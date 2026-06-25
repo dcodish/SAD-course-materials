@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>דרישות</title>
+<link rel="stylesheet" href="../web/vendor/reveal/dist/reset.css">
+<link rel="stylesheet" href="../web/vendor/reveal/dist/reveal.css">
+<link rel="stylesheet" href="../web/vendor/reveal/plugin/highlight/monokai.css">
+<link rel="stylesheet" href="../web/theme/sad.css">
+</head>
+<body>
+<div class="reveal">
+  <div class="slides">
+    <section class="title-slide" data-slug="title">
+      <div class="course">ניתוח ועיצוב מערכות מידע</div>
+      <h1>דרישות</h1>
+      <div class="lecture-no">הרצאה 3</div>
+    </section>
+    <section class="toc-slide" data-slug="toc">
+      <h1>סדר היום</h1>
+      <div class="body">
+        <ol class="toc">
+          <li class="active">מהן דרישות</li>
+          <li>למה זה קריטי</li>
+          <li>זיהוי צרכים</li>
+          <li>ניסוח דרישות</li>
+          <li>תבניות ושלמות</li>
+          <li>סיכום</li>
+        </ol>
+      </div>
+    </section>
+    <section class="sdlc-map" data-slug="lecture-03-sdlc-req">
+      <h1>היכן אנחנו ב-<span class="en">SDLC</span></h1>
+      <div class="body">
+        <div class="sdlc-stepper">
+          <div class="sdlc-step done"><span class="n">1</span><span class="nm">ייזום</span></div>
+          <div class="sdlc-step done"><span class="n">2</span><span class="nm">חקר מצב קיים</span></div>
+          <div class="sdlc-step active"><span class="n">3</span><span class="nm">ניתוח דרישות</span></div>
+          <div class="sdlc-step todo"><span class="n">4</span><span class="nm">חקר ישימות</span></div>
+          <div class="sdlc-step todo"><span class="n">5</span><span class="nm">עיצוב</span></div>
+          <div class="sdlc-step todo"><span class="n">6</span><span class="nm">פיתוח</span></div>
+          <div class="sdlc-step todo"><span class="n">7</span><span class="nm">בדיקות</span></div>
+          <div class="sdlc-step todo"><span class="n">8</span><span class="nm">הטמעה ותפעול</span></div>
+        </div>
+        <p class="sdlc-now">בשלב זה: <b>ניתוח דרישות</b> — אוספים ומנסחים מה המערכת צריכה לעשות</p>
+      </div>
+    </section>
+    <!-- A — "Previously on SAD": bridge from L2. We modeled the campus current
+         (as-is) process in BPMN; now we cross from "how it works today" to "what the
+         NEW system must do" = entering the ניתוח דרישות phase. Recap card + forward
+         line. The SDLC phase badge is added by the build — don't add one here. -->
+    <section data-slug="previously">
+      <div class="sdlc-chip" title="שלב 3 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>ניתוח דרישות</div>
+      <h1>איפה היינו, ולאן ממשיכים</h1>
+      <div class="subtitle">מ"איך זה עובד היום" אל "מה המערכת החדשה צריכה לעשות"</div>
+      <div class="body">
+
+        <div class="card">
+          <div class="panel-title">בשיעור הקודם — הבנו ומידלנו את התהליך הקיים</div>
+          <ul class="bullets">
+            <li>לקחנו את תהליך הזמנת האוכל בקמפוס כפי שהוא מתנהל <strong>היום</strong></li>
+            <li>תיעדנו אותו באופן פורמלי כתרשים <span class="en">BPMN</span> — מי עושה מה, באיזה סדר, ובאילו החלטות</li>
+            <li>זה התמונה של ה-<span class="en">as-is</span>: המצב הקיים, לפני שנגענו בו</li>
+          </ul>
+        </div>
+
+        <div class="hero fragment">
+          <h3>הגשר: מהבנה אל דרישה</h3>
+          <p>תיאור התהליך הקיים עונה על <strong>"איך זה עובד היום"</strong>. אבל מערכת מידע נבנית
+             כדי <strong>לשנות</strong> את התהליך — לכן עכשיו השאלה משתנה ל<strong>"מה המערכת החדשה
+             צריכה לעשות"</strong>. זו בדיוק נקודת המעבר אל ניתוח הדרישות.</p>
+        </div>
+
+        <p class="bottom-line fragment">היום אנחנו נכנסים לשלב <strong>ניתוח דרישות</strong> — מתרגמים את ההבנה לדרישות למערכת.</p>
+
+      </div>
+    </section>
+    <!-- A — מהן דרישות (create_what_are_requirements_slide.py).
+         Authored for L3: a definition card lands first, then the FR | NFR columns reveal
+         one at a time (campus example), then the requirement-document types note.
+         Sets up L4-5, which captures the functional requirements as use cases. -->
+    <section data-slug="what-are-requirements">
+      <div class="sdlc-chip" title="שלב 3 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>ניתוח דרישות</div>
+      <h1>מהן דרישות?</h1>
+      <div class="subtitle">מה המערכת חייבת לעשות — ומה היא חייבת להיות</div>
+      <div class="body">
+
+        <div class="hero">
+          <h3>הגדרה</h3>
+          <p>דרישה היא <strong>אמירה</strong> על מה שהמערכת חייבת <em>לעשות</em> או <em>להיות</em> — תכונה,
+             יכולת או אילוץ שהמערכת החדשה נדרשת לקיים. הדרישות הן הגשר מהתהליך הקיים שמיפינו (הרצאה 2)
+             אל מה שהמערכת החדשה צריכה לספק.</p>
+        </div>
+
+        <div class="cols">
+
+          <div class="card fragment" style="display:flex; flex-direction:column; gap:10px;">
+            <div class="panel-title">דרישות פונקציונליות <span class="en">(FR)</span></div>
+            <div class="muted">מה המערכת <strong>עושה</strong></div>
+            <ul class="bullets">
+              <li>לעיין בתפריט ולשלוח הזמנה</li>
+              <li>לשלם ולקבל התראה כשההזמנה מוכנה</li>
+              <li>מנהל מעדכן זמינות פריטים ומחירים</li>
+              <li>המטבח מסמן הזמנה כ'מוכנה'</li>
+            </ul>
+          </div>
+
+          <div class="card fragment" style="display:flex; flex-direction:column; gap:10px;">
+            <div class="panel-title">דרישות לא-פונקציונליות <span class="en">(NFR)</span></div>
+            <div class="muted">כמה <strong>טוב</strong> היא עושה זאת</div>
+            <ul class="bullets">
+              <li>ביצועים — עמידה בעומס שיא (<span class="en">12:00–14:00</span>)</li>
+              <li>אבטחה ופרטיות של נתוני הסטודנטים</li>
+              <li>שמישות — מסך הזמנה פשוט בתוך הפסקה של 15 דקות</li>
+              <li>מדרגיות — תמיכה ב-5000 סטודנטים</li>
+            </ul>
+          </div>
+
+        </div>
+
+        <div class="callout good fragment">
+          <span class="label">סוגי מסמכי דרישות</span>
+          אפשר לתעד דרישות בכמה רמות: <strong>דרישות ברמה גבוהה</strong> (תיאור כללי, רחב) מול
+          <strong>דרישות מפורטות</strong> (מדידות וניתנות לבדיקה), ו<strong>דרישות עסקיות</strong>
+          (מה הארגון רוצה להשיג) מול <strong>דרישות מערכת</strong> (מה התוכנה צריכה לעשות כדי לספק זאת).
+        </div>
+
+        <p class="bottom-line">פונקציונלי = <em>מה</em> המערכת עושה · לא-פונקציונלי = <em>כמה טוב</em> — והדרישות הפונקציונליות הן אלו שנתפוס כתרחישי <span class="en">use case</span> בהרצאה הבאה.</p>
+
+      </div>
+    </section>
+    <!-- B — why getting requirements right matters (create_why_requirements_matter_slide.py).
+         Ported + enriched: the cost-of-change curve climbs one phase at a time (Space / →) as a
+         stepped 4-card escalation, then the ⚠️ "undefined requirements" consequences note lands.
+         Industrial-engineering framing: cost & quality. Hebrew text is verbatim from the script. -->
+    <section data-slug="why-requirements-matter">
+      <div class="sdlc-chip" title="שלב 3 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>ניתוח דרישות</div>
+      <h1>למה קריטי לנתח דרישות נכון</h1>
+      <div class="subtitle">לתפוס טעות מוקדם — לפני שהיא מתומחרת בייצור</div>
+      <div class="body">
+
+        <div class="hero fragment">
+          <h3>לעשות נכון בפעם הראשונה</h3>
+          <p>דרישה שמנותחת נכון בתחילת התהליך היא הצעד עם המינוף הגבוה ביותר: היא חוסכת את כל
+             העלות של תיקון מאוחר — תכנון מחדש, פיתוח מחדש ובדיקות חוזרות.</p>
+        </div>
+
+        <div class="panel-title fragment">עקומת עלות התיקון — פי <span class="en">10</span> בכל שלב</div>
+
+        <div class="cols" style="grid-template-columns:repeat(4,1fr); align-items:end;">
+
+          <div class="card tight fragment fade-in-then-semi-out" style="text-align:center; display:flex; flex-direction:column; justify-content:flex-end; gap:6px; min-height:120px;">
+            <div class="panel-title" style="text-align:center;">דרישות <span class="en">(req)</span></div>
+            <div style="font-size:30px; font-weight:700; color:var(--green);">×1</div>
+            <div class="muted" style="font-size:17px;">מתקנים בשורת טקסט במסמך הדרישות</div>
+          </div>
+
+          <div class="card tight fragment fade-in-then-semi-out" style="text-align:center; display:flex; flex-direction:column; justify-content:flex-end; gap:6px; min-height:160px;">
+            <div class="panel-title" style="text-align:center;">עיצוב <span class="en">(design)</span></div>
+            <div style="font-size:30px; font-weight:700; color:var(--blue);">×10</div>
+            <div class="muted" style="font-size:17px;">משנים את התרשימים והמודל</div>
+          </div>
+
+          <div class="card tight fragment fade-in-then-semi-out" style="text-align:center; display:flex; flex-direction:column; justify-content:flex-end; gap:6px; min-height:200px;">
+            <div class="panel-title" style="text-align:center;">פיתוח <span class="en">(dev)</span></div>
+            <div style="font-size:30px; font-weight:700; color:var(--orange);">×100</div>
+            <div class="muted" style="font-size:17px;">כותבים מחדש קוד שכבר נכתב</div>
+          </div>
+
+          <div class="card tight fragment" style="text-align:center; display:flex; flex-direction:column; justify-content:flex-end; gap:6px; min-height:240px; border:2px solid var(--red);">
+            <div class="panel-title" style="text-align:center; color:var(--red);">ייצור <span class="en">(production)</span></div>
+            <div style="font-size:30px; font-weight:700; color:var(--red);">×1000</div>
+            <div class="muted" style="font-size:17px;">תקלה אצל המשתמש — וגם נזק לאמון</div>
+          </div>
+
+        </div>
+
+        <p class="muted center fragment" style="font-size:18px; margin:0;">
+          דרישה חסרה או שגויה עולה פי <span class="en">10</span> לתיקון בכל שלב מאוחר יותר בתהליך.
+        </p>
+
+        <div class="callout warn fragment">
+          <span class="label">⚠️ מה קורה כשהדרישות לא מוגדרות</span>
+          בלי דרישות ברורות התהליך גולש: <strong>נפיחות היקף</strong> <span class="en">(scope creep)</span> —
+          הפרויקט תופח בלי גבול; בונים את <strong>המערכת הלא נכונה</strong> שלא פותרת את הצורך האמיתי;
+          ומשלמים ב<strong>עבודה חוזרת</strong> <span class="en">(rework)</span> שמייקרת ופוגעת באיכות.
+        </div>
+
+        <p class="bottom-line">ניתוח דרישות חד מראש = פחות עלות, פחות סיכון ואיכות גבוהה יותר.</p>
+
+      </div>
+    </section>
+    <!-- C1 — שיטות לזיהוי צרכים: overview of elicitation techniques (original authoring,
+         grounded in source slide 11 "שיטות לזיהוי צרכים": ראיונות / שאלונים / תצפיות /
+         בחירה מקטלוג, expanded with the standard set). The six technique cards reveal
+         one at a time, then the ⚠️ "elicitation is hard" beat, then the transition that
+         tees up the Wetherbe framework (next slide). data-term="wetherbe" is the
+         glossary anchor for cross-lecture links from L4-5. -->
+    <section data-slug="needs-identification">
+      <div class="sdlc-chip" title="שלב 3 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>ניתוח דרישות</div>
+      <h1>שיטות לזיהוי צרכים</h1>
+      <div class="subtitle">איך מוציאים דרישות מבעלי העניין — לפני שמנסחים אותן</div>
+      <div class="body">
+
+        <p class="muted" style="margin:0;">
+          לפני שמנסחים דרישה, צריך <strong>להוציא</strong> אותה מהאנשים שמכירים את התהליך.
+          לכל שיטה יתרון וחיסרון — בפועל משלבים כמה מהן.
+        </p>
+
+        <div class="cols-3" style="align-items:stretch;">
+
+          <div class="card fragment" style="display:flex; flex-direction:column; gap:6px;">
+            <div class="panel-title">🗣️ ראיונות</div>
+            <p class="muted" style="margin:0; font-size:19px;">שיחה אחד-על-אחד עם בעל עניין. מעמיק, אבל תלוי במי שואלים, את מי, ועל מה.</p>
+          </div>
+
+          <div class="card fragment" style="display:flex; flex-direction:column; gap:6px;">
+            <div class="panel-title">📋 שאלונים</div>
+            <p class="muted" style="margin:0; font-size:19px;">מגיעים להרבה אנשים במהירות — אבל אחוז המענה נמוך וקשה להעמיק.</p>
+          </div>
+
+          <div class="card fragment" style="display:flex; flex-direction:column; gap:6px;">
+            <div class="panel-title">👁️ תצפיות</div>
+            <p class="muted" style="margin:0; font-size:19px;">צופים בעבודה בפועל. חושף מה שאנשים עושים — לא רק מה שהם אומרים שהם עושים.</p>
+          </div>
+
+          <div class="card fragment" style="display:flex; flex-direction:column; gap:6px;">
+            <div class="panel-title">📁 בחירה מקטלוג</div>
+            <p class="muted" style="margin:0; font-size:19px;">בוחרים מתוך קטלוג דרישות שכבר הועלו ע"י העובדים (<span class="en">best practices</span>).</p>
+          </div>
+
+          <div class="card fragment" style="display:flex; flex-direction:column; gap:6px;">
+            <div class="panel-title">📑 ניתוח מסמכים</div>
+            <p class="muted" style="margin:0; font-size:19px;">קוראים נהלים, טפסים ודוחות קיימים — התהליך הנוכחי כבר מתועד בהם.</p>
+          </div>
+
+          <div class="card fragment" style="display:flex; flex-direction:column; gap:6px;">
+            <div class="panel-title">👥 סדנאות ואבטיפוס</div>
+            <p class="muted" style="margin:0; font-size:19px;">מפגישים בעלי עניין סביב מודל חלקי (<span class="en">prototype</span>), כדי לדייק צרכים מוקדם.</p>
+          </div>
+
+        </div>
+
+        <div class="callout warn fragment">
+          <span class="label">⚠️ זיהוי צרכים זה קשה</span>
+          בעלי העניין לא תמיד יודעים לנסח מה הם צריכים: דרישות מנוגדות בין אנשים שונים,
+          צרכים מעורבבים עם פתרונות, ופוליטיקה ארגונית. הרבה מערכות נכשלות לא בגלל קוד גרוע,
+          אלא בגלל שהן לא עונות על הצרכים האמיתיים של המשתמשים.
+        </div>
+
+        <p class="bottom-line">
+          בדיוק כאן נכנסת מסגרת מובנית — <span class="en term" data-term="wetherbe">Wetherbe</span>: איך לשאול נכון כדי להגיע לצרכים האמיתיים (בשקף הבא).
+        </p>
+
+        <aside class="notes">
+          השקף סוקר את שיטות זיהוי הצרכים מהדק המקורי (ראיונות / שאלונים / תצפיות / בחירה
+          מקטלוג) ומרחיב לסט המקובל. הדגש: ה-elicitation עצמו קשה — וזה מה שמצדיק מסגרת
+          מובנית. תגיש את Wetherbe בשקף הבא.
+        </aside>
+
+      </div>
+    </section>
+    <!-- C — זיהוי צרכים: הגדרת מסגרת Wetherbe.
+         This slide DEFINES Wetherbe (data-slug="wetherbe") so L4-5's glossary can link here.
+         A definition hero + a short "why it matters" list. The recurring problems it names
+         are detailed on the NEXT slide (jad). Latin "Wetherbe" wrapped in <span class="en">. -->
+    <section data-slug="wetherbe">
+      <div class="sdlc-chip" title="שלב 3 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>ניתוח דרישות</div>
+      <h1>זיהוי צרכים — מסגרת <span class="en">Wetherbe</span></h1>
+      <div class="subtitle">לא לשאול מה רוצים — לחשוף את הצורך דרך שאלות מובנות</div>
+      <div class="body">
+
+        <div class="hero">
+          <h3>הגדרה</h3>
+          <p>מסגרת <span class="en">Wetherbe</span> היא גישה לזיהוי צרכים שיוצאת מנקודה אחת:
+             אין לשאול אנשים מה הם רוצים. במקום זאת היא מזהה <strong>למה</strong> איסוף הדרישות
+             הקלאסי נכשל, ומציעה דרכים מובנות לשאול — כדי לחשוף את הצורך האמיתי שמאחורי הבקשה.</p>
+        </div>
+
+        <div class="card fragment">
+          <div class="panel-title">למה אנחנו משתמשים בה</div>
+          <ul class="bullets">
+            <li>איסוף דרישות קלאסי נכשל כי לבעלי-העניין קשה לנסח מה הם צריכים בעצמם</li>
+            <li>מה שאנשים <strong>מבקשים</strong> אינו תמיד מה שהם <strong>צריכים</strong> — הבקשה היא רק נקודת פתיחה</li>
+            <li><span class="en">Wetherbe</span> מזהה למה איסוף הדרישות משתבש, ונותנת דרכים מובנות לשאול</li>
+            <li>היא מצביעה על אוסף של בעיות חוזרות באיסוף דרישות — שאותן נפרט בשקף הבא</li>
+          </ul>
+        </div>
+
+        <p class="bottom-line">הרעיון המרכזי: לא לשאול מה רוצים — לחשוף את הצורך דרך שאלות מובנות.</p>
+
+      </div>
+    </section>
+    <!-- C — Wetherbe's four problems in eliciting requirements + their solutions (L3 Requirements).
+         Original authoring. Four problem→solution cards reveal one at a time (Space / →),
+         then the JAD term lands as a defined glossary anchor (data-term="jad"), followed by
+         the AI draft beat (🤖) and its paired challenge beat (⚠️). -->
+    <section data-slug="wetherbe-problems">
+      <div class="sdlc-chip" title="שלב 3 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>ניתוח דרישות</div>
+      <h1>ארבע הבעיות של <span class="en term" data-term="wetherbe">Wetherbe</span></h1>
+      <div class="subtitle">למה קשה לחלץ דרישות — וכיצד פותרים כל מחסום</div>
+      <div class="body">
+
+        <div class="cols" style="align-items:stretch;">
+
+          <div class="card fragment" style="display:flex; flex-direction:column; gap:10px;">
+            <div class="panel-title">1 · המנהלים לא יודעים מה הם צריכים</div>
+            <p class="muted" style="margin:0;">קשה לבעלי-העניין לנסח את הצורך האמיתי שלהם בעצמם.</p>
+            <div class="callout good" style="margin-top:auto;">
+              <span class="label">הפתרון — תשאול מובנה</span>
+              לא לשאול "מה אתם רוצים?" פתוח, אלא להוביל בשאלות ממוקדות ושיטתיות שחושפות את הצורך.
+            </div>
+          </div>
+
+          <div class="card fragment" style="display:flex; flex-direction:column; gap:10px;">
+            <div class="panel-title">2 · אין זמן לניסוי וטעייה</div>
+            <p class="muted" style="margin:0;">אי-אפשר לבנות מערכת מלאה, לגלות שטעינו, ולהתחיל מהתחלה.</p>
+            <div class="callout good" style="margin-top:auto;">
+              <span class="label">הפתרון — אב-טיפוס (<span class="en">prototype</span>)</span>
+              בונים גרסה ראשונית מהירה ומציגים אותה למשתמשים — הם מגיבים למוחשי במקום לדמיין מופשט.
+            </div>
+          </div>
+
+          <div class="card fragment" style="display:flex; flex-direction:column; gap:10px;">
+            <div class="panel-title">3 · אפקט הממגורה (<span class="en">silo</span>)</div>
+            <p class="muted" style="margin:0;">כל יחידה רואה רק את החלק שלה בתהליך — אף אחד לא רואה את התמונה המלאה.</p>
+            <div class="callout good" style="margin-top:auto;">
+              <span class="label">הפתרון — סדנת <span class="en term" data-term="jad">JAD</span></span>
+              מושיבים את כל בעלי-העניין יחד בחדר אחד כדי לחבר את החלקים לדרישה אחת שלמה.
+            </div>
+          </div>
+
+          <div class="card fragment" style="display:flex; flex-direction:column; gap:10px;">
+            <div class="panel-title">4 · שואלים את השאלות הלא-נכונות</div>
+            <p class="muted" style="margin:0;">שאלה שגויה מובילה לתשובה נכונה — אבל לבעיה הלא-נכונה.</p>
+            <div class="callout good" style="margin-top:auto;">
+              <span class="label">הפתרון — לשאול "אחרת"</span>
+              מנסחים את השאלה מחדש מזוויות חלופיות, כדי לחשוף צרכים שהשאלה המקורית פספסה.
+            </div>
+          </div>
+
+        </div>
+
+        <div class="hero fragment">
+          <h3><span class="en">JAD</span> — <span class="en">Joint Application Design</span></h3>
+          <p>סדנה משותפת ומובנית שבה מנתחים ובעלי-עניין מכל היחידות מגדירים דרישות יחד בזמן אמת,
+             במקום סבב ראיונות נפרד לכל אחד. כך שוברים את אפקט הממגורה (בעיה 3): מקצרים זמן,
+             מפחיתים אי-הבנות, ומקבלים דרישה אחת מוסכמת על כל הצדדים.</p>
+        </div>
+
+        <div class="cols fragment">
+          <div class="callout ai">
+            <span class="label">🤖 הבינה מנסחת את השאלות</span>
+            <span class="en">Claude</span> מציע מראש מערך שאלות תשאול מובנה לכל בעל-עניין, ואף מסכם סדנת
+            <span class="en">JAD</span> לרשימת דרישות מסודרת — בתוך דקות.
+          </div>
+          <div class="callout warn fragment">
+            <span class="label">⚠️ אילו שאלות הוא לא שאל?</span>
+            אם הבינה מנסחת את השאלות — מי מוודא שהיא לא נפלה בדיוק לבעיה 4? בדקו אילו זוויות
+            וצרכים היא פספסה לפני שמסתמכים עליה.
+          </div>
+        </div>
+
+        <p class="bottom-line">כל מחסום בחילוץ דרישות — מקבל פתרון: תשאול · <span class="en">prototype</span> · <span class="en">JAD</span> · שאילה אחרת.</p>
+
+      </div>
+    </section>
+    <!-- C (page 10) — עקרונות בזיהוי דרישות + הגשר "אספנו, עכשיו מה?".
+         Original authoring for L3 (no pptx script). Text faithful to the original L3
+         deck: slide 25 ("עקרונות בזיהוי דרישות צרכים") = the principles card; slide 26
+         ("אז אספנו דרישות- עכשיו מה?") = the bridge hero into ניסוח דרישות / SMART.
+         The principles reveal one at a time; then the 🤖/⚠️ beat; then the bridge.
+         Closes section C and hands off to section D (SMART, next slide). -->
+    <section data-slug="requirement-principles">
+      <div class="sdlc-chip" title="שלב 3 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>ניתוח דרישות</div>
+      <h1>עקרונות בזיהוי דרישות</h1>
+      <div class="subtitle">מה לזכור כשמזהים צרכים — לפני שעוברים לניסוח</div>
+      <div class="body">
+
+        <div class="card">
+          <ul class="bullets">
+            <li class="fragment">יש <strong>לזהות ולגלות צרכים</strong> — לא לאסוף דרישות. מפרידים בין הצורך לבין הפתרון: מתעדים <em>מה</em> חסר, לא <em>איך</em> לפתור</li>
+            <li class="fragment">דרישות טובות דורשות <strong>מעורבות הלקוח</strong> — מערבים את המשתמשים האמיתיים, אלה שיעבדו עם המערכת</li>
+            <li class="fragment">מבחינים בין דרישה <strong>הכרחית</strong> לבין דרישה <strong>רצויה</strong> (<span class="en">nice-to-have</span>) — לא הכל נכנס לסל</li>
+            <li class="fragment">כל דרישה צריכה <strong>להתחבר למטרה עסקית</strong> — אם אי אפשר לשייך אותה ליעד, סימן שאלה</li>
+            <li class="fragment">דרישה צריכה להיות <strong>ניתנת לבדיקה</strong> — אם אי אפשר למדוד אם היא התקיימה, היא לא דרישה אלא משאלה</li>
+            <li class="fragment">זיהוי הצרכים הוא <strong>תהליך — לא אירוע חד-פעמי</strong>: דרישות לעולם אינן מושלמות, ושינויים בהן בלתי נמנעים</li>
+          </ul>
+        </div>
+
+        <div class="callout warn fragment">
+          <span class="label">⚠️ הסכנה החוזרת</span>
+          דרישות שאינן מוגדרות נכון יובילו לכישלון הפרויקט. הטעות הנפוצה: לרשום פתרון
+          ("<span class="en">SQL</span>", "אפליקציה") במקום את הצורך — וכך לקבע החלטה לפני שהבנו את הבעיה.
+        </div>
+
+        <div class="hero fragment">
+          <h3>אז אספנו דרישות — עכשיו מה?</h3>
+          <p>הדרישות שנאספו הן רק <strong>טיוטה ראשונית</strong>. עכשיו צריך לעבור עליהן, לחדד,
+             לדייק ולנסח מחדש — כדי להפוך אותן לדרישות <strong>ברורות, מדידות, ישימות ומבוססות צורך</strong>.
+             בשלב הבא נראה איך עושים זאת בשיטת <span class="en term" data-term="smart">SMART</span>.</p>
+        </div>
+
+        <p class="bottom-line">אספנו צרכים גולמיים — השלב הבא הוא לנסח אותם נכון.</p>
+
+      </div>
+    </section>
+    <!-- D — ניסוח דרישות: SMART. The canonical definition slide (data-slug="smart" so
+         the L4-5 glossary can link here). One card per letter (En term + Hebrew gloss +
+         campus example), revealed one beat at a time, then a vague→SMART rewrite of a
+         campus requirement. Mirrors the short SMART entry in web/theme/glossary.js. -->
+    <section data-slug="smart">
+      <div class="sdlc-chip" title="שלב 3 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>ניתוח דרישות</div>
+      <h1><span class="en">SMART</span> — ככה כותבים דרישה</h1>
+      <div class="subtitle">חמישה קריטריונים לדרישה ברורה שאפשר לבדוק</div>
+      <div class="body">
+
+        <div class="cols" style="align-items:stretch;">
+
+          <div class="card fragment" style="display:flex; flex-direction:column; gap:4px;">
+            <div class="panel-title"><b>S</b> · <span class="en">Specific</span> — ספציפית</div>
+            <p style="margin:0;">חד-משמעית, בלי מילים מעורפלות. דוגמה: "הסטודנט מזמין ארוחה מתוך תפריט הקפיטריה ומשלם בכרטיס סטודנט" — ולא "המערכת תטפל בהזמנות".</p>
+          </div>
+
+          <div class="card fragment" style="display:flex; flex-direction:column; gap:4px;">
+            <div class="panel-title"><b>M</b> · <span class="en">Measurable</span> — מדידה</div>
+            <p style="margin:0;">אפשר למדוד אם התקיימה. דוגמה: "מסך התפריט נטען תוך 2 שניות" — מספר שאפשר לבדוק, לא "מהר".</p>
+          </div>
+
+          <div class="card fragment" style="display:flex; flex-direction:column; gap:4px;">
+            <div class="panel-title"><b>A</b> · <span class="en">Achievable</span> — בת-השגה</div>
+            <p style="margin:0;">ריאלית עם המשאבים והזמן שיש. דוגמה: התראת "ההזמנה מוכנה" לטלפון — אפשרי. "חיזוי מה הסטודנט ירצה מחר" — לא לגרסה הראשונה.</p>
+          </div>
+
+          <div class="card fragment" style="display:flex; flex-direction:column; gap:4px;">
+            <div class="panel-title"><b>R</b> · <span class="en">Relevant</span> — רלוונטית</div>
+            <p style="margin:0;">תורמת למטרת המערכת ולמשתמש. דוגמה: "תזכורת לאסוף הזמנה ששולמה" — רלוונטי. ניהול מלאי הספקים של הקפיטריה — מחוץ לגבולות המערכת.</p>
+          </div>
+
+          <div class="card fragment" style="display:flex; flex-direction:column; gap:4px;">
+            <div class="panel-title"><b>T</b> · <span class="en">Time-bound</span> — תחומה בזמן</div>
+            <p style="margin:0;">עם מסגרת זמן או יעד מדיד בזמן. דוגמה: "95% מטעינות התפריט מסתיימות תוך 2 שניות בשעת העומס (12:00–14:00)".</p>
+          </div>
+
+        </div>
+
+        <div class="cols fragment" style="align-items:stretch; margin-top:6px;">
+          <div class="card bad" style="display:flex; flex-direction:column; gap:6px;">
+            <div class="panel-title">❌ דרישה מעורפלת</div>
+            <p style="margin:0;">"האפליקציה צריכה להיות מהירה."</p>
+            <span class="src">"מהירה" אינה מדידה, אין יעד ואין הקשר — אי-אפשר לבדוק אם התקיימה.</span>
+          </div>
+          <div class="card good" style="display:flex; flex-direction:column; gap:6px;">
+            <div class="panel-title">✅ אותה דרישה ב-<span class="en">SMART</span></div>
+            <p style="margin:0;">"95% מטעינות מסך התפריט מסתיימות תוך 2 שניות בשעת העומס (<span class="en">12:00–14:00</span>)."</p>
+            <span class="src">ספציפית, מדידה (95%, 2 שניות), בת-השגה, רלוונטית לחוויית ההזמנה, ותחומה בזמן.</span>
+          </div>
+        </div>
+
+        <p class="bottom-line">דרישה טובה היא דרישה שאפשר <strong>לבדוק</strong> — אם אי-אפשר למדוד אותה, היא עוד לא <span class="en">SMART</span>.</p>
+
+      </div>
+    </section>
+    <!-- D — ניסוח דרישות: מילים 'מסוכנות'. Companion to slide-smart.html: zooms into the
+         specific ambiguous words that quietly break a requirement, then the rules for
+         phrasing well, with a campus rewrite. A `callout bad` list of words to avoid +
+         a `callout good` rewrite pattern. Fragments reveal one beat at a time. -->
+    <section data-slug="dangerous-words">
+      <div class="sdlc-chip" title="שלב 3 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>ניתוח דרישות</div>
+      <h1>מילים 'מסוכנות' בדרישה</h1>
+      <div class="subtitle">למה מילה אחת מעורפלת הופכת דרישה שלמה לבלתי-ניתנת לבדיקה</div>
+      <div class="body">
+
+        <div class="cols" style="align-items:stretch;">
+
+          <div class="callout bad fragment">
+            <span class="label">⛔ מילים שמרסקות דרישה</span>
+            <ul class="bullets" style="margin-top:4px;">
+              <li><strong>מהיר</strong> (<span class="en">fast</span>) — מהר ביחס למה? אין מספר שאפשר למדוד.</li>
+              <li><strong>ידידותי למשתמש</strong> (<span class="en">user-friendly</span>) — לפי מי? אין קריטריון לבדיקה.</li>
+              <li><strong>יעיל</strong> (<span class="en">efficient</span>) — יעיל בזמן? בעלות? לא ברור מה נבדק.</li>
+              <li><strong>וכו'</strong> (<span class="en">etc.</span>) — מסתיר דרישות שלא נכתבו; מי שיבנה לא יודע מה חסר.</li>
+              <li><strong>בערך</strong> (<span class="en">approximately</span>) — מספר שאינו מספר; אי-אפשר לבדוק עמידה בו.</li>
+              <li><strong>ו/או</strong> (<span class="en">and/or</span>) — שתי דרישות במשפט אחד, ולא ברור איזו חובה.</li>
+              <li><strong>לפי הצורך</strong> (<span class="en">as needed</span>) — לפי הצורך של מי, ומתי? דוחה את ההחלטה.</li>
+            </ul>
+          </div>
+
+          <div class="card fragment" style="display:flex; flex-direction:column; gap:8px;">
+            <div class="panel-title">למה כל אלו מסוכנות</div>
+            <p style="margin:0;">המכנה המשותף: <strong>אי-אפשר לבדוק אם הדרישה התקיימה</strong>. כל מילה כזו פותחת
+               פער פרשנות — המנתח חושב דבר אחד, המפתח דבר אחר, והבודק לא יודע מה לבדוק.</p>
+            <p style="margin:0;">פער שמתגלה רק בקבלה עולה הרבה יותר מתיקון מילה אחת עכשיו.</p>
+            <div class="callout warn" style="margin-top:4px;">
+              <span class="label">⚠️ מבחן פשוט</span>
+              אם אי-אפשר לכתוב <em>תרחיש בדיקה</em> שעובר או נכשל — הדרישה עוד לא מנוסחת.
+            </div>
+          </div>
+
+        </div>
+
+        <div class="hero fragment">
+          <h3>איך כן לנסח דרישה</h3>
+          <p>קונקרטי במקום מעורפל · <strong>מדיד</strong> — מספר, יחידה ויעד · <strong>דרישה אחת למשפט</strong> (לא "ו/או") ·
+             בלשון פעילה — מי עושה מה ("הסטודנט מזמין", לא "הזמנה תטופל").</p>
+        </div>
+
+        <div class="cols fragment" style="align-items:stretch;">
+          <div class="callout bad" style="display:flex; flex-direction:column; gap:6px;">
+            <span class="label">⛔ ניסוח מסוכן</span>
+            <p style="margin:0;">"המערכת תטפל בהזמנות במהירות וביעילות לפי הצורך."</p>
+            <span class="src">"במהירות", "ביעילות", "לפי הצורך" — אף אחת לא מדידה, וכמה דרישות נדחסו למשפט אחד.</span>
+          </div>
+          <div class="callout good" style="display:flex; flex-direction:column; gap:6px;">
+            <span class="label">✅ אותו דבר, מנוסח נכון</span>
+            <p style="margin:0;">"הסטודנט שולח הזמנה דרך האפליקציה. <span class="en">95%</span> מההזמנות נקלטות ומאושרות תוך <span class="en">3</span> שניות בשעת העומס (<span class="en">12:00–14:00</span>)."</p>
+            <span class="src">קונקרטי, מדיד (95%, 3 שניות), דרישה אחת, בלשון פעילה — אפשר לכתוב לה תרחיש בדיקה.</span>
+          </div>
+        </div>
+
+        <p class="bottom-line">המילים שאתם לא כותבים חשובות כמו אלו שכן — כל מילה מעורפלת היא באג שמחכה.</p>
+
+      </div>
+    </section>
+    <!-- E — תבניות ושלמות: User Story. The canonical definition slide
+         (data-slug="user-story" so the L4-5 glossary can link here). A definition hero,
+         the template shown prominently (En + He), a campus example, then a two-column
+         contrast of User Story vs a classic requirement. Mirrors the short user-story
+         entry in web/theme/glossary.js. -->
+    <section data-slug="user-story">
+      <div class="sdlc-chip" title="שלב 3 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>ניתוח דרישות</div>
+      <h1><span class="en">User Story</span> — דרישה מנקודת מבט המשתמש</h1>
+      <div class="subtitle">תיאור קצר של צורך, בשפה של מי שישתמש במערכת</div>
+      <div class="body">
+
+        <div class="hero">
+          <h3>הגדרה</h3>
+          <p>סיפור משתמש (<span class="en">User Story</span>) הוא תיאור <strong>קצר</strong> של דרישה
+             מנקודת המבט של מי שצריך אותה — מי רוצה, מה הוא רוצה, ולמה זה חשוב לו. במקום מפרט פורמלי
+             מנסחים משפט אחד פשוט שכל בעל-עניין מבין.</p>
+        </div>
+
+        <div class="card center fragment" style="display:flex; flex-direction:column; gap:10px; align-items:center;">
+          <div class="panel-title" style="text-align:center;">התבנית</div>
+          <p style="margin:0; font-size:26px; font-weight:700; color:var(--dark-blue);">
+            <span class="en">As a [role], I want [capability], so that [value]</span>
+          </p>
+          <p style="margin:0; font-size:24px; font-weight:700;">
+            ״כ<span style="color:var(--blue);">[תפקיד]</span> אני רוצה <span style="color:var(--blue);">[יכולת]</span>
+            כדי <span style="color:var(--blue);">[ערך]</span>״
+          </p>
+          <span class="src">שלושת החלקים: מי (התפקיד) · מה (היכולת) · למה (הערך שמצדיק את הדרישה).</span>
+        </div>
+
+        <div class="callout good fragment">
+          <span class="label">דוגמה מהקמפוס</span>
+          ״כ<strong>סטודנט</strong> אני רוצה <strong>להזמין ארוחה מראש מהטלפון</strong>
+          כדי <strong>שלא אבזבז את ההפסקה בתור</strong>״ — ו: ״כ<strong>מנהל קפיטריה</strong> אני רוצה
+          <strong>לראות את כל ההזמנות בלוח אחד</strong> כדי <strong>להתמודד עם עומס הצהריים</strong>״.
+        </div>
+
+        <div class="cols fragment" style="align-items:stretch;">
+
+          <div class="card" style="display:flex; flex-direction:column; gap:8px;">
+            <div class="panel-title"><span class="en">User Story</span> — זריז ומשתמש-מרכזי</div>
+            <ul class="bullets">
+              <li>מנוסחת בשפת המשתמש, מנקודת מבטו</li>
+              <li>קצרה — משפט אחד, לא מסמך</li>
+              <li>גמישה ופתוחה למשא ומתן (<span class="en">negotiable</span>)</li>
+              <li>מדגישה את ה<strong>ערך</strong> — למה הדרישה קיימת</li>
+              <li>נפוצה בפיתוח <span class="en">agile</span> / זריז</li>
+            </ul>
+          </div>
+
+          <div class="card" style="display:flex; flex-direction:column; gap:8px;">
+            <div class="panel-title">דרישה קלאסית — פורמלית וחוזית</div>
+            <ul class="bullets">
+              <li>מנוסחת בשפה פורמלית של המערכת</li>
+              <li>מלאה ומפורטת — שואפת לכסות הכול</li>
+              <li>מחייבת וחוזית (<span class="en">contractual</span>) — קשה לשנות</li>
+              <li>מתמקדת ב<strong>מה</strong> בדיוק המערכת תעשה</li>
+              <li>נבדקת מול קריטריונים כמו <span class="en term" data-term="smart">SMART</span></li>
+            </ul>
+          </div>
+
+        </div>
+
+        <p class="bottom-line">דרישה קלאסית עונה על <em>מה</em> המערכת תעשה · <span class="en">User Story</span>
+          מזכירה גם <em>מי</em> צריך את זה ו<em>למה</em> — והערך הזה הוא שמכוון את הדיון.</p>
+
+      </div>
+    </section>
+    <!-- E — תבניות ושלמות: CRUD. The canonical definition slide (data-slug="crud" so the
+         L4-5 glossary can link here). A card defines the four data operations, then a campus
+         CRUD matrix reveals: for every data entity, ask which operations the system needs —
+         a completeness check on the functional requirements. Mirrors the short CRUD entry in
+         web/theme/glossary.js. -->
+    <section data-slug="crud">
+      <div class="sdlc-chip" title="שלב 3 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>ניתוח דרישות</div>
+      <h1><span class="en">CRUD</span> — בדיקת שלמות לכל ישות נתונים</h1>
+      <div class="subtitle">ארבע פעולות היסוד על נתונים — ולמה הן רשימת ביקורת שימושית</div>
+      <div class="body">
+
+        <div class="cols" style="align-items:stretch;">
+
+          <div class="card" style="display:flex; flex-direction:column; gap:6px;">
+            <div class="panel-title">ארבע פעולות היסוד על נתונים</div>
+            <ul class="bullets">
+              <li><b><span class="en">C</span></b> · <span class="en">Create</span> — יצירה (להוסיף רשומה חדשה)</li>
+              <li><b><span class="en">R</span></b> · <span class="en">Read</span> — קריאה (להציג / לאחזר נתון קיים)</li>
+              <li><b><span class="en">U</span></b> · <span class="en">Update</span> — עדכון (לשנות רשומה קיימת)</li>
+              <li><b><span class="en">D</span></b> · <span class="en">Delete</span> — מחיקה (להסיר רשומה)</li>
+            </ul>
+          </div>
+
+          <div class="hero">
+            <h3>למה זו בדיקת שלמות</h3>
+            <p>לכל <strong>ישות נתונים</strong> במערכת שִאלו: אילו מבין ארבע הפעולות
+               (<span class="en">Create / Read / Update / Delete</span>) המערכת באמת צריכה? פעולה
+               חסרה מסגירה דרישה פונקציונלית שנשכחה — וכך <span class="en">CRUD</span> חושפת חורים
+               ברשימת הדרישות שלא ראינו מעצמן.</p>
+          </div>
+
+        </div>
+
+        <div class="card fragment" style="margin-top:6px; display:flex; flex-direction:column; gap:8px;">
+          <div class="panel-title">מטריצת <span class="en">CRUD</span> — מערכת ההזמנות בקמפוס</div>
+          <table class="sad">
+            <tr>
+              <th style="width:22%;">ישות נתונים</th>
+              <th><span class="en">Create</span> · יצירה</th>
+              <th><span class="en">Read</span> · קריאה</th>
+              <th><span class="en">Update</span> · עדכון</th>
+              <th><span class="en">Delete</span> · מחיקה</th>
+            </tr>
+            <tr>
+              <td>פריט תפריט <span class="en">(menu item)</span></td>
+              <td class="muted">המנהל מוסיף מנה חדשה</td>
+              <td class="muted">הסטודנט רואה זמינות ומחיר</td>
+              <td class="muted">המנהל עורך מחיר / זמינות</td>
+              <td class="muted">המנהל מסיר מנה מהתפריט</td>
+            </tr>
+            <tr>
+              <td>הזמנה <span class="en">(order)</span></td>
+              <td class="muted">הסטודנט יוצר הזמנה</td>
+              <td class="muted">הסטודנט בודק סטטוס</td>
+              <td class="muted">המטבח מסמן 'מוכן'</td>
+              <td class="muted">הסטודנט מבטל הזמנה</td>
+            </tr>
+          </table>
+        </div>
+
+        <div class="cols fragment">
+          <div class="callout ai">
+            <span class="label">🤖 הבינה ממלאת את המטריצה</span>
+            <span class="en">Claude</span> מקבל את רשימת הישויות וממלא לכל אחת את ארבע הפעולות —
+            ומייצר במהירות דרישות פונקציונליות מועמדות לכל תא.
+          </div>
+          <div class="callout warn">
+            <span class="label">⚠️ איזה תא היא לא נכון מילאה?</span>
+            האם כל הפעולות שהיא הציעה באמת נדרשות, ומי מורשה לבצע כל אחת? "מחיקת הזמנה"
+            בידי סטודנט היא <em>ביטול</em>, לא מחיקה אמיתית — ולא לכל ישות צריך את כל ארבע הפעולות.
+          </div>
+        </div>
+
+        <p class="bottom-line">לכל ישות, עברו על <span class="en">C·R·U·D</span> — מה שחסר במטריצה הוא דרישה שנשכחה.</p>
+
+      </div>
+    </section>
+    <!-- E — תבניות ושלמות: how to check a requirements set is COMPLETE & consistent
+         (create_completeness_slide.py). The "completeness checklist" lands as a card,
+         items reveal one beat at a time, then a ⚠️ note on the gaps that get missed most
+         (forgotten NFRs, edge cases) and an 🤖 AI beat. Latin tokens (FR/NFR/CRUD) wrapped
+         in .en; CRUD + user-story carry glossary data-term markers (defined earlier in L3). -->
+    <section data-slug="completeness">
+      <div class="sdlc-chip" title="שלב 3 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>ניתוח דרישות</div>
+      <h1>איך מוודאים שהדרישות 'שלמות'?</h1>
+      <div class="subtitle">בדיקת שלמות ועקביות — לפני שעוברים לאפיון</div>
+      <div class="body">
+
+        <div class="card">
+          <div class="panel-title">צ'ק-ליסט השלמות</div>
+          <ul class="bullets">
+            <li class="fragment">
+              <strong>כיסוי פונקציונלי ולא-פונקציונלי</strong> — יש דרישות גם ל<em>מה</em> המערכת
+              עושה (<span class="en">FR</span>) וגם ל<em>כמה טוב</em> (<span class="en">NFR</span>),
+              ולא רק לאחד מהם.
+            </li>
+            <li class="fragment">
+              <strong>כל בעל עניין מטופל</strong> — לכל שחקן (סטודנט, מנהל קפיטריה, מטבח) יש דרישות
+              שמכסות את מה שהוא צריך מהמערכת.
+            </li>
+            <li class="fragment">
+              <strong>לכל צעד בתהליך יש דרישה</strong> — עוברים על תהליך ה־as-is שמיפינו (הרצאה 2),
+              וכל פעולה בו מקבלת דרישה במערכת החדשה.
+            </li>
+            <li class="fragment">
+              <strong>אין סתירות</strong> — שתי דרישות לא דורשות דברים מנוגדים (עקביות).
+            </li>
+            <li class="fragment">
+              <strong>כל דרישה ניתנת לבדיקה ולמעקב</strong> — אפשר לבדוק אם התקיימה
+              (<span class="en">testable</span>), ואפשר לעקוב ממנה לצורך שממנו נולדה
+              (<span class="en">traceable</span>).
+            </li>
+            <li class="fragment">
+              <strong>כיסוי <span class="en term" data-term="crud">CRUD</span> לכל ישות</strong> —
+              לכל ישות מרכזית (הזמנה, פריט תפריט, סטודנט) יש דרישות ליצירה, קריאה, עדכון ומחיקה.
+            </li>
+          </ul>
+        </div>
+
+        <div class="callout warn fragment">
+          <span class="label">⚠️ הפערים שהכי שוכחים</span>
+          בדרך כלל מכוסה דווקא ה<span class="en">FR</span>: <strong>הדרישות הלא-פונקציונליות
+          (<span class="en">NFR</span>) נשכחות</strong> — עומס, אבטחה, פרטיות, מהירות. גם
+          <strong>מקרי קצה</strong> נופלים בין הכיסאות: מה קורה כשהתשלום נכשל, כשפריט אזל,
+          כשהמטבח לא סימן 'מוכן'? "שלם" אומר גם את המסלולים שאינם רגילים.
+        </div>
+
+        <div class="callout ai fragment">
+          <span class="label">🤖 הבינה כבודקת כיסוי</span>
+          <span class="en">Claude</span> יכול להצליב את רשימת הדרישות מול השחקנים, צעדי התהליך
+          וטבלת ה־<span class="en term" data-term="crud">CRUD</span> ולסמן מה חסר — אבל ההחלטה
+          מה <em>באמת</em> בגבולות המערכת נשארת שלכם.
+        </div>
+
+        <p class="bottom-line">דרישות 'שלמות' = כל שחקן, כל צעד וכל ישות מכוסים — בלי סתירות, ועם ה־<span class="en">NFR</span> שלא נשכחו.</p>
+
+      </div>
+    </section>
+    <!-- F — campus payoff slide (create_campus_requirements_slide.py).
+         The lecture's tools applied to the running example: concrete requirements
+         DUG OUT OF THE INTERVIEWS — a few functional, a few non-functional, one phrased
+         as a SMART requirement, one as a User Story. This is the direct input to L4-5
+         (use cases). Content is sourced verbatim from lecture-04-05/running-example.md
+         (FR1-FR12, NFR1-NFR5, the interviews). SMART/User Story are glossary terms that
+         link to their canonical definition slides (data-slug="smart" / "user-story"). -->
+    <section data-slug="campus-requirements">
+      <div class="sdlc-chip" title="שלב 3 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>ניתוח דרישות</div>
+      <h1>הדרישות של מערכת הקמפוס</h1>
+      <div class="subtitle">מהראיונות אל דרישות — הקלט הישיר לתרשים תרחישי השימוש (הרצאה 4-5)</div>
+      <div class="body">
+
+        <div class="cols" style="align-items:stretch;">
+
+          <div class="card fragment" style="display:flex; flex-direction:column; gap:8px;">
+            <div class="panel-title">פונקציונליות <span class="en">(FR)</span> — מה המערכת עושה</div>
+            <ul class="bullets">
+              <li>עיון בתפריט עם סינון דיאטטי (צמחוני וכו')</li>
+              <li>הזמנה ותשלום (כרטיס אוניברסיטה / אשראי)</li>
+              <li>הזמנה מראש לשעת איסוף עתידית</li>
+              <li>זמינות בזמן-אמת — סימון "אזל" ע"י המנהל</li>
+              <li>התראה לסטודנט כשההזמנה מוכנה</li>
+              <li>אימות איסוף באמצעות קוד / ברקוד</li>
+            </ul>
+            <span class="src">נדוגו מראיונות הסטודנט, המנהל, המטבח והדלפק.</span>
+          </div>
+
+          <div class="card fragment" style="display:flex; flex-direction:column; gap:8px;">
+            <div class="panel-title">לא-פונקציונליות <span class="en">(NFR)</span> — כמה טוב</div>
+            <ul class="bullets">
+              <li>עמידה בעומס השיא (<span class="en">12:00–14:00</span>) ללא קריסה</li>
+              <li>תשלום מאובטח ושמירה על פרטיות נתוני הסטודנטים</li>
+              <li>אינטגרציה עם מערכת הזיהוי והחשבונות של האוניברסיטה</li>
+              <li>מדרגיות — 5000 סטודנטים, ללא נפילות בשעות הפעילות</li>
+              <li>ממשק פשוט ומהיר — מתאים להפסקה של 15 דקות</li>
+            </ul>
+            <span class="src">נדוגו מראיון אגף שירותי הקמפוס / <span class="en">IT</span> והסטודנט.</span>
+          </div>
+
+        </div>
+
+        <div class="cols fragment" style="align-items:stretch; margin-top:6px;">
+
+          <div class="card" style="display:flex; flex-direction:column; gap:6px;">
+            <div class="panel-title">דוגמה ל-<span class="en term" data-term="smart">SMART</span></div>
+            <p style="margin:0;">"95% מטעינות מסך התפריט מסתיימות תוך 2 שניות בשעת העומס
+               (<span class="en">12:00–14:00</span>)."</p>
+            <span class="src">ספציפית, מדידה (95%, 2 שניות), בת-השגה, רלוונטית, ותחומה בזמן —
+              לוקחים את "ממשק מהיר" המעורפל והופכים אותו לדרישה שאפשר לבדוק.</span>
+          </div>
+
+          <div class="card" style="display:flex; flex-direction:column; gap:6px;">
+            <div class="panel-title">דוגמה ל-<span class="en term" data-term="user-story">User Story</span></div>
+            <p style="margin:0;"><strong>כסטודנט/ית</strong>, אני רוצה <strong>לראות מתי ההזמנה מוכנה</strong>,
+               כדי <strong>שלא אגיע סתם ואבזבז את ההפסקה הקצרה שלי</strong>.</p>
+            <span class="src">תבנית: כ&lt;תפקיד&gt; אני רוצה &lt;יכולת&gt; כדי &lt;ערך/מטרה&gt; — מתוך ראיון הסטודנט.</span>
+          </div>
+
+        </div>
+
+        <div class="callout ai fragment">
+          <span class="label">🤖 מהראיונות לטבלת דרישות</span>
+          <span class="en">Claude</span> מקבל את הערות הראיון הגולמיות ומפיק מהן רשימת
+          <span class="en">FR</span>/<span class="en">NFR</span>, דרישות <span class="en">SMART</span>
+          ו-<span class="en">User Stories</span> — תוך שניות, ומיד מנסח מחדש לפי משוב.
+        </div>
+
+        <div class="callout warn fragment">
+          <span class="label">⚠️ מה חבוי, סותר, או הומצא?</span>
+          אילו דרישות אמיתיות נקברו ברעש (אזהרות אלרגיה, נגישות, רב-לשוניות)? איזו דרישה
+          "מומצאת" אינה בגבולות המערכת (משלוח למעונות)? היכן הראיונות סותרים זה את זה
+          (תשלום, הזמנות מראש)? הרשימה שלכם היא משטח האימות.
+        </div>
+
+        <p class="bottom-line">הדרישות שדגנו מהראיונות הן הקלט הישיר ל-<span class="en">use cases</span> בהרצאה 4-5.</p>
+
+      </div>
+    </section>
+    <!-- F — 🤖 AI בשלב הדרישות (create_ai_requirements_slide.py).
+         The lecture's AI beat for the requirements phase: Claude turns the raw campus
+         interview notes into a classified FR/NFR list, SMART phrasings, and user
+         stories, and flags gaps (🤖) — paired with the recurring challenge habit:
+         what did it mis-classify, write vaguely, invent, or miss? (⚠️). This sets up
+         L4-5's functional/non-functional AI beat. Latin tokens wrapped in .en. -->
+    <section data-slug="ai-requirements">
+      <div class="sdlc-chip" title="שלב 3 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>ניתוח דרישות</div>
+      <h1>🤖 <span class="en">AI</span> בשלב הדרישות</h1>
+      <div class="subtitle">מהערות ראיון מבולגנות לרשימת דרישות מסווגת — ואז מאתגרים</div>
+      <div class="body">
+
+        <div class="hero">
+          <h3>מה הבינה עושה כאן</h3>
+          <p>אספנו הערות ראיון גולמיות מסטודנטים, מהמטבח ומהמנהל — טקסט חופשי ומבולגן.
+             <span class="en">Claude</span> הופך את הערימה הזו לרשימת דרישות מסודרת תוך שניות: ממיין,
+             מנסח, ומסמן מה חסר. הקלט שלכם הוא הראיונות; הפלט הוא טיוטה שצריך לבדוק.</p>
+        </div>
+
+        <div class="cols-3" style="align-items:stretch;">
+
+          <div class="card ai fragment" style="display:flex; flex-direction:column; gap:8px;">
+            <div class="panel-title">ממיין <span class="en">FR</span> מול <span class="en">NFR</span></div>
+            <div class="muted">לוקח את ההערות החופשיות וממפה כל דרישה לפונקציונלית (מה המערכת עושה)
+              או לא-פונקציונלית (כמה טוב), בשתי עמודות.</div>
+          </div>
+
+          <div class="card ai fragment" style="display:flex; flex-direction:column; gap:8px;">
+            <div class="panel-title">מנסח ב-<span class="en">SMART</span></div>
+            <div class="muted">מציע ניסוח חד, מדיד ותחום בזמן לכל דרישה — במקום "שתהיה מהירה",
+              טיוטה כמו "תוך 2 שניות בשעת העומס".</div>
+          </div>
+
+          <div class="card ai fragment" style="display:flex; flex-direction:column; gap:8px;">
+            <div class="panel-title">מנסח <span class="en">user stories</span></div>
+            <div class="muted">הופך כל צורך ל"כסטודנט, אני רוצה… כדי…", ומסמן דרישות שנראה שחסרות
+              או שלא נשאלו עליהן בראיון.</div>
+          </div>
+
+        </div>
+
+        <div class="callout ai fragment">
+          <span class="label">🤖 מה <span class="en">Claude</span> מטייט</span>
+          רשימת דרישות מסווגת (<span class="en">FR</span>/<span class="en">NFR</span>), ניסוחי <span class="en">SMART</span>,
+          <span class="en">user stories</span> מתוך הראיונות — וסימון פערים. כל זה תוך שניות, מטקסט גולמי.
+        </div>
+
+        <div class="callout warn fragment">
+          <span class="label">⚠️ מה צריך לבדוק</span>
+          היא עלולה לסווג <span class="en">FR</span>/<span class="en">NFR</span> לא נכון, לנסח דרישה מעורפלת או מפורטת-יתר-על-המידה,
+          להמציא דרישה שאיש לא ביקש, או לפספס צורך לא-פונקציונלי שקבור בתוך הטקסט (אבטחה, עומס, פרטיות).
+          הסיווג והניסוח שלכם הם משטח האימות.
+        </div>
+
+        <p class="bottom-line">הבינה מטייטת — אתם מאשרים. את אותו ההרגל נחזק בהרצאה הבאה, כשנפריד דרישות פונקציונליות מלא-פונקציונליות לקראת ה-<span class="en">use case</span>.</p>
+
+      </div>
+    </section>
+    <!-- F — סיכום + הבא: recap of L3 (what requirements are, why they matter, eliciting,
+         phrasing, capturing, completeness, AI-drafts-we-verify) condensed into recap cards
+         that reveal one beat at a time, then a forward hero/bottom-line that hands off to
+         Use Case diagrams (L4-5) — still inside the ניתוח דרישות phase. Original authoring;
+         terms reuse this deck's own glossary anchors. SDLC badge is added by the build. -->
+    <section data-slug="summary">
+      <div class="sdlc-chip" title="שלב 3 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>ניתוח דרישות</div>
+      <h1>סיכום — והבא בתור</h1>
+      <div class="subtitle">מה למדנו על דרישות, ולאן זה ממשיך</div>
+      <div class="body">
+
+        <div class="cols-3" style="align-items:stretch;">
+
+          <div class="card fragment" style="display:flex; flex-direction:column; gap:8px;">
+            <div class="panel-title">מהן דרישות</div>
+            <ul class="bullets">
+              <li>פונקציונליות <span class="en">(FR)</span> — מה המערכת <strong>עושה</strong></li>
+              <li>לא-פונקציונליות <span class="en">(NFR)</span> — כמה <strong>טוב</strong> היא עושה זאת</li>
+            </ul>
+          </div>
+
+          <div class="card fragment" style="display:flex; flex-direction:column; gap:8px;">
+            <div class="panel-title">למה זה קריטי</div>
+            <ul class="bullets">
+              <li>ככל שמתקנים מאוחר יותר — העלות גבוהה יותר</li>
+              <li>דרישה שגויה או חסרה = מערכת שעונה על הבעיה הלא-נכונה</li>
+            </ul>
+          </div>
+
+          <div class="card fragment" style="display:flex; flex-direction:column; gap:8px;">
+            <div class="panel-title">זיהוי צרכים</div>
+            <ul class="bullets">
+              <li><span class="en term" data-term="wetherbe">Wetherbe</span> — תשאול מובנה במקום "מה אתם רוצים?"</li>
+              <li>אב-טיפוס (<span class="en">prototype</span>) · סדנת <span class="en term" data-term="jad">JAD</span> · לשאול אחרת</li>
+            </ul>
+          </div>
+
+          <div class="card fragment" style="display:flex; flex-direction:column; gap:8px;">
+            <div class="panel-title">ניסוח טוב</div>
+            <ul class="bullets">
+              <li><span class="en term" data-term="smart">SMART</span> — דרישה ספציפית, מדידה ובת-בדיקה</li>
+              <li>להימנע ממילים מעורפלות ("מהר", "ידידותי")</li>
+            </ul>
+          </div>
+
+          <div class="card fragment" style="display:flex; flex-direction:column; gap:8px;">
+            <div class="panel-title">תפיסה ושלמות</div>
+            <ul class="bullets">
+              <li><span class="en term" data-term="user-story">User Story</span> · <span class="en term" data-term="crud">CRUD</span> — תבניות לתיעוד דרישה</li>
+              <li>בדיקת שלמות — שכל ה-<span class="en">FR</span>/<span class="en">NFR</span> מכוסים</li>
+            </ul>
+          </div>
+
+          <div class="card fragment" style="display:flex; flex-direction:column; gap:8px;">
+            <div class="panel-title">🤖 בינה בכל שלב</div>
+            <ul class="bullets">
+              <li><span class="en">Claude</span> מנסח, מסווג ומכין דרישות במהירות</li>
+              <li>⚠️ אנחנו מי שמוודאים — מה היא פספסה, המציאה או הניחה</li>
+            </ul>
+          </div>
+
+        </div>
+
+        <div class="hero fragment">
+          <h3>הבא בתור — מדרישות למודל: תרשים <span class="en">Use Case</span> (הרצאות 4–5)</h3>
+          <p>אספנו, ניסחנו ותיעדנו דרישות — אבל רשימה היא עדיין טקסט. בשלב הבא ניקח את הדרישות
+             ה<strong>פונקציונליות</strong> (מה המערכת עושה, ובשביל מי) ונהפוך אותן ל<strong>מודל</strong>:
+             תרשים <span class="en">Use Case</span> שמראה מי השחקנים, מה גבול המערכת, ומה כל אחד יכול
+             לעשות בה. עדיין אותו שלב — <strong>ניתוח דרישות</strong> — רק מייצגים אותו ויזואלית.</p>
+        </div>
+
+        <p class="bottom-line">דרישה טובה היא דרישה שאפשר לבדוק — בהרצאה הבאה נצייר את הדרישות הפונקציונליות כתרשים <span class="en">Use Case</span>.</p>
+
+      </div>
+    </section>
+  </div>
+</div>
+<script src="../web/vendor/reveal/dist/reveal.js"></script>
+<script src="../web/vendor/reveal/plugin/notes/notes.js"></script>
+<script src="../web/vendor/reveal/plugin/highlight/highlight.js"></script>
+<script src="../web/theme/sad.js"></script>
+<script src="../web/theme/glossary.js"></script>
+</body>
+</html>

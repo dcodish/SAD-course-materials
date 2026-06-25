@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>מערכת הזמנת אוכל בקמפוס - מצב קיים — BPMN 1.0</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Hebrew:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; padding: 0; background: #eef2f6;
+      font-family: 'Noto Sans Hebrew', -apple-system, BlinkMacSystemFont, sans-serif;
+      direction: rtl; }
+    .header-bar { padding: 14px 20px; background: linear-gradient(135deg, #37474f, #546e7a);
+      color: #fff; display: flex; align-items: baseline; gap: 16px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
+    .header-bar h1 { margin: 0; font-size: 18px; font-weight: 600; }
+    .header-bar .en { font-size: 13px; opacity: 0.8; font-weight: 400; }
+    .header-bar .badge { margin-inline-start: auto; background: rgba(255,255,255,0.15);
+      padding: 3px 10px; border-radius: 10px; font-size: 11px; letter-spacing: 0.5px; }
+    .stats-bar { padding: 8px 20px; background: #ffffff; font-size: 12px; color: #546e7a;
+      border-bottom: 1px solid #cfd8dc; }
+    .stats-bar span { margin-inline-end: 16px; }
+    .svg-wrapper { overflow: auto; background: #f8fafc; padding: 20px; min-height: calc(100vh - 120px); }
+    svg { display: block; background: #f8fafc; }
+    .bpmn-element { cursor: pointer; }
+    .bpmn-tooltip { display: none; position: fixed; background: #1a1a2e; color: #fff;
+      padding: 9px 13px; border-radius: 6px; font-size: 12px; max-width: 280px;
+      z-index: 500; direction: rtl; pointer-events: none; line-height: 1.5;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+    .bpmn-tooltip strong { color: #ffd54f; }
+    .vp-export-btn { position: fixed; bottom: 20px; left: 20px; z-index: 1000;
+      background: #1e40af; color: #fff; border: none; border-radius: 6px;
+      padding: 9px 16px; font-size: 13px; cursor: pointer;
+      font-family: 'Noto Sans Hebrew', sans-serif; box-shadow: 0 2px 6px rgba(0,0,0,0.15); }
+    .vp-export-btn:hover { background: #1e3a8a; }
+    .assumptions-btn { position: fixed; top: 12px; left: 12px; z-index: 1000;
+      background: #37474f; color: #fff; border: none; border-radius: 6px;
+      padding: 7px 13px; font-size: 12px; cursor: pointer;
+      font-family: 'Noto Sans Hebrew', sans-serif; }
+    .assumptions-panel { position: fixed; top: 54px; left: 12px; z-index: 1000;
+      background: #ffffff; border: 1px solid #b0bec5; border-radius: 8px; padding: 14px;
+      max-width: 340px; max-height: 70vh; overflow-y: auto; direction: rtl;
+      font-family: 'Noto Sans Hebrew', sans-serif; font-size: 13px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.18); display: none; }
+    .assumptions-panel h4 { margin: 0 0 10px; color: #37474f; }
+    .assumptions-panel ul { margin: 4px 0 10px; padding-inline-start: 18px; }
+
+    /* Embed mode (?embed=1): only the diagram, fit-to-screen, no chrome/scroll —
+       used when this file is shown inside a lecture-slide iframe. */
+    body.embed { margin: 0; padding: 0; overflow: hidden; height: 100vh; background: #fff; }
+    body.embed .header-bar,
+    body.embed .assumptions-btn,
+    body.embed .assumptions-panel,
+    body.embed .vp-export-btn { display: none !important; }
+    body.embed .svg-wrapper { overflow: hidden !important; padding: 8px !important; min-height: 0 !important;
+      width: 100vw; height: 100vh; display: flex; align-items: center; justify-content: center; }
+    body.embed .svg-wrapper svg { width: 100% !important; height: 100% !important; max-width: none !important; }
+  </style>
+</head>
+<body>
+  <div class="header-bar">
+    <h1>מערכת הזמנת אוכל בקמפוס - מצב קיים</h1>
+    <span class="en">Campus Food Ordering (As-Is)</span>
+    <span class="badge">BPMN 1.0</span>
+  </div>
+  <div class="stats-bar">
+    <span>1 מאגרים</span>
+    <span>4 נתיבים</span>
+    <span>11 משימות</span>
+    <span>3 שערים</span>
+    <span>3 אירועים</span>
+    <span>0 פריטי נתונים</span>
+    <span>18 זרימות</span>
+  </div>
+  <div class="svg-wrapper">
+    <svg width="2160" height="752"
+         viewBox="0 0 2160 752"
+         xmlns="http://www.w3.org/2000/svg">
+      
+    <defs>
+      <pattern id="dot-grid" x="0" y="0" width="24" height="24" patternUnits="userSpaceOnUse">
+        <circle cx="1" cy="1" r="0.8" fill="#cbd5e1"/>
+      </pattern>
+      <marker id="arrow-seq" viewBox="0 0 10 10" refX="10" refY="5"
+              markerWidth="10" markerHeight="10" orient="auto-start-reverse">
+        <path d="M 0 0 L 10 5 L 0 10 Z" fill="#455a64"/>
+      </marker>
+      <marker id="msg-start" viewBox="-10 -10 20 20" refX="0" refY="0"
+              markerWidth="10" markerHeight="10" orient="auto">
+        <circle cx="0" cy="0" r="4" fill="#ffffff" stroke="#37474f" stroke-width="1.2"/>
+      </marker>
+      <marker id="msg-end" viewBox="0 0 10 10" refX="9" refY="5"
+              markerWidth="10" markerHeight="10" orient="auto-start-reverse">
+        <path d="M 0 0 L 10 5 L 0 10 Z" fill="#37474f"/>
+      </marker>
+      <marker id="arrow-data" viewBox="0 0 10 10" refX="9" refY="5"
+              markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+        <path d="M 0 0 L 10 5 L 0 10 Z" fill="#7986cb"/>
+      </marker>
+    </defs>
+      <rect x="0" y="0" width="2160" height="752" fill="#f8fafc"/>
+    <rect x="0" y="0" width="2160" height="752" fill="url(#dot-grid)"/>
+      
+    <!-- pool: pool-campus -->
+    <g class="bpmn-pool" data-pool="pool-campus">
+      <rect x="20" y="72" width="2100" height="644"
+            fill="#ffffff" stroke="#455a64" stroke-width="1.5"/>
+      <rect x="20" y="72" width="30" height="644"
+            fill="#37474f" stroke="#455a64" stroke-width="1.5"/>
+      <text x="35" y="394" text-anchor="middle"
+            dominant-baseline="middle"
+            transform="rotate(-90, 35, 394)"
+            fill="#ffffff" font-size="12" font-weight="600"
+            direction="rtl">קפיטריית הקמפוס</text>
+      <line x1="50" y1="72" x2="50" y2="716"
+            stroke="#455a64" stroke-width="1"/>
+    </g>
+      
+    <g class="bpmn-lane" data-lane="lane-student">
+      <rect x="74" y="72" width="2046" height="140"
+            fill="#fafafa" fill-opacity="0.6" stroke="none"/>
+      <rect x="50" y="72" width="24" height="140"
+            fill="#546e7a" stroke="#455a64" stroke-width="1"/>
+      <text x="62" y="142" text-anchor="middle"
+            dominant-baseline="middle"
+            transform="rotate(-90, 62, 142)"
+            fill="#ffffff" font-size="11" font-weight="500"
+            direction="rtl">סטודנט</text>
+      
+    </g>
+
+    <g class="bpmn-lane" data-lane="lane-counter">
+      <rect x="74" y="212" width="2046" height="140"
+            fill="#fafafa" fill-opacity="0.6" stroke="none"/>
+      <rect x="50" y="212" width="24" height="140"
+            fill="#546e7a" stroke="#455a64" stroke-width="1"/>
+      <text x="62" y="282" text-anchor="middle"
+            dominant-baseline="middle"
+            transform="rotate(-90, 62, 282)"
+            fill="#ffffff" font-size="11" font-weight="500"
+            direction="rtl">עובד דלפק</text>
+      <line x1="50" y1="212" x2="2120" y2="212"
+              stroke="#90a4ae" stroke-width="1" stroke-dasharray="4 3"/>
+    </g>
+
+    <g class="bpmn-lane" data-lane="lane-kitchen">
+      <rect x="74" y="352" width="2046" height="140"
+            fill="#fafafa" fill-opacity="0.6" stroke="none"/>
+      <rect x="50" y="352" width="24" height="140"
+            fill="#546e7a" stroke="#455a64" stroke-width="1"/>
+      <text x="62" y="422" text-anchor="middle"
+            dominant-baseline="middle"
+            transform="rotate(-90, 62, 422)"
+            fill="#ffffff" font-size="11" font-weight="500"
+            direction="rtl">מטבח</text>
+      <line x1="50" y1="352" x2="2120" y2="352"
+              stroke="#90a4ae" stroke-width="1" stroke-dasharray="4 3"/>
+    </g>
+
+    <g class="bpmn-lane" data-lane="lane-payment">
+      <rect x="74" y="492" width="2046" height="224"
+            fill="#fafafa" fill-opacity="0.6" stroke="none"/>
+      <rect x="50" y="492" width="24" height="224"
+            fill="#546e7a" stroke="#455a64" stroke-width="1"/>
+      <text x="62" y="604" text-anchor="middle"
+            dominant-baseline="middle"
+            transform="rotate(-90, 62, 604)"
+            fill="#ffffff" font-size="11" font-weight="500"
+            direction="rtl">תשלום</text>
+      <line x1="50" y1="492" x2="2120" y2="492"
+              stroke="#90a4ae" stroke-width="1" stroke-dasharray="4 3"/>
+    </g>
+      
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf-1">
+      <path d="M 162.0 114.0 L 260.0 114.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf-2">
+      <path d="M 400.0 114.0 L 446.0 114.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf-3">
+      <path d="M 586.0 114.0 L 632.0 114.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf-4">
+      <path d="M 772.0 114.0 L 864.0 114.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf-5">
+      <path d="M 912.0 110.0 L 930.0 110.0 L 930.0 170.0 L 846.0 170.0 L 846.0 114.0 L 446.0 114.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    <g class="bpmn-flow-label">
+      <rect x="616.2" y="103" width="59.6" height="14"
+            rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"/>
+      <text x="646" y="110" text-anchor="middle" dominant-baseline="middle"
+            font-size="10" fill="#263238" direction="rtl">לא במלאי</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf-6">
+      <path d="M 888.0 138.0 L 888.0 222.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    <g class="bpmn-flow-label">
+      <rect x="867.5" y="169" width="41" height="14"
+            rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"/>
+      <text x="888" y="176" text-anchor="middle" dominant-baseline="middle"
+            font-size="10" fill="#263238" direction="rtl">במלאי</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf-7">
+      <path d="M 958.0 254.0 L 1004.0 254.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf-8">
+      <path d="M 1074.0 286.0 L 1074.0 362.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf-9">
+      <path d="M 1144.0 394.0 L 1190.0 394.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf-10">
+      <path d="M 1260.0 426.0 L 1260.0 544.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf-11">
+      <path d="M 1330.0 576.0 L 1422.0 576.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf-12">
+      <path d="M 1470.0 572.0 L 1516.0 572.0 L 1516.0 534.0 L 1562.0 534.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    <g class="bpmn-flow-label">
+      <rect x="1472.5" y="561" width="41" height="14"
+            rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"/>
+      <text x="1493" y="568" text-anchor="middle" dominant-baseline="middle"
+            font-size="10" fill="#263238" direction="rtl">הצליח</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf-13">
+      <path d="M 1470.0 580.0 L 1539.0 580.0 L 1539.0 618.0 L 1608.0 618.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    <g class="bpmn-flow-label">
+      <rect x="1487.1" y="569" width="34.8" height="14"
+            rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"/>
+      <text x="1504.5" y="576" text-anchor="middle" dominant-baseline="middle"
+            font-size="10" fill="#263238" direction="rtl">נכשל</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf-14">
+      <path d="M 1656.0 614.0 L 1674.0 614.0 L 1674.0 666.0 L 1590.0 666.0 L 1590.0 576.0 L 1190.0 576.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    <g class="bpmn-flow-label">
+      <rect x="1363.3" y="565" width="53.4" height="14"
+            rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"/>
+      <text x="1390" y="572" text-anchor="middle" dominant-baseline="middle"
+            font-size="10" fill="#263238" direction="rtl">שלם שוב</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf-15">
+      <path d="M 1656.0 622.0 L 1702.0 622.0 L 1702.0 576.0 L 1748.0 576.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    <g class="bpmn-flow-label">
+      <rect x="1664.7" y="611" width="28.6" height="14"
+            rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"/>
+      <text x="1679" y="618" text-anchor="middle" dominant-baseline="middle"
+            font-size="10" fill="#263238" direction="rtl">בטל</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf-16">
+      <path d="M 1888.0 576.0 L 1986.0 576.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf-17">
+      <path d="M 1632.0 502.0 L 1632.0 146.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf-18">
+      <path d="M 1702.0 114.0 L 1800.0 114.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    </g>
+      
+      
+      
+    <g class="bpmn-element bpmn-event" id="start-1" data-kind="event" data-event="start">
+      <circle cx="144" cy="114" r="18" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2"/>
+      <text text-anchor="middle" font-size="10.5" fill="#37474f" direction="rtl"
+             font-weight="500"><tspan x="144" y="146">סטודנט הגיע</tspan><tspan x="144" y="158">לקפיטריה</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-task" id="t-counter" data-kind="task">
+      <rect x="260" y="82" width="140" height="64"
+            rx="8" ry="8" fill="#ffffff" stroke="#546e7a" stroke-width="1.5"/>
+      <text text-anchor="middle" dominant-baseline="middle"
+            font-size="11.5" font-weight="500"
+            fill="#1a1a2e" direction="rtl"><tspan x="330" y="114">גש לדלפק</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-task" id="t-choose" data-kind="task">
+      <rect x="446" y="82" width="140" height="64"
+            rx="8" ry="8" fill="#ffffff" stroke="#546e7a" stroke-width="1.5"/>
+      <text text-anchor="middle" dominant-baseline="middle"
+            font-size="11.5" font-weight="500"
+            fill="#1a1a2e" direction="rtl"><tspan x="516" y="114">בחר מנה מהלוח</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-task" id="t-queue" data-kind="task">
+      <rect x="632" y="82" width="140" height="64"
+            rx="8" ry="8" fill="#ffffff" stroke="#546e7a" stroke-width="1.5"/>
+      <text text-anchor="middle" dominant-baseline="middle"
+            font-size="11.5" font-weight="500"
+            fill="#1a1a2e" direction="rtl"><tspan x="702" y="114">המתן בתור</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-gateway" id="gw-stock" data-kind="gateway" data-gw="XOR">
+      <text text-anchor="middle" font-size="10.5" fill="#37474f" direction="rtl"
+             font-weight="500"><tspan x="888" y="80">המנה במלאי?</tspan></text>
+      <rect x="871" y="97" width="34" height="34"
+            fill="#fff8e1" stroke="#f9a825" stroke-width="2"
+            transform="rotate(45, 888, 114)"/>
+      
+      <line x1="880" y1="106" x2="896" y2="122"
+            stroke="#e65100" stroke-width="3" stroke-linecap="round"/>
+      <line x1="896" y1="106" x2="880" y2="122"
+            stroke="#e65100" stroke-width="3" stroke-linecap="round"/>
+    </g>
+
+    <g class="bpmn-element bpmn-task" id="t-receive" data-kind="task">
+      <rect x="1562" y="82" width="140" height="64"
+            rx="8" ry="8" fill="#ffffff" stroke="#546e7a" stroke-width="1.5"/>
+      <text text-anchor="middle" dominant-baseline="middle"
+            font-size="11.5" font-weight="500"
+            fill="#1a1a2e" direction="rtl"><tspan x="1632" y="114">קבל את ההזמנה</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-event" id="end-ok" data-kind="event" data-event="end">
+      <circle cx="1818" cy="114" r="18" fill="#ffebee" stroke="#c62828" stroke-width="3.5"/>
+      <text text-anchor="middle" font-size="10.5" fill="#37474f" direction="rtl"
+             font-weight="500"><tspan x="1818" y="146">ההזמנה התקבלה</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-task" id="t-take-order" data-kind="task">
+      <rect x="818" y="222" width="140" height="64"
+            rx="8" ry="8" fill="#ffffff" stroke="#546e7a" stroke-width="1.5"/>
+      <text text-anchor="middle" dominant-baseline="middle"
+            font-size="11.5" font-weight="500"
+            fill="#1a1a2e" direction="rtl"><tspan x="888" y="254">קבל הזמנה בעל-פה</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-task" id="t-forward" data-kind="task">
+      <rect x="1004" y="222" width="140" height="64"
+            rx="8" ry="8" fill="#ffffff" stroke="#546e7a" stroke-width="1.5"/>
+      <text text-anchor="middle" dominant-baseline="middle"
+            font-size="11.5" font-weight="500"
+            fill="#1a1a2e" direction="rtl"><tspan x="1074" y="254">העבר הזמנה למטבח</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-task" id="t-prepare" data-kind="task">
+      <rect x="1004" y="362" width="140" height="64"
+            rx="8" ry="8" fill="#ffffff" stroke="#546e7a" stroke-width="1.5"/>
+      <text text-anchor="middle" dominant-baseline="middle"
+            font-size="11.5" font-weight="500"
+            fill="#1a1a2e" direction="rtl"><tspan x="1074" y="394">הכן את ההזמנה</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-task" id="t-notify" data-kind="task">
+      <rect x="1190" y="362" width="140" height="64"
+            rx="8" ry="8" fill="#ffffff" stroke="#546e7a" stroke-width="1.5"/>
+      <text text-anchor="middle" dominant-baseline="middle"
+            font-size="11.5" font-weight="500"
+            fill="#1a1a2e" direction="rtl"><tspan x="1260" y="387">הודע שההזמנה</tspan><tspan x="1260" y="401">מוכנה</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-task" id="t-pay" data-kind="task">
+      <rect x="1190" y="544" width="140" height="64"
+            rx="8" ry="8" fill="#ffffff" stroke="#546e7a" stroke-width="1.5"/>
+      <text text-anchor="middle" dominant-baseline="middle"
+            font-size="11.5" font-weight="500"
+            fill="#1a1a2e" direction="rtl"><tspan x="1260" y="576">שלם בקופה</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-gateway" id="gw-pay" data-kind="gateway" data-gw="XOR">
+      <text text-anchor="middle" font-size="10.5" fill="#37474f" direction="rtl"
+             font-weight="500"><tspan x="1446" y="542">התשלום הצליח?</tspan></text>
+      <rect x="1429" y="559" width="34" height="34"
+            fill="#fff8e1" stroke="#f9a825" stroke-width="2"
+            transform="rotate(45, 1446, 576)"/>
+      
+      <line x1="1438" y1="568" x2="1454" y2="584"
+            stroke="#e65100" stroke-width="3" stroke-linecap="round"/>
+      <line x1="1454" y1="568" x2="1438" y2="584"
+            stroke="#e65100" stroke-width="3" stroke-linecap="round"/>
+    </g>
+
+    <g class="bpmn-element bpmn-task" id="t-approve" data-kind="task">
+      <rect x="1562" y="502" width="140" height="64"
+            rx="8" ry="8" fill="#ffffff" stroke="#546e7a" stroke-width="1.5"/>
+      <text text-anchor="middle" dominant-baseline="middle"
+            font-size="11.5" font-weight="500"
+            fill="#1a1a2e" direction="rtl"><tspan x="1632" y="534">אשר תשלום</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-gateway" id="gw-fail" data-kind="gateway" data-gw="XOR">
+      <text text-anchor="middle" font-size="10.5" fill="#37474f" direction="rtl"
+             font-weight="500"><tspan x="1632" y="584">לשלם שוב או לבטל?</tspan></text>
+      <rect x="1615" y="601" width="34" height="34"
+            fill="#fff8e1" stroke="#f9a825" stroke-width="2"
+            transform="rotate(45, 1632, 618)"/>
+      
+      <line x1="1624" y1="610" x2="1640" y2="626"
+            stroke="#e65100" stroke-width="3" stroke-linecap="round"/>
+      <line x1="1640" y1="610" x2="1624" y2="626"
+            stroke="#e65100" stroke-width="3" stroke-linecap="round"/>
+    </g>
+
+    <g class="bpmn-element bpmn-task" id="t-cancel" data-kind="task">
+      <rect x="1748" y="544" width="140" height="64"
+            rx="8" ry="8" fill="#ffffff" stroke="#546e7a" stroke-width="1.5"/>
+      <text text-anchor="middle" dominant-baseline="middle"
+            font-size="11.5" font-weight="500"
+            fill="#1a1a2e" direction="rtl"><tspan x="1818" y="576">בטל הזמנה</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-event" id="end-cancel" data-kind="event" data-event="end">
+      <circle cx="2004" cy="576" r="18" fill="#ffebee" stroke="#c62828" stroke-width="3.5"/>
+      <text text-anchor="middle" font-size="10.5" fill="#37474f" direction="rtl"
+             font-weight="500"><tspan x="2004" y="608">ההזמנה בוטלה</tspan></text>
+    </g>
+    </svg>
+  </div>
+  <div id="bpmn-tooltip" class="bpmn-tooltip"></div>
+  
+    <button class="assumptions-btn" onclick="toggleAssumptions()">ℹ️ הנחות ושאלות</button>
+    <div id="assumptions-panel" class="assumptions-panel">
+      <h4>הנחות ושאלות פתוחות</h4>
+      <strong>הנחות:</strong><ul><li>כל ארבעת התפקידים (סטודנט, עובד דלפק, מטבח, תשלום) הם נתיבים בתוך בריכת הקפיטריה — תהליך ידני ללא מערכת מחשוב, ולכן אין מאגרי נתונים.</li><li>בכשל תשלום הסטודנט בוחר באמצעות שער XOR נוסף בין תשלום חוזר (חזרה אל &apos;שלם בקופה&apos;) לבין ביטול ההזמנה.</li><li>התשלום מתבצע לאחר שההזמנה מוכנה, בהתאם לתיאור התהליך הקיים.</li></ul>
+      
+    </div>
+  <button class="vp-export-btn" onclick="exportBPMN()">Download .bpmn (Visual Paradigm)</button>
+  <script>
+  (function() {
+    const TOOLTIPS = {"start-1":"<strong>אירוע התחלה</strong><div>סטודנט הגיע לקפיטריה</div>","t-counter":"<strong>גש לדלפק</strong><div>מאגר: קפיטריית הקמפוס · נתיב: סטודנט</div>","t-choose":"<strong>בחר מנה מהלוח</strong><div>מאגר: קפיטריית הקמפוס · נתיב: סטודנט</div>","t-queue":"<strong>המתן בתור</strong><div>מאגר: קפיטריית הקמפוס · נתיב: סטודנט</div>","gw-stock":"<strong>XOR (בלעדי) — פיצול</strong><div>שאלה: המנה במלאי?</div><div>ענפים:</div><ul style=\"margin:4px 0 0;padding-right:18px\"><li>לא במלאי → בחר מנה מהלוח</li><li>במלאי → קבל הזמנה בעל-פה</li></ul>","t-take-order":"<strong>קבל הזמנה בעל-פה</strong><div>מאגר: קפיטריית הקמפוס · נתיב: עובד דלפק</div>","t-forward":"<strong>העבר הזמנה למטבח</strong><div>מאגר: קפיטריית הקמפוס · נתיב: עובד דלפק</div>","t-prepare":"<strong>הכן את ההזמנה</strong><div>מאגר: קפיטריית הקמפוס · נתיב: מטבח</div>","t-notify":"<strong>הודע שההזמנה מוכנה</strong><div>מאגר: קפיטריית הקמפוס · נתיב: מטבח</div>","t-pay":"<strong>שלם בקופה</strong><div>מאגר: קפיטריית הקמפוס · נתיב: תשלום</div>","gw-pay":"<strong>XOR (בלעדי) — פיצול</strong><div>שאלה: התשלום הצליח?</div><div>ענפים:</div><ul style=\"margin:4px 0 0;padding-right:18px\"><li>הצליח → אשר תשלום</li><li>נכשל → gw-fail</li></ul>","t-approve":"<strong>אשר תשלום</strong><div>מאגר: קפיטריית הקמפוס · נתיב: תשלום</div>","gw-fail":"<strong>XOR (בלעדי) — פיצול</strong><div>שאלה: לשלם שוב או לבטל?</div><div>ענפים:</div><ul style=\"margin:4px 0 0;padding-right:18px\"><li>שלם שוב → שלם בקופה</li><li>בטל → בטל הזמנה</li></ul>","t-cancel":"<strong>בטל הזמנה</strong><div>מאגר: קפיטריית הקמפוס · נתיב: תשלום</div>","t-receive":"<strong>קבל את ההזמנה</strong><div>מאגר: קפיטריית הקמפוס · נתיב: סטודנט</div>","end-ok":"<strong>אירוע סיום</strong><div>ההזמנה התקבלה</div>","end-cancel":"<strong>אירוע סיום</strong><div>ההזמנה בוטלה</div>"};
+    const tip = document.getElementById('bpmn-tooltip');
+    document.querySelectorAll('.bpmn-element').forEach(function(g) {
+      g.addEventListener('mouseenter', function() {
+        const id = g.getAttribute('id');
+        const content = TOOLTIPS[id];
+        if (!content) return;
+        tip.innerHTML = content;
+        tip.style.display = 'block';
+      });
+      g.addEventListener('mousemove', function(e) {
+        tip.style.top = (e.clientY + 14) + 'px';
+        tip.style.left = (e.clientX + 14) + 'px';
+      });
+      g.addEventListener('mouseleave', function() { tip.style.display = 'none'; });
+    });
+  })();
+
+  
+  function toggleAssumptions() {
+    const p = document.getElementById('assumptions-panel');
+    p.style.display = p.style.display === 'block' ? 'none' : 'block';
+  }
+
+  // Precomputed BPMN 2.0 XML — server generated from the layout
+  const BPMN_XML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<bpmn:definitions xmlns:bpmn=\"http://www.omg.org/spec/BPMN/20100524/MODEL\"\n  xmlns:bpmndi=\"http://www.omg.org/spec/BPMN/20100524/DI\"\n  xmlns:dc=\"http://www.omg.org/spec/DD/20100524/DC\"\n  xmlns:di=\"http://www.omg.org/spec/DD/20100524/DI\"\n  xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n  id=\"Definitions_1\" targetNamespace=\"http://bpmn.io/schema/bpmn\">\n  <bpmn:process id=\"process_1\" name=\"קפיטריית הקמפוס\" isExecutable=\"false\">\n      <bpmn:laneSet id=\"process_1_laneset\">\n        <bpmn:lane id=\"lane-student\" name=\"סטודנט\">\n          <bpmn:flowNodeRef>start-1</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>t-counter</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>t-choose</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>t-queue</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>gw-stock</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>t-receive</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>end-ok</bpmn:flowNodeRef>\n        </bpmn:lane>\n        <bpmn:lane id=\"lane-counter\" name=\"עובד דלפק\">\n          <bpmn:flowNodeRef>t-take-order</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>t-forward</bpmn:flowNodeRef>\n        </bpmn:lane>\n        <bpmn:lane id=\"lane-kitchen\" name=\"מטבח\">\n          <bpmn:flowNodeRef>t-prepare</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>t-notify</bpmn:flowNodeRef>\n        </bpmn:lane>\n        <bpmn:lane id=\"lane-payment\" name=\"תשלום\">\n          <bpmn:flowNodeRef>t-pay</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>gw-pay</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>t-approve</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>gw-fail</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>t-cancel</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>end-cancel</bpmn:flowNodeRef>\n        </bpmn:lane>\n      </bpmn:laneSet>\n      <bpmn:startEvent id=\"start-1\" name=\"סטודנט הגיע לקפיטריה\"/>\n      <bpmn:task id=\"t-counter\" name=\"גש לדלפק\"/>\n      <bpmn:task id=\"t-choose\" name=\"בחר מנה מהלוח\"/>\n      <bpmn:task id=\"t-queue\" name=\"המתן בתור\"/>\n      <bpmn:exclusiveGateway id=\"gw-stock\" name=\"\"/>\n      <bpmn:task id=\"t-take-order\" name=\"קבל הזמנה בעל-פה\"/>\n      <bpmn:task id=\"t-forward\" name=\"העבר הזמנה למטבח\"/>\n      <bpmn:task id=\"t-prepare\" name=\"הכן את ההזמנה\"/>\n      <bpmn:task id=\"t-notify\" name=\"הודע שההזמנה מוכנה\"/>\n      <bpmn:task id=\"t-pay\" name=\"שלם בקופה\"/>\n      <bpmn:exclusiveGateway id=\"gw-pay\" name=\"\"/>\n      <bpmn:task id=\"t-approve\" name=\"אשר תשלום\"/>\n      <bpmn:exclusiveGateway id=\"gw-fail\" name=\"\"/>\n      <bpmn:task id=\"t-cancel\" name=\"בטל הזמנה\"/>\n      <bpmn:task id=\"t-receive\" name=\"קבל את ההזמנה\"/>\n      <bpmn:endEvent id=\"end-ok\" name=\"ההזמנה התקבלה\"/>\n      <bpmn:endEvent id=\"end-cancel\" name=\"ההזמנה בוטלה\"/>\n      <bpmn:sequenceFlow id=\"sf-1\" sourceRef=\"start-1\" targetRef=\"t-counter\"/>\n      <bpmn:sequenceFlow id=\"sf-2\" sourceRef=\"t-counter\" targetRef=\"t-choose\"/>\n      <bpmn:sequenceFlow id=\"sf-3\" sourceRef=\"t-choose\" targetRef=\"t-queue\"/>\n      <bpmn:sequenceFlow id=\"sf-4\" sourceRef=\"t-queue\" targetRef=\"gw-stock\"/>\n      <bpmn:sequenceFlow id=\"sf-5\" sourceRef=\"gw-stock\" targetRef=\"t-choose\" name=\"לא במלאי\"/>\n      <bpmn:sequenceFlow id=\"sf-6\" sourceRef=\"gw-stock\" targetRef=\"t-take-order\" name=\"במלאי\"/>\n      <bpmn:sequenceFlow id=\"sf-7\" sourceRef=\"t-take-order\" targetRef=\"t-forward\"/>\n      <bpmn:sequenceFlow id=\"sf-8\" sourceRef=\"t-forward\" targetRef=\"t-prepare\"/>\n      <bpmn:sequenceFlow id=\"sf-9\" sourceRef=\"t-prepare\" targetRef=\"t-notify\"/>\n      <bpmn:sequenceFlow id=\"sf-10\" sourceRef=\"t-notify\" targetRef=\"t-pay\"/>\n      <bpmn:sequenceFlow id=\"sf-11\" sourceRef=\"t-pay\" targetRef=\"gw-pay\"/>\n      <bpmn:sequenceFlow id=\"sf-12\" sourceRef=\"gw-pay\" targetRef=\"t-approve\" name=\"הצליח\"/>\n      <bpmn:sequenceFlow id=\"sf-13\" sourceRef=\"gw-pay\" targetRef=\"gw-fail\" name=\"נכשל\"/>\n      <bpmn:sequenceFlow id=\"sf-14\" sourceRef=\"gw-fail\" targetRef=\"t-pay\" name=\"שלם שוב\"/>\n      <bpmn:sequenceFlow id=\"sf-15\" sourceRef=\"gw-fail\" targetRef=\"t-cancel\" name=\"בטל\"/>\n      <bpmn:sequenceFlow id=\"sf-16\" sourceRef=\"t-cancel\" targetRef=\"end-cancel\"/>\n      <bpmn:sequenceFlow id=\"sf-17\" sourceRef=\"t-approve\" targetRef=\"t-receive\"/>\n      <bpmn:sequenceFlow id=\"sf-18\" sourceRef=\"t-receive\" targetRef=\"end-ok\"/>\n  </bpmn:process>\n  <bpmn:collaboration id=\"collab_1\">\n    <bpmn:participant id=\"pool-campus\" name=\"קפיטריית הקמפוס\" processRef=\"process_1\"/>\n  </bpmn:collaboration>\n  <bpmndi:BPMNDiagram id=\"BPMNDiagram_1\">\n    <bpmndi:BPMNPlane id=\"BPMNPlane_1\" bpmnElement=\"collab_1\">\n      <bpmndi:BPMNShape id=\"pool-campus_di\" bpmnElement=\"pool-campus\" isHorizontal=\"true\">\n        <dc:Bounds x=\"20\" y=\"72\" width=\"2100\" height=\"644\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"lane-student_di\" bpmnElement=\"lane-student\" isHorizontal=\"true\">\n        <dc:Bounds x=\"50\" y=\"72\" width=\"2070\" height=\"140\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"lane-counter_di\" bpmnElement=\"lane-counter\" isHorizontal=\"true\">\n        <dc:Bounds x=\"50\" y=\"212\" width=\"2070\" height=\"140\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"lane-kitchen_di\" bpmnElement=\"lane-kitchen\" isHorizontal=\"true\">\n        <dc:Bounds x=\"50\" y=\"352\" width=\"2070\" height=\"140\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"lane-payment_di\" bpmnElement=\"lane-payment\" isHorizontal=\"true\">\n        <dc:Bounds x=\"50\" y=\"492\" width=\"2070\" height=\"224\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"start-1_di\" bpmnElement=\"start-1\">\n        <dc:Bounds x=\"126\" y=\"96\" width=\"36\" height=\"36\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"t-counter_di\" bpmnElement=\"t-counter\">\n        <dc:Bounds x=\"260\" y=\"82\" width=\"140\" height=\"64\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"t-choose_di\" bpmnElement=\"t-choose\">\n        <dc:Bounds x=\"446\" y=\"82\" width=\"140\" height=\"64\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"t-queue_di\" bpmnElement=\"t-queue\">\n        <dc:Bounds x=\"632\" y=\"82\" width=\"140\" height=\"64\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"gw-stock_di\" bpmnElement=\"gw-stock\">\n        <dc:Bounds x=\"864\" y=\"90\" width=\"48\" height=\"48\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"t-receive_di\" bpmnElement=\"t-receive\">\n        <dc:Bounds x=\"1562\" y=\"82\" width=\"140\" height=\"64\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"end-ok_di\" bpmnElement=\"end-ok\">\n        <dc:Bounds x=\"1800\" y=\"96\" width=\"36\" height=\"36\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"t-take-order_di\" bpmnElement=\"t-take-order\">\n        <dc:Bounds x=\"818\" y=\"222\" width=\"140\" height=\"64\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"t-forward_di\" bpmnElement=\"t-forward\">\n        <dc:Bounds x=\"1004\" y=\"222\" width=\"140\" height=\"64\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"t-prepare_di\" bpmnElement=\"t-prepare\">\n        <dc:Bounds x=\"1004\" y=\"362\" width=\"140\" height=\"64\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"t-notify_di\" bpmnElement=\"t-notify\">\n        <dc:Bounds x=\"1190\" y=\"362\" width=\"140\" height=\"64\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"t-pay_di\" bpmnElement=\"t-pay\">\n        <dc:Bounds x=\"1190\" y=\"544\" width=\"140\" height=\"64\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"gw-pay_di\" bpmnElement=\"gw-pay\">\n        <dc:Bounds x=\"1422\" y=\"552\" width=\"48\" height=\"48\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"t-approve_di\" bpmnElement=\"t-approve\">\n        <dc:Bounds x=\"1562\" y=\"502\" width=\"140\" height=\"64\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"gw-fail_di\" bpmnElement=\"gw-fail\">\n        <dc:Bounds x=\"1608\" y=\"594\" width=\"48\" height=\"48\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"t-cancel_di\" bpmnElement=\"t-cancel\">\n        <dc:Bounds x=\"1748\" y=\"544\" width=\"140\" height=\"64\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"end-cancel_di\" bpmnElement=\"end-cancel\">\n        <dc:Bounds x=\"1986\" y=\"558\" width=\"36\" height=\"36\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNEdge id=\"sf-1_di\" bpmnElement=\"sf-1\">\n        <di:waypoint x=\"162\" y=\"114\"/>\n        <di:waypoint x=\"260\" y=\"114\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf-2_di\" bpmnElement=\"sf-2\">\n        <di:waypoint x=\"400\" y=\"114\"/>\n        <di:waypoint x=\"446\" y=\"114\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf-3_di\" bpmnElement=\"sf-3\">\n        <di:waypoint x=\"586\" y=\"114\"/>\n        <di:waypoint x=\"632\" y=\"114\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf-4_di\" bpmnElement=\"sf-4\">\n        <di:waypoint x=\"772\" y=\"114\"/>\n        <di:waypoint x=\"864\" y=\"114\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf-5_di\" bpmnElement=\"sf-5\">\n        <di:waypoint x=\"912\" y=\"110\"/>\n        <di:waypoint x=\"930\" y=\"110\"/>\n        <di:waypoint x=\"930\" y=\"170\"/>\n        <di:waypoint x=\"846\" y=\"170\"/>\n        <di:waypoint x=\"846\" y=\"114\"/>\n        <di:waypoint x=\"446\" y=\"114\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf-6_di\" bpmnElement=\"sf-6\">\n        <di:waypoint x=\"888\" y=\"138\"/>\n        <di:waypoint x=\"888\" y=\"222\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf-7_di\" bpmnElement=\"sf-7\">\n        <di:waypoint x=\"958\" y=\"254\"/>\n        <di:waypoint x=\"1004\" y=\"254\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf-8_di\" bpmnElement=\"sf-8\">\n        <di:waypoint x=\"1074\" y=\"286\"/>\n        <di:waypoint x=\"1074\" y=\"362\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf-9_di\" bpmnElement=\"sf-9\">\n        <di:waypoint x=\"1144\" y=\"394\"/>\n        <di:waypoint x=\"1190\" y=\"394\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf-10_di\" bpmnElement=\"sf-10\">\n        <di:waypoint x=\"1260\" y=\"426\"/>\n        <di:waypoint x=\"1260\" y=\"544\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf-11_di\" bpmnElement=\"sf-11\">\n        <di:waypoint x=\"1330\" y=\"576\"/>\n        <di:waypoint x=\"1422\" y=\"576\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf-12_di\" bpmnElement=\"sf-12\">\n        <di:waypoint x=\"1470\" y=\"572\"/>\n        <di:waypoint x=\"1516\" y=\"572\"/>\n        <di:waypoint x=\"1516\" y=\"534\"/>\n        <di:waypoint x=\"1562\" y=\"534\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf-13_di\" bpmnElement=\"sf-13\">\n        <di:waypoint x=\"1470\" y=\"580\"/>\n        <di:waypoint x=\"1539\" y=\"580\"/>\n        <di:waypoint x=\"1539\" y=\"618\"/>\n        <di:waypoint x=\"1608\" y=\"618\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf-14_di\" bpmnElement=\"sf-14\">\n        <di:waypoint x=\"1656\" y=\"614\"/>\n        <di:waypoint x=\"1674\" y=\"614\"/>\n        <di:waypoint x=\"1674\" y=\"666\"/>\n        <di:waypoint x=\"1590\" y=\"666\"/>\n        <di:waypoint x=\"1590\" y=\"576\"/>\n        <di:waypoint x=\"1190\" y=\"576\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf-15_di\" bpmnElement=\"sf-15\">\n        <di:waypoint x=\"1656\" y=\"622\"/>\n        <di:waypoint x=\"1702\" y=\"622\"/>\n        <di:waypoint x=\"1702\" y=\"576\"/>\n        <di:waypoint x=\"1748\" y=\"576\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf-16_di\" bpmnElement=\"sf-16\">\n        <di:waypoint x=\"1888\" y=\"576\"/>\n        <di:waypoint x=\"1986\" y=\"576\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf-17_di\" bpmnElement=\"sf-17\">\n        <di:waypoint x=\"1632\" y=\"502\"/>\n        <di:waypoint x=\"1632\" y=\"146\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf-18_di\" bpmnElement=\"sf-18\">\n        <di:waypoint x=\"1702\" y=\"114\"/>\n        <di:waypoint x=\"1800\" y=\"114\"/>\n      </bpmndi:BPMNEdge>\n    </bpmndi:BPMNPlane>\n  </bpmndi:BPMNDiagram>\n</bpmn:definitions>";
+  const BPMN_FILENAME = "Campus_Food_Ordering_As-Is.bpmn";
+  function exportBPMN() {
+    const blob = new Blob([BPMN_XML], { type: 'application/xml' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = BPMN_FILENAME;
+    document.body.appendChild(a); a.click();
+    setTimeout(function() { URL.revokeObjectURL(url); a.remove(); }, 1000);
+  }
+  </script>
+  <script>if (/\bembed\b/.test(location.search)) document.body.classList.add('embed');</script>
+</body>
+</html>

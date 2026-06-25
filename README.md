@@ -13,6 +13,9 @@
 
 ## הרצאות
 
+- **הרצאה 1** — מבוא לניתוח ועיצוב מערכות מידע → [`lecture-01/`](lecture-01/index.html)
+- **הרצאה 2** — תיעוד תהליכים עסקיים — BPMN → [`lecture-02/`](lecture-02/index.html)
+- **הרצאה 3** — דרישות → [`lecture-03/`](lecture-03/index.html)
 - **הרצאה 4-5** — תרשים תרחישי שימוש — Use Case → [`lecture-04-05/`](lecture-04-05/index.html)
 
 ## חומרי עזר

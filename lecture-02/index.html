@@ -1,0 +1,1208 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>תיעוד תהליכים עסקיים — BPMN</title>
+<link rel="stylesheet" href="../web/vendor/reveal/dist/reset.css">
+<link rel="stylesheet" href="../web/vendor/reveal/dist/reveal.css">
+<link rel="stylesheet" href="../web/vendor/reveal/plugin/highlight/monokai.css">
+<link rel="stylesheet" href="../web/theme/sad.css">
+</head>
+<body>
+<div class="reveal">
+  <div class="slides">
+    <section class="title-slide" data-slug="title">
+      <div class="course">ניתוח ועיצוב מערכות מידע</div>
+      <h1>תיעוד תהליכים עסקיים — BPMN</h1>
+      <div class="lecture-no">הרצאה 2</div>
+    </section>
+    <section class="toc-slide" data-slug="toc">
+      <h1>סדר היום</h1>
+      <div class="body">
+        <ol class="toc">
+          <li class="active">חקר מצב קיים</li>
+          <li>מטקסט לתרשים</li>
+          <li>BPMN — יסודות</li>
+          <li>Gateways</li>
+          <li>המודל המלא</li>
+          <li>סיכום</li>
+        </ol>
+      </div>
+    </section>
+    <section class="sdlc-map" data-slug="lecture-02-sdlc-asis">
+      <h1>היכן אנחנו ב-<span class="en">SDLC</span></h1>
+      <div class="body">
+        <div class="sdlc-stepper">
+          <div class="sdlc-step done"><span class="n">1</span><span class="nm">ייזום</span></div>
+          <div class="sdlc-step active"><span class="n">2</span><span class="nm">חקר מצב קיים</span></div>
+          <div class="sdlc-step todo"><span class="n">3</span><span class="nm">ניתוח דרישות</span></div>
+          <div class="sdlc-step todo"><span class="n">4</span><span class="nm">חקר ישימות</span></div>
+          <div class="sdlc-step todo"><span class="n">5</span><span class="nm">עיצוב</span></div>
+          <div class="sdlc-step todo"><span class="n">6</span><span class="nm">פיתוח</span></div>
+          <div class="sdlc-step todo"><span class="n">7</span><span class="nm">בדיקות</span></div>
+          <div class="sdlc-step todo"><span class="n">8</span><span class="nm">הטמעה ותפעול</span></div>
+        </div>
+        <p class="sdlc-now">בשלב זה: <b>חקר מצב קיים</b> — ממפים את התהליך הקיים ואת בעלי העניין</p>
+      </div>
+    </section>
+    <!-- A1 — "בפרקים הקודמים": גשר מהרצאה 1. החזקנו בידנו את בעיית האוכל בקמפוס
+         ואת תהליך ההזמנה הידני הקיים (as-is). היום אנחנו עוברים מ"הלכנו דרך התהליך"
+         ל"נתעד אותו באופן פורמלי" — עדיין בשלב חקר מצב קיים. כרטיס תקציר קצר + שורת
+         קדימה אל BPMN. תג שלב ה-SDLC נוסף ע"י ה-build — לא להוסיף כאן. -->
+    <section data-slug="previously">
+      <div class="sdlc-chip" title="שלב 2 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>חקר מצב קיים</div>
+      <h1>בפרקים הקודמים על <span class="en">SAD</span></h1>
+      <div class="subtitle">מה כבר יש לנו ביד — לפני שצוללים להרצאה של היום</div>
+      <div class="body">
+
+        <p class="muted" style="margin:0;">
+          בהרצאה הקודמת זיהינו בעיה אמיתית בקמפוס והלכנו עם הסטודנט/ית צעד-אחר-צעד
+          דרך התהליך כפי שהוא מתנהל היום. את שני אלה אנחנו לוקחים איתנו להרצאה הזו:
+        </p>
+
+        <div class="cols" style="align-items:stretch;">
+
+          <div class="card fragment" style="display:flex; flex-direction:column; gap:6px;">
+            <div class="panel-title" style="color:var(--blue);">① זיהינו את הבעיה</div>
+            <p style="margin:0;">בעיית הזמנת האוכל בקמפוס — תור ארוך בשעת השיא, חוסר שקיפות לגבי מה זמין,
+            ואי-ודאות מתי האוכל מוכן. זו הבעיה העסקית שבחרנו ללוות לאורך כל הקורס.</p>
+          </div>
+
+          <div class="card fragment" style="display:flex; flex-direction:column; gap:6px;">
+            <div class="panel-title" style="color:var(--blue);">② הלכנו דרך התהליך הקיים</div>
+            <p style="margin:0;">צעדנו בתהליך ההזמנה הידני מקצה לקצה — מהליכה לקפיטריה, דרך התור,
+            הקריאה בלוח, ההזמנה, התשלום וההמתנה, ועד קבלת המנה (או "אזל — בחר/י שוב").</p>
+            <span class="tag muted" style="align-self:flex-start;">תהליך <span class="en">as-is</span></span>
+          </div>
+
+        </div>
+
+        <div class="hero fragment">
+          <h3>מה משתנה היום</h3>
+          <p>עד עכשיו <strong>הלכנו</strong> דרך התהליך כדי להבין אותו. היום נלמד
+          <strong>לתעד</strong> אותו באופן פורמלי — מטקסט חופשי, דרך כתיבה מובנית ותרשימי זרימה,
+          ועד שפת תיעוד תקנית: <span class="en">BPMN</span>. אנחנו עדיין באותו שלב ב-<span class="en">SDLC</span> —
+          <strong>חקר מצב קיים</strong>: לומדים את התהליך כפי שהוא, עוד לפני שמציעים מערכת חדשה.</p>
+        </div>
+
+        <p class="bottom-line">אותו תהליך קמפוס שהלכנו בו — היום הופך לתרשים פורמלי ב-<span class="en">BPMN</span>.</p>
+
+      </div>
+    </section>
+    <!-- A — מה מתעדים בחקר מצב קיים (as-is vs to-be).
+         Card of "what to capture" reveals beat by beat, then a two-column
+         as-is | to-be contrast, then the AI/challenge motifs and a bottom-line. -->
+    <section data-slug="what-to-document">
+      <div class="sdlc-chip" title="שלב 2 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>חקר מצב קיים</div>
+      <h1>מה מתעדים בחקר מצב קיים?</h1>
+      <div class="subtitle">לתעד את התהליך כפי שהוא קורה היום — לא כפי שהיינו רוצים שיקרה</div>
+      <div class="body">
+
+        <div class="card">
+          <div class="panel-title">מה לוכדים על התהליך הקיים</div>
+          <ul class="bullets">
+            <li class="fragment"><strong>תהליכים</strong> — מה קורה, בְּאֵילו צעדים ובאיזה סדר</li>
+            <li class="fragment"><strong>שחקנים ותפקידים</strong> — מי מבצע כל צעד (סטודנט, דלפק, מטבח, תשלום)</li>
+            <li class="fragment"><strong>קלטים ופלטים</strong> — מה נכנס לכל צעד ומה יוצא ממנו</li>
+            <li class="fragment"><strong>חוקים והחלטות</strong> — לפי מה מחליטים, ומתי התהליך מתפצל</li>
+            <li class="fragment"><strong>נקודות כאב</strong> — היכן יש עיכובים, טעויות וכפילויות</li>
+          </ul>
+        </div>
+
+        <div class="cols fragment">
+
+          <div class="card">
+            <div class="panel-title">המצב הקיים <span class="en">(as-is)</span></div>
+            <ul class="bullets">
+              <li>התהליך כפי שהוא <strong>עובד היום</strong></li>
+              <li>מתעדים מה שיש — כולל הכאב והבזבוז</li>
+              <li>זה מה שאנחנו עושים <strong>עכשיו</strong></li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <div class="panel-title">המצב הרצוי <span class="en">(to-be)</span></div>
+            <ul class="bullets">
+              <li>התהליך כפי ש<strong>נרצה שיעבוד</strong></li>
+              <li>השיפור והתכנון של מערכת חדשה</li>
+              <li>זה מגיע <strong>בהמשך</strong> — אחרי שהבנּו את הקיים</li>
+            </ul>
+          </div>
+
+        </div>
+
+        <div class="cols fragment">
+          <div class="callout ai">
+            <span class="label">🤖 הבינה מתעדת</span>
+            <span class="en">Claude</span> מקבל את תיאור התהליך הקיים ומסדר אותו לרשימה — צעדים,
+            שחקנים, קלטים ופלטים — בתוך שניות.
+          </div>
+          <div class="callout warn">
+            <span class="label">⚠️ קיים או רצוי?</span>
+            בִּדקו: האם הבינה תיעדה את מה שקורה <strong>היום</strong>, או שכבר החליקה פנימה
+            שיפור (<span class="en">to-be</span>) שעוד לא קיים בשטח?
+          </div>
+        </div>
+
+        <p class="bottom-line">קודם מתעדים את ה-<span class="en">as-is</span> · ה-<span class="en">to-be</span> מגיע אחר כך.</p>
+
+      </div>
+    </section>
+    <!-- B — מטקסט לתרשים: סולם התיעוד.
+         A 4-rung ladder from prose to a standard notation. Each rung reveals one at a
+         time (Space / →), climbing from least to most precise. The ambiguous campus
+         example lands first to motivate the climb; the bottom-line closes the loop. -->
+    <section data-slug="doc-ladder">
+      <div class="sdlc-chip" title="שלב 2 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>חקר מצב קיים</div>
+      <h1>מטקסט לתרשים — סולם התיעוד</h1>
+      <div class="subtitle">כל שלב מוותר על קריאוּת תמורת דיוק ומשמעות משותפת</div>
+      <div class="body">
+
+        <div class="callout warn">
+          <span class="label">⚠️ למה טקסט חופשי לא מספיק</span>
+          "כשמגיעה הזמנה, המטבח מתחיל להכין — אם יש מלאי." מי בודק את המלאי? מתי? ומה קורה אם אין?
+          משפט אחד, שלוש קריאות שונות — וכל אחד בצוות מבין משהו אחר.
+        </div>
+
+        <div class="cols-3" style="grid-template-columns:repeat(4, 1fr); align-items:stretch;">
+
+          <div class="card fragment" style="text-align:center; display:flex; flex-direction:column; gap:8px;">
+            <div class="tag muted" style="align-self:center;">שלב 1</div>
+            <div class="panel-title" style="text-align:center;">שפה טבעית</div>
+            <div class="muted" style="font-size:19px;">פרוזה — תיאור התהליך במילים רגילות.</div>
+            <div style="font-size:18px; color:var(--red);">קריא לכולם, אך עמום ורב-משמעי.</div>
+          </div>
+
+          <div class="card fragment" style="text-align:center; display:flex; flex-direction:column; gap:8px;">
+            <div class="tag muted" style="align-self:center;">שלב 2</div>
+            <div class="panel-title" style="text-align:center;">כתיבה מובנית</div>
+            <div class="muted" style="font-size:19px;">פסאודו-קוד — צעדים, תנאים ולולאות מסודרים.</div>
+            <div style="font-size:18px; color:var(--orange);">מדויק יותר, אך עדיין טקסט.</div>
+          </div>
+
+          <div class="card fragment" style="text-align:center; display:flex; flex-direction:column; gap:8px;">
+            <div class="tag muted" style="align-self:center;">שלב 3</div>
+            <div class="panel-title" style="text-align:center;">תרשים זרימה</div>
+            <div class="muted" style="font-size:19px;">ויזואלי — רואים מסלולים, הסתעפויות ולולאות.</div>
+            <div style="font-size:18px; color:var(--light-blue);">ברור לעין, אך ללא כללים אחידים.</div>
+          </div>
+
+          <div class="card fragment" style="text-align:center; display:flex; flex-direction:column; gap:8px; border-color:var(--blue);">
+            <div class="tag" style="align-self:center;">שלב 4</div>
+            <div class="panel-title" style="text-align:center;"><span class="en">BPMN</span></div>
+            <div class="muted" style="font-size:19px;">סימון מתוקנן — כל סמל בעל משמעות מוגדרת.</div>
+            <div style="font-size:18px; color:var(--green);">דיוק ומשמעות משותפת לכל הצוות.</div>
+          </div>
+
+        </div>
+
+        <div class="hero fragment">
+          <h3>למה מטפסים אל תקן?</h3>
+          <p>ככל שעולים בסולם — מ"פרוזה" ל-<span class="en">BPMN</span> — אנו מוותרים מעט על קלוּת
+             הקריאה ומרוויחים <strong>דיוק</strong> ו<strong>משמעות אחת ויחידה</strong> שכל הקוראים
+             מפרשים באותו אופן. סימון מתוקנן מבטל את העמימות שראינו בדוגמה.</p>
+        </div>
+
+        <p class="bottom-line">פרוזה → פסאודו-קוד → תרשים זרימה → <span class="en">BPMN</span> · פחות עמימות, יותר משמעות משותפת.</p>
+
+      </div>
+    </section>
+    <!-- B — מטקסט לתרשים: structured writing / pseudocode (sequence · branch · loop).
+         Original authoring for L2 (BPMN). Climbs one rung above prose: the three control
+         structures revealed one at a time (cols-3), then a tiny campus pseudocode example
+         that uses all three, then the bridge line to flowcharts/BPMN. -->
+    <section data-slug="structured-writing">
+      <div class="sdlc-chip" title="שלב 2 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>חקר מצב קיים</div>
+      <h1>כתיבה מובנית — מדרגה מעל טקסט חופשי</h1>
+      <div class="subtitle">שלוש מבני הבקרה של פסאודו-קוד <span class="en">(pseudo-code)</span></div>
+      <div class="body">
+
+        <p class="muted" style="margin:0;">טקסט חופשי מתאר תהליך אבל משאיר אותו עמום. כתיבה מובנית מארגנת אותו
+          בעזרת שלושה מבני בקרה בלבד — מספיקים לתאר כל תהליך עסקי:</p>
+
+        <div class="cols-3" style="align-items:stretch;">
+
+          <div class="card fragment" style="display:flex; flex-direction:column; gap:8px;">
+            <div class="panel-title">רצף <span class="en">(sequence)</span></div>
+            <p style="margin:0;">צעדים שמתבצעים זה אחר זה, לפי הסדר. כל פעולה ואז הבאה אחריה.</p>
+            <p class="muted" style="margin:0; font-size:19px;">"בחר מנה ← שלם ← קבל אישור"</p>
+          </div>
+
+          <div class="card fragment" style="display:flex; flex-direction:column; gap:8px;">
+            <div class="panel-title">הסתעפות <span class="en">(branch)</span></div>
+            <p style="margin:0;">החלטה: <span class="en">IF</span> תנאי מתקיים נעשה דבר אחד,
+              <span class="en">ELSE</span> נעשה אחר.</p>
+            <p class="muted" style="margin:0; font-size:19px;">"אם המנה אזלה — בחר אחרת"</p>
+          </div>
+
+          <div class="card fragment" style="display:flex; flex-direction:column; gap:8px;">
+            <div class="panel-title">לולאה <span class="en">(loop)</span></div>
+            <p style="margin:0;">חזרה על צעדים כל עוד תנאי מתקיים — <span class="en">REPEAT … UNTIL</span>.</p>
+            <p class="muted" style="margin:0; font-size:19px;">"חזור על ההזמנה עד שיש מנה זמינה"</p>
+          </div>
+
+        </div>
+
+        <div class="cols fragment" style="align-items:stretch;">
+
+          <div class="card" style="display:flex; flex-direction:column; gap:6px;">
+            <div class="panel-title">דוגמה: הזמנת מנה בקפיטריה</div>
+            <pre><code data-trim data-noescape>
+    <span class="en">REPEAT</span>
+        בחר מנה מהתפריט              <span class="muted">// רצף</span>
+        <span class="en">IF</span> המנה אזלה <span class="en">THEN</span>            <span class="muted">// הסתעפות</span>
+            בחר מנה אחרת
+        <span class="en">ELSE</span>
+            שלם
+            קבל את המנה
+    <span class="en">UNTIL</span> ההזמנה הושלמה          <span class="muted">// לולאה</span>
+    </code></pre>
+          </div>
+
+          <div class="card" style="display:flex; flex-direction:column; gap:10px;">
+            <div class="panel-title">שלושתם בדוגמה אחת</div>
+            <ul class="bullets">
+              <li><b>רצף</b> — "בחר ← שלם ← קבל" מתבצעים לפי הסדר.</li>
+              <li><b>הסתעפות</b> — ה-<span class="en">IF / ELSE</span> מפצל לפי זמינות המנה.</li>
+              <li><b>לולאה</b> — ה-<span class="en">REPEAT … UNTIL</span> מחזיר אותנו עד שההזמנה תקפה.</li>
+            </ul>
+            <p class="muted" style="margin:0; font-size:19px;">המבנה מסיר עמימות — אבל עדיין צריך לקרוא אותו שורה-שורה.</p>
+          </div>
+
+        </div>
+
+        <div class="hero fragment">
+          <h3>למה לא נעצור כאן?</h3>
+          <p>כתיבה מובנית מדויקת יותר מטקסט חופשי, אבל קשה לראות בה את <em>זרימת</em> התהליך במבט אחד.
+            בשקפים הבאים נעלה מדרגה נוספת — מטקסט מובנה אל <strong>תרשים</strong>.</p>
+        </div>
+
+        <p class="bottom-line">שלושה מבני בקרה בלבד — רצף · הסתעפות · לולאה — מספיקים לתאר כל תהליך.</p>
+
+      </div>
+    </section>
+    <!-- B — מטקסט לתרשים: flowcharts & process charts and their limits (original authoring).
+         The classic visual step up from prose/pseudocode: boxes for actions, diamonds for
+         decisions, arrows for flow. Strengths reveal first, then the ⚠️ limits beat that
+         motivates a shared standard → BPMN. RTL; Latin tokens wrapped in <span class="en">. -->
+    <section data-slug="flowchart">
+      <div class="sdlc-chip" title="שלב 2 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>חקר מצב קיים</div>
+      <h1>תרשימי זרימה ותרשים תהליך</h1>
+      <div class="subtitle">הקפיצה הוויזואלית — מטקסט מובנה אל תמונה של התהליך</div>
+      <div class="body">
+
+        <div class="cols">
+
+          <div class="card fragment" style="display:flex; flex-direction:column; gap:10px;">
+            <div class="panel-title">סמלים של תרשים זרימה <span class="en">(Flow chart)</span></div>
+            <ul class="bullets">
+              <li><b>מלבן</b> — פעולה או צעד בתהליך ("לבדוק מלאי", "לגבות תשלום")</li>
+              <li><b>מעוין</b> — החלטה / תנאי עם הסתעפות ("יש במלאי?")</li>
+              <li><b>חץ</b> — כיוון הזרימה מצעד לצעד</li>
+              <li><b>אובלים</b> — התחלה וסיום של התהליך</li>
+            </ul>
+          </div>
+
+          <div class="card fragment" style="display:flex; flex-direction:column; gap:10px;">
+            <div class="panel-title">למה זה עובד טוב</div>
+            <ul class="bullets">
+              <li>ויזואלי — רואים את כל התהליך במבט אחד</li>
+              <li>אינטואיטיבי — קל להבנה גם בלי רקע טכני</li>
+              <li>מראה בבירור הסתעפויות, תנאים ולולאות</li>
+              <li>גשר נוח בין הכתיבה המובנית לבין מודל פורמלי</li>
+            </ul>
+          </div>
+
+        </div>
+
+        <div class="callout warn fragment">
+          <span class="label">⚠️ המגבלות — מה תרשים זרימה <u>לא</u> נותן</span>
+          <ul class="bullets" style="margin-top:4px;">
+            <li>אין תקן ל<b>"מי עושה מה"</b> — לא רואים תפקידים ולא חלוקת אחריות בין המשתתפים</li>
+            <li>אין ייצוג ל<b>הודעות בין משתתפים</b> (סטודנט ↔ קופה ↔ מטבח ↔ תשלום)</li>
+            <li>הסמלים <b>לא אחידים</b> — כל אחד מצייר אחרת, וקשה להשוות תרשימים</li>
+          </ul>
+        </div>
+
+        <div class="hero fragment">
+          <h3>למה צריך תקן משותף?</h3>
+          <p>כשמתארים תהליך עסקי שבו <b>כמה גורמים</b> משתפים פעולה ומחליפים הודעות — תרשים זרימה
+             פשוט כבר לא מספיק. צריך שפה אחת, מוסכמת, שכולם קוראים אותו דבר ⟵ <span class="en">BPMN</span>.</p>
+        </div>
+
+        <p class="bottom-line">תרשים זרימה = נהדר לתהליך של גורם אחד · תהליך עסקי עם תפקידים והודעות ⟵ <span class="en">BPMN</span></p>
+
+      </div>
+    </section>
+    <!-- C — מהו BPMN ולמה: a definition hero + a goals/benefits list (section C of the L2 redesign).
+         Original authoring for the BPMN fundamentals section. The definition lands first,
+         then the goals reveal one at a time, then the 🤖 / ⚠️ motifs. RTL; every Latin token in .en. -->
+    <section data-slug="why-bpmn">
+      <div class="sdlc-chip" title="שלב 2 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>חקר מצב קיים</div>
+      <h1>מהו <span class="en">BPMN</span> — ולמה</h1>
+      <div class="subtitle">שפה ויזואלית אחת לתיאור תהליכים עסקיים</div>
+      <div class="body">
+
+        <div class="hero">
+          <h3><span class="en">BPMN</span> — <span class="en">Business Process Model and Notation</span></h3>
+          <p>שפה ויזואלית <strong>תקנית</strong> לתיאור תהליכים עסקיים — תקן של ארגון ה-<span class="en">OMG</span>.
+             במקום שכל אחד יצייר תרשים בסגנון משלו, כולם משתמשים באותם סמלים, ולכן כולם קוראים את התהליך
+             באותו אופן.</p>
+        </div>
+
+        <div class="cols-3" style="align-items:stretch;">
+
+          <div class="card fragment" style="display:flex; flex-direction:column; gap:8px;">
+            <div class="panel-title">סימון משותף אחד</div>
+            <div class="muted" style="font-size:19px;">סמלים מוסכמים שכולם — אנשי עסקים ואנשי
+              <span class="en">IT</span> — מפרשים באותה צורה.</div>
+          </div>
+
+          <div class="card fragment" style="display:flex; flex-direction:column; gap:8px;">
+            <div class="panel-title">לוכד מי / מה / מתי</div>
+            <div class="muted" style="font-size:19px;">מי מבצע כל פעולה, מה קורה בכל שלב, מתי, ואילו
+              הודעות עוברות בין המשתתפים.</div>
+          </div>
+
+          <div class="card fragment" style="display:flex; flex-direction:column; gap:8px;">
+            <div class="panel-title">גשר בין עסק למערכת</div>
+            <div class="muted" style="font-size:19px;">אותו תרשים מובן לצד העסקי שמגדיר את התהליך —
+              ולצד הטכני שיבנה את המערכת.</div>
+          </div>
+
+        </div>
+
+        <div class="callout ai fragment">
+          <span class="label">🤖 הבינה משרטטת ראשונה</span>
+          <span class="en">Claude</span> מקבל את תיאור התהליך בשפה חופשית ומפיק טיוטת <span class="en">BPMN</span>
+          ראשונית בשניות — נקודת פתיחה לדיון, לא תוצר סופי.
+        </div>
+
+        <div class="callout warn fragment">
+          <span class="label">⚠️ אתגרו את התרשים</span>
+          האם הסימון נכון ועקבי? האם לא הומצאו שלבים, ולא נשמטו משתתפים? קריאות אחידה שווה רק אם כולם
+          מצייתים לאותו תקן.
+        </div>
+
+        <p class="bottom-line fragment">תקן <span class="en">OMG</span> (סביב <span class="en">2004</span>) — סימון אחד שכולם קוראים אותו אותו דבר.</p>
+
+      </div>
+    </section>
+    <!-- C — BPMN flow objects: the three basic building blocks (events / activities / gateways).
+         Ported + enriched: the three cards reveal one at a time (Space / →), each with the
+         shape drawn as inline SVG + a campus micro-example, then the 🤖/⚠️ AI beat lands. -->
+    <section data-slug="bpmn-flow-objects">
+      <div class="sdlc-chip" title="שלב 2 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>חקר מצב קיים</div>
+      <h1>אלמנטים בסיסיים — <span class="en">Flow objects</span></h1>
+      <div class="subtitle">שלושת אבני הבניין של תרשים <span class="en">BPMN</span></div>
+      <div class="body">
+
+        <div class="cols-3" style="align-items:stretch;">
+
+          <!-- Events -->
+          <div class="card fragment" style="display:flex; flex-direction:column; gap:10px;">
+            <div class="panel-title"><span class="en">Events</span> · אירועים</div>
+            <div class="center">
+              <svg width="64" height="64" viewBox="0 0 64 64" role="img" aria-label="מעגל — אירוע">
+                <circle cx="32" cy="32" r="26" fill="none" stroke="var(--blue)" stroke-width="3"/>
+              </svg>
+            </div>
+            <div class="muted" style="font-size:20px;">צורה: <strong>מעגל</strong>. מסמן משהו שקורה לאורך התהליך — התחלה, אירוע ביניים, או סיום.</div>
+            <ul class="bullets" style="font-size:20px;">
+              <li>התחלה (<span class="en">start</span>) — מעגל דק</li>
+              <li>ביניים (<span class="en">intermediate</span>) — מעגל כפול</li>
+              <li>סיום (<span class="en">end</span>) — מעגל עבה</li>
+            </ul>
+            <div class="callout good" style="font-size:19px;">
+              <span class="label">דוגמה מהקמפוס</span>
+              התחלה: "הסטודנט נכנס למערכת ההזמנות" · סיום: "ההזמנה נמסרה".
+            </div>
+          </div>
+
+          <!-- Activities -->
+          <div class="card fragment" style="display:flex; flex-direction:column; gap:10px;">
+            <div class="panel-title"><span class="en">Activities</span> · פעילויות / משימות</div>
+            <div class="center">
+              <svg width="80" height="64" viewBox="0 0 80 64" role="img" aria-label="מלבן מעוגל — פעילות">
+                <rect x="8" y="14" width="64" height="36" rx="9" ry="9" fill="none" stroke="var(--blue)" stroke-width="3"/>
+              </svg>
+            </div>
+            <div class="muted" style="font-size:20px;">צורה: <strong>מלבן מעוגל-פינות</strong>. יחידת עבודה שמישהו מבצע בתהליך.</div>
+            <ul class="bullets" style="font-size:20px;">
+              <li>מתויגת בפועל פעולה: "בחר מנה", "אשר תשלום"</li>
+              <li>אבן הבניין הנפוצה ביותר בתרשים</li>
+            </ul>
+            <div class="callout good" style="font-size:19px;">
+              <span class="label">דוגמה מהקמפוס</span>
+              המשימות "בחירת מנה מהתפריט", "תשלום", "הכנת ההזמנה במטבח".
+            </div>
+          </div>
+
+          <!-- Gateways -->
+          <div class="card fragment" style="display:flex; flex-direction:column; gap:10px;">
+            <div class="panel-title"><span class="en">Gateways</span> · שערים</div>
+            <div class="center">
+              <svg width="64" height="64" viewBox="0 0 64 64" role="img" aria-label="מעוין — שער החלטה">
+                <rect x="32" y="6" width="36.77" height="36.77" rx="6" ry="6"
+                      transform="rotate(45 32 32)" fill="none" stroke="var(--blue)" stroke-width="3"/>
+              </svg>
+            </div>
+            <div class="muted" style="font-size:20px;">צורה: <strong>מעוין</strong>. נקודת פיצול או איחוד שמכוונת את זרימת התהליך.</div>
+            <ul class="bullets" style="font-size:20px;">
+              <li>החלטה — לאיזה מסלול ממשיכים?</li>
+              <li>מקביליות — מסלולים שרצים יחד</li>
+            </ul>
+            <div class="callout good" style="font-size:19px;">
+              <span class="label">דוגמה מהקמפוס</span>
+              שער החלטה: "המנה במלאי?" — כן → ממשיכים, לא → מציעים חלופה.
+            </div>
+          </div>
+
+        </div>
+
+        <div class="cols fragment">
+          <div class="callout ai">
+            <span class="label">🤖 הבינה מזהה את האלמנטים</span>
+            <span class="en">Claude</span> מקבל את תיאור התהליך במילים, ומציע איזה משפט הוא <span class="en">event</span>,
+            איזה הוא <span class="en">activity</span> ואיזה דורש <span class="en">gateway</span>.
+          </div>
+          <div class="callout warn fragment">
+            <span class="label">⚠️ מה היא בלבלה?</span>
+            לעיתים הבינה ממירה החלטה ("אם במלאי…") למשימה רגילה — ומפספסת את ה-<span class="en">gateway</span>.
+            זיהוי הצורה הנכונה לכל אלמנט הוא משטח האימות שלכם.
+          </div>
+        </div>
+
+        <p class="bottom-line">מעגל = <span class="en">event</span> · מלבן מעוגל = <span class="en">activity</span> · מעוין = <span class="en">gateway</span>.</p>
+
+      </div>
+    </section>
+    <!-- C — BPMN connecting objects: the three connectors (sequence / message flow / association).
+         Authored + enriched: the three cards reveal one at a time (Space / →), each with the
+         line drawn as inline SVG + a campus micro-example, then a first tiny model (start → task → end)
+         lands as the bottom beat. Mirrors slide-bpmn-flow-objects.html (the immediately-preceding C slide). -->
+    <section data-slug="bpmn-connecting">
+      <div class="sdlc-chip" title="שלב 2 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>חקר מצב קיים</div>
+      <h1>חיבור האלמנטים — <span class="en">Connecting objects</span></h1>
+      <div class="subtitle">שלושת סוגי הקווים שמחברים את אבני הבניין לכדי תהליך</div>
+      <div class="body">
+
+        <div class="cols-3" style="align-items:stretch;">
+
+          <!-- Sequence Flow -->
+          <div class="card fragment" style="display:flex; flex-direction:column; gap:10px;">
+            <div class="panel-title"><span class="en">Sequence Flow</span> · זרימת רצף</div>
+            <div class="center">
+              <svg width="120" height="40" viewBox="0 0 120 40" role="img" aria-label="חץ מלא — זרימת רצף">
+                <defs>
+                  <marker id="sf-arrow" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+                    <path d="M0,0 L9,4.5 L0,9 Z" fill="var(--blue)"/>
+                  </marker>
+                </defs>
+                <line x1="108" y1="20" x2="14" y2="20" stroke="var(--blue)" stroke-width="3" marker-end="url(#sf-arrow)"/>
+              </svg>
+            </div>
+            <div class="muted" style="font-size:20px;">צורה: <strong>חץ מלא (קו רציף)</strong>. קובע את <strong>סדר הביצוע</strong> בין אלמנטים — מה בא אחרי מה <em>בתוך אותו <span class="en">pool</span></em>.</div>
+            <div class="callout good" style="font-size:19px;">
+              <span class="label">דוגמה מהקמפוס</span>
+              חץ מ"בחירת מנה" אל "תשלום" — בתוך הנתיב של הסטודנט, צעד אחרי צעד.
+            </div>
+          </div>
+
+          <!-- Message Flow -->
+          <div class="card fragment" style="display:flex; flex-direction:column; gap:10px;">
+            <div class="panel-title"><span class="en">Message Flow</span> · זרימת מסר</div>
+            <div class="center">
+              <svg width="120" height="40" viewBox="0 0 120 40" role="img" aria-label="חץ מקווקו — זרימת מסר">
+                <defs>
+                  <marker id="mf-arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+                    <path d="M0,0 L10,5 L0,10" fill="none" stroke="var(--blue)" stroke-width="2"/>
+                  </marker>
+                </defs>
+                <circle cx="110" cy="20" r="3" fill="none" stroke="var(--blue)" stroke-width="2"/>
+                <line x1="106" y1="20" x2="16" y2="20" stroke="var(--blue)" stroke-width="3" stroke-dasharray="7 5" marker-end="url(#mf-arrow)"/>
+              </svg>
+            </div>
+            <div class="muted" style="font-size:20px;">צורה: <strong>חץ מקווקו</strong>. מתאר <strong>תקשורת / העברת מסר</strong> <em>בין <span class="en">pools</span> או משתתפים שונים</em>.</div>
+            <div class="callout good" style="font-size:19px;">
+              <span class="label">דוגמה מהקמפוס</span>
+              מסר "ההזמנה מוכנה" מהמטבח אל הסטודנט — מעבר בין שני משתתפים נפרדים.
+            </div>
+          </div>
+
+          <!-- Association -->
+          <div class="card fragment" style="display:flex; flex-direction:column; gap:10px;">
+            <div class="panel-title"><span class="en">Association</span> · שיוך</div>
+            <div class="center">
+              <svg width="120" height="40" viewBox="0 0 120 40" role="img" aria-label="קו מנוקד — שיוך">
+                <line x1="108" y1="20" x2="12" y2="20" stroke="var(--blue)" stroke-width="3" stroke-dasharray="2 5" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <div class="muted" style="font-size:20px;">צורה: <strong>קו מנוקד</strong>. <strong>מקשר נתונים או פריטי מידע (<span class="en">artifacts</span>)</strong> אל המשימה שמשתמשת בהם — לא זרימה, רק שיוך.</div>
+            <div class="callout good" style="font-size:19px;">
+              <span class="label">דוגמה מהקמפוס</span>
+              קו מנוקד מ"מסמך ההזמנה" אל המשימה "הכנת ההזמנה" — מצרף את המידע לפעולה.
+            </div>
+          </div>
+
+        </div>
+
+        <!-- First tiny model: start → task → end -->
+        <div class="hero fragment">
+          <h3>המודל הזעיר הראשון שלנו</h3>
+          <p>נחבר אלמנט לאלמנט בעזרת <span class="en">Sequence Flow</span> ונקבל תהליך שלם בזעיר אנפין:
+             אירוע <strong>התחלה</strong> → משימה <strong>"בחירת מנה"</strong> → אירוע <strong>סיום</strong>.</p>
+          <div class="center" style="margin-top:14px;">
+            <svg width="560" height="80" viewBox="0 0 560 80" role="img"
+                 aria-label="מודל זעיר: התחלה אל בחירת מנה אל סיום">
+              <defs>
+                <marker id="tiny-arrow" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+                  <path d="M0,0 L9,4.5 L0,9 Z" fill="var(--blue)"/>
+                </marker>
+              </defs>
+              <!-- RTL reading: start on the right, end on the left -->
+              <!-- end (thick circle) -->
+              <circle cx="48" cy="40" r="22" fill="#fff" stroke="var(--blue)" stroke-width="5"/>
+              <text x="48" y="46" text-anchor="middle" font-size="15" fill="var(--body)">סיום</text>
+              <!-- flow: task -> end -->
+              <line x1="148" y1="40" x2="78" y2="40" stroke="var(--blue)" stroke-width="3" marker-end="url(#tiny-arrow)"/>
+              <!-- task (rounded rect) -->
+              <rect x="156" y="16" width="160" height="48" rx="11" ry="11" fill="#fff" stroke="var(--blue)" stroke-width="3"/>
+              <text x="236" y="46" text-anchor="middle" font-size="17" fill="var(--body)">בחירת מנה</text>
+              <!-- flow: start -> task -->
+              <line x1="486" y1="40" x2="326" y2="40" stroke="var(--blue)" stroke-width="3" marker-end="url(#tiny-arrow)"/>
+              <!-- start (thin circle) -->
+              <circle cx="512" cy="40" r="22" fill="#fff" stroke="var(--blue)" stroke-width="2.5"/>
+              <text x="512" y="46" text-anchor="middle" font-size="15" fill="var(--body)">התחלה</text>
+            </svg>
+          </div>
+        </div>
+
+        <p class="bottom-line">חץ מלא = רצף בתוך <span class="en">pool</span> · חץ מקווקו = מסר בין <span class="en">pools</span> · קו מנוקד = שיוך נתונים.</p>
+
+      </div>
+    </section>
+    <!-- D — Gateways: the three main BPMN gateways (XOR / AND / OR).
+         Original authoring. cols-3 cards reveal one at a time (Space / →), each with the
+         diamond symbol (X / + / O) drawn as inline SVG, the meaning, and a campus example.
+         XOR (the decision) leads and is stressed as the most common; then the 🤖/⚠️ AI beat. -->
+    <section data-slug="bpmn-gateways">
+      <div class="sdlc-chip" title="שלב 2 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>חקר מצב קיים</div>
+      <h1>שערים — <span class="en">Gateways</span></h1>
+      <div class="subtitle">המעוין שמכוון את זרימת התהליך: <span class="en">XOR</span> / <span class="en">AND</span> / <span class="en">OR</span></div>
+      <div class="body">
+
+        <div class="cols-3" style="align-items:stretch;">
+
+          <!-- XOR — exclusive: exactly one path (a decision) -->
+          <div class="card fragment" style="display:flex; flex-direction:column; gap:10px;">
+            <div class="panel-title"><span class="en">XOR</span> · בלעדי <span class="tag">הנפוץ ביותר</span></div>
+            <div class="center">
+              <svg width="72" height="72" viewBox="0 0 72 72" role="img" aria-label="מעוין עם X — שער בלעדי">
+                <rect x="36" y="8" width="39.6" height="39.6" rx="6" ry="6"
+                      transform="rotate(45 36 36)" fill="none" stroke="var(--blue)" stroke-width="3"/>
+                <path d="M27 27 L45 45 M45 27 L27 45" stroke="var(--blue)" stroke-width="3.5" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <div class="muted" style="font-size:20px;">סימן: <strong><span class="en">X</span></strong>. בדיוק מסלול <strong>אחד</strong> ממשיך — זו <strong>החלטה</strong>: כן או לא, מסלול א' או מסלול ב'.</div>
+            <div class="callout good" style="font-size:19px;">
+              <span class="label">דוגמה מהקמפוס</span>
+              "המנה במלאי?" — כן → ממשיכים בהזמנה · לא → מציעים חלופה.
+            </div>
+          </div>
+
+          <!-- AND — parallel: all paths at once -->
+          <div class="card fragment" style="display:flex; flex-direction:column; gap:10px;">
+            <div class="panel-title"><span class="en">AND</span> · מקבילי</div>
+            <div class="center">
+              <svg width="72" height="72" viewBox="0 0 72 72" role="img" aria-label="מעוין עם פלוס — שער מקבילי">
+                <rect x="36" y="8" width="39.6" height="39.6" rx="6" ry="6"
+                      transform="rotate(45 36 36)" fill="none" stroke="var(--blue)" stroke-width="3"/>
+                <path d="M36 25 L36 47 M25 36 L47 36" stroke="var(--blue)" stroke-width="3.5" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <div class="muted" style="font-size:20px;">סימן: <strong>+</strong>. <strong>כל</strong> המסלולים ממשיכים <strong>במקביל</strong> — בו-זמנית, לא במקום זה את זה.</div>
+            <div class="callout good" style="font-size:19px;">
+              <span class="label">דוגמה מהקמפוס</span>
+              אחרי אישור הזמנה: המטבח מתחיל להכין <strong>וגם</strong> המערכת שולחת אישור לסטודנט.
+            </div>
+          </div>
+
+          <!-- OR — inclusive: one or more paths -->
+          <div class="card fragment" style="display:flex; flex-direction:column; gap:10px;">
+            <div class="panel-title"><span class="en">OR</span> · מכליל</div>
+            <div class="center">
+              <svg width="72" height="72" viewBox="0 0 72 72" role="img" aria-label="מעוין עם O — שער מכליל">
+                <rect x="36" y="8" width="39.6" height="39.6" rx="6" ry="6"
+                      transform="rotate(45 36 36)" fill="none" stroke="var(--blue)" stroke-width="3"/>
+                <circle cx="36" cy="36" r="11" fill="none" stroke="var(--blue)" stroke-width="3.5"/>
+              </svg>
+            </div>
+            <div class="muted" style="font-size:20px;">סימן: <strong><span class="en">O</span></strong>. מסלול <strong>אחד או יותר</strong> ממשיכים — אפשר כמה יחד, לפי התנאים שמתקיימים.</div>
+            <div class="callout good" style="font-size:19px;">
+              <span class="label">דוגמה מהקמפוס</span>
+              התראת "מוכן": לסטודנט אפשר לשלוח <span class="en">SMS</span>, גם <span class="en">push</span>, או שניהם — תלוי בהעדפותיו.
+            </div>
+          </div>
+
+        </div>
+
+        <div class="hero fragment">
+          <h3><span class="en">XOR</span> = החלטה — הוא השער שתפגשו הכי הרבה</h3>
+          <p>רוב הסיפורים בתהליך עסקי הם "אם… אז…": במלאי? שילם? אושר? כל אחד מהם הוא <span class="en">XOR</span> —
+             מעוין עם <span class="en">X</span> שבוחר מסלול אחד בדיוק. כשמתלבטים איזה שער, ברירת המחדל היא <span class="en">XOR</span>.</p>
+        </div>
+
+        <div class="cols fragment">
+          <div class="callout ai">
+            <span class="label">🤖 הבינה ממקמת שערים</span>
+            <span class="en">Claude</span> מקבל את תיאור התהליך במילים, ומציע איפה נדרש <span class="en">gateway</span> ואיזה סוג —
+            <span class="en">XOR</span> להחלטה, <span class="en">AND</span> למקביליות, <span class="en">OR</span> לבחירה מרובה.
+          </div>
+          <div class="callout warn fragment">
+            <span class="label">⚠️ איזה שער היא בחרה לא נכון?</span>
+            טעות נפוצה: הבינה שמה <span class="en">AND</span> במקום <span class="en">XOR</span> ומריצה <strong>שני</strong> מסלולים מנוגדים יחד
+            (גם "במלאי" וגם "אזל"). בדיקת לוגיקת השער היא משטח האימות שלכם.
+          </div>
+        </div>
+
+        <p class="bottom-line"><span class="en">XOR</span> = מסלול אחד (החלטה) · <span class="en">AND</span> = כולם במקביל · <span class="en">OR</span> = אחד או יותר.</p>
+
+      </div>
+    </section>
+    <!-- D — Gateways: a worked campus example. Original authoring for L2 (BPMN).
+         Two XOR decision points from the campus order process, each drawn with simple
+         inline boxes + arrows: "המנה במלאי?" (loop back on no) and "התשלום הצליח?"
+         (retry / cancel on no). Revealed one beat at a time, then the point that a
+         gateway captures the real branching that prose hid, then the 🤖/⚠️ AI beat. -->
+    <section data-slug="bpmn-gateways-example">
+      <div class="sdlc-chip" title="שלב 2 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>חקר מצב קיים</div>
+      <h1>שערים — דוגמה מהקמפוס</h1>
+      <div class="subtitle">שתי נקודות החלטה בתהליך הזמנת האוכל, כפי שהן נראות עם <span class="en">XOR</span></div>
+      <div class="body">
+
+        <p class="muted" style="margin:0;">בתהליך ההזמנה בקמפוס יש שתי נקודות שבהן התהליך <em>מתפצל</em>: זמינות המנה,
+          והצלחת התשלום. כל פיצול כזה הוא שער <span class="en">XOR</span> — בכל פעם נבחר מסלול אחד בלבד.</p>
+
+        <div class="cols" style="align-items:stretch;">
+
+          <!-- Decision 1: in stock? -->
+          <div class="card fragment" style="display:flex; flex-direction:column; gap:12px;">
+            <div class="panel-title">שער 1 — <span class="en">XOR</span>: "המנה במלאי?"</div>
+
+            <div class="center" style="display:flex; flex-direction:column; align-items:center; gap:8px;">
+              <div style="border:2px solid var(--blue); border-radius:10px; padding:8px 16px; background:#fff;">בחירת מנה</div>
+              <div style="color:var(--gray);">↓</div>
+              <div style="display:inline-flex; align-items:center; justify-content:center;
+                          width:120px; height:120px; transform:rotate(45deg);
+                          border:2px solid var(--orange); border-radius:8px; background:var(--hero-bg);">
+                <span style="transform:rotate(-45deg); font-weight:700; color:var(--orange); font-size:18px;">המנה במלאי?</span>
+              </div>
+              <div class="cols" style="width:100%; gap:10px;">
+                <div class="center" style="display:flex; flex-direction:column; align-items:center; gap:6px;">
+                  <div style="color:var(--green); font-weight:700;">כן ↓</div>
+                  <div style="border:2px solid var(--blue); border-radius:10px; padding:8px 14px; background:#fff;">המשך לתשלום</div>
+                </div>
+                <div class="center" style="display:flex; flex-direction:column; align-items:center; gap:6px;">
+                  <div style="color:var(--red); font-weight:700;">לא ↺</div>
+                  <div style="border:2px solid var(--blue); border-radius:10px; padding:8px 14px; background:#fff;">בחירת מנה אחרת</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="muted" style="font-size:20px;"><b>כן</b> → ממשיכים אל התשלום. <b>לא</b> → חוזרים אחורה
+              לבחירת מנה אחרת (לולאה), עד שיש מנה זמינה.</div>
+          </div>
+
+          <!-- Decision 2: payment ok? -->
+          <div class="card fragment" style="display:flex; flex-direction:column; gap:12px;">
+            <div class="panel-title">שער 2 — <span class="en">XOR</span>: "התשלום הצליח?"</div>
+
+            <div class="center" style="display:flex; flex-direction:column; align-items:center; gap:8px;">
+              <div style="border:2px solid var(--blue); border-radius:10px; padding:8px 16px; background:#fff;">ביצוע תשלום</div>
+              <div style="color:var(--gray);">↓</div>
+              <div style="display:inline-flex; align-items:center; justify-content:center;
+                          width:120px; height:120px; transform:rotate(45deg);
+                          border:2px solid var(--orange); border-radius:8px; background:var(--hero-bg);">
+                <span style="transform:rotate(-45deg); font-weight:700; color:var(--orange); font-size:18px;">התשלום הצליח?</span>
+              </div>
+              <div class="cols" style="width:100%; gap:10px;">
+                <div class="center" style="display:flex; flex-direction:column; align-items:center; gap:6px;">
+                  <div style="color:var(--green); font-weight:700;">כן ↓</div>
+                  <div style="border:2px solid var(--blue); border-radius:10px; padding:8px 14px; background:#fff;">הכנת ההזמנה</div>
+                </div>
+                <div class="center" style="display:flex; flex-direction:column; align-items:center; gap:6px;">
+                  <div style="color:var(--red); font-weight:700;">לא ↺</div>
+                  <div style="border:2px solid var(--blue); border-radius:10px; padding:8px 14px; background:#fff;">ניסיון חוזר / ביטול</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="muted" style="font-size:20px;"><b>כן</b> → ההזמנה עוברת להכנה במטבח. <b>לא</b> → ניסיון תשלום
+              חוזר, ואם נכשל שוב — ההזמנה מבוטלת.</div>
+          </div>
+
+        </div>
+
+        <div class="hero fragment">
+          <h3>השער חושף את ההסתעפות שהטקסט הסתיר</h3>
+          <p>בטקסט החופשי כתבנו "הסטודנט מזמין ומשלם", כאילו התהליך זורם בקו ישר. אבל בפועל יש פה
+            <strong>פיצולים</strong>: מה אם המנה אזלה? מה אם התשלום נדחה? השער <span class="en">XOR</span> מצייר
+            בדיוק את נקודות ההחלטה האלה — מסלול אחד נבחר בכל פעם — ומכריח אותנו לטפל גם במסלול ה"לא".</p>
+        </div>
+
+        <div class="cols fragment">
+          <div class="callout ai">
+            <span class="label">🤖 הבינה מציעה את השערים</span>
+            <span class="en">Claude</span> מקבל את תיאור התהליך וזורע שערי <span class="en">XOR</span> בכל מקום שיש בו
+            שאלת "אם / או" — כמו זמינות מנה והצלחת תשלום.
+          </div>
+          <div class="callout warn fragment">
+            <span class="label">⚠️ האם היא טיפלה במסלול ה"לא"?</span>
+            לעיתים הבינה מציירת רק את הענף ה"כן" ושוכחת את החזרה אחורה או את הביטול. בדקו ששני הענפים
+            של כל שער קיימים — ולאן באמת חוזרת הלולאה.
+          </div>
+        </div>
+
+        <p class="bottom-line">שער <span class="en">XOR</span> = נקודת החלטה · ענף אחד נבחר · המסלול ה"לא" חייב גם הוא יעד.</p>
+
+      </div>
+    </section>
+    <!-- E — Who? Pools & Lanes: how BPMN answers WHO performs each step.
+         Original authoring for section E of the L2 redesign. The pool/lane explainer card
+         lands first, then the campus pool+lanes list reveals, then the cross-pool flow rule,
+         then the ⚠️ common-mistake note. RTL; every Latin token wrapped in .en. -->
+    <section data-slug="bpmn-pools-lanes">
+      <div class="sdlc-chip" title="שלב 2 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>חקר מצב קיים</div>
+      <h1>מי עושה כל שלב? — <span class="en">Pools</span> ו-<span class="en">Lanes</span></h1>
+      <div class="subtitle">חלוקת התהליך למשתתפים ולתפקידים</div>
+      <div class="body">
+
+        <p class="muted" style="margin:0;">
+          עד עכשיו תיארנו <em>מה</em> קורה בתהליך. <span class="en">Pools</span> ו-<span class="en">Lanes</span>
+          מוסיפים את ה<strong>מי</strong> — באיזה מסלול אופקי יושב כל שלב, ולכן מי אחראי לבצע אותו.
+        </p>
+
+        <div class="cols" style="align-items:stretch;">
+
+          <div class="card fragment" style="display:flex; flex-direction:column; gap:8px;">
+            <div class="panel-title"><span class="en">Pool</span> · בריכה</div>
+            <div class="muted" style="font-size:21px;">
+              משתתף או ארגון שלם בתהליך — ישות שמנהלת תהליך משלה. כל
+              <span class="en">pool</span> מצוירת כמלבן רחב שמכיל את כל השלבים שלו.
+            </div>
+            <div class="callout good" style="font-size:19px;">
+              <span class="label">בקמפוס</span>
+              ה-<span class="en">pool</span> היא <strong>הקפיטריה</strong> — הארגון שמריץ את תהליך ההזמנה.
+            </div>
+          </div>
+
+          <div class="card fragment" style="display:flex; flex-direction:column; gap:8px;">
+            <div class="panel-title"><span class="en">Lane</span> · נתיב</div>
+            <div class="muted" style="font-size:21px;">
+              חלוקה פנימית של ה-<span class="en">pool</span> לתפקידים. כל <span class="en">lane</span> הוא
+              רצועה שמכילה את השלבים שתפקיד מסוים אחראי להם.
+            </div>
+            <div class="callout good" style="font-size:19px;">
+              <span class="label">בקמפוס</span>
+              בתוך הקפיטריה: <span class="en">lane</span> לכל תפקיד — מי מבצע איזה שלב.
+            </div>
+          </div>
+
+        </div>
+
+        <div class="card fragment" style="display:flex; flex-direction:column; gap:10px;">
+          <div class="panel-title">ה-<span class="en">lanes</span> של הקפיטריה</div>
+          <div class="cols" style="grid-template-columns:repeat(4,1fr); gap:12px;">
+            <div class="center" style="font-weight:700; color:var(--blue);">🎓 סטודנט</div>
+            <div class="center" style="font-weight:700; color:var(--blue);">🧾 עובד דלפק</div>
+            <div class="center" style="font-weight:700; color:var(--blue);">👨‍🍳 מטבח</div>
+            <div class="center" style="font-weight:700; color:var(--blue);">💳 תשלום</div>
+          </div>
+          <div class="muted" style="font-size:19px;">ארבעה תפקידים בתוך אותה <span class="en">pool</span> — לכל אחד הרצועה שלו בתהליך.</div>
+        </div>
+
+        <div class="hero fragment">
+          <h3><span class="en">Sequence flow</span> בתוך · <span class="en">Message flow</span> בין</h3>
+          <p>זרימת רצף (<span class="en">sequence flow</span>) נשארת <strong>בתוך</strong> אותה <span class="en">pool</span> —
+             כך מתקדם תהליך פנימי בין נתיבים. כשהזרימה <strong>חוצה</strong> בין <span class="en">pools</span> שונות
+             זו תמיד זרימת הודעה (<span class="en">message flow</span>) — בריכות נפרדות מתקשרות רק בהודעות.</p>
+        </div>
+
+        <div class="callout warn fragment">
+          <span class="label">⚠️ טעות נפוצה — הכל בנתיב אחד</span>
+          כשמכניסים את כל השלבים ל-<span class="en">lane</span> אחד, התרשים מאבד את התשובה ל"מי עושה מה" —
+          בדיוק המידע שבגללו הוספנו <span class="en">pools</span> ו-<span class="en">lanes</span>.
+          כל שלב חייב לשבת אצל התפקיד שאחראי לו בפועל.
+        </div>
+
+        <p class="bottom-line"><span class="en">Pool</span> = משתתף/ארגון · <span class="en">Lane</span> = תפקיד בתוכו · הזרימה עונה על "מי?".</p>
+
+      </div>
+    </section>
+    <!-- E — BPMN data / information artifacts: what information flows through the process (Which?).
+         Original authoring for the campus order model. Three cards reveal one at a time (Space / →):
+         Data object (document icon) · Data store · Association; each anchored to a campus example
+         (order details / menu-stock / receipt). Then the 🤖/⚠️ AI beat lands. -->
+    <section data-slug="bpmn-data">
+      <div class="sdlc-chip" title="שלב 2 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>חקר מצב קיים</div>
+      <h1>מה זורם בתהליך? — <span class="en">Data objects</span></h1>
+      <div class="subtitle">אילו פריטי מידע עוברים לאורך תהליך ההזמנה בקמפוס</div>
+      <div class="body">
+
+        <div class="cols-3" style="align-items:stretch;">
+
+          <!-- Data object -->
+          <div class="card fragment" style="display:flex; flex-direction:column; gap:10px;">
+            <div class="panel-title"><span class="en">Data object</span> · פריט מידע</div>
+            <div class="center">
+              <svg width="56" height="64" viewBox="0 0 56 64" role="img" aria-label="אייקון מסמך — פריט מידע">
+                <path d="M10 6 H36 L46 16 V58 H10 Z" fill="none" stroke="var(--blue)" stroke-width="3" stroke-linejoin="round"/>
+                <path d="M36 6 V16 H46" fill="none" stroke="var(--blue)" stroke-width="3" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <div class="muted" style="font-size:20px;">צורה: <strong>אייקון מסמך</strong>. מייצג פיסת מידע שמשימה יוצרת, קוראת או מעדכנת — מסמך, טופס או רשומה.</div>
+            <div class="callout good" style="font-size:19px;">
+              <span class="label">דוגמה מהקמפוס</span>
+              <span class="en">order</span> — פרטי ההזמנה: המנות שנבחרו, הכמות וזמן האיסוף.
+            </div>
+          </div>
+
+          <!-- Data store -->
+          <div class="card fragment" style="display:flex; flex-direction:column; gap:10px;">
+            <div class="panel-title"><span class="en">Data store</span> · מאגר נתונים</div>
+            <div class="center">
+              <svg width="64" height="64" viewBox="0 0 64 64" role="img" aria-label="אייקון מאגר — מסד נתונים">
+                <ellipse cx="32" cy="16" rx="22" ry="8" fill="none" stroke="var(--blue)" stroke-width="3"/>
+                <path d="M10 16 V48 A22 8 0 0 0 54 48 V16" fill="none" stroke="var(--blue)" stroke-width="3"/>
+                <path d="M10 32 A22 8 0 0 0 54 32" fill="none" stroke="var(--blue)" stroke-width="3"/>
+              </svg>
+            </div>
+            <div class="muted" style="font-size:20px;">צורה: <strong>אייקון מאגר</strong>. מידע שנשמר לאורך זמן — לא זורם רגעית, אלא נקרא ונכתב שוב ושוב.</div>
+            <div class="callout good" style="font-size:19px;">
+              <span class="label">דוגמה מהקמפוס</span>
+              התפריט והמלאי — מאגר שממנו קוראים זמינות מנות ומעדכנים אותו לאורך היום.
+            </div>
+          </div>
+
+          <!-- Association -->
+          <div class="card fragment" style="display:flex; flex-direction:column; gap:10px;">
+            <div class="panel-title"><span class="en">Association</span> · שיוך למשימה</div>
+            <div class="center">
+              <svg width="80" height="64" viewBox="0 0 80 64" role="img" aria-label="קו מקווקו — שיוך פריט מידע למשימה">
+                <line x1="8" y1="32" x2="72" y2="32" stroke="var(--blue)" stroke-width="3" stroke-dasharray="4 6"/>
+              </svg>
+            </div>
+            <div class="muted" style="font-size:20px;">צורה: <strong>קו מקווקו</strong>. מחבר פריט מידע למשימה — מראה איזו משימה משתמשת בו או מייצרת אותו.</div>
+            <div class="callout good" style="font-size:19px;">
+              <span class="label">דוגמה מהקמפוס</span>
+              הקבלה (<span class="en">receipt</span>) משויכת למשימת "תשלום" — היא התוצר שלה.
+            </div>
+          </div>
+
+        </div>
+
+        <div class="hero fragment">
+          <h3>מידע מול זרימה</h3>
+          <p>חיצי הרצף מראים <strong>מתי</strong> דברים קורים; פריטי המידע מראים <strong>מה</strong> עובר ביניהם.
+             בתהליך ההזמנה: ה-<span class="en">order</span> נוצר בבחירת המנה, התפריט/מלאי נקרא ומתעדכן,
+             והקבלה מופקת בתשלום — שלוש פיסות מידע שמלוות את כל המסלול.</p>
+        </div>
+
+        <div class="cols fragment">
+          <div class="callout ai">
+            <span class="label">🤖 הבינה מזהה את פריטי המידע</span>
+            <span class="en">Claude</span> מקבל את תיאור התהליך במילים ומציע אילו מסמכים ורשומות זורמים בו —
+            ההזמנה, התפריט, הקבלה — ולאיזו משימה כל אחד משויך.
+          </div>
+          <div class="callout warn fragment">
+            <span class="label">⚠️ מה היא שכחה לחבר?</span>
+            לעיתים הבינה מציירת משימה בלי פריט המידע שהיא יוצרת, או משייכת קבלה למשימה הלא נכונה.
+            בדיקה שכל פריט מידע מחובר למשימה הנכונה היא משטח האימות שלכם.
+          </div>
+        </div>
+
+        <p class="bottom-line">פריט מידע = אייקון מסמך · מאגר = אייקון מסד · שיוך = קו מקווקו למשימה.</p>
+
+      </div>
+    </section>
+    <!-- MARQUEE slide — the full as-is campus ordering process modeled in BPMN.
+         The diagram (assets/bpmn-campus-order.html) gets the dominant full-height panel
+         on the left; a narrow right rail tells the reader what to look for in it:
+         the 4 lanes, the two XOR gateways, and the loops. Layout mirrors
+         slide-interview-to-diagram.html: a grid with a ~300px rail + diagram filling the rest. -->
+    <section data-slug="campus-bpmn-model">
+      <div class="sdlc-chip" title="שלב 2 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>חקר מצב קיים</div>
+      <h1>המודל המלא: תהליך ההזמנה בקמפוס ב-<span class="en">BPMN</span></h1>
+      <div class="subtitle">תהליך ה-<span class="en">as-is</span> השלם — מההזמנה ועד התשלום</div>
+      <div class="body">
+
+        <div style="flex:1 1 auto; min-height:0; display:grid; grid-template-columns:1fr 300px; gap:18px;">
+
+          <!-- left: the live, full-height diagram (dominant panel) -->
+          <div style="display:flex; min-height:0;">
+            <div class="embed"><iframe src="assets/bpmn-campus-order.html?embed=1" title="BPMN — תהליך הזמנה בקמפוס" loading="lazy"></iframe></div>
+          </div>
+
+          <!-- right rail (RTL-first): what to see in the diagram -->
+          <div style="display:flex; flex-direction:column; gap:12px; min-height:0; overflow:auto;">
+            <div class="card tight">
+              <div class="panel-title">🔍 מה לראות בתרשים</div>
+              <ul class="bullets" style="font-size:18px; line-height:1.5; margin:8px 0 0;">
+                <li class="fragment"><b>4 מסלולים (<span class="en">lanes</span>):</b> סטודנט · דלפק · מטבח · תשלום</li>
+                <li class="fragment">שני שערי <span class="en">XOR</span>: בדיקת מלאי ובחירת אופן התשלום</li>
+                <li class="fragment">לולאות שמחזירות את התהליך אחורה</li>
+              </ul>
+            </div>
+
+            <div class="callout warn fragment" style="font-size:17px;">
+              <span class="label">⚠️ שער <span class="en">XOR</span> — מלאי</span>
+              אם הפריט אזל, התהליך מתפצל: הצעת חלופה או ביטול ההזמנה.
+            </div>
+
+            <div class="callout warn fragment" style="font-size:17px;">
+              <span class="label">⚠️ שער <span class="en">XOR</span> — תשלום</span>
+              מזומן או אשראי — שני מסלולים נפרדים שמתאחדים בסוף.
+            </div>
+
+            <div class="callout fragment" style="font-size:17px;">
+              <span class="label">🔁 לולאות</span>
+              תשלום שנכשל ובקשת תיקון להזמנה מחזירים את הזרימה לשלב קודם.
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+    <!-- E (AI beat) — Claude drafts the BPMN from the prose process (create_ai_bpmn_slide.py).
+         Echoes the recurring trust-but-challenge habit: 🤖 what Claude drafts fast from the
+         interview notes / current-process write-up, paired with ⚠️ what to verify on a BPMN. -->
+    <section data-slug="ai-bpmn">
+      <div class="sdlc-chip" title="שלב 2 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>חקר מצב קיים</div>
+      <h1>🤖 הבינה מציירת <span class="en">BPMN</span></h1>
+      <div class="subtitle">מתיאור התהליך במילים — לטיוטת מודל ראשונה תוך שניות</div>
+      <div class="body">
+
+        <div class="cols">
+
+          <div class="card fragment">
+            <div class="callout ai" style="font-size:21px;">
+              <span class="label">🤖 מה <span class="en">Claude</span> מצייר</span>
+              תנו ל-<span class="en">Claude</span> את תיאור התהליך במילים — הערות הראיון או כתיבת המצב הקיים —
+              והוא מחזיר <strong>טיוטת מודל <span class="en">BPMN</span> ראשונה</strong> במהירות: פעילויות,
+              שערים וזרימה, מוכנים לעריכה.
+            </div>
+            <ul class="bullets fragment" style="margin-top:14px;">
+              <li>הופך פסקת טקסט לרצף פעילויות ושערים</li>
+              <li>מציע מי המשתתפים (<span class="en">pools</span> ו-<span class="en">lanes</span>)</li>
+              <li>חוסך את הדף הריק — מתחילים מבסיס לתיקון</li>
+            </ul>
+          </div>
+
+          <div class="card fragment">
+            <div class="callout warn" style="font-size:21px;">
+              <span class="label">⚠️ מה לאמת על ה-<span class="en">BPMN</span></span>
+              המהירות מפתה — אבל הטיוטה כמעט תמיד דורשת תיקונים. עברו על המודל ובדקו:
+            </div>
+            <ul class="bullets fragment" style="margin-top:14px;">
+              <li><strong>צעדים מומצאים</strong> — פעילות שלא הופיעה בתהליך האמיתי</li>
+              <li><strong>לוגיקת שער שגויה</strong> — <span class="en">XOR</span> במקום <span class="en">AND</span> (או להפך)</li>
+              <li><strong>הכול במסלול אחד</strong> — חסרות חלוקה ל-<span class="en">lanes</span> לפי משתתף</li>
+              <li><strong>זרימות הודעה חסרות</strong> — אין <span class="en">message flow</span> בין משתתפים</li>
+              <li><strong>מסלולי חריגה שנשמטו</strong> — מה קורה כשהתשלום נכשל או המנה אזלה?</li>
+            </ul>
+          </div>
+
+        </div>
+
+        <div class="hero fragment">
+          <h3>ההרגל החוזר: לסמוך — אבל לאתגר</h3>
+          <p>הטיוטה של ה-<span class="en">AI</span> היא נקודת פתיחה, לא תוצר סופי. אתם מכירים את התהליך —
+             אתם המאמתים. בכל מודל נשאל את אותן שלוש שאלות: מה היא <strong>המציאה</strong>, מה היא
+             <strong>פספסה</strong>, ומה היא <strong>הניחה</strong> בלי לשאול?</p>
+        </div>
+
+        <p class="bottom-line"><span class="en">Claude</span> נותן את הטיוטה · ידע התהליך שלכם הופך אותה למודל נכון.</p>
+
+      </div>
+    </section>
+    <!-- E — טעויות נפוצות ב-BPMN: the common modelling mistakes to avoid, as "mistake → fix"
+         pairs (callout bad / callout good contrast). Original authoring for section E of the L2
+         redesign. The pairs reveal one at a time (Space / →), then the 🤖 / ⚠️ AI beat lands.
+         RTL default; every Latin token wrapped in <span class="en">. -->
+    <section data-slug="bpmn-common-mistakes">
+      <div class="sdlc-chip" title="שלב 2 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>חקר מצב קיים</div>
+      <h1>טעויות נפוצות ב-<span class="en">BPMN</span></h1>
+      <div class="subtitle">מה להימנע ממנו — וכיצד לתקן</div>
+      <div class="body">
+
+        <div class="cols" style="align-items:stretch;">
+
+          <!-- Mistake 1: everything in one lane -->
+          <div class="fragment" style="display:flex; flex-direction:column; gap:10px;">
+            <div class="callout bad">
+              <span class="label">✗ הכל במסלול אחד</span>
+              כל המשימות נכתבות באותו <span class="en">lane</span>, ולא ברור <strong>מי</strong> מבצע כל פעולה —
+              הסטודנט, הקופה או המטבח.
+            </div>
+            <div class="callout good">
+              <span class="label">✓ מסלול לכל משתתף</span>
+              חלקו את התהליך ל-<span class="en">pools</span> ו-<span class="en">lanes</span> — שורה לכל גורם,
+              כך שכל משימה יושבת תחת מי שאחראי עליה.
+            </div>
+          </div>
+
+          <!-- Mistake 2: sequence flow between pools -->
+          <div class="fragment" style="display:flex; flex-direction:column; gap:10px;">
+            <div class="callout bad">
+              <span class="label">✗ <span class="en">sequence flow</span> בין <span class="en">pools</span></span>
+              חיבור משתתפים נפרדים (סטודנט ↔ מטבח) בחץ זרימה רגיל — כאילו הם תהליך אחד רצוף.
+            </div>
+            <div class="callout good">
+              <span class="label">✓ <span class="en">message flow</span> בין משתתפים</span>
+              בין <span class="en">pools</span> עוברת <strong>הודעה</strong> (חץ מקווקו), לא זרימת רצף.
+              זרימת רצף נשארת בתוך אותו <span class="en">pool</span>.
+            </div>
+          </div>
+
+          <!-- Mistake 3: gateway with no clear question -->
+          <div class="fragment" style="display:flex; flex-direction:column; gap:10px;">
+            <div class="callout bad">
+              <span class="label">✗ <span class="en">gateway</span> בלי שאלה ברורה</span>
+              מעוין החלטה שיוצאים ממנו מסלולים בלי לנסח את התנאי — לא ברור על פי מה מחליטים.
+            </div>
+            <div class="callout good">
+              <span class="label">✓ שאלה + מסלולים מתויגים</span>
+              נסחו את ה-<span class="en">gateway</span> כשאלה ("המנה במלאי?") ותייגו כל ענף יוצא
+              ("כן" / "לא").
+            </div>
+          </div>
+
+          <!-- Mistake 4: missing end events -->
+          <div class="fragment" style="display:flex; flex-direction:column; gap:10px;">
+            <div class="callout bad">
+              <span class="label">✗ חסר אירוע סיום</span>
+              התהליך "נגמר באוויר" — אין <span class="en">end event</span>, ולא ברור מתי ובאיזה מצב הוא הסתיים.
+            </div>
+            <div class="callout good">
+              <span class="label">✓ סגרו כל מסלול</span>
+              לכל ענף יש <span class="en">end event</span> משלו ("ההזמנה נמסרה", "ההזמנה בוטלה") —
+              כל מסלול מגיע לסוף מוגדר.
+            </div>
+          </div>
+
+          <!-- Mistake 5: decision logic hidden inside a task -->
+          <div class="fragment" style="display:flex; flex-direction:column; gap:10px;">
+            <div class="callout bad">
+              <span class="label">✗ לוגיקת החלטה בתוך משימה</span>
+              משימה שמסתירה בתוכה "אם… אז…" — ההסתעפות נעלמת מהתרשים ולא נראית לעין.
+            </div>
+            <div class="callout good">
+              <span class="label">✓ הוציאו את ההחלטה ל-<span class="en">gateway</span></span>
+              כל הסתעפות מותנית מיוצגת במעוין נפרד. המשימה מבצעת פעולה אחת — לא מחליטה ומבצעת יחד.
+            </div>
+          </div>
+
+          <!-- Mistake 6: over-detailing -->
+          <div class="fragment" style="display:flex; flex-direction:column; gap:10px;">
+            <div class="callout bad">
+              <span class="label">✗ פירוט יתר</span>
+              כל לחיצת כפתור הופכת למשימה — התרשים מתפוצץ בעשרות צעדים זעירים ואי אפשר לקרוא את התהליך.
+            </div>
+            <div class="callout good">
+              <span class="label">✓ הישארו ברמת התהליך</span>
+              מדלו צעדים עסקיים משמעותיים, לא קליקים. אם שלב הוא מסך בודד — כנראה הוא פרט מימוש, לא משימה.
+            </div>
+          </div>
+
+        </div>
+
+        <div class="cols fragment">
+          <div class="callout ai">
+            <span class="label">🤖 הבינה נופלת באותן מלכודות</span>
+            כשמבקשים מ-<span class="en">Claude</span> טיוטת <span class="en">BPMN</span>, הוא נוטה לאותן שגיאות —
+            ערבוב משתתפים, <span class="en">gateway</span> בלי תנאי, או פירוט יתר.
+          </div>
+          <div class="callout warn fragment">
+            <span class="label">⚠️ עברו על הטיוטה מול הרשימה</span>
+            מי בכל <span class="en">lane</span>? האם בין ה-<span class="en">pools</span> עובר <span class="en">message flow</span>?
+            לכל <span class="en">gateway</span> יש שאלה? כל מסלול מגיע ל-<span class="en">end event</span>?
+          </div>
+        </div>
+
+        <p class="bottom-line">תרשים טוב עונה על "מי / מה / מתי" — בלי לבלוע החלטות, ובלי לטבוע בפרטים.</p>
+
+      </div>
+    </section>
+    <!-- F — סיכום + הבא: recap of Lecture 2 (documenting the as-is process, climbing
+         prose → BPMN, learning flow objects / gateways / pools & lanes / data, modelling
+         the full campus order) + the AI-drafts-we-verify thread; then a forward hero/bottom-line
+         to Lecture 3 — turning this understood process into דרישות (requirements). Original
+         authoring for section F. RTL; every Latin token wrapped in .en. SDLC chip added by build. -->
+    <section data-slug="summary">
+      <div class="sdlc-chip" title="שלב 2 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>חקר מצב קיים</div>
+      <h1>סיכום — והלאה לדרישות</h1>
+      <div class="subtitle">מה למדנו היום, ולאן זה לוקח אותנו בהרצאה הבאה</div>
+      <div class="body">
+
+        <p class="muted" style="margin:0;">היום למדנו <strong>לתעד</strong> את התהליך הקיים — לקחנו את תהליך הזמנת
+        האוכל בקמפוס שהלכנו בו, וטיפסנו מטקסט חופשי עד לתרשים פורמלי ב-<span class="en">BPMN</span>:</p>
+
+        <div class="cols-3" style="align-items:stretch;">
+
+          <div class="card fragment" style="display:flex; flex-direction:column; gap:6px;">
+            <div class="panel-title">① מטקסט לתרשים</div>
+            <div class="muted" style="font-size:20px;">טיפסנו בסולם התיעוד — מטקסט חופשי, דרך כתיבה מובנית ותרשימי
+            זרימה, ועד שפת תיעוד תקנית אחת: <span class="en">BPMN</span>.</div>
+          </div>
+
+          <div class="card fragment" style="display:flex; flex-direction:column; gap:6px;">
+            <div class="panel-title">② אבני הבניין</div>
+            <div class="muted" style="font-size:20px;">למדנו את אלמנטי הזרימה (<span class="en">flow objects</span>) — אירועים,
+            פעילויות ושערים (<span class="en">gateways</span>: <span class="en">XOR</span> / <span class="en">AND</span> / <span class="en">OR</span>).</div>
+          </div>
+
+          <div class="card fragment" style="display:flex; flex-direction:column; gap:6px;">
+            <div class="panel-title">③ מי ומה</div>
+            <div class="muted" style="font-size:20px;"><span class="en">Pools</span> ו-<span class="en">lanes</span> לוכדים <strong>מי</strong> מבצע כל פעולה,
+            ואובייקטי נתונים (<span class="en">data objects</span>) לוכדים <strong>מה</strong> זורם בתהליך.</div>
+          </div>
+
+        </div>
+
+        <div class="card fragment">
+          <ul class="bullets" style="margin:0;">
+            <li>מידלנו את <strong>תהליך ההזמנה המלא בקמפוס</strong> ב-<span class="en">BPMN</span> — סטודנט, קפיטריה,
+            מטבח ותשלום בנתיבים נפרדים, עם שער "במלאי?" ושער תשלום.</li>
+            <li>זהו תוצר חקר מצב קיים (<span class="en">as-is</span>) — התהליך כפי שהוא היום, עוד לפני שמציעים מערכת חדשה.</li>
+          </ul>
+        </div>
+
+        <div class="callout ai fragment">
+          <span class="label">🤖 הבינה משרטטת — אנחנו מאמתים</span>
+          <span class="en">Claude</span> הפיק טיוטת <span class="en">BPMN</span> מתיאור התהליך במילים בשניות; אבל אנחנו
+          בדקנו אותה — שלא הומצאו שלבים, שלא נשמטו נתיבים, ושלוגיקת השערים נכונה. הטיוטה היא נקודת פתיחה, לא תוצר סופי.
+        </div>
+
+        <div class="hero fragment">
+          <h3>הבא בתור — מתהליך מובן לדרישות</h3>
+          <p>עכשיו שאנחנו <strong>מבינים</strong> את התהליך הקיים, בהרצאה הבאה (<span class="en">L3</span>) נשאל שאלה חדשה:
+          מה <strong>המערכת החדשה</strong> צריכה לעשות? נתרגם את התהליך המובן ל<strong>דרישות</strong> — ונתחיל לעבור
+          משלב חקר מצב קיים אל שלב <strong>ניתוח דרישות</strong>.</p>
+        </div>
+
+        <p class="bottom-line fragment">היום תיעדנו את התהליך הקיים — בהרצאה הבאה נהפוך אותו לדרישות למערכת החדשה.</p>
+
+      </div>
+    </section>
+  </div>
+</div>
+<script src="../web/vendor/reveal/dist/reveal.js"></script>
+<script src="../web/vendor/reveal/plugin/notes/notes.js"></script>
+<script src="../web/vendor/reveal/plugin/highlight/highlight.js"></script>
+<script src="../web/theme/sad.js"></script>
+<script src="../web/theme/glossary.js"></script>
+</body>
+</html>
