@@ -1,0 +1,1579 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>תרשים תרחישי שימוש — Use Case</title>
+<link rel="stylesheet" href="../web/vendor/reveal/dist/reset.css">
+<link rel="stylesheet" href="../web/vendor/reveal/dist/reveal.css">
+<link rel="stylesheet" href="../web/vendor/reveal/plugin/highlight/monokai.css">
+<link rel="stylesheet" href="../web/theme/sad.css">
+</head>
+<body>
+<div class="reveal">
+  <div class="slides">
+    <section class="title-slide" data-slug="title">
+      <div class="course">ניתוח ועיצוב מערכות מידע</div>
+      <h1>תרשים תרחישי שימוש — Use Case</h1>
+      <div class="lecture-no">הרצאה 4-5</div>
+    </section>
+    <section class="toc-slide" data-slug="toc">
+      <h1>סדר היום</h1>
+      <div class="body">
+        <ol class="toc">
+          <li class="active">יסודות UML ו-AI</li>
+          <li>תרחישי שימוש</li>
+          <li>קשרים</li>
+          <li>תיעוד</li>
+          <li>מניתוח לקוד</li>
+          <li>תרגול וסיכום</li>
+        </ol>
+      </div>
+    </section>
+    <!-- A2 — Previously on SAD: a light bridge from Lecture 3 (create_previously_on_sad_slide.py).
+         Ported + enriched: the recap card (what we already hold) and the forward card
+         (where we go today) reveal in turn, ending on the bottom-line that hands the
+         text requirements into today's model. Hebrew text is verbatim from the script. -->
+    <section data-slug="previously-on-sad">
+      <h1>מאיפה הגענו: מהדרישות למודל</h1>
+      <div class="subtitle"><span class="en">Previously on SAD</span> — דרישות (הרצאה 3)</div>
+      <div class="body">
+
+        <div class="cols" style="align-items:stretch;">
+
+          <div class="card fragment" style="display:flex; flex-direction:column; gap:8px;">
+            <div class="panel-title">מה כבר יש לנו (הרצאה 3)</div>
+            <ul class="bullets">
+              <li>זיהוי צרכים (<span class="en term" data-term="wetherbe">Wetherbe</span>, <span class="en term" data-term="jad">JAD</span>, אבטיפוס)</li>
+              <li>ניסוח דרישות <span class="en term" data-term="smart">SMART</span></li>
+              <li><span class="en term" data-term="user-story">User Story</span> מול דרישה קלאסית</li>
+              <li>דרישת <span class="en term" data-term="crud">CRUD</span></li>
+            </ul>
+          </div>
+
+          <div class="card fragment" style="display:flex; flex-direction:column; gap:8px;">
+            <div class="panel-title">לאן ממשיכים היום</div>
+            <ul class="bullets">
+              <li>מטקסט חופשי למודל חזותי</li>
+              <li>תרשים תרחישי שימוש (<span class="en term" data-term="use-case">Use Case</span>)</li>
+              <li>מה המערכת עושה — ולמי</li>
+              <li>גבול: מה בפנים ומה בחוץ</li>
+            </ul>
+          </div>
+
+        </div>
+
+        <p class="bottom-line fragment">הדרישות בטקסט הן הקלט. היום נהפוך אותן למודל שאפשר לתקשר, לאמת — ולתת ל-<span class="en">AI</span>.</p>
+
+      </div>
+    </section>
+    <!-- A3 — The running scenario: campus food ordering + raw interview snippets.
+         Port of create_scenario_intro_slide.py: the 4 stakeholder quote cards (the
+         messy raw input that drives the lecture) now reveal one at a time, and a
+         ⚠️ callout names the deliberate vagueness/contradictions the class will mine. -->
+    <section data-slug="scenario-intro">
+      <h1>הסצנה: מערכת הזמנת אוכל בקמפוס</h1>
+      <div class="subtitle">הקלט הגולמי — ראיונות עם בעלי עניין</div>
+      <div class="body">
+
+        <p class="muted" style="margin:0;">
+          נלווה מערכת אחת לאורך כל ההרצאה: מראיונות, דרך תרשים תרחישי שימוש
+          (<span class="en">use case</span>), ועד קוד רץ בהרצאה 13.
+        </p>
+
+        <div class="cols" style="align-items:stretch;">
+
+          <div class="card fragment" style="display:flex; flex-direction:column; gap:6px;">
+            <div class="panel-title" style="color:var(--blue);">🎓 סטודנט/ית</div>
+            <p style="margin:0;">"רבע שעה בין הרצאות, אין זמן לתור. רוצה להזמין מהטלפון, לשלם, ולדעת מתי מוכן. וצמחוני — שיהיה ברור מה מתאים לי."</p>
+          </div>
+
+          <div class="card fragment" style="display:flex; flex-direction:column; gap:6px;">
+            <div class="panel-title" style="color:var(--blue);">🍽️ מנהל/ת קפיטריה</div>
+            <p style="margin:0;">"בצהריים אנחנו קורסים. רוצה לראות הכל בלוח אחד, לעדכן מה אזל, ובסוף היום מה נמכר. מי שמזמין מראש ולא בא — האוכל לפח."</p>
+          </div>
+
+          <div class="card fragment" style="display:flex; flex-direction:column; gap:6px;">
+            <div class="panel-title" style="color:var(--blue);">👨‍🍳 עובד/ת מטבח</div>
+            <p style="margin:0;">"אני רק צריך לדעת מה להכין ובאיזה סדר. מסמן 'מוכן' והסטודנט מקבל הודעה. תשלומים? לא התפקיד שלי."</p>
+          </div>
+
+          <div class="card fragment" style="display:flex; flex-direction:column; gap:6px;">
+            <div class="panel-title" style="color:var(--blue);">🧾 עובד/ת דלפק איסוף</div>
+            <p style="margin:0;">"צריך לוודא שזו ההזמנה שלו וששולמה. רוצה קוד או ברקוד. ואם משהו השתבש — אני נותן החזר."</p>
+          </div>
+
+        </div>
+
+        <div class="callout warn fragment">
+          <span class="label">⚠️ הקלט גולמי, מעורפל וסותר</span>
+          צרכים מעורבבים עם פתרונות, דרישות לא-פונקציונליות חבויות בתוך הטקסט, ובעיקר —
+          סתירות בין בעלי העניין (למשל תשלום: כרטיס סטודנט מול אשראי מול מזומן). זה החומר שנברור ממנו.
+        </div>
+
+        <p class="bottom-line">מהראיון המבולגן הזה ייגזרו השחקנים, הדרישות ותרשים תרחישי השימוש.</p>
+
+      </div>
+    </section>
+    <!-- A2-ish — SDLC stages x roles. Demonstrates the whole point of the pivot:
+         a live, interactive HTML asset (assets/sdlc_roles_rtl.html) embedded right
+         in the slide. Click the cards inside it during the lecture — it's live, not
+         a screenshot. -->
+    <section data-slug="sdlc-roles">
+      <h1><span class="en">SDLC</span> — שלבים ובעלי תפקידים</h1>
+      <div class="subtitle">מי הבעלים של הדרישות, ולאן נכנס תרשים תרחישי השימוש</div>
+      <div class="body">
+        <div class="embed">
+          <iframe src="assets/sdlc_roles_rtl.html" title="SDLC stages and roles" loading="lazy"></iframe>
+        </div>
+      </div>
+    </section>
+    <!-- Requirements recap (create_functional_nonfunctional_slide.py).
+         Ported + enriched: two columns (functional | non-functional) reveal one at a
+         time, then the AI classify beat (🤖) and its paired challenge beat (⚠️). -->
+    <section data-slug="functional-nonfunctional">
+      <h1>תזכורת: דרישות פונקציונליות מול לא-פונקציונליות</h1>
+      <div class="subtitle">מה המערכת עושה — מול כמה טוב</div>
+      <div class="body">
+
+        <div class="cols">
+
+          <div class="card fragment" style="display:flex; flex-direction:column; gap:10px;">
+            <div class="panel-title">פונקציונלית: מה המערכת עושה</div>
+            <ul class="bullets">
+              <li>לעיין בתפריט ולהזמין</li>
+              <li>לשלם ולקבל התראה כשמוכן</li>
+              <li>מנהל מעדכן זמינות ומחירים</li>
+              <li>מטבח מסמן 'מוכן'</li>
+            </ul>
+          </div>
+
+          <div class="card fragment" style="display:flex; flex-direction:column; gap:10px;">
+            <div class="panel-title">לא-פונקציונלית: כמה טוב</div>
+            <ul class="bullets">
+              <li>עמידה בעומס שיא (<span class="en">12:00-14:00</span>)</li>
+              <li>מהירות — הפסקה של 15 דקות</li>
+              <li>אבטחה ופרטיות נתוני סטודנטים</li>
+              <li>מדרגיות ל-5000 סטודנטים</li>
+            </ul>
+          </div>
+
+        </div>
+
+        <div class="hero fragment">
+          <h3>הגשר אל ה-<span class="en">UML</span></h3>
+          <p>תרשים ה-<span class="en">use case</span> מתאר דרישות פונקציונליות בלבד. הלא-פונקציונליות
+             (אבטחה, עומס, פרטיות) מתועדות בנפרד — כאילוצים, לא כתרחישים.</p>
+        </div>
+
+        <div class="cols fragment">
+          <div class="callout ai">
+            <span class="label">🤖 הבינה ממיינת</span>
+            <span class="en">Claude</span> מקבל את הערות הראיון הגולמיות וממיין אותן לשתי העמודות —
+            פונקציונלי מול לא-פונקציונלי — בתוך שניות.
+          </div>
+          <div class="callout warn fragment">
+            <span class="label">⚠️ מה היא סיווגה לא נכון?</span>
+            איזו דרישה היא קברה במקום הלא נכון? לעיתים "מהירות" נכנסת בטעות כתרחיש,
+            ואילוץ פרטיות נבלע בתוך הפונקציונליות. הסיווג שלכם הוא משטח האימות.
+          </div>
+        </div>
+
+        <p class="bottom-line">פונקציונלי = תרחיש ב-<span class="en">use case</span> · לא-פונקציונלי = אילוץ שמתועד בנפרד.</p>
+
+      </div>
+    </section>
+    <!-- A4 — The provocation: is UML even relevant in 2026?
+         Port of create_uml_relevance_question_slide.py. Stays an OPEN question —
+         the skeptic quote + the real temptation to skip — and teases into A5
+         (slide-uml-relevance-answer.html), which delivers the answer. Sparse + punchy:
+         the quote lands first (center), then the temptation reveals one click later. -->
+    <section data-slug="uml-relevance-question">
+      <h1>האם <span class="en">UML</span> עדיין רלוונטי?</h1>
+      <div class="subtitle">הפרובוקציה של 2026</div>
+      <div class="body">
+
+        <div class="card center" style="margin-top:18px;">
+          <p style="margin:0; font-size:30px; font-weight:700; color:var(--dark-body); line-height:1.5;">
+            &ldquo;ה-<span class="en">AI</span> כותב את הקוד מהפרומפט.<br>
+            בשביל מה לבזבז זמן על תרשימים?&rdquo;
+          </p>
+        </div>
+
+        <div class="fragment">
+          <div class="panel-title" style="margin-top:6px;">הפיתוי לדלג אמיתי:</div>
+          <div class="cols-3">
+            <div class="card tight center">
+              <span class="en" style="font-weight:700; color:var(--blue);">AI</span>
+              מייצר קוד ותרשימים בשניות — אז למה לטרוח?
+            </div>
+            <div class="card tight center">לחץ זמן ודדליינים</div>
+            <div class="card tight center">&ldquo;כבר נתקן תוך כדי&rdquo;</div>
+          </div>
+        </div>
+
+        <p class="bottom-line fragment">אבל זו טעות — ובשקף הבא נראה בדיוק למה.</p>
+
+        <aside class="notes">
+          להשאיר את השאלה פתוחה. לא לענות כאן — התשובה בשקף הבא
+          (מודל הוא חשיבה, לא ציור). לתת לפיתוי להישמע סביר לפני שמפריכים אותו.
+        </aside>
+
+      </div>
+    </section>
+    <!-- A5 — "האם UML רלוונטי?" the answer: a model is thinking, not drawing.
+         Static port of the pptx showcase slide (create_uml_relevance_answer_slide.py)
+         to demonstrate 1:1 visual parity with the old deck. -->
+    <section data-slug="uml-relevance-answer">
+      <h1>מודל הוא חשיבה, לא ציור</h1>
+      <div class="subtitle">למה <span class="en">UML</span> רלוונטי — ודווקא בעידן ה-<span class="en">AI</span></div>
+      <div class="body">
+
+        <div class="card">
+          <ul class="bullets">
+            <li>מודל הוא חשיבה, לא ציור — התוצר הוא בהירות על שחקנים, גבולות והתנהגות</li>
+            <li>המודל הוא המפרט (<span class="en">spec</span>) שה-<span class="en">AI</span> צריך — בינה מגבירה את מה שנתת לה, לטוב ולרע</li>
+            <li>גבול המערכת וההיקף הם החלטה עסקית — לא משהו שבינה מחליטה במקומך</li>
+            <li>המודל הוא משטח האימות — אי אפשר לאתגר קוד שלא הבנת</li>
+          </ul>
+        </div>
+
+        <div class="hero">
+          <h3>הסמנטיקה חשובה עכשיו יותר מתמיד</h3>
+          <p>בעבר מתכנת קרא את המודל והשלים פערים בשכל ובשאלת הבהרה. היום מכונה קוראת אותו
+             ומשחזרת בדיוק את מה שכתבת, כולל העמימות והטעויות. אי-דיוק כבר לא עולה שיחה;
+             הוא עולה קוד שגוי, שנכתב בביטחון.</p>
+        </div>
+
+        <p class="bottom-line">עלות הציור צנחה לאפס. ערך האנליסט עובר מ׳לצייר׳ ל׳להחליט ולאמת׳.</p>
+
+      </div>
+    </section>
+    <!-- A6 — AI in the analysis workflow, framed early (create_ai_workflow_map_slide.py).
+         Ported + enriched: the 4 stages now reveal one at a time (press Space / →),
+         and stage 4 carries a live ⚠️ challenge callout. -->
+    <section data-slug="ai-workflow-map">
+      <h1><span class="en">AI</span> בתהליך הניתוח — מפה</h1>
+      <div class="subtitle">איפה הבינה נכנסת — ולמה נחזור לזה לאורך ההרצאה</div>
+      <div class="body">
+
+        <div class="cols" style="grid-template-columns:repeat(4,1fr); align-items:stretch;">
+
+          <div class="card fragment fade-in-then-semi-out" style="text-align:center; display:flex; flex-direction:column; gap:10px;">
+            <div style="font-size:34px; font-weight:700; color:var(--blue);">1</div>
+            <div class="panel-title" style="text-align:center;">איסוף דרישות</div>
+            <div class="muted" style="font-size:18px;">תמלול ראיונות, זיהוי דרישות מטקסט גולמי</div>
+          </div>
+
+          <div class="card fragment fade-in-then-semi-out" style="text-align:center; display:flex; flex-direction:column; gap:10px;">
+            <div style="font-size:34px; font-weight:700; color:var(--blue);">2</div>
+            <div class="panel-title" style="text-align:center;">תיעוד וניתוח</div>
+            <div class="muted" style="font-size:18px;">סיווג פונקציונלי/לא, ניסוח <span class="en">user stories</span>, איתור פערים</div>
+          </div>
+
+          <div class="card fragment fade-in-then-semi-out" style="text-align:center; display:flex; flex-direction:column; gap:10px;">
+            <div style="font-size:34px; font-weight:700; color:var(--blue);">3</div>
+            <div class="panel-title" style="text-align:center;">מידול</div>
+            <div class="muted" style="font-size:18px;">תרשים <span class="en">use case</span> מטקסט (כמו כלי ה-<span class="en">SAD MCP</span>)</div>
+          </div>
+
+          <div class="card fragment" style="text-align:center; display:flex; flex-direction:column; gap:10px;">
+            <div style="font-size:34px; font-weight:700; color:var(--blue);">4</div>
+            <div class="panel-title" style="text-align:center;">פיתוח</div>
+            <div class="muted" style="font-size:18px;">ה-<span class="en">AI</span> כותב קוד מהמפרט. הצוות הטכני עדיין אחראי על לא-פונקציונלי ושילוב — הרצאה 13</div>
+          </div>
+
+        </div>
+
+        <div class="callout warn fragment" style="margin-top:4px;">
+          <span class="label">⚠️ ההרגל שנבנה כאן</span>
+          בכל שלב הבינה מפיקה תוצר מהר — ובכל שלב נשאל: מה היא פספסה, המציאה, או הניחה?
+        </div>
+
+        <p class="bottom-line">הקלט של <span class="en">AI</span> בכל שלב הוא המודל שלכם. ככל שהוא חד יותר — הפלט טוב יותר.</p>
+
+      </div>
+    </section>
+    <!-- A7 — The recurring risk: blind trust in AI (create_ai_trust_risk_slide.py).
+         Ported + enriched: the seductive-answer intro, then the danger (warn callout)
+         and the antidote habit side by side; the three challenge questions reveal one
+         at a time as fragments; closes on the dark-blue recurring-warning line. -->
+    <section data-slug="ai-trust-risk">
+      <h1>הסיכון: אמון עיוור ב-<span class="en">AI</span></h1>
+      <div class="subtitle">הצד השני של ה-<span class="en">AI</span></div>
+      <div class="body">
+
+        <div class="hero">
+          <h3>הפיתוי</h3>
+          <p><span class="en">AI</span> נותן תשובה מהירה, משכנעת, ונראית שלמה. הפיתוי: לקבל אותה כמו שהיא.</p>
+        </div>
+
+        <div class="cols" style="align-items:stretch;">
+
+          <div class="callout bad" style="display:flex; flex-direction:column; gap:8px;">
+            <span class="label">הסכנה</span>
+            להסתפק במה ש-<span class="en">AI</span> נתן בלי להבין ובלי לאתגר. מודל שגוי שנראה משכנע
+            מוביל לקוד שגוי — שנכתב בביטחון מלא.
+          </div>
+
+          <div class="callout good" style="display:flex; flex-direction:column; gap:10px;">
+            <span class="label">ההרגל: שלוש שאלות על כל פלט</span>
+            <ul class="bullets">
+              <li class="fragment">מה הומצא שלא ביקשנו?</li>
+              <li class="fragment">מה חסר או לא כוסה?</li>
+              <li class="fragment">אילו הנחות נסתרות הונחו?</li>
+            </ul>
+          </div>
+
+        </div>
+
+        <p class="bottom-line">נושא האזהרה הזה יחזור לאורך ההרצאה — בכל פעם שניעזר ב-<span class="en">AI</span>.</p>
+
+      </div>
+    </section>
+    <!-- A8 — UML: what & why (create_uml_what_why_slide.py).
+         Ported + enriched: a definition card, then two columns (מה זה | למה) that
+         reveal one at a time. Motivated by the preceding "is UML relevant" answer:
+         the model is the spec, so its meaning matters. Hebrew is verbatim from the script. -->
+    <section data-slug="uml-what-why">
+      <h1><span class="en">UML</span> - מה ולמה</h1>
+      <div class="subtitle"><span class="en">Unified Modeling Language</span></div>
+      <div class="body">
+
+        <div class="card" style="background:var(--row-even); border-color:var(--blue);">
+          <p style="margin:0; font-size:21px; font-weight:700; color:var(--dark-blue); line-height:1.5;">
+            שפה חזותית סטנדרטית (תקן <span class="en">OMG</span>) לתיאור, מידול ותיעוד של מערכות תוכנה -
+            מנותקת משפת תכנות מסוימת.
+          </p>
+        </div>
+
+        <div class="cols" style="align-items:stretch;">
+
+          <div class="card fragment" style="display:flex; flex-direction:column; gap:10px;">
+            <div class="panel-title">מה זה</div>
+            <ul class="bullets">
+              <li>שפה אחת משותפת לאנליסטים, מפתחים ובעלי עניין</li>
+              <li>נוטציה, לא מתודולוגיה - לא אומרת לך איך לנהל פרויקט</li>
+              <li>נולדה מתכנות מונחה-עצמים (<span class="en">OOD</span>)</li>
+            </ul>
+          </div>
+
+          <div class="card fragment" style="display:flex; flex-direction:column; gap:10px;">
+            <div class="panel-title">למה <span class="en">UML</span>?</div>
+            <ul class="bullets">
+              <li>מסמכת החלטות ומאפשרת לאתגר אותן</li>
+              <li>מנותקת משפת תכנות - לא ננעלת על מימוש מסוים</li>
+              <li>בהירות משותפת על שחקנים, גבולות והתנהגות</li>
+            </ul>
+          </div>
+
+        </div>
+
+        <p class="bottom-line"><span class="en">UML</span> היא נוטציה משותפת - והמודל הוא המפרט שמתעד החלטות ומאפשר לאתגר אותן.</p>
+
+      </div>
+    </section>
+    <!-- A9 — The history of UML: the three amigos unified into UML (create_uml_history_slide.py).
+         Ported + enriched: the three contributors reveal one at a time (Space / →),
+         then the OMG unification banner lands. Hebrew text is verbatim from the script. -->
+    <section data-slug="uml-history">
+      <h1>ההיסטוריה של <span class="en">UML</span></h1>
+      <div class="subtitle">שלושת ה'אמיגוס' שאיחדו את השפה</div>
+      <div class="body">
+
+        <div class="cols-3" style="align-items:stretch;">
+
+          <div class="card fragment fade-in-then-semi-out" style="text-align:center; display:flex; flex-direction:column; gap:8px;">
+            <div class="panel-title" style="text-align:center;"><span class="en">Grady Booch</span></div>
+            <div style="font-size:30px; font-weight:700; color:var(--blue);"><span class="en">OOAD</span></div>
+            <div class="muted" style="font-size:19px;">רמה נמוכה, מיקוד בעיצוב</div>
+          </div>
+
+          <div class="card fragment fade-in-then-semi-out" style="text-align:center; display:flex; flex-direction:column; gap:8px;">
+            <div class="panel-title" style="text-align:center;"><span class="en">Jim Rumbaugh</span></div>
+            <div style="font-size:30px; font-weight:700; color:var(--blue);"><span class="en">OMT</span></div>
+            <div class="muted" style="font-size:19px;">רמה גבוהה, מיקוד בניתוח</div>
+          </div>
+
+          <div class="card fragment" style="text-align:center; display:flex; flex-direction:column; gap:8px;">
+            <div class="panel-title" style="text-align:center;"><span class="en">Ivar Jacobson</span></div>
+            <div style="font-size:30px; font-weight:700; color:var(--blue);"><span class="en">OOSE</span></div>
+            <div class="muted" style="font-size:19px;">מיקוד ב-<span class="en">Use Cases</span></div>
+          </div>
+
+        </div>
+
+        <div class="callout good fragment" style="margin-top:4px;">
+          <span class="label">איחוד תחת ה-<span class="en">OMG</span></span>
+          שלוש השיטות אוחדו ל-<span class="en">UML</span> (תקן <span class="en">OMG</span>, אמצע שנות ה-90). התרומה של <span class="en">Jacobson</span> — תרשימי <span class="en">Use Case</span> — היא בדיוק הנושא שלנו היום.
+        </div>
+
+      </div>
+    </section>
+    <!-- A10 — "Bubbles don't crash" (Bertrand Meyer) + the 2026/AI edition.
+         Port of create_bubbles_dont_crash_slide.py. Quote-forward: the maxim lands
+         as a prominent hero, then the original meaning, then a ⚠️ callout sharpens
+         the warning for the AI era. Hebrew is verbatim from the script. -->
+    <section data-slug="bubbles-dont-crash">
+      <h1><span class="en">Bubbles don't crash</span></h1>
+      <div class="subtitle"><span class="en">Bertrand Meyer</span> — והגרסה של 2026</div>
+      <div class="body">
+
+        <div class="hero center">
+          <p style="font-size:30px; font-weight:700; color:var(--dark-body);">
+            <span class="en">"Bubbles don't crash."</span>
+          </p>
+        </div>
+
+        <div class="card fragment">
+          <div class="panel-title">המשמעות המקורית</div>
+          <p style="margin:0;">
+            ה'בועות' בתרשים לא מתקמפלות ולא רצות. הן יכולות להיראות נכון ולהיות שגויות —
+            מודל יפה אינו ערובה למערכת עובדת.
+          </p>
+        </div>
+
+        <div class="callout warn fragment">
+          <span class="label">⚠️ עדכון 2026</span>
+          <span class="en">AI</span> מייצר מודלים משכנעים-אך-שגויים בזול ובמהירות. האזהרה רק
+          מתחדדת: המודל אינו המערכת, וחובה לאמת אותו מול המציאות.
+        </div>
+
+      </div>
+    </section>
+    <!-- A11 — "מהו מודל?" what a model is + why we model (create_what_is_model_slide.py).
+         Ported + enriched: the Rumbaugh quote lands as a prominent hero, then the four
+         reasons-to-model reveal one beat at a time. Hebrew text is verbatim from the script. -->
+    <section data-slug="what-is-model">
+      <h1>מהו מודל?</h1>
+      <div class="subtitle">ולמה בכלל למדל</div>
+      <div class="body">
+
+        <div class="hero">
+          <h3>הגדרה</h3>
+          <p class="center" style="font-size:24px;">"<span class="en">Modeling captures essential parts of the system</span>" — <span class="en">Dr. James Rumbaugh</span></p>
+        </div>
+
+        <div class="panel-title">למה למדל?</div>
+
+        <ul class="bullets">
+          <li class="fragment">הפשטה — מתמקדים בחיוני, מתעלמים מהרעש</li>
+          <li class="fragment">מאפשר לחקור תכונות ולחזות התנהגות לפני שבונים</li>
+          <li class="fragment">שפת תקשורת בין כל בעלי העניין</li>
+          <li class="fragment">ממפה מצב קיים (<span class="en">As-Is</span>) מול מצב רצוי (<span class="en">To-Be</span>)</li>
+        </ul>
+
+      </div>
+    </section>
+    <!-- A12 — UML diagram families + the course map (create_uml_diagram_families_slide.py).
+         Ported + enriched: the three families reveal one at a time, then the course-map
+         table lands with the current topic (Use Case = NOW, lecture 4-5) highlighted.
+         Hebrew text is verbatim from the script; the family split is the lecture's framing. -->
+    <section data-slug="uml-diagram-families">
+      <h1>משפחות תרשימי <span class="en">UML</span> - מפת הקורס</h1>
+      <div class="subtitle">איפה כל תרשים יושב - ומתי נלמד אותו</div>
+      <div class="body">
+
+        <div class="cols-3" style="align-items:stretch;">
+
+          <div class="card fragment" style="display:flex; flex-direction:column; gap:8px;">
+            <div class="panel-title"><span class="en">Structural</span> (מבני)</div>
+            <div class="muted" style="font-size:19px;">מה קיים במערכת — מבנה ודרישות</div>
+            <ul class="bullets" style="margin-top:4px;">
+              <li><span class="en">Use Case</span> <span class="tag warn">היום</span></li>
+              <li><span class="en">Class Diagram</span></li>
+            </ul>
+          </div>
+
+          <div class="card fragment" style="display:flex; flex-direction:column; gap:8px;">
+            <div class="panel-title"><span class="en">Dynamic</span> (התנהגותי)</div>
+            <div class="muted" style="font-size:19px;">איך המערכת מתנהגת לאורך זמן</div>
+            <ul class="bullets" style="margin-top:4px;">
+              <li><span class="en">State Diagram</span></li>
+              <li><span class="en">Sequence Diagram</span></li>
+            </ul>
+          </div>
+
+          <div class="card fragment" style="display:flex; flex-direction:column; gap:8px;">
+            <div class="panel-title"><span class="en">Management</span> (ניהולי)</div>
+            <div class="muted" style="font-size:19px;">תיעוד ותכנון אספקה — מעבר לתרשימים שנלמד</div>
+            <ul class="bullets" style="margin-top:4px;">
+              <li>חבילות, פריסה ורכיבים</li>
+            </ul>
+          </div>
+
+        </div>
+
+        <table class="sad fragment">
+          <tr>
+            <th>תרשים</th>
+            <th>משפחה</th>
+            <th>מתי בקורס</th>
+          </tr>
+          <tr>
+            <td><span class="en">Use Case</span> <span class="tag warn">עכשיו</span></td>
+            <td><span class="en">Structural</span> (מבני)</td>
+            <td>היום (<span class="en">4-5</span>)</td>
+          </tr>
+          <tr>
+            <td><span class="en">Class Diagram</span></td>
+            <td><span class="en">Structural</span> (מבני)</td>
+            <td>הרצאה <span class="en">6-7</span></td>
+          </tr>
+          <tr>
+            <td><span class="en">State Diagram</span></td>
+            <td><span class="en">Dynamic</span> (התנהגותי)</td>
+            <td>הרצאה <span class="en">8</span></td>
+          </tr>
+          <tr>
+            <td><span class="en">Sequence Diagram</span></td>
+            <td><span class="en">Dynamic</span> (התנהגותי)</td>
+            <td>הרצאה <span class="en">9</span></td>
+          </tr>
+        </table>
+
+        <div class="hero fragment">
+          <h3>איפה אנחנו עכשיו</h3>
+          <p><span class="en">Use Case</span> = שכבת הדרישות. כל השאר נבנה מעליה.</p>
+        </div>
+
+      </div>
+    </section>
+    <!-- B2 — System boundary: what's in / out, and that it's a human decision
+         (create_system_boundary_slide.py). Ported + enriched: the in-scope (good) and
+         out-of-scope (bad) columns reveal one at a time, then a ⚠️ callout drives home
+         the teaching point that AI invents out-of-scope features. Hebrew is verbatim
+         from the script (out-of-scope examples enriched from running-example.md §0). -->
+    <section data-slug="system-boundary">
+      <h1>גבול המערכת (<span class="en">System Boundary</span>)</h1>
+      <div class="subtitle">מה בפנים, מה בחוץ — וזו החלטה עסקית</div>
+      <div class="body">
+
+        <p class="muted" style="margin:0;">
+          הגבול הוא תיבה: בתוכה תרחישי השימוש (מה המערכת עושה), מחוצה לה השחקנים.
+          מה נכנס פנימה זו החלטה אנושית — לא של <span class="en">AI</span>.
+        </p>
+
+        <div class="cols" style="align-items:stretch;">
+
+          <div class="card fragment" style="display:flex; flex-direction:column; gap:8px;">
+            <div class="panel-title" style="color:var(--green);">✅ בתוך הגבול</div>
+            <ul class="bullets">
+              <li>הזמנה ותשלום</li>
+              <li>איסוף ואימות</li>
+              <li>ניהול תפריט ומלאי</li>
+              <li>דוחות מכירות ואימוש</li>
+            </ul>
+          </div>
+
+          <div class="card fragment" style="display:flex; flex-direction:column; gap:8px;">
+            <div class="panel-title" style="color:var(--red);">⛔ מחוץ לגבול</div>
+            <ul class="bullets">
+              <li>משלוח לחדרים/משרדים</li>
+              <li>רכש והזמנות מספקים</li>
+              <li>ניהול מתכונים ותזונה</li>
+              <li>הנהלת חשבונות</li>
+            </ul>
+          </div>
+
+        </div>
+
+        <div class="callout warn fragment">
+          <span class="label">⚠️ הבינה ממציאה פיצ'רים שמחוץ לגבול</span>
+          <span class="en">AI</span> נוטה להוסיף "בעצמו" יכולות מפתות שלא ביקשתם — משלוח לחדרים,
+          הזמנת מלאי מספקים — וכולן יושבות ברשימת ה-<span class="en">OUT</span>. כש-<span class="en">AI</span>
+          'ממציא' משלוח — הוא חצה גבול שאתם הגדרתם. הגבול הוא שלכם, לא שלו.
+        </div>
+
+        <p class="bottom-line">הגבול הוא החלטה אנושית — ה-<span class="en">AI</span> הוא משטח האימות, לא מי שמחליט מה בפנים.</p>
+
+      </div>
+    </section>
+    <!-- B3 — Actors: roles (not people), primary vs external-system actors (create_actors_slide.py).
+         Ported + enriched: the verbatim definition leads, then the two actor groups
+         (primary people | external systems) reveal as card grids, and the script's
+         orange "external system is an actor, not a use case" note lands as a ⚠️ callout.
+         Hebrew text is verbatim from the script. -->
+    <section data-slug="actors">
+      <h1><span class="en">Actor</span> - שחקן</h1>
+      <div class="subtitle">מי מתקשר עם המערכת - כולל מערכות אחרות</div>
+      <div class="body">
+
+        <div class="hero fragment">
+          <p>שחקן = תפקיד שאדם או מערכת אחרת ממלא באינטראקציה עם המערכת - לא אדם ספציפי.</p>
+        </div>
+
+        <div class="cols" style="align-items:stretch;">
+
+          <div class="card fragment" style="display:flex; flex-direction:column; gap:10px;">
+            <div class="panel-title">שחקנים ראשיים (אנשים)</div>
+            <div class="cols-3" style="grid-template-columns:1fr; gap:10px;">
+              <div class="card tight center">🎓 סטודנט/ית</div>
+              <div class="card tight center">🍽️ מנהל/ת קפיטריה</div>
+              <div class="card tight center">👨‍🍳 עובד/ת מטבח · עובד/ת דלפק</div>
+            </div>
+          </div>
+
+          <div class="card fragment" style="display:flex; flex-direction:column; gap:10px;">
+            <div class="panel-title">מערכות חיצוניות (גם שחקנים)</div>
+            <div class="cols-3" style="grid-template-columns:1fr; gap:10px;">
+              <div class="card tight center">💳 שער תשלום</div>
+              <div class="card tight center">🏛️ מערכת זיהוי/חשבונות אוניברסיטה</div>
+              <div class="card tight center">🔔 שירות התראות</div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="callout warn fragment">
+          <span class="label">⚠️ מערכת חיצונית היא שחקן - לא <span class="en">use case</span></span>
+          טעות <span class="en">AI</span> נפוצה: למדל את שער התשלום כ-<span class="en">use case</span>.
+        </div>
+
+      </div>
+    </section>
+    <!-- B4 — Use Case definition (Jacobson) + characteristics + campus examples.
+         Port of create_use_case_definition_slide.py: Jacobson's formal definition shown
+         verbatim as a prominent hero/quote card, the four characteristics as bullets,
+         and the campus-food example use cases as small cards. -->
+    <section data-slug="use-case-definition">
+      <h1><span class="en">Use Case</span> — הגדרה</h1>
+      <div class="subtitle"><span class="en">Ivar Jacobson</span></div>
+      <div class="body">
+
+        <div class="hero">
+          <h3>ההגדרה של <span class="en">Jacobson</span></h3>
+          <p>תיאור של רצף פעולות שהמערכת מבצעת, המניב תוצאה בעלת ערך נצפה לשחקן מסוים.</p>
+        </div>
+
+        <div class="card">
+          <div class="panel-title">מאפיינים</div>
+          <ul class="bullets">
+            <li class="fragment">מנקודת המבט של השחקן — לא תהליך פנימי של המערכת</li>
+            <li class="fragment">תמיד מניב ערך (לא צעד טכני קטן כמו "בדוק שדה")</li>
+            <li class="fragment">שם = פועל + מושא: <span class="en">Place Order</span>, <span class="en">Mark Order Ready</span></li>
+          </ul>
+        </div>
+
+        <div class="card fragment">
+          <div class="panel-title">בדוגמה שלנו</div>
+          <div class="cols-3">
+            <div class="callout"><span class="en">Place Order</span></div>
+            <div class="callout"><span class="en">Track Order Status</span></div>
+            <div class="callout"><span class="en">Mark Order Ready</span></div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+    <!-- B5 — THE centerpiece: interview notes → Claude → use-case diagram → challenge it.
+         The diagram (assets/usecase-campus-food.html) is embedded in ?embed=1 mode so it
+         fills its panel, scaled to fit, no chrome and no scrolling. The prompt, the 🤖
+         output note and the ⚠️ challenge sit in a side rail so the diagram gets full height. -->
+    <section data-slug="interview-to-diagram">
+      <h1>מהראיון לתרשים — עם <span class="en">Claude</span></h1>
+      <div class="subtitle">הקלט הגולמי הופך לתרשים — ואז מאתגרים</div>
+      <div class="body">
+
+        <div style="flex:1 1 auto; min-height:0; display:grid; grid-template-columns:330px 1fr; gap:18px;">
+
+          <!-- right rail (RTL-first): prompt → AI output → challenge -->
+          <div style="display:flex; flex-direction:column; gap:12px; min-height:0; overflow:auto;">
+            <div class="card tight">
+              <div class="panel-title">📋 הפרומפט <span class="src">(להרצה חיה)</span></div>
+              <p style="font-size:18px; line-height:1.5; margin:8px 0 0;">
+                ״קרא את הערות הראיונות. הפק רשימת <span class="en">actors</span> ותרשים
+                <span class="en">use case</span> למערכת הזמנת האוכל. סמן יחסי
+                <span class="en">include</span> ו-<span class="en">extend</span>.״
+              </p>
+            </div>
+            <div class="callout ai" style="font-size:17px;">
+              <span class="label">🤖 הפלט של <span class="en">Claude</span></span>
+              התרשים שמשמאל — <span class="en">actors</span>, תרחישים וקשרים — נוצר מהערות הראיון תוך שניות.
+            </div>
+            <div class="callout warn" style="font-size:17px;">
+              <span class="label">⚠️ מה <span class="en">Claude</span> פספס?</span>
+              ביטול הזמנה ו-<span class="en">no-show</span> חסרים · ״משלוח״ הומצא (מחוץ לגבול) · <span class="en">login</span> נכפה על כל תרחיש.
+            </div>
+          </div>
+
+          <!-- left: the live, fit-to-screen diagram -->
+          <div style="display:flex; min-height:0;">
+            <div class="embed"><iframe src="assets/usecase-campus-food.html?embed=1" title="תרשים Use Case — מערכת הזמנת אוכל" loading="lazy"></iframe></div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+    <!-- B6 — The artifact chain: notes.md -> requirements.md -> use-cases (create_artifact_chain_slide.py).
+         Ported + enriched: each artifact card reveals one at a time (Space / ->) so the chain
+         builds up left-to-right; the feeds-Lecture-13 takeaway lands last. Hebrew is verbatim. -->
+    <section data-slug="artifact-chain">
+      <h1>שרשרת ה-<span class="en">artifacts</span></h1>
+      <div class="subtitle">כל שלב מייצר קובץ - שאתם מאמתים</div>
+      <div class="body">
+
+        <div class="cols" style="grid-template-columns:1fr auto 1fr auto 1fr; align-items:stretch;">
+
+          <div class="card fragment fade-in-then-semi-out" style="text-align:center; display:flex; flex-direction:column; gap:10px;">
+            <div class="panel-title" style="text-align:center; color:var(--blue);"><span class="en">interview-notes.md</span></div>
+            <div class="muted" style="font-size:19px;">הראיונות הגולמיים - הקלט</div>
+          </div>
+
+          <div class="center fragment" style="display:flex; align-items:center; font-size:34px; font-weight:700; color:var(--blue);">←</div>
+
+          <div class="card fragment fade-in-then-semi-out" style="text-align:center; display:flex; flex-direction:column; gap:10px;">
+            <div class="panel-title" style="text-align:center; color:var(--blue);"><span class="en">requirements.md</span></div>
+            <div class="muted" style="font-size:19px;">דרישות מסווגות: <span class="en">FR / NFR</span></div>
+          </div>
+
+          <div class="center fragment" style="display:flex; align-items:center; font-size:34px; font-weight:700; color:var(--blue);">←</div>
+
+          <div class="card fragment fade-in-then-semi-out" style="text-align:center; display:flex; flex-direction:column; gap:10px;">
+            <div class="panel-title" style="text-align:center; color:var(--blue);"><span class="en">use-cases</span></div>
+            <div class="muted" style="font-size:19px;">שחקנים, תרחישים וקשרים</div>
+          </div>
+
+        </div>
+
+        <div class="callout ai fragment" style="margin-top:4px;">
+          <span class="label">🤖 קובץ בכל שלב</span>
+          כל קובץ הוא <span class="en">markdown</span> ש-<span class="en">AI</span> מפיק - ואתם מאמתים.
+        </div>
+
+        <p class="bottom-line fragment">השרשרת הזו היא המפרט שנמסר לפיתוח (הרצאה 13) — שם ה-<span class="en">AI</span> כותב את רוב הקוד מהמפרט.</p>
+
+      </div>
+    </section>
+    <!-- C1 — The complete relationship set + the non-relations (create_relationships_map_slide.py).
+         Ported + enriched: the four real relationships reveal as a grid one at a time,
+         then the ⚠️ "what is NOT a relationship" callout (bad) lands, then the orange
+         "no fifth relationship" bottom-line. Hebrew is verbatim from the script. This
+         slide sets up the per-relationship slides that follow. -->
+    <section data-slug="relationships-map">
+      <h1>ארבעת הקשרים — וזה הכל</h1>
+      <div class="subtitle"><span class="en">Association</span> · <span class="en">include</span> · <span class="en">extend</span> · <span class="en">Generalization</span></div>
+      <div class="body">
+
+        <div class="panel-title">הקשרים בתרשים</div>
+
+        <div class="cols" style="grid-template-columns:repeat(4,1fr); align-items:stretch;">
+
+          <div class="card fragment" style="text-align:center; display:flex; flex-direction:column; gap:8px;">
+            <div class="panel-title" style="text-align:center; color:var(--blue);"><span class="en">Association</span></div>
+            <div class="muted" style="font-size:19px;">קו בין שחקן לתרחיש (תקשורת)</div>
+          </div>
+
+          <div class="card fragment" style="text-align:center; display:flex; flex-direction:column; gap:8px;">
+            <div class="panel-title" style="text-align:center; color:var(--blue);">«<span class="en">include</span>»</div>
+            <div class="muted" style="font-size:19px;">שימוש חוזר, תמיד מתבצע</div>
+          </div>
+
+          <div class="card fragment" style="text-align:center; display:flex; flex-direction:column; gap:8px;">
+            <div class="panel-title" style="text-align:center; color:var(--blue);">«<span class="en">extend</span>»</div>
+            <div class="muted" style="font-size:19px;">התנהגות מותנית, לפעמים</div>
+          </div>
+
+          <div class="card fragment" style="text-align:center; display:flex; flex-direction:column; gap:8px;">
+            <div class="panel-title" style="text-align:center; color:var(--blue);"><span class="en">Generalization</span></div>
+            <div class="muted" style="font-size:19px;">הכללה (תרחיש או שחקן)</div>
+          </div>
+
+        </div>
+
+        <div class="callout bad fragment">
+          <span class="label">⚠️ מה זה <em>לא</em> קשר</span>
+          <ul class="bullets" style="margin-top:6px;">
+            <li>אין סדר/רצף בין תרחישים (זה לא <span class="en">flowchart</span>)</li>
+            <li>אין «<span class="en">uses</span>»/«<span class="en">precedes</span>» (מ-<span class="en">UML 1</span>, מת)</li>
+            <li>אין קשר בין שני שחקנים מלבד הורשה</li>
+          </ul>
+        </div>
+
+        <p class="bottom-line" style="color:var(--orange);">אין קשר חמישי. אם צריך לתאר סדר פעולות — זה ה-<span class="en">flow of events</span>, לא התרשים.</p>
+
+      </div>
+    </section>
+    <!-- C2 — Association (+ multiplicity): the basic actor↔use-case line, made explicit.
+         Port of create_association_slide.py: the definition card, then the notation +
+         a campus-food example reveal one at a time. Hebrew text is verbatim from the
+         script; multiplicity notation kept in <span class="en">. -->
+    <section data-slug="association">
+      <h1><span class="en">Association</span> — הקשר הבסיסי</h1>
+      <div class="subtitle">הקו שמחבר שחקן לתרחיש</div>
+      <div class="body">
+
+        <div class="card" style="background:var(--light-blue); border:1px solid var(--blue);">
+          <p style="margin:0; font-weight:700; color:var(--dark-blue); font-size:20px;">
+            קו פשוט בין שחקן לתרחיש = תקשורת. זהו הקשר הבסיסי ביותר — ולרוב הנשכח.
+          </p>
+        </div>
+
+        <div class="cols" style="align-items:stretch;">
+
+          <div class="card fragment" style="display:flex; flex-direction:column; gap:10px;">
+            <div class="panel-title">הסימון</div>
+            <ul class="bullets">
+              <li>כל תרחיש מחובר לפחות לשחקן אחד</li>
+              <li>ריבוי (<span class="en">multiplicity</span>) אופציונלי על הקו — כמה מכל צד</li>
+              <li>השחקן שיוזם נקרא ראשי (<span class="en">primary</span>)</li>
+            </ul>
+            <p class="muted" style="margin:0; font-size:18px;">
+              ערכי ריבוי נפוצים: <span class="en">1</span> · <span class="en">*</span> · <span class="en">0..1</span>
+            </p>
+          </div>
+
+          <div class="card fragment" style="display:flex; flex-direction:column; gap:10px;">
+            <div class="panel-title" style="color:var(--blue);">דוגמה מהקמפוס</div>
+            <div class="center" style="font-size:22px; font-weight:700; color:var(--dark-blue);">
+              <span class="en">Student</span>&nbsp;———&nbsp;<span class="en">Place Order</span>
+            </div>
+            <p style="margin:0;">
+              סטודנט/ית מחובר/ת בקו פשוט לתרחיש <span class="en">Place Order</span> — זו ה-<span class="en">association</span>.
+              הסטודנט הוא השחקן הראשי (<span class="en">primary</span>) כי הוא זה שיוזם את ההזמנה.
+            </p>
+          </div>
+
+        </div>
+
+        <div class="callout ai fragment">
+          <span class="label">🤖 הבינה מצירה את הקווים</span>
+          מתוך תיאור התרחישים, <span class="en">Claude</span> מציע אילו שחקנים מחוברים לאילו תרחישים — את ה-<span class="en">associations</span>.
+        </div>
+        <div class="callout warn fragment">
+          <span class="label">⚠️ מה נשכח לחבר?</span>
+          הקשר הבסיסי הוא לרוב הנשכח: האם כל תרחיש באמת מחובר לשחקן? האם הריבוי שהבינה הניחה תואם למציאות?
+        </div>
+
+      </div>
+    </section>
+    <!-- C3 — «include»: mandatory, always-runs reuse of a shared sub-use-case
+         (create_include_slide.py). Ported + enriched: the rule bullets land first, then
+         the campus-food example card, then a 🤖 reuse beat and ⚠️ direction-check beat.
+         Hebrew is verbatim from the script; Latin tokens isolated in <span class="en">. -->
+    <section data-slug="include">
+      <h1><span class="en">«include»</span> — שימוש חוזר</h1>
+      <div class="subtitle">מחלצים תת-התנהגות משותפת</div>
+      <div class="body">
+
+        <div class="card">
+          <ul class="bullets">
+            <li class="fragment">כשכמה תרחישים חולקים תת-התנהגות — מחלצים אותה לתרחיש משלה</li>
+            <li class="fragment">התרחיש המשותף תמיד מתבצע (<span class="en">mandatory</span>) — ללא תנאי</li>
+            <li class="fragment">החץ: חץ מקווקו מהתרחיש הבסיסי אל המשותף, עם המילה <span class="en">«include»</span></li>
+          </ul>
+        </div>
+
+        <div class="hero fragment">
+          <h3>בדוגמה שלנו:</h3>
+          <p class="center" style="font-weight:700; color:var(--blue);">
+            <span class="en">Place Order «include» Check Availability</span>
+            &nbsp;·&nbsp;
+            <span class="en">Place Order «include» Process Payment</span>
+          </p>
+        </div>
+
+        <div class="cols fragment">
+          <div class="callout ai">
+            <span class="label">🤖 הבינה מאתרת שימוש חוזר</span>
+            <span class="en">Claude</span> קורא את כל התרחישים, מזהה תת-התנהגות שחוזרת בכמה מהם
+            (למשל אימות זמינות או תשלום) ומציע לחלץ אותה לתרחיש <span class="en">«include»</span> אחד.
+          </div>
+          <div class="callout warn">
+            <span class="label">⚠️ בדקו את הכיוון והתנאי</span>
+            החץ מצביע מהתרחיש הבסיסי אל המשותף — לא הפוך. ושימו לב: <span class="en">«include»</span>
+            תמיד רץ. אם ההתנהגות מתרחשת רק לפעמים — זה כבר לא <span class="en">include</span>.
+          </div>
+        </div>
+
+        <p class="bottom-line">טיפ: אם תת-התנהגות חוזרת בכמה תרחישים — זה מועמד ל-<span class="en">include</span>.</p>
+
+      </div>
+    </section>
+    <!-- C4 — «extend»: conditional/optional behavior at an extension point (create_extend_slide.py).
+         Ported + enriched: the three defining bullets reveal one at a time, the «extend» notation
+         (dashed arrow toward the base + extension point/condition) lands, then the campus example,
+         and finally the include-vs-extend contrast with the rule-of-thumb ⚠️ beat.
+         Hebrew text is verbatim from the script. -->
+    <section data-slug="extend">
+      <h1><span class="en">«extend»</span> - התנהגות מותנית</h1>
+      <div class="subtitle">מוסיפים התנהגות אופציונלית בתנאי</div>
+      <div class="body">
+
+        <div class="card">
+          <ul class="bullets">
+            <li class="fragment">תרחיש מרחיב מוסיף התנהגות אופציונלית לתרחיש בסיסי</li>
+            <li class="fragment">בנקודת הרחבה (<span class="en">extension point</span>) ובתנאי (<span class="en">condition</span>)</li>
+            <li class="fragment">החץ הפוך מ-<span class="en">include</span>: מהמרחיב אל הבסיסי. קורה רק לפעמים</li>
+          </ul>
+        </div>
+
+        <div class="cols fragment" style="align-items:stretch;">
+
+          <div class="card" style="display:flex; flex-direction:column; gap:8px;">
+            <div class="panel-title">הסימון: <span class="en">«extend»</span></div>
+            <p style="margin:0; text-align:center; font-size:26px; font-weight:700; color:var(--blue);">
+              <span class="en">Extension</span> <span style="color:var(--orange);">- - - ▷</span> <span class="en">Base</span>
+            </p>
+            <p class="muted" style="margin:0; font-size:19px;">
+              חץ מקווקו עם ראש פתוח, מהתרחיש <strong>המרחיב</strong> אל <strong>הבסיסי</strong> —
+              ומעליו התווית <span class="en">«extend»</span>.
+            </p>
+          </div>
+
+          <div class="card" style="display:flex; flex-direction:column; gap:8px;">
+            <div class="panel-title">נקודת הרחבה ותנאי</div>
+            <ul class="bullets">
+              <li>נקודת הרחבה (<span class="en">extension point</span>) — היכן בבסיסי נכנס המרחיב</li>
+              <li>תנאי (<span class="en">condition</span>) — מתי בכלל הוא קורה</li>
+            </ul>
+          </div>
+
+        </div>
+
+        <div class="hero fragment">
+          <h3>בדוגמה שלנו:</h3>
+          <p style="text-align:center; font-size:24px; font-weight:700; color:var(--blue);">
+            <span class="en">Apply Student Discount «extend» Pay for Order</span> <span class="muted">[תנאי: זכאי]</span>
+          </p>
+        </div>
+
+        <div class="callout warn fragment">
+          <span class="label">⚠️ כלל אצבע — בלבול נפוץ (גם של <span class="en">AI</span>)</span>
+          <span class="en">include</span> = תמיד · <span class="en">extend</span> = בתנאי. בלבול ביניהם הוא טעות נפוצה (גם של <span class="en">AI</span>):
+          מודל יסמן לעיתים התנהגות אופציונלית כ-<span class="en">include</span> חובה, או הפוך. בדקו את כיוון החץ ואת התנאי.
+        </div>
+
+        <p class="bottom-line"><span class="en">include</span> = שימוש חוזר מחויב · <span class="en">extend</span> = הרחבה אופציונלית בתנאי, בנקודת הרחבה.</p>
+
+      </div>
+    </section>
+    <!-- C5 — Generalization / הכללה-הורשה (create_generalization_slide.py).
+         Ported + enriched: two columns reveal one at a time — use-case generalization
+         (Pay for Order ← specific payment kinds) | actor generalization (צוות קפיטריה
+         ← specific roles). The hollow-triangle inheritance arrow points up to the
+         general parent. Hebrew text is verbatim from the script. -->
+    <section data-slug="generalization">
+      <h1><span class="en">Generalization</span> — הכללה/הורשה</h1>
+      <div class="subtitle">שני סוגים — אל תבלבלו ביניהם</div>
+      <div class="body">
+
+        <div class="cols">
+
+          <div class="card fragment" style="display:flex; flex-direction:column; gap:10px;">
+            <div class="panel-title">הכללת תרחיש (<span class="en">Use Case</span>)</div>
+            <div class="center" style="font-size:24px; font-weight:700; color:var(--blue);">
+              <span class="en">Pay for Order</span>
+            </div>
+            <div class="center" style="font-size:30px; color:var(--orange); line-height:1;">&#9651;</div>
+            <div class="muted center" style="font-size:18px;">מתמחה ל:</div>
+            <ul class="bullets" style="margin-inline:auto;">
+              <li><span class="en">Pay by University Card</span></li>
+              <li><span class="en">Pay by Credit Card</span></li>
+            </ul>
+          </div>
+
+          <div class="card fragment" style="display:flex; flex-direction:column; gap:10px;">
+            <div class="panel-title">הכללת שחקן (<span class="en">Actor</span>)</div>
+            <div class="center" style="font-size:24px; font-weight:700; color:var(--blue);">
+              צוות קפיטריה
+            </div>
+            <div class="center" style="font-size:30px; color:var(--orange); line-height:1;">&#9651;</div>
+            <div class="muted center" style="font-size:18px;">מתמחה ל:</div>
+            <ul class="bullets" style="margin-inline:auto;">
+              <li>מנהל</li>
+              <li>עובד מטבח</li>
+              <li>עובד דלפק</li>
+            </ul>
+          </div>
+
+        </div>
+
+        <div class="hero fragment">
+          <h3>המשולש החלול מצביע אל ההורה</h3>
+          <p>הבן יורש מההורה ויכול להתמחות. הכללת שחקן והכללת תרחיש הן שני סוגים נפרדים —
+             אותו סימון (<span class="en">&#9651;</span> משולש חלול), שני שימושים.</p>
+        </div>
+
+        <p class="bottom-line">אל תבלבלו: הכללת <span class="en">Actor</span> ≠ הכללת <span class="en">Use Case</span>.</p>
+
+      </div>
+    </section>
+    <!-- C6 — KISS + the functional-decomposition anti-pattern (create_kiss_antipattern_slide.py).
+         Ported + enriched: a bad-vs-good contrast (anti-pattern card | KISS card) reveals
+         side by side, then the 🤖 AI over-decomposition tendency and the ⚠️ catch-and-simplify
+         beat. Hebrew text is verbatim from the script. -->
+    <section data-slug="kiss-antipattern">
+      <h1><span class="en">KISS</span> ואנטי-תבנית</h1>
+      <div class="subtitle"><span class="en">Keep It Simple</span> — והמלכודת ההפוכה</div>
+      <div class="body">
+
+        <div class="cols">
+
+          <div class="callout bad fragment">
+            <span class="label">אנטי-תבנית: פירוק פונקציונלי</span>
+            שימוש מוגזם ב-<span class="en">include/extend</span> שמפרק כל פעולה זעירה לתרחיש.
+            מסבך את המודל בלי להוסיף ערך.
+          </div>
+
+          <div class="callout good fragment">
+            <span class="label"><span class="en">KISS</span> — שמרו פשוט</span>
+            התרשים נועד לתקשורת ולהיקף — לא לפירוק טכני. כמה תרחישים ברורים שמניבים ערך
+            עדיפים על עשרות זעירים.
+          </div>
+
+        </div>
+
+        <div class="callout ai fragment">
+          <span class="label">🤖 הבינה נוטה לפרק יתר על המידה</span>
+          <span class="en">AI</span> נוטה לפרק יתר על המידה — למשל <span class="en">login</span> על כל תרחיש.
+        </div>
+
+        <div class="callout warn fragment">
+          <span class="label">⚠️ אתגרו וצמצמו</span>
+          תפסו את הפירוק-היתר ופשטו אותו חזרה לתרחישים שמניבים ערך — לא כל פעולה זעירה ראויה לתרחיש משלה.
+        </div>
+
+        <p class="bottom-line">התרשים מתקשר היקף וערך — לא מפרק טכני. פשוט מנצח מפורט.</p>
+
+      </div>
+    </section>
+    <!-- C7 — Level of detail for use cases + a small FAQ (create_detail_faq_slide.py).
+         Ported + enriched: the "just right" detail rule sits in a hero, then three FAQ
+         cards reveal Q -> A one beat at a time; the modern "should I just ask the AI?"
+         question is rendered as a 🤖 callout. Hebrew text is verbatim from the script. -->
+    <section data-slug="detail-faq">
+      <h1>רמת פירוט ו-<span class="en">FAQ</span></h1>
+      <div class="subtitle">כמה זה יותר מדי - וכמה מעט מדי</div>
+      <div class="body">
+
+        <div class="hero">
+          <h3>לא גבוה מדי, ולא נמוך מדי</h3>
+          <p>לא גבוה מדי (כל לחיצה היא תרחיש) ולא נמוך מדי. תרחיש = יחידת ערך אחת לשחקן.</p>
+        </div>
+
+        <div class="panel-title"><span class="en">FAQ</span>:</div>
+
+        <div class="card fragment">
+          <div class="panel-title">האם <span class="en">login</span> הוא <span class="en">use case</span>?</div>
+          <p style="margin:0;">לרוב לא - מחלצים אותו ל-<span class="en">include</span>.</p>
+        </div>
+
+        <div class="card fragment">
+          <div class="panel-title">כמה תרחישים צריך?</div>
+          <p style="margin:0;">תלוי בהיקף - לא מספר קסם.</p>
+        </div>
+
+        <div class="callout ai fragment">
+          <span class="label">🤖 "פשוט אשאל את ה-<span class="en">AI</span>?"</span>
+          כן, אבל אתם מאמתים את רמת הפירוט.
+        </div>
+
+      </div>
+    </section>
+    <!-- D1 — Why document beyond the diagram (create_why_document_slide.py).
+         Ported + enriched: the "diagram = index" card lands first, then the two
+         documentation levels (high-level | detailed) reveal as two cols, then the
+         AI bottom-line beat. Hebrew text is verbatim from the script. -->
+    <section data-slug="why-document">
+      <h1>למה לתעד מעבר לתרשים?</h1>
+      <div class="subtitle">התרשים הוא המפה - לא הטיול</div>
+      <div class="body">
+
+        <div class="hero">
+          <h3>התרשים הוא אינדקס</h3>
+          <p>הוא מראה אילו תרחישים קיימים ומי משתמש. מה קורה צעד-אחר-צעד חי בתיעוד הטקסטואלי.</p>
+        </div>
+
+        <div class="panel-title">שתי רמות תיעוד:</div>
+
+        <div class="cols">
+
+          <div class="card fragment" style="display:flex; flex-direction:column; gap:8px;">
+            <div class="panel-title">תיאור ברמה גבוהה</div>
+            <p>פסקה קצרה: מה התרחיש עושה ולמי.</p>
+          </div>
+
+          <div class="card fragment" style="display:flex; flex-direction:column; gap:8px;">
+            <div class="panel-title">תיאור מפורט — <span class="en">Flow of Events</span></div>
+            <p>כל הצעדים, החלופות והחריגים.</p>
+          </div>
+
+        </div>
+
+        <div class="callout ai fragment">
+          <span class="label">🤖 התיעוד הוא הקלט</span>
+          התיעוד הוא מה שמאפשר לאמת - ומה ש-<span class="en">AI</span> צריך כדי לבנות נכון.
+        </div>
+
+      </div>
+    </section>
+    <!-- D2 — The Flow of Events template (create_flow_of_events_template_slide.py).
+         Ported + enriched: the documented use case is shown as a form. Header fields
+         render as a sad table; the key trio (Main / Alternate / Exception) lands as
+         three color-coded callouts that reveal one at a time. Hebrew is verbatim. -->
+    <section data-slug="flow-of-events-template">
+      <h1>תבנית <span class="en">Flow of Events</span></h1>
+      <div class="subtitle">המבנה הקבוע של תיעוד תרחיש</div>
+      <div class="body">
+
+        <div class="cols" style="align-items:stretch;">
+
+          <div class="card" style="display:flex; flex-direction:column; gap:10px;">
+            <div class="panel-title">שדות כותרת</div>
+            <table class="sad">
+              <tr><th style="width:42%;">שדה</th><th>תיאור</th></tr>
+              <tr><td>שם התרחיש</td><td class="muted">מזהה את ה-<span class="en">use case</span></td></tr>
+              <tr><td>שחקן ראשי</td><td class="muted">מי יוזם את התרחיש</td></tr>
+              <tr><td>תנאי קדם <span class="en">(Pre-condition)</span></td><td class="muted">מה חייב להתקיים לפני</td></tr>
+              <tr><td>תנאי סיום <span class="en">(Post-condition)</span></td><td class="muted">מה מובטח אחרי</td></tr>
+            </table>
+          </div>
+
+          <div class="card" style="display:flex; flex-direction:column; gap:12px;">
+            <div class="panel-title">שלוש זרימות</div>
+
+            <div class="callout good fragment">
+              <span class="label">ראשית <span class="en">(Main)</span></span>
+              מסלול ההצלחה
+            </div>
+
+            <div class="callout ai fragment">
+              <span class="label">חלופית <span class="en">(Alternate)</span></span>
+              וריאציות תקינות
+            </div>
+
+            <div class="callout bad fragment">
+              <span class="label">חריג <span class="en">(Exception)</span></span>
+              כשמשהו נכשל
+            </div>
+          </div>
+
+        </div>
+
+        <p class="bottom-line fragment">המבנה הזה הוא בדיוק מה ש-<span class="en">AI</span> יודע למלא - ומה שאתם יודעים לאתגר.</p>
+
+      </div>
+    </section>
+    <!-- D3 — Worked, filled-in Flow of Events for "Place Order" (create_documented_example_slide.py).
+         Two-column layout: main flow (right) beside the alternate + exception flows (left)
+         so all three fit one screen; steps verbatim from the script; fragments reveal in order. -->
+    <section data-slug="documented-example">
+      <h1>דוגמה מתועדת: <span class="en">Place Order</span></h1>
+      <div class="subtitle">מערכת הזמנת אוכל בקמפוס</div>
+      <div class="body">
+
+        <div class="cols" style="flex:1 1 auto; min-height:0; align-items:stretch;">
+
+          <!-- right column (RTL-first): the main success flow -->
+          <div class="callout good fragment" style="display:flex; flex-direction:column;">
+            <span class="label">זרימה ראשית (<span class="en">Main</span>)</span>
+            <ul class="bullets" style="font-size:20px;">
+              <li>סטודנט מאומת</li>
+              <li>עיון בתפריט</li>
+              <li>הוספת פריטים</li>
+              <li>בדיקת זמינות</li>
+              <li>אישור</li>
+              <li>תשלום</li>
+              <li>ההזמנה נשלחת לתור המתאים</li>
+              <li>התראת ׳מוכן׳</li>
+              <li>איסוף</li>
+            </ul>
+          </div>
+
+          <!-- left column: the alternate + exception flows -->
+          <div style="display:flex; flex-direction:column; gap:14px;">
+            <div class="callout warn fragment">
+              <span class="label">זרימה חלופית: פריט אזל</span>
+              המערכת מסמנת את הפריט, מציעה חלופה או מסירה אותו מהעגלה.
+            </div>
+            <div class="callout bad fragment">
+              <span class="label">חריג: תשלום נכשל</span>
+              ההזמנה לא נוצרת, הסטודנט מקבל הודעה, העגלה נשמרת.
+            </div>
+            <div class="callout warn fragment">
+              <span class="label">⚠️ שימו לב</span>
+              הזרימות החלופיות והחריגים הם בדיוק מה ש-<span class="en">AI</span> נוטה לפספס.
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+    <!-- D4 — Documenting a use case WITH AI (create_ai_documentation_slide.py).
+         Ported + enriched: a demo-ready prompt (LTR <pre><code>) David can read/reuse
+         live, then the 🤖 callout (what Claude produces) paired with the ⚠️ callout
+         (what the analyst must verify). Hebrew text is verbatim from the script. -->
+    <section data-slug="ai-documentation">
+      <h1>תיעוד עם <span class="en">AI</span></h1>
+      <div class="subtitle"><span class="en">Claude</span> כותב טיוטה — אתם מאמתים</div>
+      <div class="body">
+
+        <div class="card fragment" style="display:flex; flex-direction:column; gap:10px;">
+          <div class="panel-title">הפרומפט החי — תרגום תרחיש ל-<span class="en">Flow of Events</span></div>
+          <pre><code class="language-text" data-trim>Actor: Student
+    Use case: Place food order
+
+    Write the full Flow of Events:
+    main flow, alternative flows, and exceptions,
+    in a standard use-case format.</code></pre>
+        </div>
+
+        <div class="cols" style="align-items:stretch;">
+
+          <div class="callout ai fragment">
+            <span class="label">🤖 מה <span class="en">AI</span> עושה</span>
+            מקבל {שחקן + שם תרחיש} ומחזיר <span class="en">Flow of Events</span> מלא בשניות —
+            ראשית, חלופות וחריגים, בפורמט תקני.
+          </div>
+
+          <div class="callout warn fragment">
+            <span class="label">⚠️ מה אתם מאתגרים</span>
+            <ul class="bullets">
+              <li>חריגים חסרים (תשלום נכשל?)</li>
+              <li>צעדים שהומצאו ולא ביקשתם</li>
+              <li>זרימה חלופית שגויה או חלקית</li>
+            </ul>
+          </div>
+
+        </div>
+
+        <p class="bottom-line"><span class="en">AI</span> מאיץ את הכתיבה פי עשרה. אבל השלמות והנכונות — באחריותכם.</p>
+
+      </div>
+    </section>
+    <!-- D5 — Notes, terminology, change management (create_notes_terminology_change_slide.py).
+         Ported + enriched: three housekeeping habits reveal one card at a time
+         (Space / →), then the AI takeaway lands. Hebrew text is verbatim from the script. -->
+    <section data-slug="notes-terminology-change">
+      <h1><span class="en">Notes</span>, טרמינולוגיה וניהול שינויים</h1>
+      <div class="subtitle">שלושה הרגלים שמחזיקים מודל בריא</div>
+      <div class="body">
+
+        <div class="cols-3" style="align-items:stretch;">
+
+          <div class="card fragment" style="display:flex; flex-direction:column; gap:10px;">
+            <div class="panel-title" style="text-align:center;"><span class="en">Notes</span></div>
+            <p>הערות על התרשים מבהירות כוונה והנחות שלא נראות בנוטציה.</p>
+          </div>
+
+          <div class="card fragment" style="display:flex; flex-direction:column; gap:10px;">
+            <div class="panel-title" style="text-align:center;">טרמינולוגיה</div>
+            <p>אותו מונח לאותו דבר - לאורך כל המסמכים והתרשימים.</p>
+          </div>
+
+          <div class="card fragment" style="display:flex; flex-direction:column; gap:10px;">
+            <div class="panel-title" style="text-align:center;">ניהול שינויים</div>
+            <p>דרישות משתנות. תעדו גרסאות ועדכנו את המודל בהתאם.</p>
+          </div>
+
+        </div>
+
+        <div class="callout ai fragment" style="margin-top:4px;">
+          <span class="label">🤖 ב-<span class="en">AI</span> זה קל יותר</span>
+          התיעוד חי ב-<span class="en">markdown</span>, ואפשר לבקש עדכון עקבי בכל המסמכים.
+        </div>
+
+      </div>
+    </section>
+    <!-- D6 — Summary of the documentation phase + practical tips (create_documentation_summary_slide.py).
+         Closes documentation section D. Two cards: a recap (סיכום) and a tips (טיפים) list.
+         Ported + enriched: tips reveal one beat at a time. Hebrew text is verbatim from the script. -->
+    <section data-slug="documentation-summary">
+      <h1>סיכום שלב התיעוד + טיפים</h1>
+      <div class="subtitle">מה לקחת איתכם</div>
+      <div class="body">
+
+        <div class="cols">
+
+          <div class="card" style="display:flex; flex-direction:column; gap:10px;">
+            <div class="panel-title">סיכום</div>
+            <ul class="bullets">
+              <li>התרשים מראה מה ומי</li>
+              <li>התיעוד מראה איך - צעד אחר צעד</li>
+              <li>שלוש זרימות: ראשית, חלופית, חריג</li>
+              <li>אמתו תמיד מול הראיון המקורי</li>
+            </ul>
+          </div>
+
+          <div class="card" style="display:flex; flex-direction:column; gap:10px;">
+            <div class="panel-title">טיפים</div>
+            <ul class="bullets">
+              <li class="fragment">התחילו פשוט (<span class="en">KISS</span>)</li>
+              <li class="fragment">שם תרחיש = פועל + מושא</li>
+              <li class="fragment">אל תפרקו יתר על המידה</li>
+              <li class="fragment">תנו ל-<span class="en">AI</span> לטייט - ואתגרו את התוצאה</li>
+            </ul>
+          </div>
+
+        </div>
+
+        <p class="bottom-line">התרשים מראה מה ומי · התיעוד מראה איך — ושניהם נאמתים מול הראיון המקורי.</p>
+
+      </div>
+    </section>
+    <!-- E1 — From analysis to development: the bridge to Lecture 13.
+         Corrected message: the artifacts are a SPEC handed off to development. AI is the
+         developer (writes much of the code from the spec), but development is NOT all AI —
+         the tech team still owns the non-functional requirements and integration. -->
+    <section data-slug="analysis-to-code">
+      <h1>מניתוח לפיתוח: גשר להרצאה 13</h1>
+      <div class="subtitle">המפרט שלכם נמסר לפיתוח — שם ה-<span class="en">AI</span> כותב את רוב הקוד</div>
+      <div class="body">
+
+        <div class="cols-3" style="align-items:stretch;">
+
+          <div class="card fragment fade-in-then-semi-out" style="text-align:center; display:flex; flex-direction:column; gap:8px;">
+            <div style="font-size:34px; font-weight:700; color:var(--blue);">1</div>
+            <div class="panel-title" style="text-align:center;">תרחישים + תיעוד</div>
+            <div class="muted" style="font-size:18px;">מה שבנינו היום</div>
+          </div>
+
+          <div class="card fragment fade-in-then-semi-out" style="text-align:center; display:flex; flex-direction:column; gap:8px;">
+            <div style="font-size:34px; font-weight:700; color:var(--blue);">2</div>
+            <div class="panel-title" style="text-align:center;"><span class="en">CLAUDE.md</span></div>
+            <div class="muted" style="font-size:18px;">המפרט שנמסר לפיתוח</div>
+          </div>
+
+          <div class="card fragment" style="text-align:center; display:flex; flex-direction:column; gap:8px;">
+            <div style="font-size:34px; font-weight:700; color:var(--blue);">3</div>
+            <div class="panel-title" style="text-align:center;">פיתוח</div>
+            <div class="muted" style="font-size:18px;">ה-<span class="en">AI</span> כותב קוד · הצוות: לא-פונקציונלי ושילוב</div>
+          </div>
+
+        </div>
+
+        <div class="cols fragment">
+          <div class="callout ai">
+            <span class="label">🤖 ה-<span class="en">AI</span> הוא המפַתח</span>
+            תרחישי השימוש והתיעוד נארזים כ-<span class="en">spec</span> ב-<span class="en">CLAUDE.md</span>,
+            ו-<span class="en">Claude Code</span> כותב מהם חלק גדול מהקוד — סכימה, <span class="en term" data-term="crud">CRUD</span> ומכונות מצבים — מהר.
+          </div>
+          <div class="callout good">
+            <span class="label">👥 אבל הפיתוח אינו כולו <span class="en">AI</span></span>
+            הצוות הטכני עדיין אחראי על הדרישות הלא-פונקציונליות (ביצועים, אבטחה, עומסים) ועל שילוב הקוד במערכת הקיימת.
+            ה-<span class="en">AI</span> מוריד את עלות הקידוד — לא מחליף את צוות הפיתוח.
+          </div>
+        </div>
+
+        <div class="callout warn fragment">
+          <span class="label">⚠️ הניתוח הוא המקור</span>
+          מפרט מעורפל → קוד מעורפל, בביטחון. ככל שהניתוח חד יותר — הקוד טוב יותר.
+        </div>
+
+        <div style="margin-top:auto; text-align:center;">
+          <p class="bottom-line" style="margin:0;">ה-<span class="en">artifacts</span> מהיום הם הקלט של הרצאה 13 — מניתוח, דרך הפיתוח, למערכת רצה.</p>
+          <div class="src" style="margin-top:6px;"><span class="en">github.com/dcodish/SAD-sample-project</span> — פרויקט הדוגמה</div>
+        </div>
+
+      </div>
+    </section>
+    <!-- E2 — "The spec is the prompt": your understanding caps the AI's output.
+         Port of create_spec_is_prompt_slide.py. The thesis quote is front-and-center
+         in a hero; the 4 supporting points become bullets that reveal one at a time,
+         enriched with a 🤖 beat (good analysis amplified) and its ⚠️ pair. -->
+    <section data-slug="spec-is-prompt">
+      <h1>המפרט הוא הפרומפט</h1>
+      <div class="subtitle"><span class="en">The spec is the prompt</span></div>
+      <div class="body">
+
+        <div class="hero">
+          <h3>התזה</h3>
+          <p style="font-size:26px; font-weight:700; text-align:center;">
+            ההבנה שלכם היא התקרה של מה ש-<span class="en">AI</span> יכול לייצר.
+          </p>
+        </div>
+
+        <ul class="bullets">
+          <li class="fragment">ניתוח טוב מוגבר על ידי <span class="en">AI</span> — מהר ובאיכות</li>
+          <li class="fragment">ניתוח רע מוגבר גם הוא — שגיאות בקנה מידה</li>
+          <li class="fragment">מפרט חד, חד-משמעי וברור = קוד טוב</li>
+          <li class="fragment">מודל <span class="en">use case</span> הוא בדיוק מפרט כזה</li>
+        </ul>
+
+        <div class="cols fragment">
+          <div class="callout ai">
+            <span class="label">🤖 הבינה מגבירה את מה שנתת לה</span>
+            מפרט חד וברור → <span class="en">Claude</span> מייצר קוד טוב, מהר. הניתוח שלכם הוא מה שמכפיל את הערך.
+          </div>
+          <div class="callout warn fragment">
+            <span class="label">⚠️ גם טעות מוגברת — בקנה מידה</span>
+            עמימות או הנחה שגויה במפרט לא נעלמת; היא משוכפלת לקוד בביטחון. התקרה שלכם היא הרצפה של המכונה.
+          </div>
+        </div>
+
+        <p class="bottom-line">מודל ה-<span class="en">use case</span> הוא המפרט — והמפרט הוא הפרומפט.</p>
+
+      </div>
+    </section>
+    <!-- E3 — The analyst's changing role (create_analyst_role_slide.py).
+         Ported + enriched: a before->after contrast (פעם | היום) reveals one column
+         at a time, then closes the ⚠️ trust-but-challenge loop and lands on the
+         analyst's enduring value (judgment / domain knowledge / ability to challenge). -->
+    <section data-slug="analyst-role">
+      <h1>תפקיד האנליסט משתנה</h1>
+      <div class="subtitle">מ'לצייר' ל'להחליט ולאמת'</div>
+      <div class="body">
+
+        <div class="cols">
+
+          <div class="callout bad fragment" style="display:flex; flex-direction:column; gap:8px;">
+            <span class="label">פעם</span>
+            <p style="margin:0;">רוב הזמן הלך על ייצור התוצרים: לצייר תרשימים, לכתוב תיעוד, לעצב טבלאות.</p>
+          </div>
+
+          <div class="callout good fragment" style="display:flex; flex-direction:column; gap:8px;">
+            <span class="label">היום</span>
+            <p style="margin:0;">הערך עובר להחלטה ולאימות: לשאול את השאלות הנכונות (<span class="en">Wetherbe</span>),
+               להגדיר היקף, ולאתגר את מה ש-<span class="en">AI</span> מייצר.</p>
+          </div>
+
+        </div>
+
+        <div class="callout warn fragment">
+          <span class="label">⚠️ סגירת מעגל האזהרה</span>
+          אל תאמינו עיוורות. שיקול דעת, ידע בתחום, ויכולת לאתגר — הם המיומנות הנדירה.
+        </div>
+
+        <p class="bottom-line fragment">שיקול דעת, ידע בתחום, ויכולת לאתגר — הם המיומנות הנדירה.</p>
+
+      </div>
+    </section>
+    <!-- F1 — Old course exercises repurposed as AI-critique drills
+         (create_exercises_ai_critique_slide.py).
+         Ported + enriched: the new workflow (scenario text → AI use-case diagram →
+         critique) is made explicit as a 3-step strip, then the two original scenario
+         cards reveal one at a time, and the 🤖/⚠️ pair frames the demo-vs-exercise mode. -->
+    <section data-slug="exercises-ai-critique">
+      <h1>תרגול: פתרון עם <span class="en">AI</span>, ואז ביקורת</h1>
+      <div class="subtitle">התרחיש בטקסט הוא הקלט — אתם השופטים</div>
+      <div class="body">
+
+        <div class="cols-3" style="align-items:stretch;">
+
+          <div class="card fragment" style="text-align:center; display:flex; flex-direction:column; gap:8px;">
+            <div style="font-size:30px;">📝</div>
+            <div class="panel-title" style="text-align:center;">תרחיש בטקסט</div>
+            <div class="muted" style="font-size:18px;">תיאור מילולי של מערכת — הקלט</div>
+          </div>
+
+          <div class="card fragment" style="text-align:center; display:flex; flex-direction:column; gap:8px;">
+            <div style="font-size:30px;">🤖</div>
+            <div class="panel-title" style="text-align:center;">ה-<span class="en">AI</span> מייצר</div>
+            <div class="muted" style="font-size:18px;">שחקנים ותרשים <span class="en">use case</span></div>
+          </div>
+
+          <div class="card fragment" style="text-align:center; display:flex; flex-direction:column; gap:8px;">
+            <div style="font-size:30px;">⚠️</div>
+            <div class="panel-title" style="text-align:center;">אתם מבקרים</div>
+            <div class="muted" style="font-size:18px;">מה חסר? מה שגוי? מה הונח?</div>
+          </div>
+
+        </div>
+
+        <div class="cols" style="align-items:stretch;">
+
+          <div class="card fragment" style="display:flex; flex-direction:column; gap:8px;">
+            <div class="panel-title">תרחיש א': השאלת ספרים בספרייה</div>
+            <p style="margin:0;">תנו ל-<span class="en">AI</span> את תיאור הספרייה. בקשו שחקנים ותרשים
+               <span class="en">use case</span>. ואז בדקו: מה חסר? אילו קשרים שגויים?</p>
+          </div>
+
+          <div class="card fragment" style="display:flex; flex-direction:column; gap:8px;">
+            <div class="panel-title">תרחיש ב': ניהול חניון</div>
+            <p style="margin:0;">אותו תהליך: <span class="en">AI</span> מייצר, אתם מאתגרים. השוו את
+               הגבול שה-<span class="en">AI</span> הגדיר לזה שלכם.</p>
+          </div>
+
+        </div>
+
+        <div class="cols fragment">
+          <div class="callout ai">
+            <span class="label">🤖 הדגמה של המרצה</span>
+            מזינים תרחיש אחד יחד בכיתה, מקבלים תרשים <span class="en">use case</span> תוך שניות,
+            ומפרקים אותו על המסך — או שכל סטודנט מריץ בעצמו על התרחיש השני.
+          </div>
+          <div class="callout warn fragment">
+            <span class="label">⚠️ המיומנות שמתרגלים</span>
+            השאלה החשובה איננה "מה ה-<span class="en">AI</span> ייצר" אלא "מה הוא פיספס, המציא, או הניח".
+            זו המיומנות שאתם מתרגלים.
+          </div>
+        </div>
+
+        <p class="bottom-line">תרחיש בטקסט → תרשים מה-<span class="en">AI</span> → ביקורת שלכם.</p>
+
+      </div>
+    </section>
+    <!-- F2 — reverse exercise: read a diagram, don't draw it. Same live diagram in
+         ?embed=1 mode (fills its panel, fit-to-screen, no scroll). Questions in a side
+         rail so the diagram gets full height. The diagram stays interactive — click a
+         use case to reveal its flow-of-events. -->
+    <section data-slug="read-a-diagram">
+      <h1>מה מייצג התרשים?</h1>
+      <div class="subtitle">תרגיל הפוך: לקרוא תרשים, לא לצייר</div>
+      <div class="body">
+
+        <div style="flex:1 1 auto; min-height:0; display:grid; grid-template-columns:340px 1fr; gap:18px;">
+
+          <!-- right rail (RTL-first): the questions -->
+          <div style="display:flex; flex-direction:column; gap:14px; min-height:0; overflow:auto;">
+            <div class="card" style="display:flex; flex-direction:column; gap:12px;">
+              <div class="panel-title">שאלות</div>
+              <ul class="bullets" style="font-size:21px;">
+                <li class="fragment">מי השחקנים (<span class="en">actors</span>)?</li>
+                <li class="fragment">מהם התרחישים (<span class="en">use cases</span>)?</li>
+                <li class="fragment">אילו קשרים מופיעים — <span class="en">include</span> / <span class="en">extend</span>?</li>
+                <li class="fragment">מה חסר או לא ברור?</li>
+              </ul>
+            </div>
+            <div class="callout ai" style="font-size:17px;">
+              <span class="label">💡 התרשים חי</span>
+              לחצו על תרחיש בתרשים כדי לפתוח את ה-<span class="en">flow of events</span> שלו.
+            </div>
+          </div>
+
+          <!-- left: the live diagram to read -->
+          <div style="display:flex; min-height:0;">
+            <div class="embed"><iframe src="assets/usecase-campus-food.html?embed=1" title="תרשים Use Case לדוגמה — מערכת הזמנת אוכל" loading="lazy"></iframe></div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+    <!-- F3 — Lecture summary & close + what's next (create_lecture_summary_slide.py).
+         Ported + enriched: the five takeaways reveal one beat at a time (Space / →),
+         then the forward-looking "next up" card lands. Hebrew is verbatim from the script. -->
+    <section data-slug="lecture-summary">
+      <h1>סיכום וסגירה</h1>
+      <div class="subtitle">מה למדנו — ולאן ממשיכים</div>
+      <div class="body">
+
+        <div class="card">
+          <ul class="bullets">
+            <li class="fragment"><span class="en">UML</span> רלוונטי — ודווקא בעידן <span class="en">AI</span> הסמנטיקה חשובה יותר</li>
+            <li class="fragment"><span class="en">Use Case</span> = שחקנים + תרחישים + גבול מערכת</li>
+            <li class="fragment">ארבעה קשרים: <span class="en">association</span>, <span class="en">include</span>, <span class="en">extend</span>, <span class="en">generalization</span></li>
+            <li class="fragment">התיעוד (<span class="en">Flow of Events</span>) הוא התוכן; התרשים הוא המפה</li>
+            <li class="fragment"><span class="en">AI</span> מאיץ כל שלב — ואתם מאתגרים ומאמתים</li>
+          </ul>
+        </div>
+
+        <div class="hero fragment">
+          <h3>הבא בתור: תרשים מחלקות (<span class="en">Class Diagram</span>) — הרצאה 6-7</h3>
+          <p>נעבור מ'מה המערכת עושה' ל'ממה היא בנויה'.</p>
+        </div>
+
+      </div>
+    </section>
+  </div>
+</div>
+<script src="../web/vendor/reveal/dist/reveal.js"></script>
+<script src="../web/vendor/reveal/plugin/notes/notes.js"></script>
+<script src="../web/vendor/reveal/plugin/highlight/highlight.js"></script>
+<script src="../web/theme/sad.js"></script>
+<script src="../web/theme/glossary.js"></script>
+</body>
+</html>

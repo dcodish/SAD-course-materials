@@ -1,0 +1,404 @@
+/* =============================================================================
+   sad.css — house style for the SAD HTML lecture decks (reveal.js theme).
+   The CSS twin of slide_lib.py: same palette, blue title bar, left accent bar,
+   cards, bulleted RTL lists, the orange "hero" callout, bottom-line, and the
+   🤖 AI / ⚠️ challenge motifs. Authored at a 1280x720 (16:9) logical canvas;
+   reveal scales it to the window.
+
+   RTL: Hebrew is the default direction. Wrap inline Latin tokens (UML, AI, spec,
+   Claude) in <span class="en">...</span> so the bidi algorithm isolates them and
+   they don't reorder — the HTML analog of slide_lib's per-run lang handling.
+   ============================================================================= */
+
+:root {
+  /* Primary */
+  --blue:        #0070C0;   /* PRIMARY_BLUE */
+  --dark-blue:   #004E8C;
+  --light-blue:  #2E9ADE;
+  --gray:        #9EA2A8;
+  /* Text */
+  --body:        #333333;
+  --dark-body:   #222222;
+  --muted:       #555555;
+  --source:      #888888;
+  /* Surfaces */
+  --card-bg:     #F5F5F5;
+  --card-border: #DDDDDD;
+  --alt-row:     #EEEEEE;
+  --row-even:    #E1EFF7;
+  /* Semantic */
+  --green:       #2E7D32;
+  --red:         #C62828;
+  --orange:      #E86C00;
+  --hero-bg:     #FBECD9;   /* light orange hero tint */
+  /* Chrome metrics (logical px on the 1280x720 canvas) */
+  --accent-w:    12px;
+  --titlebar-h:  92px;
+  --pad-x:       44px;
+}
+
+/* ---- Canvas + typography ---------------------------------------------------- */
+.reveal {
+  font-family: "Heebo", "Assistant", "Segoe UI", Arial, sans-serif;
+  color: var(--body);
+  font-size: 24px;
+}
+.reveal .slides { text-align: right; }
+
+/* Each slide fills the canvas, top-aligned, flex column: title bar then body. */
+.reveal .slides > section,
+.reveal .slides > section > section {
+  inset: 0 !important;
+  top: 0 !important;
+  height: 100%;
+  width: 100%;
+  padding: 0 !important;
+  margin: 0 !important;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  direction: rtl;
+  background: #fff;
+}
+
+/* Left accent bar (visual signature) — present on every content slide. */
+.reveal .slides > section::before {
+  content: "";
+  position: absolute;
+  inset-inline-start: 0;
+  top: 0;
+  bottom: 0;
+  width: var(--accent-w);
+  background: var(--blue);
+  z-index: 5;
+}
+
+/* Inline Latin token isolation (UML / AI / spec / Claude / CRUD ...) */
+.reveal .en { unicode-bidi: isolate; direction: ltr; }
+
+.reveal a { color: var(--blue); }
+.reveal strong, .reveal b { color: inherit; }
+
+/* =============================================================================
+   Title bar + subtitle (add_base_elements / add_subtitle)
+   ============================================================================= */
+.reveal section > h1 {
+  /* Plain block flow on purpose: a flex/grid title bar would split inline
+     content (e.g. <span class="en">AI</span> + Hebrew text) into separate
+     items, collapsing the space between them and breaking bidi order.
+     line-height == bar height vertically centers the single-line title. */
+  flex: 0 0 auto;
+  height: var(--titlebar-h);
+  margin: 0;
+  background: var(--blue);
+  color: #fff;
+  font-size: 40px;
+  font-weight: 700;
+  line-height: var(--titlebar-h);
+  text-align: right;
+  white-space: nowrap;
+  padding: 0 var(--pad-x) 0 var(--pad-x);
+  letter-spacing: normal;
+  text-transform: none;
+}
+
+.reveal section > .subtitle {
+  flex: 0 0 auto;
+  margin: 18px var(--pad-x) 0;
+  font-size: 24px;
+  font-weight: 400;
+  color: var(--muted);
+  text-align: right;
+}
+
+/* The free-form content region below the title bar. */
+.reveal section > .body {
+  flex: 1 1 auto;
+  min-height: 0;
+  padding: 22px var(--pad-x) 28px;
+  overflow: auto;            /* long slides scroll rather than overflow the canvas */
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* =============================================================================
+   Cards (add_card)
+   ============================================================================= */
+.reveal .card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 16px;
+  padding: 20px 26px;
+}
+.reveal .card.tight { padding: 14px 18px; }
+
+/* =============================================================================
+   Bulleted RTL list (add_bullet_list) — blue square bullets
+   ============================================================================= */
+.reveal ul.bullets { list-style: none; margin: 0; padding: 0; }
+.reveal ul.bullets > li {
+  position: relative;
+  padding-inline-start: 26px;
+  margin: 0 0 14px;
+  font-size: 24px;
+  line-height: 1.45;
+  color: var(--body);
+}
+.reveal ul.bullets > li::before {
+  content: "";
+  position: absolute;
+  inset-inline-start: 4px;
+  top: 0.62em;
+  width: 9px;
+  height: 9px;
+  background: var(--blue);
+  border-radius: 2px;
+}
+.reveal ul.bullets > li:last-child { margin-bottom: 0; }
+.reveal ul.bullets ul { list-style: none; margin: 8px 0 0; padding: 0; }
+.reveal ul.bullets ul > li {
+  position: relative; padding-inline-start: 22px; margin: 0 0 8px;
+  font-size: 20px; color: var(--muted);
+}
+.reveal ul.bullets ul > li::before {
+  content: ""; position: absolute; inset-inline-start: 4px; top: 0.62em;
+  width: 7px; height: 7px; border: 2px solid var(--light-blue);
+  border-radius: 50%; background: transparent;
+}
+
+/* =============================================================================
+   Hero callout (the orange-tinted emphasis card)
+   ============================================================================= */
+.reveal .hero {
+  background: var(--hero-bg);
+  border: 2px solid var(--orange);
+  border-radius: 16px;
+  padding: 18px 26px;
+}
+.reveal .hero > h3 {
+  margin: 0 0 10px;
+  color: var(--orange);
+  font-size: 24px;
+  font-weight: 700;
+  text-align: right;
+  text-transform: none;
+  letter-spacing: normal;
+}
+.reveal .hero > p { margin: 0; font-size: 21px; color: var(--body); line-height: 1.5; }
+
+/* Bottom takeaway line (centered dark-blue) */
+.reveal .bottom-line {
+  margin: auto 0 0;
+  text-align: center;
+  color: var(--dark-blue);
+  font-size: 23px;
+  font-weight: 700;
+}
+
+/* =============================================================================
+   AI / challenge motifs (🤖 and ⚠️ threads of the lecture)
+   ============================================================================= */
+.reveal .callout {
+  border-radius: 14px;
+  padding: 16px 20px 16px 20px;
+  border-inline-start: 6px solid var(--gray);
+  background: var(--card-bg);
+  font-size: 21px;
+}
+.reveal .callout > .label {
+  display: block; font-weight: 700; margin-bottom: 6px; font-size: 18px;
+  letter-spacing: .02em;
+}
+.reveal .callout.ai      { background: #EAF3FB; border-inline-start-color: var(--blue); }
+.reveal .callout.ai      > .label { color: var(--dark-blue); }
+.reveal .callout.warn    { background: #FFF6E6; border-inline-start-color: var(--orange); }
+.reveal .callout.warn    > .label { color: var(--orange); }
+.reveal .callout.good    { background: #EAF6EC; border-inline-start-color: var(--green); }
+.reveal .callout.good    > .label { color: var(--green); }
+.reveal .callout.bad     { background: #FBEAEA; border-inline-start-color: var(--red); }
+.reveal .callout.bad     > .label { color: var(--red); }
+
+/* Small inline tag/badge */
+.reveal .tag {
+  display: inline-block; font-size: 16px; font-weight: 700;
+  padding: 2px 10px; border-radius: 999px; vertical-align: middle;
+  background: var(--blue); color: #fff;
+}
+.reveal .tag.warn { background: var(--orange); }
+.reveal .tag.muted { background: var(--gray); }
+
+/* =============================================================================
+   Layout helpers
+   ============================================================================= */
+.reveal .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+.reveal .cols-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.reveal .grow { flex: 1 1 auto; }
+.reveal .center { text-align: center; }
+.reveal .muted { color: var(--muted); }
+.reveal .src { color: var(--source); font-size: 16px; }
+
+/* Column / panel heading inside cards */
+.reveal .card > h3,
+.reveal .panel-title {
+  margin: 0 0 10px; font-size: 22px; font-weight: 700; color: var(--dark-blue);
+  text-align: right; text-transform: none; letter-spacing: normal;
+}
+
+/* =============================================================================
+   Tables (ranking_table look — blue header, zebra rows)
+   ============================================================================= */
+.reveal table.sad { border-collapse: collapse; width: 100%; font-size: 20px; }
+.reveal table.sad th {
+  background: var(--blue); color: #fff; font-weight: 700; padding: 10px 14px;
+  text-align: right; border: 1px solid #fff;
+}
+.reveal table.sad td { padding: 9px 14px; border: 1px solid var(--card-border); text-align: right; }
+.reveal table.sad tr:nth-child(even) td { background: var(--row-even); }
+.reveal table.sad tr:nth-child(odd) td  { background: #fff; }
+
+/* =============================================================================
+   Embeds (UML simulators / SAD-MCP SVG diagrams / iframes)
+   ============================================================================= */
+.reveal .embed {
+  flex: 1 1 auto; min-height: 0;
+  border: 1px solid var(--card-border); border-radius: 12px; overflow: hidden;
+  background: #fff;
+}
+.reveal .embed > iframe { width: 100%; height: 100%; border: 0; display: block; }
+.reveal figure.diagram { margin: 0; text-align: center; }
+.reveal figure.diagram > img,
+.reveal figure.diagram > svg { max-width: 100%; max-height: 56vh; height: auto; }
+.reveal figure.diagram > figcaption { color: var(--source); font-size: 16px; margin-top: 6px; }
+
+/* Code blocks (highlight plugin) read LTR even inside an RTL slide */
+.reveal pre { direction: ltr; text-align: left; width: 100%; font-size: 18px; box-shadow: none; }
+.reveal pre code { border-radius: 10px; padding: 16px 18px; max-height: 56vh; }
+.reveal code.inline { direction: ltr; unicode-bidi: isolate; background: #eef2f6;
+  padding: 1px 6px; border-radius: 6px; font-size: 0.85em; }
+
+/* =============================================================================
+   Title slide (built by build_web from the lecture title)
+   ============================================================================= */
+.reveal section.title-slide {
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background: linear-gradient(135deg, var(--dark-blue) 0%, var(--blue) 60%, var(--light-blue) 100%);
+}
+.reveal section.title-slide::before { display: none; }   /* no accent bar on cover */
+.reveal section.title-slide .course {
+  color: #DCEBF7; font-size: 22px; font-weight: 600; margin-bottom: 18px; letter-spacing: .02em;
+}
+.reveal section.title-slide h1 {
+  background: none; color: #fff; height: auto; line-height: 1.2;
+  font-size: 54px; padding: 0 60px; display: block; text-align: center;
+  white-space: normal;
+}
+.reveal section.title-slide .lecture-no {
+  margin-top: 24px; color: #DCEBF7; font-size: 20px; font-weight: 600;
+}
+.reveal section.title-slide .cover-img {
+  margin-top: 30px; max-height: 34vh; border-radius: 14px;
+  box-shadow: 0 10px 40px rgba(0,0,0,.35);
+}
+
+/* =============================================================================
+   TOC / agenda slide (built by build_web from the section list)
+   ============================================================================= */
+.reveal section.toc-slide ol.toc {
+  list-style: none; counter-reset: toc; margin: 8px 0 0; padding: 0;
+  display: flex; flex-direction: column; gap: 14px;
+}
+.reveal section.toc-slide ol.toc > li {
+  counter-increment: toc; position: relative; padding-inline-start: 64px;
+  font-size: 28px; color: var(--muted); display: flex; align-items: center; min-height: 48px;
+}
+.reveal section.toc-slide ol.toc > li::before {
+  content: counter(toc); position: absolute; inset-inline-start: 0; top: 50%;
+  transform: translateY(-50%);
+  width: 44px; height: 44px; border-radius: 50%;
+  background: var(--card-bg); border: 2px solid var(--card-border); color: var(--gray);
+  display: flex; align-items: center; justify-content: center; font-size: 22px; font-weight: 700;
+}
+.reveal section.toc-slide ol.toc > li.active { color: var(--dark-blue); font-weight: 700; }
+.reveal section.toc-slide ol.toc > li.active::before {
+  background: var(--blue); border-color: var(--blue); color: #fff;
+}
+
+/* =============================================================================
+   Not-yet-ported placeholder (so partial decks still build during migration)
+   ============================================================================= */
+.reveal section.todo-slide { align-items: center; justify-content: center; text-align: center; }
+.reveal section.todo-slide::before { display: none; }
+.reveal section.todo-slide .todo-card {
+  background: var(--card-bg); border: 2px dashed var(--gray); border-radius: 16px;
+  padding: 30px 44px; color: var(--muted); max-width: 70%;
+}
+.reveal section.todo-slide .todo-card .slug { color: var(--blue); font-weight: 700; direction: ltr; }
+
+/* Slide-number + progress styling */
+.reveal .slide-number { background: rgba(0,80,140,.85); }
+.reveal .progress { color: var(--blue); }
+
+/* =============================================================================
+   Glossary terms (clickable concept reminders) — see web/theme/glossary.js
+   ============================================================================= */
+.reveal .term {
+  color: var(--blue);
+  cursor: pointer;
+  border-bottom: 2px dotted var(--blue);
+  border-radius: 2px;
+  padding: 0 1px;
+  transition: background .12s ease;
+}
+.reveal .term:hover { background: #E1EFF7; }
+.reveal .term:focus-visible { outline: 2px solid var(--light-blue); outline-offset: 2px; }
+.reveal .term::after {
+  content: "\24D8";            /* ⓘ */
+  font-size: .62em;
+  vertical-align: super;
+  margin-inline-start: 1px;
+  opacity: .65;
+}
+
+/* The popover is position:fixed (outside reveal's scaled .slides), so its sizes are
+   real px — a stable UI overlay regardless of how the slide is scaled. */
+.glossary-pop {
+  position: fixed;
+  z-index: 1000;
+  max-width: 380px;
+  background: #fff;
+  border: 1px solid var(--card-border);
+  border-inline-start: 5px solid var(--blue);
+  border-radius: 12px;
+  box-shadow: 0 14px 44px rgba(0,40,80,.30);
+  padding: 16px 20px 16px 18px;
+  font-family: "Heebo", "Assistant", "Segoe UI", Arial, sans-serif;
+  color: var(--body);
+  direction: rtl;
+  text-align: right;
+  font-size: 16px;
+  line-height: 1.5;
+}
+.glossary-pop h4 { margin: 0 0 8px; color: var(--dark-blue); font-size: 19px; font-weight: 700; }
+.glossary-pop .glossary-body p { margin: 0 0 8px; }
+.glossary-pop .glossary-body p:last-child { margin-bottom: 0; }
+.glossary-pop ul.g-list { margin: 4px 0 0; padding: 0; list-style: none; }
+.glossary-pop ul.g-list li { margin: 0 0 5px; }
+.glossary-pop ul.g-list b { color: var(--blue); }
+.glossary-pop .g-quote {
+  background: var(--card-bg); border-inline-start: 3px solid var(--light-blue);
+  border-radius: 8px; padding: 8px 12px; margin: 8px 0 0; font-size: 15px;
+}
+.glossary-pop .glossary-more {
+  display: inline-block; margin-top: 12px; color: var(--blue);
+  font-weight: 700; text-decoration: none; font-size: 15px;
+}
+.glossary-pop .glossary-more:hover { text-decoration: underline; }
+.glossary-pop .glossary-close {
+  position: absolute; inset-inline-start: 10px; top: 8px;
+  border: 0; background: none; font-size: 22px; line-height: 1;
+  color: var(--muted); cursor: pointer; padding: 0;
+}
+.glossary-pop .glossary-close:hover { color: var(--red); }

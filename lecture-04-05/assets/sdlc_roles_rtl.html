@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SDLC — שלבים ובעלי תפקידים</title>
+<style>
+  :root{--blue:#0E5489;--blue2:#1B6FB0;--ink:#0B2E4F;--muted:#6B7A8C;
+    --orange:#E08A2B;--purple:#6C5CB8;--green:#2E9E6B;--slate:#5A7184;--gold:#E5A21A;}
+  *{box-sizing:border-box}
+  body{margin:0;background:#EEF2F6;font-family:Heebo,Assistant,"Segoe UI",Arial,sans-serif;color:var(--ink)}
+  .wrap{max-width:1500px;margin:22px auto;padding:0 16px}
+  .panel{background:#fff;border-radius:18px;box-shadow:0 6px 30px rgba(15,40,70,.10);padding:22px 22px 18px}
+  h1{margin:0 0 4px;font-size:22px}
+  .sub{color:var(--muted);font-size:13px}
+  .dir{color:var(--blue);font-size:12px;font-weight:600;margin:6px 0 4px}
+  .hint{color:var(--muted);font-size:12px;margin-bottom:14px}
+
+  .rail{display:flex;gap:10px;overflow-x:auto;padding-bottom:6px;align-items:stretch}
+  .card{flex:1 1 0;min-width:160px;display:flex;flex-direction:column;border:1px solid #E3E8EE;
+         border-radius:14px;overflow:hidden;background:#FBFCFE;position:relative}
+  .card.flagged{border:2px solid var(--gold);box-shadow:0 0 0 4px rgba(229,162,26,.12)}
+  .here{position:absolute;top:-1px;left:50%;transform:translateX(-50%);background:var(--gold);color:#fff;
+         font-size:11px;font-weight:700;padding:2px 12px;border-radius:0 0 9px 9px;z-index:2}
+  .head{background:linear-gradient(180deg,var(--blue2),var(--blue));color:#fff;padding:14px 10px 12px;
+         display:flex;flex-direction:column;align-items:center;gap:6px;position:relative}
+  .card.flagged .head{padding-top:20px}
+  .num{width:26px;height:26px;border-radius:50%;background:rgba(255,255,255,.22);display:flex;
+        align-items:center;justify-content:center;font-weight:700;font-size:14px}
+  .stage{font-size:15px;font-weight:700;text-align:center;line-height:1.15}
+  .more{position:absolute;top:8px;left:9px;font-size:13px;opacity:.7}
+
+  .owner{margin:10px 8px 4px;padding:8px 10px;border-radius:10px;background:#FFF6E0;
+          border:1px solid #F3D58A;display:flex;flex-direction:column;align-items:center;gap:1px;text-align:center}
+  .owner .ico{color:var(--gold);font-size:14px;line-height:1}
+  .owner .olabel{font-size:10px;color:#9a7b1f;font-weight:600}
+  .owner b{font-size:11.5px;color:#7a5c10}
+
+  .players{padding:6px 8px 12px;display:flex;flex-direction:column;gap:6px}
+  .pill{font-size:10.5px;line-height:1.25;padding:5px 9px;border-radius:8px;background:#fff;
+         border:1px solid #E3E8EE;border-inline-start:4px solid #ccc}
+  .g-orange{border-inline-start-color:var(--orange);background:#FDF2E6}
+  .g-blue{border-inline-start-color:var(--blue2);background:#EAF2FA}
+  .g-purple{border-inline-start-color:var(--purple);background:#F0EDFA}
+  .g-green{border-inline-start-color:var(--green);background:#E9F6EF}
+  .g-slate{border-inline-start-color:var(--slate);background:#EEF1F4}
+
+  .clk{cursor:pointer;transition:transform .08s ease, box-shadow .12s ease}
+  .pill.clk:hover,.owner.clk:hover{transform:translateY(-1px);box-shadow:0 3px 10px rgba(15,40,70,.12)}
+  .head.clk:hover{filter:brightness(1.08)}
+
+  .legend{margin-top:16px;padding-top:14px;border-top:1px solid #E3E8EE;display:flex;flex-wrap:wrap;
+           gap:14px 22px;align-items:center;font-size:12.5px;color:#33424F}
+  .lg{display:flex;align-items:center;gap:7px}
+  .sw{width:16px;height:14px;border-radius:3px;display:inline-block;border-inline-start:4px solid #ccc}
+  .sw.g-orange{border-inline-start-color:var(--orange);background:#FDF2E6}
+  .sw.g-blue{border-inline-start-color:var(--blue2);background:#EAF2FA}
+  .sw.g-purple{border-inline-start-color:var(--purple);background:#F0EDFA}
+  .sw.g-green{border-inline-start-color:var(--green);background:#E9F6EF}
+  .sw.g-slate{border-inline-start-color:var(--slate);background:#EEF1F4}
+  .owns{display:flex;align-items:center;gap:7px;font-weight:600}
+  .owns i{width:16px;height:14px;border-radius:3px;background:#FFF6E0;border:1px solid #F3D58A;
+           display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:10px}
+  .note{margin-top:12px;color:#C0560E;font-size:12.5px;font-weight:600}
+
+  .overlay{position:fixed;inset:0;background:rgba(11,46,79,.55);display:none;align-items:center;
+            justify-content:center;z-index:50;padding:20px}
+  .overlay.open{display:flex}
+  .modal{background:#fff;max-width:470px;width:100%;border-radius:16px;padding:24px 22px 22px;
+          box-shadow:0 20px 60px rgba(0,0,0,.3);position:relative}
+  .modal .x{position:absolute;top:12px;left:14px;border:none;background:#EEF2F6;width:30px;height:30px;
+             border-radius:50%;font-size:16px;cursor:pointer;color:#5A6B7B}
+  .modal .kind{font-size:11px;font-weight:700;color:#fff;background:var(--blue);display:inline-block;
+                padding:3px 11px;border-radius:20px;margin-bottom:10px}
+  .modal h3{margin:0 0 8px;font-size:19px;color:var(--ink)}
+  .modal p{margin:0;font-size:14.5px;line-height:1.65;color:#33424F}
+</style>
+</head>
+<body>
+  <div class="wrap"><div class="panel">
+    <h1>שלבי ה-SDLC — מי מוביל ומי משתתף בכל שלב</h1>
+    <div class="sub">מיפוי בעלי התפקידים והאקטורים לאורך מחזור החיים של מערכת המידע</div>
+    <div class="dir">← הזמן מתקדם מימין לשמאל</div>
+    <div class="hint">לחצו על שלב או על תפקיד לקבלת הסבר קצר.</div>
+
+    <div class="rail">
+    <div class="card">
+      
+      <div class="head clk" data-pop="stage:init"><span class="num">1</span><span class="stage">ייזום</span><span class="more">ⓘ</span></div>
+      <div class="owner clk" data-pop="role:PM"><span class="ico">★</span><span class="olabel">בעל אחריות</span><b>PM / Program Manager</b></div>
+      <div class="players"><span class="pill clk g-orange" data-pop="role:MGMT">הנהלה בכירה והנהלות הארגונים</span><span class="pill clk g-blue" data-pop="role:BA">Business Analyst</span></div>
+    </div>
+    <div class="card">
+      
+      <div class="head clk" data-pop="stage:asis"><span class="num">2</span><span class="stage">חקר מצב קיים</span><span class="more">ⓘ</span></div>
+      <div class="owner clk" data-pop="role:BA"><span class="ico">★</span><span class="olabel">בעל אחריות</span><b>Business Analyst</b></div>
+      <div class="players"><span class="pill clk g-orange" data-pop="role:MGMT">הנהלה בכירה והנהלות הארגונים</span><span class="pill clk g-orange" data-pop="role:USRD">משתמשי מערכת ישירים</span><span class="pill clk g-orange" data-pop="role:USRI">משתמשי מערכת עקיפים</span><span class="pill clk g-purple" data-pop="role:SA">Designer / System Analyst</span><span class="pill clk g-purple" data-pop="role:DS">Data Scientist</span><span class="pill clk g-purple" data-pop="role:BI">Reporting / BI</span></div>
+    </div>
+    <div class="card flagged">
+      <div class="here">אנחנו כאן</div>
+      <div class="head clk" data-pop="stage:req"><span class="num">3</span><span class="stage">ניתוח דרישות</span><span class="more">ⓘ</span></div>
+      <div class="owner clk" data-pop="role:BA"><span class="ico">★</span><span class="olabel">בעל אחריות</span><b>Business Analyst</b></div>
+      <div class="players"><span class="pill clk g-orange" data-pop="role:USRD">משתמשי מערכת ישירים</span><span class="pill clk g-orange" data-pop="role:USRI">משתמשי מערכת עקיפים</span><span class="pill clk g-orange" data-pop="role:MGMT">הנהלה בכירה והנהלות הארגונים</span><span class="pill clk g-purple" data-pop="role:UX">UX / Creative</span><span class="pill clk g-purple" data-pop="role:SA">Designer / System Analyst</span></div>
+    </div>
+    <div class="card">
+      
+      <div class="head clk" data-pop="stage:feas"><span class="num">4</span><span class="stage">חקר ישימות</span><span class="more">ⓘ</span></div>
+      <div class="owner clk" data-pop="role:PM"><span class="ico">★</span><span class="olabel">בעל אחריות</span><b>PM / Program Manager</b></div>
+      <div class="players"><span class="pill clk g-orange" data-pop="role:MGMT">הנהלה בכירה והנהלות הארגונים</span><span class="pill clk g-blue" data-pop="role:BA">Business Analyst</span><span class="pill clk g-purple" data-pop="role:SA">Designer / System Analyst</span><span class="pill clk g-purple" data-pop="role:DS">Data Scientist</span><span class="pill clk g-slate" data-pop="role:DO">DevOps</span></div>
+    </div>
+    <div class="card">
+      
+      <div class="head clk" data-pop="stage:design"><span class="num">5</span><span class="stage">עיצוב</span><span class="more">ⓘ</span></div>
+      <div class="owner clk" data-pop="role:SA"><span class="ico">★</span><span class="olabel">בעל אחריות</span><b>Designer / System Analyst</b></div>
+      <div class="players"><span class="pill clk g-purple" data-pop="role:UX">UX / Creative</span><span class="pill clk g-purple" data-pop="role:DS">Data Scientist</span><span class="pill clk g-green" data-pop="role:DEV">Developer (FE/BE/DBA/MW)</span><span class="pill clk g-green" data-pop="role:FS">Full-stack Developer</span><span class="pill clk g-purple" data-pop="role:BI">Reporting / BI</span></div>
+    </div>
+    <div class="card">
+      
+      <div class="head clk" data-pop="stage:dev"><span class="num">6</span><span class="stage">פיתוח</span><span class="more">ⓘ</span></div>
+      <div class="owner clk" data-pop="role:DEV"><span class="ico">★</span><span class="olabel">בעל אחריות</span><b>Developer (FE/BE/DBA/MW)</b></div>
+      <div class="players"><span class="pill clk g-green" data-pop="role:FS">Full-stack Developer</span><span class="pill clk g-purple" data-pop="role:BI">Reporting / BI</span><span class="pill clk g-slate" data-pop="role:DO">DevOps</span><span class="pill clk g-purple" data-pop="role:SA">Designer / System Analyst</span></div>
+    </div>
+    <div class="card">
+      
+      <div class="head clk" data-pop="stage:test"><span class="num">7</span><span class="stage">בדיקות</span><span class="more">ⓘ</span></div>
+      <div class="owner clk" data-pop="role:QA"><span class="ico">★</span><span class="olabel">בעל אחריות</span><b>QA</b></div>
+      <div class="players"><span class="pill clk g-green" data-pop="role:DEV">Developer (FE/BE/DBA/MW)</span><span class="pill clk g-green" data-pop="role:FS">Full-stack Developer</span><span class="pill clk g-orange" data-pop="role:USRD">משתמשי מערכת ישירים</span><span class="pill clk g-blue" data-pop="role:BA">Business Analyst</span></div>
+    </div>
+    <div class="card">
+      
+      <div class="head clk" data-pop="stage:ops"><span class="num">8</span><span class="stage">הטמעה ותפעול</span><span class="more">ⓘ</span></div>
+      <div class="owner clk" data-pop="role:DO"><span class="ico">★</span><span class="olabel">בעל אחריות</span><b>DevOps</b></div>
+      <div class="players"><span class="pill clk g-slate" data-pop="role:SUP">ארגוני תמיכה (1st / 2nd / 3rd)</span><span class="pill clk g-slate" data-pop="role:QA">QA</span><span class="pill clk g-orange" data-pop="role:USRD">משתמשי מערכת ישירים</span><span class="pill clk g-orange" data-pop="role:USRI">משתמשי מערכת עקיפים</span><span class="pill clk g-orange" data-pop="role:MGMT">הנהלה בכירה והנהלות הארגונים</span></div>
+    </div></div>
+
+    <div class="legend"><span class="lg"><i class="sw g-orange"></i>בעלי עניין ומשתמשים</span><span class="lg"><i class="sw g-blue"></i>ניהול וניתוח עסקי</span><span class="lg"><i class="sw g-purple"></i>עיצוב, חוויה ונתונים</span><span class="lg"><i class="sw g-green"></i>פיתוח</span><span class="lg"><i class="sw g-slate"></i>תפעול, איכות ותמיכה</span><span class="owns"><i>★</i>בעל אחריות לשלב</span></div>
+    <div class="note">בעלי התפקידים בונים את המערכת · משתמשים/אקטורים (כתום) משתמשים בה — ההבחנה מתחדדת בשלבי חקר המצב והדרישות.</div>
+  </div></div>
+
+  <div class="overlay" id="ov">
+    <div class="modal">
+      <button class="x" id="xbtn" aria-label="סגור">✕</button>
+      <span class="kind" id="mk"></span>
+      <h3 id="mt"></h3>
+      <p id="mb"></p>
+    </div>
+  </div>
+
+<script>
+const INFO = {"role:MGMT": {"kind": "תפקיד / אקטור", "title": "הנהלה בכירה והנהלות הארגונים", "body": "מאשרת תקציב, מטרות והחלטות Go/No-Go, מגדירה סדרי עדיפויות עסקיים ונותנת חסות לפרויקט."}, "role:USRD": {"kind": "תפקיד / אקטור", "title": "משתמשי מערכת ישירים", "body": "מי שמפעיל את המערכת ביום-יום, ומהווה מקור מרכזי לדרישות ולבדיקות הקבלה (UAT)."}, "role:USRI": {"kind": "תפקיד / אקטור", "title": "משתמשי מערכת עקיפים", "body": "נהנה מתוצרי המערכת מבלי להפעיל אותה ישירות, למשל מקבלי דוחות והחלטות."}, "role:PM": {"kind": "תפקיד / אקטור", "title": "PM / Program Manager", "body": "אחראי על לוחות הזמנים, התקציב, הסיכונים והתיאום בין כל בעלי העניין, ומוביל את המשא ומתן ובחירת הספקים."}, "role:BA": {"kind": "תפקיד / אקטור", "title": "Business Analyst", "body": "מגשר בין הצרכים העסקיים למימוש הטכני, אוסף ומגדיר דרישות ומבצע ניתוח עלות-תועלת."}, "role:DS": {"kind": "תפקיד / אקטור", "title": "Data Scientist", "body": "מנתח נתונים, בונה מודלים ותובנות ובוחן את היתכנות הפתרונות מבוססי הנתונים."}, "role:SA": {"kind": "תפקיד / אקטור", "title": "Designer / System Analyst", "body": "מתרגם את הדרישות לעיצוב מערכת וארכיטקטורה, ומגדיר רכיבים, נתונים וממשקים."}, "role:UX": {"kind": "תפקיד / אקטור", "title": "UX / Creative", "body": "מעצב את חוויית וממשק המשתמש: זרימות, מסכים ושימושיות."}, "role:BI": {"kind": "תפקיד / אקטור", "title": "Reporting / BI", "body": "בונה דוחות, דשבורדים ושכבות מידע ניהולי מתוך נתוני המערכת."}, "role:DEV": {"kind": "תפקיד / אקטור", "title": "Developer (FE/BE/DBA/MW)", "body": "מפתח Frontend, Backend, DBA ו-Middleware — כותב את הקוד ובונה את רכיבי המערכת."}, "role:FS": {"kind": "תפקיד / אקטור", "title": "Full-stack Developer", "body": "מפתח Full-stack שעובד גם בצד הלקוח וגם בצד השרת."}, "role:DO": {"kind": "תפקיד / אקטור", "title": "DevOps", "body": "אחראי על CI/CD, תשתיות, פריסה, ניטור ויציבות הסביבה."}, "role:QA": {"kind": "תפקיד / אקטור", "title": "QA", "body": "מתכנן ומבצע בדיקות, מאתר תקלות ומוודא עמידה בדרישות לפני העלייה לאוויר."}, "role:SUP": {"kind": "תפקיד / אקטור", "title": "ארגוני תמיכה (1st / 2nd / 3rd)", "body": "מעניק תמיכה למשתמשים בשלוש רמות (1st, 2nd, 3rd) לאחר העלייה לאוויר."}, "stage:init": {"kind": "שלב SDLC", "title": "ייזום", "body": "הגדרת הצורך העסקי, מטרות הפרויקט, ההיקף הראשוני, נותני החסות וההצדקה הכלכלית. תוצר עיקרי: מסמך ייזום (Project Charter)."}, "stage:asis": {"kind": "שלב SDLC", "title": "חקר מצב קיים", "body": "מיפוי התהליכים, המערכות והנתונים הקיימים (As-Is) — כיצד הדברים פועלים היום, כולל כשלים וצווארי בקבוק. תוצר עיקרי: תיאור המצב הקיים."}, "stage:req": {"kind": "שלב SDLC", "title": "ניתוח דרישות", "body": "איסוף והגדרה של מה המערכת צריכה לעשות: דרישות פונקציונליות ולא-פונקציונליות, תרחישי שימוש ואקטורים. תוצר עיקרי: מסמך דרישות (SRS)."}, "stage:feas": {"kind": "שלב SDLC", "title": "חקר ישימות", "body": "בחינת חלופות מימוש והכרעת Build מול Buy, בדיקת היתכנות טכנית, כלכלית ותפעולית, הוצאת RFP, משא ומתן ובחירת ספק. תוצר עיקרי: דוח ישימות והמלצה."}, "stage:design": {"kind": "שלב SDLC", "title": "עיצוב", "body": "תרגום הדרישות לארכיטקטורה: מבנה המערכת, מסד הנתונים, הממשקים וחוויית המשתמש. תוצר עיקרי: מסמך עיצוב."}, "stage:dev": {"kind": "שלב SDLC", "title": "פיתוח", "body": "כתיבת הקוד, בניית הרכיבים, האינטגרציות ומסד הנתונים בהתאם לעיצוב. תוצר עיקרי: גרסת תוכנה לבדיקות."}, "stage:test": {"kind": "שלב SDLC", "title": "בדיקות", "body": "אימות שהמערכת עומדת בדרישות: בדיקות יחידה, אינטגרציה, מערכת ובדיקות קבלה (UAT) על ידי המשתמשים. תוצר עיקרי: מערכת מאושרת לעלייה."}, "stage:ops": {"kind": "שלב SDLC", "title": "הטמעה ותפעול", "body": "העלאה לסביבת הייצור, הדרכת משתמשים, מעבר לתפעול שוטף, ניטור ותמיכה. תוצר עיקרי: מערכת חיה בתפעול."}};
+const ov=document.getElementById('ov');
+function close(){ov.classList.remove('open');}
+document.addEventListener('click',function(e){
+  const t=e.target.closest('[data-pop]');
+  if(t){const d=INFO[t.getAttribute('data-pop')];
+    if(d){document.getElementById('mk').textContent=d.kind;
+      document.getElementById('mt').textContent=d.title;
+      document.getElementById('mb').textContent=d.body;
+      ov.classList.add('open');}
+    return;}
+  if(e.target===ov||e.target.id==='xbtn') close();
+});
+document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});
+</script>
+</body>
+</html>
