@@ -16,7 +16,7 @@ Reveal.initialize({
   center: false,            // top-align slides (we paint a title bar at the top)
   rtl: false,               // keep arrow-key nav conventional; content is RTL via dir
   hash: true,               // deep-link each slide in the URL
-  slideNumber: 'c/t',
+  slideNumber: 'c',         // just the slide number (bottom-left, styled in sad.css)
   showSlideNumber: 'all',
   controls: true,
   controlsTutorial: false,

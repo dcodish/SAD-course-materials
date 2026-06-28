@@ -105,23 +105,30 @@
 
 .reveal section > .subtitle {
   flex: 0 0 auto;
-  margin: 18px var(--pad-x) 0;
-  font-size: 24px;
+  margin: 10px var(--pad-x) 0;
+  font-size: 22px;
   font-weight: 400;
   color: var(--muted);
   text-align: right;
 }
 
-/* The free-form content region below the title bar. */
+/* The free-form content region below the title bar.
+   RULE: a content slide must FIT the 1280x720 canvas — it never scrolls. The body
+   is overflow:hidden on purpose: if your content is clipped, that's the signal to
+   trim/resize it, NOT to add a scrollbar. The only sanctioned exception is a long
+   diagram/image you genuinely want to explore — opt that one slide in with
+   class="body scroll". See web/SLIDE_AUTHORING.md ("No scroll on content slides"). */
 .reveal section > .body {
   flex: 1 1 auto;
   min-height: 0;
-  padding: 22px var(--pad-x) 28px;
-  overflow: auto;            /* long slides scroll rather than overflow the canvas */
+  padding: 16px var(--pad-x) 16px;
+  overflow: hidden;          /* content slides never scroll — author them to fit */
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 12px;
 }
+/* Sanctioned exception: a long diagram/image to scroll through. */
+.reveal section > .body.scroll { overflow: auto; }
 
 /* =============================================================================
    Cards (add_card)
@@ -130,9 +137,9 @@
   background: var(--card-bg);
   border: 1px solid var(--card-border);
   border-radius: 16px;
-  padding: 20px 26px;
+  padding: 14px 22px;
 }
-.reveal .card.tight { padding: 14px 18px; }
+.reveal .card.tight { padding: 10px 16px; }
 
 /* =============================================================================
    Bulleted RTL list (add_bullet_list) — blue square bullets
@@ -141,9 +148,9 @@
 .reveal ul.bullets > li {
   position: relative;
   padding-inline-start: 26px;
-  margin: 0 0 14px;
-  font-size: 24px;
-  line-height: 1.45;
+  margin: 0 0 8px;
+  font-size: 22px;
+  line-height: 1.35;
   color: var(--body);
 }
 .reveal ul.bullets > li::before {
@@ -159,8 +166,8 @@
 .reveal ul.bullets > li:last-child { margin-bottom: 0; }
 .reveal ul.bullets ul { list-style: none; margin: 8px 0 0; padding: 0; }
 .reveal ul.bullets ul > li {
-  position: relative; padding-inline-start: 22px; margin: 0 0 8px;
-  font-size: 20px; color: var(--muted);
+  position: relative; padding-inline-start: 22px; margin: 0 0 5px;
+  font-size: 18px; color: var(--muted);
 }
 .reveal ul.bullets ul > li::before {
   content: ""; position: absolute; inset-inline-start: 4px; top: 0.62em;
@@ -175,25 +182,25 @@
   background: var(--hero-bg);
   border: 2px solid var(--orange);
   border-radius: 16px;
-  padding: 18px 26px;
+  padding: 12px 22px;
 }
 .reveal .hero > h3 {
-  margin: 0 0 10px;
+  margin: 0 0 6px;
   color: var(--orange);
-  font-size: 24px;
+  font-size: 22px;
   font-weight: 700;
   text-align: right;
   text-transform: none;
   letter-spacing: normal;
 }
-.reveal .hero > p { margin: 0; font-size: 21px; color: var(--body); line-height: 1.5; }
+.reveal .hero > p { margin: 0; font-size: 20px; color: var(--body); line-height: 1.4; }
 
 /* Bottom takeaway line (centered dark-blue) */
 .reveal .bottom-line {
   margin: auto 0 0;
   text-align: center;
   color: var(--dark-blue);
-  font-size: 23px;
+  font-size: 21px;
   font-weight: 700;
 }
 
@@ -202,13 +209,13 @@
    ============================================================================= */
 .reveal .callout {
   border-radius: 14px;
-  padding: 16px 20px 16px 20px;
+  padding: 12px 16px;
   border-inline-start: 6px solid var(--gray);
   background: var(--card-bg);
-  font-size: 21px;
+  font-size: 20px;
 }
 .reveal .callout > .label {
-  display: block; font-weight: 700; margin-bottom: 6px; font-size: 18px;
+  display: block; font-weight: 700; margin-bottom: 4px; font-size: 17px;
   letter-spacing: .02em;
 }
 .reveal .callout.ai      { background: #EAF3FB; border-inline-start-color: var(--blue); }
@@ -232,8 +239,8 @@
 /* =============================================================================
    Layout helpers
    ============================================================================= */
-.reveal .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
-.reveal .cols-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.reveal .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.reveal .cols-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
 .reveal .grow { flex: 1 1 auto; }
 .reveal .center { text-align: center; }
 .reveal .muted { color: var(--muted); }
@@ -242,7 +249,7 @@
 /* Column / panel heading inside cards */
 .reveal .card > h3,
 .reveal .panel-title {
-  margin: 0 0 10px; font-size: 22px; font-weight: 700; color: var(--dark-blue);
+  margin: 0 0 6px; font-size: 20px; font-weight: 700; color: var(--dark-blue);
   text-align: right; text-transform: none; letter-spacing: normal;
 }
 
@@ -338,8 +345,25 @@
 }
 .reveal section.todo-slide .todo-card .slug { color: var(--blue); font-weight: 700; direction: ltr; }
 
-/* Slide-number + progress styling */
-.reveal .slide-number { background: rgba(0,80,140,.85); }
+/* =============================================================================
+   Acronyms (build_web.py): first use spelled out inline, later uses in a footer.
+   ============================================================================= */
+.reveal .acro-def { color: var(--muted); font-weight: 400; font-size: .8em; }
+.reveal section.has-acro-footer > .body { padding-bottom: 28px; }  /* reserve the strip */
+.reveal section > .acro-footer {
+  position: absolute; bottom: 8px; left: 240px; right: var(--pad-x);
+  text-align: right; direction: rtl;
+  font-size: 13px; line-height: 1.2; color: var(--muted);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.reveal .acro-footer .en { color: var(--muted); }
+
+/* Slide-number (moved to bottom-LEFT; reveal's default is bottom-right) + progress */
+.reveal .slide-number {
+  background: rgba(0,80,140,.85);
+  left: 12px; right: auto;
+  bottom: 12px;
+}
 .reveal .progress { color: var(--blue); }
 
 /* =============================================================================
@@ -411,7 +435,7 @@
 .reveal section > .sdlc-chip {
   position: absolute;
   bottom: 16px;
-  left: 36px;          /* physical left so it stays clear of reveal's bottom-right controls */
+  left: 92px;          /* clears the bottom-left slide number (.slide-number) */
   z-index: 6;
   display: inline-flex; align-items: center; gap: 7px;
   background: var(--blue); color: #fff;

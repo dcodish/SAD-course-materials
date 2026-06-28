@@ -17,15 +17,62 @@
       <h1>מבוא לניתוח ועיצוב מערכות מידע</h1>
       <div class="lecture-no">הרצאה 1</div>
     </section>
+    <!-- Opening video — "סרטון פתיחה" from the original L1 deck (slide 2, media1.mp4 =
+         old lectures/video1.mp4, copied to assets/video1.mp4). A short hook that opens
+         the whole course, shown right after the title. Click to play (instructor-paced;
+         no autoplay so it doesn't fire on slide entry). No SDLC chip — this is a
+         pre-content slide (sdlc_phase: "" in slides.yaml suppresses it). -->
+    <section data-slug="opening-video">
+      <h1>ברוכים הבאים</h1>
+      <div class="subtitle">סרטון פתיחה — רגע לפני שמתחילים</div>
+      <div class="body" style="display:flex; align-items:center; justify-content:center;">
+        <video class="opening-video"
+               src="assets/video1.mp4"
+               controls playsinline preload="metadata"
+               style="max-width:100%; max-height:500px; width:auto; height:auto;
+                      border-radius:8px; box-shadow:0 6px 22px rgba(0,0,0,.20);">
+          הדפדפן אינו תומך בהפעלת וידאו.
+        </video>
+      </div>
+    </section>
     <section class="toc-slide" data-slug="toc">
       <h1>סדר היום</h1>
       <div class="body">
         <ol class="toc">
-          <li class="active">מבוא ו-SDLC</li>
+          <li class="active">מבוא ו-SDLC — מחזור פיתוח תוכנה (Software Development Life Cycle)</li>
           <li>ייזום: זיהוי בעיה</li>
           <li>חקר מצב קיים</li>
           <li>סיכום</li>
         </ol>
+      </div>
+    </section>
+    <!-- Course logistics — restored from the original L1 deck (slide 4). Titles only;
+         the details are covered live in class. The ORIGINAL values from the source deck
+         are preserved below for reference / easy fill-in:
+           מרצי הקורס:  ד"ר דוד קודיש · איציק גורביץ
+           מתרגלים:     דרור בראל · עמית מנצור
+           שעות קבלה:   יפורסם במודל
+           סילבוס:      יפורסם במודל
+           דרישות קדם:  יסודות מ"מ · בסיסי נתונים · פתמ"ע
+           פרויקט הקורס: פרויקט מתמשך לאורך הסמסטר
+         No SDLC chip — administrative slide (sdlc_phase: "" in slides.yaml). -->
+    <section data-slug="logistics">
+      <h1>לוגיסטיקה — איך הקורס מתנהל</h1>
+      <div class="subtitle">נעבור על הפרטים בכיתה</div>
+      <div class="body">
+
+        <div class="cols-3">
+          <div class="card"><div class="panel-title">מרצי הקורס</div></div>
+          <div class="card"><div class="panel-title">מתרגלים</div></div>
+          <div class="card"><div class="panel-title">שעות קבלה</div></div>
+        </div>
+
+        <div class="cols-3">
+          <div class="card"><div class="panel-title">סילבוס</div></div>
+          <div class="card"><div class="panel-title">פרויקט הקורס</div></div>
+          <div class="card"><div class="panel-title">דרישות קדם</div></div>
+        </div>
+
       </div>
     </section>
     <!-- A3 — מה זה ניתוח ועיצוב מערכות מידע + מטרות הקורס.
@@ -44,7 +91,7 @@
           <p style="margin:0;">
             ניתוח ועיצוב מערכות מידע הוא התחום שמתרגם <strong>צורך עסקי</strong> ל-<strong>מערכת
             שמספקת ערך</strong>. האנליסט/ית עומד/ת באמצע: מבין/ה את התהליך והבעיה בשטח,
-            ומתרגם/ת אותם להגדרה ברורה שצוות פיתוח (היום — גם <span class="en">AI</span>) יכול לבנות לפיה.
+            ומתרגם/ת אותם להגדרה ברורה שצוות פיתוח (היום — גם <span class="en">AI</span> <span class="acro-def">(<span class="en">Artificial Intelligence</span> · בינה מלאכותית)</span>) יכול לבנות לפיה.
           </p>
         </div>
 
@@ -63,10 +110,12 @@
       </div>
     </section>
     <!-- A4 — מהנתון לתובנה: פירמידת DIKW (create_dikw_pyramid_slide.py).
-         Original redesign (enriched from old slide 5). The four levels build up
-         bottom->top as fragments (data first, wisdom last), each with a one-line
-         gloss and a campus micro-example, then the bottom-line: why we build systems. -->
-    <section data-slug="dikw-pyramid">
+         Enriched from old slide 5. Four levels build up bottom->top as fragments
+         (data first, wisdom last), each with a one-line gloss and a NEUTRAL generic
+         example (NOT the campus story — that's only introduced later, in the ייזום
+         section). Punchline: the purpose of an organizational IS is to support
+         decision-making. -->
+    <section data-slug="dikw-pyramid" class="has-acro-footer">
       <div class="sdlc-chip" title="שלב 1 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>ייזום</div>
       <h1>מהנתון לתובנה — פירמידת <span class="en">DIKW</span></h1>
       <div class="subtitle">איך נתונים גולמיים הופכים להחלטה — וזו בדיוק הסיבה שבונים מערכות מידע</div>
@@ -78,40 +127,40 @@
           <div style="display:flex; flex-direction:column-reverse; gap:8px;">
 
             <div class="card tight fragment" style="border-inline-start:6px solid var(--gray); display:flex; align-items:center; gap:14px;">
-              <div style="width:118px; text-align:center;">
+              <div style="width:118px; text-align:center; display:flex; flex-direction:column; gap:5px;">
                 <div style="font-size:24px; font-weight:700; color:var(--blue);"><span class="en">Data</span></div>
                 <div class="muted" style="font-size:16px;">נתונים</div>
               </div>
-              <div style="font-size:19px; line-height:1.4;">עובדות גולמיות, ללא הקשר. <span class="muted">לדוגמה: רשומות הזמנה — מי, מה, מתי.</span></div>
+              <div style="font-size:19px; line-height:1.4;">עובדות גולמיות, ללא הקשר. <span class="muted">לדוגמה: רשומות מכירה — מי, מה, מתי.</span></div>
             </div>
 
             <div class="card tight fragment" style="border-inline-start:6px solid var(--light-blue); display:flex; align-items:center; gap:14px;">
-              <div style="width:118px; text-align:center;">
+              <div style="width:118px; text-align:center; display:flex; flex-direction:column; gap:5px;">
                 <div style="font-size:24px; font-weight:700; color:var(--blue);"><span class="en">Information</span></div>
                 <div class="muted" style="font-size:16px;">מידע</div>
               </div>
-              <div style="font-size:19px; line-height:1.4;">נתונים מאורגנים שעונים על "מה?". <span class="muted">"שיא ההזמנות הוא ב-<span class="en">12:30</span>".</span></div>
+              <div style="font-size:19px; line-height:1.4;">נתונים מאורגנים שעונים על "מה?". <span class="muted">"שיא המכירות הוא ב-<span class="en">12:00</span>".</span></div>
             </div>
 
             <div class="card tight fragment" style="border-inline-start:6px solid var(--blue); display:flex; align-items:center; gap:14px;">
-              <div style="width:118px; text-align:center;">
+              <div style="width:118px; text-align:center; display:flex; flex-direction:column; gap:5px;">
                 <div style="font-size:24px; font-weight:700; color:var(--blue);"><span class="en">Knowledge</span></div>
                 <div class="muted" style="font-size:16px;">ידע</div>
               </div>
-              <div style="font-size:19px; line-height:1.4;">דפוסים שעונים על "איך?". <span class="muted">"כדאי להכין יותר כריכים לפני הצהריים".</span></div>
+              <div style="font-size:19px; line-height:1.4;">דפוסים שעונים על "איך?". <span class="muted">"כדאי לחדש מלאי לפני שעות הצהריים".</span></div>
             </div>
 
             <div class="card tight fragment" style="border-inline-start:6px solid var(--orange); display:flex; align-items:center; gap:14px;">
-              <div style="width:118px; text-align:center;">
+              <div style="width:118px; text-align:center; display:flex; flex-direction:column; gap:5px;">
                 <div style="font-size:24px; font-weight:700; color:var(--orange);"><span class="en">Wisdom</span></div>
                 <div class="muted" style="font-size:16px;">תבונה</div>
               </div>
-              <div style="font-size:19px; line-height:1.4;">החלטה ומדיניות שעונות על "מה לעשות?". <span class="muted">"מעבר להזמנה מראש בשעות השיא".</span></div>
+              <div style="font-size:19px; line-height:1.4;">החלטה ומדיניות שעונות על "מה לעשות?". <span class="muted">"להוסיף עמדת שירות בשעות השיא".</span></div>
             </div>
 
           </div>
 
-          <!-- Side rail: the climb + the campus thread -->
+          <!-- Side rail: the climb + the purpose of an organizational IS -->
           <div style="display:flex; flex-direction:column; gap:12px;">
             <div class="card fragment">
               <div class="panel-title">העלייה בפירמידה</div>
@@ -121,10 +170,8 @@
               </ul>
             </div>
             <div class="hero fragment">
-              <h3>אותו מקרה לאורך הקמפוס</h3>
-              <p>אותן רשומות הזמנה גולמיות מטפסות עד להחלטה: <span class="en">Data</span> ←
-                 <span class="en">Information</span> ← <span class="en">Knowledge</span> ←
-                 <span class="en">Wisdom</span>.</p>
+              <h3>מטרת מערכת מידע ארגונית</h3>
+              <p>היא לעזור ב<strong>קבלת החלטות</strong>.</p>
             </div>
           </div>
 
@@ -133,69 +180,71 @@
         <p class="bottom-line fragment">מערכת מידע קיימת כדי לטפס בפירמידה — להפוך נתונים גולמיים להחלטות.</p>
 
       </div>
+    <div class="acro-footer"><span class="acro"><span class="en">DIKW</span> = <span class="en">Data, Information, Knowledge, Wisdom</span> · נתונים, מידע, ידע, תבונה</span></div>
     </section>
-    <!-- A5 — 🤖 AI נכנס כבר עכשיו, לכל אורך המחזור. NEW (no pptx source).
-         Introduces the course's AI through-line on day one: AI in every SDLC phase,
-         the analyst's role shifting from producing to deciding/verifying, and the
-         recurring ⚠️ trust-but-challenge habit. Framing: AI is the coder handed a
-         spec — it does not replace the analyst or the engineering team.
-         Structure mirrors the gold-standard slides (cards reveal one beat at a time,
-         paired 🤖/⚠️ callouts, bottom-line). -->
-    <section data-slug="ai-in-lifecycle">
+    <!-- A5 — כללי היסוד לפרויקט (was the conceptual "AI in the lifecycle" slide;
+         reframed into the concrete day-one ground rules). Two ground rules:
+         (1) a shared course GitHub repo — slides, content, examples, the course
+             PROJECT, and more examples shared through the semester. The URL isn't
+             known yet; it's a placeholder. SEARCH "REPO URL" to fill it in later.
+         (2) the analyst owns the groundwork (set up interviews, ask, challenge, push,
+             understand the real need); AI assists (suggest what to ask, organize
+             interview/data outputs, draft summaries) but never replaces that work.
+         Carries the AI through-line (🤖 + ⚠️ trust-but-challenge) as a course rule.
+         Inherits the lecture default SDLC phase (init). MUST fit — no scroll. -->
+    <section data-slug="ground-rules" class="has-acro-footer">
       <div class="sdlc-chip" title="שלב 1 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>ייזום</div>
-      <h1>🤖 <span class="en">AI</span> נכנס כבר עכשיו — לכל אורך המחזור</h1>
-      <div class="subtitle">לא נושא לסוף הקורס: הבינה כבר חלק מכל שלב בפיתוח מערכת</div>
+      <h1>כללי היסוד לפרויקט</h1>
+      <div class="subtitle">איך נעבוד בקורס — המאגר המשותף, ומי עושה מה כשיש <span class="en">AI</span></div>
       <div class="body">
 
-        <p class="muted" style="margin:0;">
-          בכל שלב ב-<span class="en">SDLC</span> — מייזום ועד תפעול — הבינה כבר מפיקה תוצרים תוך שניות:
-          סיכומי ראיונות, תרשימים, ניסוח דרישות, ואפילו קוד. נחזור לזה בכל הרצאה.
-        </p>
+        <div class="card" style="display:flex; align-items:center; gap:16px; flex-wrap:wrap;">
+          <div style="flex:1 1 320px;">
+            <div class="panel-title">המאגר המשותף של הקורס (<span class="en">GitHub</span>)</div>
+            <p style="margin:0;">כל החומרים במקום אחד: שקפים, דוגמאות, <strong>פרויקט הקורס</strong>, ודוגמאות נוספות שנשתף לאורך הסמסטר.</p>
+          </div>
+          <!-- Student-facing course repo (GitHub file view: all md files + materials browsable,
+               README is the hub, links out to the live decks on Pages). The repo, not the Pages
+               site, is the home base students are pointed to. -->
+          <div style="flex:0 0 auto; background:#0d1117; color:#fff; border-radius:10px; padding:10px 16px; font-weight:600; display:flex; align-items:center; gap:10px;">
+            <span class="en">🔗 github.com/dcodish/SAD-course-materials</span>
+          </div>
+        </div>
 
         <div class="cols" style="align-items:stretch;">
-
-          <div class="callout ai fragment">
-            <span class="label">🤖 מה הבינה מביאה</span>
-            טיוטות מהר: מסכמת ראיונות, משרטטת תרשימים, מנסחת דרישות וכותבת קוד מתוך מפרט.
-            עבודה שלקחה שעות — מתחילה כטיוטה בשניות.
-          </div>
-
           <div class="card fragment" style="display:flex; flex-direction:column; gap:10px;">
-            <div class="panel-title">תפקיד האנליסט/ית משתנה</div>
+            <div class="panel-title">העבודה שלכם — האנליסט/ית</div>
             <ul class="bullets">
-              <li>מ<b>לייצר</b> תוצרים — ל<b>להחליט ולאמת</b></li>
-              <li>לשאול את השאלות הנכונות ולקבוע את ההיקף והגבולות</li>
-              <li>לאתגר את הפלט של הבינה — לא לקבל אותו כפי שהוא</li>
+              <li>להקים את הראיונות ולהגיע מוכנים</li>
+              <li>לשאול את השאלות הנכונות</li>
+              <li>לאתגר, ללחוץ ולברר עד שמבינים באמת</li>
+              <li>להבין את הצורך האמיתי של הלקוח — לא מה שנוח להניח</li>
             </ul>
           </div>
-
+          <div class="card fragment" style="display:flex; flex-direction:column; gap:10px;">
+            <div class="panel-title">🤖 במה ה-<span class="en">AI</span> עוזר</div>
+            <ul class="bullets">
+              <li>מציע מה לשאול ובמה להעמיק</li>
+              <li>מסכם ומארגן תוצרי ראיונות ואיסוף נתונים</li>
+              <li>מנסח טיוטות — סיכומים ודרישות</li>
+            </ul>
+          </div>
         </div>
 
         <div class="callout warn fragment">
-          <span class="label">⚠️ ההרגל שמתחיל היום — וחוזר בכל הרצאה</span>
-          אף פעם לא מקבלים פלט של בינה בעיניים עצומות. בכל פעם שואלים:
-          <b>מה היא פספסה, מה היא המציאה, ומה היא הניחה?</b> זה ההרגל המקצועי שנבנה לאורך כל הקורס.
+          <span class="label">⚠️ ה-<span class="en">AI</span> לא מחליף אתכם</span>
+          נשתמש ב-<span class="en">AI</span> בקורס בדיוק כמו אנליסט בשטח — לסיכומים ולכל מה שבאמת עוזר. אבל עבודת השטח עצמה — הראיונות, השאלות, האתגור — היא תמיד שלכם.
         </div>
-
-        <div class="hero fragment">
-          <h3>מי עושה מה — שלא יהיה בלבול</h3>
-          <p>
-            ה-<span class="en">AI</span> הוא ה<b>מתכנת/עוזר</b> שמקבל מפרט (<span class="en">spec</span>) — הוא <b>לא</b> מחליף את
-            האנליסט/ית ולא את צוות ההנדסה. הבינה לא "עושה את הניתוח במקומכם": ההיקף,
-            ההחלטות והאחריות נשארים שלכם, והצוות הטכני עדיין אחראי על דרישות לא-פונקציונליות ושילוב.
-          </p>
-        </div>
-
-        <p class="bottom-line">הבינה מגבירה את מה שנתתם לה — לכן ערך האנליסט/ית עובר מ׳לייצר׳ ל׳להחליט ולאמת׳.</p>
 
       </div>
+    <div class="acro-footer"><span class="acro"><span class="en">AI</span> = <span class="en">Artificial Intelligence</span> · בינה מלאכותית</span></div>
     </section>
     <!-- A6 — SDLC: מחזור חיי פיתוח מערכת (redesign, original authoring).
          The 8 phases of our model, in order, each with its one-line "what we do".
          Phase names + the `does` lines are verbatim from lectures.yaml (sdlc_phases).
          The 8 cards reveal one beat at a time; then the variants note and the
          "where are we" chip note land. -->
-    <section data-slug="sdlc-overview">
+    <section data-slug="sdlc-overview" class="has-acro-footer">
       <div class="sdlc-chip" title="שלב 1 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>ייזום</div>
       <h1><span class="en">SDLC</span> — מחזור חיי פיתוח מערכת</h1>
       <div class="subtitle">שמונה השלבים שילוו אותנו לאורך כל הקורס</div>
@@ -261,8 +310,9 @@
         <p class="bottom-line">ה-<span class="en">SDLC</span> הוא עמוד השדרה של הקורס — נתחיל בייזום ונלך שלב-שלב עד הטמעה ותפעול.</p>
 
       </div>
+    <div class="acro-footer"><span class="acro"><span class="en">SDLC</span> = <span class="en">Software Development Life Cycle</span> · מחזור פיתוח תוכנה</span> &nbsp;·&nbsp; <span class="acro"><span class="en">AI</span> = <span class="en">Artificial Intelligence</span> · בינה מלאכותית</span></div>
     </section>
-    <section class="sdlc-map" data-slug="lecture-01-sdlc-init">
+    <section class="sdlc-map has-acro-footer" data-slug="lecture-01-sdlc-init">
       <h1>היכן אנחנו ב-<span class="en">SDLC</span></h1>
       <div class="body">
         <div class="sdlc-stepper">
@@ -277,6 +327,7 @@
         </div>
         <p class="sdlc-now">בשלב זה: <b>ייזום</b> — מזהים בעיה עסקית ומגדירים מטרה</p>
       </div>
+    <div class="acro-footer"><span class="acro"><span class="en">SDLC</span> = <span class="en">Software Development Life Cycle</span> · מחזור פיתוח תוכנה</span></div>
     </section>
     <!-- B1 — הסיפור של הקורס: בעיה בקמפוס.
          Introduces the course's running example (campus food ordering) as a *business
@@ -284,16 +335,11 @@
          a student with a 15-min break, a manager drowning at noon — then a short pain
          list, and a bottom-line that this one problem will carry us through the whole
          SDLC. The spine slide every later lecture returns to. -->
-    <section data-slug="campus-problem">
+    <section data-slug="campus-problem" class="has-acro-footer">
       <div class="sdlc-chip" title="שלב 1 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>ייזום</div>
       <h1>הסיפור של הקורס: בעיה בקמפוס</h1>
       <div class="subtitle">המצב שנעבוד עליו כל הסמסטר — בשלב הייזום, כבעיה עסקית</div>
       <div class="body">
-
-        <p class="muted" style="margin:0;">
-          צהריים בקפיטריה. בין <span class="en">12:00</span> ל-<span class="en">14:00</span>
-          העומס בשיא, התור מתפתל החוצה — ושני אנשים חיים את אותה בעיה משני צדדים:
-        </p>
 
         <div class="cols" style="align-items:stretch;">
 
@@ -320,7 +366,7 @@
         <div class="card fragment">
           <div class="panel-title">הכאב היום — בקצרה</div>
           <ul class="bullets">
-            <li>תורים ארוכים בשעת השיא (<span class="en">12:00–14:00</span>) — סטודנטים מפספסים את ההפסקה הקצרה</li>
+            <li>תורים ארוכים בשעת ההפסקה (<span class="en">12:00–12:15</span>) — סטודנטים מפספסים את ההפסקה הקצרה</li>
             <li>מנות נמכרות עד אזילה — מי שמגיע מאוחר נשאר בלי</li>
             <li>אין למנהל/ת תמונת מצב אחת של ההזמנות — קשה לתפעל בשיא</li>
             <li>הקפיטריה מפסידה מכירות ומאבדת רצון טוב של לקוחות</li>
@@ -334,6 +380,37 @@
         </div>
 
         <p class="bottom-line">הסיפור הזה הוא עמוד השדרה של הקורס — נחזור אליו בכל שלב במחזור חיי הפיתוח (<span class="en">SDLC</span>).</p>
+
+      </div>
+    <div class="acro-footer"><span class="acro"><span class="en">SDLC</span> = <span class="en">Software Development Life Cycle</span> · מחזור פיתוח תוכנה</span></div>
+    </section>
+    <!-- B1.5 — המודל לפתרון בעיה עסקית (restored from original deck slide 11: the
+         "six steps problem solving model" / RCA). FRAMEWORK ONLY — each step with a
+         generic one-liner, NOT filled in for campus (the following slides walk steps 1-2
+         and fill them in on the campus example; 3-6 unfold across the course). Steps 1-2
+         are tagged "this lecture", 3-6 "later". Closing note keeps the "solution types"
+         (managerial/technological/other). phase: init. MUST fit. -->
+    <section data-slug="six-step-model">
+      <div class="sdlc-chip" title="שלב 1 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>ייזום</div>
+      <h1>המודל לפתרון בעיה עסקית</h1>
+      <div class="subtitle">המסגרת בלבד — שישה שלבים מבעיה לפתרון; את הפרטים נמלא בשקפים הבאים</div>
+      <div class="body">
+
+        <table class="sad">
+          <tr><th style="width:42px;">#</th><th style="width:30%;">השלב</th><th>מה עושים בו</th><th style="width:140px;"></th></tr>
+          <tr><td>1</td><td><b>הגדרת הבעיה</b></td><td>סימפטומים, ראיונות, מי מושפע — מנסחים מהי הבעיה</td><td><span class="tag">בהרצאה זו</span></td></tr>
+          <tr><td>2</td><td><b>ניתוח שורש</b> (<span class="en">RCA</span> <span class="acro-def">(<span class="en">Root Cause Analysis</span> · ניתוח שורש)</span>)</td><td>יורדים מהסימפטום אל הסיבה האמיתית שמחוללת אותו</td><td><span class="tag">בהרצאה זו</span></td></tr>
+          <tr><td>3</td><td><b>פיתוח חלופות</b></td><td>מייצרים כמה דרכים אפשריות לסגור את הפער</td><td><span class="muted">בהמשך הקורס</span></td></tr>
+          <tr><td>4</td><td><b>בחירת חלופה</b></td><td>שוקלים ישימות, עלות וסיכונים — ובוחרים</td><td><span class="muted">בהמשך הקורס</span></td></tr>
+          <tr><td>5</td><td><b>הטמעה</b></td><td>בונים, משיקים ומטמיעים את הפתרון הנבחר</td><td><span class="muted">בהמשך הקורס</span></td></tr>
+          <tr><td>6</td><td><b>הערכה</b></td><td>מודדים אם הבעיה אכן נפתרה — ומשפרים</td><td><span class="muted">בהמשך הקורס</span></td></tr>
+        </table>
+
+        <div class="hero">
+          <h3>זו המסגרת — את הפרטים נמלא צעד-אחר-צעד</h3>
+          <p>בהרצאה זו נעבור לעומק על שלבים <strong>1–2</strong> ונמלא אותם על דוגמת הקמפוס; שלבים 3–6 ייפרשו על פני הקורס.
+             וזכרו — <strong>פתרון</strong> יכול להיות <strong>ניהולי</strong>, <strong>טכנולוגי</strong> או <strong>אחר</strong>, לא בהכרח מערכת מידע.</p>
+        </div>
 
       </div>
     </section>
@@ -354,11 +431,11 @@
           <div class="card" style="display:flex; flex-direction:column; gap:10px;">
             <div class="panel-title">ארגז הכלים — איך אוספים את התמונה</div>
             <ul class="bullets">
-              <li class="fragment">סימפטומים — לזהות <strong>מה כואב</strong>: מה לא עובד, איפה נתקעים, מה חוזר על עצמו</li>
+              <li class="fragment">סימפטומים — לזהות <strong>מה כואב</strong>: מה לא עובד, איפה נתקעים</li>
               <li class="fragment">ראיונות — לשבת עם בעלי העניין ולשאול מה הם חווים בשטח</li>
-              <li class="fragment">שאלונים — לאסוף תמונה רחבה ממספר גדול של אנשים</li>
-              <li class="fragment">תצפית — להסתכל על התהליך כפי שהוא קורה בפועל, לא רק כפי שמתארים אותו</li>
-              <li class="fragment">מי מושפע מהבעיה ואיך? — למפות את כל הנפגעים ואת מחיר הבעיה לכל אחד</li>
+              <li class="fragment">שאלונים — לאסוף תמונה רחבה מהרבה אנשים</li>
+              <li class="fragment">תצפית — להתבונן בתהליך כפי שהוא קורה בפועל</li>
+              <li class="fragment">מי מושפע ואיך? — למפות את הנפגעים ואת מחיר הבעיה</li>
             </ul>
           </div>
 
@@ -369,7 +446,6 @@
               באמת קורה — שואלים את הסטודנטים בתור, מראיינים את צוות הקפיטריה, ומתבוננים
               בתהליך ההזמנה מרגע ההגעה ועד קבלת האוכל.
             </p>
-            <p class="src">התמונה שנאסוף כאן היא הקלט לשלב הבא — מסגור הבעיה.</p>
           </div>
 
         </div>
@@ -377,17 +453,48 @@
         <div class="hero fragment">
           <h3>סימפטום הוא לא הבעיה</h3>
           <p>תור ארוך הוא <strong>סימפטום</strong> — מה שכואב. הבעיה האמיתית עמוקה יותר:
-             <em>מה גורם לבעיה? מה שורש הבעיה?</em> אולי תהליך ההזמנה ידני, אולי אין מידע
-             מראש על זמינות מנות. מי שמטפל בסימפטום בלבד — פותר את התור הזה, והוא חוזר מחר.</p>
+             <em>מה השורש?</em> מי שמטפל בסימפטום בלבד — פותר את התור הזה, והוא חוזר מחר.</p>
         </div>
 
         <div class="callout ai fragment">
           <span class="label">🤖 איך <span class="en">Claude</span> עוזר כאן</span>
-          מזינים ל-<span class="en">Claude</span> את תמלילי הראיונות ותשובות השאלונים, והוא
-          מסכם אותם, מצביע על סימפטומים חוזרים, ומציע מי בעלי העניין שכדאי לראיין הלאה.
+          מזינים ל-<span class="en">Claude</span> תמלילי ראיונות ושאלונים — והוא מסכם, מאתר סימפטומים חוזרים, ומציע את בעלי העניין הבאים לראיון.
         </div>
 
-        <p class="bottom-line">קודם אוספים סימפטומים — אחר כך חופרים לשורש. אל תתבלבלו בין השניים.</p>
+      </div>
+    </section>
+    <!-- B2.5 — ניסוח בעיה עסקית: התבנית (restored from original deck slide 12). The
+         explicit 7-part template for writing up a business problem, shown BEFORE we fill
+         it in for the campus case (frame-problem / impact-symptoms / problem-to-solution).
+         Order matters: problem first (1-4), solution only after (5-7). phase: init.
+         MUST fit — no scroll. -->
+    <section data-slug="framing-template">
+      <div class="sdlc-chip" title="שלב 1 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>ייזום</div>
+      <h1>ניסוח בעיה עסקית — תבנית</h1>
+      <div class="subtitle">שבעה חלקים לתיאור מלא של בעיה — נמלא אותם על הקמפוס בשקפים הבאים</div>
+      <div class="body">
+
+        <div class="card">
+          <div class="panel-title">מה כולל ניסוח בעיה טוב</div>
+          <div class="cols">
+            <ul class="bullets">
+              <li><span class="tag">1</span> תיאור ה<strong>מצב האידאלי</strong></li>
+              <li><span class="tag">2</span> מה ה<strong>בעיה כרגע</strong> ומשמעותה</li>
+              <li><span class="tag">3</span> ה<strong>השלכות הכלכליות</strong></li>
+              <li><span class="tag">4</span> <strong>סימפטומים</strong> שממחישים את הבעיה</li>
+            </ul>
+            <ul class="bullets">
+              <li><span class="tag">5</span> תיאור <strong>פתרון אפשרי</strong></li>
+              <li><span class="tag">6</span> <strong>יתרונות</strong> הפתרון המוצע</li>
+              <li><span class="tag">7</span> <strong>סיכום</strong> הבעיה והפתרון</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="hero">
+          <h3>שימו לב לסדר</h3>
+          <p>קודם <strong>הבעיה</strong> (1–4), ורק אחר כך <strong>הפתרון</strong> (5–7). לא קופצים לפתרון לפני שהבעיה ברורה.</p>
+        </div>
 
       </div>
     </section>
@@ -422,7 +529,7 @@
           <div class="card fragment" style="display:flex; flex-direction:column; gap:10px;">
             <div class="panel-title">מצב קיים — מה קורה היום</div>
             <ul class="bullets">
-              <li>תור פיזי בשעות העומס (<span class="en">12:00-14:00</span>)</li>
+              <li>תור פיזי בשעת ההפסקה (<span class="en">12:00–12:15</span>)</li>
               <li>מנות אוזלות — מגיעים והאוכל כבר נגמר</li>
               <li>הפסקה מבוזבזת על המתנה במקום על אוכל</li>
             </ul>
@@ -457,7 +564,7 @@
           <div class="card fragment" style="display:flex; flex-direction:column; gap:10px;">
             <div class="panel-title">השלכות — מה זה עולה לעסק</div>
             <ul class="bullets">
-              <li>אובדן מכירות בשעת השיא (<span class="en">12:00-14:00</span>) — לקוחות מוותרים על קנייה</li>
+              <li>אובדן מכירות בשעת ההפסקה (<span class="en">12:00–12:15</span>) — לקוחות מוותרים על קנייה</li>
               <li>קיבולת מבוזבזת מחוץ לשעת השיא — המטבח עומד ריק</li>
               <li>חוסר שביעות רצון של סטודנטים — נוטשים את השירות</li>
               <li>עומס יתר וטעויות אצל הצוות תחת לחץ</li>
@@ -515,8 +622,7 @@
         <div class="card">
           <div class="panel-title">הפתרון המוצע — אפליקציית הזמנת אוכל בקמפוס</div>
           <ul class="bullets">
-            <li>מזמינים מראש מהטלפון — בלי לעמוד בתור</li>
-            <li>משלמים מראש דרך האפליקציה</li>
+            <li>מזמינים ומשלמים מראש מהטלפון — בלי לעמוד בתור</li>
             <li>אוספים את המנה כשהיא מוכנה</li>
             <li>רואים מה זמין במלאי <strong>לפני</strong> ההזמנה — לא מגיעים למנה שאזלה</li>
           </ul>
@@ -544,69 +650,76 @@
 
         <div class="hero fragment">
           <h3>סיכום: מבעיה לפתרון</h3>
-          <p>הבעיה: <strong>תור פיזי שלא מבטיח מנה</strong>, שעולה מכירות אבודות בשעת השיא.
-             הפתרון המוצע: <strong>הזמנה מראש, תשלום ואיסוף עם זמינות גלויה</strong> — שסוגר בדיוק
-             את הפער שמיסגרנו, וממיר את הסימפטומים (תור, "אזל", נטישה) לערך מדיד.</p>
+          <p>הבעיה: <strong>תור פיזי שלא מבטיח מנה</strong>, שעולה מכירות אבודות בשיא. הפתרון המוצע:
+             <strong>הזמנה מראש, תשלום ואיסוף עם זמינות גלויה</strong> — שסוגר בדיוק את הפער שמיסגרנו.</p>
         </div>
 
         <div class="callout warn fragment">
           <span class="label">⚠️ הפתרון הוא עדיין השערה</span>
           בשלב הזה "אפליקציה" היא <strong>הצעה</strong>, לא החלטה. עוד לא בדקנו אם היא <strong>ישימה</strong> —
-          טכנית, כלכלית ותפעולית (חקר ישימות, בהמשך הקורס). אל תתאהבו בפתרון: מהנדס/ת תעשייה
-          בוחנ/ת חלופות ומאמת/ת לפני שמתחייבים.
+          טכנית, כלכלית ותפעולית (חקר ישימות, בהמשך). אל תתאהבו בפתרון לפני שמאמתים אותו.
         </div>
-
-        <p class="bottom-line">פתרון טוב סוגר את הפער ומייצר ערך מדיד — אבל עד שלא הוכחה ישימותו, הוא השערה, לא תוכנית.</p>
 
       </div>
     </section>
-    <!-- B6 — Root-cause analysis tools: Fishbone · 5 Whys · FTA, applied to the campus queue.
-         Original authoring for Lecture 1. Three classic IE tools reveal one at a time
-         (Space / →), then a worked 5-Whys chain on the campus case, capped by an
-         🤖 AI beat and its paired ⚠️ challenge. -->
+    <!-- B5.5 — הבעיה בקמפוס: ניסוח מלא. The consolidated 7-part problem statement for
+         the campus running example, filling the template from framing-template. Placed
+         AFTER problem-to-solution so the solution (parts 5-7) isn't revealed before the
+         "frame before you solve" sequence. This is the reference artifact — the input to
+         the as-is study and every later phase. phase: init. MUST fit — no scroll. -->
+    <section data-slug="full-problem-statement">
+      <div class="sdlc-chip" title="שלב 1 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>ייזום</div>
+      <h1>הבעיה בקמפוס — ניסוח מלא</h1>
+      <div class="subtitle">התבנית בת שבעת החלקים, מלאה — תמונה אחת שלמה של הבעיה</div>
+      <div class="body">
+
+        <div class="card">
+          <div class="cols">
+            <ul class="bullets">
+              <li><span class="tag">1</span> <b>מצב אידיאלי</b> — הזמנה מראש בלי תור, מנה מובטחת, זמינות מלאי גלויה</li>
+              <li><span class="tag">2</span> <b>הבעיה כיום ומשמעותה</b> — תור פיזי בשיא שלא מבטיח מנה; ההפסקה הקצרה מתבזבזת</li>
+              <li><span class="tag">3</span> <b>השלכות כלכליות</b> — אובדן מכירות בשיא, קיבולת מבוזבזת, נטישת לקוחות</li>
+              <li><span class="tag">4</span> <b>סימפטומים</b> — תור ארוך, "אזל המלאי", תלונות, הזמנות ננטשות</li>
+            </ul>
+            <ul class="bullets">
+              <li><span class="tag">5</span> <b>פתרון אפשרי</b> — אפליקציית הזמנה מראש, תשלום ואיסוף עם זמינות</li>
+              <li><span class="tag">6</span> <b>יתרונות</b> — לסטודנט/ית: זמן ומנה מובטחת; לקפיטריה: מכירות ונתונים</li>
+              <li><span class="tag">7</span> <b>סיכום</b> — לסגור את הפער: מתור-בלי-הבטחה להזמנה-מובטחת-מראש</li>
+            </ul>
+          </div>
+        </div>
+
+        <p class="bottom-line">זהו הקלט לשלבים הבאים — חקר המצב הקיים והניתוח שיבואו אחריו נשענים על הניסוח הזה.</p>
+
+      </div>
+    </section>
+    <!-- B6 — Root-cause analysis tools: Fishbone · 5 Whys · FTA (overview).
+         Three classic IE tools, then the 🤖 AI beat + ⚠️ challenge. The next three
+         slides (rca-fishbone / rca-5whys / rca-fta) work each tool on the campus queue
+         with a drawn diagram. -->
     <section data-slug="root-cause-tools">
       <div class="sdlc-chip" title="שלב 1 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>ייזום</div>
       <h1>כלים לניתוח שורש: מהסימפטום לשורש</h1>
-      <div class="subtitle">שלושה כלים קלאסיים שמהנדס תעשייה כבר מכיר</div>
+      <div class="subtitle">שלושה כלים קלאסיים שמהנדס תעשייה כבר מכיר — נדגים כל אחד על בעיית הקמפוס</div>
       <div class="body">
 
         <div class="cols-3" style="align-items:stretch;">
 
           <div class="card fragment" style="display:flex; flex-direction:column; gap:8px;">
             <div class="panel-title"><span class="en">Fishbone</span> (<span class="en">Ishikawa</span>)</div>
-            <p style="margin:0;">תרשים עצם-דג שממפה את הסיבות האפשריות לפי קטגוריות (אדם, שיטה, מכונה, סביבה).</p>
-            <div class="muted" style="font-size:18px;">מתי: כשרוצים לסרוק רוחב — הרבה גורמים אפשריים בבת אחת.</div>
+            <p style="margin:0;">תרשים עצם-דג שממפה את הסיבות האפשריות לפי קטגוריות (אנשים, שיטה, טכנולוגיה, סביבה).</p>
           </div>
 
           <div class="card fragment" style="display:flex; flex-direction:column; gap:8px;">
             <div class="panel-title">חמש פעמים "למה?" — <span class="en">5 Whys</span></div>
             <p style="margin:0;">שואלים "למה?" שוב ושוב (בערך חמש פעמים) עד שמגיעים מהסימפטום אל הסיבה האמיתית.</p>
-            <div class="muted" style="font-size:18px;">מתי: כשרוצים לרדת לעומק שרשרת סיבה אחת, מהירה ופשוטה.</div>
           </div>
 
           <div class="card fragment" style="display:flex; flex-direction:column; gap:8px;">
             <div class="panel-title"><span class="en">FTA</span> — עץ תקלות</div>
             <p style="margin:0;"><span class="en">Fault Tree Analysis</span>: מתחילים מהתקלה ויורדים בעץ לוגי (<span class="en">AND</span>/<span class="en">OR</span>) של הגורמים שמובילים אליה.</p>
-            <div class="muted" style="font-size:18px;">מתי: כשהבעיה מורכבת ורוצים לכמת אילו צירופי גורמים מובילים אליה.</div>
           </div>
 
-        </div>
-
-        <div class="hero fragment">
-          <h3>נדגים <span class="en">5 Whys</span> על הבעיה בקמפוס</h3>
-          <p>הסימפטום: <strong>תור ארוך בקפיטריה בשעת השיא</strong>. נשאל "למה?" עד שנגיע לשורש —
-             וכך נדע מה הפתרון באמת צריך לתקן.</p>
-        </div>
-
-        <div class="card fragment" style="display:flex; flex-direction:column; gap:6px;">
-          <div class="panel-title">שרשרת ה-<span class="en">5 Whys</span> — תור בקפיטריה</div>
-          <ul class="bullets">
-            <li><strong>למה יש תור?</strong> כי כולם מגיעים להזמין באותו הזמן — סביב 12:30.</li>
-            <li><strong>למה כולם באותו הזמן?</strong> כי אין דרך להזמין מראש — חייבים להגיע פיזית לדלפק.</li>
-            <li><strong>למה אי-אפשר להזמין מראש?</strong> כי אין מערכת שמקבלת הזמנות מוקדם.</li>
-            <li><strong>למה אין מערכת כזו?</strong> כי כל התהליך ידני — פנקס ומזומן בלבד.</li>
-            <li><strong>השורש:</strong> היעדר מערכת הזמנה מקוונת שמפזרת את הביקוש לאורך זמן.</li>
-          </ul>
         </div>
 
         <div class="cols fragment">
@@ -617,8 +730,7 @@
           </div>
           <div class="callout warn fragment">
             <span class="label">⚠️ מה היא פספסה או הניחה?</span>
-            האם השורש שהוצע הוא באמת השורש, או רק סימפטום נוסף? אילו גורמים (סביבה, אנשים) היא דילגה עליהם?
-            ניתוח השורש שלכם הוא משטח האימות.
+            האם זה באמת השורש, או רק סימפטום נוסף? אילו גורמים (סביבה, אנשים) דילגה עליהם? אתם משטח האימות.
           </div>
         </div>
 
@@ -626,25 +738,213 @@
 
       </div>
     </section>
+    <!-- B6.1 — Fishbone (Ishikawa) worked on the campus queue. A proper fish-bone:
+         spine + effect head + four angled category bones (שיטה / אנשים / טכנולוגיה /
+         סביבה), each with its specific sub-cause twigs. CLICK-TO-DRILL: each category's
+         twigs start hidden (visibility:hidden) and toggle on click of its label (inline
+         onclick — no <script>, so it survives however the fragment is inlined). The +/–
+         indicator flips. Categories match the overview slide (root-cause-tools).
+         Twig labels are text-anchor=middle at a FIXED horizontal centre per side (left
+         x=465, right x=790) — deterministic regardless of RTL, sitting well clear of the
+         diagonal bones; a connector line bridges each label to its rib. Verified with
+         web/shoot_slides.py. NOTE: the drilled-in twigs won't appear in a static PNG/PDF
+         render — they show in the live HTML deck (incl. the Pages bundle). phase: init.
+         MUST fit. -->
+    <section data-slug="rca-fishbone">
+      <div class="sdlc-chip" title="שלב 1 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>ייזום</div>
+      <h1><span class="en">Fishbone</span> (<span class="en">Ishikawa</span>) — תור בקפיטריה</h1>
+      <div class="subtitle">סורקים לרוחב לפי קטגוריות — לחצו על קטגוריה כדי לרדת לסיבות הספציפיות שלה</div>
+      <div class="body">
+        <figure class="diagram" style="flex:1 1 auto; display:flex; align-items:center; justify-content:center; margin:0;">
+          <svg viewBox="0 0 1200 470" style="width:100%; height:100%; max-height:none;" xmlns="http://www.w3.org/2000/svg" font-family="Arial">
+
+            <!-- spine + effect head (left) -->
+            <line x1="284" y1="235" x2="1170" y2="235" stroke="#0070C0" stroke-width="4"/>
+            <polygon points="284,235 316,222 316,248" fill="#0070C0"/>
+            <rect x="24" y="185" width="260" height="100" rx="12" fill="#0070C0"/>
+            <text x="154" y="227" text-anchor="middle" fill="#fff" font-size="26" font-weight="700" style="direction:rtl;">תור ארוך</text>
+            <text x="154" y="259" text-anchor="middle" fill="#fff" font-size="20" style="direction:rtl;">בשעת השיא</text>
+
+            <!-- ribs (always visible) -->
+            <line x1="560" y1="235" x2="650" y2="74"  stroke="#888" stroke-width="3"/>
+            <line x1="880" y1="235" x2="970" y2="74"  stroke="#888" stroke-width="3"/>
+            <line x1="560" y1="235" x2="650" y2="396" stroke="#888" stroke-width="3"/>
+            <line x1="880" y1="235" x2="970" y2="396" stroke="#888" stroke-width="3"/>
+
+            <!-- ============ שיטה (top-left, blue) ============ -->
+            <g class="twigs" id="tw-method" visibility="hidden">
+              <g stroke="#cdd8e0" stroke-width="2">
+                <line x1="601" y1="163" x2="340" y2="163"/>
+                <line x1="623" y1="122" x2="340" y2="122"/>
+                <line x1="643" y1="87"  x2="340" y2="87"/>
+              </g>
+              <text x="465" y="158" text-anchor="middle" fill="#444" font-size="17" style="direction:rtl;">אין הזמנה מראש</text>
+              <text x="465" y="117" text-anchor="middle" fill="#444" font-size="17" style="direction:rtl;">הזמנה ידנית בדלפק</text>
+              <text x="465" y="82"  text-anchor="middle" fill="#444" font-size="17" style="direction:rtl;">אין ניהול תור</text>
+            </g>
+            <g style="cursor:pointer" onclick="var g=document.getElementById('tw-method');var on=g.getAttribute('visibility')==='visible';g.setAttribute('visibility',on?'hidden':'visible');this.querySelector('.pm').textContent=on?'+':'–';">
+              <rect x="575" y="44" width="150" height="34" rx="8" fill="#E1EFF7" stroke="#0070C0"/>
+              <text class="pm" x="592" y="68" fill="#0070C0" font-size="20" font-weight="700">+</text>
+              <text x="660" y="67" text-anchor="middle" fill="#0a4a78" font-size="20" font-weight="700" style="direction:rtl;">שיטה</text>
+            </g>
+
+            <!-- ============ אנשים (top-right, green) ============ -->
+            <g class="twigs" id="tw-people" visibility="hidden">
+              <g stroke="#cfe4d6" stroke-width="2">
+                <line x1="921" y1="163" x2="670" y2="163"/>
+                <line x1="943" y1="122" x2="670" y2="122"/>
+                <line x1="963" y1="87"  x2="670" y2="87"/>
+              </g>
+              <text x="778" y="158" text-anchor="middle" fill="#444" font-size="17" style="direction:rtl;">כולם מגיעים ב-12:00</text>
+              <text x="778" y="117" text-anchor="middle" fill="#444" font-size="17" style="direction:rtl;">הפסקות מרוכזות</text>
+              <text x="778" y="82"  text-anchor="middle" fill="#444" font-size="17" style="direction:rtl;">אין מי שמכוון את התור</text>
+            </g>
+            <g style="cursor:pointer" onclick="var g=document.getElementById('tw-people');var on=g.getAttribute('visibility')==='visible';g.setAttribute('visibility',on?'hidden':'visible');this.querySelector('.pm').textContent=on?'+':'–';">
+              <rect x="895" y="44" width="150" height="34" rx="8" fill="#E6F4EA" stroke="#2E9E4F"/>
+              <text class="pm" x="912" y="68" fill="#2E9E4F" font-size="20" font-weight="700">+</text>
+              <text x="980" y="67" text-anchor="middle" fill="#1f7a3d" font-size="20" font-weight="700" style="direction:rtl;">אנשים</text>
+            </g>
+
+            <!-- ============ טכנולוגיה (bottom-left, orange) ============ -->
+            <g class="twigs" id="tw-tech" visibility="hidden">
+              <g stroke="#f0ddc6" stroke-width="2">
+                <line x1="601" y1="308" x2="340" y2="308"/>
+                <line x1="623" y1="348" x2="340" y2="348"/>
+                <line x1="643" y1="383" x2="340" y2="383"/>
+              </g>
+              <text x="465" y="303" text-anchor="middle" fill="#444" font-size="17" style="direction:rtl;">אין מערכת הזמנה מקוונת</text>
+              <text x="465" y="343" text-anchor="middle" fill="#444" font-size="17" style="direction:rtl;">אין מידע על מלאי בזמן אמת</text>
+              <text x="465" y="378" text-anchor="middle" fill="#444" font-size="17" style="direction:rtl;">תשלום ידני בלבד</text>
+            </g>
+            <g style="cursor:pointer" onclick="var g=document.getElementById('tw-tech');var on=g.getAttribute('visibility')==='visible';g.setAttribute('visibility',on?'hidden':'visible');this.querySelector('.pm').textContent=on?'+':'–';">
+              <rect x="560" y="402" width="180" height="34" rx="8" fill="#FCEFE0" stroke="#E86C00"/>
+              <text class="pm" x="577" y="426" fill="#E86C00" font-size="20" font-weight="700">+</text>
+              <text x="655" y="425" text-anchor="middle" fill="#b85600" font-size="20" font-weight="700" style="direction:rtl;">טכנולוגיה</text>
+            </g>
+
+            <!-- ============ סביבה (bottom-right, purple) ============ -->
+            <g class="twigs" id="tw-env" visibility="hidden">
+              <g stroke="#e0d6ef" stroke-width="2">
+                <line x1="921" y1="308" x2="670" y2="308"/>
+                <line x1="943" y1="348" x2="670" y2="348"/>
+                <line x1="963" y1="383" x2="670" y2="383"/>
+              </g>
+              <text x="778" y="303" text-anchor="middle" fill="#444" font-size="17" style="direction:rtl;">שיא ביקוש נקודתי</text>
+              <text x="778" y="343" text-anchor="middle" fill="#444" font-size="17" style="direction:rtl;">לוח אקדמי מרוכז</text>
+              <text x="778" y="378" text-anchor="middle" fill="#444" font-size="17" style="direction:rtl;">מרחב פיזי מוגבל</text>
+            </g>
+            <g style="cursor:pointer" onclick="var g=document.getElementById('tw-env');var on=g.getAttribute('visibility')==='visible';g.setAttribute('visibility',on?'hidden':'visible');this.querySelector('.pm').textContent=on?'+':'–';">
+              <rect x="880" y="402" width="180" height="34" rx="8" fill="#EFE7F7" stroke="#7A4FB0"/>
+              <text class="pm" x="897" y="426" fill="#7A4FB0" font-size="20" font-weight="700">+</text>
+              <text x="975" y="425" text-anchor="middle" fill="#5a3690" font-size="20" font-weight="700" style="direction:rtl;">סביבה</text>
+            </g>
+
+          </svg>
+        </figure>
+        <p class="bottom-line" style="margin:0;">פתחו את הקטגוריות — והן מצביעות שוב ושוב על אותו שורש: <strong>היעדר מערכת הזמנה מקוונת</strong>.</p>
+      </div>
+    </section>
+    <!-- B6.2 — 5 Whys worked on the campus queue. FIVE "why?" steps drilling one causal
+         chain to the root (vs Fishbone's breadth). The chain pivots on the BGU reality:
+         everyone floods the counter in the single shared 12:00–12:15 break, and because
+         ordering is only physical/on-the-spot, that short window becomes a queue — root =
+         no online pre-ordering. The break time itself is fixed (it can't be "the fix");
+         the lever is pre-ordering. phase: init. MUST fit — no scroll. -->
+    <section data-slug="rca-5whys">
+      <div class="sdlc-chip" title="שלב 1 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>ייזום</div>
+      <h1><span class="en">5 Whys</span> — תור בקפיטריה</h1>
+      <div class="subtitle">שואלים "למה?" חמש פעמים — יורדים בשרשרת סיבה אחת עד השורש</div>
+      <div class="body" style="gap:4px;">
+
+        <div class="card tight"><b>1. למה נוצר תור ארוך?</b> &nbsp;כי כולם מגיעים להזמין בדיוק באותו חלון זמן.</div>
+        <div style="text-align:center; color:var(--muted); font-size:13px; line-height:1; margin:0;">↓ למה?</div>
+        <div class="card tight"><b>2. למה כולם באותו חלון?</b> &nbsp;כי זו שעת ההפסקה — <span class="en">12:00–12:15</span>, החלון היחיד שכולם פנויים בו.</div>
+        <div style="text-align:center; color:var(--muted); font-size:13px; line-height:1; margin:0;">↓ למה?</div>
+        <div class="card tight"><b>3. למה ההפסקה הקצרה יוצרת תור?</b> &nbsp;כי מזמינים רק פיזית בדלפק, בתוך 15 הדקות האלה.</div>
+        <div style="text-align:center; color:var(--muted); font-size:13px; line-height:1; margin:0;">↓ למה?</div>
+        <div class="card tight"><b>4. למה רק פיזית בדלפק?</b> &nbsp;כי אין שום אפשרות להזמין מראש, לפני ההפסקה.</div>
+        <div style="text-align:center; color:var(--muted); font-size:13px; line-height:1; margin:0;">↓ למה?</div>
+        <div class="card tight"><b>5. למה אי-אפשר להזמין מראש?</b> &nbsp;כי כל התהליך ידני — פנקס ומזומן, בלי מערכת מקוונת.</div>
+
+        <div class="hero" style="margin-top:6px;">
+          <h3>🎯 השורש</h3>
+          <p>היעדר מערכת הזמנה מקוונת. את <strong>שעת ההפסקה</strong> אי-אפשר לשנות — מה שאפשר לתקן הוא היכולת
+             <strong>להזמין מראש</strong> ולפזר את הביקוש. וזה, לא התור עצמו, מה שהפתרון מכוון אליו.</p>
+        </div>
+
+      </div>
+    </section>
+    <!-- B6.3 — FTA (Fault Tree Analysis) worked on campus. Top event decomposed through
+         an OR gate (long queue OR sold out) and an AND gate (everyone at once AND no
+         pre-ordering), down to basic causes. Closes the RCA mini-section with the 🤖/⚠️
+         beat. Inline SVG. phase: init. MUST fit — no scroll. -->
+    <section data-slug="rca-fta" class="has-acro-footer">
+      <div class="sdlc-chip" title="שלב 1 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>ייזום</div>
+      <h1><span class="en">FTA</span> — עץ תקלות של בעיית הקמפוס</h1>
+      <div class="subtitle">מתחילים מהתקלה ויורדים בעץ לוגי (<span class="en">AND</span>/<span class="en">OR</span>) עד הגורמים הבסיסיים</div>
+      <div class="body">
+        <figure class="diagram" style="height:360px; display:flex; align-items:center; justify-content:center; margin:0;">
+          <svg viewBox="0 0 1180 380" style="width:100%; height:100%; max-height:none;" xmlns="http://www.w3.org/2000/svg" font-family="Arial">
+            <!-- connectors -->
+            <g stroke="#888" stroke-width="2.5" fill="none">
+              <line x1="590" y1="64" x2="590" y2="92"/>
+              <line x1="590" y1="150" x2="320" y2="176"/>
+              <line x1="590" y1="150" x2="860" y2="176"/>
+              <line x1="320" y1="232" x2="320" y2="258"/>
+              <line x1="320" y1="316" x2="170" y2="316"/><line x1="170" y1="316" x2="170" y2="328"/>
+              <line x1="320" y1="316" x2="470" y2="316"/><line x1="470" y1="316" x2="470" y2="328"/>
+              <line x1="860" y1="232" x2="860" y2="328"/>
+            </g>
+
+            <!-- top event -->
+            <rect x="370" y="8" width="440" height="56" rx="8" fill="#0070C0"/>
+            <text x="590" y="42" text-anchor="middle" fill="#fff" font-size="22" font-weight="700" style="direction:rtl;">סטודנט/ית לא מקבל/ת מנה בהפסקה</text>
+
+            <!-- OR gate -->
+            <rect x="548" y="96" width="84" height="36" rx="18" fill="#E86C00"/>
+            <text x="590" y="121" text-anchor="middle" fill="#fff" font-size="18" font-weight="700">OR · או</text>
+
+            <!-- intermediate events -->
+            <rect x="175" y="176" width="290" height="56" rx="8" fill="#E1EFF7" stroke="#0070C0"/>
+            <text x="320" y="210" text-anchor="middle" fill="#0a4a78" font-size="21" font-weight="700" style="direction:rtl;">תור ארוך בשעת השיא</text>
+            <rect x="715" y="176" width="290" height="56" rx="8" fill="#E1EFF7" stroke="#0070C0"/>
+            <text x="860" y="210" text-anchor="middle" fill="#0a4a78" font-size="21" font-weight="700" style="direction:rtl;">המנה אזלה</text>
+
+            <!-- AND gate under "תור ארוך" -->
+            <rect x="276" y="258" width="88" height="36" rx="18" fill="#2E9E4F"/>
+            <text x="320" y="283" text-anchor="middle" fill="#fff" font-size="17" font-weight="700">AND · וגם</text>
+
+            <!-- basic causes -->
+            <rect x="55" y="328" width="230" height="48" rx="8" fill="#fff" stroke="#888"/>
+            <text x="170" y="358" text-anchor="middle" fill="#333" font-size="18" style="direction:rtl;">כולם מגיעים ב-12:00</text>
+            <rect x="355" y="328" width="230" height="48" rx="8" fill="#fff" stroke="#888"/>
+            <text x="470" y="358" text-anchor="middle" fill="#333" font-size="18" style="direction:rtl;">אין הזמנה מראש</text>
+            <rect x="745" y="328" width="230" height="48" rx="8" fill="#fff" stroke="#888"/>
+            <text x="860" y="358" text-anchor="middle" fill="#333" font-size="18" style="direction:rtl;">אין מידע על מלאי מראש</text>
+          </svg>
+        </figure>
+
+        <div class="callout warn" style="margin:0 0 0 150px;">
+          <span class="label">🤖 הבינה מציעה עץ — ⚠️ אתם מאמתים</span>
+          <span class="en">Claude</span> בונה עץ תקלות בשניות — אבל האם השער באמת <span class="en">AND</span>, ואילו גורמים בסיסיים דילג? אתם משטח האימות.
+        </div>
+      </div>
+    <div class="acro-footer"><span class="acro"><span class="en">FTA</span> = <span class="en">Fault Tree Analysis</span> · ניתוח עץ תקלות</span></div>
+    </section>
     <!-- B7 — 🤖 AI בשלב הייזום. NEW (no pptx source).
          First concrete AI-beat of the course: what Claude produces in the initiation
          phase (summarize messy interviews, draft a problem statement, propose a
          Fishbone, cluster symptoms) — each paired with what the analyst must verify.
-         Echoes the day-one habit from A5 (slide-ai-in-lifecycle): "מה היא פספסה,
+         Echoes the day-one habit from A5 (slide-ground-rules): "מה היא פספסה,
          המציאה, או הניחה?". Framing: AI is the assistant handed a spec, never the
          analyst. Structure mirrors the gold-standard slides — a 2x2 grid of AI tasks
          that reveal one beat at a time, then the paired 🤖/⚠️ callouts and bottom-line.
          Demo-flavored and tight: this is the first place students see the motif "live". -->
-    <section data-slug="ai-initiation">
+    <section data-slug="ai-initiation" class="has-acro-footer">
       <div class="sdlc-chip" title="שלב 1 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>ייזום</div>
       <h1>🤖 <span class="en">AI</span> בשלב הייזום</h1>
       <div class="subtitle">מה <span class="en">Claude</span> מפיק כשמזהים את הבעיה — ואיך אנחנו מאתגרים אותו</div>
       <div class="body">
-
-        <p class="muted" style="margin:0;">
-          את ערימת הראיונות, השאלונים והסימפטומים מהקמפוס אפשר להזין ל-<span class="en">Claude</span> —
-          והוא מחזיר טיוטות בשניות. ארבעה תוצרים טיפוסיים, כל אחד עם השאלה שמלווה אותו:
-        </p>
 
         <div class="cols" style="align-items:stretch;">
 
@@ -693,11 +993,34 @@
              <b>מה הוא פספס, מה הוא המציא, ומה הוא הניח?</b> — וההחלטה מי הבעיה האמיתית נשארת שלכם.</p>
         </div>
 
-        <p class="bottom-line">בייזום הבינה מאיצה את הטיוטה — האנליסט/ית עדיין מחליט/ה מהי הבעיה.</p>
+      </div>
+    <div class="acro-footer"><span class="acro"><span class="en">AI</span> = <span class="en">Artificial Intelligence</span> · בינה מלאכותית</span></div>
+    </section>
+    <!-- B8 — לסיכום: זיהוי בעיה עסקית (restored from original deck slide 25). Wraps the
+         ייזום section: where business problems come from, what a good problem statement
+         contains, the warning against premature solution-fixation, and who owns cross-org
+         decisions. Closes by handing off to the as-is phase (חקר מצב קיים). phase: init.
+         MUST fit — no scroll. -->
+    <section data-slug="init-summary">
+      <div class="sdlc-chip" title="שלב 1 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>ייזום</div>
+      <h1>לסיכום: זיהוי בעיה עסקית</h1>
+      <div class="subtitle">מה לקחת מהשלב הזה</div>
+      <div class="body">
+
+        <div class="card">
+          <ul class="bullets">
+            <li>בעיות עסקיות צפות <strong>מלמעלה</strong> (דרישת הנהלה) או <strong>מלמטה</strong> (מהשטח)</li>
+            <li>בעיה עסקית טובה = <strong>מצב רצוי</strong> + <strong>מצב מצוי</strong> + הפער שביניהם</li>
+            <li>מותר כיוון ראשוני לפתרון — אבל נזהרים מ<strong>קיבעון מחשבתי</strong> ולא קופצים אליו</li>
+            <li>החלטות על מערכות מידע <strong>חוצות-ארגון</strong> מגיעות מ<strong>ההנהלה</strong></li>
+          </ul>
+        </div>
+
+        <p class="bottom-line">מיסגרנו את הבעיה — בשלב הבא יוצאים אל ה<strong>מצב הקיים</strong>: איך עובדים היום בפועל.</p>
 
       </div>
     </section>
-    <section class="sdlc-map" data-slug="lecture-01-sdlc-asis">
+    <section class="sdlc-map has-acro-footer" data-slug="lecture-01-sdlc-asis">
       <h1>היכן אנחנו ב-<span class="en">SDLC</span></h1>
       <div class="body">
         <div class="sdlc-stepper">
@@ -712,6 +1035,7 @@
         </div>
         <p class="sdlc-now">בשלב זה: <b>חקר מצב קיים</b> — ממפים את התהליך הקיים ואת בעלי העניין</p>
       </div>
+    <div class="acro-footer"><span class="acro"><span class="en">SDLC</span> = <span class="en">Software Development Life Cycle</span> · מחזור פיתוח תוכנה</span></div>
     </section>
     <!-- C2 — מהו תהליך עסקי (old slides 28, 29, 30).
          Opens the חקר מצב קיים (as-is) phase: to map the current state we first need to
@@ -723,60 +1047,47 @@
     <section data-slug="business-process">
       <div class="sdlc-chip" title="שלב 2 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>חקר מצב קיים</div>
       <h1>מהו תהליך עסקי</h1>
-      <div class="subtitle">נכנסנו לשלב <strong>חקר מצב קיים</strong> — וכדי למפות את המצב, צריך קודם לדעת מהו תהליך</div>
       <div class="body">
 
         <div class="card">
           <div class="panel-title">הגדרה</div>
-          <p style="margin:0 0 12px;">
-            <strong>תהליך עסקי</strong> הוא רצף מובנה ומסודר של הפעולות והמשימות שיש לבצע
-            כדי לתת שירות מסוים, לייצר מוצר מסוים, או לשרת מטרה מסוימת עבור לקוח.
+          <p style="margin:0 0 8px;">
+            <strong>תהליך עסקי</strong> הוא רצף מובנה ומסודר של פעולות ומשימות שיש לבצע
+            כדי לתת שירות, לייצר מוצר, או לשרת מטרה עבור לקוח.
           </p>
           <ul class="bullets">
-            <li class="fragment"><strong>מופעל באירוע</strong> ומבוסס על פעולות בעלות רצף בזמן ובמרחב</li>
-            <li class="fragment"><strong>מוגדר היטב</strong> — בעל גבולות מוגדרים, תשומות (<span class="en">input</span>) ותפוקות (<span class="en">output</span>)</li>
-            <li class="fragment"><strong>יוצר ערך</strong> ללקוח / משרת מטרה ארגונית</li>
-            <li class="fragment">בדרך כלל, אך לא בהכרח, חוצה פונקציות ארגוניות ואפילו חוצה ארגונים</li>
+            <li><strong>מופעל באירוע</strong> ובעל רצף בזמן ובמרחב</li>
+            <li><strong>מוגדר היטב</strong> — גבולות, תשומות (<span class="en">input</span>) ותפוקות (<span class="en">output</span>)</li>
+            <li><strong>יוצר ערך</strong> ללקוח / משרת מטרה ארגונית</li>
           </ul>
         </div>
 
         <div class="cols" style="align-items:stretch;">
 
-          <div class="card fragment" style="display:flex; flex-direction:column; gap:10px;">
-            <div class="panel-title" style="color:var(--green);">✓ תהליך עסקי — דוגמאות מהאוניברסיטה</div>
+          <div class="card fragment" style="display:flex; flex-direction:column; gap:8px;">
+            <div class="panel-title" style="color:var(--green);">✓ תהליך עסקי — דוגמאות</div>
             <ul class="bullets">
-              <li>רישום לקורסים — בוחרים, נרשמים דרך המערכת ומקבלים אישור</li>
-              <li>הגשת בקשה לסיום תואר — מסיימים חובות, מגישים בקשה לזכאות, ממתינים לאישור</li>
-              <li>החזרת ספר לספרייה — מחזירים, המערכת מסמנת שהוחזר, נסגר החוב</li>
+              <li>רישום לקורסים — בוחרים, נרשמים ומקבלים אישור</li>
+              <li>החזרת ספר לספרייה — מחזירים, המערכת מסמנת, נסגר החוב</li>
             </ul>
-            <p class="src">רצף פעולות → מופעל באירוע → תשומה ← תפוקה בעלת ערך (אישור / זכאות / ספר זמין לבא בתור).</p>
           </div>
 
-          <div class="card fragment" style="display:flex; flex-direction:column; gap:10px;">
+          <div class="card fragment" style="display:flex; flex-direction:column; gap:8px;">
             <div class="panel-title" style="color:var(--red);">✗ לא תהליך עסקי</div>
             <ul class="bullets">
-              <li>השתתפות בשיעור והקשבה להרצאה — פעילות, לא רצף שמייצר תפוקה ללקוח</li>
-              <li>למידה למבחן בבית — הרגל אישי, בלי גבולות ארגוניים, תשומות ותפוקות</li>
+              <li>הקשבה להרצאה — פעילות, לא רצף שמייצר תפוקה ללקוח</li>
               <li>לחיצה בודדת על כפתור — פעולה אחת, לא רצף מובנה</li>
             </ul>
-            <p class="src">חסרים מאפיינים: אירוע מפעיל, גבולות, תשומה/תפוקה מוגדרות, או ערך ללקוח.</p>
           </div>
 
-        </div>
-
-        <div class="callout ai fragment">
-          <span class="label">🤖 איך <span class="en">Claude</span> עוזר כאן</span>
-          מתארים ל-<span class="en">Claude</span> פעילות מתוך הראיונות, והוא עוזר להחליט אם זה
-          תהליך עסקי — מזהה את האירוע המפעיל, התשומות, התפוקות והלקוח שמקבל את הערך.
         </div>
 
         <div class="callout warn fragment">
-          <span class="label">⚠️ אתגרו את הסיווג</span>
-          גבול התהליך הוא החלטה <em>שלכם</em>: איפה הוא מתחיל ואיפה נגמר? מה התפוקה ומי הלקוח?
-          בדקו שלא סימנתם פעילות בודדת כתהליך — או שלא ויתרתם על תפוקה אמיתית.
+          <span class="label">🤖 <span class="en">Claude</span> עוזר לסווג — ⚠️ אבל הגבול הוא שלכם</span>
+          מתארים פעילות מהראיונות ו-<span class="en">Claude</span> מזהה אירוע מפעיל, תשומות, תפוקות ולקוח. אבל איפה התהליך מתחיל ונגמר, ומהי התפוקה — החלטה שלכם.
         </div>
 
-        <p class="bottom-line">משזיהינו את התהליכים העסקיים — בשבוע הבא נמדל אותם רשמית בעזרת <span class="en">BPMN</span>.</p>
+        <p class="bottom-line">משזיהינו את התהליכים — בשבוע הבא נמדל אותם רשמית בעזרת <span class="en">BPMN</span> <span class="acro-def">(<span class="en">Business Process Model and Notation</span> · מידול וסימון תהליכים עסקיים)</span>.</p>
 
       </div>
     </section>
@@ -799,7 +1110,6 @@
               <li>ממפה תהליכים — מתאר איך העבודה מתבצעת היום, מקצה לקצה</li>
               <li>כותב דרישות — מתרגם צרכים עמומים למפרט ברור וניתן לבדיקה</li>
               <li>מאמת מול בעלי העניין — מוודא שהבנו נכון לפני שבונים</li>
-              <li>היום: מכוון ומאמת <span class="en">AI</span> — מנחה את הבינה ובודק את הפלט שלה</li>
             </ul>
           </div>
 
@@ -817,9 +1127,9 @@
 
         <div class="hero fragment">
           <h3>למה דווקא מהנדסי תעשייה וניהול</h3>
-          <p>החוזק של ה-<span class="en">BA</span> הוא חשיבה תהליכית: לראות מערכת כזרימת עבודה
-             של אנשים, שלבים והחלטות — בדיוק מה שלמדתם. אתם כבר יודעים למפות תהליך, לזהות צוואר
-             בקבוק ולשאול "למה זה נעשה ככה?". זה הלב של תפקיד ה-<span class="en">BA</span>.</p>
+          <p>החוזק של ה-<span class="en">BA</span> הוא חשיבה תהליכית: לראות מערכת כזרימת עבודה של
+             אנשים, שלבים והחלטות — בדיוק מה שלמדתם. למפות תהליך, לזהות צוואר בקבוק ולשאול
+             "למה ככה?" — זה הלב של ה-<span class="en">BA</span>.</p>
         </div>
 
         <div class="cols fragment">
@@ -835,8 +1145,6 @@
           </div>
         </div>
 
-        <p class="bottom-line">ערך ה-<span class="en">BA</span> הוא בלהחליט ולאמת — לא בלהפיק.</p>
-
       </div>
     </section>
     <!-- C4 — המצב הקיים: תהליך ההזמנה בקמפוס היום.
@@ -846,7 +1154,7 @@
          waits, and receives — or "אזל, בחר/י שוב". Pain points (תור / אזל / חוסר שקיפות)
          are pinned on the steps. The hand-off: this exact as-is process is what L2 will
          model formally with BPMN. The explicit input to Lecture 2. -->
-    <section data-slug="current-process-campus">
+    <section data-slug="current-process-campus" class="has-acro-footer">
       <div class="sdlc-chip" title="שלב 2 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>חקר מצב קיים</div>
       <h1>המצב הקיים: תהליך ההזמנה בקמפוס היום</h1>
       <div class="subtitle">איך זה קורה היום — ידנית, בלי שום מערכת (תהליך <span class="en">as-is</span>)</div>
@@ -923,6 +1231,7 @@
         <p class="bottom-line">זהו בדיוק התהליך הקיים שנמדל באופן פורמלי בשבוע הבא — עם <span class="en">BPMN</span> (הרצאה 2).</p>
 
       </div>
+    <div class="acro-footer"><span class="acro"><span class="en">BPMN</span> = <span class="en">Business Process Model and Notation</span> · מידול וסימון תהליכים עסקיים</span></div>
     </section>
     <!-- C5 — 🤖 AI ממפה את המצב הקיים. NEW (no pptx source).
          Closes the as-is (חקר מצב קיים) phase: AI turns the messy interview notes from
@@ -932,7 +1241,7 @@
          verifies it against reality; the verified map is the hand-off into L2 (BPMN).
          Structure mirrors the gold-standard slides: paired 🤖/⚠️ cards that reveal one
          beat at a time, then a bottom-line. -->
-    <section data-slug="ai-asis-map">
+    <section data-slug="ai-asis-map" class="has-acro-footer">
       <div class="sdlc-chip" title="שלב 2 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>חקר מצב קיים</div>
       <h1>🤖 <span class="en">AI</span> ממפה את המצב הקיים</h1>
       <div class="subtitle">מהערות ראיון מבולגנות — לטיוטת מפת תהליך ראשונה</div>
@@ -978,6 +1287,7 @@
         <p class="bottom-line">הבינה מאיצה את מיפוי המצב הקיים — אבל האנליסט/ית מאמת/ת אותו מול המציאות.</p>
 
       </div>
+    <div class="acro-footer"><span class="acro"><span class="en">BPMN</span> = <span class="en">Business Process Model and Notation</span> · מידול וסימון תהליכים עסקיים</span> &nbsp;·&nbsp; <span class="acro"><span class="en">AI</span> = <span class="en">Artificial Intelligence</span> · בינה מלאכותית</span></div>
     </section>
     <!-- D1 — סיכום הרצאה 1 + בשבוע הבא: BPMN.
          Recaps the whole lecture against the course through-lines: the discipline
@@ -988,7 +1298,7 @@
          process formally with BPMN. Four recap cards reveal one beat at a time, the
          ⚠️ habit lands, then the BPMN hero + bottom-line. Mirrors the gold-standard
          structure (cards → callout → hero → bottom-line). -->
-    <section data-slug="summary">
+    <section data-slug="summary" class="has-acro-footer">
       <div class="sdlc-chip" title="שלב 2 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>חקר מצב קיים</div>
       <h1>סיכום — ובשבוע הבא</h1>
       <div class="subtitle">מה לקחנו מהיום, ולאן ממשיכים</div>
@@ -1049,6 +1359,7 @@
         <p class="bottom-line">הכרנו את הדיסציפלינה ואת המחזור והתחלנו את הדוגמה הרצה — מכאן ל-<span class="en">BPMN</span>.</p>
 
       </div>
+    <div class="acro-footer"><span class="acro"><span class="en">SDLC</span> = <span class="en">Software Development Life Cycle</span> · מחזור פיתוח תוכנה</span> &nbsp;·&nbsp; <span class="acro"><span class="en">BPMN</span> = <span class="en">Business Process Model and Notation</span> · מידול וסימון תהליכים עסקיים</span> &nbsp;·&nbsp; <span class="acro"><span class="en">AI</span> = <span class="en">Artificial Intelligence</span> · בינה מלאכותית</span></div>
     </section>
   </div>
 </div>
