@@ -97,7 +97,7 @@
             <span class="tag"><span class="en">UC</span>/<span class="en">CD</span> נבחרים 7.5%</span>
             <span class="tag">פרויקט ב' 22.5%</span>
             <span class="tag">מבחן 50%</span><br>
-            <span class="src">ציון נמוך מ־56 במבחן → ציון הקורס = ציון המבחן · 4 תרגילי בית (הוגש/לא הוגש) · אין חובת נוכחות</span>
+            <span class="src">ציון נמוך מ־56 במבחן ← ציון הקורס = ציון המבחן · 4 תרגילי בית (הוגש/לא הוגש) · אין חובת נוכחות</span>
           </div>
           <div class="callout ai">
             <span class="label">🤖 מדיניות שימוש ב-<span class="en">AI</span> <span class="acro-def">(<span class="en">Artificial Intelligence</span> · בינה מלאכותית)</span></span>
@@ -1088,6 +1088,87 @@
         </div>
 
         <p class="bottom-line">זהו הקלט לשלבים הבאים — חקר המצב הקיים והניתוח שיבואו אחריו נשענים על הניסוח הזה.</p>
+
+      </div>
+    </section>
+    <!-- B5.6 — תיעוד הבעיות: טבלת הבעיות (added 2026-07). After framing/RCA, the problems are
+         consolidated into the FORMAL submission format from הנחיות חלק א' (columns גורם · בעיה
+         עסקית · הועלה ע"י · פתרון רצוי, ≥10 problems, ≥5 to solve). HABIT (2026-07 per request):
+         EVERY business problem is translated into MONEY — time=money, quality=money, churn=money —
+         so each בעיה-עסקית cell carries a figure and the hero makes the rule explicit: a problem
+         that costs nothing gets ignored. Reinforces the page-17 impact slide ("בעיה בלי מספר קשה
+         להצדיק"), now as a repeated habit. The פתרון-רצוי column aggregates into the system-to-
+         develop (compact callout). Campus rows tie to the running story (Shimon, queue). phase: init. -->
+    <section data-slug="documenting-problems">
+      <div class="sdlc-chip" title="שלב 1 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>ייזום</div>
+      <style>
+        section[data-slug="documenting-problems"] table.sad { width: 100%; table-layout: fixed; }
+        section[data-slug="documenting-problems"] table.sad th,
+        section[data-slug="documenting-problems"] table.sad td { font-size: 15px; padding: 6px 10px; line-height: 1.35; vertical-align: top; }
+        section[data-slug="documenting-problems"] table.sad td.n { text-align: center; font-weight: 700; }
+        section[data-slug="documenting-problems"] table.sad .money { color: var(--green); font-weight: 700; white-space: nowrap; }
+        section[data-slug="documenting-problems"] .hero p { font-size: 19px; }
+        section[data-slug="documenting-problems"] .callout { font-size: 16px; }
+      </style>
+      <h1>תיעוד הבעיות — הפורמט להגשה</h1>
+      <div class="subtitle">מרכזים את כל הבעיות בטבלה אחת — ולכל בעיה מצמידים מספר בכסף</div>
+      <div class="body">
+
+        <p class="muted" style="margin:0; font-size:17px;">כל הבעיות שזיהיתם נאספות לטבלה אחת בפורמט קבוע. שימו לב להפרדה בין
+          <b>הגורם</b> ל<b>בעיה</b> — ולכך שכל בעיה מתורגמת ל<b>השלכה כספית</b>:</p>
+
+        <table class="sad">
+          <colgroup>
+            <col style="width:34px;"><col style="width:22%;"><col style="width:29%;"><col style="width:13%;"><col>
+          </colgroup>
+          <tr>
+            <th>#</th>
+            <th>גורם לבעיה</th>
+            <th>בעיה עסקית <span style="font-weight:400; opacity:.85;">(עם מספר)</span></th>
+            <th>הועלה ע"י</th>
+            <th>פתרון רצוי</th>
+          </tr>
+          <tr class="fragment">
+            <td class="n">1</td>
+            <td>ריכוז הביקוש ל-15 דקות + קבלת הזמנות ידנית בדלפק</td>
+            <td>מכירות אבודות בשעת השיא — <span class="money">כ-1,000 ₪ ביום</span></td>
+            <td>סטודנטים</td>
+            <td>הזמנה ותשלום מראש באפליקציה — פיזור הביקוש</td>
+          </tr>
+          <tr class="fragment">
+            <td class="n">2</td>
+            <td>אין תצוגת מלאי בזמן אמת</td>
+            <td>נטישה למתחרה — ~15 לקוחות/שבוע <span class="money">(≈ 2,000 ₪/חודש)</span></td>
+            <td>סטודנטים · שמעון</td>
+            <td>הצגת זמינות מלאי לפני ההזמנה</td>
+          </tr>
+          <tr class="fragment">
+            <td class="n">3</td>
+            <td>ניהול הזמנות ומלאי ידני וחלקי</td>
+            <td>בזבוז מלאי ותכנון שגוי — <span class="money">כ-800 ₪ בחודש</span></td>
+            <td>שמעון (מנהל)</td>
+            <td>מערכת מרכזת + דוחות מכירות ומלאי</td>
+          </tr>
+        </table>
+
+        <div class="hero fragment">
+          <h3>💰 כלל אצבע: כל בעיה — מתורגמת לכסף</h3>
+          <p><b>זמן = כסף · איכות = כסף · נטישה = כסף.</b> בעיה כואבת שלא עולה כלום — אף אחד לא יתעדף אותה,
+            גם אם היא אמיתית. אומדן גס מספיק, העיקר שיש מספר — לכמת אותו זה בדיוק תפקיד מהנדס/ת התעשייה.</p>
+        </div>
+
+        <div class="cols fragment">
+          <div class="callout warn">
+            <span class="label">⚠️ כללי התיעוד</span>
+            תעדו את <b>כל</b> הבעיות שמצאתם (לא רק אחת) · סמנו אילו תבחרו לפתור · הפרידו גורם מבעיה.
+          </div>
+          <div class="callout good">
+            <span class="label">📦 עמודת "הפתרון הרצוי" ⟵ המערכת שתפתחו</span>
+            הפתרונות הרצויים מצטברים למערכת אחת עם הערך המוסף שלה — וזה הקלט לניסוח הדרישות.
+          </div>
+        </div>
+
+        <p class="bottom-line">לכל בעיה: גורם · <b>מספר בכסף</b> · פתרון רצוי — בלי מספר, קשה להצדיק פרויקט.</p>
 
       </div>
     </section>

@@ -43,10 +43,33 @@
     .assumptions-panel h4 { margin: 0 0 10px; color: #37474f; }
     .assumptions-panel ul { margin: 4px 0 10px; padding-inline-start: 18px; }
 
+    /* Token simulation — scenario buttons animate a token along the real flow paths.
+       The .sim-bar stays visible in embed mode too (it is how the model is presented). */
+    .sim-bar { position: fixed; bottom: 18px; left: 50%; transform: translateX(-50%); z-index: 1200;
+      display: flex; gap: 8px; align-items: center; flex-wrap: wrap; justify-content: center;
+      background: rgba(26,26,46,0.92); padding: 9px 14px; border-radius: 12px;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.25); direction: rtl; }
+    .sim-bar .sim-title { color: #ffd54f; font-size: 13px; font-weight: 700; margin-inline-end: 4px; }
+    .sim-bar button { background: #37474f; color: #fff; border: none; border-radius: 8px;
+      padding: 7px 12px; font-size: 13px; cursor: pointer; font-family: 'Noto Sans Hebrew', sans-serif; }
+    .sim-bar button:hover { background: #546e7a; }
+    .sim-bar button.active { background: #2e7d32; }
+    .sim-bar button.sim-stop { background: #8d6e63; }
+    .sim-caption { position: fixed; top: 14px; left: 50%; transform: translateX(-50%); z-index: 1200;
+      background: rgba(46,125,50,0.95); color: #fff; padding: 6px 16px; border-radius: 10px;
+      font-size: 14px; font-weight: 600; display: none; direction: rtl; pointer-events: none; }
+    .sim-caption.show { display: block; }
+    .sim-token { filter: drop-shadow(0 0 5px rgba(46,125,50,0.8)); }
+    .sim-active rect, .sim-active circle, .sim-active polygon {
+      stroke: #e65100 !important; stroke-width: 3px !important; }
+    .sim-active { filter: drop-shadow(0 0 7px rgba(230,81,0,0.55)); }
+    g.sim-done > path { stroke: #2e7d32 !important; stroke-width: 2.4px !important; }
+
     /* Embed mode (?embed=1): only the diagram, fit-to-screen, no chrome/scroll —
        used when this file is shown inside a lecture-slide iframe. */
     body.embed { margin: 0; padding: 0; overflow: hidden; height: 100vh; background: #fff; }
     body.embed .header-bar,
+    body.embed .stats-bar,
     body.embed .assumptions-btn,
     body.embed .assumptions-panel,
     body.embed .vp-export-btn { display: none !important; }
@@ -488,6 +511,136 @@
       
     </div>
   <button class="vp-export-btn" onclick="exportBPMN()">Download .bpmn (Visual Paradigm)</button>
+  <div class="sim-caption" id="sim-caption"></div>
+  <div class="sim-bar" id="sim-bar">
+    <span class="sim-title">▶ הריצו אסימון:</span>
+    <button data-scenario="happy">מסלול חלק</button>
+    <button data-scenario="stock">אזל מהמלאי</button>
+    <button data-scenario="retry">תשלום נכשל → שוב</button>
+    <button data-scenario="cancel">תשלום נכשל → ביטול</button>
+    <button class="sim-stop" id="sim-stop">⏹ עצור</button>
+  </div>
+  <script>
+  /* ---- Token simulation: a green token travels the real sequence-flow paths.
+          Scenario = ordered list of node ids ('t-…', 'gw-…', events) and flow ids ('sf-…').
+          Flows are animated with getPointAtLength; nodes highlight + dwell; traversed
+          flows stay green so the full route is painted by the end of the run. ---- */
+  (function() {
+    const svg = document.querySelector('.svg-wrapper svg');
+    const caption = document.getElementById('sim-caption');
+    const SVGNS = 'http://www.w3.org/2000/svg';
+
+    const COMMON = ['start-1','sf-1','t-counter','sf-2','t-choose','sf-3','t-queue','sf-4','gw-stock'];
+    const AFTER_STOCK = ['sf-6','t-take-order','sf-7','t-forward','sf-8','t-prepare','sf-9','t-notify','sf-10','t-pay','sf-11','gw-pay'];
+    const FINISH_OK = ['sf-12','t-approve','sf-17','t-receive','sf-18','end-ok'];
+    const SCENARIOS = {
+      happy:  COMMON.concat(AFTER_STOCK, FINISH_OK),
+      stock:  COMMON.concat(['sf-5','t-choose','sf-3','t-queue','sf-4','gw-stock'], AFTER_STOCK, FINISH_OK),
+      retry:  COMMON.concat(AFTER_STOCK, ['sf-13','gw-fail','sf-14','t-pay','sf-11','gw-pay'], FINISH_OK),
+      cancel: COMMON.concat(AFTER_STOCK, ['sf-13','gw-fail','sf-15','t-cancel','sf-16','end-cancel'])
+    };
+
+    let runId = 0;
+    let token = null;
+    const sleep = ms => new Promise(r => setTimeout(r, ms));
+
+    function ensureToken() {
+      if (!token) {
+        token = document.createElementNS(SVGNS, 'circle');
+        token.setAttribute('r', '11');
+        token.setAttribute('fill', '#2e7d32');
+        token.setAttribute('stroke', '#fff');
+        token.setAttribute('stroke-width', '2.5');
+        token.classList.add('sim-token');
+        svg.appendChild(token);
+      }
+      token.style.display = '';
+      return token;
+    }
+
+    function nodeCenter(g) {
+      const rect = g.querySelector('rect');
+      if (rect) {
+        const tr = rect.getAttribute('transform');
+        if (tr) {
+          const m = tr.match(/rotate\(\s*45[,\s]+([\d.]+)[,\s]+([\d.]+)/);
+          if (m) return { x: +m[1], y: +m[2] };   // gateway diamond: rotation centre
+        }
+        return { x: +rect.getAttribute('x') + rect.getAttribute('width') / 2,
+                 y: +rect.getAttribute('y') + rect.getAttribute('height') / 2 };
+      }
+      const c = g.querySelector('circle');
+      return { x: +c.getAttribute('cx'), y: +c.getAttribute('cy') };
+    }
+
+    function moveAlong(path, dur) {
+      return new Promise(res => {
+        const len = path.getTotalLength();
+        const t0 = performance.now();
+        const id = runId;
+        function frame(t) {
+          if (id !== runId) return res(false);
+          const p = Math.min(1, (t - t0) / dur);
+          const pt = path.getPointAtLength(p * len);
+          token.setAttribute('cx', pt.x);
+          token.setAttribute('cy', pt.y);
+          if (p < 1) requestAnimationFrame(frame); else res(true);
+        }
+        requestAnimationFrame(frame);
+      });
+    }
+
+    function showCaption(g) {
+      const t = g.querySelector('text');
+      if (!t) return;
+      caption.textContent = t.textContent.replace(/\s+/g, ' ').trim();
+      caption.classList.add('show');
+    }
+
+    function clearAll() {
+      svg.querySelectorAll('.sim-done').forEach(g => g.classList.remove('sim-done'));
+      svg.querySelectorAll('.sim-active').forEach(g => g.classList.remove('sim-active'));
+      if (token) token.style.display = 'none';
+      caption.classList.remove('show');
+      document.querySelectorAll('.sim-bar button').forEach(b => b.classList.remove('active'));
+    }
+
+    async function run(name) {
+      runId++;
+      const id = runId;
+      clearAll();
+      ensureToken();
+      document.querySelectorAll('.sim-bar button').forEach(b =>
+        b.classList.toggle('active', b.dataset.scenario === name));
+      for (const step of SCENARIOS[name]) {
+        if (id !== runId) return;
+        if (step.indexOf('sf-') === 0) {
+          const g = svg.querySelector('[data-flow="' + step + '"]');
+          const path = g.querySelector('path');
+          const dur = Math.max(420, path.getTotalLength() / 380 * 1000);
+          if (!await moveAlong(path, dur)) return;
+          g.classList.add('sim-done');
+        } else {
+          const g = document.getElementById(step);
+          const c = nodeCenter(g);
+          token.setAttribute('cx', c.x);
+          token.setAttribute('cy', c.y);
+          g.classList.add('sim-active');
+          showCaption(g);
+          await sleep(step.indexOf('gw-') === 0 ? 650 : 800);
+          if (id !== runId) return;
+          if (step.indexOf('end-') !== 0) g.classList.remove('sim-active'); // end events stay lit
+        }
+      }
+      caption.classList.remove('show');
+      document.querySelectorAll('.sim-bar button').forEach(b => b.classList.remove('active'));
+    }
+
+    document.querySelectorAll('.sim-bar button[data-scenario]').forEach(b =>
+      b.addEventListener('click', () => run(b.dataset.scenario)));
+    document.getElementById('sim-stop').addEventListener('click', () => { runId++; clearAll(); });
+  })();
+  </script>
   <script>
   (function() {
     const TOOLTIPS = {"start-1":"<strong>אירוע התחלה</strong><div>סטודנט הגיע לקפיטריה</div>","t-counter":"<strong>גש לדלפק</strong><div>מאגר: קפיטריית הקמפוס · נתיב: סטודנט</div>","t-choose":"<strong>בחר מנה מהלוח</strong><div>מאגר: קפיטריית הקמפוס · נתיב: סטודנט</div>","t-queue":"<strong>המתן בתור</strong><div>מאגר: קפיטריית הקמפוס · נתיב: סטודנט</div>","gw-stock":"<strong>XOR (בלעדי) — פיצול</strong><div>שאלה: המנה במלאי?</div><div>ענפים:</div><ul style=\"margin:4px 0 0;padding-right:18px\"><li>לא במלאי → בחר מנה מהלוח</li><li>במלאי → קבל הזמנה בעל-פה</li></ul>","t-take-order":"<strong>קבל הזמנה בעל-פה</strong><div>מאגר: קפיטריית הקמפוס · נתיב: עובד דלפק</div>","t-forward":"<strong>העבר הזמנה למטבח</strong><div>מאגר: קפיטריית הקמפוס · נתיב: עובד דלפק</div>","t-prepare":"<strong>הכן את ההזמנה</strong><div>מאגר: קפיטריית הקמפוס · נתיב: מטבח</div>","t-notify":"<strong>הודע שההזמנה מוכנה</strong><div>מאגר: קפיטריית הקמפוס · נתיב: מטבח</div>","t-pay":"<strong>שלם בקופה</strong><div>מאגר: קפיטריית הקמפוס · נתיב: תשלום</div>","gw-pay":"<strong>XOR (בלעדי) — פיצול</strong><div>שאלה: התשלום הצליח?</div><div>ענפים:</div><ul style=\"margin:4px 0 0;padding-right:18px\"><li>הצליח → אשר תשלום</li><li>נכשל → gw-fail</li></ul>","t-approve":"<strong>אשר תשלום</strong><div>מאגר: קפיטריית הקמפוס · נתיב: תשלום</div>","gw-fail":"<strong>XOR (בלעדי) — פיצול</strong><div>שאלה: לשלם שוב או לבטל?</div><div>ענפים:</div><ul style=\"margin:4px 0 0;padding-right:18px\"><li>שלם שוב → שלם בקופה</li><li>בטל → בטל הזמנה</li></ul>","t-cancel":"<strong>בטל הזמנה</strong><div>מאגר: קפיטריית הקמפוס · נתיב: תשלום</div>","t-receive":"<strong>קבל את ההזמנה</strong><div>מאגר: קפיטריית הקמפוס · נתיב: סטודנט</div>","end-ok":"<strong>אירוע סיום</strong><div>ההזמנה התקבלה</div>","end-cancel":"<strong>אירוע סיום</strong><div>ההזמנה בוטלה</div>"};

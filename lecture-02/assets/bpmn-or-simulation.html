@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>סימולציית שער OR — הצטברות אסימונים</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Hebrew:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; padding: 0; background: #eef2f6;
+      font-family: 'Noto Sans Hebrew', -apple-system, BlinkMacSystemFont, sans-serif; direction: rtl; }
+    .header-bar { padding: 12px 20px; background: linear-gradient(135deg, #37474f, #546e7a);
+      color: #fff; display: flex; align-items: baseline; gap: 14px; }
+    .header-bar h1 { margin: 0; font-size: 17px; font-weight: 600; }
+    .header-bar .en { font-size: 12px; opacity: 0.8; }
+    .stage { padding: 8px 12px; }
+    svg { display: block; width: 100%; height: auto; background: #f8fafc; border-radius: 8px; }
+
+    /* Control bar */
+    .ctrl { display: flex; gap: 8px; align-items: center; justify-content: center; flex-wrap: wrap;
+      padding: 8px; }
+    .ctrl button { background: #37474f; color: #fff; border: none; border-radius: 8px;
+      padding: 6px 13px; font-size: 13px; cursor: pointer; font-family: inherit; }
+    .ctrl button:hover { background: #546e7a; }
+    .ctrl .hint { color: #546e7a; font-size: 12.5px; }
+
+    /* Embed mode (?embed=1): only the stage, fit-to-screen, no chrome. */
+    body.embed { overflow: hidden; height: 100vh; background: #fff; display: flex; flex-direction: column; }
+    body.embed .header-bar { display: none; }
+    body.embed .stage { flex: 1 1 auto; min-height: 0; padding: 4px 8px 0; display: flex; }
+    body.embed .stage svg { height: 100%; max-height: 100%; }
+    body.embed .ctrl { padding: 4px 8px 6px; }
+  </style>
+</head>
+<body>
+  <div class="header-bar">
+    <h1>סימולציית שער <span class="en">OR</span> (מכליל) — הצטברות אסימונים</h1>
+    <span class="en">Inclusive OR — token accumulation</span>
+  </div>
+
+  <div class="stage">
+    <svg id="sim-svg" viewBox="0 0 1060 340" role="img"
+         aria-label="סימולציה: הזמנות בצבעים שונים מנותבות לעמדות ההכנה ומתאחדות בשער ה-OR; אסימונים נערמים בעמדות תפוסות ובשער האיחוד עד שכל ענפי ההזמנה מוכנים">
+      <defs>
+        <marker id="or-ar" markerWidth="9" markerHeight="9" refX="7.5" refY="4.5" orient="auto">
+          <path d="M0,0 L8,4.5 L0,9 Z" fill="#546e7a"/>
+        </marker>
+      </defs>
+
+      <!-- ===== visible sequence flows (edge-to-edge, gray) ===== -->
+      <g fill="none" stroke="#546e7a" stroke-width="2">
+        <line x1="62" y1="170" x2="80" y2="170" marker-end="url(#or-ar)"/>
+        <line x1="200" y1="170" x2="238" y2="170" marker-end="url(#or-ar)"/>
+        <!-- split -> 3 stations -->
+        <path d="M302 170 L360 170 L360 67 L440 67" marker-end="url(#or-ar)"/>
+        <line x1="302" y1="170" x2="440" y2="170" marker-end="url(#or-ar)"/>
+        <path d="M302 170 L360 170 L360 273 L440 273" marker-end="url(#or-ar)"/>
+        <!-- 3 stations -> join -->
+        <path d="M590 67 L660 67 L660 170 L688 170" marker-end="url(#or-ar)"/>
+        <line x1="590" y1="170" x2="688" y2="170" marker-end="url(#or-ar)"/>
+        <path d="M590 273 L660 273 L660 170 L688 170" marker-end="url(#or-ar)"/>
+        <!-- join -> pack -> end -->
+        <line x1="752" y1="170" x2="812" y2="170" marker-end="url(#or-ar)"/>
+        <line x1="942" y1="170" x2="986" y2="170" marker-end="url(#or-ar)"/>
+      </g>
+
+      <!-- ===== hidden motion guides (centre-to-centre / centre-to-entrance) ===== -->
+      <g fill="none" stroke="none">
+        <path id="g-start-kabel" d="M42 170 L140 170"/>
+        <path id="g-kabel-split" d="M140 170 L270 170"/>
+        <path id="g-split-hot"   d="M270 170 L360 170 L360 67 L440 67"/>
+        <path id="g-split-salad" d="M270 170 L440 170"/>
+        <path id="g-split-drink" d="M270 170 L360 170 L360 273 L440 273"/>
+        <path id="g-hot-join"    d="M565 67 L660 67 L660 170 L688 170"/>
+        <path id="g-salad-join"  d="M565 170 L688 170"/>
+        <path id="g-drink-join"  d="M565 273 L660 273 L660 170 L688 170"/>
+        <path id="g-join-pack"   d="M720 170 L877 170"/>
+        <path id="g-pack-end"    d="M877 170 L1006 170"/>
+      </g>
+
+      <!-- ===== branch condition labels (green, above each run, clear of the arrows) ===== -->
+      <g font-size="13" font-weight="700" fill="#2e7d32" text-anchor="middle" style="direction:rtl;">
+        <text x="400" y="55">אם יש חמה</text>
+        <text x="400" y="158">אם יש סלט</text>
+        <text x="400" y="261">אם יש שתייה</text>
+      </g>
+
+      <!-- ===== nodes ===== -->
+      <!-- start -->
+      <circle cx="42" cy="170" r="20" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2.5"/>
+      <!-- קבל הזמנה -->
+      <rect x="80" y="146" width="120" height="48" rx="8" fill="#fff" stroke="#546e7a" stroke-width="1.5"/>
+      <text x="140" y="175" text-anchor="middle" font-size="14" fill="#1a1a2e" style="direction:rtl;">קבל הזמנה</text>
+      <!-- OR-split: diamond holds ONLY the O marker -->
+      <polygon points="270,138 302,170 270,202 238,170" fill="#fff8e1" stroke="#f9a825" stroke-width="2"/>
+      <circle cx="270" cy="170" r="12" fill="none" stroke="#e65100" stroke-width="3"/>
+      <!-- stations -->
+      <rect x="440" y="44" width="150" height="46" rx="8" fill="#fff" stroke="#546e7a" stroke-width="1.5"/>
+      <text x="515" y="72" text-anchor="middle" font-size="14" fill="#1a1a2e" style="direction:rtl;">הכן מנה חמה</text>
+      <rect x="440" y="147" width="150" height="46" rx="8" fill="#fff" stroke="#546e7a" stroke-width="1.5"/>
+      <text x="515" y="175" text-anchor="middle" font-size="14" fill="#1a1a2e" style="direction:rtl;">הכן סלט</text>
+      <rect x="440" y="250" width="150" height="46" rx="8" fill="#fff" stroke="#546e7a" stroke-width="1.5"/>
+      <text x="515" y="278" text-anchor="middle" font-size="14" fill="#1a1a2e" style="direction:rtl;">הכן שתייה</text>
+      <!-- OR-join: diamond holds ONLY the O marker -->
+      <polygon points="720,138 752,170 720,202 688,170" fill="#fff8e1" stroke="#f9a825" stroke-width="2"/>
+      <circle cx="720" cy="170" r="12" fill="none" stroke="#e65100" stroke-width="3"/>
+      <text id="join-badge" x="720" y="216" text-anchor="middle" font-size="12" font-weight="700" fill="#e65100" style="direction:rtl;"></text>
+      <!-- ארוז ומסור -->
+      <rect x="812" y="146" width="130" height="48" rx="8" fill="#fff" stroke="#546e7a" stroke-width="1.5"/>
+      <text x="877" y="175" text-anchor="middle" font-size="14" fill="#1a1a2e" style="direction:rtl;">ארוז ומסור</text>
+      <!-- end -->
+      <circle id="end-ev" cx="1006" cy="170" r="20" fill="#ffebee" stroke="#c62828" stroke-width="4"/>
+
+      <!-- token layer sits on top -->
+      <g id="token-layer"></g>
+    </svg>
+  </div>
+
+  <div class="ctrl">
+    <button id="btn-pause">⏸ השהה</button>
+    <button id="btn-speed">⏩ מהירות ×1</button>
+    <span class="hint">כל צבע = הזמנה אחרת · אסימונים נערמים בעמדה תפוסה ובשער ה-<span class="en">OR</span> עד שכל ענפי ההזמנה הגיעו</span>
+  </div>
+
+  <script>
+  (function () {
+    const SVGNS = 'http://www.w3.org/2000/svg';
+    const layer = document.getElementById('token-layer');
+    const joinBadge = document.getElementById('join-badge');
+    const endEv = document.getElementById('end-ev');
+
+    // 10 distinct order colors
+    const COLORS = ['#e53935','#8e24aa','#3949ab','#039be5','#00897b',
+                    '#43a047','#f9a825','#fb8c00','#6d4c41','#d81b60'];
+
+    const NODE = { start:{x:42,y:170}, kabel:{x:140,y:170}, split:{x:270,y:170},
+                   join:{x:720,y:170}, pack:{x:877,y:170}, end:{x:1006,y:170} };
+
+    const STATIONS = [
+      { key:'hot',   work:{x:565,y:67},  entrance:{x:440,y:67},  gin:'g-split-hot',   gout:'g-hot-join',   prep:2000, busy:false, waiting:[] },
+      { key:'salad', work:{x:565,y:170}, entrance:{x:440,y:170}, gin:'g-split-salad', gout:'g-salad-join', prep:1200, busy:false, waiting:[] },
+      { key:'drink', work:{x:565,y:273}, entrance:{x:440,y:273}, gin:'g-split-drink', gout:'g-drink-join', prep:650,  busy:false, waiting:[] },
+    ];
+
+    let speed = 1;
+    let paused = false;
+    const SPEEDS = [1, 2, 0.5];
+    let speedIdx = 0;
+
+    const rand = (a, b) => a + Math.random() * (b - a);
+
+    // ---- pausable + speed-scaled timing primitives ----
+    function sleep(ms) {
+      return new Promise(res => {
+        let rem = ms, last = null;
+        function frame(t) {
+          if (last === null) last = t;
+          const dt = t - last; last = t;
+          if (!paused) rem -= dt * speed;
+          if (rem <= 0) return res();
+          requestAnimationFrame(frame);
+        }
+        requestAnimationFrame(frame);
+      });
+    }
+    function moveGuide(tok, id, pxPerSec) {
+      pxPerSec = pxPerSec || 200;
+      return new Promise(res => {
+        const path = document.getElementById(id);
+        const len = path.getTotalLength();
+        let dist = 0, last = null;
+        function frame(t) {
+          if (last === null) last = t;
+          const dt = t - last; last = t;
+          if (!paused) dist += pxPerSec * speed * dt / 1000;
+          const d = Math.min(dist, len);
+          const p = path.getPointAtLength(d);
+          tok.setAttribute('cx', p.x); tok.setAttribute('cy', p.y);
+          if (dist >= len) return res();
+          requestAnimationFrame(frame);
+        }
+        requestAnimationFrame(frame);
+      });
+    }
+    function moveTo(tok, to, pxPerSec) {
+      pxPerSec = pxPerSec || 200;
+      return new Promise(res => {
+        const from = { x:+tok.getAttribute('cx'), y:+tok.getAttribute('cy') };
+        const len = Math.hypot(to.x - from.x, to.y - from.y) || 1;
+        let dist = 0, last = null;
+        function frame(t) {
+          if (last === null) last = t;
+          const dt = t - last; last = t;
+          if (!paused) dist += pxPerSec * speed * dt / 1000;
+          const p = Math.min(1, dist / len);
+          tok.setAttribute('cx', from.x + (to.x - from.x) * p);
+          tok.setAttribute('cy', from.y + (to.y - from.y) * p);
+          if (p >= 1) return res();
+          requestAnimationFrame(frame);
+        }
+        requestAnimationFrame(frame);
+      });
+    }
+
+    function makeToken(color) {
+      const c = document.createElementNS(SVGNS, 'circle');
+      c.setAttribute('r', 8);
+      c.setAttribute('fill', color);
+      c.setAttribute('stroke', '#fff');
+      c.setAttribute('stroke-width', 2);
+      c.setAttribute('cx', NODE.start.x);
+      c.setAttribute('cy', NODE.start.y);
+      c.style.filter = 'drop-shadow(0 1px 2px rgba(0,0,0,.35))';
+      layer.appendChild(c);
+      return c;
+    }
+    const place = (tok, x, y) => { tok.setAttribute('cx', x); tok.setAttribute('cy', y); };
+
+    // ---- station occupancy (capacity 1 -> a queue forms and accumulates) ----
+    function restackStation(st) {
+      st.waiting.forEach((w, i) => place(w.tok, st.entrance.x - 22 - i * 15, st.entrance.y));
+    }
+    function acquire(st, tok) {
+      if (!st.busy) { st.busy = true; return Promise.resolve(); }
+      return new Promise(res => { st.waiting.push({ tok, res }); restackStation(st); });
+    }
+    function release(st) {
+      const next = st.waiting.shift();
+      restackStation(st);
+      if (next) next.res();          // station stays busy, handed to next in queue
+      else st.busy = false;
+    }
+
+    // ---- OR-join accumulation ----
+    const joinPile = [];             // {orderId, tok}
+    function joinSlot(i) {
+      const perRow = 5, col = i % perRow, row = Math.floor(i / perRow);
+      return { x: NODE.join.x - 32 + col * 16, y: 232 + row * 15 };
+    }
+    function restackJoin() {
+      joinPile.forEach((e, i) => { const s = joinSlot(i); place(e.tok, s.x, s.y); });
+      joinBadge.textContent = joinPile.length ? ('ממתינים: ' + joinPile.length) : '';
+    }
+
+    async function flashEnd() {
+      endEv.setAttribute('fill', '#c8e6c9');
+      endEv.setAttribute('stroke', '#2e7d32');
+      await sleep(260);
+      endEv.setAttribute('fill', '#ffebee');
+      endEv.setAttribute('stroke', '#c62828');
+    }
+
+    function pickStations() {
+      let sel = STATIONS.filter(() => Math.random() < 0.72);  // usually 2-3 branches
+      if (!sel.length) sel = [STATIONS[Math.floor(Math.random() * 3)]];
+      return sel;
+    }
+
+    let orderSeq = 0, inFlight = 0;
+
+    async function runOrder() {
+      const color = COLORS[orderSeq % COLORS.length];
+      const orderId = ++orderSeq;
+      const stations = pickStations();
+      inFlight++;
+
+      // 1) single token: start -> קבל הזמנה -> OR-split
+      const lead = makeToken(color);
+      await moveGuide(lead, 'g-start-kabel');
+      await sleep(260);
+      await moveGuide(lead, 'g-kabel-split');
+      await sleep(220);                       // gateway evaluates
+      lead.remove();
+
+      // 2) fan out: one token per ACTIVATED station (that's the OR split)
+      await Promise.all(stations.map(async st => {
+        const t = makeToken(color);
+        place(t, NODE.split.x, NODE.split.y);
+        await moveGuide(t, st.gin);           // to the station entrance
+        await acquire(st, t);                 // wait if station busy (accumulate!)
+        await moveTo(t, st.work, 170);        // into the station (parked clear of its label)
+        await sleep(st.prep + rand(-150, 300));
+        release(st);
+        await moveGuide(t, st.gout);          // to the OR-join entrance
+        joinPile.push({ orderId, tok: t });
+        restackJoin();                        // pile up and wait for siblings
+      }));
+
+      // 3) all activated branches have arrived -> the OR-join fires
+      const mine = joinPile.filter(e => e.orderId === orderId);
+      await Promise.all(mine.map(e => moveTo(e.tok, NODE.join, 240)));
+      mine.forEach(e => { const i = joinPile.indexOf(e); if (i >= 0) joinPile.splice(i, 1); });
+      restackJoin();
+      const merged = mine[0].tok;             // keep one, drop the rest (merge)
+      mine.slice(1).forEach(e => e.tok.remove());
+      await sleep(200);
+
+      // 4) merged token: join -> ארוז ומסור -> end
+      await moveGuide(merged, 'g-join-pack');
+      await sleep(320);
+      await moveGuide(merged, 'g-pack-end');
+      flashEnd();
+      await sleep(140);
+      merged.remove();
+      inFlight--;
+    }
+
+    // ---- continuous loop of orders (overlapping -> congestion -> accumulation) ----
+    async function loop() {
+      while (true) {
+        if (!paused && inFlight < 6) runOrder();
+        await sleep(rand(750, 1150));
+      }
+    }
+
+    // ---- controls ----
+    const btnPause = document.getElementById('btn-pause');
+    const btnSpeed = document.getElementById('btn-speed');
+    btnPause.addEventListener('click', () => {
+      paused = !paused;
+      btnPause.textContent = paused ? '▶ המשך' : '⏸ השהה';
+    });
+    btnSpeed.addEventListener('click', () => {
+      speedIdx = (speedIdx + 1) % SPEEDS.length;
+      speed = SPEEDS[speedIdx];
+      btnSpeed.textContent = '⏩ מהירות ×' + speed;
+    });
+
+    loop();
+  })();
+  </script>
+
+  <script>if (/\bembed\b/.test(location.search)) document.body.classList.add('embed');</script>
+</body>
+</html>
