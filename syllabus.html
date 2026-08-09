@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ניתוח ועיצוב מערכות מידע - סילבוס - תשפ&quot;ו - סמסטר קיץ</title>
+<style>
+:root{--blue:#0070C0;--dark-blue:#004E8C;--ink:#1d2733;--muted:#5a6875;--line:#dde3ea;
+      --tint:#f2f7fb;--warn-bg:#fff6e5;--warn-line:#e0a33a;--page:#eef2f6;}
+*{box-sizing:border-box;}
+body{margin:0;background:var(--page);color:var(--ink);
+     font-family:"Heebo","Segoe UI",Arial,sans-serif;line-height:1.65;font-size:16px;}
+.sheet{max-width:980px;margin:26px auto;background:#fff;border:1px solid var(--line);
+       border-radius:16px;box-shadow:0 2px 16px rgba(15,40,70,.07);overflow:hidden;}
+header{background:linear-gradient(135deg,var(--dark-blue),var(--blue));color:#fff;padding:34px 34px 28px;}
+header h1{margin:0 0 6px;font-size:30px;line-height:1.25;}
+header .nums{opacity:.9;font-size:15px;}
+header .sem{margin-top:14px;display:inline-block;background:rgba(255,255,255,.16);
+            border:1px solid rgba(255,255,255,.35);border-radius:999px;padding:5px 16px;font-weight:600;}
+header .dept{margin-top:10px;opacity:.85;font-size:14px;}
+main{padding:8px 34px 34px;}
+section{padding-top:22px;}
+h2{color:var(--dark-blue);font-size:21px;margin:0 0 10px;padding-bottom:7px;
+   border-bottom:2px solid var(--tint);}
+h3{font-size:16.5px;margin:16px 0 4px;color:var(--dark-blue);}
+p{margin:0 0 10px;}
+ul{margin:0 0 10px;padding-inline-start:22px;}
+li{margin-bottom:5px;}
+a{color:var(--blue);}
+.en{unicode-bidi:isolate;direction:ltr;}
+.tbl-wrap{overflow-x:auto;}
+table{width:100%;border-collapse:collapse;font-size:14.5px;margin:6px 0 4px;}
+th,td{border:1px solid var(--line);padding:8px 10px;text-align:start;vertical-align:top;}
+th{background:var(--tint);color:var(--dark-blue);font-weight:700;white-space:nowrap;}
+tbody tr:nth-child(even){background:#fafcfe;}
+table.schedule td:first-child{text-align:center;font-weight:700;color:var(--dark-blue);width:38px;}
+table.schedule td:nth-child(2){white-space:nowrap;}
+table.schedule td:nth-child(3){color:var(--muted);font-size:13.5px;white-space:nowrap;}
+table.grades td:nth-child(2){text-align:center;font-weight:700;width:150px;}
+.callout{background:var(--tint);border-inline-start:5px solid var(--blue);
+         border-radius:0 10px 10px 0;padding:12px 16px;margin:10px 0;}
+ul.sessions{list-style:none;padding:0;margin:0 0 10px;}
+ul.sessions li{margin-bottom:3px;}
+.two-up{display:flex;gap:14px;flex-wrap:wrap;margin:12px 0;}
+.site-card{flex:1 1 300px;background:var(--tint);border:1px solid var(--line);
+           border-radius:12px;padding:14px 18px;}
+.site-card.accent{border-color:var(--blue);}
+.site-h{font-weight:700;color:var(--dark-blue);margin-bottom:6px;}
+.site-card ul{margin:0;padding-inline-start:20px;font-size:15px;}
+.site-links{margin:10px 0 0;font-size:14px;word-break:break-all;}
+.warn{background:var(--warn-bg);border-inline-start:5px solid var(--warn-line);
+      border-radius:0 10px 10px 0;padding:12px 16px;margin:10px 0;font-weight:600;}
+.stamp{padding:14px 34px;font-size:13.5px;border-bottom:1px solid var(--line);}
+.stamp.live{background:#eef8ef;color:#215c2c;}
+.stamp.frozen{background:var(--warn-bg);color:#6b4a10;}
+.stamp b{font-weight:700;}
+.refs{list-style:none;padding:0;margin:0;font-size:14.5px;}
+.refs li{display:flex;gap:10px;margin-bottom:8px;align-items:baseline;}
+.refs .key{flex:0 0 auto;min-width:100px;font-weight:700;color:var(--dark-blue);
+           unicode-bidi:isolate;direction:ltr;text-align:start;}
+.refs .cite{flex:1 1 auto;unicode-bidi:isolate;direction:ltr;text-align:left;}
+.refs .cite-he{flex:1 1 auto;}
+.refs .topic{flex:0 0 auto;font-size:12.5px;color:var(--muted);background:var(--tint);
+             border:1px solid var(--line);border-radius:999px;padding:1px 9px;white-space:nowrap;}
+.refs .req{flex:0 0 auto;font-size:12.5px;font-weight:700;color:#8a4b00;background:var(--warn-bg);
+           border:1px solid var(--warn-line);border-radius:999px;padding:1px 9px;white-space:nowrap;}
+.refs .reflink{text-decoration:none;font-weight:700;}
+.reqs > div{margin-bottom:14px;}
+footer{padding:18px 34px 26px;color:var(--muted);font-size:13px;border-top:1px solid var(--line);}
+@media print{
+  body{background:#fff;font-size:11pt;}
+  .sheet{margin:0;border:0;border-radius:0;box-shadow:none;max-width:none;}
+  header{background:var(--dark-blue) !important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  th,.callout,.warn,.stamp{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  section{page-break-inside:avoid;}
+  table{page-break-inside:auto;font-size:9.5pt;}
+  tr{page-break-inside:avoid;}
+}
+@media (max-width:640px){
+  main,header,footer,.stamp{padding-inline:18px;}
+  header h1{font-size:23px;}
+}
+</style>
+</head>
+<body>
+<div class="sheet">
+<header>
+  <h1>סילבוס הקורס - ניתוח ועיצוב מערכות מידע</h1>
+  <div class="nums"><span class="en">364-1-1411</span></div>
+  <div class="sem">תשפ&quot;ו - סמסטר קיץ</div>
+  <div class="dept">הנדסת תעשייה וניהול, אוניברסיטת בן-גוריון בנגב</div>
+</header>
+<div class="stamp live">✅ <b>הגרסה העדכנית</b> - תשפ&quot;ו - סמסטר קיץ, גרסה 1.0, עודכן 2026-08-09. עמוד זה הוא המקור הקובע ומתעדכן במהלך הסמסטר.</div>
+<main>
+<section>
+  <h2>מועדי המפגשים וצוות הקורס</h2>
+  <p style="margin-bottom:4px"><b>הרצאות:</b></p>
+  <ul class="sessions"><li>יום שני 8-11</li><li>יום שני 12-15</li></ul>
+  <p><b>תרגולים:</b> לפי לו&quot;ז תרגולים</p>
+  <div class="tbl-wrap"><table>
+<thead><tr><th>שם</th><th>תפקיד</th><th>שעות קבלה (בתיאום מראש)</th><th>חדר</th><th>דוא&quot;ל</th></tr></thead>
+<tbody>
+<tr><td>ד&quot;ר דוד קודיש</td><td>מרצה</td><td>בתיאום מראש</td><td>בנין 16 חדר 257</td><td><a class="en" href="mailto:codishd@bgu.ac.il">codishd@bgu.ac.il</a></td></tr>
+<tr><td>איציק גורביץ</td><td>מרצה</td><td>בתיאום מראש</td><td></td><td><a class="en" href="mailto:itzikgu@post.bgu.ac.il">itzikgu@post.bgu.ac.il</a></td></tr>
+<tr><td>עמית מוכתר</td><td>מתרגל</td><td>בתיאום מראש</td><td></td><td><a class="en" href="mailto:amitmuch@post.bgu.ac.il">amitmuch@post.bgu.ac.il</a></td></tr>
+</tbody>
+</table></div>
+  <p style="margin-top:10px"><b>מייל הקורס:</b>
+     <a class="en" href="mailto:sadbgu@gmail.com">sadbgu@gmail.com</a></p>
+</section>
+<section>
+  <h2>תיאור הקורס</h2>
+  <p>הקורס מקנה לסטודנטים את כל הידע הדרוש לניתוח ועיצוב מערכת מידע החל משלב איתור הבעיה העסקית, דרך כל שלבי ניתוח הבעיה, חקר המצב הקיים והבנת הארגון ע&quot;י ניתוח ותיעוד התהליכים העסקיים שבו. תיעוד זה נעשה באמצעות שפת <span class="en">BPMN</span>. בהמשך, הקורס עוסק בשיטות שונות לאיסוף וארגון הדרישות לפתרון הבעיה, חיפוש חלופות בשוק, חקר ישימות וניתוחי עלות-תועלת, ובמידת הצורך, פיתוח מערכת מידע. כחלק משלבי פיתוח מערכת המידע, הקורס מכסה את תחום עיצוב הפתרון לבעיה באמצעות כלי <span class="en">UML</span> המשמשים כשפה אחידה בין צוותי תכנון ופיתוח תוכנה. במסגרת זו, הסטודנטים בקורס גם מתנסים בפיתוח אב-טיפוס ראשוני לבעיה עסקית.</p>
+</section>
+<section>
+  <h2>אתר הקורס וחומרי הלימוד</h2>
+  <p>לקורס שני אתרים, וההפרדה ביניהם פשוטה: מה ששייך לסמסטר הנוכחי נמצא במודל, ומה שחוצה סמסטרים נמצא ב-<span class="en">GitHub</span>.</p>
+  <div class="two-up">
+    <div class="site-card">
+      <div class="site-h">מודל - הסמסטר הנוכחי</div>
+      <ul><li>הודעות ועדכונים שוטפים</li><li>ציונים</li><li>הגשות (תרגילי בית וחלקי הפרויקט)</li><li>מועדי הגשה וחומרים ייעודיים לסמסטר זה</li></ul>
+    </div>
+    <div class="site-card accent">
+      <div class="site-h"><span class="en">GitHub </span>- חומרי הקורס</div>
+      <ul><li>מצגות ההרצאות (אינטראקטיביות, לצפייה בדפדפן)</li><li>חומרי תרגול, תרגילים ופתרונות</li><li>הדוגמה הרצה של הקורס וחומרי העזר</li><li>הסילבוס - הגרסה הקובעת והמעודכנת</li></ul>
+      <p class="site-links">
+        <a class="en" href="https://github.com/dcodish/SAD-course-materials">https://github.com/dcodish/SAD-course-materials</a><br>
+        <a class="en" href="https://dcodish.github.io/SAD-course-materials/">https://dcodish.github.io/SAD-course-materials/</a></p>
+    </div>
+  </div>
+  <p>בקורס נעשה שימוש ב-<span class="en">MCP</span> של הקורס (<span class="en">sad-mcp</span>) - תוסף ל-<span class="en">Claude Desktop</span> שדרכו ניתן לראיין את בעלי העניין של הדוגמה הרצה, לתרגל איסוף דרישות ולגשת לכלי התרשימים. הוראות התקנה בעמוד ה-<span class="en">GitHub</span> של הקורס.</p>
+</section>
+<section>
+  <h2>מטרות הקורס</h2>
+  <ul><li>להקנות יכולות וכלים לנתח מערכת מסובכת של תהליכים עסקיים, כולל ייעול באמצעות מערכת ממוחשבת.</li><li>ללמד את השלבים העיקריים בתהליך הפיתוח של מערכות מידע, ובפרט את שלב ניתוח המערכת תוך שימוש במתודולוגיות פיתוח נפוצות, בעיקר מתודולוגיית פיתוח מונחה אובייקטים תוך שימוש ב-<span class="en">UML</span> וכלי <span class="en">CASE</span>.</li><li>התנסות בתהליכי התכנון, העיצוב והפיתוח של מערכת מידע.</li><li>להכשיר מנתחי ומעצבי מערכות מידע לעידן הבינה המלאכותית: לשלב כלי <span class="en">AI</span> לאורך כל מחזור החיים - מזיהוי הבעיה ואיסוף הדרישות ועד לבניית אב-טיפוס עובד - ובד בבד לפתח את שיקול הדעת המקצועי לבחון את תוצריהם ולשאול מה הכלי פספס, מה הניח מבלי לומר, ומה נותר באחריות המנתח/ת. הבינה המלאכותית מאיצה את העבודה; היא אינה מחליפה את ההבנה העסקית ואת האחריות על התוצר.</li></ul>
+  <p><b>מבנה הקורס:</b> הרצאה: 3 שעות שבועיות. תרגול: שעה שבועית. נק&quot;ז: 3.5</p>
+</section>
+<section>
+  <h2>דרישות הקורס</h2>
+  <div class="reqs"><div><h3>קורסי קדם</h3><p>יסודות מערכות מידע, בסיסי נתונים, פיתוח מונחה עצמים. סטודנטים ללא דרישות קדם אלה רשאים להירשם לקורס רק לאחר אישור המחלקה ובכפוף לרישום לקורסים אלה במקביל לקורס זה. במידה ותנאים אלה לא מתקיימים, יוסר רישומו של הסטודנט מהקורס ברגע שהדבר יתברר, ללא שום יכולת ערעור בנושא.</p></div><div><h3>נוכחות</h3><p>אין חובת נוכחות בהרצאות ובתרגולים.</p></div><div><h3>פרויקט הקורס</h3><p>במהלך הקורס יתבצע פרויקט מודרך, אשר יכלול את רוב מחזור החיים בפיתוח מערכת מידע. הפרויקט הוא פרויקט קבוצתי (קבוצות של 4) ויוגש בחלקים. הפרויקט יכלול ניתוח ועיצוב מערכת מידע עבור ארגון שייבחר ע&quot;י הסטודנטים. הנחיות הרשמה והגשה מפורטות תינתנה בנפרד במהלך הסמסטר עבור כל אחד מהחלקים. כל חלקי הפרויקט יוגשו בהתאם להנחיות. יש חובה להגיש את כל חלקי הפרויקט ולקבל בהם ציון עובר על מנת לעבור את הקורס. אין אפשרות להחליף קבוצה מרגע ההגשה הראשונה.</p></div><div><h3>תרגילי בית</h3><p>יש להגיש 4 תרגילי בית שיינתנו במהלך הסמסטר. התרגילים יבדקו ברמת הוגש/לא הוגש. כל תרגיל שלא יוגש, יוגש באיחור ללא אישור מראש, או שלא בפורמט הנדרש - יגרור הורדת נקודה בציון הסופי. ההגשה הינה אישית ותתבצע באופן מקוון באמצעות אתר הקורס. ניתן להכין את התרגילים גם בכתב יד, אך יש לוודא טרם ההגשה שהסריקה יוצאת ברורה ומסודרת. יש לרשום על הקבצים את שם ות&quot;ז הסטודנט ולהגישם כקובץ <span class="en">PDF</span>.</p><div class="warn">שימו לב: תרגיל בית בלתי קריא, מרושל, באיחור, או שלא בפורמט הנכון - ייחשב אוטומטית כתרגיל בית שלא הוגש. לאחר ההגשה יפורסם פתרון עבור כל תרגיל.</div></div><div><h3>מבחן סופי</h3><p>בסוף הקורס ייערך מבחן. יש חובת מעבר של המבחן כתנאי למעבר הקורס. במקרה של קבלת ציון נמוך מ-56 במבחן הסופי, ציון הקורס יהיה ציון המבחן ללא שום שקלול של מרכיבי ציון אחרים, למעט בונוסים.</p></div><div><h3>בונוסים</h3><p>מידי פעם יוצע לסטודנטים לבצע משימות העשרה אישיות/קבוצתיות תמורת נקודות בונוס בקורס. משימות אלה הינן רשות. אין אפשרות לקבל יותר מ-4 נקודות בונוס בקורס, ללא יוצא מן הכלל.</p></div><div><h3>השתתפות בניסויים</h3><p>במסגרת הקורס, וכחלק מההבנה שאנשי מערכות מידע גם מנהלים מחקר וניסויים בתחום מערכות מידע, ניתן יהיה להשתתף בניסויים שונים הנערכים במסגרת המחלקה ככל שיאושרו על ידי צוות הקורס, תמורת נקודות בונוס בקורס. יובהר כי לא ניתן לקבל יותר מ-2 נקודות בונוס עבור השתתפות בניסויים בקורס. נקודות אלו הן בנוסף לנקודות בונוס אחרות בקורס.</p></div><div><h3>מילואים, היעדרויות ושאר אירועים</h3><p>במקרה של היעדרות של יותר מ-5 ימים ברצף בשל אירוע מזכה, ניתן יהיה לוותר על אחת מהגשות תרגילי הבית בסמסטר.</p></div></div>
+</section>
+<section>
+  <h2>מדיניות שימוש בכלי <span class="en">AI</span></h2>
+  <p>בקורס זה אנו מעודדים את הסטודנטים/ות לחקור ולהתנסות בשימוש בכלי בינה מלאכותית גנרטיבית כגון <span class="en">ChatGPT</span>, <span class="en">Claude</span> ו-<span class="en">Gemini</span>, ככלי עזר במילוי מטלות ומשימות אקדמיות. עם זאת, כל שימוש בכלים אלו מחייב מילוי והגשה של טופס הצהרה מפורט, הכולל מידע על הכלי שבו נעשה שימוש, מטרת השימוש, והאופן שבו שולב התוצר בעבודה.</p><p>האחריות לבדוק את נכונות התכנים שהופקו ואת מידת התאמתם לדרישות האקדמיות של העבודה מוטלת על הסטודנט/ית בלבד. האחריות המלאה על התוצר הסופי - תוכנו, אמינותו, תקפותו והצגת מקורות - חלה על מגיש/ת העבודה בלבד.</p><p>שימוש בכלי בינה מלאכותית ללא הצהרה, או שימוש שאינו עומד בכללי הקורס, ייחשב כהפרה של כללי היושרה האקדמית.</p><p>ברצוני להזכיר שבקורסים שונים עשויות להיות מדיניות שונות לגבי שימוש בבינה מלאכותית, והאחריות להתעדכן ולפעול בהתאם לכל קורס היא על הסטודנט/ית.</p>
+</section>
+<section>
+  <h2>מבנה ציון הקורס</h2>
+  <div class="tbl-wrap"><table class="grades">
+<thead><tr><th>מרכיב</th><th>משקל (באחוזים)</th><th>תאריך הגשה</th></tr></thead>
+<tbody>
+<tr><td>פרויקט חלק א&#x27;</td><td>20</td><td></td></tr>
+<tr><td><span class="en">CD</span> ו-<span class="en">UC</span> נבחרים (חלק ב&#x27;)</td><td>10</td><td></td></tr>
+<tr><td>פרויקט חלק ב&#x27;</td><td>20</td><td></td></tr>
+<tr><td>מבחן סופי</td><td>50</td><td></td></tr>
+</tbody>
+</table></div>
+  <h3>הערות</h3>
+  <ul><li>כלל ההגשות מלבד חלק ב&#x27; הינן עד לשעה 23:55 בתאריך הנקוב.</li><li>מועדי הגשת תרגילי הבית והפרויקט יפורסמו בהמשך.</li></ul>
+</section>
+<section>
+  <h2>פירוט המפגשים</h2>
+  <div class="tbl-wrap"><table class="schedule">
+<thead><tr><th>#</th><th>תאריך</th><th>שלב</th><th>נושא ההרצאה</th><th>פרויקט</th><th>נושא תרגול</th><th>תרגילי בית</th></tr></thead>
+<tbody>
+<tr><td>1</td><td>17.8</td><td>ייזום / חקר מצב קיים</td><td>מבוא, חקר מצב קיים</td><td>ציוות ורישום לארגון</td><td>תרגול הקדמה</td><td></td></tr>
+<tr><td>2</td><td>17.8</td><td>חקר מצב קיים</td><td>תהליכים עסקיים ו-<span class="en">BPMN</span></td><td></td><td><span class="en">BPMN</span></td><td></td></tr>
+<tr><td>3</td><td>24.8</td><td>ניתוח דרישות</td><td>איסוף ותיעוד דרישות</td><td></td><td>דרישות ו-<span class="en">User Stories</span></td><td>הגשת תרגיל בית 1</td></tr>
+<tr><td>4</td><td>24.8</td><td>ניתוח דרישות</td><td>ניתוח דרישות - <span class="en">Use Case Diagram</span></td><td></td><td><span class="en">Use Case Diagram </span>- מבוא</td><td></td></tr>
+<tr><td>5</td><td>27.8 / שיעור השלמה</td><td>ניתוח דרישות</td><td>ניתוח דרישות - <span class="en">Use Case Diagram</span></td><td></td><td><span class="en">Use Case Diagram </span>- מתקדם</td><td></td></tr>
+<tr><td>6</td><td>31.8</td><td>עיצוב</td><td><span class="en">Class Diagram</span></td><td>הגשת חלק א&#x27;</td><td><span class="en">Class Diagram 1</span></td><td>הגשת תרגיל בית 2</td></tr>
+<tr><td>7</td><td>31.8</td><td>עיצוב</td><td><span class="en">Class Diagram</span></td><td></td><td><span class="en">Class Diagram 2</span></td><td></td></tr>
+<tr><td>8</td><td>7.9</td><td>עיצוב</td><td><span class="en">State Diagram</span></td><td>הגשת <span class="en">Class Diagram</span></td><td></td><td>הגשת תרגיל בית 3</td></tr>
+<tr><td>9</td><td>7.9</td><td>פיתוח</td><td>מאנליזה ל-<span class="en">CRUD</span> עובד - בניית מערכת עם <span class="en">Claude Code</span></td><td></td><td><span class="en">State Diagram</span></td><td></td></tr>
+<tr><td>10</td><td>14.9</td><td>חקר ישימות</td><td>חקר ישימות</td><td></td><td>חקר ישימות</td><td>הגשת תרגיל בית 4</td></tr>
+<tr><td>11</td><td>השלמה</td><td>כל מחזור החיים</td><td>מתודולוגיות פיתוח</td><td></td><td>הגנות</td><td></td></tr>
+<tr><td>12</td><td>השלמה</td><td>כל מחזור החיים</td><td><span class="en">Agile</span></td><td>הגשת חלק ב&#x27;</td><td>הגנות השלמה</td><td></td></tr>
+<tr><td>13</td><td>-</td><td>-</td><td>שיעור חזרה</td><td></td><td>-</td><td></td></tr>
+</tbody>
+</table></div>
+</section>
+<section>
+  <h2>ספרות הקורס</h2>
+  <ul class="refs"><li><span class="key">[AviFit]</span><span class="cite">Avison, D., and Fitzgerald, G. Information Systems Development: Methodologies, Techniques and Tools, 4th ed., McGraw-Hill, 2006.</span><span class="topic">מתודולוגיות פיתוח</span></li><li><span class="key">[Dumas]</span><span class="cite">Dumas, M., La Rosa, M., Mendling, J., and Reijers, H.A. Fundamentals of Business Process Management, 2nd ed., Springer, 2018.</span><span class="topic">תהליכים עסקיים ו-<span class="en">BPMN</span></span></li><li><span class="key">[Silver]</span><span class="cite">Silver, B. BPMN Quick and Easy Using Method and Style, Cody-Cassidy Press, 2017.</span><span class="topic"><span class="en">BPMN</span></span></li><li><span class="key">[Dennis]</span><span class="cite">Dennis, A., Wixom, B.H., and Tegarden, D. Systems Analysis and Design: An Object-Oriented Approach with UML, 6th ed., Wiley, 2020.</span><span class="topic">חקר ישימות</span></li><li><span class="key">[Fowler]</span><span class="cite">Fowler, M. UML Distilled: A Brief Guide to the Standard Object Modeling Language, 3rd ed., Addison-Wesley, 2003.</span><span class="topic">תרשימי <span class="en">UML</span></span></li><li><span class="key">[RuJaBo]</span><span class="cite">Rumbaugh, J., Jacobson, I., and Booch, G. The Unified Modeling Language Reference Manual, 2nd ed., Addison-Wesley, 2004.</span><span class="topic">תרשימי <span class="en">UML</span></span></li><li><span class="key">[Maciaszek]</span><span class="cite">Maciaszek, L.A. Requirements Analysis and System Design, 3rd ed., Addison-Wesley, 2007.</span><span class="topic">דרישות ועיצוב</span></li><li><span class="key">[Cohn]</span><span class="cite">Cohn, M. User Stories Applied: For Agile Software Development, Addison-Wesley, 2004.</span><span class="topic"><span class="en">User Stories</span></span></li><li><span class="key">[Shoval]</span><span class="cite-he">שובל, פרץ. תכנון, ניתוח ועיצוב מערכות מידע, מהדורה שנייה מעודכנת, כרכים א&#x27;-ג&#x27;, הוצאת האוניברסיטה הפתוחה, 2015.</span><span class="topic">ניתוח ועיצוב</span></li><li><span class="key">[מפתח]</span><span class="cite-he">משרד האוצר, אגף החשב הכללי / מתודה מחשבים, &quot;נוהל מפת&quot;ח&quot;, מהדורה 6, 1997.</span><span class="topic">מתודולוגיה</span></li></ul>
+  <h3>תקנים ומקורות מקוונים</h3>
+  <ul class="refs"><li><span class="key">[BPMN 2.0]</span><span class="cite">Object Management Group. Business Process Model and Notation (BPMN), Version 2.0.2, 2013 (also ISO/IEC 19510). <a class="en reflink" href="https://www.omg.org/spec/BPMN/">↗</a></span><span class="topic"><span class="en">BPMN</span></span></li><li><span class="key">[UML 2.5]</span><span class="cite">Object Management Group. Unified Modeling Language (UML), Version 2.5.1, 2017. <a class="en reflink" href="https://www.omg.org/spec/UML/">↗</a></span><span class="topic">תרשימי <span class="en">UML</span></span></li><li><span class="key">[Agile]</span><span class="cite">Manifesto for Agile Software Development, 2001. <a class="en reflink" href="https://agilemanifesto.org/">↗</a></span><span class="topic"><span class="en">Agile</span></span></li><li><span class="key">[Scrum]</span><span class="cite">Schwaber, K., and Sutherland, J. The Scrum Guide, 2020. <a class="en reflink" href="https://scrumguides.org/">↗</a></span><span class="topic"><span class="en">Agile</span></span></li></ul>
+  <h3>מאמרים - זמינים במאגר הקורס ב-<span class="en">GitHub</span></h3>
+  <ul class="refs"><li><span class="key">[Wetherbe]</span><span class="cite">Wetherbe, J.C. &quot;Executive Information Requirements: Getting It Right.&quot; MIS Quarterly, 15(1), 1991, pp. 51-65. <a class="en reflink" href="https://github.com/dcodish/SAD-course-materials/blob/main/materials/3-ניתוח-דרישות/מאמרים/Wetherbe-1991-executive-information-requirements.pdf">↗</a></span><span class="req">קריאת חובה לקראת שיעור 3</span><span class="topic">איסוף ותיעוד דרישות</span></li><li><span class="key">[SiNeMa]</span><span class="cite">Sircar, S., Nerur, S.P., and Mahapatra, R. &quot;Revolution or Evolution: A Comparison of Object-Oriented and Structured System Development Methods.&quot; MIS Quarterly, 25(4), December 2001, pp. 457-471.</span><span class="topic">מתודולוגיות פיתוח</span></li><li><span class="key">[Brown &amp; Vessey]</span><span class="cite">Brown, C.V., and Vessey, I. &quot;NIBCO&#x27;s &#x27;Big Bang&#x27;.&quot; Communications of AIS, 5(1), January 2001. <a class="en reflink" href="https://github.com/dcodish/SAD-course-materials/blob/main/materials/8-הטמעה-ותפעול/מאמרים/Brown-Vessey-2001-NIBCO-big-bang.pdf">↗</a></span><span class="topic">הטמעה ותפעול</span></li><li><span class="key">[Nelson]</span><span class="cite">Nelson, R.R. &quot;IT Project Management: Infamous Failures, Classic Mistakes, and Best Practices.&quot; MIS Quarterly Executive, 6(2), June 2007. <a class="en reflink" href="https://github.com/dcodish/SAD-course-materials/blob/main/materials/4-חקר-ישימות/מאמרים/Nelson-2007-it-project-management-failures.pdf">↗</a></span><span class="topic">חקר ישימות</span></li></ul>
+</section>
+</main>
+<footer>ניתוח ועיצוב מערכות מידע / תשפ&quot;ו - סמסטר קיץ / גרסה 1.0 / 2026-08-09</footer>
+</div>
+</body>
+</html>
