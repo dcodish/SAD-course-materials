@@ -4,16 +4,22 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>מערכת הזמנת אוכל בקמפוס — Use Case Diagram</title>
+<!--
+  GENERATED — do not hand-edit. Source: scratchpad/build_food_static.py + build_food_model.py.
+  The clean full campus model (slide "read a diagram") — click any use case. Model validated
+  against sad-mcp 2.8.0 → ok. STATIC layout: `diagramLayouts = []` (see the module docstring —
+  the «extend» needs to be in the centre with hand-placed labels; fixLayout can't do that).
+  Do NOT press "Fix Layout" expecting improvement — there is no layout to recompute; the button
+  is hidden in ?embed=1 anyway.
+-->
 <style>
-/* Fully self-contained: no external font fetch. Map the skill font families to
-   system stacks so the file renders identically offline / inside a slide iframe. */
 :root { }
 * { font-synthesis: weight; }
-body, .tab, .fix-btn, .assumptions-col, .user-stories-panel,
+body, .fix-btn, .assumptions-col, .user-stories-panel,
 .uc-modal, .uc-modal-body, .wf-screen {
   font-family: 'Noto Sans Hebrew', 'Segoe UI', 'Arial', sans-serif !important;
 }
-.uc-id, .step-include, .vp-export-btn {
+.uc-id, .step-include, .step-label, .vp-export-btn {
   font-family: 'IBM Plex Mono', 'Consolas', 'Courier New', monospace !important;
 }
 /* uc-diagram-common.css — SAD MCP shared styles for use case diagrams */
@@ -92,8 +98,53 @@ body.uc-modal-open { overflow: hidden; }
 .step-system { color: #475569; font-style: italic; }
 .step-include { color: #7c3aed; font-family: 'IBM Plex Mono', monospace; font-size: 11px; }
 .step-uc-ref { color: #7c3aed; cursor: pointer; text-decoration: underline; }
+
+/* ── Flow of events (§4.4a / NOTATION §11b) ──────────────────────────────
+   Step labels are printed by the JS, not by list-style, so the number a reader
+   sees always matches what an extension's "חזרה לשלב 2.1" points at. */
+.uc-scenarios ul.flow { list-style: none; margin: 0 0 14px; padding: 0; }
+.uc-scenarios ul.flow ul.flow { margin: 4px 0 6px; padding-right: 14px;
+  border-right: 2px solid #e2e8f0; }
+.flow-step { color: #1e293b; font-size: 13px; line-height: 1.9; }
+.step-label { display: inline-block; min-width: 34px; color: #64748b;
+  font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600; }
+
+/* loop / alt — control structures read as keywords, not as prose */
+.flow-loop > .ctrl-kw, .flow-alt > .ctrl-kw { font-weight: 700; font-size: 11px;
+  padding: 1px 7px; border-radius: 10px; letter-spacing: .02em; }
+.flow-loop > .ctrl-kw { color: #0369a1; background: #e0f2fe; }
+.flow-alt  > .ctrl-kw { color: #92400e; background: #fef3c7; }
+.ctrl-cond { color: #334155; font-style: italic; }
+.flow-loop > ul.flow { border-right-color: #7dd3fc; }
+.flow-alt  > ul.flow, .flow-branches { border-right-color: #fcd34d; }
+.flow-branches { list-style: none; margin: 4px 0 6px; padding-right: 14px;
+  border-right: 2px solid #fcd34d; }
+.flow-branch { font-size: 13px; line-height: 1.9; }
+.branch-label { color: #92400e; font-weight: 600; font-size: 12px;
+  background: #fffbeb; border: 1px solid #fde68a; border-radius: 4px; padding: 0 6px; }
+.flow-branch > ul.flow { border-right-color: #fde68a; }
+
+/* «extend» hook marker (§3.3) — a step declaring an extension point */
+.ext-point-badge { font-size: 11.5px; color: #7c3aed; background: #f5f3ff;
+  border: 1px solid #ddd6fe; border-radius: 4px; padding: 1px 8px;
+  margin: 2px 0 2px 0; display: inline-block; line-height: 1.7; }
+.ext-point-cond { color: #6d28d9; font-size: 11px; }
+
+/* extensions — the not-happy path */
+.ext-holder { list-style: none; }
+.ext-list { list-style: none; margin: 2px 0 8px; padding-right: 34px; }
 .ext-inline, .ext-sub { list-style: none; color: #64748b; font-size: 12px;
   padding-right: 24px; line-height: 1.7; }
+.ext-sub { padding-right: 0; border-right: 2px solid #fecaca; padding-right: 10px;
+  margin-bottom: 4px; }
+.ext-label { color: #b91c1c; min-width: 42px; }
+.ext-steps { list-style: none; margin: 2px 0; padding-right: 12px; }
+.ext-steps li { font-size: 12px; color: #64748b; line-height: 1.7; }
+.ext-steps .step-label { min-width: 48px; color: #94a3b8; }
+.ext-outcome { font-size: 11.5px; font-weight: 600; margin: 2px 0 2px 0;
+  padding-right: 12px; }
+.ext-resume { color: #0f766e; }
+.ext-terminate { color: #b91c1c; }
 .uc-prepostuser { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 18px;
   margin: 18px 0 20px; }
 .uc-prepostuser > div { background: #f8fafc; border: 1px solid #e2e8f0;
@@ -137,34 +188,24 @@ body.uc-modal-open { overflow: hidden; }
 .wf-badge { display: inline-block; background: #e0f2fe; color: #0369a1;
   padding: 2px 8px; border-radius: 999px; font-size: 10px; font-weight: 600; }
 
-/* Restore correct tab/hidden behavior (common.css sets display:flex on .diagram-part). */
 [hidden] { display: none !important; }
 svg { max-width: 100%; height: auto; }
 
-/* ── Embed mode (?embed=1): show only the diagram, scaled to fit the viewport,
-   no page chrome and no scrolling. Used when this file is shown inside a
-   lecture-slide iframe. ── */
 body.embed { padding: 0 !important; margin: 0; height: 100vh; overflow: hidden; background: #fff; }
 body.embed .page-title,
-body.embed .fix-btn,
 body.embed .vp-export-btn,
 body.embed .assumptions-panel,
 body.embed .user-stories-panel { display: none !important; }
-body.embed div:has(> .fix-btn),
 body.embed div:has(> .vp-export-btn) { display: none !important; }
 body.embed .diagram-part { display: block !important; height: 100vh !important; width: 100vw !important; margin: 0 !important; }
 body.embed svg { max-width: none !important; width: 100% !important; height: 100% !important; display: block; }
 </style>
 </head>
 <body>
-<h1 class="page-title">מערכת הזמנת אוכל בקמפוס — תרשים תרחישי שימוש (Use Case)</h1>
-
-<div style="text-align:center;margin:8px 0;">
-  <button onclick="fixLayout(currentLayout())" class="fix-btn">Fix Layout</button>
-</div>
+<h1 class="page-title">מערכת הזמנת אוכל בקמפוס — תרשים תרחישי שימוש</h1>
 
 <div class="diagram-part" id="diagram-0">
-<svg id="diagram-svg-0" viewBox="0 0 1200 900" xmlns="http://www.w3.org/2000/svg">
+<svg id="diagram-svg-0" viewBox="0 0 1420 720" xmlns="http://www.w3.org/2000/svg">
   <defs>
     <pattern id="dot-grid" width="24" height="24" patternUnits="userSpaceOnUse">
       <circle cx="1" cy="1" r="0.8" fill="#cbd5e1"/>
@@ -177,105 +218,98 @@ body.embed svg { max-width: none !important; width: 100% !important; height: 100
     </marker>
   </defs>
 
-  <rect x="0" y="0" width="1200" height="900" fill="#f8fafc"/>
-  <rect x="0" y="0" width="1200" height="900" fill="url(#dot-grid)"/>
+  <rect x="0" y="0" width="1420" height="720" fill="#f8fafc"/>
+  <rect x="0" y="0" width="1420" height="720" fill="url(#dot-grid)"/>
 
-  <!-- System boundary -->
-  <rect class="system-boundary" x="300" y="60" width="600" height="760"
-        rx="12" fill="#ffffff" stroke="#3b82f6" stroke-width="2.5"/>
-  <rect x="300" y="60" width="600" height="44" rx="12" fill="#1e40af"/>
-  <rect x="300" y="82" width="600" height="22" fill="#1e40af"/>
-  <text x="600" y="88" text-anchor="middle"
-        font-size="14" font-weight="700" fill="#ffffff"
-        font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">מערכת הזמנת אוכל בקמפוס</text>
+  <rect class="system-boundary" x="300" y="40" width="880" height="620" rx="12" fill="#ffffff" stroke="#3b82f6" stroke-width="2.5"/>
+  <rect x="300" y="40" width="880" height="44" rx="12" fill="#1e40af"/>
+  <rect x="300" y="62" width="880" height="22" fill="#1e40af"/>
+  <text x="740" y="68" text-anchor="middle" font-size="14" font-weight="700" fill="#ffffff" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">מערכת הזמנת אוכל בקמפוס</text>
 
-  <!-- Association lines (solid) + hitboxes -->
-    <line data-conn-from="student" data-conn-to="uc-browse-menu" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
-  <line class="conn-hitbox" data-conn-id="as-student-browse" data-hitbox-from="student" data-hitbox-to="uc-browse-menu" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('as-student-browse','assoc',event)"/>
-  <line data-conn-from="student" data-conn-to="uc-place-order" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
-  <line class="conn-hitbox" data-conn-id="as-student-place" data-hitbox-from="student" data-hitbox-to="uc-place-order" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('as-student-place','assoc',event)"/>
-  <line data-conn-from="student" data-conn-to="uc-pay-order" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
-  <line class="conn-hitbox" data-conn-id="as-student-pay" data-hitbox-from="student" data-hitbox-to="uc-pay-order" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('as-student-pay','assoc',event)"/>
-  <line data-conn-from="student" data-conn-to="uc-apply-discount" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
-  <line class="conn-hitbox" data-conn-id="as-student-discount" data-hitbox-from="student" data-hitbox-to="uc-apply-discount" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('as-student-discount','assoc',event)"/>
-  <line data-conn-from="student" data-conn-to="uc-receive-notification" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
-  <line class="conn-hitbox" data-conn-id="as-student-notify" data-hitbox-from="student" data-hitbox-to="uc-receive-notification" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('as-student-notify','assoc',event)"/>
-  <line data-conn-from="student" data-conn-to="uc-pickup-verify" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
-  <line class="conn-hitbox" data-conn-id="as-student-pickup" data-hitbox-from="student" data-hitbox-to="uc-pickup-verify" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('as-student-pickup','assoc',event)"/>
-  <line data-conn-from="payment-gw" data-conn-to="uc-pay-order" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
-  <line class="conn-hitbox" data-conn-id="as-payment-pay" data-hitbox-from="payment-gw" data-hitbox-to="uc-pay-order" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('as-payment-pay','assoc',event)"/>
-  <line data-conn-from="uni-card" data-conn-to="uc-pay-order" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
-  <line class="conn-hitbox" data-conn-id="as-unicard-pay" data-hitbox-from="uni-card" data-hitbox-to="uc-pay-order" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('as-unicard-pay','assoc',event)"/>
-  <line data-conn-from="pickup-staff" data-conn-to="uc-pickup-verify" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
-  <line class="conn-hitbox" data-conn-id="as-pickup-verify" data-hitbox-from="pickup-staff" data-hitbox-to="uc-pickup-verify" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('as-pickup-verify','assoc',event)"/>
-  <line data-conn-from="kitchen-staff" data-conn-to="uc-prep-queue" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
-  <line class="conn-hitbox" data-conn-id="as-kitchen-queue" data-hitbox-from="kitchen-staff" data-hitbox-to="uc-prep-queue" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('as-kitchen-queue','assoc',event)"/>
-  <line data-conn-from="kitchen-staff" data-conn-to="uc-mark-ready" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
-  <line class="conn-hitbox" data-conn-id="as-kitchen-ready" data-hitbox-from="kitchen-staff" data-hitbox-to="uc-mark-ready" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('as-kitchen-ready','assoc',event)"/>
-  <line data-conn-from="cafe-manager" data-conn-to="uc-manage-menu" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
-  <line class="conn-hitbox" data-conn-id="as-manager-menu" data-hitbox-from="cafe-manager" data-hitbox-to="uc-manage-menu" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('as-manager-menu','assoc',event)"/>
-  <line data-conn-from="cafe-manager" data-conn-to="uc-sales-report" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
-  <line class="conn-hitbox" data-conn-id="as-manager-report" data-hitbox-from="cafe-manager" data-hitbox-to="uc-sales-report" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('as-manager-report','assoc',event)"/>
+  <line x1="220" y1="263" x2="355.9" y2="161.3" stroke="#334155" stroke-width="1.8"/>
+  <line class="conn-hitbox" data-conn-id="as-student-browse" data-hitbox-from="student" data-hitbox-to="uc-browse-menu" x1="220" y1="263" x2="355.9" y2="161.3" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('as-student-browse','assoc',event)"/>
+  <line x1="220" y1="263" x2="346.4" y2="229.7" stroke="#334155" stroke-width="1.8"/>
+  <line class="conn-hitbox" data-conn-id="as-student-place" data-hitbox-from="student" data-hitbox-to="uc-place-order" x1="220" y1="263" x2="346.4" y2="229.7" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('as-student-place','assoc',event)"/>
+  <line x1="220" y1="263" x2="331.7" y2="296.3" stroke="#334155" stroke-width="1.8"/>
+  <line class="conn-hitbox" data-conn-id="as-student-pay" data-hitbox-from="student" data-hitbox-to="uc-pay-order" x1="220" y1="263" x2="331.7" y2="296.3" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('as-student-pay','assoc',event)"/>
+  <line x1="220" y1="263" x2="347.2" y2="364.7" stroke="#334155" stroke-width="1.8"/>
+  <line class="conn-hitbox" data-conn-id="as-student-track" data-hitbox-from="student" data-hitbox-to="uc-track-order" x1="220" y1="263" x2="347.2" y2="364.7" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('as-student-track','assoc',event)"/>
+  <line x1="220" y1="563" x2="354.1" y2="472.0" stroke="#334155" stroke-width="1.8"/>
+  <line class="conn-hitbox" data-conn-id="as-pickup-verify" data-hitbox-from="pickup-staff" data-hitbox-to="uc-pickup-verify" x1="220" y1="563" x2="354.1" y2="472.0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('as-pickup-verify','assoc',event)"/>
+  <line x1="220" y1="413" x2="648.2" y2="160.8" stroke="#334155" stroke-width="1.8"/>
+  <line class="conn-hitbox" data-conn-id="as-kitchen-queue" data-hitbox-from="kitchen-staff" data-hitbox-to="uc-prep-queue" x1="220" y1="413" x2="648.2" y2="160.8" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('as-kitchen-queue','assoc',event)"/>
+  <line x1="1260" y1="172" x2="827.4" y2="147.6" stroke="#334155" stroke-width="1.8"/>
+  <line class="conn-hitbox" data-conn-id="as-manager-queue" data-hitbox-from="cafe-manager" data-hitbox-to="uc-prep-queue" x1="1260" y1="172" x2="827.4" y2="147.6" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('as-manager-queue','assoc',event)"/>
+  <line x1="220" y1="413" x2="343.9" y2="520.1" stroke="#334155" stroke-width="1.8"/>
+  <line class="conn-hitbox" data-conn-id="as-kitchen-ready" data-hitbox-from="kitchen-staff" data-hitbox-to="uc-mark-ready" x1="220" y1="413" x2="343.9" y2="520.1" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('as-kitchen-ready','assoc',event)"/>
+  <line x1="1260" y1="172" x2="1139.3" y2="149.6" stroke="#334155" stroke-width="1.8"/>
+  <line class="conn-hitbox" data-conn-id="as-manager-menu" data-hitbox-from="cafe-manager" data-hitbox-to="uc-manage-menu" x1="1260" y1="172" x2="1139.3" y2="149.6" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('as-manager-menu','assoc',event)"/>
+  <line x1="1260" y1="172" x2="1132.4" y2="216.9" stroke="#334155" stroke-width="1.8"/>
+  <line class="conn-hitbox" data-conn-id="as-manager-report" data-hitbox-from="cafe-manager" data-hitbox-to="uc-sales-report" x1="1260" y1="172" x2="1132.4" y2="216.9" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('as-manager-report','assoc',event)"/>
+  <line x1="1260" y1="322" x2="1149.5" y2="304.8" stroke="#334155" stroke-width="1.8"/>
+  <line class="conn-hitbox" data-conn-id="as-clock-noshow" data-hitbox-from="clock" data-hitbox-to="uc-handle-no-show" x1="1260" y1="322" x2="1149.5" y2="304.8" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('as-clock-noshow','assoc',event)"/>
+  <text x="1200" y="300" text-anchor="middle" font-size="10" fill="#b45309" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">⏰ בתום חלון האיסוף</text>
+  <line x1="522.1" y1="232.1" x2="650.3" y2="293.9" stroke="#7c3aed" stroke-width="1.6" stroke-dasharray="6 4" marker-end="url(#arrow-include)"/>
+  <line x1="540.0" y1="302.0" x2="647.5" y2="302.0" stroke="#7c3aed" stroke-width="1.6" stroke-dasharray="6 4" marker-end="url(#arrow-include)"/>
+  <line x1="642.5" y1="224.0" x2="525.0" y2="224.0" stroke="#7c3aed" stroke-width="1.6" stroke-dasharray="6 4" marker-end="url(#arrow-extend)"/>
+  <text x="583" y="214" text-anchor="middle" font-size="11" fill="#7c3aed" font-family="'IBM Plex Mono',monospace">«extend»</text>
+  <text x="612" y="250" text-anchor="middle" font-size="11" fill="#7c3aed" font-family="'IBM Plex Mono',monospace">«include»</text>
+  <text x="600" y="294" text-anchor="middle" font-size="11" fill="#7c3aed" font-family="'IBM Plex Mono',monospace">«include»</text>
+  <g font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">
+    <text x="583" y="176" text-anchor="middle" font-size="10.5" fill="#7c3aed">📍 נקודת הרחבה: קביעת זמן איסוף</text>
+    <text x="583" y="191" text-anchor="middle" font-size="10" fill="#64748b">[הסטודנט מבקש איסוף עתידי]</text>
+  </g>
 
-  <!-- include / extend dashed lines + labels -->
-    <line data-conn-from="uc-place-order" data-conn-to="uc-validate-cart" x1="0" y1="0" x2="0" y2="0" stroke="#7c3aed" stroke-width="1.6" stroke-dasharray="6 4" marker-end="url(#arrow-include)"/>
-  <text data-label-for="uc-place-order uc-validate-cart" x="0" y="0" text-anchor="middle" font-size="9.5" fill="#7c3aed" font-family="'IBM Plex Mono',monospace">«include»</text>
-  <line data-conn-from="uc-pay-order" data-conn-to="uc-validate-cart" x1="0" y1="0" x2="0" y2="0" stroke="#7c3aed" stroke-width="1.6" stroke-dasharray="6 4" marker-end="url(#arrow-include)"/>
-  <text data-label-for="uc-pay-order uc-validate-cart" x="0" y="0" text-anchor="middle" font-size="9.5" fill="#7c3aed" font-family="'IBM Plex Mono',monospace">«include»</text>
-  <line data-conn-from="uc-apply-discount" data-conn-to="uc-pay-order" x1="0" y1="0" x2="0" y2="0" stroke="#7c3aed" stroke-width="1.6" stroke-dasharray="6 4" marker-end="url(#arrow-extend)"/>
-  <text data-label-for="uc-apply-discount uc-pay-order" x="0" y="0" text-anchor="middle" font-size="9.5" fill="#7c3aed" font-family="'IBM Plex Mono',monospace">«extend»</text>
-
-  <!-- Use case ellipses -->
-  <g id="uc-group-uc-browse-menu" data-uc-id="uc-browse-menu" onclick="showDesc('uc-browse-menu','uc',event)" style="cursor:pointer">
-  <ellipse cx="560" cy="120" rx="106" ry="30" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
-  <text x="560" y="124" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">עיון בתפריט</text>
+<g id="uc-group-uc-browse-menu" data-uc-id="uc-browse-menu" onclick="showDesc('uc-browse-menu','uc',event)" style="cursor:pointer">
+  <ellipse cx="435" cy="146" rx="90" ry="32" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+  <text x="435" y="150" text-anchor="middle" font-size="12" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">עיון בתפריט</text>
 </g>
 <g id="uc-group-uc-place-order" data-uc-id="uc-place-order" onclick="showDesc('uc-place-order','uc',event)" style="cursor:pointer">
-  <ellipse cx="560" cy="190" rx="100" ry="30" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
-  <text x="560" y="194" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">הזמנת אוכל</text>
+  <ellipse cx="435" cy="224" rx="90" ry="32" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+  <text x="435" y="228" text-anchor="middle" font-size="12" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">הזמנת אוכל</text>
 </g>
 <g id="uc-group-uc-pay-order" data-uc-id="uc-pay-order" onclick="showDesc('uc-pay-order','uc',event)" style="cursor:pointer">
-  <ellipse cx="560" cy="260" rx="120" ry="30" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
-  <text x="560" y="264" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">תשלום על הזמנה</text>
+  <ellipse cx="435" cy="302" rx="105" ry="32" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+  <text x="435" y="306" text-anchor="middle" font-size="12" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">תשלום על הזמנה</text>
 </g>
-<g id="uc-group-uc-apply-discount" data-uc-id="uc-apply-discount" onclick="showDesc('uc-apply-discount','uc',event)" style="cursor:pointer">
-  <ellipse cx="560" cy="330" rx="120" ry="30" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
-  <text x="560" y="334" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">החלת הנחת סטודנט</text>
+<g id="uc-group-uc-track-order" data-uc-id="uc-track-order" onclick="showDesc('uc-track-order','uc',event)" style="cursor:pointer">
+  <ellipse cx="435" cy="380" rx="100" ry="32" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+  <text x="435" y="384" text-anchor="middle" font-size="12" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">מעקב אחר הזמנה</text>
 </g>
 <g id="uc-group-uc-pickup-verify" data-uc-id="uc-pickup-verify" onclick="showDesc('uc-pickup-verify','uc',event)" style="cursor:pointer">
-  <ellipse cx="560" cy="400" rx="106" ry="30" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
-  <text x="560" y="404" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">אימות איסוף</text>
-</g>
-<g id="uc-group-uc-receive-notification" data-uc-id="uc-receive-notification" onclick="showDesc('uc-receive-notification','uc',event)" style="cursor:pointer">
-  <ellipse cx="560" cy="470" rx="100" ry="30" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
-  <text x="560" y="474" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">קבלת התראה</text>
-</g>
-<g id="uc-group-uc-manage-menu" data-uc-id="uc-manage-menu" onclick="showDesc('uc-manage-menu','uc',event)" style="cursor:pointer">
-  <ellipse cx="560" cy="540" rx="120" ry="30" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
-  <text x="560" y="536" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">ניהול תפריט</text>
-  <text x="560" y="552" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">ומלאי</text>
-</g>
-<g id="uc-group-uc-sales-report" data-uc-id="uc-sales-report" onclick="showDesc('uc-sales-report','uc',event)" style="cursor:pointer">
-  <ellipse cx="560" cy="610" rx="120" ry="30" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
-  <text x="560" y="606" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">צפייה בדוח</text>
-  <text x="560" y="622" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">מכירות</text>
-</g>
-<g id="uc-group-uc-prep-queue" data-uc-id="uc-prep-queue" onclick="showDesc('uc-prep-queue','uc',event)" style="cursor:pointer">
-  <ellipse cx="560" cy="680" rx="120" ry="30" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
-  <text x="560" y="684" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">צפייה בתור הכנה</text>
+  <ellipse cx="435" cy="458" rx="90" ry="32" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+  <text x="435" y="462" text-anchor="middle" font-size="12" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">אימות איסוף</text>
 </g>
 <g id="uc-group-uc-mark-ready" data-uc-id="uc-mark-ready" onclick="showDesc('uc-mark-ready','uc',event)" style="cursor:pointer">
-  <ellipse cx="560" cy="750" rx="120" ry="30" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
-  <text x="560" y="746" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">סימון הזמנה</text>
-  <text x="560" y="762" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">כמוכנה</text>
+  <ellipse cx="435" cy="536" rx="105" ry="32" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+  <text x="435" y="540" text-anchor="middle" font-size="12" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">סימון הזמנה כמוכנה</text>
+</g>
+<g id="uc-group-uc-prep-queue" data-uc-id="uc-prep-queue" onclick="showDesc('uc-prep-queue','uc',event)" style="cursor:pointer">
+  <ellipse cx="732.5" cy="146" rx="95" ry="32" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+  <text x="732.5" y="150" text-anchor="middle" font-size="12" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">צפייה בתור הכנה</text>
+</g>
+<g id="uc-group-uc-schedule-pickup" data-uc-id="uc-schedule-pickup" onclick="showDesc('uc-schedule-pickup','uc',event)" style="cursor:pointer">
+  <ellipse cx="732.5" cy="224" rx="90" ry="32" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+  <text x="732.5" y="228" text-anchor="middle" font-size="12" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">הזמנה מראש</text>
 </g>
 <g id="uc-group-uc-validate-cart" data-uc-id="uc-validate-cart" onclick="showDesc('uc-validate-cart','uc',event)" style="cursor:pointer">
-  <ellipse cx="560" cy="820" rx="100" ry="30" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
-  <text x="560" y="824" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">בדיקת עגלה</text>
+  <ellipse cx="732.5" cy="302" rx="85" ry="32" fill="#EDE9FE" stroke="#7c3aed" stroke-width="1.8"/>
+  <text x="732.5" y="306" text-anchor="middle" font-size="12" font-weight="600" fill="#4C1D95" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">בדיקת עגלה</text>
+</g>
+<g id="uc-group-uc-manage-menu" data-uc-id="uc-manage-menu" onclick="showDesc('uc-manage-menu','uc',event)" style="cursor:pointer">
+  <ellipse cx="1030" cy="146" rx="110" ry="32" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+  <text x="1030" y="150" text-anchor="middle" font-size="12" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">ניהול תפריט ומלאי</text>
+</g>
+<g id="uc-group-uc-sales-report" data-uc-id="uc-sales-report" onclick="showDesc('uc-sales-report','uc',event)" style="cursor:pointer">
+  <ellipse cx="1030" cy="224" rx="105" ry="32" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+  <text x="1030" y="228" text-anchor="middle" font-size="12" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">צפייה בדוח מכירות</text>
+</g>
+<g id="uc-group-uc-handle-no-show" data-uc-id="uc-handle-no-show" onclick="showDesc('uc-handle-no-show','uc',event)" style="cursor:pointer">
+  <ellipse cx="1030" cy="302" rx="120" ry="32" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+  <text x="1030" y="306" text-anchor="middle" font-size="12" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">טיפול בהזמנה שלא נאספה</text>
 </g>
 
-  <!-- Actors -->
-  <g id="actor-group-student" data-actor-id="student" onclick="showDesc('student','actor',event)" style="cursor:pointer" transform="translate(80,200)">
+<g id="actor-group-student" data-actor-id="student" onclick="showDesc('student','actor',event)" style="cursor:pointer" transform="translate(220,263)">
   <circle cx="0" cy="-60" r="14" fill="#e0f0ff" stroke="#334155" stroke-width="2"/>
   <line x1="0" y1="-46" x2="0" y2="-10" stroke="#334155" stroke-width="2"/>
   <line x1="-18" y1="-36" x2="18" y2="-36" stroke="#334155" stroke-width="2"/>
@@ -283,15 +317,7 @@ body.embed svg { max-width: none !important; width: 100% !important; height: 100
   <line x1="0" y1="-10" x2="14" y2="14" stroke="#334155" stroke-width="2"/>
   <text x="0" y="32" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">סטודנט</text>
 </g>
-<g id="actor-group-pickup-staff" data-actor-id="pickup-staff" onclick="showDesc('pickup-staff','actor',event)" style="cursor:pointer" transform="translate(80,460)">
-  <circle cx="0" cy="-60" r="14" fill="#e0f0ff" stroke="#334155" stroke-width="2"/>
-  <line x1="0" y1="-46" x2="0" y2="-10" stroke="#334155" stroke-width="2"/>
-  <line x1="-18" y1="-36" x2="18" y2="-36" stroke="#334155" stroke-width="2"/>
-  <line x1="0" y1="-10" x2="-14" y2="14" stroke="#334155" stroke-width="2"/>
-  <line x1="0" y1="-10" x2="14" y2="14" stroke="#334155" stroke-width="2"/>
-  <text x="0" y="32" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">עובד דלפק איסוף</text>
-</g>
-<g id="actor-group-kitchen-staff" data-actor-id="kitchen-staff" onclick="showDesc('kitchen-staff','actor',event)" style="cursor:pointer" transform="translate(80,700)">
+<g id="actor-group-kitchen-staff" data-actor-id="kitchen-staff" onclick="showDesc('kitchen-staff','actor',event)" style="cursor:pointer" transform="translate(220,413)">
   <circle cx="0" cy="-60" r="14" fill="#e0f0ff" stroke="#334155" stroke-width="2"/>
   <line x1="0" y1="-46" x2="0" y2="-10" stroke="#334155" stroke-width="2"/>
   <line x1="-18" y1="-36" x2="18" y2="-36" stroke="#334155" stroke-width="2"/>
@@ -299,7 +325,15 @@ body.embed svg { max-width: none !important; width: 100% !important; height: 100
   <line x1="0" y1="-10" x2="14" y2="14" stroke="#334155" stroke-width="2"/>
   <text x="0" y="32" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">עובד מטבח</text>
 </g>
-<g id="actor-group-cafe-manager" data-actor-id="cafe-manager" onclick="showDesc('cafe-manager','actor',event)" style="cursor:pointer" transform="translate(1000,300)">
+<g id="actor-group-pickup-staff" data-actor-id="pickup-staff" onclick="showDesc('pickup-staff','actor',event)" style="cursor:pointer" transform="translate(220,563)">
+  <circle cx="0" cy="-60" r="14" fill="#e0f0ff" stroke="#334155" stroke-width="2"/>
+  <line x1="0" y1="-46" x2="0" y2="-10" stroke="#334155" stroke-width="2"/>
+  <line x1="-18" y1="-36" x2="18" y2="-36" stroke="#334155" stroke-width="2"/>
+  <line x1="0" y1="-10" x2="-14" y2="14" stroke="#334155" stroke-width="2"/>
+  <line x1="0" y1="-10" x2="14" y2="14" stroke="#334155" stroke-width="2"/>
+  <text x="0" y="32" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">עובד דלפק איסוף</text>
+</g>
+<g id="actor-group-cafe-manager" data-actor-id="cafe-manager" onclick="showDesc('cafe-manager','actor',event)" style="cursor:pointer" transform="translate(1260,172)">
   <circle cx="0" cy="-60" r="14" fill="#e0f0ff" stroke="#334155" stroke-width="2"/>
   <line x1="0" y1="-46" x2="0" y2="-10" stroke="#334155" stroke-width="2"/>
   <line x1="-18" y1="-36" x2="18" y2="-36" stroke="#334155" stroke-width="2"/>
@@ -307,44 +341,28 @@ body.embed svg { max-width: none !important; width: 100% !important; height: 100
   <line x1="0" y1="-10" x2="14" y2="14" stroke="#334155" stroke-width="2"/>
   <text x="0" y="32" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">מנהל קפיטריה</text>
 </g>
-<g id="actor-group-payment-gw" data-actor-id="payment-gw" onclick="showDesc('payment-gw','actor',event)" style="cursor:pointer" transform="translate(1000,560)">
+<g id="actor-group-clock" data-actor-id="clock" onclick="showDesc('clock','actor',event)" style="cursor:pointer" transform="translate(1260,322)">
   <circle cx="0" cy="-60" r="14" fill="#fef3c7" stroke="#334155" stroke-width="2"/>
   <line x1="0" y1="-46" x2="0" y2="-10" stroke="#334155" stroke-width="2"/>
   <line x1="-18" y1="-36" x2="18" y2="-36" stroke="#334155" stroke-width="2"/>
   <line x1="0" y1="-10" x2="-14" y2="14" stroke="#334155" stroke-width="2"/>
   <line x1="0" y1="-10" x2="14" y2="14" stroke="#334155" stroke-width="2"/>
-  <text x="0" y="30" text-anchor="middle" font-size="9" fill="#64748b" font-family="'IBM Plex Mono',monospace">«system»</text>
-  <text x="0" y="46" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">שער תשלום</text>
-</g>
-<g id="actor-group-uni-card" data-actor-id="uni-card" onclick="showDesc('uni-card','actor',event)" style="cursor:pointer" transform="translate(1000,740)">
-  <circle cx="0" cy="-60" r="14" fill="#fef3c7" stroke="#334155" stroke-width="2"/>
-  <line x1="0" y1="-46" x2="0" y2="-10" stroke="#334155" stroke-width="2"/>
-  <line x1="-18" y1="-36" x2="18" y2="-36" stroke="#334155" stroke-width="2"/>
-  <line x1="0" y1="-10" x2="-14" y2="14" stroke="#334155" stroke-width="2"/>
-  <line x1="0" y1="-10" x2="14" y2="14" stroke="#334155" stroke-width="2"/>
-  <text x="0" y="30" text-anchor="middle" font-size="9" fill="#64748b" font-family="'IBM Plex Mono',monospace">«system»</text>
-  <text x="0" y="46" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">מערכת כרטיס אוניברסיטה</text>
+  <text x="0" y="32" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">זמן</text>
+  <text x="0" y="46" text-anchor="middle" font-size="9" font-style="italic" fill="#64748b" font-family="'IBM Plex Mono',monospace">«system»</text>
 </g>
 </svg>
 </div>
 
-<!-- Assumptions / open-questions panel -->
 <div id="assumptions-panel" class="assumptions-panel" hidden>
-  <div class="assumptions-col" id="assumptions-col">
-    <h3>הנחות</h3><ul id="assumptions-list"></ul>
-  </div>
-  <div class="assumptions-col" id="open-questions-col">
-    <h3>שאלות פתוחות</h3><ul id="open-questions-list"></ul>
-  </div>
+  <div class="assumptions-col" id="assumptions-col"><h3>הנחות</h3><ul id="assumptions-list"></ul></div>
+  <div class="assumptions-col" id="open-questions-col"><h3>שאלות פתוחות</h3><ul id="open-questions-list"></ul></div>
 </div>
 
-<!-- User stories summary -->
 <div id="user-stories-panel" class="user-stories-panel" hidden>
   <h3>סיפורי משתמש</h3>
   <ul id="user-stories-list"></ul>
 </div>
 
-<!-- UC modal -->
 <div id="uc-modal" class="uc-modal" hidden role="dialog" aria-modal="true">
   <div class="uc-modal-backdrop" onclick="closeUcModal()"></div>
   <div class="uc-modal-body"></div>
@@ -353,17 +371,2452 @@ body.embed svg { max-width: none !important; width: 100% !important; height: 100
 <button class="vp-export-btn" onclick="exportXMI()">Download .xmi (Visual Paradigm)</button>
 
 <script>
-var diagramLayouts    = [{"svgId": "diagram-svg-0", "boundary": {"x": 300, "y": 60, "width": 600, "height": 760}, "actors": [{"id": "student", "label": "סטודנט", "side": "left", "x": 80, "y": 200, "actorType": "human", "ucIds": ["uc-browse-menu", "uc-place-order", "uc-pay-order", "uc-apply-discount", "uc-receive-notification", "uc-pickup-verify"]}, {"id": "pickup-staff", "label": "עובד דלפק איסוף", "side": "left", "x": 80, "y": 460, "actorType": "human", "ucIds": ["uc-pickup-verify"]}, {"id": "kitchen-staff", "label": "עובד מטבח", "side": "left", "x": 80, "y": 700, "actorType": "human", "ucIds": ["uc-prep-queue", "uc-mark-ready"]}, {"id": "cafe-manager", "label": "מנהל קפיטריה", "side": "right", "x": 1000, "y": 300, "actorType": "human", "ucIds": ["uc-manage-menu", "uc-sales-report"]}, {"id": "payment-gw", "label": "שער תשלום", "side": "bottom", "x": 480, "y": 900, "actorType": "system", "ucIds": ["uc-pay-order"]}, {"id": "uni-card", "label": "מערכת כרטיס אוניברסיטה", "side": "bottom", "x": 700, "y": 900, "actorType": "system", "ucIds": ["uc-pay-order"]}], "useCases": [{"id": "uc-browse-menu", "cx": 560, "cy": 120, "rx": 106, "ry": 30}, {"id": "uc-place-order", "cx": 560, "cy": 190, "rx": 100, "ry": 30}, {"id": "uc-pay-order", "cx": 560, "cy": 260, "rx": 120, "ry": 30}, {"id": "uc-apply-discount", "cx": 560, "cy": 330, "rx": 120, "ry": 30}, {"id": "uc-pickup-verify", "cx": 560, "cy": 400, "rx": 106, "ry": 30}, {"id": "uc-receive-notification", "cx": 560, "cy": 470, "rx": 100, "ry": 30}, {"id": "uc-manage-menu", "cx": 560, "cy": 540, "rx": 120, "ry": 30}, {"id": "uc-sales-report", "cx": 560, "cy": 610, "rx": 120, "ry": 30}, {"id": "uc-prep-queue", "cx": 560, "cy": 680, "rx": 120, "ry": 30}, {"id": "uc-mark-ready", "cx": 560, "cy": 750, "rx": 120, "ry": 30}, {"id": "uc-validate-cart", "cx": 560, "cy": 820, "rx": 100, "ry": 30}], "connections": [{"from": "student", "to": "uc-browse-menu", "type": "association"}, {"from": "student", "to": "uc-place-order", "type": "association"}, {"from": "student", "to": "uc-pay-order", "type": "association"}, {"from": "student", "to": "uc-apply-discount", "type": "association"}, {"from": "student", "to": "uc-receive-notification", "type": "association"}, {"from": "student", "to": "uc-pickup-verify", "type": "association"}, {"from": "payment-gw", "to": "uc-pay-order", "type": "association"}, {"from": "uni-card", "to": "uc-pay-order", "type": "association"}, {"from": "pickup-staff", "to": "uc-pickup-verify", "type": "association"}, {"from": "kitchen-staff", "to": "uc-prep-queue", "type": "association"}, {"from": "kitchen-staff", "to": "uc-mark-ready", "type": "association"}, {"from": "cafe-manager", "to": "uc-manage-menu", "type": "association"}, {"from": "cafe-manager", "to": "uc-sales-report", "type": "association"}, {"from": "uc-place-order", "to": "uc-validate-cart", "type": "include"}, {"from": "uc-pay-order", "to": "uc-validate-cart", "type": "include"}, {"from": "uc-apply-discount", "to": "uc-pay-order", "type": "extend"}]}];
-var actorDescriptions = {"student": {"name": "סטודנט", "desc": "סטודנט/ית המזמין/ה אוכל מקפיטריות הקמפוס דרך האפליקציה הניידת ואוסף/ת אותו בדלפק."}, "pickup-staff": {"name": "עובד דלפק איסוף", "desc": "עובד/ת דלפק האיסוף המאמת/ת ומוסר/ת הזמנות מוכנות לסטודנטים."}, "kitchen-staff": {"name": "עובד מטבח", "desc": "עובד/ת מטבח הצופה בתור ההכנה ומסמן/ת הזמנות כמוכנות לאיסוף."}, "cafe-manager": {"name": "מנהל קפיטריה", "desc": "מנהל/ת קפיטריה המנהל/ת את התפריט והמלאי וצופה בדוחות מכירות."}, "payment-gw": {"name": "שער תשלום", "desc": "שער תשלום חיצוני המעבד עסקאות אשראי ומחזיר אישור תשלום."}, "uni-card": {"name": "מערכת כרטיס אוניברסיטה", "desc": "מערכת כרטיס האוניברסיטה המחייבת את תקציב הסטודנט הטעון בכרטיס."}};
-var assocDescriptions = {"as-student-browse": {"name": "סטודנט ↔ עיון בתפריט", "desc": "הסטודנט יוזם את העיון בתפריט הקפיטריה."}, "as-student-place": {"name": "סטודנט ↔ הזמנת אוכל", "desc": "הסטודנט יוזם את פתיחת ההזמנה."}, "as-student-pay": {"name": "סטודנט ↔ תשלום על הזמנה", "desc": "הסטודנט יוזם את התשלום על ההזמנה."}, "as-student-discount": {"name": "סטודנט ↔ החלת הנחת סטודנט", "desc": "הסטודנט מבקש להחיל את הנחת הסטודנט בעת התשלום."}, "as-student-notify": {"name": "סטודנט ↔ קבלת התראה", "desc": "הסטודנט פותח את מרכז ההתראות לצפייה בעדכוני ההזמנה."}, "as-student-pickup": {"name": "סטודנט ↔ אימות איסוף", "desc": "הסטודנט משתתף באימות האיסוף ומציג את קוד ההזמנה."}, "as-payment-pay": {"name": "שער תשלום ↔ תשלום על הזמנה", "desc": "שער התשלום מעבד את העסקה ומחזיר אישור תשלום."}, "as-unicard-pay": {"name": "מערכת כרטיס אוניברסיטה ↔ תשלום על הזמנה", "desc": "מערכת כרטיס האוניברסיטה מחייבת את הכרטיס ומאשרת תשלום."}, "as-pickup-verify": {"name": "עובד דלפק איסוף ↔ אימות איסוף", "desc": "עובד דלפק האיסוף יוזם את אימות האיסוף בעת המסירה."}, "as-kitchen-queue": {"name": "עובד מטבח ↔ צפייה בתור הכנה", "desc": "עובד המטבח יוזם צפייה בתור ההכנה."}, "as-kitchen-ready": {"name": "עובד מטבח ↔ סימון הזמנה כמוכנה", "desc": "עובד המטבח מסמן את ההזמנה כמוכנה לאיסוף."}, "as-manager-menu": {"name": "מנהל קפיטריה ↔ ניהול תפריט ומלאי", "desc": "מנהל הקפיטריה מנהל את התפריט והמלאי."}, "as-manager-report": {"name": "מנהל קפיטריה ↔ צפייה בדוח מכירות", "desc": "מנהל הקפיטריה מפיק ומציג את דוח המכירות."}};
-var useCaseDocs       = {"uc-browse-menu": {"id": "uc-browse-menu", "name": "עיון בתפריט", "primaryActor": "student", "secondaryActors": [], "description": "הסטודנט מעיין בתפריט הקפיטריה ובמחירים ובזמינות הפריטים.", "preconditions": ["הסטודנט מחובר לאפליקציה.", "לפחות קפיטריה אחת פעילה עם תפריט מפורסם."], "postconditions": ["התפריט הזמין מוצג לסטודנט עם מחירים ומצב מלאי עדכני."], "scenarios": [{"id": "sc-happy", "name": "מסלול מרכזי", "flow": [{"kind": "actor", "actor": "student", "text": "בוחר קפיטריה מתוך רשימת הקפיטריות בקמפוס"}, {"kind": "system", "text": "טוען ומציג את התפריט של הקפיטריה הנבחרת"}, {"kind": "actor", "actor": "student", "text": "מסנן את התפריט לפי קטגוריה ומחיר"}, {"kind": "system", "text": "מציג עבור כל פריט מחיר, תיאור וסימון זמינות במלאי"}, {"kind": "actor", "actor": "student", "text": "מסמן פריט להוספה לעגלה"}], "extensions": [{"at": 2, "text": "אם לקפיטריה אין תפריט פעיל — המערכת מציגה הודעה ומחזירה לרשימת הקפיטריות."}, {"at": 4, "text": "אם פריט אזל מהמלאי — המערכת מסמנת אותו כלא זמין ומונעת את הוספתו לעגלה."}]}], "userStories": [{"role": "סטודנט", "want": "לעיין בתפריט הקפיטריה ובמחירים מהנייד", "so": "שאוכל להחליט מה להזמין לפני שאגיע לקמפוס"}, {"role": "סטודנט", "want": "לראות אילו פריטים זמינים במלאי", "so": "שלא אזמין מנה שכבר אזלה"}], "wireframe": "<div class=\"wf-screen\"><h3 class=\"wf-heading\">תפריט קפיטריה — קמפוס</h3><div class=\"wf-row\"><label class=\"wf-label\">קפיטריה</label><select class=\"wf-select\" disabled><option>קפיטריה מרכזית</option></select></div><div class=\"wf-row\"><label class=\"wf-label\">סינון</label><input class=\"wf-input\" disabled placeholder=\"חיפוש פריט / קטגוריה\" /></div><table class=\"wf-table\"><thead><tr><th>פריט</th><th>מחיר</th><th>זמינות</th></tr></thead><tbody><tr><td>כריך טונה</td><td>18 ₪</td><td><span class=\"wf-badge\">במלאי</span></td></tr><tr><td>סלט יווני</td><td>26 ₪</td><td><span class=\"wf-badge\">במלאי</span></td></tr><tr><td>מאפה גבינה</td><td>12 ₪</td><td><span class=\"wf-badge\">אזל</span></td></tr></tbody></table><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">הוסף לעגלה</button></div><p class=\"wf-hint\">פריטים שאזלו מסומנים ולא ניתנים להוספה לעגלה.</p></div>"}, "uc-place-order": {"id": "uc-place-order", "name": "הזמנת אוכל", "primaryActor": "student", "secondaryActors": [], "description": "הסטודנט מרכיב עגלת פריטים ופותח הזמנה חדשה בקפיטריה.", "preconditions": ["הסטודנט מחובר לאפליקציה.", "העגלה מכילה לפחות פריט אחד זמין."], "postconditions": ["נוצרה הזמנה חדשה עם סטטוס \"ממתינה לתשלום\".", "פרטי ההזמנה נשמרו ושויכו לסטודנט ולקפיטריה."], "scenarios": [{"id": "sc-happy", "name": "מסלול מרכזי", "flow": [{"kind": "actor", "actor": "student", "text": "פותח את עגלת הקנייה ובוחר \"בצע הזמנה\""}, {"kind": "include", "uc": "uc-validate-cart", "text": "המערכת בודקת את תקינות העגלה לפני יצירת ההזמנה"}, {"kind": "actor", "actor": "student", "text": "בוחר זמן איסוף מבוקש מתוך החלונות הפנויים"}, {"kind": "system", "text": "יוצר הזמנה עם מזהה ייחודי ומשייך אותה לקפיטריה ולסטודנט"}, {"kind": "system", "text": "שומר את ההזמנה בסטטוס \"ממתינה לתשלום\" ומציג סיכום הזמנה"}], "extensions": [{"at": 3, "text": "אם אין חלון איסוף פנוי בזמן המבוקש — המערכת מציעה את החלון הפנוי הקרוב ביותר."}]}], "userStories": [{"role": "סטודנט", "want": "לפתוח הזמנה ולבחור זמן איסוף", "so": "שהאוכל יהיה מוכן לאיסוף כשאגיע"}, {"role": "סטודנט", "want": "שהמערכת תוודא שהעגלה תקינה לפני שאמשיך", "so": "שלא אפתח הזמנה עם פריט שאזל או מחיר שגוי"}], "wireframe": "<div class=\"wf-screen\"><h3 class=\"wf-heading\">סיכום עגלה ופתיחת הזמנה</h3><table class=\"wf-table\"><thead><tr><th>פריט</th><th>כמות</th><th>מחיר</th></tr></thead><tbody><tr><td>כריך טונה</td><td>1</td><td>18 ₪</td></tr><tr><td>סלט יווני</td><td>1</td><td>26 ₪</td></tr><tr><td>סה&quot;כ</td><td></td><td>44 ₪</td></tr></tbody></table><div class=\"wf-row\"><label class=\"wf-label\">זמן איסוף</label><select class=\"wf-select\" disabled><option>12:30</option><option>13:00</option></select></div><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">בצע הזמנה</button><button class=\"wf-button\">המשך קנייה</button></div><p class=\"wf-hint\">בלחיצה על \"בצע הזמנה\" המערכת בודקת את העגלה ויוצרת הזמנה בסטטוס \"ממתינה לתשלום\".</p></div>"}, "uc-pay-order": {"id": "uc-pay-order", "name": "תשלום על הזמנה", "primaryActor": "student", "secondaryActors": ["payment-gw", "uni-card"], "description": "הסטודנט משלם על הזמנה קיימת באמצעות שער תשלום או כרטיס אוניברסיטה.", "preconditions": ["קיימת הזמנה בסטטוס \"ממתינה לתשלום\" המשויכת לסטודנט."], "postconditions": ["התשלום נרשם וההזמנה עוברת לסטטוס \"שולמה\" ונכנסת לתור ההכנה."], "scenarios": [{"id": "sc-gateway", "name": "מסלול מרכזי: תשלום בשער תשלום", "flow": [{"kind": "actor", "actor": "student", "text": "בוחר את ההזמנה הממתינה לתשלום ולוחץ \"שלם\""}, {"kind": "include", "uc": "uc-validate-cart", "text": "המערכת מאמתת מחדש את תקינות העגלה והמחירים לפני החיוב"}, {"kind": "actor", "actor": "student", "text": "בוחר אמצעי תשלום מסוג כרטיס אשראי ומזין את פרטי הכרטיס"}, {"kind": "actor", "actor": "payment-gw", "text": "מאשר את העסקה ומחזיר אסמכתת תשלום"}, {"kind": "system", "text": "מעדכן את ההזמנה לסטטוס \"שולמה\" ומכניס אותה לתור ההכנה"}], "extensions": [{"at": 4, "text": "אם שער התשלום דוחה את העסקה — המערכת מציגה הודעת כשל ומשאירה את ההזמנה בסטטוס \"ממתינה לתשלום\"."}]}, {"id": "sc-uni-card", "name": "מסלול חלופי: תשלום בכרטיס אוניברסיטה", "flow": [{"kind": "actor", "actor": "student", "text": "בוחר את ההזמנה הממתינה לתשלום ובוחר אמצעי תשלום \"כרטיס אוניברסיטה\""}, {"kind": "actor", "actor": "uni-card", "text": "מאמת את יתרת הכרטיס ומאשר חיוב של סכום ההזמנה"}, {"kind": "system", "text": "רושם את החיוב ומעדכן את ההזמנה לסטטוס \"שולמה\""}], "extensions": [{"at": 2, "text": "אם יתרת כרטיס האוניברסיטה אינה מספיקה — המערכת מציעה לסטודנט להשלים את ההפרש בשער תשלום חיצוני."}]}], "userStories": [{"role": "סטודנט", "want": "לשלם על ההזמנה בכרטיס אשראי דרך שער התשלום", "so": "שההזמנה תיכנס להכנה מיד"}, {"role": "סטודנט", "want": "לשלם בכרטיס האוניברסיטה שלי", "so": "שאוכל לנצל את התקציב הטעון בכרטיס הסטודנט"}], "wireframe": "<div class=\"wf-screen\"><h3 class=\"wf-heading\">תשלום על הזמנה #1042</h3><div class=\"wf-section\">סכום לתשלום: <strong>44 ₪</strong></div><div class=\"wf-row\"><label class=\"wf-label\">אמצעי תשלום</label><select class=\"wf-select\" disabled><option>כרטיס אשראי (שער תשלום)</option><option>כרטיס אוניברסיטה</option></select></div><div class=\"wf-row\"><label class=\"wf-label\">מספר כרטיס</label><input class=\"wf-input\" disabled placeholder=\"•••• •••• •••• ••••\" /></div><div class=\"wf-row\"><label class=\"wf-label\">תוקף</label><input class=\"wf-input\" disabled placeholder=\"MM/YY\" /></div><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">שלם</button><button class=\"wf-button\">ביטול</button></div><p class=\"wf-hint\">לאחר אישור התשלום ההזמנה עוברת לסטטוס \"שולמה\" ונכנסת לתור ההכנה.</p></div>"}, "uc-apply-discount": {"id": "uc-apply-discount", "name": "החלת הנחת סטודנט", "primaryActor": "student", "secondaryActors": [], "description": "החלת הנחת סטודנט על התשלום כאשר הסטודנט זכאי להנחה.", "preconditions": ["מתבצע תהליך תשלום על הזמנה.", "לסטודנט קיימת זכאות פעילה להנחת סטודנט."], "postconditions": ["סכום ההזמנה לתשלום מופחת בהתאם לאחוז הנחת הסטודנט."], "scenarios": [{"id": "sc-happy", "name": "מסלול מרכזי", "flow": [{"kind": "actor", "actor": "student", "text": "מזין קוד הנחת סטודנט או מאשר זיהוי זכאות אוטומטי"}, {"kind": "system", "text": "בודק את תוקף זכאות ההנחה מול פרופיל הסטודנט"}, {"kind": "system", "text": "מחשב מחדש את סכום ההזמנה לאחר ההנחה ומציג את הסכום המעודכן"}], "extensions": [{"at": 2, "text": "אם ההנחה אינה בתוקף או נוצלה במלואה — המערכת מציגה הודעה ומשאירה את הסכום המקורי."}]}], "userStories": [{"role": "סטודנט", "want": "שתוחל הנחת הסטודנט שלי בעת התשלום", "so": "שאשלם מחיר מוזל המגיע לי כסטודנט"}, {"role": "מנהל קפיטריה", "want": "שהמערכת תחיל הנחות סטודנט בצורה אוטומטית ומבוקרת", "so": "שכל הסטודנטים יקבלו את ההנחה הנכונה ללא טעויות חיוב"}], "wireframe": "<div class=\"wf-screen\"><h3 class=\"wf-heading\">הנחת סטודנט</h3><div class=\"wf-row\"><label class=\"wf-label\">קוד הנחה</label><input class=\"wf-input\" disabled placeholder=\"STUDENT-2026\" /></div><div class=\"wf-section\">סכום לפני הנחה: 44 ₪</div><div class=\"wf-section\">הנחת סטודנט (10%): -4.4 ₪</div><div class=\"wf-section\"><strong>סכום לתשלום: 39.6 ₪</strong></div><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">החל הנחה</button></div><p class=\"wf-hint\">ההנחה מוחלת רק אם זכאות הסטודנט בתוקף; אחרת נשמר הסכום המקורי.</p></div>"}, "uc-pickup-verify": {"id": "uc-pickup-verify", "name": "אימות איסוף", "primaryActor": "pickup-staff", "secondaryActors": ["student"], "description": "עובד דלפק האיסוף מאמת את זהות הסטודנט ואת מספר ההזמנה בעת מסירת ההזמנה.", "preconditions": ["קיימת הזמנה בסטטוס \"מוכנה לאיסוף\".", "הסטודנט הגיע לדלפק האיסוף."], "postconditions": ["ההזמנה עוברת לסטטוס \"נאספה\" ונסגרת במערכת."], "scenarios": [{"id": "sc-happy", "name": "מסלול מרכזי", "flow": [{"kind": "actor", "actor": "student", "text": "מציג את קוד ה-QR של ההזמנה במסך האפליקציה"}, {"kind": "actor", "actor": "pickup-staff", "text": "סורק את קוד ה-QR של ההזמנה בעמדת הדלפק"}, {"kind": "system", "text": "מאמת שהקוד תואם להזמנה בסטטוס \"מוכנה לאיסוף\""}, {"kind": "system", "text": "מעדכן את ההזמנה לסטטוס \"נאספה\" ומציג אישור מסירה"}], "extensions": [{"at": 3, "text": "אם הקוד אינו תקף או ההזמנה כבר נאספה — המערכת מציגה התראה ומונעת מסירה כפולה."}]}], "userStories": [{"role": "עובד דלפק איסוף", "want": "לאמת את מספר ההזמנה לפני המסירה", "so": "שלא אמסור הזמנה לאדם הלא נכון"}, {"role": "סטודנט", "want": "שהאיסוף יאומת במהירות באמצעות קוד", "so": "שאקבל את ההזמנה ללא עיכוב בדלפק"}], "wireframe": "<div class=\"wf-screen\"><h3 class=\"wf-heading\">אימות איסוף — דלפק</h3><div class=\"wf-image-box\">[סורק קוד QR של ההזמנה]</div><div class=\"wf-row\"><label class=\"wf-label\">מספר הזמנה</label><input class=\"wf-input\" disabled placeholder=\"#1042\" /></div><div class=\"wf-section\">סטטוס: <span class=\"wf-badge\">מוכנה לאיסוף</span></div><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">אשר מסירה</button><button class=\"wf-button\">דחה</button></div><p class=\"wf-hint\">המערכת מונעת מסירה כפולה ומציגה התראה אם הקוד אינו תקף.</p></div>"}, "uc-receive-notification": {"id": "uc-receive-notification", "name": "קבלת התראה", "primaryActor": "student", "secondaryActors": [], "description": "הסטודנט מקבל ומציג התראות על שינויי סטטוס ההזמנה שלו.", "preconditions": ["לסטודנט קיימת לפחות הזמנה פעילה אחת במערכת."], "postconditions": ["הסטודנט צפה בעדכון הסטטוס העדכני של ההזמנה."], "scenarios": [{"id": "sc-happy", "name": "מסלול מרכזי", "flow": [{"kind": "actor", "actor": "student", "text": "פותח את מרכז ההתראות באפליקציה"}, {"kind": "system", "text": "מציג את רשימת ההתראות על שינויי סטטוס ההזמנות (\"בהכנה\", \"מוכנה לאיסוף\")"}, {"kind": "actor", "actor": "student", "text": "מקיש על התראת \"מוכנה לאיסוף\" כדי לצפות בפרטי ההזמנה"}, {"kind": "system", "text": "מציג את פרטי ההזמנה ואת קוד האיסוף"}], "extensions": [{"at": 2, "text": "אם אין התראות חדשות — המערכת מציגה הודעת \"אין התראות חדשות\"."}]}], "userStories": [{"role": "סטודנט", "want": "לקבל ולצפות בהתראה כשההזמנה מוכנה לאיסוף", "so": "שאדע מתי לגשת לדלפק"}, {"role": "סטודנט", "want": "לראות את היסטוריית עדכוני הסטטוס של ההזמנה", "so": "שאוכל לעקוב אחר התקדמות ההזמנה מרגע התשלום ועד האיסוף"}], "wireframe": "<div class=\"wf-screen\"><h3 class=\"wf-heading\">מרכז התראות</h3><table class=\"wf-table\"><thead><tr><th>הזמנה</th><th>סטטוס</th><th>זמן</th></tr></thead><tbody><tr><td>#1042</td><td><span class=\"wf-badge\">מוכנה לאיסוף</span></td><td>12:28</td></tr><tr><td>#1042</td><td>בהכנה</td><td>12:10</td></tr></tbody></table><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">צפה בפרטי הזמנה</button></div><p class=\"wf-hint\">הקשה על התראת \"מוכנה לאיסוף\" מציגה את פרטי ההזמנה ואת קוד האיסוף.</p></div>"}, "uc-manage-menu": {"id": "uc-manage-menu", "name": "ניהול תפריט ומלאי", "primaryActor": "cafe-manager", "secondaryActors": [], "description": "מנהל הקפיטריה מעדכן את פריטי התפריט, המחירים ורמות המלאי.", "preconditions": ["מנהל הקפיטריה מחובר עם הרשאות ניהול קפיטריה."], "postconditions": ["התפריט ורמות המלאי המעודכנים נשמרו ומשתקפים לסטודנטים."], "scenarios": [{"id": "sc-happy", "name": "מסלול מרכזי", "flow": [{"kind": "actor", "actor": "cafe-manager", "text": "פותח את מסך ניהול התפריט של הקפיטריה"}, {"kind": "actor", "actor": "cafe-manager", "text": "מוסיף פריט חדש ומזין שם, תיאור, מחיר וכמות מלאי"}, {"kind": "system", "text": "מאמת את שלמות שדות הפריט ואת תקינות המחיר"}, {"kind": "system", "text": "שומר את הפריט ומעדכן את רמת המלאי הזמינה בתפריט"}], "extensions": [{"at": 3, "text": "אם המחיר שלילי או שדה חובה חסר — המערכת מציגה שגיאת ולידציה ולא שומרת."}]}], "userStories": [{"role": "מנהל קפיטריה", "want": "לעדכן את פריטי התפריט והמחירים", "so": "שהסטודנטים יראו תפריט מדויק ועדכני"}, {"role": "מנהל קפיטריה", "want": "לעדכן את רמות המלאי של הפריטים", "so": "שלא יתקבלו הזמנות על פריטים שאזלו"}], "wireframe": "<div class=\"wf-screen\"><h3 class=\"wf-heading\">ניהול תפריט ומלאי</h3><div class=\"wf-row\"><label class=\"wf-label\">שם פריט</label><input class=\"wf-input\" disabled placeholder=\"כריך טונה\" /></div><div class=\"wf-row\"><label class=\"wf-label\">מחיר</label><input class=\"wf-input\" disabled placeholder=\"18\" /></div><div class=\"wf-row\"><label class=\"wf-label\">כמות במלאי</label><input class=\"wf-input\" disabled placeholder=\"40\" /></div><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">שמור פריט</button><button class=\"wf-button\">מחק</button></div><p class=\"wf-hint\">המערכת מאמתת שדות חובה ומחיר חיובי לפני שמירה, ומעדכנת את התפריט המוצג לסטודנטים.</p></div>"}, "uc-sales-report": {"id": "uc-sales-report", "name": "צפייה בדוח מכירות", "primaryActor": "cafe-manager", "secondaryActors": [], "description": "מנהל הקפיטריה מפיק וצופה בדוח מכירות יומי של הקפיטריה.", "preconditions": ["מנהל הקפיטריה מחובר עם הרשאות ניהול קפיטריה.", "קיימות הזמנות שהושלמו בתקופה המבוקשת."], "postconditions": ["דוח המכירות לתקופה הנבחרת מוצג למנהל."], "scenarios": [{"id": "sc-happy", "name": "מסלול מרכזי", "flow": [{"kind": "actor", "actor": "cafe-manager", "text": "בוחר טווח תאריכים להפקת דוח מכירות (למשל סוף יום)"}, {"kind": "system", "text": "מצרף את ההזמנות ששולמו בטווח ומחשב סכומי מכירה לפי פריט וקטגוריה"}, {"kind": "system", "text": "מציג את דוח המכירות עם סך הכנסות, כמות הזמנות ופריטים מובילים"}], "extensions": [{"at": 2, "text": "אם אין הזמנות בטווח שנבחר — המערכת מציגה דוח ריק עם הודעה מתאימה."}]}], "userStories": [{"role": "מנהל קפיטריה", "want": "לצפות בדוח מכירות יומי", "so": "שאוכל לעקוב אחר הכנסות הקפיטריה ולתכנן מלאי"}, {"role": "מנהל קפיטריה", "want": "לזהות את הפריטים הנמכרים ביותר בדוח", "so": "שאוכל להתאים את התפריט ואת המלאי לביקוש"}], "wireframe": "<div class=\"wf-screen\"><h3 class=\"wf-heading\">דוח מכירות יומי</h3><div class=\"wf-row\"><label class=\"wf-label\">טווח תאריכים</label><input class=\"wf-input\" disabled placeholder=\"25/06/2026\" /></div><table class=\"wf-table\"><thead><tr><th>פריט</th><th>כמות</th><th>הכנסה</th></tr></thead><tbody><tr><td>כריך טונה</td><td>52</td><td>936 ₪</td></tr><tr><td>סלט יווני</td><td>31</td><td>806 ₪</td></tr><tr><td>סה&quot;כ</td><td>83</td><td>1,742 ₪</td></tr></tbody></table><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">הפק דוח</button></div><p class=\"wf-hint\">אם אין הזמנות בטווח שנבחר מוצג דוח ריק עם הודעה מתאימה.</p></div>"}, "uc-prep-queue": {"id": "uc-prep-queue", "name": "צפייה בתור הכנה", "primaryActor": "kitchen-staff", "secondaryActors": [], "description": "עובד המטבח צופה בתור ההזמנות ששולמו וממתינות להכנה.", "preconditions": ["עובד המטבח מחובר לעמדת המטבח."], "postconditions": ["תור ההזמנות להכנה מוצג לעובד המטבח לפי סדר עדיפות."], "scenarios": [{"id": "sc-happy", "name": "מסלול מרכזי", "flow": [{"kind": "actor", "actor": "kitchen-staff", "text": "פותח את מסך תור ההכנה בעמדת המטבח"}, {"kind": "system", "text": "מציג את ההזמנות ששולמו וממתינות להכנה לפי זמן איסוף מבוקש"}, {"kind": "actor", "actor": "kitchen-staff", "text": "בוחר הזמנה כדי לצפות בפירוט הפריטים שלה"}, {"kind": "system", "text": "מציג את פריטי ההזמנה, הכמויות והערות הסטודנט"}], "extensions": [{"at": 2, "text": "אם אין הזמנות ממתינות — המערכת מציגה הודעת \"תור הכנה ריק\"."}]}], "userStories": [{"role": "עובד מטבח", "want": "לצפות בתור ההזמנות הממתינות להכנה", "so": "שאדע מה להכין ובאיזה סדר"}, {"role": "עובד מטבח", "want": "לראות את זמני האיסוף המבוקשים של ההזמנות בתור", "so": "שאוכל לתעדף את ההכנה לפי דחיפות"}], "wireframe": "<div class=\"wf-screen\"><h3 class=\"wf-heading\">תור הכנה — מטבח</h3><table class=\"wf-table\"><thead><tr><th>הזמנה</th><th>זמן איסוף</th><th>פריטים</th></tr></thead><tbody><tr><td>#1042</td><td>12:30</td><td>2</td></tr><tr><td>#1043</td><td>12:45</td><td>3</td></tr></tbody></table><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">פתח הזמנה</button></div><p class=\"wf-hint\">בחירת הזמנה מציגה את פירוט הפריטים, הכמויות והערות הסטודנט.</p></div>"}, "uc-mark-ready": {"id": "uc-mark-ready", "name": "סימון הזמנה כמוכנה", "primaryActor": "kitchen-staff", "secondaryActors": [], "description": "עובד המטבח מסמן הזמנה כמוכנה לאיסוף לאחר שהוכנה.", "preconditions": ["קיימת הזמנה בסטטוס \"בהכנה\" בתור המטבח."], "postconditions": ["ההזמנה עוברת לסטטוס \"מוכנה לאיסוף\" והסטודנט מקבל התראה."], "scenarios": [{"id": "sc-happy", "name": "מסלול מרכזי", "flow": [{"kind": "actor", "actor": "kitchen-staff", "text": "בוחר את ההזמנה שהושלמה הכנתה מתוך תור ההכנה"}, {"kind": "actor", "actor": "kitchen-staff", "text": "מקיש על \"סמן כמוכנה\""}, {"kind": "system", "text": "מעדכן את ההזמנה לסטטוס \"מוכנה לאיסוף\" ויוצר התראה לסטודנט"}], "extensions": [{"at": 1, "text": "אם פריט בהזמנה אזל באמצע ההכנה — עובד המטבח מסמן את ההזמנה כ\"בעיה\" והמערכת מיידעת את הסטודנט."}]}], "userStories": [{"role": "עובד מטבח", "want": "לסמן הזמנה כמוכנה לאיסוף", "so": "שהסטודנט יקבל התראה ויגיע לאסוף אותה"}, {"role": "סטודנט", "want": "שההזמנה תסומן כמוכנה ברגע שהיא ארוזה", "so": "שאקבל התראה מדויקת ולא אמתין בדלפק לחינם"}], "wireframe": "<div class=\"wf-screen\"><h3 class=\"wf-heading\">הזמנה #1042 — הכנה</h3><table class=\"wf-table\"><thead><tr><th>פריט</th><th>כמות</th></tr></thead><tbody><tr><td>כריך טונה</td><td>1</td></tr><tr><td>סלט יווני</td><td>1</td></tr></tbody></table><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">סמן כמוכנה</button><button class=\"wf-button\">סמן בעיה</button></div><p class=\"wf-hint\">סימון ההזמנה כמוכנה מעדכן את סטטוסה ל\"מוכנה לאיסוף\" ומפעיל התראה לסטודנט.</p></div>"}, "uc-validate-cart": {"id": "uc-validate-cart", "name": "בדיקת עגלה", "primaryActor": "student", "secondaryActors": [], "description": "אימות תקינות פריטי העגלה, זמינותם במלאי ועדכניות מחיריהם.", "preconditions": ["קיימת עגלה עם פריט אחד לפחות."], "postconditions": ["נקבע כי כל פריטי העגלה זמינים ומחיריהם עדכניים, או שזוהתה אי-תקינות."], "scenarios": [{"id": "sc-happy", "name": "מסלול מרכזי", "flow": [{"kind": "system", "text": "עובר על כל פריט בעגלה ובודק את זמינותו במלאי הקפיטריה"}, {"kind": "system", "text": "משווה את מחיר כל פריט למחיר העדכני בתפריט"}, {"kind": "system", "text": "מחשב את סכום העגלה הכולל ומחזיר סטטוס תקינות"}], "extensions": [{"at": 1, "text": "אם פריט אזל מהמלאי — המערכת מסמנת אותו, מסירה אותו מהעגלה ומיידעת את הסטודנט."}, {"at": 2, "text": "אם מחיר פריט השתנה — המערכת מעדכנת את המחיר בעגלה ומבקשת אישור מהסטודנט."}]}], "userStories": [{"role": "סטודנט", "want": "שהמערכת תוודא שכל פריט בעגלה זמין ובמחיר עדכני", "so": "שלא אתבצע חיוב על פריט שאזל או במחיר שגוי"}], "wireframe": ""}};
-var diagramModel      = {"kind": "use-case", "title": "מערכת הזמנת אוכל בקמפוס", "assumptions": ["כל סטודנט מזוהה במערכת באמצעות חשבון אישי המקושר למספר תעודת הסטודנט.", "האפליקציה מתממשקת לשער התשלום ולמערכת כרטיס האוניברסיטה דרך ממשק API חיצוני.", "כל הזמנה משויכת לקפיטריה אחת בלבד שבה היא מוכנה ונאספת."], "openQuestions": ["האם נדרשת הרשאת מנהל קפיטריה לאישור הנחת סטודנט מעבר לגובה הנחה מסוים?", "האם ניתן לשלם בהזמנה אחת בשילוב כרטיס אוניברסיטה ושער תשלום חיצוני?"], "parts": [{"id": "part-1", "label": "מערכת הזמנת אוכל בקמפוס", "splitRationale": "", "elements": [{"kind": "actor", "id": "student", "name": "סטודנט", "actorType": "human", "side": "left", "x": 80, "y": 200}, {"kind": "actor", "id": "pickup-staff", "name": "עובד דלפק איסוף", "actorType": "human", "side": "left", "x": 80, "y": 460}, {"kind": "actor", "id": "kitchen-staff", "name": "עובד מטבח", "actorType": "human", "side": "left", "x": 80, "y": 700}, {"kind": "actor", "id": "cafe-manager", "name": "מנהל קפיטריה", "actorType": "human", "side": "right", "x": 1000, "y": 300}, {"kind": "actor", "id": "payment-gw", "name": "שער תשלום", "actorType": "system", "side": "right", "x": 1000, "y": 560}, {"kind": "actor", "id": "uni-card", "name": "מערכת כרטיס אוניברסיטה", "actorType": "system", "side": "right", "x": 1000, "y": 740}, {"kind": "useCase", "id": "uc-browse-menu", "name": "עיון בתפריט", "description": "הסטודנט מעיין בתפריט הקפיטריה ובמחירים ובזמינות הפריטים.", "primaryActor": "student", "secondaryActors": [], "preconditions": ["הסטודנט מחובר לאפליקציה.", "לפחות קפיטריה אחת פעילה עם תפריט מפורסם."], "postconditions": ["התפריט הזמין מוצג לסטודנט עם מחירים ומצב מלאי עדכני."], "scenarios": [{"id": "sc-happy", "name": "מסלול מרכזי", "flow": [{"kind": "actor", "actor": "student", "text": "בוחר קפיטריה מתוך רשימת הקפיטריות בקמפוס"}, {"kind": "system", "text": "טוען ומציג את התפריט של הקפיטריה הנבחרת"}, {"kind": "actor", "actor": "student", "text": "מסנן את התפריט לפי קטגוריה ומחיר"}, {"kind": "system", "text": "מציג עבור כל פריט מחיר, תיאור וסימון זמינות במלאי"}, {"kind": "actor", "actor": "student", "text": "מסמן פריט להוספה לעגלה"}], "extensions": [{"at": 2, "text": "אם לקפיטריה אין תפריט פעיל — המערכת מציגה הודעה ומחזירה לרשימת הקפיטריות."}, {"at": 4, "text": "אם פריט אזל מהמלאי — המערכת מסמנת אותו כלא זמין ומונעת את הוספתו לעגלה."}]}], "userStories": [{"role": "סטודנט", "want": "לעיין בתפריט הקפיטריה ובמחירים מהנייד", "so": "שאוכל להחליט מה להזמין לפני שאגיע לקמפוס"}, {"role": "סטודנט", "want": "לראות אילו פריטים זמינים במלאי", "so": "שלא אזמין מנה שכבר אזלה"}], "wireframe": "<div class=\"wf-screen\"><h3 class=\"wf-heading\">תפריט קפיטריה — קמפוס</h3><div class=\"wf-row\"><label class=\"wf-label\">קפיטריה</label><select class=\"wf-select\" disabled><option>קפיטריה מרכזית</option></select></div><div class=\"wf-row\"><label class=\"wf-label\">סינון</label><input class=\"wf-input\" disabled placeholder=\"חיפוש פריט / קטגוריה\" /></div><table class=\"wf-table\"><thead><tr><th>פריט</th><th>מחיר</th><th>זמינות</th></tr></thead><tbody><tr><td>כריך טונה</td><td>18 ₪</td><td><span class=\"wf-badge\">במלאי</span></td></tr><tr><td>סלט יווני</td><td>26 ₪</td><td><span class=\"wf-badge\">במלאי</span></td></tr><tr><td>מאפה גבינה</td><td>12 ₪</td><td><span class=\"wf-badge\">אזל</span></td></tr></tbody></table><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">הוסף לעגלה</button></div><p class=\"wf-hint\">פריטים שאזלו מסומנים ולא ניתנים להוספה לעגלה.</p></div>"}, {"kind": "useCase", "id": "uc-place-order", "name": "הזמנת אוכל", "description": "הסטודנט מרכיב עגלת פריטים ופותח הזמנה חדשה בקפיטריה.", "primaryActor": "student", "secondaryActors": [], "preconditions": ["הסטודנט מחובר לאפליקציה.", "העגלה מכילה לפחות פריט אחד זמין."], "postconditions": ["נוצרה הזמנה חדשה עם סטטוס \"ממתינה לתשלום\".", "פרטי ההזמנה נשמרו ושויכו לסטודנט ולקפיטריה."], "scenarios": [{"id": "sc-happy", "name": "מסלול מרכזי", "flow": [{"kind": "actor", "actor": "student", "text": "פותח את עגלת הקנייה ובוחר \"בצע הזמנה\""}, {"kind": "include", "uc": "uc-validate-cart", "text": "המערכת בודקת את תקינות העגלה לפני יצירת ההזמנה"}, {"kind": "actor", "actor": "student", "text": "בוחר זמן איסוף מבוקש מתוך החלונות הפנויים"}, {"kind": "system", "text": "יוצר הזמנה עם מזהה ייחודי ומשייך אותה לקפיטריה ולסטודנט"}, {"kind": "system", "text": "שומר את ההזמנה בסטטוס \"ממתינה לתשלום\" ומציג סיכום הזמנה"}], "extensions": [{"at": 3, "text": "אם אין חלון איסוף פנוי בזמן המבוקש — המערכת מציעה את החלון הפנוי הקרוב ביותר."}]}], "userStories": [{"role": "סטודנט", "want": "לפתוח הזמנה ולבחור זמן איסוף", "so": "שהאוכל יהיה מוכן לאיסוף כשאגיע"}, {"role": "סטודנט", "want": "שהמערכת תוודא שהעגלה תקינה לפני שאמשיך", "so": "שלא אפתח הזמנה עם פריט שאזל או מחיר שגוי"}], "wireframe": "<div class=\"wf-screen\"><h3 class=\"wf-heading\">סיכום עגלה ופתיחת הזמנה</h3><table class=\"wf-table\"><thead><tr><th>פריט</th><th>כמות</th><th>מחיר</th></tr></thead><tbody><tr><td>כריך טונה</td><td>1</td><td>18 ₪</td></tr><tr><td>סלט יווני</td><td>1</td><td>26 ₪</td></tr><tr><td>סה&quot;כ</td><td></td><td>44 ₪</td></tr></tbody></table><div class=\"wf-row\"><label class=\"wf-label\">זמן איסוף</label><select class=\"wf-select\" disabled><option>12:30</option><option>13:00</option></select></div><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">בצע הזמנה</button><button class=\"wf-button\">המשך קנייה</button></div><p class=\"wf-hint\">בלחיצה על \"בצע הזמנה\" המערכת בודקת את העגלה ויוצרת הזמנה בסטטוס \"ממתינה לתשלום\".</p></div>"}, {"kind": "useCase", "id": "uc-pay-order", "name": "תשלום על הזמנה", "description": "הסטודנט משלם על הזמנה קיימת באמצעות שער תשלום או כרטיס אוניברסיטה.", "primaryActor": "student", "secondaryActors": ["payment-gw", "uni-card"], "preconditions": ["קיימת הזמנה בסטטוס \"ממתינה לתשלום\" המשויכת לסטודנט."], "postconditions": ["התשלום נרשם וההזמנה עוברת לסטטוס \"שולמה\" ונכנסת לתור ההכנה."], "scenarios": [{"id": "sc-gateway", "name": "מסלול מרכזי: תשלום בשער תשלום", "flow": [{"kind": "actor", "actor": "student", "text": "בוחר את ההזמנה הממתינה לתשלום ולוחץ \"שלם\""}, {"kind": "include", "uc": "uc-validate-cart", "text": "המערכת מאמתת מחדש את תקינות העגלה והמחירים לפני החיוב"}, {"kind": "actor", "actor": "student", "text": "בוחר אמצעי תשלום מסוג כרטיס אשראי ומזין את פרטי הכרטיס"}, {"kind": "actor", "actor": "payment-gw", "text": "מאשר את העסקה ומחזיר אסמכתת תשלום"}, {"kind": "system", "text": "מעדכן את ההזמנה לסטטוס \"שולמה\" ומכניס אותה לתור ההכנה"}], "extensions": [{"at": 4, "text": "אם שער התשלום דוחה את העסקה — המערכת מציגה הודעת כשל ומשאירה את ההזמנה בסטטוס \"ממתינה לתשלום\"."}]}, {"id": "sc-uni-card", "name": "מסלול חלופי: תשלום בכרטיס אוניברסיטה", "flow": [{"kind": "actor", "actor": "student", "text": "בוחר את ההזמנה הממתינה לתשלום ובוחר אמצעי תשלום \"כרטיס אוניברסיטה\""}, {"kind": "actor", "actor": "uni-card", "text": "מאמת את יתרת הכרטיס ומאשר חיוב של סכום ההזמנה"}, {"kind": "system", "text": "רושם את החיוב ומעדכן את ההזמנה לסטטוס \"שולמה\""}], "extensions": [{"at": 2, "text": "אם יתרת כרטיס האוניברסיטה אינה מספיקה — המערכת מציעה לסטודנט להשלים את ההפרש בשער תשלום חיצוני."}]}], "userStories": [{"role": "סטודנט", "want": "לשלם על ההזמנה בכרטיס אשראי דרך שער התשלום", "so": "שההזמנה תיכנס להכנה מיד"}, {"role": "סטודנט", "want": "לשלם בכרטיס האוניברסיטה שלי", "so": "שאוכל לנצל את התקציב הטעון בכרטיס הסטודנט"}], "wireframe": "<div class=\"wf-screen\"><h3 class=\"wf-heading\">תשלום על הזמנה #1042</h3><div class=\"wf-section\">סכום לתשלום: <strong>44 ₪</strong></div><div class=\"wf-row\"><label class=\"wf-label\">אמצעי תשלום</label><select class=\"wf-select\" disabled><option>כרטיס אשראי (שער תשלום)</option><option>כרטיס אוניברסיטה</option></select></div><div class=\"wf-row\"><label class=\"wf-label\">מספר כרטיס</label><input class=\"wf-input\" disabled placeholder=\"•••• •••• •••• ••••\" /></div><div class=\"wf-row\"><label class=\"wf-label\">תוקף</label><input class=\"wf-input\" disabled placeholder=\"MM/YY\" /></div><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">שלם</button><button class=\"wf-button\">ביטול</button></div><p class=\"wf-hint\">לאחר אישור התשלום ההזמנה עוברת לסטטוס \"שולמה\" ונכנסת לתור ההכנה.</p></div>"}, {"kind": "useCase", "id": "uc-apply-discount", "name": "החלת הנחת סטודנט", "description": "החלת הנחת סטודנט על התשלום כאשר הסטודנט זכאי להנחה.", "primaryActor": "student", "secondaryActors": [], "preconditions": ["מתבצע תהליך תשלום על הזמנה.", "לסטודנט קיימת זכאות פעילה להנחת סטודנט."], "postconditions": ["סכום ההזמנה לתשלום מופחת בהתאם לאחוז הנחת הסטודנט."], "scenarios": [{"id": "sc-happy", "name": "מסלול מרכזי", "flow": [{"kind": "actor", "actor": "student", "text": "מזין קוד הנחת סטודנט או מאשר זיהוי זכאות אוטומטי"}, {"kind": "system", "text": "בודק את תוקף זכאות ההנחה מול פרופיל הסטודנט"}, {"kind": "system", "text": "מחשב מחדש את סכום ההזמנה לאחר ההנחה ומציג את הסכום המעודכן"}], "extensions": [{"at": 2, "text": "אם ההנחה אינה בתוקף או נוצלה במלואה — המערכת מציגה הודעה ומשאירה את הסכום המקורי."}]}], "userStories": [{"role": "סטודנט", "want": "שתוחל הנחת הסטודנט שלי בעת התשלום", "so": "שאשלם מחיר מוזל המגיע לי כסטודנט"}, {"role": "מנהל קפיטריה", "want": "שהמערכת תחיל הנחות סטודנט בצורה אוטומטית ומבוקרת", "so": "שכל הסטודנטים יקבלו את ההנחה הנכונה ללא טעויות חיוב"}], "wireframe": "<div class=\"wf-screen\"><h3 class=\"wf-heading\">הנחת סטודנט</h3><div class=\"wf-row\"><label class=\"wf-label\">קוד הנחה</label><input class=\"wf-input\" disabled placeholder=\"STUDENT-2026\" /></div><div class=\"wf-section\">סכום לפני הנחה: 44 ₪</div><div class=\"wf-section\">הנחת סטודנט (10%): -4.4 ₪</div><div class=\"wf-section\"><strong>סכום לתשלום: 39.6 ₪</strong></div><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">החל הנחה</button></div><p class=\"wf-hint\">ההנחה מוחלת רק אם זכאות הסטודנט בתוקף; אחרת נשמר הסכום המקורי.</p></div>"}, {"kind": "useCase", "id": "uc-pickup-verify", "name": "אימות איסוף", "description": "עובד דלפק האיסוף מאמת את זהות הסטודנט ואת מספר ההזמנה בעת מסירת ההזמנה.", "primaryActor": "pickup-staff", "secondaryActors": ["student"], "preconditions": ["קיימת הזמנה בסטטוס \"מוכנה לאיסוף\".", "הסטודנט הגיע לדלפק האיסוף."], "postconditions": ["ההזמנה עוברת לסטטוס \"נאספה\" ונסגרת במערכת."], "scenarios": [{"id": "sc-happy", "name": "מסלול מרכזי", "flow": [{"kind": "actor", "actor": "student", "text": "מציג את קוד ה-QR של ההזמנה במסך האפליקציה"}, {"kind": "actor", "actor": "pickup-staff", "text": "סורק את קוד ה-QR של ההזמנה בעמדת הדלפק"}, {"kind": "system", "text": "מאמת שהקוד תואם להזמנה בסטטוס \"מוכנה לאיסוף\""}, {"kind": "system", "text": "מעדכן את ההזמנה לסטטוס \"נאספה\" ומציג אישור מסירה"}], "extensions": [{"at": 3, "text": "אם הקוד אינו תקף או ההזמנה כבר נאספה — המערכת מציגה התראה ומונעת מסירה כפולה."}]}], "userStories": [{"role": "עובד דלפק איסוף", "want": "לאמת את מספר ההזמנה לפני המסירה", "so": "שלא אמסור הזמנה לאדם הלא נכון"}, {"role": "סטודנט", "want": "שהאיסוף יאומת במהירות באמצעות קוד", "so": "שאקבל את ההזמנה ללא עיכוב בדלפק"}], "wireframe": "<div class=\"wf-screen\"><h3 class=\"wf-heading\">אימות איסוף — דלפק</h3><div class=\"wf-image-box\">[סורק קוד QR של ההזמנה]</div><div class=\"wf-row\"><label class=\"wf-label\">מספר הזמנה</label><input class=\"wf-input\" disabled placeholder=\"#1042\" /></div><div class=\"wf-section\">סטטוס: <span class=\"wf-badge\">מוכנה לאיסוף</span></div><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">אשר מסירה</button><button class=\"wf-button\">דחה</button></div><p class=\"wf-hint\">המערכת מונעת מסירה כפולה ומציגה התראה אם הקוד אינו תקף.</p></div>"}, {"kind": "useCase", "id": "uc-receive-notification", "name": "קבלת התראה", "description": "הסטודנט מקבל ומציג התראות על שינויי סטטוס ההזמנה שלו.", "primaryActor": "student", "secondaryActors": [], "preconditions": ["לסטודנט קיימת לפחות הזמנה פעילה אחת במערכת."], "postconditions": ["הסטודנט צפה בעדכון הסטטוס העדכני של ההזמנה."], "scenarios": [{"id": "sc-happy", "name": "מסלול מרכזי", "flow": [{"kind": "actor", "actor": "student", "text": "פותח את מרכז ההתראות באפליקציה"}, {"kind": "system", "text": "מציג את רשימת ההתראות על שינויי סטטוס ההזמנות (\"בהכנה\", \"מוכנה לאיסוף\")"}, {"kind": "actor", "actor": "student", "text": "מקיש על התראת \"מוכנה לאיסוף\" כדי לצפות בפרטי ההזמנה"}, {"kind": "system", "text": "מציג את פרטי ההזמנה ואת קוד האיסוף"}], "extensions": [{"at": 2, "text": "אם אין התראות חדשות — המערכת מציגה הודעת \"אין התראות חדשות\"."}]}], "userStories": [{"role": "סטודנט", "want": "לקבל ולצפות בהתראה כשההזמנה מוכנה לאיסוף", "so": "שאדע מתי לגשת לדלפק"}, {"role": "סטודנט", "want": "לראות את היסטוריית עדכוני הסטטוס של ההזמנה", "so": "שאוכל לעקוב אחר התקדמות ההזמנה מרגע התשלום ועד האיסוף"}], "wireframe": "<div class=\"wf-screen\"><h3 class=\"wf-heading\">מרכז התראות</h3><table class=\"wf-table\"><thead><tr><th>הזמנה</th><th>סטטוס</th><th>זמן</th></tr></thead><tbody><tr><td>#1042</td><td><span class=\"wf-badge\">מוכנה לאיסוף</span></td><td>12:28</td></tr><tr><td>#1042</td><td>בהכנה</td><td>12:10</td></tr></tbody></table><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">צפה בפרטי הזמנה</button></div><p class=\"wf-hint\">הקשה על התראת \"מוכנה לאיסוף\" מציגה את פרטי ההזמנה ואת קוד האיסוף.</p></div>"}, {"kind": "useCase", "id": "uc-manage-menu", "name": "ניהול תפריט ומלאי", "description": "מנהל הקפיטריה מעדכן את פריטי התפריט, המחירים ורמות המלאי.", "primaryActor": "cafe-manager", "secondaryActors": [], "preconditions": ["מנהל הקפיטריה מחובר עם הרשאות ניהול קפיטריה."], "postconditions": ["התפריט ורמות המלאי המעודכנים נשמרו ומשתקפים לסטודנטים."], "scenarios": [{"id": "sc-happy", "name": "מסלול מרכזי", "flow": [{"kind": "actor", "actor": "cafe-manager", "text": "פותח את מסך ניהול התפריט של הקפיטריה"}, {"kind": "actor", "actor": "cafe-manager", "text": "מוסיף פריט חדש ומזין שם, תיאור, מחיר וכמות מלאי"}, {"kind": "system", "text": "מאמת את שלמות שדות הפריט ואת תקינות המחיר"}, {"kind": "system", "text": "שומר את הפריט ומעדכן את רמת המלאי הזמינה בתפריט"}], "extensions": [{"at": 3, "text": "אם המחיר שלילי או שדה חובה חסר — המערכת מציגה שגיאת ולידציה ולא שומרת."}]}], "userStories": [{"role": "מנהל קפיטריה", "want": "לעדכן את פריטי התפריט והמחירים", "so": "שהסטודנטים יראו תפריט מדויק ועדכני"}, {"role": "מנהל קפיטריה", "want": "לעדכן את רמות המלאי של הפריטים", "so": "שלא יתקבלו הזמנות על פריטים שאזלו"}], "wireframe": "<div class=\"wf-screen\"><h3 class=\"wf-heading\">ניהול תפריט ומלאי</h3><div class=\"wf-row\"><label class=\"wf-label\">שם פריט</label><input class=\"wf-input\" disabled placeholder=\"כריך טונה\" /></div><div class=\"wf-row\"><label class=\"wf-label\">מחיר</label><input class=\"wf-input\" disabled placeholder=\"18\" /></div><div class=\"wf-row\"><label class=\"wf-label\">כמות במלאי</label><input class=\"wf-input\" disabled placeholder=\"40\" /></div><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">שמור פריט</button><button class=\"wf-button\">מחק</button></div><p class=\"wf-hint\">המערכת מאמתת שדות חובה ומחיר חיובי לפני שמירה, ומעדכנת את התפריט המוצג לסטודנטים.</p></div>"}, {"kind": "useCase", "id": "uc-sales-report", "name": "צפייה בדוח מכירות", "description": "מנהל הקפיטריה מפיק וצופה בדוח מכירות יומי של הקפיטריה.", "primaryActor": "cafe-manager", "secondaryActors": [], "preconditions": ["מנהל הקפיטריה מחובר עם הרשאות ניהול קפיטריה.", "קיימות הזמנות שהושלמו בתקופה המבוקשת."], "postconditions": ["דוח המכירות לתקופה הנבחרת מוצג למנהל."], "scenarios": [{"id": "sc-happy", "name": "מסלול מרכזי", "flow": [{"kind": "actor", "actor": "cafe-manager", "text": "בוחר טווח תאריכים להפקת דוח מכירות (למשל סוף יום)"}, {"kind": "system", "text": "מצרף את ההזמנות ששולמו בטווח ומחשב סכומי מכירה לפי פריט וקטגוריה"}, {"kind": "system", "text": "מציג את דוח המכירות עם סך הכנסות, כמות הזמנות ופריטים מובילים"}], "extensions": [{"at": 2, "text": "אם אין הזמנות בטווח שנבחר — המערכת מציגה דוח ריק עם הודעה מתאימה."}]}], "userStories": [{"role": "מנהל קפיטריה", "want": "לצפות בדוח מכירות יומי", "so": "שאוכל לעקוב אחר הכנסות הקפיטריה ולתכנן מלאי"}, {"role": "מנהל קפיטריה", "want": "לזהות את הפריטים הנמכרים ביותר בדוח", "so": "שאוכל להתאים את התפריט ואת המלאי לביקוש"}], "wireframe": "<div class=\"wf-screen\"><h3 class=\"wf-heading\">דוח מכירות יומי</h3><div class=\"wf-row\"><label class=\"wf-label\">טווח תאריכים</label><input class=\"wf-input\" disabled placeholder=\"25/06/2026\" /></div><table class=\"wf-table\"><thead><tr><th>פריט</th><th>כמות</th><th>הכנסה</th></tr></thead><tbody><tr><td>כריך טונה</td><td>52</td><td>936 ₪</td></tr><tr><td>סלט יווני</td><td>31</td><td>806 ₪</td></tr><tr><td>סה&quot;כ</td><td>83</td><td>1,742 ₪</td></tr></tbody></table><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">הפק דוח</button></div><p class=\"wf-hint\">אם אין הזמנות בטווח שנבחר מוצג דוח ריק עם הודעה מתאימה.</p></div>"}, {"kind": "useCase", "id": "uc-prep-queue", "name": "צפייה בתור הכנה", "description": "עובד המטבח צופה בתור ההזמנות ששולמו וממתינות להכנה.", "primaryActor": "kitchen-staff", "secondaryActors": [], "preconditions": ["עובד המטבח מחובר לעמדת המטבח."], "postconditions": ["תור ההזמנות להכנה מוצג לעובד המטבח לפי סדר עדיפות."], "scenarios": [{"id": "sc-happy", "name": "מסלול מרכזי", "flow": [{"kind": "actor", "actor": "kitchen-staff", "text": "פותח את מסך תור ההכנה בעמדת המטבח"}, {"kind": "system", "text": "מציג את ההזמנות ששולמו וממתינות להכנה לפי זמן איסוף מבוקש"}, {"kind": "actor", "actor": "kitchen-staff", "text": "בוחר הזמנה כדי לצפות בפירוט הפריטים שלה"}, {"kind": "system", "text": "מציג את פריטי ההזמנה, הכמויות והערות הסטודנט"}], "extensions": [{"at": 2, "text": "אם אין הזמנות ממתינות — המערכת מציגה הודעת \"תור הכנה ריק\"."}]}], "userStories": [{"role": "עובד מטבח", "want": "לצפות בתור ההזמנות הממתינות להכנה", "so": "שאדע מה להכין ובאיזה סדר"}, {"role": "עובד מטבח", "want": "לראות את זמני האיסוף המבוקשים של ההזמנות בתור", "so": "שאוכל לתעדף את ההכנה לפי דחיפות"}], "wireframe": "<div class=\"wf-screen\"><h3 class=\"wf-heading\">תור הכנה — מטבח</h3><table class=\"wf-table\"><thead><tr><th>הזמנה</th><th>זמן איסוף</th><th>פריטים</th></tr></thead><tbody><tr><td>#1042</td><td>12:30</td><td>2</td></tr><tr><td>#1043</td><td>12:45</td><td>3</td></tr></tbody></table><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">פתח הזמנה</button></div><p class=\"wf-hint\">בחירת הזמנה מציגה את פירוט הפריטים, הכמויות והערות הסטודנט.</p></div>"}, {"kind": "useCase", "id": "uc-mark-ready", "name": "סימון הזמנה כמוכנה", "description": "עובד המטבח מסמן הזמנה כמוכנה לאיסוף לאחר שהוכנה.", "primaryActor": "kitchen-staff", "secondaryActors": [], "preconditions": ["קיימת הזמנה בסטטוס \"בהכנה\" בתור המטבח."], "postconditions": ["ההזמנה עוברת לסטטוס \"מוכנה לאיסוף\" והסטודנט מקבל התראה."], "scenarios": [{"id": "sc-happy", "name": "מסלול מרכזי", "flow": [{"kind": "actor", "actor": "kitchen-staff", "text": "בוחר את ההזמנה שהושלמה הכנתה מתוך תור ההכנה"}, {"kind": "actor", "actor": "kitchen-staff", "text": "מקיש על \"סמן כמוכנה\""}, {"kind": "system", "text": "מעדכן את ההזמנה לסטטוס \"מוכנה לאיסוף\" ויוצר התראה לסטודנט"}], "extensions": [{"at": 1, "text": "אם פריט בהזמנה אזל באמצע ההכנה — עובד המטבח מסמן את ההזמנה כ\"בעיה\" והמערכת מיידעת את הסטודנט."}]}], "userStories": [{"role": "עובד מטבח", "want": "לסמן הזמנה כמוכנה לאיסוף", "so": "שהסטודנט יקבל התראה ויגיע לאסוף אותה"}, {"role": "סטודנט", "want": "שההזמנה תסומן כמוכנה ברגע שהיא ארוזה", "so": "שאקבל התראה מדויקת ולא אמתין בדלפק לחינם"}], "wireframe": "<div class=\"wf-screen\"><h3 class=\"wf-heading\">הזמנה #1042 — הכנה</h3><table class=\"wf-table\"><thead><tr><th>פריט</th><th>כמות</th></tr></thead><tbody><tr><td>כריך טונה</td><td>1</td></tr><tr><td>סלט יווני</td><td>1</td></tr></tbody></table><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">סמן כמוכנה</button><button class=\"wf-button\">סמן בעיה</button></div><p class=\"wf-hint\">סימון ההזמנה כמוכנה מעדכן את סטטוסה ל\"מוכנה לאיסוף\" ומפעיל התראה לסטודנט.</p></div>"}, {"kind": "useCase", "id": "uc-validate-cart", "name": "בדיקת עגלה", "description": "אימות תקינות פריטי העגלה, זמינותם במלאי ועדכניות מחיריהם.", "primaryActor": "student", "secondaryActors": [], "preconditions": ["קיימת עגלה עם פריט אחד לפחות."], "postconditions": ["נקבע כי כל פריטי העגלה זמינים ומחיריהם עדכניים, או שזוהתה אי-תקינות."], "scenarios": [{"id": "sc-happy", "name": "מסלול מרכזי", "flow": [{"kind": "system", "text": "עובר על כל פריט בעגלה ובודק את זמינותו במלאי הקפיטריה"}, {"kind": "system", "text": "משווה את מחיר כל פריט למחיר העדכני בתפריט"}, {"kind": "system", "text": "מחשב את סכום העגלה הכולל ומחזיר סטטוס תקינות"}], "extensions": [{"at": 1, "text": "אם פריט אזל מהמלאי — המערכת מסמנת אותו, מסירה אותו מהעגלה ומיידעת את הסטודנט."}, {"at": 2, "text": "אם מחיר פריט השתנה — המערכת מעדכנת את המחיר בעגלה ומבקשת אישור מהסטודנט."}]}], "userStories": [{"role": "סטודנט", "want": "שהמערכת תוודא שכל פריט בעגלה זמין ובמחיר עדכני", "so": "שלא אתבצע חיוב על פריט שאזל או במחיר שגוי"}]}], "relationships": [{"kind": "actorAssoc", "id": "as-student-browse", "actorId": "student", "ucId": "uc-browse-menu", "role": "initiator", "description": "הסטודנט יוזם את העיון בתפריט הקפיטריה."}, {"kind": "actorAssoc", "id": "as-student-place", "actorId": "student", "ucId": "uc-place-order", "role": "initiator", "description": "הסטודנט יוזם את פתיחת ההזמנה."}, {"kind": "actorAssoc", "id": "as-student-pay", "actorId": "student", "ucId": "uc-pay-order", "role": "initiator", "description": "הסטודנט יוזם את התשלום על ההזמנה."}, {"kind": "actorAssoc", "id": "as-student-discount", "actorId": "student", "ucId": "uc-apply-discount", "role": "initiator", "description": "הסטודנט מבקש להחיל את הנחת הסטודנט בעת התשלום."}, {"kind": "actorAssoc", "id": "as-student-notify", "actorId": "student", "ucId": "uc-receive-notification", "role": "initiator", "description": "הסטודנט פותח את מרכז ההתראות לצפייה בעדכוני ההזמנה."}, {"kind": "actorAssoc", "id": "as-student-pickup", "actorId": "student", "ucId": "uc-pickup-verify", "role": "participant", "description": "הסטודנט משתתף באימות האיסוף ומציג את קוד ההזמנה."}, {"kind": "actorAssoc", "id": "as-payment-pay", "actorId": "payment-gw", "ucId": "uc-pay-order", "role": "supplier", "description": "שער התשלום מעבד את העסקה ומחזיר אישור תשלום."}, {"kind": "actorAssoc", "id": "as-unicard-pay", "actorId": "uni-card", "ucId": "uc-pay-order", "role": "supplier", "description": "מערכת כרטיס האוניברסיטה מחייבת את הכרטיס ומאשרת תשלום."}, {"kind": "actorAssoc", "id": "as-pickup-verify", "actorId": "pickup-staff", "ucId": "uc-pickup-verify", "role": "initiator", "description": "עובד דלפק האיסוף יוזם את אימות האיסוף בעת המסירה."}, {"kind": "actorAssoc", "id": "as-kitchen-queue", "actorId": "kitchen-staff", "ucId": "uc-prep-queue", "role": "initiator", "description": "עובד המטבח יוזם צפייה בתור ההכנה."}, {"kind": "actorAssoc", "id": "as-kitchen-ready", "actorId": "kitchen-staff", "ucId": "uc-mark-ready", "role": "initiator", "description": "עובד המטבח מסמן את ההזמנה כמוכנה לאיסוף."}, {"kind": "actorAssoc", "id": "as-manager-menu", "actorId": "cafe-manager", "ucId": "uc-manage-menu", "role": "initiator", "description": "מנהל הקפיטריה מנהל את התפריט והמלאי."}, {"kind": "actorAssoc", "id": "as-manager-report", "actorId": "cafe-manager", "ucId": "uc-sales-report", "role": "initiator", "description": "מנהל הקפיטריה מפיק ומציג את דוח המכירות."}, {"kind": "include", "id": "inc-place-validate", "from": "uc-place-order", "to": "uc-validate-cart"}, {"kind": "include", "id": "inc-pay-validate", "from": "uc-pay-order", "to": "uc-validate-cart"}, {"kind": "extend", "id": "ext-discount-pay", "from": "uc-apply-discount", "to": "uc-pay-order", "extensionPoint": "חישוב סכום לתשלום"}]}]};
+var diagramLayouts    = [];
+var actorDescriptions = {
+  "student": {
+    "name": "סטודנט",
+    "desc": "סטודנט בקמפוס — מזמין, משלם, עוקב ואוסף. הוא יוזם את כל התרחישים שלו."
+  },
+  "pickup-staff": {
+    "name": "עובד דלפק איסוף",
+    "desc": "מאמת את קוד האיסוף ומוסר את ההזמנה. הוא היוזם — הסטודנט רק מציג לו קוד."
+  },
+  "kitchen-staff": {
+    "name": "עובד מטבח",
+    "desc": "רואה את תור ההכנה לפי עמדה ומסמן הזמנות כמוכנות."
+  },
+  "cafe-manager": {
+    "name": "מנהל קפיטריה",
+    "desc": "מנהל תפריט ומלאי, צופה בדוח מכירות — וגם הוא פותח את תור ההכנה."
+  },
+  "clock": {
+    "name": "זמן",
+    "desc": "⏰ הזמן מפעיל אותנו: בתום חלון האיסוף הוא יוזם את הטיפול בהזמנות שלא נאספו. אנחנו לא קוראים לו — הוא מתחיל. לכן הוא שחקן."
+  }
+};
+var assocDescriptions = {
+  "as-student-browse": {
+    "name": "סטודנט ↔ עיון בתפריט",
+    "desc": "הסטודנט יוזם את העיון בתפריט."
+  },
+  "as-student-place": {
+    "name": "סטודנט ↔ הזמנת אוכל",
+    "desc": "הסטודנט יוזם את ההזמנה."
+  },
+  "as-student-pay": {
+    "name": "סטודנט ↔ תשלום על הזמנה",
+    "desc": "הסטודנט יוזם את התשלום."
+  },
+  "as-student-schedule": {
+    "name": "סטודנט ↔ הזמנה מראש",
+    "desc": "הסטודנט בוחר להזמין מראש לשעה עתידית."
+  },
+  "as-student-track": {
+    "name": "סטודנט ↔ מעקב אחר הזמנה",
+    "desc": "הסטודנט יוזם מעקב אחר ההזמנה שלו."
+  },
+  "as-pickup-verify": {
+    "name": "עובד דלפק איסוף ↔ אימות איסוף",
+    "desc": "עובד הדלפק יוזם את אימות האיסוף. הסטודנט רק מציג לו קוד — הוא מדבר עם אדם, לא עם המערכת."
+  },
+  "as-kitchen-queue": {
+    "name": "עובד מטבח ↔ צפייה בתור הכנה",
+    "desc": "עובד המטבח פותח את תור ההכנה בעצמו."
+  },
+  "as-manager-queue": {
+    "name": "מנהל קפיטריה ↔ צפייה בתור הכנה",
+    "desc": "גם המנהל פותח את תור ההכנה בעצמו — שני שחקנים, כל אחד יוזם."
+  },
+  "as-kitchen-ready": {
+    "name": "עובד מטבח ↔ סימון הזמנה כמוכנה",
+    "desc": "עובד המטבח יוזם את הסימון כמוכנה."
+  },
+  "as-manager-menu": {
+    "name": "מנהל קפיטריה ↔ ניהול תפריט ומלאי",
+    "desc": "מנהל הקפיטריה יוזם את ניהול התפריט."
+  },
+  "as-manager-report": {
+    "name": "מנהל קפיטריה ↔ צפייה בדוח מכירות",
+    "desc": "מנהל הקפיטריה יוזם את הפקת הדוח."
+  },
+  "as-clock-noshow": {
+    "name": "זמן ↔ טיפול בהזמנה שלא נאספה",
+    "desc": "⏰ הזמן מפעיל אותנו — בתום חלון האיסוף. אנחנו לא קוראים לו; הוא זה שמתחיל."
+  }
+};
+var useCaseDocs       = {
+  "uc-browse-menu": {
+    "kind": "useCase",
+    "id": "uc-browse-menu",
+    "name": "עיון בתפריט",
+    "description": "הסטודנט מעיין בתפריט הקפיטריה — פריטים, מחירים וזמינות — ומסנן לפי העדפה תזונתית.",
+    "preconditions": [
+      "הסטודנט מזוהה באפליקציה."
+    ],
+    "postconditions": [
+      "התפריט העדכני הוצג לסטודנט, כולל מחיר וזמינות לכל פריט."
+    ],
+    "scenarios": [
+      {
+        "id": "sc-happy",
+        "name": "מסלול מרכזי",
+        "flow": [
+          {
+            "kind": "actor",
+            "actor": "student",
+            "text": "בוחר קפיטריה מתוך רשימת הקפיטריות בקמפוס"
+          },
+          {
+            "kind": "system",
+            "text": "טוענת את התפריט ומציגה לכל פריט שם, מחיר וזמינות"
+          },
+          {
+            "kind": "alt",
+            "condition": "אופן העיון שבחר הסטודנט",
+            "branches": [
+              {
+                "label": "עיון חופשי",
+                "steps": [
+                  {
+                    "kind": "actor",
+                    "actor": "student",
+                    "text": "עובר בין קטגוריות התפריט"
+                  },
+                  {
+                    "kind": "system",
+                    "text": "מציגה את הפריטים בקטגוריה שנבחרה"
+                  }
+                ]
+              },
+              {
+                "label": "סינון תזונתי",
+                "steps": [
+                  {
+                    "kind": "actor",
+                    "actor": "student",
+                    "text": "בוחר מסנן — צמחוני, טבעוני או ללא גלוטן"
+                  },
+                  {
+                    "kind": "system",
+                    "text": "מציגה רק פריטים העונים למסנן ומסמנת את המסנן הפעיל"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "actor",
+            "actor": "student",
+            "text": "בוחר פריט לצפייה בפרטיו"
+          },
+          {
+            "kind": "system",
+            "text": "מציגה רכיבים, מחיר וזמן הכנה משוער"
+          }
+        ],
+        "extensions": [
+          {
+            "at": "2",
+            "text": "הקפיטריה סגורה ואין לה תפריט פעיל",
+            "steps": [
+              "המערכת מציגה את שעות הפעילות"
+            ],
+            "outcome": {
+              "kind": "resume",
+              "at": "1"
+            }
+          },
+          {
+            "at": "3.2.2",
+            "text": "אף פריט אינו עונה למסנן",
+            "steps": [
+              "המערכת מציעה להסיר את המסנן"
+            ],
+            "outcome": {
+              "kind": "resume",
+              "at": "3"
+            }
+          }
+        ]
+      }
+    ],
+    "userStories": [
+      {
+        "role": "סטודנט",
+        "want": "לראות מה זמין לפני שאני מגיע",
+        "so": "לא אגיע סתם אם המנה נגמרה"
+      },
+      {
+        "role": "סטודנט צמחוני",
+        "want": "לסנן לפי העדפה תזונתית",
+        "so": "אמצא מהר מה מתאים לי"
+      }
+    ],
+    "primaryActor": "student",
+    "wireframe": "<div class=\"wf-screen\"><div class=\"wf-heading\">תפריט הקפיטריה</div><div class=\"wf-row\"><label class=\"wf-label\">סינון</label><select class=\"wf-select\" disabled><option>צמחוני</option></select></div><table class=\"wf-table\"><thead><tr><th>פריט</th><th>מחיר</th><th>זמינות</th></tr></thead><tbody><tr><td>סלט יווני</td><td>28 ₪</td><td><span class=\"wf-badge\">זמין</span></td></tr></tbody></table></div>"
+  },
+  "uc-place-order": {
+    "kind": "useCase",
+    "id": "uc-place-order",
+    "name": "הזמנת אוכל",
+    "description": "הסטודנט מרכיב הזמנה מפריטי התפריט ופותח אותה במערכת.",
+    "preconditions": [
+      "הסטודנט מזוהה באפליקציה.",
+      "לקפיטריה יש תפריט פעיל."
+    ],
+    "postconditions": [
+      "ההזמנה נוצרה בסטטוס \"ממתינה לתשלום\" והוצג סיכום."
+    ],
+    "scenarios": [
+      {
+        "id": "sc-happy",
+        "name": "מסלול מרכזי",
+        "flow": [
+          {
+            "kind": "loop",
+            "condition": "הסטודנט מוסיף פריטים להזמנה",
+            "steps": [
+              {
+                "kind": "actor",
+                "actor": "student",
+                "text": "בוחר פריט מהתפריט ומזין כמות"
+              },
+              {
+                "kind": "system",
+                "text": "מוסיפה את הפריט לעגלה ומחשבת סכום ביניים"
+              },
+              {
+                "kind": "actor",
+                "actor": "student",
+                "text": "מעדכן כמות או מסיר פריט במידת הצורך"
+              }
+            ]
+          },
+          {
+            "kind": "actor",
+            "actor": "student",
+            "text": "בוחר \"בצע הזמנה\""
+          },
+          {
+            "kind": "include",
+            "uc": "uc-validate-cart",
+            "text": "לפני יצירת ההזמנה"
+          },
+          {
+            "kind": "system",
+            "text": "קובעת את זמן האיסוף כ\"מיידי\" ומחשבת זמן הכנה משוער",
+            "extensionPoint": "קביעת זמן איסוף"
+          },
+          {
+            "kind": "system",
+            "text": "יוצרת הזמנה עם מזהה ייחודי ושומרת בסטטוס \"ממתינה לתשלום\""
+          }
+        ],
+        "extensions": [
+          {
+            "at": "1.2",
+            "text": "הפריט אזל מהמלאי בזמן ההרכבה",
+            "steps": [
+              "המערכת מסמנת \"אזל\", מסירה מהעגלה ומציעה חלופה"
+            ],
+            "outcome": {
+              "kind": "resume",
+              "at": "1.1"
+            }
+          },
+          {
+            "at": "3",
+            "text": "בדיקת העגלה החזירה \"אינה תקינה\"",
+            "steps": [
+              "המערכת מציגה את הפריטים הבעייתיים"
+            ],
+            "outcome": {
+              "kind": "resume",
+              "at": "1"
+            }
+          }
+        ]
+      }
+    ],
+    "userStories": [
+      {
+        "role": "סטודנט",
+        "want": "להזמין מהטלפון לפני שאני מגיע",
+        "so": "לא אעמוד בתור בהפסקה של רבע שעה"
+      },
+      {
+        "role": "סטודנט",
+        "want": "לבחור זמן איסוף",
+        "so": "אגיע כשהאוכל מוכן"
+      }
+    ],
+    "primaryActor": "student",
+    "wireframe": "<div class=\"wf-screen\"><div class=\"wf-heading\">העגלה שלי</div><table class=\"wf-table\"><thead><tr><th>פריט</th><th>כמות</th><th>מחיר</th></tr></thead><tbody><tr><td>סלט יווני</td><td>1</td><td>28 ₪</td></tr></tbody></table><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">בצע הזמנה</button></div></div>"
+  },
+  "uc-pay-order": {
+    "kind": "useCase",
+    "id": "uc-pay-order",
+    "name": "תשלום על הזמנה",
+    "description": "הסטודנט משלם על הזמנה שממתינה לתשלום.",
+    "preconditions": [
+      "קיימת הזמנה בסטטוס \"ממתינה לתשלום\"."
+    ],
+    "postconditions": [
+      "ההזמנה עודכנה ל\"שולמה\" ונכנסה לתור ההכנה.",
+      "הוצג לסטודנט קוד איסוף."
+    ],
+    "scenarios": [
+      {
+        "id": "sc-happy",
+        "name": "מסלול מרכזי",
+        "flow": [
+          {
+            "kind": "actor",
+            "actor": "student",
+            "text": "בוחר את ההזמנה ולוחץ \"שלם\""
+          },
+          {
+            "kind": "include",
+            "uc": "uc-validate-cart",
+            "text": "מאמתת מחדש מחירים וזמינות לפני החיוב"
+          },
+          {
+            "kind": "alt",
+            "condition": "אמצעי התשלום שבחר הסטודנט",
+            "branches": [
+              {
+                "label": "כרטיס סטודנט",
+                "steps": [
+                  {
+                    "kind": "actor",
+                    "actor": "student",
+                    "text": "מאשר חיוב של חשבון הסטודנט שלו"
+                  },
+                  {
+                    "kind": "system",
+                    "text": "שולחת בקשת חיוב למערכת החשבונות של האוניברסיטה ומקבלת אישור"
+                  }
+                ]
+              },
+              {
+                "label": "כרטיס אשראי",
+                "steps": [
+                  {
+                    "kind": "actor",
+                    "actor": "student",
+                    "text": "מזין מספר כרטיס, תוקף ו-CVV"
+                  },
+                  {
+                    "kind": "system",
+                    "text": "שולחת בקשת חיוב לשער התשלומים ומקבלת אישור"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "system",
+            "text": "מעדכנת את ההזמנה ל\"שולמה\", משבצת לתור ההכנה ומציגה קוד איסוף"
+          }
+        ],
+        "extensions": [
+          {
+            "at": "2",
+            "text": "בדיקת העגלה החזירה שמחיר השתנה",
+            "steps": [
+              "המערכת מציגה את המחיר המעודכן ומבקשת אישור"
+            ],
+            "outcome": {
+              "kind": "resume",
+              "at": "1"
+            }
+          },
+          {
+            "at": "3.1.2",
+            "text": "מערכת החשבונות דוחה את החיוב (יתרה לא מספיקה)",
+            "steps": [
+              "המערכת מציגה את סיבת הדחייה"
+            ],
+            "outcome": {
+              "kind": "resume",
+              "at": "3"
+            }
+          },
+          {
+            "at": "3.2.2",
+            "text": "שער התשלומים דוחה את החיוב",
+            "steps": [
+              "המערכת מציגה את סיבת הדחייה"
+            ],
+            "outcome": {
+              "kind": "terminate",
+              "text": "ההזמנה נשארת \"ממתינה לתשלום\" והעגלה נשמרת."
+            }
+          }
+        ]
+      }
+    ],
+    "userStories": [
+      {
+        "role": "סטודנט",
+        "want": "לשלם מהטלפון",
+        "so": "לא אעמוד בתור בקופה"
+      },
+      {
+        "role": "סטודנט",
+        "want": "לשלם בכרטיס הסטודנט",
+        "so": "לא אקליד פרטי אשראי בכל הזמנה"
+      }
+    ],
+    "primaryActor": "student",
+    "wireframe": "<div class=\"wf-screen\"><div class=\"wf-heading\">תשלום — הזמנה #4127</div><div class=\"wf-row\"><span class=\"wf-label\">סה״כ:</span><span>44 ₪</span></div><div class=\"wf-row\"><label class=\"wf-label\">אמצעי תשלום</label><select class=\"wf-select\" disabled><option>כרטיס סטודנט</option></select></div><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">שלם</button></div></div>"
+  },
+  "uc-schedule-pickup": {
+    "kind": "useCase",
+    "id": "uc-schedule-pickup",
+    "name": "הזמנה מראש",
+    "description": "הסטודנט מזמין מראש לחלון איסוף עתידי במקום לאיסוף מיידי.",
+    "preconditions": [
+      "ההזמנה נמצאת בשלב קביעת זמן האיסוף.",
+      "הקפיטריה פעילה בשעה המבוקשת."
+    ],
+    "postconditions": [
+      "ההזמנה שויכה לחלון איסוף עתידי ולא תיכנס לתור ההכנה עד תחילת החלון."
+    ],
+    "scenarios": [
+      {
+        "id": "sc-happy",
+        "name": "מסלול מרכזי",
+        "flow": [
+          {
+            "kind": "actor",
+            "actor": "student",
+            "text": "בוחר \"הזמנה מראש\" ומזין את שעת האיסוף המבוקשת"
+          },
+          {
+            "kind": "system",
+            "text": "מציגה את חלונות האיסוף הפנויים באותה שעה"
+          },
+          {
+            "kind": "actor",
+            "actor": "student",
+            "text": "בוחר חלון איסוף"
+          },
+          {
+            "kind": "system",
+            "text": "מוודאת שהחלון עדיין פנוי ושהקפיטריה פעילה בשעה הזו"
+          },
+          {
+            "kind": "system",
+            "text": "משייכת את ההזמנה לחלון ומסמנת שהיא תיכנס לתור ההכנה רק בתחילתו"
+          }
+        ],
+        "extensions": [
+          {
+            "at": "4",
+            "text": "החלון התמלא בינתיים או שהקפיטריה סגורה באותה שעה",
+            "steps": [
+              "המערכת מציגה את החלונות הפנויים הקרובים"
+            ],
+            "outcome": {
+              "kind": "resume",
+              "at": "2"
+            }
+          }
+        ]
+      }
+    ],
+    "userStories": [
+      {
+        "role": "סטודנט",
+        "want": "להזמין בבוקר לשעת הצהריים",
+        "so": "האוכל יחכה לי בהפסקה"
+      },
+      {
+        "role": "מנהל קפיטריה",
+        "want": "לדעת מראש כמה הזמנות מגיעות לכל חלון",
+        "so": "אתכנן את המטבח"
+      }
+    ],
+    "primaryActor": "student",
+    "wireframe": "<div class=\"wf-screen\"><div class=\"wf-heading\">הזמנה מראש</div><div class=\"wf-row\"><label class=\"wf-label\">שעת איסוף</label><select class=\"wf-select\" disabled><option>12:30</option></select></div><div class=\"wf-hint\">ההזמנה תיכנס להכנה רק סמוך לשעה שבחרת.</div><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">שריין חלון</button></div></div>"
+  },
+  "uc-validate-cart": {
+    "kind": "useCase",
+    "id": "uc-validate-cart",
+    "name": "בדיקת עגלה",
+    "description": "המערכת בודקת שהעגלה תקינה — זמינות הפריטים ומחירים עדכניים — ומחזירה סטטוס תקינות לתרחיש שקרא לה.",
+    "preconditions": [
+      "התרחיש נקרא מתוך תרחיש אחר.",
+      "בעגלה יש לפחות פריט אחד."
+    ],
+    "postconditions": [
+      "הוחזר סטטוס תקינות: \"תקינה\", או רשימת הפריטים הבעייתיים."
+    ],
+    "scenarios": [
+      {
+        "id": "sc-happy",
+        "name": "מסלול מרכזי",
+        "flow": [
+          {
+            "kind": "system",
+            "text": "עוברת על כל פריט בעגלה ובודקת את זמינותו במלאי"
+          },
+          {
+            "kind": "system",
+            "text": "משווה את מחיר כל פריט למחיר העדכני בתפריט"
+          },
+          {
+            "kind": "system",
+            "text": "מחשבת את סכום העגלה הכולל"
+          },
+          {
+            "kind": "system",
+            "text": "מחזירה סטטוס תקינות לתרחיש שקרא לה"
+          }
+        ],
+        "extensions": [
+          {
+            "at": "1",
+            "text": "פריט אינו זמין במלאי",
+            "steps": [
+              "המערכת מוסיפה את הפריט לרשימת הבעיות"
+            ],
+            "outcome": {
+              "kind": "terminate",
+              "text": "מוחזר \"אינה תקינה\" — הטיפול הוא של התרחיש שקרא."
+            }
+          },
+          {
+            "at": "2",
+            "text": "מחיר הפריט השתנה מאז שנוסף לעגלה",
+            "steps": [
+              "המערכת מעדכנת את המחיר ומסמנת שהשתנה"
+            ],
+            "outcome": {
+              "kind": "resume",
+              "at": "3"
+            }
+          }
+        ]
+      }
+    ],
+    "userStories": [
+      {
+        "role": "סטודנט",
+        "want": "שהפריטים בעגלה יהיו זמינים במחיר הנכון",
+        "so": "לא אשלם על משהו שאינו קיים"
+      },
+      {
+        "role": "מנהל קפיטריה",
+        "want": "בדיקת מלאי ומחיר לפני כל הזמנה",
+        "so": "לא נמכור פריט שאזל"
+      }
+    ]
+  },
+  "uc-track-order": {
+    "kind": "useCase",
+    "id": "uc-track-order",
+    "name": "מעקב אחר הזמנה",
+    "description": "הסטודנט עוקב אחר סטטוס ההזמנה שלו עד שהיא מוכנה לאיסוף.",
+    "preconditions": [
+      "לסטודנט קיימת הזמנה פעילה ששולמה."
+    ],
+    "postconditions": [
+      "הסטודנט ראה את הסטטוס העדכני ואת קוד האיסוף."
+    ],
+    "scenarios": [
+      {
+        "id": "sc-happy",
+        "name": "מסלול מרכזי",
+        "flow": [
+          {
+            "kind": "actor",
+            "actor": "student",
+            "text": "פותח את מסך \"ההזמנות שלי\""
+          },
+          {
+            "kind": "system",
+            "text": "מציגה את ההזמנות הפעילות עם סטטוס לכל אחת"
+          },
+          {
+            "kind": "actor",
+            "actor": "student",
+            "text": "בוחר הזמנה לצפייה מפורטת"
+          },
+          {
+            "kind": "system",
+            "text": "מציגה פריטים, קוד איסוף וזמן משוער לסיום ההכנה"
+          },
+          {
+            "kind": "system",
+            "text": "מעדכנת את הסטטוס המוצג ככל שההכנה מתקדמת"
+          }
+        ],
+        "extensions": [
+          {
+            "at": "2",
+            "text": "אין לסטודנט הזמנות פעילות",
+            "steps": [
+              "המערכת מציעה לעבור לתפריט"
+            ],
+            "outcome": {
+              "kind": "terminate",
+              "text": "אין הזמנה למעקב."
+            }
+          },
+          {
+            "at": "4",
+            "text": "ההזמנה בוטלה על ידי הקפיטריה",
+            "steps": [
+              "המערכת מציגה הודעת ביטול ואת אופן הזיכוי"
+            ],
+            "outcome": {
+              "kind": "terminate",
+              "text": "ההזמנה בוטלה והסטודנט זוכה."
+            }
+          }
+        ]
+      }
+    ],
+    "userStories": [
+      {
+        "role": "סטודנט",
+        "want": "לדעת מתי ההזמנה מוכנה",
+        "so": "אגש לאסוף בדיוק בזמן"
+      },
+      {
+        "role": "סטודנט",
+        "want": "לראות זמן משוער",
+        "so": "אתכנן את ההפסקה שלי"
+      }
+    ],
+    "primaryActor": "student",
+    "wireframe": "<div class=\"wf-screen\"><div class=\"wf-heading\">הזמנה #4127</div><div class=\"wf-row\"><span class=\"wf-label\">סטטוס:</span><span class=\"wf-badge\">בהכנה</span></div><div class=\"wf-row\"><span class=\"wf-label\">קוד איסוף:</span><span>K-58</span></div></div>"
+  },
+  "uc-pickup-verify": {
+    "kind": "useCase",
+    "id": "uc-pickup-verify",
+    "name": "אימות איסוף",
+    "description": "עובד הדלפק מאמת באמצעות קוד האיסוף שההזמנה שולמה ושייכת לסטודנט שמולו, ומוסר אותה.",
+    "preconditions": [
+      "ההזמנה מסומנת \"מוכנה לאיסוף\".",
+      "עובד הדלפק מחובר לעמדת הדלפק."
+    ],
+    "postconditions": [
+      "ההזמנה סומנה \"נאספה\" ונרשם מועד המסירה."
+    ],
+    "scenarios": [
+      {
+        "id": "sc-happy",
+        "name": "מסלול מרכזי",
+        "flow": [
+          {
+            "kind": "actor",
+            "actor": "pickup-staff",
+            "text": "סורק בעמדת הדלפק את קוד האיסוף שמציג הסטודנט"
+          },
+          {
+            "kind": "system",
+            "text": "מאתרת את ההזמנה ומציגה פריטים, סטטוס תשלום וסטטוס הכנה"
+          },
+          {
+            "kind": "actor",
+            "actor": "pickup-staff",
+            "text": "משווה את הפריטים שעל המגש לפרטי ההזמנה"
+          },
+          {
+            "kind": "actor",
+            "actor": "pickup-staff",
+            "text": "מוסר את ההזמנה ומסמן אותה \"נאספה\""
+          },
+          {
+            "kind": "system",
+            "text": "רושמת את מועד המסירה ומסירה מרשימת הממתינות"
+          }
+        ],
+        "extensions": [
+          {
+            "at": "2",
+            "text": "הקוד שגוי או שלא נמצאה הזמנה תואמת",
+            "steps": [
+              "המערכת מציגה \"הזמנה לא נמצאה\""
+            ],
+            "outcome": {
+              "kind": "resume",
+              "at": "1"
+            }
+          },
+          {
+            "at": "2",
+            "text": "ההזמנה עדיין אינה \"מוכנה לאיסוף\"",
+            "steps": [
+              "המערכת מציגה את הזמן המשוער לסיום"
+            ],
+            "outcome": {
+              "kind": "terminate",
+              "text": "המסירה נדחתה עד שההזמנה תסומן מוכנה."
+            }
+          },
+          {
+            "at": "3",
+            "text": "פריט חסר במגש",
+            "steps": [
+              "עובד הדלפק מדווח למטבח"
+            ],
+            "outcome": {
+              "kind": "terminate",
+              "text": "המסירה עוכבה עד להשלמת הפריט."
+            }
+          }
+        ]
+      }
+    ],
+    "userStories": [
+      {
+        "role": "עובד דלפק",
+        "want": "לאמת בקוד שההזמנה שולמה",
+        "so": "לא אמסור לאדם הלא נכון"
+      },
+      {
+        "role": "עובד דלפק",
+        "want": "שהזמנה שנמסרה תוסר מהרשימה",
+        "so": "לא אתבלבל בשעות העומס"
+      }
+    ],
+    "primaryActor": "pickup-staff",
+    "wireframe": "<div class=\"wf-screen\"><div class=\"wf-heading\">עמדת דלפק — אימות איסוף</div><div class=\"wf-row\"><label class=\"wf-label\">קוד איסוף</label><input class=\"wf-input\" disabled placeholder=\"K-58\"></div><div class=\"wf-row\"><span class=\"wf-label\">תשלום:</span><span class=\"wf-badge\">שולמה</span></div><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">סמן כנאספה</button></div></div>"
+  },
+  "uc-prep-queue": {
+    "kind": "useCase",
+    "id": "uc-prep-queue",
+    "name": "צפייה בתור הכנה",
+    "description": "עובד המטבח או מנהל הקפיטריה צופים בתור ההזמנות הממתינות להכנה, לפי עמדה.",
+    "preconditions": [
+      "המשתמש מחובר עם הרשאה לקפיטריה."
+    ],
+    "postconditions": [
+      "הוצג תור ההכנה העדכני, ממוין לפי סדר ההזמנות."
+    ],
+    "scenarios": [
+      {
+        "id": "sc-happy",
+        "name": "מסלול מרכזי",
+        "flow": [
+          {
+            "kind": "actor",
+            "actor": "kitchen-staff",
+            "text": "פותח את מסך תור ההכנה"
+          },
+          {
+            "kind": "system",
+            "text": "מציגה את ההזמנות הממתינות לפי סדר קליטה"
+          },
+          {
+            "kind": "actor",
+            "actor": "kitchen-staff",
+            "text": "מסנן לפי עמדת הכנה — חמה או קרה"
+          },
+          {
+            "kind": "system",
+            "text": "מציגה רק את הפריטים של אותה עמדה ומדגישה הזמנות ממתינות זמן רב"
+          }
+        ],
+        "extensions": [
+          {
+            "at": "2",
+            "text": "אין הזמנות ממתינות",
+            "steps": [
+              "המערכת מציגה מסך ריק עם הודעה"
+            ],
+            "outcome": {
+              "kind": "terminate",
+              "text": "אין מה להכין כרגע."
+            }
+          }
+        ]
+      }
+    ],
+    "userStories": [
+      {
+        "role": "עובד מטבח",
+        "want": "לראות מה להכין ובאיזה סדר",
+        "so": "לא אתבלבל בשעות העומס"
+      },
+      {
+        "role": "מנהל קפיטריה",
+        "want": "לראות את כל ההזמנות הפעילות בלוח אחד",
+        "so": "אדע אם אנחנו נסגרים בעומס"
+      }
+    ],
+    "primaryActor": "kitchen-staff",
+    "wireframe": "<div class=\"wf-screen\"><div class=\"wf-heading\">תור הכנה — עמדה חמה</div><table class=\"wf-table\"><thead><tr><th>הזמנה</th><th>פריט</th><th>ממתין</th></tr></thead><tbody><tr><td>#4127</td><td>שקשוקה</td><td>4 דק׳</td></tr></tbody></table></div>"
+  },
+  "uc-mark-ready": {
+    "kind": "useCase",
+    "id": "uc-mark-ready",
+    "name": "סימון הזמנה כמוכנה",
+    "description": "עובד המטבח מסמן שהזמנה סיימה הכנה; המערכת מודיעה לסטודנט ומעבירה אותה לאיסוף.",
+    "preconditions": [
+      "ההזמנה נמצאת בתור ההכנה."
+    ],
+    "postconditions": [
+      "ההזמנה עברה לסטטוס \"מוכנה לאיסוף\" והסטודנט קיבל הודעה."
+    ],
+    "scenarios": [
+      {
+        "id": "sc-happy",
+        "name": "מסלול מרכזי",
+        "flow": [
+          {
+            "kind": "actor",
+            "actor": "kitchen-staff",
+            "text": "בוחר את ההזמנה בתור ההכנה ומסמן \"מוכנה\""
+          },
+          {
+            "kind": "system",
+            "text": "מוודאת שכל עמדות ההכנה של ההזמנה סיימו"
+          },
+          {
+            "kind": "system",
+            "text": "מעדכנת את ההזמנה ל\"מוכנה לאיסוף\""
+          },
+          {
+            "kind": "system",
+            "text": "שולחת לסטודנט הודעה עם קוד האיסוף"
+          }
+        ],
+        "extensions": [
+          {
+            "at": "2",
+            "text": "עמדה אחרת של אותה הזמנה טרם סיימה",
+            "steps": [
+              "המערכת מסמנת את הפריט כמוכן וממתינה לעמדה השנייה"
+            ],
+            "outcome": {
+              "kind": "terminate",
+              "text": "ההזמנה תעבור ל\"מוכנה\" רק כששתי העמדות יסיימו."
+            }
+          }
+        ]
+      }
+    ],
+    "userStories": [
+      {
+        "role": "עובד מטבח",
+        "want": "לסמן שסיימתי מנה",
+        "so": "הסטודנט יידע שאפשר לגשת"
+      },
+      {
+        "role": "סטודנט",
+        "want": "לקבל הודעה כשההזמנה מוכנה",
+        "so": "לא אחכה בדלפק"
+      }
+    ],
+    "primaryActor": "kitchen-staff",
+    "wireframe": "<div class=\"wf-screen\"><div class=\"wf-heading\">תור הכנה</div><div class=\"wf-row\"><span class=\"wf-label\">הזמנה #4127</span><span class=\"wf-badge\">בהכנה</span></div><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">סמן כמוכנה</button></div></div>"
+  },
+  "uc-manage-menu": {
+    "kind": "useCase",
+    "id": "uc-manage-menu",
+    "name": "ניהול תפריט ומלאי",
+    "description": "מנהל הקפיטריה מוסיף פריטים לתפריט, צופה בו, מעדכן מחירים וזמינות ומסיר פריטים.",
+    "preconditions": [
+      "המנהל מחובר עם הרשאת ניהול לקפיטריה שלו."
+    ],
+    "postconditions": [
+      "התפריט והמלאי המוצגים לסטודנטים משקפים את המצב העדכני."
+    ],
+    "scenarios": [
+      {
+        "id": "sc-add",
+        "name": "הוספת פריט לתפריט",
+        "flow": [
+          {
+            "kind": "actor",
+            "actor": "cafe-manager",
+            "text": "פותח את מסך ניהול התפריט ובוחר \"הוספת פריט\""
+          },
+          {
+            "kind": "actor",
+            "actor": "cafe-manager",
+            "text": "מזין שם, קטגוריה, מחיר וכמות מלאי"
+          },
+          {
+            "kind": "system",
+            "text": "מוודאת שהשם אינו קיים ושהמחיר והכמות חיוביים"
+          },
+          {
+            "kind": "system",
+            "text": "שומרת את הפריט ומציגה אותו בתפריט"
+          }
+        ],
+        "extensions": [
+          {
+            "at": "3",
+            "text": "פריט בשם זהה כבר קיים",
+            "steps": [
+              "המערכת מציעה לעדכן את הקיים"
+            ],
+            "outcome": {
+              "kind": "resume",
+              "at": "2"
+            }
+          },
+          {
+            "at": "3",
+            "text": "המחיר או הכמות אינם תקינים",
+            "steps": [
+              "המערכת מסמנת את השדה השגוי"
+            ],
+            "outcome": {
+              "kind": "resume",
+              "at": "2"
+            }
+          }
+        ]
+      },
+      {
+        "id": "sc-view",
+        "name": "צפייה בתפריט ובמלאי",
+        "flow": [
+          {
+            "kind": "actor",
+            "actor": "cafe-manager",
+            "text": "פותח את מסך ניהול התפריט"
+          },
+          {
+            "kind": "system",
+            "text": "מציגה טבלת פריטים — שם, קטגוריה, מחיר, מלאי וזמינות"
+          },
+          {
+            "kind": "actor",
+            "actor": "cafe-manager",
+            "text": "ממיין או מסנן לפי קטגוריה או לפי פריטים שאזלו"
+          },
+          {
+            "kind": "system",
+            "text": "מציגה את הרשימה המסוננת ומדגישה מלאי נמוך"
+          }
+        ],
+        "extensions": [
+          {
+            "at": "2",
+            "text": "אין עדיין פריטים בתפריט",
+            "steps": [
+              "המערכת מציגה הנחיה להוסיף פריט ראשון"
+            ],
+            "outcome": {
+              "kind": "terminate",
+              "text": "אין תפריט לצפייה."
+            }
+          }
+        ]
+      },
+      {
+        "id": "sc-update",
+        "name": "עדכון פריט וסימון \"אזל\"",
+        "flow": [
+          {
+            "kind": "actor",
+            "actor": "cafe-manager",
+            "text": "בוחר פריט מטבלת התפריט"
+          },
+          {
+            "kind": "actor",
+            "actor": "cafe-manager",
+            "text": "מעדכן מחיר או כמות, או מסמן \"אזל\""
+          },
+          {
+            "kind": "system",
+            "text": "מוודאת שהערכים תקינים"
+          },
+          {
+            "kind": "system",
+            "text": "שומרת ומעדכנת את התצוגה — פריט שסומן \"אזל\" מוצג \"לא זמין\" ואינו ניתן להזמנה"
+          }
+        ],
+        "extensions": [
+          {
+            "at": "3",
+            "text": "הערך שהוזן אינו תקין",
+            "steps": [
+              "המערכת משאירה את הערך הקודם בתוקף"
+            ],
+            "outcome": {
+              "kind": "resume",
+              "at": "2"
+            }
+          }
+        ]
+      },
+      {
+        "id": "sc-delete",
+        "name": "הסרת פריט מהתפריט",
+        "flow": [
+          {
+            "kind": "actor",
+            "actor": "cafe-manager",
+            "text": "בוחר פריט ומפעיל \"הסרה מהתפריט\""
+          },
+          {
+            "kind": "system",
+            "text": "מוודאת שהפריט אינו כלול בהזמנות פעילות"
+          },
+          {
+            "kind": "system",
+            "text": "מבקשת אישור להסרה"
+          },
+          {
+            "kind": "actor",
+            "actor": "cafe-manager",
+            "text": "מאשר את ההסרה"
+          },
+          {
+            "kind": "system",
+            "text": "מסירה את הפריט ושומרת את נתוני המכירות ההיסטוריים"
+          }
+        ],
+        "extensions": [
+          {
+            "at": "2",
+            "text": "הפריט כלול בהזמנות פעילות",
+            "steps": [
+              "המערכת מציעה לסמן \"אזל\" במקום"
+            ],
+            "outcome": {
+              "kind": "terminate",
+              "text": "הפריט לא הוסר — סומן \"אזל\"."
+            }
+          }
+        ]
+      }
+    ],
+    "userStories": [
+      {
+        "role": "מנהל קפיטריה",
+        "want": "לעדכן זמינות ומחירים מכל מקום",
+        "so": "הסטודנטים יראו מידע מדויק בעומס"
+      },
+      {
+        "role": "מנהל קפיטריה",
+        "want": "שפריט שאזל יוצג \"לא זמין\" מיד",
+        "so": "לא יזמינו מנות שאינן קיימות"
+      }
+    ],
+    "primaryActor": "cafe-manager",
+    "wireframe": "<div class=\"wf-screen\"><div class=\"wf-heading\">ניהול תפריט ומלאי</div><table class=\"wf-table\"><thead><tr><th>פריט</th><th>מחיר</th><th>מלאי</th><th>זמינות</th></tr></thead><tbody><tr><td>סלט יווני</td><td>28 ₪</td><td>12</td><td><span class=\"wf-badge\">זמין</span></td></tr><tr><td>כריך טונה</td><td>22 ₪</td><td>0</td><td><span class=\"wf-badge\">אזל</span></td></tr></tbody></table><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">הוסף פריט</button><button class=\"wf-button\">שמור</button></div></div>"
+  },
+  "uc-handle-no-show": {
+    "kind": "useCase",
+    "id": "uc-handle-no-show",
+    "name": "טיפול בהזמנה שלא נאספה",
+    "description": "בתום חלון האיסוף המערכת מאתרת הזמנות ששולמו ולא נאספו, מסמנת אותן ומדווחת למנהל.",
+    "preconditions": [
+      "חלף חלון האיסוף של לפחות הזמנה אחת ששולמה."
+    ],
+    "postconditions": [
+      "כל הזמנה שלא נאספה סומנה \"לא נאספה\" ודווחה למנהל הקפיטריה."
+    ],
+    "scenarios": [
+      {
+        "id": "sc-happy",
+        "name": "מסלול מרכזי",
+        "flow": [
+          {
+            "kind": "actor",
+            "actor": "clock",
+            "text": "מפעיל את הבדיקה בתום כל חלון איסוף"
+          },
+          {
+            "kind": "system",
+            "text": "מאתרת הזמנות ששולמו וחלון האיסוף שלהן חלף"
+          },
+          {
+            "kind": "system",
+            "text": "מסמנת כל הזמנה כזו \"לא נאספה\" ורושמת את מועד הפקיעה"
+          },
+          {
+            "kind": "system",
+            "text": "מרכזת את ההזמנות שלא נאספו ומציגה אותן למנהל הקפיטריה"
+          }
+        ],
+        "extensions": [
+          {
+            "at": "2",
+            "text": "לא נמצאו הזמנות שלא נאספו",
+            "steps": [
+              "המערכת מסיימת את הבדיקה בלי לשנות דבר"
+            ],
+            "outcome": {
+              "kind": "terminate",
+              "text": "אין הזמנות לטיפול בסבב הזה."
+            }
+          }
+        ]
+      }
+    ],
+    "userStories": [
+      {
+        "role": "מנהל קפיטריה",
+        "want": "לדעת אילו הזמנות שולמו ולא נאספו",
+        "so": "אדע כמה אוכל הולך לפח"
+      },
+      {
+        "role": "מנהל קפיטריה",
+        "want": "שהמערכת תזהה no-show בעצמה",
+        "so": "לא אצטרך לעקוב ידנית"
+      }
+    ],
+    "primaryActor": "clock"
+  },
+  "uc-sales-report": {
+    "kind": "useCase",
+    "id": "uc-sales-report",
+    "name": "צפייה בדוח מכירות",
+    "description": "מנהל הקפיטריה צופה בדוח המכירות של סוף היום כדי לתכנן הזמנות מספקים.",
+    "preconditions": [
+      "המנהל מחובר עם הרשאת ניהול.",
+      "קיימים נתוני מכירות ליום הנבחר."
+    ],
+    "postconditions": [
+      "הוצג דוח המכירות של היום הנבחר, ממוין לפי כמות."
+    ],
+    "scenarios": [
+      {
+        "id": "sc-happy",
+        "name": "מסלול מרכזי",
+        "flow": [
+          {
+            "kind": "actor",
+            "actor": "cafe-manager",
+            "text": "פותח את מסך הדוחות ובוחר תאריך"
+          },
+          {
+            "kind": "system",
+            "text": "מאספת את ההזמנות שהושלמו באותו יום"
+          },
+          {
+            "kind": "system",
+            "text": "מציגה כמה נמכר מכל פריט, ממוין מהנמכר ביותר"
+          },
+          {
+            "kind": "actor",
+            "actor": "cafe-manager",
+            "text": "מייצא את הדוח לקובץ"
+          }
+        ],
+        "extensions": [
+          {
+            "at": "2",
+            "text": "לא נרשמו מכירות בתאריך שנבחר",
+            "steps": [
+              "המערכת מציגה דוח ריק"
+            ],
+            "outcome": {
+              "kind": "resume",
+              "at": "1"
+            }
+          }
+        ]
+      }
+    ],
+    "userStories": [
+      {
+        "role": "מנהל קפיטריה",
+        "want": "לראות בסוף היום מה נמכר הכי הרבה",
+        "so": "אתכנן הזמנות מהספקים"
+      },
+      {
+        "role": "מנהל קפיטריה",
+        "want": "לייצא את הדוח",
+        "so": "אוכל לצרף אותו להזמנת הרכש"
+      }
+    ],
+    "primaryActor": "cafe-manager",
+    "wireframe": "<div class=\"wf-screen\"><div class=\"wf-heading\">דוח מכירות — 17/07</div><table class=\"wf-table\"><thead><tr><th>פריט</th><th>נמכרו</th></tr></thead><tbody><tr><td>סלט יווני</td><td>42</td></tr></tbody></table><div class=\"wf-actions\"><button class=\"wf-button\">ייצוא</button></div></div>"
+  }
+};
+var diagramModel      = {
+  "kind": "use-case",
+  "title": "מערכת הזמנת אוכל בקמפוס",
+  "assumptions": [
+    "כל סטודנט מזוהה במערכת באמצעות חשבון אוניברסיטאי אישי.",
+    "שער התשלום ומערכת החשבונות הם מערכות שאנחנו פונים אליהן — קריאת API, ולכן אינם שחקנים.",
+    "בדיקת עגלה נקראת תמיד מתוך הזמנה ומתוך תשלום, ולכן היא «include» ואין לה שחקן.",
+    "⏰ הזמן הוא שחקן: הוא מפעיל את הטיפול בהזמנות שלא נאספו בתום חלון האיסוף."
+  ],
+  "openQuestions": [
+    "מה עושים בהזמנה שלא נאספה — לזרוק, לחייב, או לחסום את הסטודנט? המערכת מזהה ומדווחת; ההחלטה טרם התקבלה.",
+    "אם פריט אוזל אחרי שההזמנה כבר שולמה — מי מאשר את הביטול?",
+    "האם גם דוח סוף-היום צריך לרוץ אוטומטית? אז ⏰ הזמן ייזום גם אותו."
+  ],
+  "parts": [
+    {
+      "id": "part-1",
+      "label": "מערכת הזמנת אוכל בקמפוס",
+      "splitRationale": "",
+      "elements": [
+        {
+          "kind": "actor",
+          "id": "student",
+          "name": "סטודנט",
+          "actorType": "human",
+          "side": "left"
+        },
+        {
+          "kind": "actor",
+          "id": "pickup-staff",
+          "name": "עובד דלפק איסוף",
+          "actorType": "human",
+          "side": "left"
+        },
+        {
+          "kind": "actor",
+          "id": "kitchen-staff",
+          "name": "עובד מטבח",
+          "actorType": "human",
+          "side": "left"
+        },
+        {
+          "kind": "actor",
+          "id": "cafe-manager",
+          "name": "מנהל קפיטריה",
+          "actorType": "human",
+          "side": "right"
+        },
+        {
+          "kind": "actor",
+          "id": "clock",
+          "name": "זמן",
+          "actorType": "system",
+          "side": "right"
+        },
+        {
+          "kind": "useCase",
+          "id": "uc-browse-menu",
+          "name": "עיון בתפריט",
+          "description": "הסטודנט מעיין בתפריט הקפיטריה — פריטים, מחירים וזמינות — ומסנן לפי העדפה תזונתית.",
+          "preconditions": [
+            "הסטודנט מזוהה באפליקציה."
+          ],
+          "postconditions": [
+            "התפריט העדכני הוצג לסטודנט, כולל מחיר וזמינות לכל פריט."
+          ],
+          "scenarios": [
+            {
+              "id": "sc-happy",
+              "name": "מסלול מרכזי",
+              "flow": [
+                {
+                  "kind": "actor",
+                  "actor": "student",
+                  "text": "בוחר קפיטריה מתוך רשימת הקפיטריות בקמפוס"
+                },
+                {
+                  "kind": "system",
+                  "text": "טוענת את התפריט ומציגה לכל פריט שם, מחיר וזמינות"
+                },
+                {
+                  "kind": "alt",
+                  "condition": "אופן העיון שבחר הסטודנט",
+                  "branches": [
+                    {
+                      "label": "עיון חופשי",
+                      "steps": [
+                        {
+                          "kind": "actor",
+                          "actor": "student",
+                          "text": "עובר בין קטגוריות התפריט"
+                        },
+                        {
+                          "kind": "system",
+                          "text": "מציגה את הפריטים בקטגוריה שנבחרה"
+                        }
+                      ]
+                    },
+                    {
+                      "label": "סינון תזונתי",
+                      "steps": [
+                        {
+                          "kind": "actor",
+                          "actor": "student",
+                          "text": "בוחר מסנן — צמחוני, טבעוני או ללא גלוטן"
+                        },
+                        {
+                          "kind": "system",
+                          "text": "מציגה רק פריטים העונים למסנן ומסמנת את המסנן הפעיל"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "kind": "actor",
+                  "actor": "student",
+                  "text": "בוחר פריט לצפייה בפרטיו"
+                },
+                {
+                  "kind": "system",
+                  "text": "מציגה רכיבים, מחיר וזמן הכנה משוער"
+                }
+              ],
+              "extensions": [
+                {
+                  "at": "2",
+                  "text": "הקפיטריה סגורה ואין לה תפריט פעיל",
+                  "steps": [
+                    "המערכת מציגה את שעות הפעילות"
+                  ],
+                  "outcome": {
+                    "kind": "resume",
+                    "at": "1"
+                  }
+                },
+                {
+                  "at": "3.2.2",
+                  "text": "אף פריט אינו עונה למסנן",
+                  "steps": [
+                    "המערכת מציעה להסיר את המסנן"
+                  ],
+                  "outcome": {
+                    "kind": "resume",
+                    "at": "3"
+                  }
+                }
+              ]
+            }
+          ],
+          "userStories": [
+            {
+              "role": "סטודנט",
+              "want": "לראות מה זמין לפני שאני מגיע",
+              "so": "לא אגיע סתם אם המנה נגמרה"
+            },
+            {
+              "role": "סטודנט צמחוני",
+              "want": "לסנן לפי העדפה תזונתית",
+              "so": "אמצא מהר מה מתאים לי"
+            }
+          ],
+          "primaryActor": "student",
+          "wireframe": "<div class=\"wf-screen\"><div class=\"wf-heading\">תפריט הקפיטריה</div><div class=\"wf-row\"><label class=\"wf-label\">סינון</label><select class=\"wf-select\" disabled><option>צמחוני</option></select></div><table class=\"wf-table\"><thead><tr><th>פריט</th><th>מחיר</th><th>זמינות</th></tr></thead><tbody><tr><td>סלט יווני</td><td>28 ₪</td><td><span class=\"wf-badge\">זמין</span></td></tr></tbody></table></div>"
+        },
+        {
+          "kind": "useCase",
+          "id": "uc-place-order",
+          "name": "הזמנת אוכל",
+          "description": "הסטודנט מרכיב הזמנה מפריטי התפריט ופותח אותה במערכת.",
+          "preconditions": [
+            "הסטודנט מזוהה באפליקציה.",
+            "לקפיטריה יש תפריט פעיל."
+          ],
+          "postconditions": [
+            "ההזמנה נוצרה בסטטוס \"ממתינה לתשלום\" והוצג סיכום."
+          ],
+          "scenarios": [
+            {
+              "id": "sc-happy",
+              "name": "מסלול מרכזי",
+              "flow": [
+                {
+                  "kind": "loop",
+                  "condition": "הסטודנט מוסיף פריטים להזמנה",
+                  "steps": [
+                    {
+                      "kind": "actor",
+                      "actor": "student",
+                      "text": "בוחר פריט מהתפריט ומזין כמות"
+                    },
+                    {
+                      "kind": "system",
+                      "text": "מוסיפה את הפריט לעגלה ומחשבת סכום ביניים"
+                    },
+                    {
+                      "kind": "actor",
+                      "actor": "student",
+                      "text": "מעדכן כמות או מסיר פריט במידת הצורך"
+                    }
+                  ]
+                },
+                {
+                  "kind": "actor",
+                  "actor": "student",
+                  "text": "בוחר \"בצע הזמנה\""
+                },
+                {
+                  "kind": "include",
+                  "uc": "uc-validate-cart",
+                  "text": "לפני יצירת ההזמנה"
+                },
+                {
+                  "kind": "system",
+                  "text": "קובעת את זמן האיסוף כ\"מיידי\" ומחשבת זמן הכנה משוער",
+                  "extensionPoint": "קביעת זמן איסוף"
+                },
+                {
+                  "kind": "system",
+                  "text": "יוצרת הזמנה עם מזהה ייחודי ושומרת בסטטוס \"ממתינה לתשלום\""
+                }
+              ],
+              "extensions": [
+                {
+                  "at": "1.2",
+                  "text": "הפריט אזל מהמלאי בזמן ההרכבה",
+                  "steps": [
+                    "המערכת מסמנת \"אזל\", מסירה מהעגלה ומציעה חלופה"
+                  ],
+                  "outcome": {
+                    "kind": "resume",
+                    "at": "1.1"
+                  }
+                },
+                {
+                  "at": "3",
+                  "text": "בדיקת העגלה החזירה \"אינה תקינה\"",
+                  "steps": [
+                    "המערכת מציגה את הפריטים הבעייתיים"
+                  ],
+                  "outcome": {
+                    "kind": "resume",
+                    "at": "1"
+                  }
+                }
+              ]
+            }
+          ],
+          "userStories": [
+            {
+              "role": "סטודנט",
+              "want": "להזמין מהטלפון לפני שאני מגיע",
+              "so": "לא אעמוד בתור בהפסקה של רבע שעה"
+            },
+            {
+              "role": "סטודנט",
+              "want": "לבחור זמן איסוף",
+              "so": "אגיע כשהאוכל מוכן"
+            }
+          ],
+          "primaryActor": "student",
+          "wireframe": "<div class=\"wf-screen\"><div class=\"wf-heading\">העגלה שלי</div><table class=\"wf-table\"><thead><tr><th>פריט</th><th>כמות</th><th>מחיר</th></tr></thead><tbody><tr><td>סלט יווני</td><td>1</td><td>28 ₪</td></tr></tbody></table><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">בצע הזמנה</button></div></div>"
+        },
+        {
+          "kind": "useCase",
+          "id": "uc-pay-order",
+          "name": "תשלום על הזמנה",
+          "description": "הסטודנט משלם על הזמנה שממתינה לתשלום.",
+          "preconditions": [
+            "קיימת הזמנה בסטטוס \"ממתינה לתשלום\"."
+          ],
+          "postconditions": [
+            "ההזמנה עודכנה ל\"שולמה\" ונכנסה לתור ההכנה.",
+            "הוצג לסטודנט קוד איסוף."
+          ],
+          "scenarios": [
+            {
+              "id": "sc-happy",
+              "name": "מסלול מרכזי",
+              "flow": [
+                {
+                  "kind": "actor",
+                  "actor": "student",
+                  "text": "בוחר את ההזמנה ולוחץ \"שלם\""
+                },
+                {
+                  "kind": "include",
+                  "uc": "uc-validate-cart",
+                  "text": "מאמתת מחדש מחירים וזמינות לפני החיוב"
+                },
+                {
+                  "kind": "alt",
+                  "condition": "אמצעי התשלום שבחר הסטודנט",
+                  "branches": [
+                    {
+                      "label": "כרטיס סטודנט",
+                      "steps": [
+                        {
+                          "kind": "actor",
+                          "actor": "student",
+                          "text": "מאשר חיוב של חשבון הסטודנט שלו"
+                        },
+                        {
+                          "kind": "system",
+                          "text": "שולחת בקשת חיוב למערכת החשבונות של האוניברסיטה ומקבלת אישור"
+                        }
+                      ]
+                    },
+                    {
+                      "label": "כרטיס אשראי",
+                      "steps": [
+                        {
+                          "kind": "actor",
+                          "actor": "student",
+                          "text": "מזין מספר כרטיס, תוקף ו-CVV"
+                        },
+                        {
+                          "kind": "system",
+                          "text": "שולחת בקשת חיוב לשער התשלומים ומקבלת אישור"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "kind": "system",
+                  "text": "מעדכנת את ההזמנה ל\"שולמה\", משבצת לתור ההכנה ומציגה קוד איסוף"
+                }
+              ],
+              "extensions": [
+                {
+                  "at": "2",
+                  "text": "בדיקת העגלה החזירה שמחיר השתנה",
+                  "steps": [
+                    "המערכת מציגה את המחיר המעודכן ומבקשת אישור"
+                  ],
+                  "outcome": {
+                    "kind": "resume",
+                    "at": "1"
+                  }
+                },
+                {
+                  "at": "3.1.2",
+                  "text": "מערכת החשבונות דוחה את החיוב (יתרה לא מספיקה)",
+                  "steps": [
+                    "המערכת מציגה את סיבת הדחייה"
+                  ],
+                  "outcome": {
+                    "kind": "resume",
+                    "at": "3"
+                  }
+                },
+                {
+                  "at": "3.2.2",
+                  "text": "שער התשלומים דוחה את החיוב",
+                  "steps": [
+                    "המערכת מציגה את סיבת הדחייה"
+                  ],
+                  "outcome": {
+                    "kind": "terminate",
+                    "text": "ההזמנה נשארת \"ממתינה לתשלום\" והעגלה נשמרת."
+                  }
+                }
+              ]
+            }
+          ],
+          "userStories": [
+            {
+              "role": "סטודנט",
+              "want": "לשלם מהטלפון",
+              "so": "לא אעמוד בתור בקופה"
+            },
+            {
+              "role": "סטודנט",
+              "want": "לשלם בכרטיס הסטודנט",
+              "so": "לא אקליד פרטי אשראי בכל הזמנה"
+            }
+          ],
+          "primaryActor": "student",
+          "wireframe": "<div class=\"wf-screen\"><div class=\"wf-heading\">תשלום — הזמנה #4127</div><div class=\"wf-row\"><span class=\"wf-label\">סה״כ:</span><span>44 ₪</span></div><div class=\"wf-row\"><label class=\"wf-label\">אמצעי תשלום</label><select class=\"wf-select\" disabled><option>כרטיס סטודנט</option></select></div><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">שלם</button></div></div>"
+        },
+        {
+          "kind": "useCase",
+          "id": "uc-schedule-pickup",
+          "name": "הזמנה מראש",
+          "description": "הסטודנט מזמין מראש לחלון איסוף עתידי במקום לאיסוף מיידי.",
+          "preconditions": [
+            "ההזמנה נמצאת בשלב קביעת זמן האיסוף.",
+            "הקפיטריה פעילה בשעה המבוקשת."
+          ],
+          "postconditions": [
+            "ההזמנה שויכה לחלון איסוף עתידי ולא תיכנס לתור ההכנה עד תחילת החלון."
+          ],
+          "scenarios": [
+            {
+              "id": "sc-happy",
+              "name": "מסלול מרכזי",
+              "flow": [
+                {
+                  "kind": "actor",
+                  "actor": "student",
+                  "text": "בוחר \"הזמנה מראש\" ומזין את שעת האיסוף המבוקשת"
+                },
+                {
+                  "kind": "system",
+                  "text": "מציגה את חלונות האיסוף הפנויים באותה שעה"
+                },
+                {
+                  "kind": "actor",
+                  "actor": "student",
+                  "text": "בוחר חלון איסוף"
+                },
+                {
+                  "kind": "system",
+                  "text": "מוודאת שהחלון עדיין פנוי ושהקפיטריה פעילה בשעה הזו"
+                },
+                {
+                  "kind": "system",
+                  "text": "משייכת את ההזמנה לחלון ומסמנת שהיא תיכנס לתור ההכנה רק בתחילתו"
+                }
+              ],
+              "extensions": [
+                {
+                  "at": "4",
+                  "text": "החלון התמלא בינתיים או שהקפיטריה סגורה באותה שעה",
+                  "steps": [
+                    "המערכת מציגה את החלונות הפנויים הקרובים"
+                  ],
+                  "outcome": {
+                    "kind": "resume",
+                    "at": "2"
+                  }
+                }
+              ]
+            }
+          ],
+          "userStories": [
+            {
+              "role": "סטודנט",
+              "want": "להזמין בבוקר לשעת הצהריים",
+              "so": "האוכל יחכה לי בהפסקה"
+            },
+            {
+              "role": "מנהל קפיטריה",
+              "want": "לדעת מראש כמה הזמנות מגיעות לכל חלון",
+              "so": "אתכנן את המטבח"
+            }
+          ],
+          "primaryActor": "student",
+          "wireframe": "<div class=\"wf-screen\"><div class=\"wf-heading\">הזמנה מראש</div><div class=\"wf-row\"><label class=\"wf-label\">שעת איסוף</label><select class=\"wf-select\" disabled><option>12:30</option></select></div><div class=\"wf-hint\">ההזמנה תיכנס להכנה רק סמוך לשעה שבחרת.</div><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">שריין חלון</button></div></div>"
+        },
+        {
+          "kind": "useCase",
+          "id": "uc-validate-cart",
+          "name": "בדיקת עגלה",
+          "description": "המערכת בודקת שהעגלה תקינה — זמינות הפריטים ומחירים עדכניים — ומחזירה סטטוס תקינות לתרחיש שקרא לה.",
+          "preconditions": [
+            "התרחיש נקרא מתוך תרחיש אחר.",
+            "בעגלה יש לפחות פריט אחד."
+          ],
+          "postconditions": [
+            "הוחזר סטטוס תקינות: \"תקינה\", או רשימת הפריטים הבעייתיים."
+          ],
+          "scenarios": [
+            {
+              "id": "sc-happy",
+              "name": "מסלול מרכזי",
+              "flow": [
+                {
+                  "kind": "system",
+                  "text": "עוברת על כל פריט בעגלה ובודקת את זמינותו במלאי"
+                },
+                {
+                  "kind": "system",
+                  "text": "משווה את מחיר כל פריט למחיר העדכני בתפריט"
+                },
+                {
+                  "kind": "system",
+                  "text": "מחשבת את סכום העגלה הכולל"
+                },
+                {
+                  "kind": "system",
+                  "text": "מחזירה סטטוס תקינות לתרחיש שקרא לה"
+                }
+              ],
+              "extensions": [
+                {
+                  "at": "1",
+                  "text": "פריט אינו זמין במלאי",
+                  "steps": [
+                    "המערכת מוסיפה את הפריט לרשימת הבעיות"
+                  ],
+                  "outcome": {
+                    "kind": "terminate",
+                    "text": "מוחזר \"אינה תקינה\" — הטיפול הוא של התרחיש שקרא."
+                  }
+                },
+                {
+                  "at": "2",
+                  "text": "מחיר הפריט השתנה מאז שנוסף לעגלה",
+                  "steps": [
+                    "המערכת מעדכנת את המחיר ומסמנת שהשתנה"
+                  ],
+                  "outcome": {
+                    "kind": "resume",
+                    "at": "3"
+                  }
+                }
+              ]
+            }
+          ],
+          "userStories": [
+            {
+              "role": "סטודנט",
+              "want": "שהפריטים בעגלה יהיו זמינים במחיר הנכון",
+              "so": "לא אשלם על משהו שאינו קיים"
+            },
+            {
+              "role": "מנהל קפיטריה",
+              "want": "בדיקת מלאי ומחיר לפני כל הזמנה",
+              "so": "לא נמכור פריט שאזל"
+            }
+          ]
+        },
+        {
+          "kind": "useCase",
+          "id": "uc-track-order",
+          "name": "מעקב אחר הזמנה",
+          "description": "הסטודנט עוקב אחר סטטוס ההזמנה שלו עד שהיא מוכנה לאיסוף.",
+          "preconditions": [
+            "לסטודנט קיימת הזמנה פעילה ששולמה."
+          ],
+          "postconditions": [
+            "הסטודנט ראה את הסטטוס העדכני ואת קוד האיסוף."
+          ],
+          "scenarios": [
+            {
+              "id": "sc-happy",
+              "name": "מסלול מרכזי",
+              "flow": [
+                {
+                  "kind": "actor",
+                  "actor": "student",
+                  "text": "פותח את מסך \"ההזמנות שלי\""
+                },
+                {
+                  "kind": "system",
+                  "text": "מציגה את ההזמנות הפעילות עם סטטוס לכל אחת"
+                },
+                {
+                  "kind": "actor",
+                  "actor": "student",
+                  "text": "בוחר הזמנה לצפייה מפורטת"
+                },
+                {
+                  "kind": "system",
+                  "text": "מציגה פריטים, קוד איסוף וזמן משוער לסיום ההכנה"
+                },
+                {
+                  "kind": "system",
+                  "text": "מעדכנת את הסטטוס המוצג ככל שההכנה מתקדמת"
+                }
+              ],
+              "extensions": [
+                {
+                  "at": "2",
+                  "text": "אין לסטודנט הזמנות פעילות",
+                  "steps": [
+                    "המערכת מציעה לעבור לתפריט"
+                  ],
+                  "outcome": {
+                    "kind": "terminate",
+                    "text": "אין הזמנה למעקב."
+                  }
+                },
+                {
+                  "at": "4",
+                  "text": "ההזמנה בוטלה על ידי הקפיטריה",
+                  "steps": [
+                    "המערכת מציגה הודעת ביטול ואת אופן הזיכוי"
+                  ],
+                  "outcome": {
+                    "kind": "terminate",
+                    "text": "ההזמנה בוטלה והסטודנט זוכה."
+                  }
+                }
+              ]
+            }
+          ],
+          "userStories": [
+            {
+              "role": "סטודנט",
+              "want": "לדעת מתי ההזמנה מוכנה",
+              "so": "אגש לאסוף בדיוק בזמן"
+            },
+            {
+              "role": "סטודנט",
+              "want": "לראות זמן משוער",
+              "so": "אתכנן את ההפסקה שלי"
+            }
+          ],
+          "primaryActor": "student",
+          "wireframe": "<div class=\"wf-screen\"><div class=\"wf-heading\">הזמנה #4127</div><div class=\"wf-row\"><span class=\"wf-label\">סטטוס:</span><span class=\"wf-badge\">בהכנה</span></div><div class=\"wf-row\"><span class=\"wf-label\">קוד איסוף:</span><span>K-58</span></div></div>"
+        },
+        {
+          "kind": "useCase",
+          "id": "uc-pickup-verify",
+          "name": "אימות איסוף",
+          "description": "עובד הדלפק מאמת באמצעות קוד האיסוף שההזמנה שולמה ושייכת לסטודנט שמולו, ומוסר אותה.",
+          "preconditions": [
+            "ההזמנה מסומנת \"מוכנה לאיסוף\".",
+            "עובד הדלפק מחובר לעמדת הדלפק."
+          ],
+          "postconditions": [
+            "ההזמנה סומנה \"נאספה\" ונרשם מועד המסירה."
+          ],
+          "scenarios": [
+            {
+              "id": "sc-happy",
+              "name": "מסלול מרכזי",
+              "flow": [
+                {
+                  "kind": "actor",
+                  "actor": "pickup-staff",
+                  "text": "סורק בעמדת הדלפק את קוד האיסוף שמציג הסטודנט"
+                },
+                {
+                  "kind": "system",
+                  "text": "מאתרת את ההזמנה ומציגה פריטים, סטטוס תשלום וסטטוס הכנה"
+                },
+                {
+                  "kind": "actor",
+                  "actor": "pickup-staff",
+                  "text": "משווה את הפריטים שעל המגש לפרטי ההזמנה"
+                },
+                {
+                  "kind": "actor",
+                  "actor": "pickup-staff",
+                  "text": "מוסר את ההזמנה ומסמן אותה \"נאספה\""
+                },
+                {
+                  "kind": "system",
+                  "text": "רושמת את מועד המסירה ומסירה מרשימת הממתינות"
+                }
+              ],
+              "extensions": [
+                {
+                  "at": "2",
+                  "text": "הקוד שגוי או שלא נמצאה הזמנה תואמת",
+                  "steps": [
+                    "המערכת מציגה \"הזמנה לא נמצאה\""
+                  ],
+                  "outcome": {
+                    "kind": "resume",
+                    "at": "1"
+                  }
+                },
+                {
+                  "at": "2",
+                  "text": "ההזמנה עדיין אינה \"מוכנה לאיסוף\"",
+                  "steps": [
+                    "המערכת מציגה את הזמן המשוער לסיום"
+                  ],
+                  "outcome": {
+                    "kind": "terminate",
+                    "text": "המסירה נדחתה עד שההזמנה תסומן מוכנה."
+                  }
+                },
+                {
+                  "at": "3",
+                  "text": "פריט חסר במגש",
+                  "steps": [
+                    "עובד הדלפק מדווח למטבח"
+                  ],
+                  "outcome": {
+                    "kind": "terminate",
+                    "text": "המסירה עוכבה עד להשלמת הפריט."
+                  }
+                }
+              ]
+            }
+          ],
+          "userStories": [
+            {
+              "role": "עובד דלפק",
+              "want": "לאמת בקוד שההזמנה שולמה",
+              "so": "לא אמסור לאדם הלא נכון"
+            },
+            {
+              "role": "עובד דלפק",
+              "want": "שהזמנה שנמסרה תוסר מהרשימה",
+              "so": "לא אתבלבל בשעות העומס"
+            }
+          ],
+          "primaryActor": "pickup-staff",
+          "wireframe": "<div class=\"wf-screen\"><div class=\"wf-heading\">עמדת דלפק — אימות איסוף</div><div class=\"wf-row\"><label class=\"wf-label\">קוד איסוף</label><input class=\"wf-input\" disabled placeholder=\"K-58\"></div><div class=\"wf-row\"><span class=\"wf-label\">תשלום:</span><span class=\"wf-badge\">שולמה</span></div><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">סמן כנאספה</button></div></div>"
+        },
+        {
+          "kind": "useCase",
+          "id": "uc-prep-queue",
+          "name": "צפייה בתור הכנה",
+          "description": "עובד המטבח או מנהל הקפיטריה צופים בתור ההזמנות הממתינות להכנה, לפי עמדה.",
+          "preconditions": [
+            "המשתמש מחובר עם הרשאה לקפיטריה."
+          ],
+          "postconditions": [
+            "הוצג תור ההכנה העדכני, ממוין לפי סדר ההזמנות."
+          ],
+          "scenarios": [
+            {
+              "id": "sc-happy",
+              "name": "מסלול מרכזי",
+              "flow": [
+                {
+                  "kind": "actor",
+                  "actor": "kitchen-staff",
+                  "text": "פותח את מסך תור ההכנה"
+                },
+                {
+                  "kind": "system",
+                  "text": "מציגה את ההזמנות הממתינות לפי סדר קליטה"
+                },
+                {
+                  "kind": "actor",
+                  "actor": "kitchen-staff",
+                  "text": "מסנן לפי עמדת הכנה — חמה או קרה"
+                },
+                {
+                  "kind": "system",
+                  "text": "מציגה רק את הפריטים של אותה עמדה ומדגישה הזמנות ממתינות זמן רב"
+                }
+              ],
+              "extensions": [
+                {
+                  "at": "2",
+                  "text": "אין הזמנות ממתינות",
+                  "steps": [
+                    "המערכת מציגה מסך ריק עם הודעה"
+                  ],
+                  "outcome": {
+                    "kind": "terminate",
+                    "text": "אין מה להכין כרגע."
+                  }
+                }
+              ]
+            }
+          ],
+          "userStories": [
+            {
+              "role": "עובד מטבח",
+              "want": "לראות מה להכין ובאיזה סדר",
+              "so": "לא אתבלבל בשעות העומס"
+            },
+            {
+              "role": "מנהל קפיטריה",
+              "want": "לראות את כל ההזמנות הפעילות בלוח אחד",
+              "so": "אדע אם אנחנו נסגרים בעומס"
+            }
+          ],
+          "primaryActor": "kitchen-staff",
+          "wireframe": "<div class=\"wf-screen\"><div class=\"wf-heading\">תור הכנה — עמדה חמה</div><table class=\"wf-table\"><thead><tr><th>הזמנה</th><th>פריט</th><th>ממתין</th></tr></thead><tbody><tr><td>#4127</td><td>שקשוקה</td><td>4 דק׳</td></tr></tbody></table></div>"
+        },
+        {
+          "kind": "useCase",
+          "id": "uc-mark-ready",
+          "name": "סימון הזמנה כמוכנה",
+          "description": "עובד המטבח מסמן שהזמנה סיימה הכנה; המערכת מודיעה לסטודנט ומעבירה אותה לאיסוף.",
+          "preconditions": [
+            "ההזמנה נמצאת בתור ההכנה."
+          ],
+          "postconditions": [
+            "ההזמנה עברה לסטטוס \"מוכנה לאיסוף\" והסטודנט קיבל הודעה."
+          ],
+          "scenarios": [
+            {
+              "id": "sc-happy",
+              "name": "מסלול מרכזי",
+              "flow": [
+                {
+                  "kind": "actor",
+                  "actor": "kitchen-staff",
+                  "text": "בוחר את ההזמנה בתור ההכנה ומסמן \"מוכנה\""
+                },
+                {
+                  "kind": "system",
+                  "text": "מוודאת שכל עמדות ההכנה של ההזמנה סיימו"
+                },
+                {
+                  "kind": "system",
+                  "text": "מעדכנת את ההזמנה ל\"מוכנה לאיסוף\""
+                },
+                {
+                  "kind": "system",
+                  "text": "שולחת לסטודנט הודעה עם קוד האיסוף"
+                }
+              ],
+              "extensions": [
+                {
+                  "at": "2",
+                  "text": "עמדה אחרת של אותה הזמנה טרם סיימה",
+                  "steps": [
+                    "המערכת מסמנת את הפריט כמוכן וממתינה לעמדה השנייה"
+                  ],
+                  "outcome": {
+                    "kind": "terminate",
+                    "text": "ההזמנה תעבור ל\"מוכנה\" רק כששתי העמדות יסיימו."
+                  }
+                }
+              ]
+            }
+          ],
+          "userStories": [
+            {
+              "role": "עובד מטבח",
+              "want": "לסמן שסיימתי מנה",
+              "so": "הסטודנט יידע שאפשר לגשת"
+            },
+            {
+              "role": "סטודנט",
+              "want": "לקבל הודעה כשההזמנה מוכנה",
+              "so": "לא אחכה בדלפק"
+            }
+          ],
+          "primaryActor": "kitchen-staff",
+          "wireframe": "<div class=\"wf-screen\"><div class=\"wf-heading\">תור הכנה</div><div class=\"wf-row\"><span class=\"wf-label\">הזמנה #4127</span><span class=\"wf-badge\">בהכנה</span></div><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">סמן כמוכנה</button></div></div>"
+        },
+        {
+          "kind": "useCase",
+          "id": "uc-manage-menu",
+          "name": "ניהול תפריט ומלאי",
+          "description": "מנהל הקפיטריה מוסיף פריטים לתפריט, צופה בו, מעדכן מחירים וזמינות ומסיר פריטים.",
+          "preconditions": [
+            "המנהל מחובר עם הרשאת ניהול לקפיטריה שלו."
+          ],
+          "postconditions": [
+            "התפריט והמלאי המוצגים לסטודנטים משקפים את המצב העדכני."
+          ],
+          "scenarios": [
+            {
+              "id": "sc-add",
+              "name": "הוספת פריט לתפריט",
+              "flow": [
+                {
+                  "kind": "actor",
+                  "actor": "cafe-manager",
+                  "text": "פותח את מסך ניהול התפריט ובוחר \"הוספת פריט\""
+                },
+                {
+                  "kind": "actor",
+                  "actor": "cafe-manager",
+                  "text": "מזין שם, קטגוריה, מחיר וכמות מלאי"
+                },
+                {
+                  "kind": "system",
+                  "text": "מוודאת שהשם אינו קיים ושהמחיר והכמות חיוביים"
+                },
+                {
+                  "kind": "system",
+                  "text": "שומרת את הפריט ומציגה אותו בתפריט"
+                }
+              ],
+              "extensions": [
+                {
+                  "at": "3",
+                  "text": "פריט בשם זהה כבר קיים",
+                  "steps": [
+                    "המערכת מציעה לעדכן את הקיים"
+                  ],
+                  "outcome": {
+                    "kind": "resume",
+                    "at": "2"
+                  }
+                },
+                {
+                  "at": "3",
+                  "text": "המחיר או הכמות אינם תקינים",
+                  "steps": [
+                    "המערכת מסמנת את השדה השגוי"
+                  ],
+                  "outcome": {
+                    "kind": "resume",
+                    "at": "2"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "sc-view",
+              "name": "צפייה בתפריט ובמלאי",
+              "flow": [
+                {
+                  "kind": "actor",
+                  "actor": "cafe-manager",
+                  "text": "פותח את מסך ניהול התפריט"
+                },
+                {
+                  "kind": "system",
+                  "text": "מציגה טבלת פריטים — שם, קטגוריה, מחיר, מלאי וזמינות"
+                },
+                {
+                  "kind": "actor",
+                  "actor": "cafe-manager",
+                  "text": "ממיין או מסנן לפי קטגוריה או לפי פריטים שאזלו"
+                },
+                {
+                  "kind": "system",
+                  "text": "מציגה את הרשימה המסוננת ומדגישה מלאי נמוך"
+                }
+              ],
+              "extensions": [
+                {
+                  "at": "2",
+                  "text": "אין עדיין פריטים בתפריט",
+                  "steps": [
+                    "המערכת מציגה הנחיה להוסיף פריט ראשון"
+                  ],
+                  "outcome": {
+                    "kind": "terminate",
+                    "text": "אין תפריט לצפייה."
+                  }
+                }
+              ]
+            },
+            {
+              "id": "sc-update",
+              "name": "עדכון פריט וסימון \"אזל\"",
+              "flow": [
+                {
+                  "kind": "actor",
+                  "actor": "cafe-manager",
+                  "text": "בוחר פריט מטבלת התפריט"
+                },
+                {
+                  "kind": "actor",
+                  "actor": "cafe-manager",
+                  "text": "מעדכן מחיר או כמות, או מסמן \"אזל\""
+                },
+                {
+                  "kind": "system",
+                  "text": "מוודאת שהערכים תקינים"
+                },
+                {
+                  "kind": "system",
+                  "text": "שומרת ומעדכנת את התצוגה — פריט שסומן \"אזל\" מוצג \"לא זמין\" ואינו ניתן להזמנה"
+                }
+              ],
+              "extensions": [
+                {
+                  "at": "3",
+                  "text": "הערך שהוזן אינו תקין",
+                  "steps": [
+                    "המערכת משאירה את הערך הקודם בתוקף"
+                  ],
+                  "outcome": {
+                    "kind": "resume",
+                    "at": "2"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "sc-delete",
+              "name": "הסרת פריט מהתפריט",
+              "flow": [
+                {
+                  "kind": "actor",
+                  "actor": "cafe-manager",
+                  "text": "בוחר פריט ומפעיל \"הסרה מהתפריט\""
+                },
+                {
+                  "kind": "system",
+                  "text": "מוודאת שהפריט אינו כלול בהזמנות פעילות"
+                },
+                {
+                  "kind": "system",
+                  "text": "מבקשת אישור להסרה"
+                },
+                {
+                  "kind": "actor",
+                  "actor": "cafe-manager",
+                  "text": "מאשר את ההסרה"
+                },
+                {
+                  "kind": "system",
+                  "text": "מסירה את הפריט ושומרת את נתוני המכירות ההיסטוריים"
+                }
+              ],
+              "extensions": [
+                {
+                  "at": "2",
+                  "text": "הפריט כלול בהזמנות פעילות",
+                  "steps": [
+                    "המערכת מציעה לסמן \"אזל\" במקום"
+                  ],
+                  "outcome": {
+                    "kind": "terminate",
+                    "text": "הפריט לא הוסר — סומן \"אזל\"."
+                  }
+                }
+              ]
+            }
+          ],
+          "userStories": [
+            {
+              "role": "מנהל קפיטריה",
+              "want": "לעדכן זמינות ומחירים מכל מקום",
+              "so": "הסטודנטים יראו מידע מדויק בעומס"
+            },
+            {
+              "role": "מנהל קפיטריה",
+              "want": "שפריט שאזל יוצג \"לא זמין\" מיד",
+              "so": "לא יזמינו מנות שאינן קיימות"
+            }
+          ],
+          "primaryActor": "cafe-manager",
+          "wireframe": "<div class=\"wf-screen\"><div class=\"wf-heading\">ניהול תפריט ומלאי</div><table class=\"wf-table\"><thead><tr><th>פריט</th><th>מחיר</th><th>מלאי</th><th>זמינות</th></tr></thead><tbody><tr><td>סלט יווני</td><td>28 ₪</td><td>12</td><td><span class=\"wf-badge\">זמין</span></td></tr><tr><td>כריך טונה</td><td>22 ₪</td><td>0</td><td><span class=\"wf-badge\">אזל</span></td></tr></tbody></table><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">הוסף פריט</button><button class=\"wf-button\">שמור</button></div></div>"
+        },
+        {
+          "kind": "useCase",
+          "id": "uc-handle-no-show",
+          "name": "טיפול בהזמנה שלא נאספה",
+          "description": "בתום חלון האיסוף המערכת מאתרת הזמנות ששולמו ולא נאספו, מסמנת אותן ומדווחת למנהל.",
+          "preconditions": [
+            "חלף חלון האיסוף של לפחות הזמנה אחת ששולמה."
+          ],
+          "postconditions": [
+            "כל הזמנה שלא נאספה סומנה \"לא נאספה\" ודווחה למנהל הקפיטריה."
+          ],
+          "scenarios": [
+            {
+              "id": "sc-happy",
+              "name": "מסלול מרכזי",
+              "flow": [
+                {
+                  "kind": "actor",
+                  "actor": "clock",
+                  "text": "מפעיל את הבדיקה בתום כל חלון איסוף"
+                },
+                {
+                  "kind": "system",
+                  "text": "מאתרת הזמנות ששולמו וחלון האיסוף שלהן חלף"
+                },
+                {
+                  "kind": "system",
+                  "text": "מסמנת כל הזמנה כזו \"לא נאספה\" ורושמת את מועד הפקיעה"
+                },
+                {
+                  "kind": "system",
+                  "text": "מרכזת את ההזמנות שלא נאספו ומציגה אותן למנהל הקפיטריה"
+                }
+              ],
+              "extensions": [
+                {
+                  "at": "2",
+                  "text": "לא נמצאו הזמנות שלא נאספו",
+                  "steps": [
+                    "המערכת מסיימת את הבדיקה בלי לשנות דבר"
+                  ],
+                  "outcome": {
+                    "kind": "terminate",
+                    "text": "אין הזמנות לטיפול בסבב הזה."
+                  }
+                }
+              ]
+            }
+          ],
+          "userStories": [
+            {
+              "role": "מנהל קפיטריה",
+              "want": "לדעת אילו הזמנות שולמו ולא נאספו",
+              "so": "אדע כמה אוכל הולך לפח"
+            },
+            {
+              "role": "מנהל קפיטריה",
+              "want": "שהמערכת תזהה no-show בעצמה",
+              "so": "לא אצטרך לעקוב ידנית"
+            }
+          ],
+          "primaryActor": "clock"
+        },
+        {
+          "kind": "useCase",
+          "id": "uc-sales-report",
+          "name": "צפייה בדוח מכירות",
+          "description": "מנהל הקפיטריה צופה בדוח המכירות של סוף היום כדי לתכנן הזמנות מספקים.",
+          "preconditions": [
+            "המנהל מחובר עם הרשאת ניהול.",
+            "קיימים נתוני מכירות ליום הנבחר."
+          ],
+          "postconditions": [
+            "הוצג דוח המכירות של היום הנבחר, ממוין לפי כמות."
+          ],
+          "scenarios": [
+            {
+              "id": "sc-happy",
+              "name": "מסלול מרכזי",
+              "flow": [
+                {
+                  "kind": "actor",
+                  "actor": "cafe-manager",
+                  "text": "פותח את מסך הדוחות ובוחר תאריך"
+                },
+                {
+                  "kind": "system",
+                  "text": "מאספת את ההזמנות שהושלמו באותו יום"
+                },
+                {
+                  "kind": "system",
+                  "text": "מציגה כמה נמכר מכל פריט, ממוין מהנמכר ביותר"
+                },
+                {
+                  "kind": "actor",
+                  "actor": "cafe-manager",
+                  "text": "מייצא את הדוח לקובץ"
+                }
+              ],
+              "extensions": [
+                {
+                  "at": "2",
+                  "text": "לא נרשמו מכירות בתאריך שנבחר",
+                  "steps": [
+                    "המערכת מציגה דוח ריק"
+                  ],
+                  "outcome": {
+                    "kind": "resume",
+                    "at": "1"
+                  }
+                }
+              ]
+            }
+          ],
+          "userStories": [
+            {
+              "role": "מנהל קפיטריה",
+              "want": "לראות בסוף היום מה נמכר הכי הרבה",
+              "so": "אתכנן הזמנות מהספקים"
+            },
+            {
+              "role": "מנהל קפיטריה",
+              "want": "לייצא את הדוח",
+              "so": "אוכל לצרף אותו להזמנת הרכש"
+            }
+          ],
+          "primaryActor": "cafe-manager",
+          "wireframe": "<div class=\"wf-screen\"><div class=\"wf-heading\">דוח מכירות — 17/07</div><table class=\"wf-table\"><thead><tr><th>פריט</th><th>נמכרו</th></tr></thead><tbody><tr><td>סלט יווני</td><td>42</td></tr></tbody></table><div class=\"wf-actions\"><button class=\"wf-button\">ייצוא</button></div></div>"
+        }
+      ],
+      "relationships": [
+        {
+          "kind": "actorAssoc",
+          "id": "as-student-browse",
+          "actorId": "student",
+          "ucId": "uc-browse-menu",
+          "role": "initiator",
+          "description": "הסטודנט יוזם את העיון בתפריט."
+        },
+        {
+          "kind": "actorAssoc",
+          "id": "as-student-place",
+          "actorId": "student",
+          "ucId": "uc-place-order",
+          "role": "initiator",
+          "description": "הסטודנט יוזם את ההזמנה."
+        },
+        {
+          "kind": "actorAssoc",
+          "id": "as-student-pay",
+          "actorId": "student",
+          "ucId": "uc-pay-order",
+          "role": "initiator",
+          "description": "הסטודנט יוזם את התשלום."
+        },
+        {
+          "kind": "actorAssoc",
+          "id": "as-student-schedule",
+          "actorId": "student",
+          "ucId": "uc-schedule-pickup",
+          "role": "initiator",
+          "description": "הסטודנט בוחר להזמין מראש לשעה עתידית."
+        },
+        {
+          "kind": "actorAssoc",
+          "id": "as-student-track",
+          "actorId": "student",
+          "ucId": "uc-track-order",
+          "role": "initiator",
+          "description": "הסטודנט יוזם מעקב אחר ההזמנה שלו."
+        },
+        {
+          "kind": "actorAssoc",
+          "id": "as-pickup-verify",
+          "actorId": "pickup-staff",
+          "ucId": "uc-pickup-verify",
+          "role": "initiator",
+          "description": "עובד הדלפק יוזם את אימות האיסוף. הסטודנט רק מציג לו קוד — הוא מדבר עם אדם, לא עם המערכת."
+        },
+        {
+          "kind": "actorAssoc",
+          "id": "as-kitchen-queue",
+          "actorId": "kitchen-staff",
+          "ucId": "uc-prep-queue",
+          "role": "initiator",
+          "description": "עובד המטבח פותח את תור ההכנה בעצמו."
+        },
+        {
+          "kind": "actorAssoc",
+          "id": "as-manager-queue",
+          "actorId": "cafe-manager",
+          "ucId": "uc-prep-queue",
+          "role": "initiator",
+          "description": "גם המנהל פותח את תור ההכנה בעצמו — שני שחקנים, כל אחד יוזם."
+        },
+        {
+          "kind": "actorAssoc",
+          "id": "as-kitchen-ready",
+          "actorId": "kitchen-staff",
+          "ucId": "uc-mark-ready",
+          "role": "initiator",
+          "description": "עובד המטבח יוזם את הסימון כמוכנה."
+        },
+        {
+          "kind": "actorAssoc",
+          "id": "as-manager-menu",
+          "actorId": "cafe-manager",
+          "ucId": "uc-manage-menu",
+          "role": "initiator",
+          "description": "מנהל הקפיטריה יוזם את ניהול התפריט."
+        },
+        {
+          "kind": "actorAssoc",
+          "id": "as-manager-report",
+          "actorId": "cafe-manager",
+          "ucId": "uc-sales-report",
+          "role": "initiator",
+          "description": "מנהל הקפיטריה יוזם את הפקת הדוח."
+        },
+        {
+          "kind": "actorAssoc",
+          "id": "as-clock-noshow",
+          "actorId": "clock",
+          "ucId": "uc-handle-no-show",
+          "role": "initiator",
+          "description": "⏰ הזמן מפעיל אותנו — בתום חלון האיסוף. אנחנו לא קוראים לו; הוא זה שמתחיל."
+        },
+        {
+          "kind": "include",
+          "id": "inc-place-validate",
+          "from": "uc-place-order",
+          "to": "uc-validate-cart"
+        },
+        {
+          "kind": "include",
+          "id": "inc-pay-validate",
+          "from": "uc-pay-order",
+          "to": "uc-validate-cart"
+        },
+        {
+          "kind": "extend",
+          "id": "ext-schedule-place",
+          "from": "uc-schedule-pickup",
+          "to": "uc-place-order",
+          "extensionPoint": "קביעת זמן איסוף",
+          "condition": "הסטודנט מבקש איסוף עתידי"
+        }
+      ]
+    }
+  ]
+};
 </script>
 <script>
 /* uc-diagram-common.js — SAD MCP shared runtime for use case diagrams
    Depends on globals defined in the inline <script> of each diagram:
    diagramLayouts, actorDescriptions, assocDescriptions, useCaseDocs, diagramModel
+
+   This file is deployed by hand to themathbible.com (see CLAUDE.md → Static Assets).
+   Keep UC_RUNTIME_VERSION in sync with package.json on every deploy — it prints to the
+   browser console so you can confirm which runtime is actually live vs. the repo.
 */
+const UC_RUNTIME_VERSION = '2.8.0';
+if (typeof console !== 'undefined') console.info('[sad-mcp] uc-diagram runtime v' + UC_RUNTIME_VERSION);
 
 // ── fixLayout constants ───────────────────────────────────────────────────
 const HEADER_H  = 44;
@@ -460,9 +2913,22 @@ function fixLayout(layout) {
     }
   });
 
+  // Step 6b — Enforce a minimum vertical gap between actors on the same side.
+  // Step 6 centers each actor on its UCs' mean cy, which can place two single-UC
+  // actors barely one row apart (~UC_GAP) so their stick figures + labels overlap.
+  // Push later actors down to keep centers at least ACTOR_MIN_GAP apart (CR #6).
+  const ACTOR_MIN_GAP = 150;
+  ['left', 'right'].forEach(side => {
+    const col = layout.actors.filter(a => a.side === side).sort((a, bb) => a.y - bb.y);
+    for (let i = 1; i < col.length; i++) {
+      const need = col[i - 1].y + ACTOR_MIN_GAP;
+      if (col[i].y < need) col[i].y = need;
+    }
+  });
+
   // Step 7 — Write UC positions to the SVG (absolute attributes).
   layout.useCases.forEach(uc => {
-    const g = document.getElementById('uc-group-' + uc.id);
+    const g = svg.querySelector('[id="uc-group-' + uc.id + '"]');
     if (!g) return;
     const el = g.querySelector('ellipse');
     if (!el) return;
@@ -477,7 +2943,10 @@ function fixLayout(layout) {
     g.removeAttribute('transform');
   });
   layout.actors.forEach(actor => {
-    const g = document.getElementById('actor-group-' + actor.id);
+    // Scope to THIS svg: a shared actor id (e.g. 'head') repeats across tabs, so
+    // document.getElementById returns the first tab's figure and moves the wrong
+    // one — leaving this tab's figure detached from its (correctly placed) line.
+    const g = svg.querySelector('[id="actor-group-' + actor.id + '"]');
     if (g) g.setAttribute('transform', `translate(${actor.x},${actor.y})`);
   });
 
@@ -528,8 +2997,9 @@ function fixLayout(layout) {
     svg.setAttribute('viewBox', p.join(' '));
   }
 
-  // Step 10 — Timing labels.
+  // Step 10 — Timing labels + «extend» condition/point notes.
   renderTimingLabels(layout);
+  renderExtendNotes(layout);
 }
 
 // ── renderTimingLabels ────────────────────────────────────────────────────
@@ -562,6 +3032,52 @@ function renderTimingLabels(layout) {
     text.setAttribute('direction', 'rtl');
     text.textContent = conn.timing;
     g.appendChild(rect); g.appendChild(text);
+    svg.appendChild(g);
+  });
+}
+
+// ── renderExtendNotes ─────────────────────────────────────────────────────
+// UML puts the {condition} and the extension point on every Extend — a bare
+// «extend» label cannot answer "when does this fire?". Data comes from
+// diagramModel.relationships (kind: 'extend'); rendered like timing labels:
+// re-created on every fixLayout pass at the arrow midpoint, below the line
+// (the static «extend» label sits above it).
+function renderExtendNotes(layout) {
+  const svg = document.getElementById(layout.svgId);
+  if (!svg || typeof diagramModel === 'undefined') return;
+  svg.querySelectorAll('.extend-note').forEach(el => el.remove());
+  const NS = 'http://www.w3.org/2000/svg';
+  const rels = (diagramModel.parts || []).flatMap(p => p.relationships || []);
+  rels.filter(r => r.kind === 'extend' && (r.condition || r.extensionPoint)).forEach(r => {
+    const line = svg.querySelector(`[data-conn-from="${r.from}"][data-conn-to="${r.to}"]`);
+    if (!line) return;  // this tab does not draw the arrow
+    const x1 = +line.getAttribute('x1'), y1 = +line.getAttribute('y1');
+    const x2 = +line.getAttribute('x2'), y2 = +line.getAttribute('y2');
+    const mx = (x1 + x2) / 2, my = (y1 + y2) / 2;
+    const rows = [];
+    if (r.condition)      rows.push('{' + r.condition + '}');
+    if (r.extensionPoint) rows.push('📍 ' + r.extensionPoint);
+    const LINE_H = 13;
+    const w = 14 + Math.max(...rows.map(t => t.length)) * 6;
+    const h = rows.length * LINE_H + 7;
+    const g = document.createElementNS(NS, 'g');
+    g.setAttribute('class', 'extend-note');
+    const rect = document.createElementNS(NS, 'rect');
+    rect.setAttribute('x', mx - w / 2); rect.setAttribute('y', my + 5);
+    rect.setAttribute('width', w);      rect.setAttribute('height', h);
+    rect.setAttribute('fill', 'white'); rect.setAttribute('stroke', '#7c3aed');
+    rect.setAttribute('stroke-width', '0.8'); rect.setAttribute('rx', '3');
+    g.appendChild(rect);
+    rows.forEach((t, i) => {
+      const text = document.createElementNS(NS, 'text');
+      text.setAttribute('x', mx); text.setAttribute('y', my + 5 + LINE_H * (i + 1));
+      text.setAttribute('font-size', '9.5'); text.setAttribute('text-anchor', 'middle');
+      text.setAttribute('fill', '#7c3aed');
+      text.setAttribute('font-family', "'Noto Sans Hebrew', sans-serif");
+      text.setAttribute('direction', 'rtl');
+      text.textContent = t;
+      g.appendChild(text);
+    });
     svg.appendChild(g);
   });
 }
@@ -624,31 +3140,167 @@ function wireframeSafe(html) {
   return !forbidden.some(rx => rx.test(html));
 }
 
+// Flow of events (§4.4a / NOTATION §11b). The flow is a tree: actor/system/
+// include are leaves, `loop` and `alt` nest one level deeper. Step labels are
+// computed here rather than left to <ol> numbering, because extensions and
+// `resume` outcomes reference them by name — CSS counters would let the rendered
+// number drift away from "חזרה לשלב 2.1" and nobody would notice.
+function ucEsc(s) {
+  return String(s == null ? '' : s)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function ucOutcomeHtml(outcome) {
+  if (!outcome) return '';
+  if (outcome.kind === 'resume')
+    return `<div class="ext-outcome ext-resume">↩ חזרה לשלב ${ucEsc(outcome.at)}</div>`;
+  if (outcome.kind === 'terminate')
+    return `<div class="ext-outcome ext-terminate">⛔ המקרה מסתיים ללא הצלחה${
+      outcome.text ? ' — ' + ucEsc(outcome.text) : ''}</div>`;
+  return '';
+}
+
+function ucExtensionHtml(ext, label, letter) {
+  // Legacy extensions (text-only, pre-2.6) carry the whole sentence in `text`
+  // and already read as prose — don't prefix them with "אם".
+  const structured = Array.isArray(ext.steps) || !!ext.outcome;
+  const head = structured
+    ? `אם ${ucEsc(ext.text)}:`
+    : ucEsc(ext.text);
+  const subSteps = (ext.steps || []).length
+    ? `<ul class="ext-steps">${(ext.steps || []).map((s, k) =>
+        `<li><span class="step-label">${label}${letter}${k + 1}</span>${ucEsc(s)}</li>`).join('')}</ul>`
+    : '';
+  return `<li class="ext-sub"><span class="step-label ext-label">${label}${letter}</span>${head}` +
+         `${subSteps}${ucOutcomeHtml(ext.outcome)}</li>`;
+}
+
+function ucStepBodyHtml(step, ctx) {
+  if (step.kind === 'actor')
+    return `<strong class="step-actor" data-actor-id="${ucEsc(step.actor)}">${ucEsc(ctx.actorName(step.actor))}</strong>: ${ucEsc(step.text)}`;
+  if (step.kind === 'system')
+    return `<em class="step-system">המערכת</em>: ${ucEsc(step.text)}`;
+  if (step.kind === 'include')
+    return `<span class="step-include">«include» </span><a class="step-uc-ref" data-uc-ref="${ucEsc(step.uc)}">${ucEsc(ctx.ucName(step.uc))}</a>${step.text ? ' — ' + ucEsc(step.text) : ''}`;
+  if (step.kind === 'extension')  // legacy inline extension pseudo-step
+    return ucEsc(step.text);
+  return ucEsc(step.text);
+}
+
+// «extend» hook marker (§3.3). A step carrying `extensionPoint` is the named
+// location where an extension may fire — mark it in the base's modal, naming the
+// extension(s) that hook here and their {condition}, so the reader can answer
+// "at what point does it fire?" from the base's own flow.
+function ucPointBadgeHtml(step, ctx) {
+  const pt = step && step.extensionPoint;
+  if (!pt) return '';
+  const rels = (diagramModel.parts || []).flatMap(p => p.relationships || []);
+  const hooks = rels
+    .filter(r => r.kind === 'extend' && r.to === ctx.ucId && r.extensionPoint === pt)
+    .map(r =>
+      `<a class="step-uc-ref" data-uc-ref="${ucEsc(r.from)}">${ucEsc(ctx.ucName(r.from))}</a>` +
+      (r.condition ? ` <span class="ext-point-cond">{${ucEsc(r.condition)}}</span>` : ''));
+  return `<div class="ext-point-badge">📍 נקודת הרחבה ״${ucEsc(pt)}״` +
+         (hooks.length ? ` — «extend» ${hooks.join(' · ')}` : '') + `</div>`;
+}
+
+function ucFlowHtml(flow, prefix, extByAt, ctx) {
+  let html = '<ul class="flow">';
+  (flow || []).forEach((step, i) => {
+    const label = `${prefix}${i + 1}`;
+    const badge = ucPointBadgeHtml(step, ctx);
+
+    if (step.kind === 'loop') {
+      html += `<li class="flow-step flow-loop"><span class="step-label">${label}</span>` +
+              `<span class="ctrl-kw">חזור</span> <span class="ctrl-cond">${ucEsc(step.condition)}</span>:` +
+              badge + ucFlowHtml(step.steps, `${label}.`, extByAt, ctx) + '</li>';
+    } else if (step.kind === 'alt') {
+      let branches = '<ul class="flow-branches">';
+      (step.branches || []).forEach((b, bi) => {
+        const bLabel = `${label}.${bi + 1}`;
+        branches += `<li class="flow-branch"><span class="step-label">${bLabel}</span>` +
+                    `<span class="branch-label">${ucEsc(b.label)}</span>` +
+                    ucFlowHtml(b.steps, `${bLabel}.`, extByAt, ctx) + '</li>';
+      });
+      branches += '</ul>';
+      html += `<li class="flow-step flow-alt"><span class="step-label">${label}</span>` +
+              `<span class="ctrl-kw">לפי</span> <span class="ctrl-cond">${ucEsc(step.condition)}</span>:` +
+              badge + branches + '</li>';
+    } else if (step.kind === 'extension') {
+      html += `<li class="ext-inline">${step.at ? ucEsc(step.at) + 'a. ' : ''}${ucEsc(step.text)}</li>`;
+    } else {
+      html += `<li class="flow-step"><span class="step-label">${label}</span>${ucStepBodyHtml(step, ctx)}${badge}</li>`;
+    }
+
+    const exts = extByAt.get(label) || [];
+    if (exts.length)
+      html += '<li class="ext-holder"><ul class="ext-list">' +
+              exts.map((e, j) => ucExtensionHtml(e, label, String.fromCharCode(97 + j))).join('') +
+              '</ul></li>';
+  });
+  return html + '</ul>';
+}
+
+// Modal header "who" line. Course doctrine: שחקן = מי שיוזם — an actor is whoever
+// initiates. Two UC kinds legitimately have ZERO actor associations, each with its
+// own wording because their invocation mechanism differs:
+//   «include» target (CR #4)  — nobody initiates it, it is CALLED by its bases.
+//   «extend» extension (§3.3) — nothing calls it EITHER: it fires on its own when
+//     the base reaches the named extension point and the condition holds. Naming
+//     the base + point here is what answers "at what point does it run?".
+// An extension WITH an actor shows the actor line AND its base/point line.
+function ucWhoHtml(id, doc, actorName, esc) {
+  const rels = (diagramModel.parts || []).flatMap(p => p.relationships || []);
+  const els  = (diagramModel.parts || []).flatMap(p => p.elements || []);
+  const nameOf = eid => { const el = els.find(e => e.id === eid); return esc(el ? el.name : eid); };
+  const extendsOf = rels.filter(r => r.kind === 'extend' && r.from === id)
+    .map(r => nameOf(r.to) + (r.extensionPoint ? ', בנקודת ״' + esc(r.extensionPoint) + '״' : ''));
+  const extendLine = extendsOf.length
+    ? `<div class="uc-primary uc-called">
+        <span class="uc-primary-label">הרחבה של:</span>
+        <b class="uc-callers">${extendsOf.join(' · ')}</b>
+      </div>`
+    : '';
+
+  const hasActor = rels.some(r => r.kind === 'actorAssoc' && r.ucId === id);
+  if (hasActor) {
+    return `<div class="uc-primary">
+        <span class="uc-primary-label">שחקן:</span>
+        <a class="uc-primary-link" data-actor-pulse="${esc(doc.primaryActor)}">${esc(actorName(doc.primaryActor))}</a>
+      </div>` + extendLine;
+  }
+  if (extendsOf.length) {
+    return `<div class="uc-primary uc-called">
+        <span class="uc-primary-label">אין שחקן — הרחבה של:</span>
+        <b class="uc-callers">${extendsOf.join(' · ')}</b>
+      </div>`;
+  }
+  const callers = rels.filter(r => r.kind === 'include' && r.to === id).map(r => nameOf(r.from));
+  return `<div class="uc-primary uc-called">
+      <span class="uc-primary-label">אין שחקן — נקראת מתוך:</span>
+      <b class="uc-callers">${callers.join(' · ')}</b>
+    </div>`;
+}
+
 function openUcModal(id) {
   const doc = useCaseDocs[id];
   if (!doc) return;
   const actorName = aid => (actorDescriptions[aid]?.name) || aid;
   const ucName    = uid => (useCaseDocs[uid]?.name) || uid;
-  const esc = s => String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  const ctx = { actorName, ucName, ucId: id };
+  const esc = ucEsc;
 
   let scenariosHtml = '';
   (doc.scenarios || []).forEach(sce => {
-    scenariosHtml += `<h3>${esc(sce.name || sce.id)}</h3><ol>`;
-    (sce.flow || []).forEach((step, i) => {
-      if (step.kind === 'actor') {
-        scenariosHtml += `<li><strong class="step-actor" data-actor-id="${esc(step.actor)}">${esc(actorName(step.actor))}</strong>: ${esc(step.text || '')}</li>`;
-      } else if (step.kind === 'system') {
-        scenariosHtml += `<li><em class="step-system">המערכת</em>: ${esc(step.text || '')}</li>`;
-      } else if (step.kind === 'include') {
-        scenariosHtml += `<li><span class="step-include">«include» </span><a class="step-uc-ref" data-uc-ref="${esc(step.uc)}">${esc(ucName(step.uc))}</a>${step.text ? ' — ' + esc(step.text) : ''}</li>`;
-      } else if (step.kind === 'extension') {
-        scenariosHtml += `<li class="ext-inline">${step.at ? esc(String(step.at)) + 'a. ' : ''}${esc(step.text || '')}</li>`;
-      }
-      (sce.extensions || []).filter(e => e.at === i + 1).forEach((ext, j) => {
-        scenariosHtml += `<li class="ext-sub">${i + 1}${String.fromCharCode(97 + j)}. ${esc(ext.text)}</li>`;
-      });
+    // `at` is a dot-numbered label; legacy models used a plain step number.
+    const extByAt = new Map();
+    (sce.extensions || []).forEach(e => {
+      const at = String(e.at == null ? '' : e.at);
+      if (!extByAt.has(at)) extByAt.set(at, []);
+      extByAt.get(at).push(e);
     });
-    scenariosHtml += '</ol>';
+    scenariosHtml += `<h3>${esc(sce.name || sce.id)}</h3>` +
+                     ucFlowHtml(sce.flow, '', extByAt, ctx);
   });
 
   const listItems = items => (items || []).map(s => `<li>${esc(s)}</li>`).join('');
@@ -667,10 +3319,7 @@ function openUcModal(id) {
     <header>
       <span class="uc-id">${esc(doc.id)}</span>
       <h2 class="uc-name">${esc(doc.name)}</h2>
-      <div class="uc-primary">
-        <span class="uc-primary-label">שחקן ראשי:</span>
-        <a class="uc-primary-link" data-actor-pulse="${esc(doc.primaryActor)}">${esc(actorName(doc.primaryActor))}</a>
-      </div>
+      ${ucWhoHtml(id, doc, actorName, esc)}
     </header>
     <section class="uc-description">${esc(doc.description || '')}</section>
     <section class="uc-scenarios">${scenariosHtml}</section>
@@ -681,7 +3330,9 @@ function openUcModal(id) {
     </section>
     ${wfHtml}`;
 
-  body.querySelector('.uc-primary-link').onclick = () => { closeUcModal(); pulseActor(doc.primaryActor); };
+  // An actorless «include» target renders no .uc-primary-link — guard before wiring.
+  const primaryLink = body.querySelector('.uc-primary-link');
+  if (primaryLink) primaryLink.onclick = () => { closeUcModal(); pulseActor(doc.primaryActor); };
   body.querySelectorAll('.step-actor').forEach(el => {
     el.onclick = () => { closeUcModal(); pulseActor(el.dataset.actorId); };
   });
@@ -748,18 +3399,55 @@ function xmiBody(elements, rels) {
     const actorName = id => (elements.find(e => e.kind === 'actor'   && e.id === id) || {}).name || id;
     const ucName    = id => (elements.find(e => e.kind === 'useCase' && e.id === id) || {}).name || id;
     const out = [];
-    (uc.scenarios || []).forEach(sc => {
-      out.push((sc.name || sc.id) + ':');
-      (sc.flow || []).forEach((step, i) => {
-        const n = i + 1;
-        if      (step.kind === 'actor')     out.push('  ' + n + '. ' + actorName(step.actor) + ': ' + step.text);
-        else if (step.kind === 'system')    out.push('  ' + n + '. System: ' + step.text);
-        else if (step.kind === 'include')   out.push('  ' + n + '. «include» ' + ucName(step.uc) + (step.text ? ' — ' + step.text : ''));
-        else if (step.kind === 'extension') out.push('  ' + n + 'a. ' + step.text);
-        (sc.extensions || []).filter(e => e.at === n).forEach((e, j) => {
-          out.push('  ' + n + String.fromCharCode(97 + j) + '. ' + e.text);
+
+    // VP stores Flow of Events as an OpaqueBehavior text body, so the loop/alt
+    // structure round-trips as indented prose rather than as UML activity nodes.
+    const emit = (flow, prefix, indent, extByAt) => {
+      (flow || []).forEach((step, i) => {
+        const label = prefix + (i + 1);
+        const pad = '  '.repeat(indent);
+        // §3.3 — a step that declares an extension point is the named hook; the
+        // exported flow must show it or the correspondence lives only on-screen.
+        const pt = step.extensionPoint ? ' — 📍 נקודת הרחבה: ' + step.extensionPoint : '';
+        if (step.kind === 'loop') {
+          out.push(pad + label + '. חזור ' + (step.condition || '') + ':' + pt);
+          emit(step.steps, label + '.', indent + 1, extByAt);
+        } else if (step.kind === 'alt') {
+          out.push(pad + label + '. לפי ' + (step.condition || '') + ':' + pt);
+          (step.branches || []).forEach((b, bi) => {
+            const bLabel = label + '.' + (bi + 1);
+            out.push('  '.repeat(indent + 1) + bLabel + ' [' + (b.label || '') + ']');
+            emit(b.steps, bLabel + '.', indent + 2, extByAt);
+          });
+        } else if (step.kind === 'actor')     out.push(pad + label + '. ' + actorName(step.actor) + ': ' + step.text + pt);
+        else if (step.kind === 'system')      out.push(pad + label + '. System: ' + step.text + pt);
+        else if (step.kind === 'include')     out.push(pad + label + '. «include» ' + ucName(step.uc) + (step.text ? ' — ' + step.text : '') + pt);
+        else if (step.kind === 'extension')   out.push(pad + label + 'a. ' + step.text);
+
+        (extByAt.get(label) || []).forEach((e, j) => {
+          const letter = String.fromCharCode(97 + j);
+          const structured = Array.isArray(e.steps) || !!e.outcome;
+          out.push(pad + '  ' + label + letter + '. ' + (structured ? 'אם ' + e.text + ':' : e.text));
+          (e.steps || []).forEach((s, k) => {
+            out.push(pad + '    ' + label + letter + (k + 1) + '. ' + s);
+          });
+          if (e.outcome && e.outcome.kind === 'resume')
+            out.push(pad + '    ↩ חזרה לשלב ' + e.outcome.at);
+          else if (e.outcome && e.outcome.kind === 'terminate')
+            out.push(pad + '    ⛔ המקרה מסתיים ללא הצלחה' + (e.outcome.text ? ' — ' + e.outcome.text : ''));
         });
       });
+    };
+
+    (uc.scenarios || []).forEach(sc => {
+      out.push((sc.name || sc.id) + ':');
+      const extByAt = new Map();
+      (sc.extensions || []).forEach(e => {
+        const at = String(e.at == null ? '' : e.at);
+        if (!extByAt.has(at)) extByAt.set(at, []);
+        extByAt.get(at).push(e);
+      });
+      emit(sc.flow, '', 1, extByAt);
     });
     return out.join('\n');
   }
@@ -851,12 +3539,55 @@ function renderUserStoriesSummary() {
   });
 }
 
+// ── Hover highlight ────────────────────────────────────────────────────────
+// Point at any association / «include» / «extend» line to trace it through
+// crossings: it brightens to magenta, thickens, and lifts to the front,
+// restoring on mouse-out. Reuses the existing wide .conn-hitbox targets (kept in
+// sync by fixLayout), so no extra geometry and it works on every tab.
+function wireUcHover() {
+  document.querySelectorAll('.conn-hitbox').forEach(hit => {
+    if (hit.dataset.hoverWired) return;
+    hit.dataset.hoverWired = '1';
+    hit.style.cursor = 'pointer';
+    const svg = hit.ownerSVGElement;
+    const fId = hit.getAttribute('data-hitbox-from');
+    const tId = hit.getAttribute('data-hitbox-to');
+    const line = svg && svg.querySelector(
+      `[data-conn-from="${fId}"][data-conn-to="${tId}"]`);
+    if (!line) return;
+    let slot = null;
+    hit.addEventListener('mouseenter', () => {
+      const s0 = line.getAttribute('stroke') || '#334155';
+      const w0 = line.getAttribute('stroke-width') || '1.5';
+      line.dataset.s0 = s0; line.dataset.w0 = w0;
+      slot = document.createComment('e'); line.parentNode.insertBefore(slot, line);
+      line.parentNode.appendChild(line); // lift to front
+      line.setAttribute('stroke', '#e6007e');
+      line.setAttribute('stroke-width', String(Math.max(3.2, parseFloat(w0) + 1.6)));
+    });
+    hit.addEventListener('mouseleave', () => {
+      line.setAttribute('stroke', line.dataset.s0 || '#334155');
+      line.setAttribute('stroke-width', line.dataset.w0 || '1.5');
+      if (slot && slot.parentNode) { slot.parentNode.insertBefore(line, slot); slot.remove(); }
+      slot = null;
+    });
+  });
+}
+
 // ── Init ──────────────────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
-  document.body.classList.toggle('embed', /\bembed\b/.test(location.search));
   diagramLayouts.forEach(l => fixLayout(l));
   renderAssumptions();
   renderUserStoriesSummary();
+});
+// Wired independently so a hiccup in the layout/summary init above never skips
+// it (hover doesn't depend on layout — it only attaches listeners).
+document.addEventListener('DOMContentLoaded', wireUcHover);
+
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  document.body.classList.toggle('embed', /\bembed\b/.test(location.search));
 });
 </script>
 </body>

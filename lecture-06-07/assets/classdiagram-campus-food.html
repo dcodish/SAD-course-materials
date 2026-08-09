@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<!-- Campus food-ordering domain model — SAD lecture 6-7 marquee asset.
+     Generated per the uml_class_diagram skill (§9) + NOTATION.md (canonical).
+     Embedded by lecture-06-07/slides/slide-campus-model.html as
+       <iframe src="assets/classdiagram-campus-food.html?embed=1">
+     ?embed=1  → fit-to-viewport SVG, page title + export button hidden.
+
+     RTL NOTE (deliberate): <html> carries NO dir="rtl" and neither does <body>
+     or the <svg>. SVG coordinates are LTR (skill §6 / checklist), so every
+     text-anchor="start" label anchors its LEFT edge and stays inside its box.
+     Only the HTML click-description panel is dir="rtl" — it is not SVG. Do NOT
+     add dir="rtl" higher up: `direction:rtl` is INHERITED into <text>, which
+     flips text-anchor semantics and pushes Hebrew labels out of their boxes. -->
+<html lang="he">
+<head>
+  <meta charset="UTF-8">
+  <title>תרשים מחלקות — מערכת הזמנת מזון בקמפוס</title>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    body { margin: 0; background: #f1f5f9; font-family: 'IBM Plex Mono', monospace; }
+    .tab-bar { display: flex; gap: 4px; padding: 8px; background: #e2e8f0; }
+    .tab-btn { padding: 4px 12px; border: 1px solid #cbd5e1; background: white; cursor: pointer; border-radius: 4px; }
+    .tab-btn.active { background: #1e40af; color: white; }
+    .split-rationale { font-size: 11px; color: #64748b; padding: 4px 8px; }
+    .page-title { font-size: 15px; font-weight: 700; color: #1e293b; padding: 12px 16px 4px; direction: rtl; }
+    svg { display: block; max-width: 100%; height: auto; }
+
+    /* Clickable class boxes */
+    .cd-class { cursor: pointer; }
+    .cd-class:hover > rect:first-child { stroke-width: 3.2; }
+    .cd-class.sel > rect:first-child { stroke: #e6007e; stroke-width: 3.4; }
+
+    /* VP export button styles (from export-buttons.md) */
+    .vp-export-btn {
+      position: fixed; bottom: 20px; right: 20px; z-index: 1000;
+      background: #1e40af; color: #fff; border: none; border-radius: 6px;
+      padding: 8px 16px; font-size: 13px; cursor: pointer;
+      font-family: 'IBM Plex Mono', monospace;
+    }
+    .vp-export-btn:hover { background: #1e3a8a; }
+
+    /* Click-a-class description panel (HTML overlay — RTL lives ONLY here) */
+    .cd-hint {
+      position: fixed; top: 8px; left: 50%; transform: translateX(-50%);
+      z-index: 1100; background: rgba(30,64,175,.92); color: #fff;
+      font-family: 'Segoe UI', Arial, sans-serif; font-size: 12.5px;
+      padding: 3px 12px; border-radius: 999px; pointer-events: none;
+      transition: opacity .25s;
+    }
+    .cd-info {
+      position: fixed; left: 12px; right: 12px; bottom: 12px; z-index: 1200;
+      background: rgba(255,255,255,.975); border: 2px solid #1e40af;
+      border-left-width: 8px; border-radius: 8px; padding: 9px 40px 10px 14px;
+      box-shadow: 0 6px 22px rgba(15,23,42,.22);
+      font-family: 'Segoe UI', Arial, sans-serif;
+    }
+    .cd-info[hidden] { display: none; }
+    .cd-info-title { font-size: 16px; font-weight: 700; color: #1e40af; margin-bottom: 3px; }
+    .cd-info-body { font-size: 14.5px; line-height: 1.45; color: #1e293b; }
+    .cd-info-body b { color: #1e40af; }
+    .cd-info-body .en { font-family: 'IBM Plex Mono', monospace; font-size: 13px; direction: ltr; unicode-bidi: isolate; }
+    .cd-info-x {
+      position: absolute; top: 5px; left: 7px; border: none; background: none;
+      font-size: 17px; line-height: 1; color: #64748b; cursor: pointer;
+    }
+
+    /* Embed mode — full-screen iframe with no chrome */
+    body.embed { overflow: hidden; margin: 0; }
+    body.embed .vp-export-btn,
+    body.embed .tab-bar,
+    body.embed .page-title { display: none; }
+    body.embed svg { width: 100vw; height: 100vh; max-width: none; }
+  </style>
+</head>
+<body>
+  <div class="page-title">תרשים מחלקות — מערכת הזמנת מזון בקמפוס</div>
+
+  <!-- SVG target; JS populates it -->
+  <svg id="diagram-svg" xmlns="http://www.w3.org/2000/svg"></svg>
+
+  <!-- Click-a-class affordance + description panel -->
+  <div class="cd-hint" id="cd-hint" dir="rtl">לחצו על מחלקה לקבלת הסבר</div>
+  <div class="cd-info" id="cd-info" dir="rtl" hidden>
+    <button class="cd-info-x" onclick="hideInfo()" title="סגור">✕</button>
+    <div class="cd-info-title" id="cd-info-title"></div>
+    <div class="cd-info-body" id="cd-info-body"></div>
+  </div>
+
+  <!-- VP export button (from export-buttons.md) -->
+  <button class="vp-export-btn" onclick="exportXMI()">Download .xmi (Visual Paradigm)</button>
+
+  <script>
+  /* ============================================================
+     1. DATA — CLASSES and RELS (§9b, §9c)
+     Layout: main chain across the top row (y=230, connector y=270),
+     payment sub-tree centre-bottom, the two «external system» boxes at the
+     left and right EDGES so they read as outside our system boundary.
+     ============================================================ */
+  const CLASSES = [
+    {
+      id: 'Student', name: 'סטודנט', stereotype: null, isEnum: false, isAbstract: false, isExternal: false,
+      attrs: ['- studentId : String', '- name : String', '- email : String'],
+      ops: [],
+      x: 60, y: 230,
+      desc: 'מי שמזמין. המערכת שומרת רשומה לכל סטודנט — מספר סטודנט (מספר עסקי שהאוניברסיטה משתמשת בו), שם ודוא״ל. לסטודנט אחד יכולות להיות <b>0..*</b> הזמנות; לכל הזמנה יש בדיוק סטודנט אחד.'
+    },
+    {
+      id: 'Order', name: 'הזמנה', stereotype: null, isEnum: false, isAbstract: false, isExternal: false,
+      attrs: [
+        '- orderId : String',
+        '- createdAt : DateTime',
+        '- pickupTime : DateTime',
+        '- pickupCode : String',
+        '- status : OrderStatus'
+      ],
+      ops: ['+ total() : Money', '+ cancel()'],
+      x: 290, y: 230,
+      desc: 'ההזמנה עצמה. שימו לב ש-<span class="en">total()</span> היא <b>פעולה</b> ולא תכונה — הסכום מחושב מהשורות ולכן לא נשמר. התכונה <span class="en">status</span> היא מטיפוס <span class="en">OrderStatus</span> — זו כל החוליה אל קופסת ה-<span class="en">enumeration</span>.'
+    },
+    {
+      id: 'OrderLine', name: 'שורת הזמנה', stereotype: null, isEnum: false, isAbstract: false, isExternal: false,
+      attrs: ['- quantity : int {>0}', '- notes : String'],
+      ops: ['+ lineTotal() : Money'],
+      x: 540, y: 230,
+      desc: '<b>מחלקה מתווכת</b> (מחלקה מתווכת): היא מחליפה את הקשר רבים-לרבים שבין הזמנה לפריט תפריט, ונושאת את הנתון שנולד מהקשר — <span class="en">quantity</span> וההערות. הקשר המקורי <span class="en">M:N</span> נמחק ובמקומו שני קשרים נפרדים.'
+    },
+    {
+      id: 'MenuItem', name: 'פריט תפריט', stereotype: null, isEnum: false, isAbstract: false, isExternal: false,
+      attrs: [
+        '- itemId : String',
+        '- name : String',
+        '- price : Money {>=0}',
+        '- isVegetarian : Boolean',
+        '- available : Boolean'
+      ],
+      ops: [],
+      x: 777, y: 230,
+      desc: 'מה שאפשר להזמין: שם, מחיר עם אילוץ <span class="en">{&gt;=0}</span>, האם צמחוני והאם זמין כרגע. הפריט קיים בתפריט גם בלי אף הזמנה — ולכן הקשר אל שורת הזמנה הוא קשר רגיל ולא הרכבה.'
+    },
+    {
+      id: 'Station', name: 'עמדה', stereotype: null, isEnum: false, isAbstract: false, isExternal: false,
+      attrs: ['- name : String', '- type : StationType'],
+      ops: [],
+      x: 1033, y: 230,
+      desc: 'עמדת ההגשה שממנה אוספים את הפריט (פיצה, סלטים, שתייה). כל פריט תפריט משויך לעמדה אחת; לעמדה יש <b>*</b> פריטים.'
+    },
+    {
+      id: 'Cafeteria', name: 'קפיטריה', stereotype: null, isEnum: false, isAbstract: false, isExternal: false,
+      attrs: ['- name : String', '- location : String'],
+      ops: [],
+      x: 1036, y: 90,
+      desc: '<b>צבירה (◇ יהלום ריק)</b>: הקפיטריה מכילה עמדות, אבל העמדה יכולה להתקיים בלעדיה — אם סוגרים קפיטריה אפשר להעביר את העמדה לקפיטריה אחרת. זה ההבדל מהרכבה: שם המחיקה מוחקת גם את החלק.'
+    },
+    {
+      id: 'Payment', name: 'תשלום', stereotype: null, isEnum: false, isAbstract: false, isExternal: false,
+      attrs: ['- paymentId : String', '- amount : Money', '- paidAt : DateTime'],
+      ops: [],
+      x: 560, y: 470,
+      desc: 'רשומת התשלום של ההזמנה. הקרדינליות <b>0..1</b> מספרת סיפור: יש הזמנות שבוטלו לפני שנוצר תשלום. תשלום פונה למערכת חיצונית — ראו את קו התלות אל שער התשלום.'
+    },
+    {
+      id: 'UniversityCardPayment', name: 'תשלום בכרטיס אוניברסיטה', stereotype: null, isEnum: false, isAbstract: false, isExternal: false,
+      attrs: ['- universityId : String'],
+      ops: [],
+      x: 470, y: 620,
+      desc: '<b>הכללה (▷ משולש ריק)</b>: כל תכונות תשלום קיימות גם כאן, ובנוסף מספר הכרטיס האוניברסיטאי. ההורשה מוצדקת כי לשני תתי-הסוגים יש נתונים <b>שונים</b> — לא רק שם אחר.'
+    },
+    {
+      id: 'CreditCardPayment', name: 'תשלום באשראי', stereotype: null, isEnum: false, isAbstract: false, isExternal: false,
+      attrs: ['- last4 : String', '- gatewayRef : String'],
+      ops: [],
+      x: 700, y: 620,
+      desc: 'תת-סוג של תשלום, עם 4 הספרות האחרונות ואסמכתא מהסולק (<span class="en">gatewayRef</span>) — נתונים שלא קיימים בתשלום בכרטיס אוניברסיטה, וזו הסיבה להורשה.'
+    },
+    {
+      id: 'OrderStatus', name: 'OrderStatus', stereotype: '«enumeration»', isEnum: true, isAbstract: false, isExternal: false,
+      attrs: ['ממתין', 'בהכנה', 'מוכן', 'נאסף', 'בוטל'],
+      ops: [],
+      x: 300, y: 80,
+      desc: 'רשימה סגורה של מצבי ההזמנה — ערכים טקסטואליים, מעטים, ולא משתנים לעתים קרובות. הקופסה <b>אינה מחוברת בקו</b> לאף מחלקה: ההפניה היחידה היא טיפוס התכונה <span class="en">status : OrderStatus</span>.'
+    },
+    {
+      id: 'PaymentGateway', name: 'שער תשלום', stereotype: '«external system»', isEnum: false, isAbstract: false, isExternal: true,
+      attrs: ['אין רשומות אצלנו'], ops: [], minW: 170,
+      x: 900, y: 480,
+      desc: '<b>מערכת חיצונית</b> — הסולק שמחייב את כרטיס האשראי. אנחנו <b>לא</b> שומרים אותה: אין לה תכונות ואין לה פעולות, ואין קרדינליות על הקו. הקשר הוא <b>תלות</b> (קו מקווקו + חץ פתוח) — "תשלום משתמש בשער התשלום".'
+    },
+    {
+      id: 'UniversityIdentity', name: 'זיהוי אוניברסיטה', stereotype: '«external system»', isEnum: false, isAbstract: false, isExternal: true,
+      attrs: ['אין רשומות אצלנו'], ops: [], minW: 170,
+      x: 60, y: 400,
+      desc: '<b>מערכת חיצונית</b> — שירות ה-<span class="en">SSO</span> של האוניברסיטה שמאמת מי הסטודנט. אין לנו רשומות שלה, רק <b>תלות</b> עליה. אם מישהו הפך אותה למחלקה עם תכונות — זו טעות קלאסית במבחן.'
+    }
+  ];
+
+  const RELS = [
+    // סטודנט (1) —— (0..*) הזמנה
+    { type: 'assoc', from: 'Student', to: 'Order',
+      fromMult: '1', toMult: '0..*', fromRole: null, toRole: null, label: null,
+      points: [[206, 270], [290, 270]] },
+
+    // הזמנה (1) ◆—— (1..*) שורת הזמנה  (composition — FILLED diamond at הזמנה)
+    { type: 'comp', from: 'Order', to: 'OrderLine',
+      fromMult: '1', toMult: '1..*', fromRole: null, toRole: null, label: null,
+      points: [[456, 270], [540, 270]] },
+
+    // שורת הזמנה (*) —— (1) פריט תפריט
+    { type: 'assoc', from: 'OrderLine', to: 'MenuItem',
+      fromMult: '*', toMult: '1', fromRole: null, toRole: null, label: null,
+      points: [[693, 270], [777, 270]] },
+
+    // פריט תפריט (*) —— (1) עמדה
+    { type: 'assoc', from: 'MenuItem', to: 'Station',
+      fromMult: '*', toMult: '1', fromRole: null, toRole: null, label: null,
+      points: [[949, 270], [1033, 270]] },
+
+    // קפיטריה (1) ◇—— (1..*) עמדה  (aggregation — HOLLOW diamond at קפיטריה)
+    { type: 'agg', from: 'Cafeteria', to: 'Station',
+      fromMult: '1', toMult: '1..*', fromRole: null, toRole: null, label: null,
+      points: [[1106, 158], [1106, 230]] },
+
+    // הזמנה (1) —— (0..1) תשלום
+    { type: 'assoc', from: 'Order', to: 'Payment',
+      fromMult: '1', toMult: '0..1', fromRole: null, toRole: null, label: null,
+      points: [[373, 369], [373, 430], [633, 430], [633, 470]] },
+
+    // תשלום בכרטיס אוניברסיטה ——▷ תשלום  (generalization — hollow triangle AT תשלום)
+    { type: 'gen', from: 'UniversityCardPayment', to: 'Payment',
+      fromMult: null, toMult: null, fromRole: null, toRole: null, label: null,
+      points: [[553, 620], [553, 588], [633, 588], [633, 552]] },
+
+    // תשלום באשראי ——▷ תשלום  (generalization — hollow triangle AT תשלום)
+    { type: 'gen', from: 'CreditCardPayment', to: 'Payment',
+      fromMult: null, toMult: null, fromRole: null, toRole: null, label: null,
+      points: [[776, 620], [776, 588], [633, 588], [633, 552]] },
+
+    // תשלום ⇢ «external system» שער תשלום   (dependency — dashed + open arrow, NO multiplicity)
+    { type: 'dep', from: 'Payment', to: 'PaymentGateway',
+      fromMult: null, toMult: null, fromRole: null, toRole: null, label: null,
+      points: [[706, 505], [900, 505]] },
+
+    // סטודנט ⇢ «external system» זיהוי אוניברסיטה  (dependency)
+    { type: 'dep', from: 'Student', to: 'UniversityIdentity',
+      fromMult: null, toMult: null, fromRole: null, toRole: null, label: null,
+      points: [[133, 312], [133, 400]] }
+  ];
+
+  /* ============================================================
+     2. ENGINE — SKILL.md §9d, plus two additive hooks:
+        · boxW honours an optional cls.minW  (so «external system» headers fit)
+        · svgBox honours cls.isExternal      (gray dashed "outside our system" look)
+     ============================================================ */
+  // ── Constants ─────────────────────────────────────────────────────────────
+  const HDR_H = 28, PAD = 6, LINE_H = 14, DIV_H = 1;
+  const FM = 'font-family="IBM Plex Mono, monospace"';
+
+  function escXml(s) {
+    return String(s)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+
+  function boxH(cls) {
+    const hdrH = cls.stereotype ? 38 : HDR_H;
+    return hdrH + PAD + cls.attrs.length * LINE_H +
+      (cls.ops.length > 0 ? DIV_H + cls.ops.length * LINE_H : 0) + PAD;
+  }
+
+  function boxW(cls) {
+    const longest = [...cls.attrs, ...cls.ops, cls.name]
+      .reduce((m, s) => Math.max(m, s.length), 0);
+    return Math.max(120, cls.minW || 0, Math.ceil(longest * 6.5) + 16);
+  }
+
+  function svgBox(cls) {
+    const w = boxW(cls), h = boxH(cls), { x, y } = cls;
+    const hdrH = cls.stereotype ? 38 : HDR_H;
+    const ext = !!cls.isExternal;
+    const border   = (cls.isEnum || ext) ? '#94a3b8' : '#3b82f6';
+    const hdrFill  = cls.isEnum ? '#475569' : ext ? '#64748b' : '#1e40af';
+    const bodyFill = cls.isEnum ? '#f8fafc' : ext ? '#e2e8f0' : 'white';
+    const dash     = (cls.isEnum || ext) ? 'stroke-dasharray="5 3"' : '';
+
+    let s = `<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="${bodyFill}" stroke="${border}" stroke-width="2" ${dash} rx="2"/>`;
+    s += `<rect x="${x}" y="${y}" width="${w}" height="${hdrH}" fill="${hdrFill}" rx="2"/>`;
+
+    if (cls.stereotype) {
+      s += `<text x="${x + w/2}" y="${y + 13}" text-anchor="middle" fill="white" font-size="9" ${FM}>${escXml(cls.stereotype)}</text>`;
+    }
+    const nameStyle = cls.isAbstract ? 'font-style:italic' : '';
+    const nameY = cls.stereotype ? y + hdrH - 8 : y + hdrH / 2 + 4;
+    s += `<text x="${x + w/2}" y="${nameY}" text-anchor="middle" fill="white" font-size="11" font-weight="700" ${FM} style="${nameStyle}">${escXml(cls.name)}</text>`;
+
+    const divY = y + hdrH;
+    s += `<line x1="${x}" y1="${divY}" x2="${x + w}" y2="${divY}" stroke="${border}" stroke-width="1"/>`;
+
+    const attrFill  = ext ? '#475569' : '#1e293b';
+    const attrStyle = ext ? ' font-style="italic"' : '';
+    let curY = divY + PAD + 10;
+    for (const a of cls.attrs) {
+      s += `<text x="${x + 6}" y="${curY}" text-anchor="start" fill="${attrFill}" font-size="10.5"${attrStyle} ${FM}>${escXml(a)}</text>`;
+      curY += LINE_H;
+    }
+    if (cls.ops.length > 0) {
+      const opDivY = divY + PAD + cls.attrs.length * LINE_H;
+      s += `<line x1="${x}" y1="${opDivY}" x2="${x + w}" y2="${opDivY}" stroke="${border}" stroke-width="1"/>`;
+      curY = opDivY + PAD + 10;
+      for (const o of cls.ops) {
+        s += `<text x="${x + 6}" y="${curY}" text-anchor="start" fill="#2563eb" font-size="10.5" font-style="italic" ${FM}>${escXml(o)}</text>`;
+        curY += LINE_H;
+      }
+    }
+    return `<g class="cd-class" data-id="${cls.id}">${s}</g>`;
+  }
+
+  function svgRel(rel) {
+    const pts = rel.points.map(([px, py]) => `${px},${py}`).join(' ');
+    let mS = '', mE = '', dash = '';
+    if (rel.type === 'comp') mS = 'marker-start="url(#compFill)"';
+    if (rel.type === 'agg')  mS = 'marker-start="url(#aggHollow)"';
+    if (rel.type === 'gen')  mE = 'marker-end="url(#genHollow)"';
+    if (rel.type === 'dep')  { mE = 'marker-end="url(#arrOpen)"'; dash = 'stroke-dasharray="6 3"'; }
+    // 'assoc': no markers — plain line
+
+    let s = `<polyline class="cd-edge" points="${pts}" fill="none" stroke="#334155" stroke-width="1.8" ${dash} ${mS} ${mE}/>`;
+    // Multiplicity labels — placed just OUTSIDE each box, offset along the line
+    // (away from the box) and beside it, so BOTH ends are always legible.
+    // On a VERTICAL segment the perpendicular offset is horizontal, so it must
+    // clear half the label's own width — otherwise the line runs through "1..*".
+    const multLabel = (end, adj, txt) => {
+      const dx = adj[0] - end[0], dy = adj[1] - end[1];
+      const L = Math.hypot(dx, dy) || 1, ux = dx / L, uy = dy / L;
+      const perp = Math.abs(uy) > Math.abs(ux) ? 9 + txt.length * 3.9 : 10;
+      const x = end[0] + ux * 22 - uy * perp, y = end[1] + uy * 22 + ux * perp + 3;
+      return `<text x="${x}" y="${y}" text-anchor="middle" fill="#475569" font-size="11.5" font-weight="700" ${FM}>${escXml(txt)}</text>`;
+    };
+    if (rel.fromMult) s += multLabel(rel.points[0], rel.points[1], rel.fromMult);
+    if (rel.toMult) {
+      const n = rel.points.length;
+      s += multLabel(rel.points[n - 1], rel.points[n - 2], rel.toMult);
+    }
+    if (rel.label) {
+      const mid = rel.points[Math.floor(rel.points.length / 2)];
+      s += `<text x="${mid[0]}" y="${mid[1] - 6}" text-anchor="middle" fill="#64748b" font-size="9.5" ${FM}>${escXml(rel.label)}</text>`;
+    }
+    return s;
+  }
+
+  // ── Legend — real SVG samples so each marker is the one actually used ───────
+  function svgLegend(totalHeight) {
+    const yL = totalHeight - 44, yT = yL + 4;
+    const items = [
+      { label: 'Association',    attrs: '' },
+      { label: 'Aggregation',    attrs: 'marker-start="url(#aggHollow)"' },
+      { label: 'Composition',    attrs: 'marker-start="url(#compFill)"' },
+      { label: 'Generalization', attrs: 'marker-end="url(#genHollow)"' },
+      { label: 'Dependency',     attrs: 'marker-end="url(#arrOpen)" stroke-dasharray="6 3"' }
+    ];
+    let s = '', x = 24;
+    for (const it of items) {
+      s += `<line x1="${x}" y1="${yL}" x2="${x + 36}" y2="${yL}" stroke="#334155" stroke-width="1.8" ${it.attrs}/>`;
+      s += `<text x="${x + 43}" y="${yT}" text-anchor="start" fill="#475569" font-size="12.5" ${FM}>${it.label}</text>`;
+      x += 36 + 43 + it.label.length * 7.6 + 26;
+    }
+    s += `<text x="${x + 6}" y="${yT}" text-anchor="start" fill="#64748b" font-size="12.5" ${FM}>קרדינליות בשני הקצוות</text>`;
+    return s;
+  }
+
+  // ── Hover highlight ─────────────────────────────────────────────────────────
+  // Point at any relationship line to trace it through crossings: it brightens,
+  // thickens, and lifts to the front, restoring on mouse-out. A wide transparent
+  // overlay makes the thin line easy to grab. Call wireHover(svg) after innerHTML.
+  function wireHover(svg) {
+    svg.querySelectorAll('.cd-edge').forEach(function (line) {
+      const hit = line.cloneNode(false);
+      hit.removeAttribute('marker-start'); hit.removeAttribute('marker-end');
+      hit.removeAttribute('class');
+      hit.setAttribute('stroke', 'transparent');
+      hit.setAttribute('stroke-width', '16');
+      hit.setAttribute('fill', 'none');
+      hit.style.pointerEvents = 'stroke';
+      hit.style.cursor = 'pointer';
+      line.parentNode.insertBefore(hit, line.nextSibling); // transparent overlay on top
+      const s0 = line.getAttribute('stroke');
+      const w0 = line.getAttribute('stroke-width');
+      let slot = null;
+      hit.addEventListener('mouseenter', function () {
+        slot = document.createComment('e'); hit.parentNode.insertBefore(slot, hit);
+        const p = hit.parentNode; p.appendChild(line); p.appendChild(hit); // lift to front
+        line.setAttribute('stroke', '#e6007e');
+        line.setAttribute('stroke-width', String(Math.max(3.4, parseFloat(w0 || '1.8') + 1.6)));
+      });
+      hit.addEventListener('mouseleave', function () {
+        line.setAttribute('stroke', s0); if (w0) line.setAttribute('stroke-width', w0);
+        if (slot && slot.parentNode) {
+          slot.parentNode.insertBefore(line, slot);
+          slot.parentNode.insertBefore(hit, slot);
+          slot.remove();
+        }
+        slot = null;
+      });
+    });
+  }
+
+  // ── Click a class → show its description ───────────────────────────────────
+  function hideInfo() {
+    document.getElementById('cd-info').hidden = true;
+    document.querySelectorAll('.cd-class.sel').forEach(g => g.classList.remove('sel'));
+  }
+  function showInfo(cls, g) {
+    document.querySelectorAll('.cd-class.sel').forEach(n => n.classList.remove('sel'));
+    if (g) g.classList.add('sel');
+    document.getElementById('cd-info-title').textContent = cls.name;
+    document.getElementById('cd-info-body').innerHTML = cls.desc || '';
+    document.getElementById('cd-info').hidden = false;
+    const hint = document.getElementById('cd-hint');
+    if (hint) hint.style.opacity = '0';
+  }
+  function wireClicks(svg) {
+    const byId = {};
+    for (const c of CLASSES) byId[c.id] = c;
+    svg.querySelectorAll('.cd-class').forEach(function (g) {
+      g.addEventListener('click', function (ev) {
+        ev.stopPropagation();
+        const cls = byId[g.getAttribute('data-id')];
+        if (!cls) return;
+        if (g.classList.contains('sel')) hideInfo(); else showInfo(cls, g);
+      });
+    });
+    svg.addEventListener('click', hideInfo);
+  }
+
+  function render() {
+    // Orthogonality guard (§4 validation): every segment must share x or y.
+    for (const rel of RELS) {
+      for (let i = 0; i < rel.points.length - 1; i++) {
+        const a = rel.points[i], b = rel.points[i + 1];
+        if (a[0] !== b[0] && a[1] !== b[1]) {
+          console.warn('Diagonal segment', rel.from, '->', rel.to, 'at index', i);
+        }
+      }
+    }
+
+    let maxX = 600, maxY = 400;
+    for (const cls of CLASSES) {
+      maxX = Math.max(maxX, cls.x + boxW(cls) + 60);
+      maxY = Math.max(maxY, cls.y + boxH(cls) + 80);
+    }
+
+    const defs = `<defs>
+      <pattern id="dotgrid" width="24" height="24" patternUnits="userSpaceOnUse">
+        <circle cx="12" cy="12" r="0.8" fill="#cbd5e1"/>
+      </pattern>
+      <marker id="genHollow" markerWidth="12" markerHeight="10" refX="10" refY="5" orient="auto">
+        <polygon points="0,0 10,5 0,10" fill="white" stroke="#334155" stroke-width="1.5"/>
+      </marker>
+      <marker id="arrOpen" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+        <polyline points="0,0 9,4 0,8" fill="none" stroke="#334155" stroke-width="1.5"/>
+      </marker>
+      <marker id="compFill" markerWidth="14" markerHeight="10" refX="1" refY="5" orient="auto">
+        <polygon points="0,5 7,0 14,5 7,10" fill="#1e40af" stroke="#1e40af"/>
+      </marker>
+      <marker id="aggHollow" markerWidth="14" markerHeight="10" refX="1" refY="5" orient="auto">
+        <polygon points="0,5 7,0 14,5 7,10" fill="white" stroke="#334155"/>
+      </marker>
+    </defs>`;
+
+    // totalWidth / totalHeight include margins and space for the legend.
+    // RIGHT_MARGIN ≥ 40px, BOTTOM_MARGIN ≥ 70px (legend needs ~50px).
+    // These are already baked into maxX / maxY from the loop above (60px / 80px).
+    const totalWidth  = maxX;
+    const totalHeight = maxY;   // legend drawn at totalHeight - 44, inside this height
+
+    const bg    = `<rect width="${totalWidth}" height="${totalHeight}" fill="url(#dotgrid)"/>`;
+    const rels  = RELS.map(svgRel).join('');
+    const boxes = CLASSES.map(svgBox).join('');
+    const legend = svgLegend(totalHeight);
+
+    const svg = document.getElementById('diagram-svg');
+    svg.setAttribute('width',   totalWidth);
+    svg.setAttribute('height',  totalHeight);
+    svg.setAttribute('viewBox', `0 0 ${totalWidth} ${totalHeight}`);
+    svg.innerHTML = defs + bg + rels + boxes + legend;
+    wireHover(svg);
+    wireClicks(svg);
+  }
+
+  /* ============================================================
+     3. VP EXPORT — from export-buttons.md (class-diagram xmiBody)
+     ============================================================ */
+  function xmlEscape(s) {
+    return String(s ?? '')
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&apos;');
+  }
+
+  function downloadFile(filename, mimeType, content) {
+    const blob = new Blob([content], { type: mimeType });
+    const url  = URL.createObjectURL(blob);
+    const a    = Object.assign(document.createElement('a'),
+                   { href: url, download: filename });
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(() => { URL.revokeObjectURL(url); a.remove(); }, 1000);
+  }
+
+  function xmiBody(elements, rels) {
+    const lines = [];
+    for (const el of elements) {
+      if (el.kind === 'class') {
+        const isEnum = el.stereotype === 'enumeration';
+        const type = isEnum ? 'uml:Enumeration' : 'uml:Class';
+        lines.push(`    <packagedElement xmi:type="${type}" xmi:id="${el.id}" name="${xmlEscape(el.name)}"${el.isAbstract?' isAbstract="true"':''}>`);
+        if (isEnum) {
+          for (const a of (el.attributes || []))
+            lines.push(`      <ownedLiteral xmi:id="${el.id}_${xmlEscape(a.name)}" name="${xmlEscape(a.name)}"/>`);
+        } else {
+          for (const a of (el.attributes || []))
+            lines.push(`      <ownedAttribute xmi:id="${el.id}_${xmlEscape(a.name)}" name="${xmlEscape(a.name)}" visibility="${a.visibility==='+'?'public':a.visibility==='-'?'private':'protected'}"/>`);
+          for (const op of (el.operations || []))
+            lines.push(`      <ownedOperation xmi:id="${el.id}_${xmlEscape(op.name)}" name="${xmlEscape(op.name)}"/>`);
+        }
+        lines.push(`    </packagedElement>`);
+      }
+    }
+    for (const r of rels) {
+      if (r.kind === 'generalization')
+        lines.push(`    <packagedElement xmi:type="uml:Generalization" xmi:id="${r.id}" specific="${r.from}" general="${r.to}"/>`);
+      if (r.kind === 'association')
+        lines.push(`    <packagedElement xmi:type="uml:Association" xmi:id="${r.id}" memberEnd="${r.from}_end ${r.to}_end"/>`);
+      if (r.kind === 'dependency')
+        lines.push(`    <packagedElement xmi:type="uml:Dependency" xmi:id="${r.id}" client="${r.from}" supplier="${r.to}"/>`);
+    }
+    return lines.join('\n');
+  }
+
+  function exportXMI() {
+    const m = diagramModel;
+    const title = xmlEscape(m.title || 'diagram');
+    const allElements = m.parts.flatMap(p => p.elements);
+    const allRelationships = m.parts.flatMap(p => p.relationships);
+    const body = xmiBody(allElements, allRelationships);
+
+    const xmi = `<?xml version="1.0" encoding="UTF-8"?>
+<xmi:XMI xmi:version="2.1"
+  xmlns:xmi="http://www.omg.org/XMI"
+  xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML">
+  <uml:Model xmi:id="model_1" name="${title}">
+${body}
+  </uml:Model>
+</xmi:XMI>`;
+
+    downloadFile(title.replace(/\s+/g, '_') + '.xmi', 'application/xml', xmi);
+  }
+  // NOTE: Visual Paradigm auto-layouts on XMI import — coordinates are not preserved.
+
+  /* ============================================================
+     4. diagramModel — from model-shape.md for kind: 'class'
+     ============================================================ */
+  const diagramModel = {
+    kind: 'class',
+    title: 'תרשים מחלקות — מערכת הזמנת מזון בקמפוס',
+    parts: [
+      {
+        id: 'part-1',
+        label: 'Domain Model',
+        splitRationale: '',
+        elements: [
+          { kind: 'class', id: 'Student', name: 'סטודנט', isAbstract: false, stereotype: null,
+            attributes: [
+              { visibility: '-', name: 'studentId', type: 'String', defaultValue: null, constraint: null },
+              { visibility: '-', name: 'name', type: 'String', defaultValue: null, constraint: null },
+              { visibility: '-', name: 'email', type: 'String', defaultValue: null, constraint: null }
+            ],
+            operations: [],
+            x: 60, y: 230, w: 146, h: 82 },
+          { kind: 'class', id: 'Order', name: 'הזמנה', isAbstract: false, stereotype: null,
+            attributes: [
+              { visibility: '-', name: 'orderId', type: 'String', defaultValue: null, constraint: null },
+              { visibility: '-', name: 'createdAt', type: 'DateTime', defaultValue: null, constraint: null },
+              { visibility: '-', name: 'pickupTime', type: 'DateTime', defaultValue: null, constraint: null },
+              { visibility: '-', name: 'pickupCode', type: 'String', defaultValue: null, constraint: null },
+              { visibility: '-', name: 'status', type: 'OrderStatus', defaultValue: null, constraint: null }
+            ],
+            operations: [
+              { visibility: '+', name: 'total', params: [], returnType: 'Money' },
+              { visibility: '+', name: 'cancel', params: [], returnType: null }
+            ],
+            x: 290, y: 230, w: 166, h: 139 },
+          { kind: 'class', id: 'OrderLine', name: 'שורת הזמנה', isAbstract: false, stereotype: null,
+            attributes: [
+              { visibility: '-', name: 'quantity', type: 'int', defaultValue: null, constraint: '>0' },
+              { visibility: '-', name: 'notes', type: 'String', defaultValue: null, constraint: null }
+            ],
+            operations: [
+              { visibility: '+', name: 'lineTotal', params: [], returnType: 'Money' }
+            ],
+            x: 540, y: 230, w: 153, h: 83 },
+          { kind: 'class', id: 'MenuItem', name: 'פריט תפריט', isAbstract: false, stereotype: null,
+            attributes: [
+              { visibility: '-', name: 'itemId', type: 'String', defaultValue: null, constraint: null },
+              { visibility: '-', name: 'name', type: 'String', defaultValue: null, constraint: null },
+              { visibility: '-', name: 'price', type: 'Money', defaultValue: null, constraint: '>=0' },
+              { visibility: '-', name: 'isVegetarian', type: 'Boolean', defaultValue: null, constraint: null },
+              { visibility: '-', name: 'available', type: 'Boolean', defaultValue: null, constraint: null }
+            ],
+            operations: [],
+            x: 777, y: 230, w: 172, h: 110 },
+          { kind: 'class', id: 'Station', name: 'עמדה', isAbstract: false, stereotype: null,
+            attributes: [
+              { visibility: '-', name: 'name', type: 'String', defaultValue: null, constraint: null },
+              { visibility: '-', name: 'type', type: 'StationType', defaultValue: null, constraint: null }
+            ],
+            operations: [],
+            x: 1033, y: 230, w: 146, h: 68 },
+          { kind: 'class', id: 'Cafeteria', name: 'קפיטריה', isAbstract: false, stereotype: null,
+            attributes: [
+              { visibility: '-', name: 'name', type: 'String', defaultValue: null, constraint: null },
+              { visibility: '-', name: 'location', type: 'String', defaultValue: null, constraint: null }
+            ],
+            operations: [],
+            x: 1036, y: 90, w: 140, h: 68 },
+          { kind: 'class', id: 'Payment', name: 'תשלום', isAbstract: false, stereotype: null,
+            attributes: [
+              { visibility: '-', name: 'paymentId', type: 'String', defaultValue: null, constraint: null },
+              { visibility: '-', name: 'amount', type: 'Money', defaultValue: null, constraint: null },
+              { visibility: '-', name: 'paidAt', type: 'DateTime', defaultValue: null, constraint: null }
+            ],
+            operations: [],
+            x: 560, y: 470, w: 146, h: 82 },
+          { kind: 'class', id: 'UniversityCardPayment', name: 'תשלום בכרטיס אוניברסיטה', isAbstract: false, stereotype: null,
+            attributes: [
+              { visibility: '-', name: 'universityId', type: 'String', defaultValue: null, constraint: null }
+            ],
+            operations: [],
+            x: 470, y: 620, w: 166, h: 54 },
+          { kind: 'class', id: 'CreditCardPayment', name: 'תשלום באשראי', isAbstract: false, stereotype: null,
+            attributes: [
+              { visibility: '-', name: 'last4', type: 'String', defaultValue: null, constraint: null },
+              { visibility: '-', name: 'gatewayRef', type: 'String', defaultValue: null, constraint: null }
+            ],
+            operations: [],
+            x: 700, y: 620, w: 153, h: 68 },
+          { kind: 'class', id: 'OrderStatus', name: 'OrderStatus', isAbstract: false, stereotype: 'enumeration',
+            attributes: [
+              { visibility: '', name: 'ממתין', type: null, defaultValue: null, constraint: null },
+              { visibility: '', name: 'בהכנה', type: null, defaultValue: null, constraint: null },
+              { visibility: '', name: 'מוכן', type: null, defaultValue: null, constraint: null },
+              { visibility: '', name: 'נאסף', type: null, defaultValue: null, constraint: null },
+              { visibility: '', name: 'בוטל', type: null, defaultValue: null, constraint: null }
+            ],
+            operations: [],
+            x: 300, y: 80, w: 120, h: 120 },
+          { kind: 'class', id: 'PaymentGateway', name: 'שער תשלום', isAbstract: false, stereotype: 'external system',
+            attributes: [], operations: [],
+            x: 900, y: 480, w: 170, h: 64 },
+          { kind: 'class', id: 'UniversityIdentity', name: 'זיהוי אוניברסיטה', isAbstract: false, stereotype: 'external system',
+            attributes: [], operations: [],
+            x: 60, y: 400, w: 170, h: 64 }
+        ],
+        relationships: [
+          { kind: 'association', id: 'assoc_student_order', from: 'Student', to: 'Order',
+            multFrom: '1', multTo: '0..*', roleFrom: null, roleTo: null,
+            directed: false, aggregation: false, composition: false },
+          { kind: 'association', id: 'comp_order_orderline', from: 'Order', to: 'OrderLine',
+            multFrom: '1', multTo: '1..*', roleFrom: null, roleTo: null,
+            directed: false, aggregation: false, composition: true },
+          { kind: 'association', id: 'assoc_orderline_menuitem', from: 'OrderLine', to: 'MenuItem',
+            multFrom: '*', multTo: '1', roleFrom: null, roleTo: null,
+            directed: false, aggregation: false, composition: false },
+          { kind: 'association', id: 'assoc_menuitem_station', from: 'MenuItem', to: 'Station',
+            multFrom: '*', multTo: '1', roleFrom: null, roleTo: null,
+            directed: false, aggregation: false, composition: false },
+          { kind: 'association', id: 'agg_cafeteria_station', from: 'Cafeteria', to: 'Station',
+            multFrom: '1', multTo: '1..*', roleFrom: null, roleTo: null,
+            directed: false, aggregation: true, composition: false },
+          { kind: 'association', id: 'assoc_order_payment', from: 'Order', to: 'Payment',
+            multFrom: '1', multTo: '0..1', roleFrom: null, roleTo: null,
+            directed: false, aggregation: false, composition: false },
+          { kind: 'generalization', id: 'gen_unicard_payment', from: 'UniversityCardPayment', to: 'Payment' },
+          { kind: 'generalization', id: 'gen_credit_payment', from: 'CreditCardPayment', to: 'Payment' },
+          { kind: 'dependency', id: 'dep_payment_gateway', from: 'Payment', to: 'PaymentGateway', stereotype: null },
+          { kind: 'dependency', id: 'dep_student_identity', from: 'Student', to: 'UniversityIdentity', stereotype: null }
+        ]
+      }
+    ]
+  };
+
+  /* ============================================================
+     Boot — embed mode + render
+     ============================================================ */
+  function boot() {
+    if (location.search.includes('embed=1')) document.body.classList.add('embed');
+    render();
+  }
+  document.addEventListener('DOMContentLoaded', boot);
+  </script>
+</body>
+</html>

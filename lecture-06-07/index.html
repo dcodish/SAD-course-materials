@@ -1,0 +1,2641 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>תרשים מחלקות — Class Diagram</title>
+<link rel="stylesheet" href="../web/vendor/reveal/dist/reset.css">
+<link rel="stylesheet" href="../web/vendor/reveal/dist/reveal.css">
+<link rel="stylesheet" href="../web/vendor/reveal/plugin/highlight/monokai.css">
+<link rel="stylesheet" href="../web/theme/sad.css">
+</head>
+<body>
+<div class="reveal">
+  <div class="slides">
+    <section class="title-slide" data-slug="title">
+      <div class="course">ניתוח ועיצוב מערכות מידע</div>
+      <h1>תרשים מחלקות — Class Diagram</h1>
+      <div class="lecture-no">הרצאה 6-7</div>
+    </section>
+    <section class="toc-slide" data-slug="toc">
+      <h1>סדר היום</h1>
+      <div class="body">
+        <ol class="toc">
+          <li class="active">יסודות — מחלקה ותרשים</li>
+          <li>אנטומיה של מחלקה</li>
+          <li>קשרים בין מחלקות</li>
+          <li>מניתוח לעיצוב טוב</li>
+          <li>תרגול וסיכום</li>
+        </ol>
+      </div>
+    </section>
+    <!-- A3 — Previously on SAD: the bridge from L4-5 into the design phase.
+         A left→right (RTL: right→left) strip of the pipeline so far — ראיונות → דרישות →
+         תרחישי שימוש (L4-5) → מודל מחלקות (עכשיו) — with ← arrows (forward = reading flow).
+         The big orange ← marks the phase crossing from ניתוח into עיצוב. One .hero states the
+         new question (מה→איך). A short setting slide; the SDLC chip (design) is build-injected. -->
+    <section data-slug="previously-on-sad" class="has-acro-footer">
+      <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
+      <style>
+        section[data-slug="previously-on-sad"] .chain-wrap{ flex:1; display:flex; flex-direction:column; justify-content:center; gap:14px; min-height:0; }
+        section[data-slug="previously-on-sad"] .chain{ display:flex; align-items:stretch; justify-content:center; gap:8px; }
+        section[data-slug="previously-on-sad"] .chip{ background:var(--card-bg); border:1px solid var(--card-border); border-radius:14px;
+          padding:16px 18px; text-align:center; display:flex; flex-direction:column; justify-content:center; gap:5px; min-width:158px; }
+        section[data-slug="previously-on-sad"] .chip .t{ font-size:22px; font-weight:700; color:var(--dark-blue); }
+        section[data-slug="previously-on-sad"] .chip small{ font-size:14px; color:var(--muted); }
+        section[data-slug="previously-on-sad"] .chip.now{ background:var(--hero-bg); border:2px solid var(--orange); }
+        section[data-slug="previously-on-sad"] .chip.now .t{ color:var(--orange); }
+        section[data-slug="previously-on-sad"] .arr{ align-self:center; font-size:28px; color:var(--light-blue); font-weight:700; }
+        section[data-slug="previously-on-sad"] .cross{ align-self:center; font-size:40px; color:var(--orange); font-weight:700; }
+        section[data-slug="previously-on-sad"] .cap{ margin:0; text-align:center; font-size:18px; color:var(--muted); }
+        section[data-slug="previously-on-sad"] .cap .an{ color:var(--dark-blue); }
+        section[data-slug="previously-on-sad"] .cap .de{ color:var(--orange); }
+        section[data-slug="previously-on-sad"] .hero > p{ font-size:22px; }
+      </style>
+      <h1>מ-<span class="en">Use Case</span> למודל נתונים</h1>
+      <div class="subtitle"><span class="en">Previously on SAD</span> — מניתוח (הרצאה 4-5) לעיצוב</div>
+      <div class="body">
+
+        <div class="chain-wrap">
+          <div class="chain">
+            <div class="chip"><span class="t">ראיונות</span><small>הרצאה 3</small></div>
+            <span class="arr">←</span>
+            <div class="chip"><span class="t">דרישות</span><small>הרצאה 3</small></div>
+            <span class="arr">←</span>
+            <div class="chip"><span class="t">תרחישי שימוש</span><small><span class="en">Use Case</span> · הרצאה 4-5</small></div>
+            <span class="cross">←</span>
+            <div class="chip now"><span class="t">מודל מחלקות</span><small>עכשיו · הרצאה 6-7</small></div>
+          </div>
+          <p class="cap">שלושת הראשונים = <b class="an">ניתוח</b> (מה המערכת עושה) · האחרון = <b class="de">עיצוב</b> (איך בנוי המידע) — כאן חוצים.</p>
+        </div>
+
+        <div class="hero">
+          <h3>השאלה שמשתנה</h3>
+          <p>עד עכשיו שאלנו <b>מה</b> המערכת עושה — תרחישי שימוש ותהליכים. מהיום שואלים <b>איך</b> בנוי המידע שהיא מחזיקה.</p>
+        </div>
+
+        <!-- nbsp binds the last two words so the line can't wrap leaving one word orphaned. -->
+        <p class="bottom-line">הדרישות ותרחישי השימוש הם הקלט; היום נהפוך אותם למודל המחלקות — הנתונים&#160;שהמערכת&#160;שומרת.</p>
+
+      </div>
+      <aside class="notes">
+        שקופית מעבר: זו הנקודה שבה הקורס חוצה מ<b>ניתוח דרישות</b> ל<b>עיצוב</b> — השקופית הבאה (מפת SDLC) מסמנת זאת מפורשות.
+        ב-L4-5 הפקנו תרחישי שימוש ותהליכים (מה + למי); עכשיו שואלים שאלה חדשה — אילו נתונים המערכת חייבת להחזיק כדי לבצע אותם.
+        זה הקלט למודל המחלקות: אותה דוגמה רצה (הזמנת אוכל בקמפוס), שלב הבא.
+      </aside>
+    <div class="acro-footer"><span class="acro"><span class="en">SDLC</span> = <span class="en">Software Development Life Cycle</span> · מחזור פיתוח תוכנה</span></div>
+    </section>
+    <!-- Where-are-we transition: crossing from ניתוח דרישות into עיצוב (what -> how). Uses the
+         shared interactive SDLC x roles rail (assets/sdlc_roles_rtl.html), flagged on the current
+         phase via ?here=design. Replaces the old simple phase-map (source: sdlc) so every HTML deck
+         uses the same asset — L1 (?here=init/asis), L2 (?here=asis), L3 + L4-5 (?here=req). -->
+    <section data-slug="sdlc-roles-design" class="has-acro-footer">
+      <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
+      <h1>היכן אנחנו ב-<span class="en">SDLC</span></h1>
+      <div class="subtitle">שלב <b>עיצוב</b> — כל שלב במחזור החיים ובעלי התפקידים המעורבים בו · כאן עוברים מ<b>מה</b> ל<b>איך</b></div>
+      <div class="body">
+        <div class="embed">
+          <iframe src="assets/sdlc_roles_rtl.html?here=design" title="SDLC stages and roles" loading="lazy"></iframe>
+        </div>
+      </div>
+    <div class="acro-footer"><span class="acro"><span class="en">SDLC</span> = <span class="en">Software Development Life Cycle</span> · מחזור פיתוח תוכנה</span></div>
+    </section>
+    <!-- A5 — מחלקות ואובייקטים. The core idea before any diagram: class = תבנית (blueprint/type),
+         object = מופע (instance). SVG shows ONE class box (הזמנה, canonical attrs/ops) and TWO
+         concrete instances connected by DASHED gray connectors (not solid association lines — those
+         come in Section ג; the dashed style keeps the distinction honest). Canonical class names/
+         attrs are verbatim from PORTING_BRIEF so every slide agrees. Student names kept male form
+         per course convention (יוסי / דני). Class box notation follows the tool doctrine:
+         name (UpperCamelCase) / attributes (- name : Type) / operations (italic). -->
+    <section data-slug="classes-objects" class="has-acro-footer">
+      <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
+      <style>
+        section[data-slug="classes-objects"] .defs{ align-items:stretch; }
+        section[data-slug="classes-objects"] .defs .card{ display:flex; flex-direction:column; gap:4px; }
+        section[data-slug="classes-objects"] .defs p{ margin:0; font-size:18px; line-height:1.4; }
+        section[data-slug="classes-objects"] .viz{ flex:1; display:flex; flex-direction:column; gap:6px; min-height:0; justify-content:center; }
+        section[data-slug="classes-objects"] .viz svg{ display:block; width:100%; max-width:560px; max-height:300px; height:auto; margin:0 auto; }
+        section[data-slug="classes-objects"] .callout.ai{ font-size:18px; }
+      </style>
+      <h1>מחלקות ואובייקטים</h1>
+      <div class="subtitle"><span class="en">Class</span> = תבנית · <span class="en">Object</span> = מופע</div>
+      <div class="body">
+
+        <div class="cols defs">
+          <div class="card tight">
+            <div class="panel-title">מחלקה = תבנית</div>
+            <p>הגדרה כללית של קבוצת אובייקטים בעלי אותן תכונות ופעולות. <span class="en">Class</span> — כמו טופס ריק, נכתב פעם אחת.</p>
+          </div>
+          <div class="card tight">
+            <div class="panel-title">אובייקט = מופע</div>
+            <p><span class="en">Object</span> קונקרטי בודד של המחלקה, עם ערכים ממשיים — הזמנה מסוימת של סטודנט מסוים.</p>
+          </div>
+        </div>
+
+        <div class="card viz">
+          <div class="panel-title" style="text-align:center;">מחלקה אחת <span class="en">הזמנה</span> — הרבה מופעים</div>
+          <svg viewBox="0 0 500 240" xmlns="http://www.w3.org/2000/svg" role="img"
+               aria-label="מחלקת הזמנה כתבנית מימין, ושתי הזמנות קונקרטיות כמופעים משמאל, מחוברות בקווים מקווקווים">
+
+            <!-- dashed connectors (NOT association lines — instance-of, drawn first, boxes cover ends) -->
+            <line x1="315" y1="100" x2="200" y2="80"  stroke="#94a3b8" stroke-width="1.4" stroke-dasharray="4 4"/>
+            <line x1="315" y1="150" x2="200" y2="182" stroke="#94a3b8" stroke-width="1.4" stroke-dasharray="4 4"/>
+
+            <!-- ===== THE CLASS (template), on the right ===== -->
+            <text x="397" y="22" text-anchor="middle" direction="rtl" font-size="14" font-weight="700"
+                  fill="#1e40af" font-family="'Noto Sans Hebrew',sans-serif">מחלקה — תבנית</text>
+            <rect x="315" y="30" width="165" height="182" fill="#fff" stroke="#3b82f6" stroke-width="1.8" rx="3"/>
+            <rect x="315" y="30" width="165" height="30" fill="#1e40af" stroke="#3b82f6" stroke-width="1.8" rx="3"/>
+            <text x="397" y="50" text-anchor="middle" direction="rtl" font-size="15" font-weight="700"
+                  fill="#fff" font-family="'Noto Sans Hebrew',sans-serif">הזמנה</text>
+            <line x1="315" y1="60" x2="480" y2="60" stroke="#3b82f6" stroke-width="1"/>
+            <line x1="315" y1="150" x2="480" y2="150" stroke="#3b82f6" stroke-width="1"/>
+            <!-- font-size 11 (was 12.5): at 12.5 the longest attribute line ran past the
+                 class box's right border. -->
+            <g font-family="'Consolas','Courier New',monospace" font-size="11" fill="#1e293b" direction="ltr" text-anchor="start">
+              <text x="323" y="80">- orderId : String</text>
+              <text x="323" y="100">- status : OrderStatus</text>
+              <text x="323" y="120">- pickupTime : DateTime</text>
+              <text x="323" y="170" font-style="italic">+ total() : Money</text>
+              <text x="323" y="190" font-style="italic">+ cancel()</text>
+            </g>
+
+            <!-- ===== TWO OBJECTS (instances), on the left ===== -->
+            <text x="112" y="22" text-anchor="middle" direction="rtl" font-size="14" font-weight="700"
+                  fill="#0F766E" font-family="'Noto Sans Hebrew',sans-serif">אובייקטים — מופעים</text>
+
+            <rect x="25" y="45" width="175" height="68" fill="#f0fdf9" stroke="#0F766E" stroke-width="1.6" rx="3"/>
+            <text x="112" y="63" text-anchor="middle" direction="ltr" text-decoration="underline"
+                  font-family="'Consolas','Courier New',monospace" font-size="12.5" font-weight="700" fill="#0F766E">#1042 : הזמנה</text>
+            <g font-family="'Consolas','Courier New',monospace" font-size="12" fill="#334155" direction="ltr" text-anchor="start">
+              <text x="34" y="84">status = בהכנה</text>
+              <text x="34" y="102">pickupTime = 12:30</text>
+            </g>
+
+            <rect x="25" y="150" width="175" height="68" fill="#f0fdf9" stroke="#0F766E" stroke-width="1.6" rx="3"/>
+            <text x="112" y="168" text-anchor="middle" direction="ltr" text-decoration="underline"
+                  font-family="'Consolas','Courier New',monospace" font-size="12.5" font-weight="700" fill="#0F766E">#1043 : הזמנה</text>
+            <g font-family="'Consolas','Courier New',monospace" font-size="12" fill="#334155" direction="ltr" text-anchor="start">
+              <text x="34" y="189">status = מוכן</text>
+              <text x="34" y="207">pickupTime = 13:00</text>
+            </g>
+
+            <text x="255" y="128" text-anchor="middle" direction="rtl" font-size="11" fill="#94a3b8"
+                  font-family="'Noto Sans Hebrew',sans-serif">מופע של</text>
+          </svg>
+        </div>
+
+        <div class="callout ai">
+          <span class="label">🤖 בעבודה עם <span class="en">AI</span></span>
+          אפשר לבקש מ-<span class="en">AI</span> למנות מתוך המפרט את המחלקות <b>המועמדות</b> (התבניות) — לא את האובייקטים הבודדים.
+        </div>
+
+        <p class="bottom-line">התרשים ממדל <b>מחלקות</b> (תבניות) — לא אובייקטים בודדים.</p>
+
+      </div>
+      <aside class="notes">
+        מחלקה = תבנית/טיפוס; אובייקט = מופע קונקרטי עם ערכים. הדוגמה: המחלקה <span class="en">הזמנה</span> מוגדרת פעם אחת,
+        ובפועל קיימות אלפי הזמנות — #1042 של יוסי, #1043 של דני — כולן חולקות אותן תכונות ופעולות, ונבדלות בערכים ובמזהה.
+        הקווים המקווקווים הם "מופע של" (instance-of), לא קשר אסוציאציה — קווי אסוציאציה (מלאים, בלי חץ) נלמדים בחלק ג'.
+        מסר: תרשים המחלקות ממדל את התבניות, לא את המופעים.
+      </aside>
+    <div class="acro-footer"><span class="acro"><span class="en">AI</span> = <span class="en">Artificial Intelligence</span> · בינה מלאכותית</span></div>
+    </section>
+    <!-- A6 — מהו תרשים מחלקות. Definition: the static structure / domain model — the classes the
+         system manages + the relationships between them. Contrast with the use-case diagram
+         (behavior / what) vs class diagram (structure / data). LEFT: a labelled 3-compartment box
+         preview (שם / תכונות / פעולות) on the canonical הזמנה class. RIGHT: "why it's good for" —
+         shared vocabulary · the blueprint the DB + code are built from · what AI reads to generate
+         the data layer (the 🤖 thread). Box notation obeys the tool doctrine. -->
+    <section data-slug="what-is-class-diagram" class="has-acro-footer">
+      <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
+      <style>
+        section[data-slug="what-is-class-diagram"] .hero > p{ font-size:20px; }
+        section[data-slug="what-is-class-diagram"] .main{ flex:1; align-items:stretch; min-height:0; }
+        section[data-slug="what-is-class-diagram"] .main > .card{ display:flex; flex-direction:column; gap:8px; }
+        section[data-slug="what-is-class-diagram"] .anatomy svg{ display:block; width:100%; max-width:360px; max-height:290px; height:auto; margin:auto; }
+        section[data-slug="what-is-class-diagram"] ul.bullets > li{ font-size:19px; line-height:1.4; }
+        section[data-slug="what-is-class-diagram"] .callout.ai{ font-size:18px; margin-top:auto; }
+      </style>
+      <h1>מהו תרשים מחלקות</h1>
+      <div class="subtitle">המבנה הסטטי של המערכת — <span class="en">domain model</span></div>
+      <div class="body">
+
+        <div class="hero">
+          <h3>הגדרה</h3>
+          <p><b>המבנה הסטטי</b> של המערכת: המחלקות שהמערכת מנהלת והקשרים ביניהן. תרשים תרחישי שימוש מתאר <b>התנהגות</b> (מה) — תרשים המחלקות מתאר <b>מבנה ונתונים</b> (איך בנוי).</p>
+        </div>
+
+        <div class="cols main">
+
+          <div class="card anatomy">
+            <div class="panel-title" style="text-align:center;">שלושה חלקים לכל מחלקה</div>
+            <svg viewBox="0 0 360 230" xmlns="http://www.w3.org/2000/svg" role="img"
+                 aria-label="תיבת המחלקה הזמנה עם שלושה חלקים מסומנים: שם, תכונות, פעולות">
+              <!-- leader lines: label (left) → compartment (box left edge) -->
+              <line x1="156" y1="43"  x2="175" y2="43"  stroke="#94a3b8" stroke-width="1"/>
+              <line x1="156" y1="100" x2="175" y2="100" stroke="#94a3b8" stroke-width="1"/>
+              <line x1="156" y1="178" x2="175" y2="178" stroke="#94a3b8" stroke-width="1"/>
+
+              <g direction="rtl" text-anchor="start" font-family="'Noto Sans Hebrew',sans-serif" fill="#1e40af" font-weight="700">
+                <text x="150" y="47"  font-size="14">שם המחלקה</text>
+                <text x="150" y="104" font-size="14">תכונות</text>
+                <text x="150" y="182" font-size="14">פעולות</text>
+              </g>
+
+              <!-- the class box -->
+              <rect x="175" y="27" width="160" height="185" fill="#fff" stroke="#3b82f6" stroke-width="1.8" rx="3"/>
+              <rect x="175" y="27" width="160" height="30"  fill="#1e40af" stroke="#3b82f6" stroke-width="1.8" rx="3"/>
+              <text x="255" y="47" text-anchor="middle" direction="rtl" font-size="15" font-weight="700"
+                    fill="#fff" font-family="'Noto Sans Hebrew',sans-serif">הזמנה</text>
+              <line x1="175" y1="57"  x2="335" y2="57"  stroke="#3b82f6" stroke-width="1"/>
+              <line x1="175" y1="145" x2="335" y2="145" stroke="#3b82f6" stroke-width="1"/>
+              <!-- font-size 11 (was 12.5): at 12.5 the longest line "- pickupTime : DateTime"
+                   ran past the class box's right border (box = x 175..335). -->
+              <g font-family="'Consolas','Courier New',monospace" font-size="11" fill="#1e293b" direction="ltr" text-anchor="start">
+                <text x="183" y="77">- orderId : String</text>
+                <text x="183" y="98">- status : OrderStatus</text>
+                <text x="183" y="119">- pickupTime : DateTime</text>
+                <text x="183" y="167" font-style="italic">+ total() : Money</text>
+                <text x="183" y="188" font-style="italic">+ cancel()</text>
+              </g>
+            </svg>
+          </div>
+
+          <div class="card">
+            <div class="panel-title">למה זה שימושי</div>
+            <ul class="bullets">
+              <li><b>אוצר מילים משותף</b> — שפה אחת לכל בעלי העניין על ישויות המערכת.</li>
+              <li><b>השלד</b> שעליו נבנים בסיס הנתונים והקוד — כל תכונה הופכת לעמודה/שדה.</li>
+            </ul>
+            <div class="callout ai">
+              <span class="label">🤖 שכבת הנתונים</span>
+              זה גם מה ש-<span class="en">AI</span> קורא כדי לייצר את שכבת הנתונים והפעולות — מודל ברור פנימה, קוד נכון החוצה.
+            </div>
+          </div>
+
+        </div>
+
+        <p class="bottom-line">תוצר מרכזי של שלב העיצוב: מ״מה המערכת עושה״ אל ״איך בנוי המידע שלה״.</p>
+
+      </div>
+      <aside class="notes">
+        תרשים מחלקות = המבנה הסטטי / מודל התחום: המחלקות שהמערכת מנהלת + הקשרים ביניהן. ניגוד מועיל: תרשים תרחישי שימוש
+        מתאר התנהגות (מה עושים), תרשים מחלקות מתאר מבנה ונתונים (מה מחזיקים). שלושת החלקים: שם, תכונות, פעולות (נרחיב בחלק ב').
+        למה חשוב: שפה משותפת, שלד לבסיס הנתונים ולקוד, והקלט ש-AI קורא כדי לייצר את שכבת הנתונים — ולכן מודל מעורפל ⇒ קוד שגוי.
+      </aside>
+    <div class="acro-footer"><span class="acro"><span class="en">AI</span> = <span class="en">Artificial Intelligence</span> · בינה מלאכותית</span></div>
+    </section>
+    <!-- A7 — 🤖 מ-use cases למודל מחלקות. The design-phase AI beat, re-setting the ⚠️ challenge
+         habit for class diagrams. 🤖 callout: paste the L4-5 use cases/requirements → AI drafts a
+         candidate class list + first relationships in seconds. ⚠️ callout: it LOOKS complete, but AI
+         reliably (a) turns דוח מכירות/קבלה into a class (persistence test — previews B7); (b) invents
+         entities the boundary excluded (משלוח, OUT per running-example §0); (c) guesses multiplicity;
+         (d) picks inheritance where an enum belongs. Habit hero: the model is your verification
+         surface — what did it invent / miss / assume? Candidate names verbatim from PORTING_BRIEF. -->
+    <section data-slug="ai-domain-model" class="has-acro-footer">
+      <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
+      <style>
+        section[data-slug="ai-domain-model"] .lead{ background:var(--light-blue); border:1px solid var(--blue); }
+        section[data-slug="ai-domain-model"] .lead p{ margin:0; font-weight:700; color:var(--dark-blue); font-size:19px; line-height:1.4; }
+        section[data-slug="ai-domain-model"] .main{ flex:1; align-items:stretch; min-height:0; }
+        section[data-slug="ai-domain-model"] .main > .callout{ display:flex; flex-direction:column; font-size:18px; }
+        section[data-slug="ai-domain-model"] .chips{ display:flex; flex-wrap:wrap; gap:7px; margin-top:8px; }
+        section[data-slug="ai-domain-model"] .chips .tag{ font-size:15px; }
+        section[data-slug="ai-domain-model"] .rel{ margin-top:8px; font-size:16px; color:var(--muted); }
+        section[data-slug="ai-domain-model"] .fails{ margin:6px 0 0; padding:0; list-style:none; }
+        section[data-slug="ai-domain-model"] .fails li{ position:relative; padding-inline-start:22px; margin:0 0 6px; font-size:16.5px; line-height:1.4; }
+        section[data-slug="ai-domain-model"] .fails li:last-child{ margin-bottom:0; }
+        section[data-slug="ai-domain-model"] .fails li::before{ content:"✗"; position:absolute; inset-inline-start:0; color:var(--red); font-weight:700; }
+        /* Habit hero is the bottom element; clear the SDLC chip (floats bottom-LEFT = inline-end in RTL). */
+        section[data-slug="ai-domain-model"] .habit{ padding-inline-end:170px; }
+        section[data-slug="ai-domain-model"] .habit > p{ font-size:20px; }
+      </style>
+      <h1>🤖 מ-<span class="en">use cases</span> למודל מחלקות</h1>
+      <div class="subtitle">ה-<span class="en">AI</span> מנסח מודל בשניות — ואנחנו מאתגרים אותו</div>
+      <div class="body">
+
+        <div class="card lead">
+          <p>מדביקים ל-<span class="en">AI</span> את תרחישי השימוש והדרישות (הרצאה 4-5) — ומקבלים טיוטת מודל מחלקות עם קשרים ראשוניים, מיד.</p>
+        </div>
+
+        <div class="cols main">
+
+          <div class="callout ai">
+            <span class="label">🤖 מה ה-<span class="en">AI</span> מפיק</span>
+            רשימת מחלקות מועמדות מתוך אותה דוגמה רצה:
+            <div class="chips">
+              <span class="tag">סטודנט</span>
+              <span class="tag">הזמנה</span>
+              <span class="tag">שורת הזמנה</span>
+              <span class="tag">פריט תפריט</span>
+              <span class="tag">תשלום</span>
+              <span class="tag">עמדה</span>
+              <span class="tag">קפיטריה</span>
+            </div>
+            <div class="rel">ומעליהן — הצעת קשרים וקרדינליות ראשונית. נראה שלם ומשכנע.</div>
+          </div>
+
+          <div class="callout warn">
+            <span class="label">⚠️ נראה שלם — אבל ה-<span class="en">AI</span> נופל שוב ושוב</span>
+            <ul class="fails">
+              <li>הופך <b>דוח מכירות / קבלה</b> למחלקה — זה פלט מחושב שלא נשמר (מבחן ההתמדה, נרחיב ב-B7).</li>
+              <li>ממציא ישויות שהוצאו מהגבול — <b>משלוח</b> (מחוץ ל-<span class="en">scope</span>).</li>
+              <li>מנחש <b>קרדינליות</b> במקום לברר אותה.</li>
+              <li>בוחר <b>הורשה</b> במקום <span class="en">enum</span> (סטטוס הזמנה אינו תת-מחלקה).</li>
+            </ul>
+          </div>
+
+        </div>
+
+        <div class="hero habit">
+          <h3>ההרגל שנקבע כאן</h3>
+          <p>המודל הוא <b>משטח האימות</b> שלך. על כל טיוטה שאל: מה הומצא? מה חסר? מה הונח?</p>
+        </div>
+
+      </div>
+      <aside class="notes">
+        הביט של שלב העיצוב, במקביל ל-L4-5: ה-AI מנסח בשניות מודל מחלקות מלא-למראה מתוך תרחישי השימוש והדרישות — וזו בדיוק הסכנה.
+        ארבעת הכשלים החוזרים בתרשים מחלקות: (א) קבלה/דוח כמחלקה — מבחן ההתמדה (המערכת שומרת רשומות של הישות?); (ב) המצאת ישויות
+        שמחוץ לגבול (משלוח — OUT ב-running-example §0); (ג) ניחוש קרדינליות; (ד) הורשה במקום enum (סטטוס הזמנה). מְקבעים את ההרגל:
+        המודל הוא משטח האימות — מה הומצא, מה חסר, מה הונח. נאתגר כל נקודה כזו לאורך ההרצאה.
+      </aside>
+    <div class="acro-footer"><span class="acro"><span class="en">SDLC</span> = <span class="en">Software Development Life Cycle</span> · מחזור פיתוח תוכנה</span> &nbsp;·&nbsp; <span class="acro"><span class="en">AI</span> = <span class="en">Artificial Intelligence</span> · בינה מלאכותית</span></div>
+    </section>
+    <!-- B1 — מחלקה: the rectangle + 3 compartments (name / attributes / operations).
+         Campus הזמנה (Order) box, per PORTING_BRIEF.md canonical model. A clean, simplified
+         box here (3 attrs + 2 ops) — the full attribute compartment expands on slide-attributes (B3).
+         SVG conventions copied from lecture-04-05/slides/slide-association.html:
+           class box = white rect, blue border #3b82f6, header band #1e40af white name,
+           divider lines per compartment; attribute/op text left-anchored (LTR Latin identifiers),
+           operations rendered italic; Hebrew labels use 'Noto Sans Hebrew' + direction. -->
+    <section data-slug="class-box">
+      <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
+      <style>
+        section[data-slug="class-box"] .box-cols { flex:1 1 auto; min-height:0; align-items:stretch; }
+        section[data-slug="class-box"] .box-cols > .card { display:flex; flex-direction:column; justify-content:center; }
+        section[data-slug="class-box"] .class-svg { display:block; width:100%; max-height:360px; height:auto; }
+        section[data-slug="class-box"] ul.bullets > li { font-size:19px !important; line-height:1.4; margin-bottom:12px; }
+        section[data-slug="class-box"] ul.bullets > li b { color:var(--dark-blue); }
+        section[data-slug="class-box"] .part-tag {
+          display:inline-block; font-size:14px; font-weight:700; color:#fff; background:var(--blue);
+          border-radius:6px; padding:1px 9px; margin-inline-start:6px; vertical-align:middle;
+        }
+      </style>
+      <h1>מחלקה — התיבה ושלושת החלקים</h1>
+      <div class="subtitle">כל מחלקה = מלבן ובו שלושה תאים: שם · תכונות · פעולות</div>
+      <div class="body">
+
+        <div class="card" style="background:var(--light-blue); border:1px solid var(--blue);">
+          <p style="margin:0; font-weight:700; color:#fff; font-size:20px;">
+            מחלקה = תיאור של קבוצת אובייקטים בעלי תכונות, פעולות וקשרים דומים.
+          </p>
+        </div>
+
+        <div class="cols box-cols">
+
+          <div class="card">
+            <div class="panel-title">שלושת החלקים</div>
+            <ul class="bullets">
+              <li><span class="part-tag">1</span> <b>שם המחלקה</b> — בראש התיבה, על הרקע הכחול</li>
+              <li><span class="part-tag">2</span> <b>תכונות</b> (<span class="en">Attributes</span>) — הנתונים שהמחלקה מחזיקה על כל אובייקט</li>
+              <li><span class="part-tag">3</span> <b>פעולות</b> (<span class="en">Operations</span>) — מה המחלקה יודעת לעשות, נכתבות ב<b>כתב נטוי</b></li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <svg class="class-svg" viewBox="0 0 380 236" xmlns="http://www.w3.org/2000/svg" role="img"
+                 aria-label="תיבת המחלקה הזמנה עם שלושה תאים: שם, תכונות ופעולות">
+              <!-- header band -->
+              <rect x="20" y="8" width="340" height="52" fill="#1e40af"/>
+              <text x="190" y="34" text-anchor="middle" direction="rtl" font-size="21" font-weight="700"
+                    fill="#ffffff" font-family="'Noto Sans Hebrew',sans-serif">הזמנה</text>
+              <text x="190" y="52" text-anchor="middle" font-size="13" fill="#dbeafe"
+                    font-family="'Segoe UI',Arial,sans-serif" font-style="italic">Order</text>
+
+              <!-- attributes compartment -->
+              <text x="34" y="88"  text-anchor="start" direction="ltr" font-size="16" fill="#1e293b"
+                    font-family="'Consolas','Courier New',monospace">- orderId : String</text>
+              <text x="34" y="117" text-anchor="start" direction="ltr" font-size="16" fill="#1e293b"
+                    font-family="'Consolas','Courier New',monospace">- pickupTime : DateTime</text>
+              <text x="34" y="146" text-anchor="start" direction="ltr" font-size="16" fill="#1e293b"
+                    font-family="'Consolas','Courier New',monospace">- status : OrderStatus</text>
+
+              <!-- operations compartment (italic) -->
+              <text x="34" y="188" text-anchor="start" direction="ltr" font-size="16" fill="#1e293b" font-style="italic"
+                    font-family="'Consolas','Courier New',monospace">+ total() : Money</text>
+              <text x="34" y="217" text-anchor="start" direction="ltr" font-size="16" fill="#1e293b" font-style="italic"
+                    font-family="'Consolas','Courier New',monospace">+ cancel()</text>
+
+              <!-- dividers between compartments -->
+              <line x1="20" y1="60"  x2="360" y2="60"  stroke="#3b82f6" stroke-width="1.4"/>
+              <line x1="20" y1="160" x2="360" y2="160" stroke="#3b82f6" stroke-width="1.4"/>
+              <!-- outer border last, so it sits above the fills -->
+              <rect x="20" y="8" width="340" height="216" fill="none" stroke="#3b82f6" stroke-width="2"/>
+            </svg>
+          </div>
+
+        </div>
+
+        <p class="bottom-line">התרשים ממדל <b>מחלקות</b> (תבניות) — לא אובייקטים בודדים.</p>
+
+      </div>
+      <aside class="notes">
+        התיבה היא לב תרשים המחלקות: מלבן חצוי לשלושה תאים. השם למעלה (על הרקע הכחול, UpperCamelCase
+        ביחיד), אחריו התכונות — הנתונים שנשמרים על כל אובייקט — ולבסוף הפעולות בכתב נטוי. כאן מוצגת
+        גרסה מצומצמת של הזמנה; בשקופית התכונות נרחיב את תא התכונות המלא. הפורמט המדויק של תכונה
+        ופעולה מגיע בשקופיות הבאות.
+      </aside>
+    </section>
+    <!-- B2 — שם המחלקה + חבילות (packages).
+         Naming rules (UpperCamelCase, singular, no spaces) with good/bad campus examples;
+         then package = grouping/namespacing mechanism, drawn as a UML folder-tab rectangle
+         grouping Order + OrderLine, with the הזמנות::הזמנה namespacing note.
+         SVG conventions per slide-association.html (blue border, header band #1e40af). -->
+    <section data-slug="class-name">
+      <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
+      <style>
+        section[data-slug="class-name"] .name-cols { flex:1 1 auto; min-height:0; align-items:stretch; }
+        section[data-slug="class-name"] .name-cols > .card { display:flex; flex-direction:column; }
+        section[data-slug="class-name"] ul.bullets > li { font-size:19px !important; line-height:1.4; margin-bottom:9px; }
+        section[data-slug="class-name"] .ex-row { display:flex; gap:10px; margin-top:8px; }
+        section[data-slug="class-name"] .callout { font-size:17px; padding:8px 12px; }
+        section[data-slug="class-name"] .callout .label { margin-bottom:2px; font-size:15px; }
+        section[data-slug="class-name"] .callout .en { font-weight:700; }
+        section[data-slug="class-name"] .bad-x { text-decoration:line-through; text-decoration-color:var(--red); }
+        section[data-slug="class-name"] .pkg-svg { display:block; width:100%; max-height:250px; height:auto; }
+        section[data-slug="class-name"] .ns { text-align:center; margin:8px 0 0; font-size:18px; color:var(--muted); }
+        section[data-slug="class-name"] .ns .en { color:var(--dark-blue); font-weight:700; }
+      </style>
+      <h1>שם המחלקה וחבילות</h1>
+      <div class="subtitle">איך מזהים מחלקה — ואיך מקבצים מחלקות יחד</div>
+      <div class="body">
+
+        <div class="cols name-cols">
+
+          <div class="card">
+            <div class="panel-title">כללי מתן שם</div>
+            <ul class="bullets">
+              <li>מתחיל ב<b>אות גדולה</b></li>
+              <li><span class="en">UpperCamelCase</span> — כל מילה באות גדולה, ללא מקף</li>
+              <li>ב<b>יחיד</b> — מחלקה מתארת אובייקט אחד, לא אוסף</li>
+              <li>בלי רווחים ובלי סימנים</li>
+            </ul>
+            <div class="ex-row">
+              <div class="callout good" style="flex:1;">
+                <span class="label">✓ תקין</span>
+                <span class="en">Order</span> · <span class="en">MenuItem</span>
+              </div>
+              <div class="callout bad" style="flex:1;">
+                <span class="label">✗ שגוי</span>
+                <span class="en bad-x">orders</span> · <span class="en bad-x">menu item</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="panel-title">חבילה (<span class="en">package</span>)</div>
+            <p style="margin:0 0 6px; font-size:17px; color:var(--body);">
+              מנגנון <b>קיבוץ</b>: אוסף מחלקות הקשורות לאותו נושא לתוך יחידה אחת.
+            </p>
+            <svg class="pkg-svg" viewBox="0 0 360 210" xmlns="http://www.w3.org/2000/svg" role="img"
+                 aria-label="חבילה בשם הזמנות המקבצת את המחלקות הזמנה ושורת הזמנה">
+              <!-- folder tab -->
+              <rect x="24" y="16" width="120" height="26" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.6"/>
+              <text x="84" y="34" text-anchor="middle" direction="rtl" font-size="15" font-weight="700"
+                    fill="#1e40af" font-family="'Noto Sans Hebrew',sans-serif">הזמנות</text>
+              <!-- package body -->
+              <rect x="24" y="42" width="312" height="152" fill="#ffffff" stroke="#3b82f6" stroke-width="1.6"/>
+
+              <!-- grouped class: הזמנה -->
+              <rect x="52" y="70" width="120" height="46" fill="#ffffff" stroke="#3b82f6" stroke-width="1.6"/>
+              <rect x="52" y="70" width="120" height="26" fill="#1e40af"/>
+              <text x="112" y="88" text-anchor="middle" direction="rtl" font-size="14" font-weight="700"
+                    fill="#ffffff" font-family="'Noto Sans Hebrew',sans-serif">הזמנה</text>
+              <text x="112" y="110" text-anchor="middle" font-size="12" fill="#64748b"
+                    font-family="'Segoe UI',Arial,sans-serif" font-style="italic">Order</text>
+
+              <!-- grouped class: שורת הזמנה -->
+              <rect x="188" y="70" width="124" height="46" fill="#ffffff" stroke="#3b82f6" stroke-width="1.6"/>
+              <rect x="188" y="70" width="124" height="26" fill="#1e40af"/>
+              <text x="250" y="88" text-anchor="middle" direction="rtl" font-size="14" font-weight="700"
+                    fill="#ffffff" font-family="'Noto Sans Hebrew',sans-serif">שורת הזמנה</text>
+              <text x="250" y="110" text-anchor="middle" font-size="12" fill="#64748b"
+                    font-family="'Segoe UI',Arial,sans-serif" font-style="italic">OrderLine</text>
+
+              <text x="180" y="160" text-anchor="middle" direction="rtl" font-size="14" fill="#475569"
+                    font-family="'Noto Sans Hebrew',sans-serif">מחלקות הקשורות לתחום ההזמנות</text>
+            </svg>
+            <p class="ns">שיוך במרחב שם: <span class="en" dir="ltr">הזמנות::הזמנה</span></p>
+          </div>
+
+        </div>
+
+      </div>
+      <aside class="notes">
+        שם מחלקה מזוהה מיד לפי הצורה: אות גדולה, UpperCamelCase, ביחיד, בלי רווחים. orders (רבים)
+        ו-"menu item" (רווח + אות קטנה) שגויים. חבילה היא מנגנון קיבוץ — אוסף מחלקות של אותו נושא;
+        כאן חבילת "הזמנות" מכילה את Order ו-OrderLine. הסימון הזמנות::הזמנה מציין מחלקה בתוך מרחב
+        השם של החבילה, בדיוק כמו Household::WashingMachine. חבילות עוזרות לארגן מודל גדול.
+      </aside>
+    </section>
+    <!-- B3 — תכונות / Attributes.
+         Format + name : Type [= default] {constraint}; rules (camelCase name, dataType,
+         default, {} constraint, visibility). Right: the הזמנה attribute compartment expanded
+         (full canonical 5 attrs), the attributes tinted to draw the eye. Visibility kept
+         brief here — the full +/#/- table is B6 (slide-visibility). -->
+    <section data-slug="attributes">
+      <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
+      <style>
+        section[data-slug="attributes"] .fmt {
+          background:#0f172a; border-radius:12px; padding:12px 18px; text-align:center; direction:ltr;
+          font-family:'Consolas','Courier New',monospace; font-size:22px; color:#e2e8f0; letter-spacing:.5px;
+        }
+        section[data-slug="attributes"] .fmt .vis  { color:#f59e0b; font-weight:700; }
+        section[data-slug="attributes"] .fmt .nm   { color:#93c5fd; }
+        section[data-slug="attributes"] .fmt .ty   { color:#86efac; }
+        section[data-slug="attributes"] .fmt .df   { color:#c4b5fd; }
+        section[data-slug="attributes"] .fmt .cn   { color:#fca5a5; }
+        section[data-slug="attributes"] .attr-cols { flex:1 1 auto; min-height:0; align-items:stretch; }
+        section[data-slug="attributes"] .attr-cols > .card { display:flex; flex-direction:column; justify-content:center; }
+        section[data-slug="attributes"] ul.bullets > li { font-size:18px !important; line-height:1.4; margin-bottom:10px; }
+        section[data-slug="attributes"] ul.bullets > li b { color:var(--dark-blue); }
+        section[data-slug="attributes"] ul.bullets .en { font-weight:700; }
+        section[data-slug="attributes"] .class-svg { display:block; width:100%; max-height:280px; height:auto; }
+      </style>
+      <!-- Title pattern: keep the em dash OUTSIDE the .en span. With the dash inside the LTR
+           isolate it rendered as "תכונות Attributes —" with the dash dangling at the far left.
+           This matches the sibling slides (Operations — פעולות, Visibility — נראות). -->
+      <h1><span class="en">Attributes</span> — תכונות</h1>
+      <div class="subtitle">הנתונים שהמחלקה מחזיקה על כל אובייקט</div>
+      <div class="body">
+
+        <div class="fmt">
+          <span class="vis">+</span> <span class="nm">name</span> :
+          <span class="ty">Type</span> <span class="df">[= default]</span> <span class="cn">{constraint}</span>
+        </div>
+
+        <div class="cols attr-cols">
+
+          <div class="card">
+            <div class="panel-title">מרכיבי התכונה</div>
+            <ul class="bullets">
+              <li><b>שם</b> — באות קטנה, <span class="en">camelCase</span></li>
+              <li><b>טיפוס</b> (<span class="en">dataType</span>) — אחרי הנקודתיים: <span class="en">String</span>, <span class="en">DateTime</span>, <span class="en">Money</span>…</li>
+              <li><b>ברירת מחדל</b> — ערך התחלתי אחרי <span class="en">=</span></li>
+              <li><b>אילוצים</b> — תמיד בסוגריים מסולסלים <span class="en">{ }</span></li>
+              <li><b>נראות</b> — <span class="en">+ / # / -</span> (בהרחבה בשקופית הנראות)</li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <svg class="class-svg" viewBox="0 0 380 240" xmlns="http://www.w3.org/2000/svg" role="img"
+                 aria-label="תא התכונות המורחב של המחלקה הזמנה">
+              <!-- header band -->
+              <rect x="20" y="8" width="340" height="46" fill="#1e40af"/>
+              <text x="190" y="30" text-anchor="middle" direction="rtl" font-size="19" font-weight="700"
+                    fill="#ffffff" font-family="'Noto Sans Hebrew',sans-serif">הזמנה</text>
+              <text x="190" y="47" text-anchor="middle" font-size="12" fill="#dbeafe"
+                    font-family="'Segoe UI',Arial,sans-serif" font-style="italic">Order</text>
+
+              <!-- attributes compartment, tinted to draw the eye -->
+              <rect x="20" y="54" width="340" height="150" fill="#eff6ff"/>
+              <text x="34" y="80"  text-anchor="start" direction="ltr" font-size="15" fill="#1e293b"
+                    font-family="'Consolas','Courier New',monospace">- orderId : String</text>
+              <text x="34" y="107" text-anchor="start" direction="ltr" font-size="15" fill="#1e293b"
+                    font-family="'Consolas','Courier New',monospace">- createdAt : DateTime</text>
+              <text x="34" y="134" text-anchor="start" direction="ltr" font-size="15" fill="#1e293b"
+                    font-family="'Consolas','Courier New',monospace">- pickupTime : DateTime</text>
+              <text x="34" y="161" text-anchor="start" direction="ltr" font-size="15" fill="#1e293b"
+                    font-family="'Consolas','Courier New',monospace">- pickupCode : String</text>
+              <text x="34" y="188" text-anchor="start" direction="ltr" font-size="15" fill="#1e293b"
+                    font-family="'Consolas','Courier New',monospace">- status : OrderStatus</text>
+
+              <!-- operations compartment (collapsed context, italic) -->
+              <text x="34" y="228" text-anchor="start" direction="ltr" font-size="14" fill="#94a3b8" font-style="italic"
+                    font-family="'Consolas','Courier New',monospace">+ total() : Money  ...</text>
+
+              <!-- dividers + outer border last -->
+              <line x1="20" y1="54"  x2="360" y2="54"  stroke="#3b82f6" stroke-width="1.4"/>
+              <line x1="20" y1="204" x2="360" y2="204" stroke="#3b82f6" stroke-width="1.4"/>
+              <rect x="20" y="8" width="340" height="224" fill="none" stroke="#3b82f6" stroke-width="2"/>
+            </svg>
+          </div>
+
+        </div>
+
+      </div>
+      <aside class="notes">
+        כל שורה בתא התכונות מצייתת לפורמט אחד: נראות, שם ב-camelCase, נקודתיים וטיפוס, אופציונלית
+        ברירת מחדל אחרי = ואילוץ ב-{}. הזמנה מחזיקה orderId, createdAt, pickupTime, pickupCode
+        ו-status (מטיפוס ה-enum OrderStatus). הטיפוס יכול להיות פרימיטיבי (String, DateTime) או
+        מחלקה/enum אחרת. את הנראות (+/#/-) נפרט בשקופית הנראות; כאן די לציין שהיא הסימן בתחילת השורה.
+      </aside>
+    </section>
+    <!-- B4 — דוגמאות, אילוצים {} ו-enumeration.
+         3-column slide. Left col (right in RTL): attribute VALUE examples on the campus
+         price attr (MenuItem). Middle: constraints always in {}, may lean on a Note.
+         Right col (left in RTL): the «enumeration» OrderStatus box — gray DASHED border
+         #94a3b8, header #475569 — drawn UNCONNECTED to any class (per tool doctrine: the
+         attribute status : OrderStatus is the only link, no line to the box). -->
+    <section data-slug="attribute-examples">
+      <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
+      <style>
+        section[data-slug="attribute-examples"] .ex3 { flex:1 1 auto; min-height:0; align-items:stretch; }
+        section[data-slug="attribute-examples"] .ex3 > .card { display:flex; flex-direction:column; }
+        section[data-slug="attribute-examples"] .vex-row { display:flex; align-items:center; gap:8px; margin-bottom:11px; }
+        section[data-slug="attribute-examples"] .vex-code {
+          direction:ltr; font-family:'Consolas','Courier New',monospace; background:#eef2f6;
+          border-radius:6px; padding:3px 8px; font-size:16px; color:#0f172a; white-space:nowrap;
+        }
+        section[data-slug="attribute-examples"] .vex-note { font-size:15px; color:var(--muted); }
+        section[data-slug="attribute-examples"] .cn-text { font-size:16px; color:var(--body); margin:0 0 8px; line-height:1.4; }
+        section[data-slug="attribute-examples"] .cn-text .en { direction:ltr; font-family:'Consolas','Courier New',monospace; }
+        section[data-slug="attribute-examples"] .note-svg { display:block; width:100%; max-height:96px; height:auto; margin-top:auto; }
+        section[data-slug="attribute-examples"] .enum-svg { display:block; width:100%; max-height:200px; height:auto; margin:2px auto 6px; }
+        section[data-slug="attribute-examples"] ul.bullets > li { font-size:15px !important; line-height:1.35; margin-bottom:6px; }
+        section[data-slug="attribute-examples"] .panel-title { font-size:19px; }
+      </style>
+      <h1>דוגמאות, אילוצים ו-<span class="en">enumeration</span></h1>
+      <div class="body">
+
+        <div class="cols-3 ex3">
+
+          <!-- col 1: value examples (campus price attr) -->
+          <div class="card">
+            <div class="panel-title">דוגמאות ערך</div>
+            <div class="vex-row"><span class="vex-code">price : Money</span><span class="vex-note">טיפוס בלבד</span></div>
+            <div class="vex-row"><span class="vex-code">price = 0</span><span class="vex-note">ערך התחלתי</span></div>
+            <div class="vex-row"><span class="vex-code">price : Money = 0</span><span class="vex-note">טיפוס + ברירת מחדל</span></div>
+            <div class="vex-row"><span class="vex-code">price {&#8805; 0}</span><span class="vex-note">אילוץ</span></div>
+          </div>
+
+          <!-- col 2: constraints in {} + Note -->
+          <div class="card">
+            <div class="panel-title">אילוצים <span class="en">{ }</span></div>
+            <p class="cn-text">
+              אילוץ נכתב <b>תמיד</b> בסוגריים מסולסלים ומגדיר חוק על הערך:
+              <br><span class="en">quantity {&gt; 0}</span> · <span class="en">price {&#8805; 0}</span>
+            </p>
+            <p class="cn-text" style="color:var(--muted);">אפשר לתלות אילוץ מורכב ב-<b>Note</b> (פתק):</p>
+            <svg class="note-svg" viewBox="0 0 220 96" xmlns="http://www.w3.org/2000/svg" role="img"
+                 aria-label="פתק Note ובו אילוץ על הכמות">
+              <path d="M14 14 L176 14 L206 44 L206 84 L14 84 Z" fill="#fffbeb" stroke="#d1a441" stroke-width="1.6"/>
+              <path d="M176 14 L176 44 L206 44" fill="none" stroke="#d1a441" stroke-width="1.6"/>
+              <text x="106" y="60" text-anchor="middle" direction="ltr" font-size="16" fill="#7c5c11"
+                    font-family="'Consolas','Courier New',monospace">{ quantity &gt; 0 }</text>
+            </svg>
+          </div>
+
+          <!-- col 3: «enumeration» OrderStatus — gray dashed, UNCONNECTED -->
+          <div class="card">
+            <div class="panel-title"><span class="en">&laquo;enumeration&raquo;</span></div>
+            <svg class="enum-svg" viewBox="0 0 220 196" xmlns="http://www.w3.org/2000/svg" role="img"
+                 aria-label="תיבת enumeration בשם OrderStatus עם חמישה ערכים, אינה מחוברת למחלקה">
+              <!-- header band -->
+              <rect x="18" y="6" width="184" height="44" fill="#475569"/>
+              <text x="110" y="24" text-anchor="middle" font-size="12" fill="#e2e8f0" font-style="italic"
+                    font-family="'Segoe UI',Arial,sans-serif">&laquo;enumeration&raquo;</text>
+              <text x="110" y="43" text-anchor="middle" font-size="16" font-weight="700" fill="#ffffff"
+                    font-family="'Segoe UI',Arial,sans-serif">OrderStatus</text>
+              <!-- literal values, right-aligned Hebrew inside the box.
+                   RTL GOTCHA (fixed 2026-07-16): these MUST be text-anchor="start", not "end".
+                   SVG text inherits direction:rtl from the RTL page, and in RTL the "end" edge is the
+                   LEFT one — so text-anchor="end" anchored the left edge at x=188 and the labels grew
+                   RIGHTWARD, out of the dashed box, leaving it visually empty. With "start" the right
+                   edge sits at x=188 and text grows leftward, inside the box (18..202).
+                   Removing direction="rtl" does NOT help: rtl is inherited from the page. -->
+              <text x="188" y="70"  text-anchor="start" direction="rtl" font-size="15" fill="#1e293b"
+                    font-family="'Noto Sans Hebrew',sans-serif">ממתין</text>
+              <text x="188" y="96"  text-anchor="start" direction="rtl" font-size="15" fill="#1e293b"
+                    font-family="'Noto Sans Hebrew',sans-serif">בהכנה</text>
+              <text x="188" y="122" text-anchor="start" direction="rtl" font-size="15" fill="#1e293b"
+                    font-family="'Noto Sans Hebrew',sans-serif">מוכן</text>
+              <text x="188" y="148" text-anchor="start" direction="rtl" font-size="15" fill="#1e293b"
+                    font-family="'Noto Sans Hebrew',sans-serif">נאסף</text>
+              <text x="188" y="174" text-anchor="start" direction="rtl" font-size="15" fill="#1e293b"
+                    font-family="'Noto Sans Hebrew',sans-serif">בוטל</text>
+              <!-- divider + dashed gray border last -->
+              <line x1="18" y1="50" x2="202" y2="50" stroke="#94a3b8" stroke-width="1.4" stroke-dasharray="5 3"/>
+              <rect x="18" y="6" width="184" height="180" fill="none" stroke="#94a3b8" stroke-width="1.8" stroke-dasharray="5 3"/>
+            </svg>
+            <ul class="bullets">
+              <li>רשימה <b>סגורה</b> של ערכי טקסט, <span class="en" dir="ltr">&#8804; 20</span> בערך</li>
+              <li>לא למספרים / כמויות</li>
+              <li><b>אינה מחוברת בקו</b> — הטיפוס <span class="en" dir="ltr">status : OrderStatus</span> הוא הקשר היחיד</li>
+            </ul>
+          </div>
+
+        </div>
+
+        <p class="bottom-line">אילוץ תמיד ב-<span class="en">{ }</span> · <span class="en">enumeration</span> = תיבה אפורה מקווקוות, לא מחוברת.</p>
+
+      </div>
+      <aside class="notes">
+        שלוש דרכים לפרט תכונה: טיפוס בלבד, ברירת מחדל אחרי =, ואילוץ ב-{}. האילוץ נכתב תמיד בסוגריים
+        מסולסלים; אילוץ מורכב אפשר לתלות ב-Note. ה-enumeration הוא טיפוס עם רשימת ערכי טקסט סגורה
+        (עד ~20, לא למספרים) — כאן OrderStatus עם ממתין/בהכנה/מוכן/נאסף/בוטל. חשוב: תיבת ה-enum
+        מצוירת ליד המחלקה אך אינה מחוברת אליה בקו — הקשר היחיד הוא שהתכונה status היא מטיפוס
+        OrderStatus. זו טעות נפוצה למתוח קו למחלקה. בהרצאה 8 (תרשים מצבים) הערכים האלה יהפכו למצבים.
+      </aside>
+    </section>
+    <!-- B5 — Operations: the third compartment. Format + method(param:Type):Return, rendered
+         ITALIC (tool doctrine, NOTATION.md — operations compartment is italic). SVG shows the
+         canonical הזמנה (Order) box with the operations compartment highlighted. The box keeps
+         the canonical ops (total/cancel) so it agrees with the marquee model (C8); markReady is
+         offered only as an extra format example (side-effecting op, no return). -->
+    <section data-slug="operations">
+      <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
+      <style>
+        /* LTR code + multiplicity text must not inherit the deck's RTL (fixes left-clip + reversal) */
+        section[data-slug="operations"] svg text:not([direction="rtl"]) { direction: ltr; }
+        section[data-slug="operations"] .cols { flex:1 1 auto; min-height:0; align-items:stretch; }
+        section[data-slug="operations"] .cols > .card { display:flex; flex-direction:column; gap:8px; }
+        section[data-slug="operations"] ul.bullets > li { font-size:17px !important; line-height:1.4; margin-bottom:6px; }
+        section[data-slug="operations"] .fmt {
+          direction:ltr; text-align:center; font-family:Consolas,'Courier New',monospace;
+          background:var(--light-blue); color:#fff; border-radius:10px; padding:8px 10px;
+          font-size:18px; font-weight:700; letter-spacing:.02em;
+        }
+        section[data-slug="operations"] .op-svg { display:block; width:100%; max-width:250px; height:auto; margin:2px auto 0; }
+        section[data-slug="operations"] .cap { font-size:15px; color:var(--muted); margin:2px 0 0; text-align:center; }
+        section[data-slug="operations"] .ex { text-align:center; }
+        section[data-slug="operations"] .ex .sig { display:block; direction:ltr; font-family:Consolas,'Courier New',monospace;
+          font-style:italic; font-weight:700; color:#9a3412; font-size:16px; margin-bottom:2px; }
+        section[data-slug="operations"] .ex .why { font-size:14px; color:var(--muted); }
+        section[data-slug="operations"] .cols-3 { margin-top:2px; }
+      </style>
+      <h1><span class="en">Operations</span> — פעולות המחלקה</h1>
+      <div class="subtitle">מה המחלקה יודעת <b>לעשות</b> — החלק השלישי בתיבה</div>
+      <div class="body">
+
+        <div class="cols">
+
+          <div class="card">
+            <div class="panel-title">פורמט הפעולה</div>
+            <div class="fmt">+ method(param : Type) : ReturnType</div>
+            <ul class="bullets">
+              <li>שם הפעולה כמו תכונה — <span class="en">camelCase</span>, מתחיל באות קטנה</li>
+              <li>פרמטרים עם טיפוסים בסוגריים — <span class="en">(param : Type)</span></li>
+              <li>טיפוס הערך המוחזר אחרי הנקודתיים — <span class="en">: Return</span> (אם קיים)</li>
+              <li>נראות בהתחלה — <span class="en">+ / # / -</span></li>
+              <li>הפעולות נכתבות ב<b>כתב נטוי</b> — כך מבחינים אותן מהתכונות</li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <div class="panel-title">התיבה — חלק הפעולות מודגש</div>
+            <svg class="op-svg" viewBox="0 0 250 200" xmlns="http://www.w3.org/2000/svg" role="img"
+                 aria-label="תיבת המחלקה הזמנה: שם, תכונות, וחלק הפעולות מודגש בכתב נטוי">
+              <rect x="14" y="6" width="222" height="188" fill="#fff" stroke="#3b82f6" stroke-width="2"/>
+              <!-- header band -->
+              <rect x="14" y="6" width="222" height="32" fill="#1e40af"/>
+              <text x="125" y="27" text-anchor="middle" direction="rtl" font-size="15" font-weight="700"
+                    fill="#fff" font-family="'Noto Sans Hebrew',sans-serif">הזמנה</text>
+              <!-- attributes compartment -->
+              <line x1="14" y1="112" x2="236" y2="112" stroke="#cbd5e1" stroke-width="1"/>
+              <text x="24" y="58"  text-anchor="start" font-size="12" fill="#334155" font-family="Consolas,monospace">- orderId : String</text>
+              <text x="24" y="78"  text-anchor="start" font-size="12" fill="#334155" font-family="Consolas,monospace">- status : OrderStatus</text>
+              <text x="24" y="98"  text-anchor="start" font-size="12" fill="#334155" font-family="Consolas,monospace">- pickupTime : DateTime</text>
+              <!-- operations compartment (highlighted) -->
+              <rect x="15" y="113" width="220" height="80" fill="#FFF6E6"/>
+              <text x="24" y="140" text-anchor="start" font-size="12.5" font-style="italic" fill="#9a3412" font-family="Consolas,monospace">+ total() : Money</text>
+              <text x="24" y="166" text-anchor="start" font-size="12.5" font-style="italic" fill="#9a3412" font-family="Consolas,monospace">+ cancel()</text>
+            </svg>
+            <p class="cap">חלק שלישי בתיבה — נכתב בכתב נטוי</p>
+          </div>
+
+        </div>
+
+        <div class="cols-3">
+          <div class="card tight ex fragment">
+            <span class="sig">+ total() : Money</span>
+            <span class="why">מחזירה ערך — טיפוס <span class="en">Money</span></span>
+          </div>
+          <div class="card tight ex fragment">
+            <span class="sig">+ cancel()</span>
+            <span class="why">ללא ערך מוחזר — משנה מצב בלבד</span>
+          </div>
+          <div class="card tight ex fragment">
+            <span class="sig">+ markReady()</span>
+            <span class="why">פעולה בעלת "תופעת לוואי"</span>
+          </div>
+        </div>
+
+        <p class="bottom-line">הפעולות נכתבות בכתב נטוי — כך מבחינים אותן מהתכונות בתיבה.</p>
+
+      </div>
+      <aside class="notes">
+        החלק השלישי בתיבת המחלקה. פורמט: + שם(פרמטר : טיפוס) : טיפוס-מוחזר, ותמיד בכתב נטוי
+        (זו הדוקטרינה מול הכלי uml_class_diagram). דוגמאות קמפוס: total() מחזירה סכום,
+        cancel() בלי ערך מוחזר, markReady() משנה מצב. בשלב הניתוח לרוב מספיק לזהות מעט פעולות
+        מפתח; העומק המלא מתחדד בעיצוב ובקוד.
+      </aside>
+    </section>
+    <!-- B6 — Visibility: the + / # / - markers. A table.sad (סימון | נראות | משמעות | דוגמה מהקמפוס)
+         with one campus line each. pickupCode(-) and total(+) are canonical members; validate() on
+         תשלום is an illustrative protected op living on the Payment inheritance hierarchy (the only
+         campus place where # / יורשים is meaningful). Bottom-line: analysis marks basic visibility;
+         the full picture sharpens in code. -->
+    <section data-slug="visibility" class="has-acro-footer">
+      <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
+      <style>
+        section[data-slug="visibility"] table.sad { flex:1 1 auto; font-size:18px; }
+        section[data-slug="visibility"] table.sad th { font-size:17px; }
+        section[data-slug="visibility"] table.sad td { vertical-align:middle; }
+        section[data-slug="visibility"] .sym { direction:ltr; font-family:Consolas,'Courier New',monospace;
+          font-size:26px; font-weight:700; text-align:center; }
+        section[data-slug="visibility"] .sym.pub { color:var(--green); }
+        section[data-slug="visibility"] .sym.prot { color:var(--orange); }
+        section[data-slug="visibility"] .sym.priv { color:var(--red); }
+        section[data-slug="visibility"] td .en { font-weight:700; }
+        section[data-slug="visibility"] .intro { background:var(--light-blue); border:1px solid var(--blue); }
+        section[data-slug="visibility"] .intro p { margin:0; color:#fff; font-size:19px; font-weight:600; }
+        section[data-slug="visibility"] .callout { font-size:16px; }
+      </style>
+      <h1><span class="en">Visibility</span> — נראות</h1>
+      <div class="subtitle">מי מורשה לגשת לתכונה או לפעולה של המחלקה</div>
+      <div class="body">
+
+        <div class="card intro">
+          <p>הסימון בתחילת כל חבר (תכונה או פעולה) קובע מי רשאי לגשת אליו — מבפנים, מהיורשים, או מכל מקום.</p>
+        </div>
+
+        <table class="sad">
+          <tr>
+            <th style="width:10%;">סימון</th>
+            <th style="width:20%;">נראות</th>
+            <th style="width:32%;">משמעות</th>
+            <th>דוגמה מהקמפוס</th>
+          </tr>
+          <tr>
+            <td class="sym pub">+</td>
+            <td><span class="en">Public</span> — ציבורי</td>
+            <td>כל מחלקה אחרת יכולה לגשת</td>
+            <td><span class="en">+ total() : Money</span> על <b>הזמנה</b> — כל מי שמשתמש בהזמנה יכול לחשב את הסכום</td>
+          </tr>
+          <tr>
+            <td class="sym prot">#</td>
+            <td><span class="en">Protected</span> — מוגן</td>
+            <td>רק המחלקה ותתי-המחלקות (היורשים)</td>
+            <td><span class="en">#&nbsp;validate()</span> על <b>תשלום</b> — זמין לתשלום בכרטיס ולתשלום באשראי, לא מבחוץ</td>
+          </tr>
+          <tr>
+            <td class="sym priv">-</td>
+            <td><span class="en">Private</span> — פרטי</td>
+            <td>רק המחלקה עצמה</td>
+            <td><span class="en">- pickupCode : String</span> על <b>הזמנה</b> — מוסתר מכל מחלקה אחרת</td>
+          </tr>
+        </table>
+
+        <div class="callout ai">
+          <span class="label">🤖 הרגל שכדאי לבדוק</span>
+          ה-<span class="en">AI</span> נוטה לסמן הכל כ-<span class="en">public</span>. בשלב הניתוח: נתונים רגישים
+          פרטיים (<span class="en">-</span>), פעולות שירות שהמערכת חושפת ציבוריות (<span class="en">+</span>).
+        </div>
+
+        <p class="bottom-line">בניתוח נסמן נראות בסיסית; העיצוב המלא מתחדד בקוד.</p>
+
+      </div>
+      <aside class="notes">
+        נראות = מי מורשה לגשת לחבר של המחלקה. + ציבורי (הכל), # מוגן (רק היורשים), - פרטי
+        (רק המחלקה). # רלוונטי בעיקר כשיש הורשה — ולכן הדוגמה שלו על היררכיית התשלום
+        (תשלום ← כרטיס אוניברסיטה / אשראי). בניתוח מסתפקים לרוב ב-+ ו- - ; העיצוב המלא מתחדד בקוד.
+      </aside>
+    <div class="acro-footer"><span class="acro"><span class="en">AI</span> = <span class="en">Artificial Intelligence</span> · בינה מלאכותית</span></div>
+    </section>
+    <!-- B7 — What is NOT a class. The persistence test as the headline:
+         "האם המערכת שומרת ומנהלת רשומות של הישות הזו?" — the single sharpest filter of the
+         lecture. ✅ real classes (stored & managed) vs ❌ NOT classes: computed output
+         (דוח מכירות / קבלה / אישור הזמנה — derived on demand, no independent record) and an
+         untracked participant (הספק — procurement is OUT of scope, §0). Cross-check against the
+         use cases. ⚠️ this is the #1 AI class-diagram mistake — it turns every report/receipt
+         into a class. -->
+    <section data-slug="not-a-class" class="has-acro-footer">
+      <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
+      <style>
+        section[data-slug="not-a-class"] .cols { flex:1 1 auto; min-height:0; align-items:stretch; }
+        section[data-slug="not-a-class"] .cols > .card { display:flex; flex-direction:column; gap:8px; }
+        section[data-slug="not-a-class"] .test { background:var(--hero-bg); border:2px solid var(--orange); }
+        section[data-slug="not-a-class"] .test p { margin:0; text-align:center; font-size:23px; font-weight:700; color:var(--dark-blue); }
+        section[data-slug="not-a-class"] .yes .panel-title { color:var(--green); }
+        section[data-slug="not-a-class"] .no .panel-title { color:var(--red); }
+        section[data-slug="not-a-class"] .yes { border-color:var(--green); }
+        section[data-slug="not-a-class"] .no { border-color:var(--red); }
+        section[data-slug="not-a-class"] ul.bullets > li { font-size:17px !important; line-height:1.35; margin-bottom:5px; }
+        section[data-slug="not-a-class"] .sub { font-weight:700; color:var(--dark-body); font-size:16px; margin:4px 0 1px; }
+        section[data-slug="not-a-class"] .callout.warn { font-size:16px; padding-inline-end:150px; }
+      </style>
+      <h1>מה <b>אינו</b> מחלקה</h1>
+      <div class="subtitle">מבחן ההתמדה — הפילטר החד ביותר בבחירת המחלקות</div>
+      <div class="body">
+
+        <div class="card test">
+          <p>האם המערכת שומרת ומנהלת רשומות של הישות הזו?</p>
+        </div>
+
+        <div class="cols">
+
+          <div class="card yes">
+            <div class="panel-title">✅ כן — זו מחלקה</div>
+            <ul class="bullets">
+              <li><b>הזמנה</b> — נוצרת, נשמרת ומתעדכנת</li>
+              <li><b>פריט תפריט</b> — מנוהל ע"י המנהל, נקרא ע"י הסטודנט</li>
+              <li><b>תשלום</b> — רשומה נשמרת לכל תשלום</li>
+            </ul>
+            <p class="cap muted" style="font-size:15px; margin-top:auto;">
+              המערכת מנהלת עליהן <span class="en">CRUD</span> — לכן הן מחלקות.</p>
+          </div>
+
+          <div class="card no">
+            <div class="panel-title">❌ לא — אינו מחלקה</div>
+            <p class="sub">פלט מחושב (נגזר בזמן אמת)</p>
+            <ul class="bullets">
+              <li><b>דוח מכירות</b> · <b>קבלה</b> · <b>אישור הזמנה</b></li>
+            </ul>
+            <p class="cap muted" style="font-size:15px; margin:1px 0 4px;">
+              מחושבים מנתונים קיימים בכל פעם מחדש — אין רשומה עצמאית לנהל.</p>
+            <p class="sub">משתתף שאיננו נשמר</p>
+            <ul class="bullets">
+              <li><b>הספק</b> ("הספק מספק סחורה") — מחוץ ל-<span class="en">scope</span>; המערכת לא מנהלת עליו רשומות</li>
+            </ul>
+          </div>
+
+        </div>
+
+        <div class="callout warn">
+          <span class="label">⚠️ הטעות מספר 1 של ה-AI בתרשים מחלקות</span>
+          ה-<span class="en">AI</span> הופך כל דוח / קבלה / אישור ל<b>מחלקה</b>. הריצו את מבחן ההתמדה — ובדיקת
+          הצלבה: ישות שאין לה קשר לאף תרחיש שימוש, כנראה אינה מחלקה.
+        </div>
+
+      </div>
+      <aside class="notes">
+        מבחן ההתמדה (persistence test): "האם המערכת שומרת ומנהלת רשומות של הישות?" רק אם כן — זו מחלקה.
+        פלט מחושב (דוח מכירות, קבלה, אישור הזמנה) נגזר בזמן אמת מנתונים קיימים, ואין לו רשומה עצמאית לנהל.
+        משתתף שאיננו נשמר (הספק — רכש מחוץ ל-scope) גם אינו מחלקה. הצלבה שימושית: ישות ללא קשר לאף
+        תרחיש שימוש כנראה אינה מחלקה. זו הטעות מספר 1 של ה-AI — הוא הופך כל דוח/קבלה למחלקה בביטחון מלא.
+      </aside>
+    <div class="acro-footer"><span class="acro"><span class="en">CRUD</span> = <span class="en">Create, Read, Update, Delete</span> · יצירה, קריאה, עדכון, מחיקה</span> &nbsp;·&nbsp; <span class="acro"><span class="en">AI</span> = <span class="en">Artificial Intelligence</span> · בינה מלאכותית</span></div>
+    </section>
+    <!-- B8 — Compact notation. When the focus is relationships, collapse the box: three
+         views of the SAME canonical הזמנה (Order) class at decreasing detail — full (3
+         compartments) / name+attributes / name only. The class still holds all its members;
+         this is only a display choice to keep the relationship diagram readable. Short slide. -->
+    <section data-slug="compact-notation">
+      <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
+      <style>
+        /* LTR code text must not inherit the deck's RTL (fixes members clipped to 1-char fragments) */
+        section[data-slug="compact-notation"] svg text:not([direction="rtl"]) { direction: ltr; }
+        section[data-slug="compact-notation"] .cols-3 { flex:1 1 auto; min-height:0; align-items:stretch; }
+        section[data-slug="compact-notation"] .cols-3 > .card {
+          display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px; }
+        section[data-slug="compact-notation"] .cn-svg { display:block; width:100%; max-width:190px; height:auto; }
+        section[data-slug="compact-notation"] .cap { font-size:16px; color:var(--dark-blue); font-weight:700; margin:0; text-align:center; }
+        section[data-slug="compact-notation"] .intro { background:var(--light-blue); border:1px solid var(--blue); }
+        section[data-slug="compact-notation"] .intro p { margin:0; color:#fff; font-size:19px; font-weight:600; }
+      </style>
+      <h1>הצגה מקוצרת של המחלקה</h1>
+      <div class="subtitle">כשהמיקוד הוא <b>הקשרים</b> — מצמצמים את התיבה</div>
+      <div class="body">
+
+        <div class="card intro">
+          <p>כשהדיון הוא על הקשרים בין המחלקות, אין צורך בכל הפרטים. מצמצמים את התיבה ומשאירים רק את מה שחשוב.</p>
+        </div>
+
+        <div class="cols-3">
+
+          <!-- Full box: 3 compartments -->
+          <div class="card">
+            <svg class="cn-svg" viewBox="0 0 200 180" xmlns="http://www.w3.org/2000/svg" role="img"
+                 aria-label="תיבה מלאה של המחלקה הזמנה: שם, תכונות ופעולות">
+              <rect x="8" y="6" width="184" height="168" fill="#fff" stroke="#3b82f6" stroke-width="2"/>
+              <rect x="8" y="6" width="184" height="28" fill="#1e40af"/>
+              <text x="100" y="25" text-anchor="middle" direction="rtl" font-size="14" font-weight="700" fill="#fff" font-family="'Noto Sans Hebrew',sans-serif">הזמנה</text>
+              <line x1="8" y1="112" x2="192" y2="112" stroke="#cbd5e1" stroke-width="1"/>
+              <text x="16" y="52" text-anchor="start" font-size="11" fill="#334155" font-family="Consolas,monospace">- orderId : String</text>
+              <text x="16" y="74" text-anchor="start" font-size="11" fill="#334155" font-family="Consolas,monospace">- status : OrderStatus</text>
+              <text x="16" y="96" text-anchor="start" font-size="11" fill="#334155" font-family="Consolas,monospace">- pickupTime : DateTime</text>
+              <text x="16" y="134" text-anchor="start" font-size="11" font-style="italic" fill="#9a3412" font-family="Consolas,monospace">+ total() : Money</text>
+              <text x="16" y="156" text-anchor="start" font-size="11" font-style="italic" fill="#9a3412" font-family="Consolas,monospace">+ cancel()</text>
+            </svg>
+            <p class="cap">מלא — שם, תכונות ופעולות</p>
+          </div>
+
+          <!-- Name + attributes only -->
+          <div class="card">
+            <svg class="cn-svg" viewBox="0 0 200 130" xmlns="http://www.w3.org/2000/svg" role="img"
+                 aria-label="תיבה מקוצרת של הזמנה: שם ותכונות בלבד">
+              <rect x="8" y="6" width="184" height="118" fill="#fff" stroke="#3b82f6" stroke-width="2"/>
+              <rect x="8" y="6" width="184" height="28" fill="#1e40af"/>
+              <text x="100" y="25" text-anchor="middle" direction="rtl" font-size="14" font-weight="700" fill="#fff" font-family="'Noto Sans Hebrew',sans-serif">הזמנה</text>
+              <text x="16" y="56" text-anchor="start" font-size="11" fill="#334155" font-family="Consolas,monospace">- orderId : String</text>
+              <text x="16" y="80" text-anchor="start" font-size="11" fill="#334155" font-family="Consolas,monospace">- status : OrderStatus</text>
+              <text x="16" y="104" text-anchor="start" font-size="11" fill="#334155" font-family="Consolas,monospace">- pickupTime : DateTime</text>
+            </svg>
+            <p class="cap">שם + תכונות</p>
+          </div>
+
+          <!-- Name only -->
+          <div class="card">
+            <svg class="cn-svg" viewBox="0 0 200 70" xmlns="http://www.w3.org/2000/svg" role="img"
+                 aria-label="תיבה מכווצת של הזמנה: שם בלבד">
+              <rect x="8" y="10" width="184" height="46" fill="#1e40af" stroke="#3b82f6" stroke-width="2"/>
+              <text x="100" y="39" text-anchor="middle" direction="rtl" font-size="16" font-weight="700" fill="#fff" font-family="'Noto Sans Hebrew',sans-serif">הזמנה</text>
+            </svg>
+            <p class="cap">שם בלבד</p>
+          </div>
+
+        </div>
+
+        <p class="bottom-line">הַראו את מה שחשוב לדיון — והשמיטו את השאר כדי למקד בקשרים. המחלקה עדיין מכילה את כל חבריה.</p>
+
+      </div>
+      <aside class="notes">
+        כלל תצוגה (לא שינוי במודל): כשהמיקוד הוא הקשרים, אפשר לכווץ את התיבה — מלא / שם+תכונות / שם בלבד.
+        זו אותה מחלקה הזמנה בשלוש רמות פירוט; היא עדיין מכילה את כל התכונות והפעולות. משמיטים פרטים
+        כדי לשמור על קריאוּת תרשים הקשרים, לא כדי לוותר עליהם.
+      </aside>
+    </section>
+    <!-- C (Section ג, part 1) — מפת הקשרים: the whole relationship set as a legend grid.
+         Each card carries the glyph (inline SVG), the He+En name, and a one-liner. Below:
+         the "levels by priority" ladder (old slide 29): קשר רגיל ← מחלקת קשר ← מחלקה מתווכת ←
+         n-ary. This is the section's map; the next slides drill each relationship on campus.
+         Glyphs + doctrine per ../SAD MCP/skills/uml-class-diagram/NOTATION.md:
+         association = solid line no arrow; aggregation = hollow ◇ at whole; composition =
+         filled ◆ at whole; generalization = hollow ▷ at parent; dependency = dashed + open
+         arrow, NOT drawn on the domain model (external systems only). -->
+    <section data-slug="relationships-map">
+      <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
+      <style>
+        section[data-slug="relationships-map"] .rel-grid {
+          flex:1; display:grid; grid-template-columns:repeat(5,1fr); gap:12px; align-items:stretch; }
+        section[data-slug="relationships-map"] .rel-grid .card {
+          display:flex; flex-direction:column; align-items:center; gap:7px; text-align:center;
+          padding:12px 10px; }
+        section[data-slug="relationships-map"] .glyph { width:100%; max-width:120px; height:auto; display:block; margin:2px 0; }
+        section[data-slug="relationships-map"] .rel-name { font-size:18px; font-weight:700; color:var(--dark-blue); line-height:1.15; }
+        section[data-slug="relationships-map"] .rel-en { font-size:14px; color:var(--blue); font-weight:700; }
+        section[data-slug="relationships-map"] .rel-desc { font-size:15.5px; color:var(--muted); line-height:1.35; margin-top:auto; }
+        section[data-slug="relationships-map"] .ladder-card { padding:11px 18px; }
+        section[data-slug="relationships-map"] .ladder {
+          display:flex; align-items:center; justify-content:center; flex-wrap:wrap; gap:9px; }
+        section[data-slug="relationships-map"] .ladder .step {
+          background:var(--light-blue); color:#fff; border-radius:999px; padding:5px 15px;
+          font-size:17px; font-weight:700; }
+        section[data-slug="relationships-map"] .ladder .arrow { color:var(--blue); font-size:22px; font-weight:700; }
+        section[data-slug="relationships-map"] .ladder-cap { text-align:center; font-size:15.5px; color:var(--muted); margin-top:7px; }
+      </style>
+      <h1>מפת הקשרים</h1>
+      <div class="subtitle">חמישה סוגי קשר בתרשים המחלקות — ובאיזה להשתמש</div>
+      <div class="body">
+
+        <div class="rel-grid">
+
+          <div class="card">
+            <svg class="glyph" viewBox="0 0 110 40" role="img" aria-label="קו מלא בלי חץ — אסוציאציה">
+              <line x1="8" y1="20" x2="102" y2="20" stroke="#334155" stroke-width="2"/>
+            </svg>
+            <div class="rel-name">אסוציאציה</div>
+            <div class="rel-en"><span class="en">Association</span></div>
+            <div class="rel-desc">קו מלא, בלי חץ — הקשר הבסיסי. קרדינליות בשני הקצוות.</div>
+          </div>
+
+          <div class="card">
+            <svg class="glyph" viewBox="0 0 110 40" role="img" aria-label="קו עם מעוין חלול בקצה השלם — צבירה">
+              <line x1="30" y1="20" x2="102" y2="20" stroke="#334155" stroke-width="2"/>
+              <polygon points="8,20 19,13 30,20 19,27" fill="#fff" stroke="#334155" stroke-width="2"/>
+            </svg>
+            <div class="rel-name">צבירה</div>
+            <div class="rel-en"><span class="en">Aggregation</span></div>
+            <div class="rel-desc">◇ שלם–חלק. החלק קיים גם בלי השלם.</div>
+          </div>
+
+          <div class="card">
+            <svg class="glyph" viewBox="0 0 110 40" role="img" aria-label="קו עם מעוין מלא בקצה השלם — הרכבה">
+              <line x1="30" y1="20" x2="102" y2="20" stroke="#334155" stroke-width="2"/>
+              <polygon points="8,20 19,13 30,20 19,27" fill="#334155" stroke="#334155" stroke-width="2"/>
+            </svg>
+            <div class="rel-name">הרכבה</div>
+            <div class="rel-en"><span class="en">Composition</span></div>
+            <div class="rel-desc">◆ החלק לא קיים בלי השלם.</div>
+          </div>
+
+          <div class="card">
+            <svg class="glyph" viewBox="0 0 110 40" role="img" aria-label="קו עם משולש חלול בקצה ההורה — הכללה">
+              <line x1="26" y1="20" x2="102" y2="20" stroke="#334155" stroke-width="2"/>
+              <polygon points="8,20 26,10 26,30" fill="#fff" stroke="#334155" stroke-width="2"/>
+            </svg>
+            <div class="rel-name">הכללה / הורשה</div>
+            <div class="rel-en"><span class="en">Generalization</span></div>
+            <div class="rel-desc">▷ יחס <span class="en">is-a</span> — בן יורש מהורה.</div>
+          </div>
+
+          <div class="card">
+            <svg class="glyph" viewBox="0 0 110 40" role="img" aria-label="קו מקווקו עם חץ פתוח — תלות">
+              <line x1="20" y1="20" x2="102" y2="20" stroke="#334155" stroke-width="2" stroke-dasharray="6,4"/>
+              <polyline points="30,12 18,20 30,28" fill="none" stroke="#334155" stroke-width="2"/>
+            </svg>
+            <div class="rel-name">תלות</div>
+            <div class="rel-en"><span class="en">Dependency</span></div>
+            <div class="rel-desc">קו מקווקו + חץ פתוח למערכת חיצונית שאנחנו קוראים לה. <span class="tag muted">«external system»</span></div>
+          </div>
+
+        </div>
+
+        <div class="card ladder-card">
+          <div class="panel-title" style="text-align:center;">רמות הקשר — מהפשוט למורכב</div>
+          <div class="ladder">
+            <span class="step">קשר רגיל</span>
+            <span class="arrow">←</span>
+            <span class="step">מחלקת קשר</span>
+            <span class="arrow">←</span>
+            <span class="step">מחלקה מתווכת</span>
+            <span class="arrow">←</span>
+            <span class="step">קשר <span class="en">n-ary</span></span>
+          </div>
+          <div class="ladder-cap">בחר תמיד את הרמה הפשוטה ביותר שמספיקה. קשר <span class="en">n-ary</span> — לפרק למחלקה מתווכת.</div>
+        </div>
+
+        <p class="bottom-line">בשקפים הבאים נצלול לכל קשר בנפרד — על מודל הזמנת האוכל בקמפוס.</p>
+
+      </div>
+      <aside class="notes">
+        מפת הקשרים לסעיף. חמישה סוגים: אסוציאציה (קו מלא בלי חץ), צבירה (מעוין חלול על השלם),
+        הרכבה (מעוין מלא על השלם), הכללה (משולש חלול אל ההורה), תלות (מקווקו + חץ פתוח — למערכות
+        חיצוניות שאנחנו קוראים להן; המערכת החיצונית מצוירת כתיבה עם הסטריאוטיפ «external system»,
+        כלומר אינה אחת ממחלקות התחום שלנו). סולם העדיפות: תמיד להתחיל מקשר רגיל; להסלים למחלקת
+        קשר / מחלקה מתווכת רק כשצריך לאחסן נתונים על הקשר; קשר n-ary תמיד לפרק למחלקה מתווכת.
+      </aside>
+    </section>
+    <!-- C (Section ג) — Association + Multiplicity. The core line, on campus data.
+         SVG: סטודנט 1 ——— 0..* הזמנה — SOLID line, NO arrowhead, multiplicity at BOTH ends.
+         Doctrine (../SAD MCP/skills/uml-class-diagram/NOTATION.md): association = solid line
+         no arrow (directed association never used on a domain model); multiplicity at both
+         ends ALWAYS (1 / 0..1 / 1..* / 0..*). Two tiny extras: a recursive/self association
+         (קטגוריה) and the {or} constraint. ⚠️: AI leaves an end blank or guesses 1.
+         Class-box SVG convention: white rect, #3b82f6 border, #1e40af header w/ white name. -->
+    <section data-slug="association-multiplicity" class="has-acro-footer">
+      <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
+      <style>
+        /* LTR code + multiplicity text must not inherit the deck's RTL (fixes 0..*→*..0 + member clip) */
+        section[data-slug="association-multiplicity"] svg text:not([direction="rtl"]) { direction: ltr; }
+        section[data-slug="association-multiplicity"] .assoc-svg { display:block; width:100%; height:auto; }
+        section[data-slug="association-multiplicity"] .top-cols { flex:1; align-items:stretch; }
+        section[data-slug="association-multiplicity"] .top-cols > .card { display:flex; flex-direction:column; gap:8px; justify-content:center; }
+        section[data-slug="association-multiplicity"] .cap { font-size:16px; line-height:1.45; color:var(--muted); margin:0; }
+        section[data-slug="association-multiplicity"] ul.bullets > li { font-size:18px !important; line-height:1.4; }
+        section[data-slug="association-multiplicity"] ul.bullets ul > li { font-size:15.5px !important; }
+        section[data-slug="association-multiplicity"] .mini-cols > .card { padding:10px 16px; }
+        section[data-slug="association-multiplicity"] .mini-cols .panel-title { font-size:16px; margin-bottom:4px; }
+        section[data-slug="association-multiplicity"] .mini-cols p { font-size:15px; line-height:1.4; margin:0; color:var(--body); }
+        section[data-slug="association-multiplicity"] .self-svg { display:block; width:150px; height:auto; margin:0 auto; }
+        section[data-slug="association-multiplicity"] .callout.warn { font-size:16px; padding-inline-end:150px; }
+      </style>
+      <h1><span class="en">Association</span> + קרדינליות</h1>
+      <div class="subtitle">הקו שמחבר שתי מחלקות — וכמה מכל צד</div>
+      <div class="body">
+
+        <div class="cols top-cols">
+
+          <div class="card">
+            <div class="panel-title" style="color:var(--blue);">דוגמה מהקמפוס</div>
+            <svg class="assoc-svg" viewBox="0 0 560 120" xmlns="http://www.w3.org/2000/svg" role="img"
+                 aria-label="סטודנט אחד מקושר בקו מלא לאפס או יותר הזמנות">
+              <!-- association line: SOLID, no markers -->
+              <line x1="380" y1="60" x2="195" y2="60" stroke="#334155" stroke-width="1.8"/>
+              <!-- multiplicity at BOTH ends -->
+              <text x="366" y="52" text-anchor="middle" font-size="14" fill="#64748b" font-family="Arial,sans-serif">1</text>
+              <text x="210" y="52" text-anchor="middle" font-size="14" fill="#64748b" font-family="Arial,sans-serif">0..*</text>
+
+              <!-- סטודנט (right) -->
+              <g transform="translate(380,28)">
+                <rect width="165" height="64" fill="#fff" stroke="#3b82f6" stroke-width="1.6"/>
+                <rect width="165" height="24" fill="#1e40af"/>
+                <text x="82" y="16.5" text-anchor="middle" font-size="13.5" font-weight="700" fill="#fff" direction="rtl" font-family="'Noto Sans Hebrew',sans-serif">סטודנט</text>
+                <text x="8" y="40" font-size="11.5" fill="#1e293b" font-family="Arial,sans-serif">- studentId : String</text>
+                <text x="8" y="57" font-size="11.5" fill="#1e293b" font-family="Arial,sans-serif">- name : String</text>
+              </g>
+
+              <!-- הזמנה (left) -->
+              <g transform="translate(20,28)">
+                <rect width="175" height="64" fill="#fff" stroke="#3b82f6" stroke-width="1.6"/>
+                <rect width="175" height="24" fill="#1e40af"/>
+                <text x="87" y="16.5" text-anchor="middle" font-size="13.5" font-weight="700" fill="#fff" direction="rtl" font-family="'Noto Sans Hebrew',sans-serif">הזמנה</text>
+                <text x="8" y="40" font-size="11.5" fill="#1e293b" font-family="Arial,sans-serif">- orderId : String</text>
+                <text x="8" y="57" font-size="11.5" fill="#1e293b" font-family="Arial,sans-serif">- status : OrderStatus</text>
+              </g>
+            </svg>
+            <p class="cap">סטודנט אחד מבצע אפס או יותר הזמנות; כל הזמנה שייכת לסטודנט אחד בדיוק. קו מלא, בלי חץ.</p>
+          </div>
+
+          <div class="card">
+            <div class="panel-title">הכללים</div>
+            <ul class="bullets">
+              <li>קו <b>מלא</b> — בלי חץ (חץ מכוון לא בשימוש על מודל התחום)</li>
+              <li><b>קרדינליות בשני הקצוות — תמיד</b></li>
+              <li>המשמעויות:
+                <ul>
+                  <li><span class="en">1</span> = בדיוק אחד</li>
+                  <li><span class="en">0..1</span> = אפס או אחד (אופציונלי)</li>
+                  <li><span class="en">1..*</span> = אחד או יותר</li>
+                  <li><span class="en">0..*</span> = אפס או יותר (כל כמות)</li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+
+        </div>
+
+        <div class="cols mini-cols">
+          <div class="card">
+            <div class="panel-title">קשר רקורסיבי (מחלקה לעצמה)</div>
+            <svg class="self-svg" viewBox="0 0 190 90" xmlns="http://www.w3.org/2000/svg" role="img"
+                 aria-label="קטגוריה מקושרת לעצמה — הורה אחד, אפס או יותר תת-קטגוריות">
+              <path d="M120,52 C155,8 60,8 78,52" fill="none" stroke="#334155" stroke-width="1.6"/>
+              <!-- x=134 (was 128): the loop's rightmost point is ~x=128,y=31, so the old label sat
+                   ON the curve. Starting at 134 clears it and still fits the 190-wide viewBox. -->
+              <text x="134" y="30" font-size="12" fill="#64748b" font-family="Arial,sans-serif">0..*</text>
+              <text x="58" y="34" font-size="12" fill="#64748b" font-family="Arial,sans-serif">1</text>
+              <g transform="translate(52,52)">
+                <rect width="94" height="34" fill="#fff" stroke="#3b82f6" stroke-width="1.6"/>
+                <rect width="94" height="24" fill="#1e40af"/>
+                <text x="47" y="16.5" text-anchor="middle" font-size="13" font-weight="700" fill="#fff" direction="rtl" font-family="'Noto Sans Hebrew',sans-serif">קטגוריה</text>
+              </g>
+            </svg>
+            <p style="text-align:center;">לקטגוריה יש הורה אחד ו<b>תת-קטגוריות</b> משלה — אותה מחלקה בשני הקצוות.</p>
+          </div>
+          <div class="card">
+            <div class="panel-title">אילוץ <span class="en">{or}</span></div>
+            <p>הזמנה משויכת ל<b>תשלום בכרטיס אוניברסיטה</b> <span class="en">{or}</span> <b>תשלום באשראי</b> —
+              אחד מהם, לא שניהם. מסמנים <span class="en">{or}</span> על שני הקווים היוצאים.</p>
+          </div>
+        </div>
+
+        <div class="callout warn">
+          <span class="label">⚠️ הטעות הנפוצה של ה-<span class="en">AI</span></span>
+          משאיר קצה אחד ריק, או מנחש <span class="en">1</span> בלי לבדוק. תמיד לוודא קרדינליות
+          <b>בשני</b> הקצוות — ולשאול מול המקור: כמה מכל צד באמת?
+        </div>
+
+      </div>
+      <aside class="notes">
+        הקו הבסיסי: אסוציאציה = קו מלא בלי חץ, קרדינליות בשני הקצוות תמיד. סטודנט 1 — 0..* הזמנה.
+        ארבע המשמעויות: 1, 0..1, 1..*, 0..*. שתי הרחבות קצרות: קשר רקורסיבי (קטגוריה לעצמה — הורה
+        1, תת-קטגוריות 0..*) ואילוץ {or} (הזמנה משולמת בכרטיס אוניברסיטה או באשראי, לא בשניהם).
+        ה-AI נוטה להשאיר קצה בלי קרדינליות או לנחש 1 — זו נקודת אימות.
+      </aside>
+    <div class="acro-footer"><span class="acro"><span class="en">AI</span> = <span class="en">Artificial Intelligence</span> · בינה מלאכותית</span></div>
+    </section>
+    <!-- C (Section ג) — מחלקה מתווכת מול מחלקת קשר. The meaty one.
+         Problem: הזמנה–פריט תפריט is M:N and must store כמות. Solution = MEDIATING CLASS
+         שורת הזמנה (quantity, notes) that REPLACES the M:N with two plain associations:
+         הזמנה 1 —— * שורת הזמנה * —— 1 פריט תפריט  (drawn exactly per PORTING_BRIEF).
+         Contrast = ASSOCIATION CLASS: keeps the association line, attaches to its MIDPOINT via
+         a DASHED perpendicular; the relationship has attributes but no independent lifecycle
+         (classic Enrollment/ציון between סטודנט and קורס). table.sad = the distinction, per
+         ../SAD MCP/skills/uml-class-diagram/NOTATION.md. Ternary/n-ary → resolve to mediating. -->
+    <section data-slug="association-mediating-class">
+      <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
+      <style>
+        /* LTR code + multiplicity text must not inherit the deck's RTL (fixes clip + attrs crossing the line) */
+        section[data-slug="association-mediating-class"] svg text:not([direction="rtl"]) { direction: ltr; }
+        section[data-slug="association-mediating-class"] .diag-svg { display:block; width:100%; height:auto; }
+        section[data-slug="association-mediating-class"] .diag-cols { flex:1; align-items:stretch; }
+        section[data-slug="association-mediating-class"] .diag-cols > .card { display:flex; flex-direction:column; gap:6px; }
+        section[data-slug="association-mediating-class"] .diag-cols .panel-title { font-size:17px; margin-bottom:2px; }
+        section[data-slug="association-mediating-class"] .cap { font-size:14.5px; line-height:1.4; color:var(--muted); margin:auto 0 0; }
+        section[data-slug="association-mediating-class"] table.sad { font-size:15.5px; }
+        section[data-slug="association-mediating-class"] table.sad th,
+        section[data-slug="association-mediating-class"] table.sad td { padding:6px 12px; }
+        section[data-slug="association-mediating-class"] table.sad td:first-child { font-weight:700; color:var(--dark-blue); white-space:nowrap; }
+        section[data-slug="association-mediating-class"] .nary { text-align:center; font-size:15.5px; color:var(--muted); margin:0; }
+      </style>
+      <h1>מחלקה מתווכת מול מחלקת קשר</h1>
+      <div class="subtitle">הזמנה–פריט תפריט הוא קשר <span class="en">M:N</span> שצריך לאחסן <b>כמות</b> — איך ממדלים?</div>
+      <div class="body">
+
+        <div class="cols diag-cols">
+
+          <!-- LEFT: mediating class (the solution to the M:N) -->
+          <div class="card">
+            <div class="panel-title" style="color:var(--green);">הפתרון: מחלקה מתווכת</div>
+            <svg class="diag-svg" viewBox="0 0 640 108" xmlns="http://www.w3.org/2000/svg" role="img"
+                 aria-label="שורת הזמנה כמחלקה מתווכת בין הזמנה לפריט תפריט">
+              <!-- lines: two plain associations, solid, no markers -->
+              <line x1="520" y1="56" x2="403" y2="56" stroke="#334155" stroke-width="1.8"/>
+              <line x1="248" y1="56" x2="145" y2="56" stroke="#334155" stroke-width="1.8"/>
+              <!-- multiplicity: הזמנה 1 — * שורת הזמנה * — 1 פריט תפריט -->
+              <text x="508" y="48" text-anchor="middle" font-size="13" fill="#64748b" font-family="Arial,sans-serif">1</text>
+              <text x="415" y="48" text-anchor="middle" font-size="13" fill="#64748b" font-family="Arial,sans-serif">*</text>
+              <!-- FIXED 2026-07-16: these two were at x=260 / x=133, i.e. INSIDE the שורת הזמנה
+                   (248..403) and פריט תפריט (..145) boxes, which are drawn later and hid them — so
+                   the שורת הזמנה—פריט תפריט link showed no multiplicities, contradicting the
+                   "קרדינליות בשני הקצוות — תמיד" rule. Now placed on the line itself (145..248). -->
+              <text x="238" y="48" text-anchor="middle" font-size="13" fill="#64748b" font-family="Arial,sans-serif">*</text>
+              <text x="155" y="48" text-anchor="middle" font-size="13" fill="#64748b" font-family="Arial,sans-serif">1</text>
+
+              <!-- הזמנה (right, name-only) -->
+              <g transform="translate(520,37)">
+                <rect width="110" height="38" fill="#fff" stroke="#3b82f6" stroke-width="1.6"/>
+                <rect width="110" height="24" fill="#1e40af"/>
+                <text x="55" y="16.5" text-anchor="middle" font-size="13" font-weight="700" fill="#fff" direction="rtl" font-family="'Noto Sans Hebrew',sans-serif">הזמנה</text>
+              </g>
+              <!-- שורת הזמנה (center, WITH attributes — it's a real class) -->
+              <g transform="translate(248,24)">
+                <rect width="155" height="64" fill="#fff" stroke="#3b82f6" stroke-width="1.6"/>
+                <rect width="155" height="24" fill="#1e40af"/>
+                <text x="77" y="16.5" text-anchor="middle" font-size="13" font-weight="700" fill="#fff" direction="rtl" font-family="'Noto Sans Hebrew',sans-serif">שורת הזמנה</text>
+                <text x="8" y="40" font-size="11" fill="#1e293b" font-family="Arial,sans-serif">- quantity : int {&gt;0}</text>
+                <text x="8" y="57" font-size="11" fill="#1e293b" font-family="Arial,sans-serif">- notes : String</text>
+              </g>
+              <!-- פריט תפריט (left, name-only) -->
+              <g transform="translate(20,37)">
+                <rect width="125" height="38" fill="#fff" stroke="#3b82f6" stroke-width="1.6"/>
+                <rect width="125" height="24" fill="#1e40af"/>
+                <text x="62" y="16.5" text-anchor="middle" font-size="13" font-weight="700" fill="#fff" direction="rtl" font-family="'Noto Sans Hebrew',sans-serif">פריט תפריט</text>
+              </g>
+            </svg>
+            <p class="cap">מחלקה רגילה עם זהות משלה, ש<b>מפצלת</b> את ה-<span class="en">M:N</span> לשתי אסוציאציות.
+              הכמות נשמרת עליה — כי היא הישות שנשמרת ומנוהלת.</p>
+          </div>
+
+          <!-- RIGHT: association class (the contrast) -->
+          <div class="card">
+            <div class="panel-title" style="color:var(--blue);">לעומת: מחלקת קשר</div>
+            <svg class="diag-svg" viewBox="0 0 640 190" xmlns="http://www.w3.org/2000/svg" role="img"
+                 aria-label="מחלקת קשר הרשמה מחוברת בקו מקווקו לאמצע הקשר בין סטודנט לקורס">
+              <!-- association line (M:N) -->
+              <line x1="430" y1="42" x2="180" y2="42" stroke="#334155" stroke-width="1.8"/>
+              <text x="418" y="34" text-anchor="middle" font-size="13" fill="#64748b" font-family="Arial,sans-serif">*</text>
+              <text x="192" y="34" text-anchor="middle" font-size="13" fill="#64748b" font-family="Arial,sans-serif">*</text>
+              <!-- DASHED perpendicular from the MIDPOINT down to the association class -->
+              <line x1="305" y1="42" x2="305" y2="120" stroke="#334155" stroke-width="1.6" stroke-dasharray="5,4"/>
+
+              <!-- סטודנט (right, name-only) -->
+              <g transform="translate(430,23)">
+                <rect width="125" height="38" fill="#fff" stroke="#3b82f6" stroke-width="1.6"/>
+                <rect width="125" height="24" fill="#1e40af"/>
+                <text x="62" y="16.5" text-anchor="middle" font-size="13" font-weight="700" fill="#fff" direction="rtl" font-family="'Noto Sans Hebrew',sans-serif">סטודנט</text>
+              </g>
+              <!-- קורס (left, name-only) -->
+              <g transform="translate(70,23)">
+                <rect width="110" height="38" fill="#fff" stroke="#3b82f6" stroke-width="1.6"/>
+                <rect width="110" height="24" fill="#1e40af"/>
+                <text x="55" y="16.5" text-anchor="middle" font-size="13" font-weight="700" fill="#fff" direction="rtl" font-family="'Noto Sans Hebrew',sans-serif">קורס</text>
+              </g>
+              <!-- הרשמה (association class, with attribute) -->
+              <g transform="translate(235,120)">
+                <rect width="140" height="52" fill="#fff" stroke="#3b82f6" stroke-width="1.6"/>
+                <rect width="140" height="24" fill="#1e40af"/>
+                <text x="70" y="16.5" text-anchor="middle" font-size="13" font-weight="700" fill="#fff" direction="rtl" font-family="'Noto Sans Hebrew',sans-serif">הרשמה</text>
+                <text x="8" y="41" font-size="11" fill="#1e293b" font-family="Arial,sans-serif">- grade : Grade</text>
+              </g>
+            </svg>
+            <p class="cap">מחלקת קשר <span class="en">Enrollment</span> נתלית על <b>אמצע</b> הקשר בקו <b>מקווקו</b>.
+              לקשר יש תכונה (ציון), אבל <b>אין</b> לו מחזור חיים עצמאי.</p>
+          </div>
+
+        </div>
+
+        <table class="sad">
+          <tr>
+            <th>היבט</th>
+            <th>מחלקה מתווכת <span class="en">(Mediating)</span></th>
+            <th>מחלקת קשר <span class="en">(Association Class)</span></th>
+          </tr>
+          <tr>
+            <td>מהות</td>
+            <td>מחלקה רגילה, עם זהות ומחזור חיים משלה</td>
+            <td>תלויה בקשר — בלי מחזור חיים עצמאי</td>
+          </tr>
+          <tr>
+            <td>סימון</td>
+            <td>מפצלת <span class="en">M:N</span> לשתי אסוציאציות</td>
+            <td>קו מקווקו אל <b>אמצע</b> קו הקשר</td>
+          </tr>
+          <tr>
+            <td>מתי</td>
+            <td>הישות עצמה נשמרת ומנוהלת (שורת הזמנה)</td>
+            <td>לקשר יש תכונות בלבד (ציון בהרשמה)</td>
+          </tr>
+        </table>
+
+        <p class="nary">קשר <span class="en">n-ary</span> (טרינרי ומעלה) — לא מציירים כמעוין; תמיד <b>מפרקים למחלקה מתווכת</b>.</p>
+
+      </div>
+      <aside class="notes">
+        שתי הישויות שמבלבלות. מחלקה מתווכת: מחלקה רגילה (שורת הזמנה) עם זהות משלה, שמפצלת קשר M:N
+        לשתי אסוציאציות רגילות — הזמנה 1 — * שורת הזמנה * — 1 פריט תפריט; הכמות נשמרת עליה.
+        מחלקת קשר: נשארת על הקו, נתלית על אמצעו בקו מקווקו מאונך; לקשר יש תכונה (ציון בהרשמה) אבל
+        אין לו חיים עצמאיים. מבחן ההכרעה: האם לישות יש זהות ומחזור חיים משל עצמה? כן ← מחלקה
+        מתווכת; לא, רק תכונות על הקשר ← מחלקת קשר. קשר n-ary — תמיד לפרק למחלקה מתווכת.
+      </aside>
+    </section>
+    <!-- C (Section ג) — Aggregation מול Composition. Two SVGs side by side.
+         Composition ◆: הזמנה ◆——— שורת הזמנה (FILLED diamond at הזמנה/Order = the whole) — a
+           line can't exist without its order (delete order ⇒ delete its lines).
+         Aggregation ◇: קפיטריה ◇——— עמדה (HOLLOW diamond at קפיטריה/Cafeteria = the whole) —
+           a station exists independently; it can be reassigned.
+         Doctrine (../SAD MCP/skills/uml-class-diagram/NOTATION.md): the diamond sits at the
+         WHOLE; filled = existential dependency, hollow = the part survives on its own.
+         Multiplicity both ends per the canonical model (1 at the whole, 1..* at the part). -->
+    <section data-slug="aggregation-composition">
+      <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
+      <style>
+        /* LTR code + multiplicity text must not inherit the deck's RTL (fixes 1..*→*..1 + member clip) */
+        section[data-slug="aggregation-composition"] svg text:not([direction="rtl"]) { direction: ltr; }
+        section[data-slug="aggregation-composition"] .ac-svg { display:block; width:100%; height:auto; }
+        section[data-slug="aggregation-composition"] .ac-cols { flex:1; align-items:stretch; }
+        section[data-slug="aggregation-composition"] .ac-cols > .card { display:flex; flex-direction:column; gap:8px; justify-content:center; }
+        section[data-slug="aggregation-composition"] .ac-cols .panel-title { font-size:19px; }
+        section[data-slug="aggregation-composition"] .glyph-inline { font-size:22px; vertical-align:-2px; }
+        section[data-slug="aggregation-composition"] .def { font-size:16.5px; line-height:1.45; margin:0; color:var(--body); }
+        section[data-slug="aggregation-composition"] .hero p { font-size:18px; }
+        section[data-slug="aggregation-composition"] .hero { padding:10px 22px; }
+      </style>
+      <h1><span class="en">Aggregation</span> מול <span class="en">Composition</span></h1>
+      <div class="subtitle">שלם–חלק — האם החלק יכול להתקיים בלי השלם?</div>
+      <div class="body">
+
+        <div class="cols ac-cols">
+
+          <!-- Composition — filled diamond at the whole (הזמנה) -->
+          <div class="card">
+            <div class="panel-title" style="color:var(--dark-blue);"><span class="glyph-inline">◆</span> הרכבה — <span class="en">Composition</span></div>
+            <svg class="ac-svg" viewBox="0 0 470 118" xmlns="http://www.w3.org/2000/svg" role="img"
+                 aria-label="הזמנה מחוברת בהרכבה, מעוין מלא, לשורת הזמנה">
+              <line x1="314" y1="60" x2="170" y2="60" stroke="#334155" stroke-width="1.8"/>
+              <!-- filled diamond at הזמנה (the whole) -->
+              <polygon points="340,60 327,53 314,60 327,67" fill="#1e40af" stroke="#1e40af" stroke-width="1.4"/>
+              <text x="322" y="48" text-anchor="middle" font-size="13" fill="#64748b" font-family="Arial,sans-serif">1</text>
+              <text x="184" y="52" text-anchor="middle" font-size="13" fill="#64748b" font-family="Arial,sans-serif">1..*</text>
+
+              <!-- הזמנה (whole, right, name-only) -->
+              <g transform="translate(340,41)">
+                <rect width="110" height="38" fill="#fff" stroke="#3b82f6" stroke-width="1.6"/>
+                <rect width="110" height="24" fill="#1e40af"/>
+                <text x="55" y="16.5" text-anchor="middle" font-size="13" font-weight="700" fill="#fff" direction="rtl" font-family="'Noto Sans Hebrew',sans-serif">הזמנה</text>
+              </g>
+              <!-- שורת הזמנה (part, left) -->
+              <g transform="translate(20,37)">
+                <rect width="150" height="52" fill="#fff" stroke="#3b82f6" stroke-width="1.6"/>
+                <rect width="150" height="24" fill="#1e40af"/>
+                <text x="75" y="16.5" text-anchor="middle" font-size="13" font-weight="700" fill="#fff" direction="rtl" font-family="'Noto Sans Hebrew',sans-serif">שורת הזמנה</text>
+                <text x="8" y="41" font-size="11" fill="#1e293b" font-family="Arial,sans-serif">- quantity : int {&gt;0}</text>
+              </g>
+            </svg>
+            <p class="def">החלק <b>לא קיים</b> בלי השלם. נמחקת הזמנה — נמחקות איתה כל שורות ההזמנה שלה.</p>
+          </div>
+
+          <!-- Aggregation — hollow diamond at the whole (קפיטריה) -->
+          <div class="card">
+            <div class="panel-title" style="color:var(--dark-blue);"><span class="glyph-inline">◇</span> צבירה — <span class="en">Aggregation</span></div>
+            <svg class="ac-svg" viewBox="0 0 470 118" xmlns="http://www.w3.org/2000/svg" role="img"
+                 aria-label="קפיטריה מחוברת בצבירה, מעוין חלול, לעמדה">
+              <line x1="294" y1="60" x2="170" y2="60" stroke="#334155" stroke-width="1.8"/>
+              <!-- hollow diamond at קפיטריה (the whole) -->
+              <polygon points="320,60 307,53 294,60 307,67" fill="#fff" stroke="#334155" stroke-width="1.6"/>
+              <text x="302" y="48" text-anchor="middle" font-size="13" fill="#64748b" font-family="Arial,sans-serif">1</text>
+              <text x="184" y="52" text-anchor="middle" font-size="13" fill="#64748b" font-family="Arial,sans-serif">1..*</text>
+
+              <!-- קפיטריה (whole, right) -->
+              <g transform="translate(320,37)">
+                <rect width="130" height="52" fill="#fff" stroke="#3b82f6" stroke-width="1.6"/>
+                <rect width="130" height="24" fill="#1e40af"/>
+                <text x="65" y="16.5" text-anchor="middle" font-size="13" font-weight="700" fill="#fff" direction="rtl" font-family="'Noto Sans Hebrew',sans-serif">קפיטריה</text>
+                <text x="8" y="41" font-size="11" fill="#1e293b" font-family="Arial,sans-serif">- location : String</text>
+              </g>
+              <!-- עמדה (part, left) -->
+              <g transform="translate(20,37)">
+                <rect width="150" height="52" fill="#fff" stroke="#3b82f6" stroke-width="1.6"/>
+                <rect width="150" height="24" fill="#1e40af"/>
+                <text x="75" y="16.5" text-anchor="middle" font-size="13" font-weight="700" fill="#fff" direction="rtl" font-family="'Noto Sans Hebrew',sans-serif">עמדה</text>
+                <text x="8" y="41" font-size="11" fill="#1e293b" font-family="Arial,sans-serif">- type : StationType</text>
+              </g>
+            </svg>
+            <p class="def">החלק <b>קיים גם לבד</b>. נסגרת קפיטריה — העמדה יכולה לעבור למקום אחר.</p>
+          </div>
+
+        </div>
+
+        <div class="hero">
+          <h3>🔎 מבחן הקיום</h3>
+          <p>מחק את ה<b>שלם</b> — החלק נעלם איתו? <b>◆ הרכבה</b>. החלק שורד לבד? <b>◇ צבירה</b>.</p>
+        </div>
+
+        <p class="bottom-line">היהלום יושב תמיד על ה<b>שלם</b>: מלא = תלות קיומית, חלול = חלק עצמאי.</p>
+
+      </div>
+      <aside class="notes">
+        שתיהן קשר שלם–חלק, וההבדל הוא תלות קיומית. הרכבה (מעוין מלא על השלם): החלק לא קיים בלי
+        השלם — נמחקת הזמנה, נמחקות שורות ההזמנה. צבירה (מעוין חלול על השלם): החלק עצמאי — עמדה
+        יכולה לעבור בין קפיטריות. המבחן: מחק את השלם — אם החלק נעלם זו הרכבה, אם הוא שורד זו צבירה.
+        היהלום תמיד בצד השלם; קרדינליות בשני הקצוות (1 בצד השלם, 1..* בצד החלק).
+      </aside>
+    </section>
+    <!-- Section ג / C — Generalization (הורשה). Port per lecture-06-07/PORTING_BRIEF.md.
+         NOTATION authority: ../../SAD MCP/skills/uml-class-diagram/NOTATION.md —
+         generalization = solid line + HOLLOW triangle ▷ at the PARENT; child→parent.
+         Campus model (verbatim): Payment (תשלום) parent; children UniversityCardPayment
+         (תשלום בכרטיס אוניברסיטה, adds universityId) and CreditCardPayment (תשלום באשראי,
+         adds last4 + gatewayRef). This is the SAME split as L4-5's `Pay for Order` use-case
+         generalization (running-example.md §6) — call that back.
+         Doctrine: inherit ONLY when subtypes have genuinely different attributes/ops; same
+         data + a different label ⇒ enum, not inheritance (callback to B4 / OrderStatus). -->
+    <section data-slug="generalization">
+      <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
+      <style>
+        section[data-slug="generalization"] > .body { display:flex; flex-direction:column; gap:10px; }
+        section[data-slug="generalization"] .note-card { background:var(--light-blue); border:1px solid var(--blue);
+          border-radius:14px; padding:9px 18px; }
+        section[data-slug="generalization"] .note-card p { margin:0; font-weight:700; color:var(--dark-blue);
+          font-size:18px; line-height:1.4; }
+        section[data-slug="generalization"] .gen-row { flex:1 1 auto; min-height:0; display:grid;
+          grid-template-columns:330px 1fr; gap:16px; }
+        section[data-slug="generalization"] .rail { display:flex; flex-direction:column; gap:9px; min-height:0; }
+        section[data-slug="generalization"] .rail .card { display:flex; flex-direction:column; gap:6px; }
+        section[data-slug="generalization"] .rail ul.bullets > li { font-size:16.5px !important; line-height:1.4; margin-bottom:6px; }
+        section[data-slug="generalization"] .rail .callout { font-size:15.5px; padding:9px 13px; }
+        section[data-slug="generalization"] .rail .callout > .label { font-size:15px; }
+        section[data-slug="generalization"] .diagram-wrap { display:flex; align-items:center; justify-content:center; min-height:0; }
+        section[data-slug="generalization"] .gen-svg { display:block; width:100%; height:auto; max-height:360px; }
+      </style>
+      <h1><span class="en">Generalization</span> — הורשה (<span class="en">is-a</span>)</h1>
+      <div class="subtitle">תת-מחלקה היא <b>סוג-של</b> מחלקת-העל — ויורשת ממנה, ומוסיפה תכונות משלה</div>
+      <div class="body">
+
+        <div class="note-card">
+          <p>משולש <b>חלול</b> ▷ בקצה מחלקת-העל; הקו יוצא מהילד <b>אל</b> ההורה. הילד יורש הכול — ומוסיף רק את מה שייחודי לו.</p>
+        </div>
+
+        <div class="gen-row">
+
+          <!-- right rail (RTL-first): the rule + the L4-5 callback + the enum trap -->
+          <div class="rail">
+            <div class="card">
+              <div class="panel-title">מתי לרשת — ומתי לא</div>
+              <ul class="bullets">
+                <li>יורשים <b>רק</b> כשלתת-הסוגים תכונות/פעולות <b>שונות באמת</b></li>
+                <li>כאן כן: כרטיס-אונ׳ מוסיף <span class="en">universityId</span>; אשראי מוסיף <span class="en">last4</span> ו-<span class="en">gatewayRef</span></li>
+              </ul>
+            </div>
+            <div class="callout ai">
+              <span class="label">↩ קישור להרצאה 4-5</span>
+              זו בדיוק הכללת התרחיש <span class="en">Pay for Order</span> ← שני סוגי התשלום. אותה הבחנה, עכשיו במבנה הנתונים.
+            </div>
+            <div class="callout warn">
+              <span class="label">⚠️ אותם נתונים, תפקיד שונה ⇒ <span class="en">enum</span></span>
+              אם אין תכונות חדשות (למשל סטטוס הזמנה) — זו <b>לא</b> הורשה אלא <span class="en">enum</span>. וזהירות מ<b>ריבוי הורשה</b> (<span class="en">Diamond of Death</span>).
+            </div>
+          </div>
+
+          <!-- left: the generalization diagram -->
+          <div class="diagram-wrap">
+            <svg class="gen-svg" viewBox="0 0 820 330" xmlns="http://www.w3.org/2000/svg" role="img"
+                 aria-label="תשלום כמחלקת-על עם משולש חלול, ושתי תת-מחלקות: תשלום בכרטיס אוניברסיטה ותשלום באשראי">
+
+              <!-- ── parent: תשלום / Payment ── -->
+              <rect x="300" y="8" width="220" height="100" fill="#fff"/>
+              <rect x="300" y="8" width="220" height="40" fill="#1e40af"/>
+              <text x="410" y="28" text-anchor="middle" direction="rtl" font-size="17" font-weight="700"
+                    fill="#fff" font-family="'Noto Sans Hebrew',sans-serif">תשלום</text>
+              <text x="410" y="43" text-anchor="middle" font-size="11" fill="#cbd5e1"
+                    font-family="Consolas,monospace">«Payment»</text>
+              <line x1="300" y1="48" x2="520" y2="48" stroke="#3b82f6" stroke-width="1"/>
+              <text x="310" y="66" text-anchor="start" direction="ltr" font-size="12.5" fill="#1e293b" font-family="Consolas,monospace">- paymentId : String</text>
+              <text x="310" y="84" text-anchor="start" direction="ltr" font-size="12.5" fill="#1e293b" font-family="Consolas,monospace">- amount : Money</text>
+              <text x="310" y="102" text-anchor="start" direction="ltr" font-size="12.5" fill="#1e293b" font-family="Consolas,monospace">- paidAt : DateTime</text>
+              <rect x="300" y="8" width="220" height="100" fill="none" stroke="#3b82f6" stroke-width="1.6"/>
+
+              <!-- ── generalization: HOLLOW triangle at the parent, apex pointing UP ── -->
+              <line x1="410" y1="108" x2="410" y2="116" stroke="#334155" stroke-width="1.6"/>
+              <polygon points="410,116 394,136 426,136" fill="#fff" stroke="#334155" stroke-width="1.6"/>
+              <!-- shared bus: down from triangle, across, then down to each child -->
+              <line x1="410" y1="136" x2="410" y2="160" stroke="#334155" stroke-width="1.6"/>
+              <line x1="170" y1="160" x2="650" y2="160" stroke="#334155" stroke-width="1.6"/>
+              <line x1="170" y1="160" x2="170" y2="210" stroke="#334155" stroke-width="1.6"/>
+              <line x1="650" y1="160" x2="650" y2="210" stroke="#334155" stroke-width="1.6"/>
+
+              <!-- ── child 1: תשלום בכרטיס אוניברסיטה / UniversityCardPayment ── -->
+              <rect x="40" y="210" width="260" height="110" fill="#fff"/>
+              <rect x="40" y="210" width="260" height="44" fill="#1e40af"/>
+              <text x="170" y="231" text-anchor="middle" direction="rtl" font-size="13" font-weight="700"
+                    fill="#fff" font-family="'Noto Sans Hebrew',sans-serif">תשלום בכרטיס אוניברסיטה</text>
+              <text x="170" y="247" text-anchor="middle" font-size="10" fill="#cbd5e1"
+                    font-family="Consolas,monospace">«UniversityCardPayment»</text>
+              <line x1="40" y1="254" x2="300" y2="254" stroke="#3b82f6" stroke-width="1"/>
+              <text x="50" y="288" text-anchor="start" direction="ltr" font-size="12.5" fill="#1e293b" font-family="Consolas,monospace">+ universityId : String</text>
+              <rect x="40" y="210" width="260" height="110" fill="none" stroke="#3b82f6" stroke-width="1.6"/>
+
+              <!-- ── child 2: תשלום באשראי / CreditCardPayment ── -->
+              <rect x="520" y="210" width="260" height="110" fill="#fff"/>
+              <rect x="520" y="210" width="260" height="44" fill="#1e40af"/>
+              <text x="650" y="231" text-anchor="middle" direction="rtl" font-size="13" font-weight="700"
+                    fill="#fff" font-family="'Noto Sans Hebrew',sans-serif">תשלום באשראי</text>
+              <text x="650" y="247" text-anchor="middle" font-size="10" fill="#cbd5e1"
+                    font-family="Consolas,monospace">«CreditCardPayment»</text>
+              <line x1="520" y1="254" x2="780" y2="254" stroke="#3b82f6" stroke-width="1"/>
+              <text x="530" y="281" text-anchor="start" direction="ltr" font-size="12.5" fill="#1e293b" font-family="Consolas,monospace">+ last4 : String</text>
+              <text x="530" y="301" text-anchor="start" direction="ltr" font-size="12.5" fill="#1e293b" font-family="Consolas,monospace">+ gatewayRef : String</text>
+              <rect x="520" y="210" width="260" height="110" fill="none" stroke="#3b82f6" stroke-width="1.6"/>
+            </svg>
+          </div>
+
+        </div>
+
+      </div>
+      <aside class="notes">
+        הורשה = משולש חלול בקצה ההורה, קו מהילד אל ההורה. תשלום הוא ההורה; כרטיס-אוניברסיטה
+        ואשראי יורשים ממנו ומוסיפים תכונות משלהם (universityId מול last4/gatewayRef) — לכן
+        ההורשה מוצדקת. זו אותה הבחנה שראינו בהכללת התרחיש Pay for Order בהרצאה 4-5.
+        הכלל: יורשים רק כשיש הבדל אמיתי בתכונות/פעולות. אם ההבדל הוא רק תווית (סטטוס הזמנה:
+        ממתין/בהכנה/מוכן/נאסף/בוטל) — זה enum, לא הורשה, וזו טעות נפוצה שנתרגל בשקף הבא.
+        להזכיר בקצרה: ריבוי הורשה (Diamond of Death) — נמנעים ממנו בניתוח.
+      </aside>
+    </section>
+    <!-- Section ג / C — Dependency ו-Interface. Port per lecture-06-07/PORTING_BRIEF.md.
+         NOTATION authority: ../../SAD MCP/skills/uml-class-diagram/NOTATION.md —
+         Dependency = dashed line + OPEN arrow. DOCTRINE CHANGED (David, 2026-08-09): it IS
+         drawn in this course. The target is an external system/API we CALL, drawn as a box with
+         the «external system» stereotype — NOT one of our domain classes (it holds no data we
+         store). Still never a dependency between two regular domain classes.
+         Callback to L4-5: "מה שאנחנו קוראים לו אינו שחקן — הוא תלות עיצובית"
+         (slide-association.html ⚠️). Interface/API = black box (washing-machine metaphor)
+         → campus: we talk to the payment gateway through a defined ממשק/API, not internals.
+         Mostly a concept slide: text + one small dashed-open-arrow SVG. -->
+    <section data-slug="dependency-interface">
+      <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
+      <style>
+        section[data-slug="dependency-interface"] > .body { display:flex; flex-direction:column; gap:11px; }
+        section[data-slug="dependency-interface"] .note-card { background:var(--light-blue); border:1px solid var(--blue);
+          border-radius:14px; padding:9px 18px; }
+        section[data-slug="dependency-interface"] .note-card p { margin:0; font-weight:700; color:var(--dark-blue);
+          font-size:18px; line-height:1.4; }
+        section[data-slug="dependency-interface"] .dep-cols { flex:1 1 auto; min-height:0; align-items:stretch; }
+        section[data-slug="dependency-interface"] .dep-cols > .card { display:flex; flex-direction:column; gap:8px; }
+        section[data-slug="dependency-interface"] ul.bullets > li { font-size:17px !important; line-height:1.4; margin-bottom:7px; }
+        section[data-slug="dependency-interface"] .dep-svg { display:block; width:100%; height:auto; max-height:150px; }
+        section[data-slug="dependency-interface"] .callout { font-size:17px; }
+        /* keep the last line clear of the .sdlc-chip (bottom-left, z-index 6) — inline-end = left in RTL */
+        section[data-slug="dependency-interface"] .callout.warn { padding-inline-end:150px; }
+      </style>
+      <h1><span class="en">Dependency</span> ו-<span class="en">Interface</span></h1>
+      <div class="subtitle">מחלקה שמשתמשת באחרת — כך מסמנים את המערכות החיצוניות שאנחנו קוראים להן</div>
+      <div class="body">
+
+        <div class="note-card">
+          <p><span class="en">Dependency</span> = קו <b>מקווקו</b> + חץ <b>פתוח</b>: מחלקה אחת קוראת לאחרת כדי לבצע משהו. <b>כן מציירים</b> אותו — אל <b>מערכת חיצונית</b> שאנחנו קוראים לה, שמצוירת כתיבה עם הסטריאוטיפ <span class="en">«external system»</span>. לא בין שתי מחלקות תחום רגילות.</p>
+        </div>
+
+        <div class="cols dep-cols">
+
+          <!-- right (RTL-first): where dependency DOES show up — external systems we call -->
+          <div class="card">
+            <div class="panel-title">איפה זה כן חי — מערכות חיצוניות שאנחנו קוראים להן</div>
+            <svg class="dep-svg" viewBox="0 0 640 150" xmlns="http://www.w3.org/2000/svg" role="img"
+                 aria-label="המערכת שלנו תלויה בשער תשלום חיצוני, בקו מקווקו עם חץ פתוח">
+              <defs>
+                <marker id="depOpen" markerWidth="11" markerHeight="9" refX="9" refY="4.2" orient="auto">
+                  <polyline points="0 0, 9 4.2, 0 8.4" fill="none" stroke="#7c3aed" stroke-width="1.3"/>
+                </marker>
+              </defs>
+              <!-- our system (client) — right -->
+              <rect x="430" y="45" width="180" height="66" rx="10" fill="#EAF3FB" stroke="#0070C0" stroke-width="1.8"/>
+              <text x="520" y="83" text-anchor="middle" direction="rtl" font-size="15" font-weight="700"
+                    fill="#004E8C" font-family="'Noto Sans Hebrew',sans-serif">המערכת שלנו</text>
+              <!-- external system (supplier) — left, dashed border to signal "outside the boundary" -->
+              <rect x="40" y="45" width="180" height="66" rx="10" fill="#F5F3FF" stroke="#7c3aed" stroke-width="1.6" stroke-dasharray="6 4"/>
+              <text x="130" y="79" text-anchor="middle" direction="rtl" font-size="14" font-weight="700"
+                    fill="#4C1D95" font-family="'Noto Sans Hebrew',sans-serif">שער תשלום</text>
+              <text x="130" y="97" text-anchor="middle" direction="rtl" font-size="10.5"
+                    fill="#7c3aed" font-family="'Segoe UI',Arial,sans-serif" direction="ltr">«external system»</text>
+              <!-- dependency: DASHED line, OPEN arrow, from client(right) to supplier(left) -->
+              <line x1="430" y1="78" x2="226" y2="78" stroke="#7c3aed" stroke-width="1.5" stroke-dasharray="6 4" marker-end="url(#depOpen)"/>
+              <text x="328" y="68" text-anchor="middle" font-size="11" fill="#7c3aed" font-family="Consolas,monospace">«use»</text>
+            </svg>
+            <ul class="bullets">
+              <li><b>שער תשלום</b> — לחיוב אשראי</li>
+              <li><b>מערכת זיהוי/חשבונות האוניברסיטה</b> — כניסה וחיוב כרטיס סטודנט</li>
+            </ul>
+          </div>
+
+          <!-- left: interface / API black box — the washing-machine metaphor, campus-ified -->
+          <div class="card">
+            <div class="panel-title"><span class="en">Interface</span> / <span class="en">API</span> — קופסה שחורה</div>
+            <ul class="bullets">
+              <li>מדברים עם המערכת החיצונית דרך <b>ממשק</b> מוגדר (<span class="en">API</span>) — <b>לא</b> דרך המימוש הפנימי שלה</li>
+              <li>בדיוק כמו מכונת כביסה: לוחצים ״הפעל״ ומקבלים תוצאה, בלי לדעת מה קורה בפנים</li>
+              <li>אנחנו שולחים ״חייב 32 ₪״ לשער התשלום ומקבלים ״שולם / נכשל״ — הפנים שלו אינם העניין שלנו</li>
+            </ul>
+          </div>
+
+        </div>
+
+        <div class="callout warn">
+          <span class="label">⚠️ מערכת חיצונית מופיעה בתרשים — אבל אינה מחלקת תחום</span>
+          שער תשלום ומערכת הזיהוי <b>כן</b> מצוירים, כתיבת <span class="en">«external system»</span> בקצה קו התלות — אבל <b>לא</b> כמחלקות תחום עם תכונות שאנחנו שומרים. בדיוק כמו שהם לא היו <b>שחקנים</b> בהרצאה 4-5.
+        </div>
+
+      </div>
+      <aside class="notes">
+        Dependency = קו מקווקו + חץ פתוח, ״מחלקה א׳ משתמשת ב-ב׳״. בקורס כן מציירים תלות — אל מערכת
+        חיצונית שאנחנו קוראים לה, המצוירת כתיבה עם הסטריאוטיפ «external system» (אינה מחלקת תחום):
+        שער תשלום, מערכת הזיהוי/חשבונות של האוניברסיטה. זו ההמשכיות מהרצאה 4-5: מה שאנחנו קוראים לו אינו שחקן —
+        הוא תלות; וכאן הוא כן מצויר, אך כמערכת חיצונית ולא כמחלקת תחום. Interface/API = קופסה שחורה: מדברים דרך ממשק מוגדר,
+        לא דרך המימוש (מטאפורת מכונת הכביסה מהמצגת הישנה, מותאמת לשער התשלום).
+      </aside>
+    </section>
+    <!-- Section ג / C — class discussion: "which relationship — if any?" (twin of L4-5
+         slide-relationship-or-not.html). 6 campus cards; click a card → a popup with TWO
+         candidate models (א / ב). NEITHER is marked correct on screen — the key lives in
+         this comment + the <aside class="notes">. No <script>: inline onclick only, so it
+         survives however the fragment is inlined (matching the L4-5 exemplar + L1 fishbone).
+         Doctrine authority: ../../SAD MCP/skills/uml-class-diagram/NOTATION.md.
+
+         INSTRUCTOR ANSWER KEY (not shown to students):
+           1 הזמנה ↔ שורת הזמנה → א COMPOSITION (יהלום מלא בצד ההזמנה). שורת הזמנה לא קיימת
+                                  בלי ההזמנה שלה — מוחקים הזמנה, נמחקות השורות. (ב = צירוף/aggregation,
+                                  יהלום חלול — מתאים למקרה 2, לא כאן.)
+           2 קפיטריה ↔ עמדה     → ב AGGREGATION (יהלום חלול בצד הקפיטריה). עמדה מתקיימת בעצמה
+                                  וניתן לשייך אותה מחדש — צירוף, לא הרכבה. המראָה של מקרה 1.
+           3 תשלום-אונ׳/אשראי   → א GENERALIZATION. לכל תת-סוג תכונות משלו (universityId מול
+                                  last4/gatewayRef) ⇒ הורשה מוצדקת. (ב enum שגוי — יש הבדל תכונות.)
+                                  המראָה של מקרה 5.
+           4 הזמנה ↔ פריט תפריט → ב מחלקה מתווכת (שורת הזמנה). קשר M:N + צורך לשמור כמות לכל פריט
+             (עם כמות)            ⇒ אין איפה לתלות את הכמות בקשר רגיל; המחלקה המתווכת נושאת אותה.
+           5 סטטוס הזמנה         → ב ENUM «OrderStatus», לא הורשה. ל״הזמנה ממתינה״ ול״הזמנה מוכנה״
+             (המלכודת)            אותן תכונות בדיוק — רק התווית שונה ⇒ enum. הטעות הקלאסית. מראָה של 3.
+           6 דוח מכירות          → ב לא מחלקה בכלל. מבחן ההימצאוּת: המערכת לא שומרת רשומת ״דוח״ —
+                                  היא מחשבת אותו מההזמנות בזמן אמת. פלט מחושב, לא ישות נשמרת.
+         איזון החדר: 1 הרכבה · 2 צירוף · 3 הורשה · 4 מחלקה מתווכת · 5 enum (לא הורשה!) · 6 לא מחלקה.
+         שלושה מהשישה אינם ״קשר רגיל״ (5 enum, 6 לא-מחלקה, 4 דורש מחלקה מתווכת) — וזה הלקח. -->
+    <section data-slug="relationship-or-not">
+      <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
+      <style>
+        section[data-slug="relationship-or-not"] > .body { display:flex; flex-direction:column; gap:12px; }
+        section[data-slug="relationship-or-not"] .cases { display:grid; grid-template-columns:repeat(3,1fr);
+          grid-template-rows:1fr 1fr; gap:14px; flex:1 1 auto; min-height:0; }
+        section[data-slug="relationship-or-not"] .case { border:1.5px solid #cbd5e1; border-radius:12px; background:#f8fafc;
+          padding:12px 14px; display:flex; flex-direction:column; align-items:center; justify-content:center;
+          gap:8px; position:relative; cursor:pointer; transition:border-color .12s, box-shadow .12s, transform .12s; }
+        section[data-slug="relationship-or-not"] .case:hover { border-color:var(--blue);
+          box-shadow:0 4px 14px rgba(30,64,175,.16); transform:translateY(-2px); }
+        section[data-slug="relationship-or-not"] .case .n { position:absolute; top:8px; inset-inline-start:12px; font-size:15px;
+          color:#94a3b8; font-weight:700; }
+        section[data-slug="relationship-or-not"] .case .emo { font-size:34px; line-height:1; }
+        section[data-slug="relationship-or-not"] .case .txt { font-size:16.5px; text-align:center; color:#1e293b; line-height:1.35; }
+        section[data-slug="relationship-or-not"] .case .tap { position:absolute; bottom:5px; inset-inline-end:9px; font-size:11px; }
+
+        /* ── the א/ב popup ─────────────────────────────────────────────────── */
+        section[data-slug="relationship-or-not"] .rq { position:absolute; inset:0; z-index:20;
+          background:rgba(15,23,42,.55); display:flex; align-items:center; justify-content:center; padding:24px; }
+        section[data-slug="relationship-or-not"] .rq[hidden] { display:none; }
+        section[data-slug="relationship-or-not"] .rq-box { background:#fff; border-radius:14px; width:100%; max-width:940px;
+          max-height:100%; overflow:auto; padding:16px 20px 12px; position:relative; box-shadow:0 18px 50px rgba(0,0,0,.3); }
+        section[data-slug="relationship-or-not"] .rq-x { position:absolute; top:8px; inset-inline-end:12px; border:0;
+          background:transparent; font-size:19px; color:#64748b; cursor:pointer; line-height:1; }
+        section[data-slug="relationship-or-not"] .rq-h { font-size:21px; font-weight:700; color:var(--blue); }
+        section[data-slug="relationship-or-not"] .rq-sit { font-size:14.5px; color:#475569; margin:2px 0 10px; line-height:1.45; }
+        section[data-slug="relationship-or-not"] .rq-opts { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+        section[data-slug="relationship-or-not"] .rq-opt { border:1.5px solid #e2e8f0; border-radius:10px; padding:8px 10px 10px;
+          background:#f8fafc; display:flex; flex-direction:column; gap:6px; }
+        section[data-slug="relationship-or-not"] .rq-t { font-size:15px; font-weight:700; color:#1e293b; }
+        section[data-slug="relationship-or-not"] .rq-t span { color:#64748b; font-weight:400; font-size:13px; }
+        section[data-slug="relationship-or-not"] .rq-opt svg { width:100%; height:auto; background:#fff;
+          border:1px solid #eef2f7; border-radius:8px; }
+        section[data-slug="relationship-or-not"] .rq-cap { font-size:12.5px; color:#475569; line-height:1.45; margin:0; }
+        section[data-slug="relationship-or-not"] .rq-q { text-align:center; font-size:15px; font-weight:700;
+          color:var(--blue); margin:10px 0 0; }
+      </style>
+      <h1>איזה קשר — אם בכלל?</h1>
+      <div class="subtitle">לחצו על מקרה — ותקבלו <b>שתי</b> דרכים למדל אותו. איזו נכונה, ולמה? (התשובה לא על המסך)</div>
+      <div class="body">
+
+        <div class="cases">
+          <div class="case fragment" onclick="document.getElementById('cr1').hidden=false"><span class="n">1</span><div class="emo">🧾</div><div class="txt">הזמנה ושורת הזמנה — האחת בלי השנייה?</div><span class="tap">👆</span></div>
+          <div class="case fragment" onclick="document.getElementById('cr2').hidden=false"><span class="n">2</span><div class="emo">🏬</div><div class="txt">קפיטריה והעמדות (חם/קר) שבתוכה</div><span class="tap">👆</span></div>
+          <div class="case fragment" onclick="document.getElementById('cr3').hidden=false"><span class="n">3</span><div class="emo">💳</div><div class="txt">תשלום בכרטיס-אונ׳ מול תשלום באשראי</div><span class="tap">👆</span></div>
+          <div class="case fragment" onclick="document.getElementById('cr4').hidden=false"><span class="n">4</span><div class="emo">🍽️</div><div class="txt">הזמנה ופריט תפריט — עם <b>כמות</b> לכל פריט</div><span class="tap">👆</span></div>
+          <div class="case fragment" onclick="document.getElementById('cr5').hidden=false"><span class="n">5</span><div class="emo">🚦</div><div class="txt">סטטוס הזמנה: ממתין / בהכנה / מוכן / נאסף / בוטל</div><span class="tap">👆</span></div>
+          <div class="case fragment" onclick="document.getElementById('cr6').hidden=false"><span class="n">6</span><div class="emo">📊</div><div class="txt">דוח מכירות סוף-יום</div><span class="tap">👆</span></div>
+        </div>
+
+        <p class="bottom-line">רמז: לא כל צמד ישויות הוא קשר — לפעמים התשובה היא <span class="en">enum</span>, מחלקה מתווכת, או בכלל לא מחלקה.</p>
+
+      </div>
+
+      <!-- ══ 1 · הזמנה ↔ שורת הזמנה — composition vs aggregation ══ -->
+      <div class="rq" id="cr1" hidden onclick="this.hidden=true">
+        <div class="rq-box" onclick="event.stopPropagation()">
+          <button class="rq-x" onclick="this.closest('.rq').hidden=true">✕</button>
+          <div class="rq-h">1 · הזמנה ושורת הזמנה</div>
+          <div class="rq-sit">שורת הזמנה מייצגת ״פריט אחד + כמות״ בתוך הזמנה. אם מוחקים את ההזמנה — מה קורה לשורות שלה?</div>
+          <div class="rq-opts">
+            <div class="rq-opt">
+              <div class="rq-t">א <span>— יהלום מלא ◆</span></div>
+              <svg viewBox="0 0 300 90" xmlns="http://www.w3.org/2000/svg">
+                <rect x="18" y="34" width="116" height="40" rx="6" fill="#fff" stroke="#2980b9" stroke-width="1.4"/>
+                <text x="76" y="58" text-anchor="middle" direction="rtl" font-size="11" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">שורת הזמנה</text>
+                <rect x="190" y="34" width="92" height="40" rx="6" fill="#fff" stroke="#2980b9" stroke-width="1.4"/>
+                <text x="236" y="58" text-anchor="middle" direction="rtl" font-size="11" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">הזמנה</text>
+                <line x1="176" y1="54" x2="134" y2="54" stroke="#334155" stroke-width="1.5"/>
+                <polygon points="190,54 176,47 162,54 176,61" fill="#334155" stroke="#334155" stroke-width="1"/>
+                <text x="184" y="28" text-anchor="middle" font-size="10" fill="#64748b" font-family="Consolas,monospace">1</text>
+                <text x="140" y="28" text-anchor="middle" font-size="10" fill="#64748b" font-family="Consolas,monospace">1..*</text>
+              </svg>
+              <p class="rq-cap">החלק לא קיים בלי השלם — מוחקים הזמנה, נמחקות השורות.</p>
+            </div>
+            <div class="rq-opt">
+              <div class="rq-t">ב <span>— יהלום חלול ◇</span></div>
+              <svg viewBox="0 0 300 90" xmlns="http://www.w3.org/2000/svg">
+                <rect x="18" y="34" width="116" height="40" rx="6" fill="#fff" stroke="#2980b9" stroke-width="1.4"/>
+                <text x="76" y="58" text-anchor="middle" direction="rtl" font-size="11" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">שורת הזמנה</text>
+                <rect x="190" y="34" width="92" height="40" rx="6" fill="#fff" stroke="#2980b9" stroke-width="1.4"/>
+                <text x="236" y="58" text-anchor="middle" direction="rtl" font-size="11" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">הזמנה</text>
+                <line x1="176" y1="54" x2="134" y2="54" stroke="#334155" stroke-width="1.5"/>
+                <polygon points="190,54 176,47 162,54 176,61" fill="#fff" stroke="#334155" stroke-width="1.4"/>
+                <text x="184" y="28" text-anchor="middle" font-size="10" fill="#64748b" font-family="Consolas,monospace">1</text>
+                <text x="140" y="28" text-anchor="middle" font-size="10" fill="#64748b" font-family="Consolas,monospace">1..*</text>
+              </svg>
+              <p class="rq-cap">החלק מתקיים בעצמו — אפשר להעביר אותו לשלם אחר.</p>
+            </div>
+          </div>
+          <p class="rq-q">איזה יהלום — מלא או חלול? כלומר: קיום החלק תלוי בשלם, או לא?</p>
+        </div>
+      </div>
+
+      <!-- ══ 2 · קפיטריה ↔ עמדה — aggregation vs composition ══ -->
+      <div class="rq" id="cr2" hidden onclick="this.hidden=true">
+        <div class="rq-box" onclick="event.stopPropagation()">
+          <button class="rq-x" onclick="this.closest('.rq').hidden=true">✕</button>
+          <div class="rq-h">2 · קפיטריה והעמדות שבתוכה</div>
+          <div class="rq-sit">לקפיטריה יש עמדות חמות וקרות. אם סוגרים קפיטריה — העמדה נעלמת, או אפשר לשייך אותה למקום אחר?</div>
+          <div class="rq-opts">
+            <div class="rq-opt">
+              <div class="rq-t">א <span>— יהלום מלא ◆</span></div>
+              <svg viewBox="0 0 300 90" xmlns="http://www.w3.org/2000/svg">
+                <rect x="18" y="34" width="100" height="40" rx="6" fill="#fff" stroke="#2980b9" stroke-width="1.4"/>
+                <text x="68" y="58" text-anchor="middle" direction="rtl" font-size="11" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">עמדה</text>
+                <rect x="182" y="34" width="100" height="40" rx="6" fill="#fff" stroke="#2980b9" stroke-width="1.4"/>
+                <text x="232" y="58" text-anchor="middle" direction="rtl" font-size="11" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">קפיטריה</text>
+                <line x1="168" y1="54" x2="118" y2="54" stroke="#334155" stroke-width="1.5"/>
+                <polygon points="182,54 168,47 154,54 168,61" fill="#334155" stroke="#334155" stroke-width="1"/>
+                <text x="176" y="28" text-anchor="middle" font-size="10" fill="#64748b" font-family="Consolas,monospace">1</text>
+                <text x="124" y="28" text-anchor="middle" font-size="10" fill="#64748b" font-family="Consolas,monospace">1..*</text>
+              </svg>
+              <p class="rq-cap">העמדה לא קיימת בלי הקפיטריה — נמחקת יחד איתה.</p>
+            </div>
+            <div class="rq-opt">
+              <div class="rq-t">ב <span>— יהלום חלול ◇</span></div>
+              <svg viewBox="0 0 300 90" xmlns="http://www.w3.org/2000/svg">
+                <rect x="18" y="34" width="100" height="40" rx="6" fill="#fff" stroke="#2980b9" stroke-width="1.4"/>
+                <text x="68" y="58" text-anchor="middle" direction="rtl" font-size="11" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">עמדה</text>
+                <rect x="182" y="34" width="100" height="40" rx="6" fill="#fff" stroke="#2980b9" stroke-width="1.4"/>
+                <text x="232" y="58" text-anchor="middle" direction="rtl" font-size="11" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">קפיטריה</text>
+                <line x1="168" y1="54" x2="118" y2="54" stroke="#334155" stroke-width="1.5"/>
+                <polygon points="182,54 168,47 154,54 168,61" fill="#fff" stroke="#334155" stroke-width="1.4"/>
+                <text x="176" y="28" text-anchor="middle" font-size="10" fill="#64748b" font-family="Consolas,monospace">1</text>
+                <text x="124" y="28" text-anchor="middle" font-size="10" fill="#64748b" font-family="Consolas,monospace">1..*</text>
+              </svg>
+              <p class="rq-cap">העמדה עצמאית — אפשר לשייך אותה מחדש לקפיטריה אחרת.</p>
+            </div>
+          </div>
+          <p class="rq-q">נראה בדיוק כמו מקרה 1 — אז למה התשובה אחרת? מה קורה לעמדה כשהשלם נמחק?</p>
+        </div>
+      </div>
+
+      <!-- ══ 3 · תשלום — generalization vs enum ══ -->
+      <div class="rq" id="cr3" hidden onclick="this.hidden=true">
+        <div class="rq-box" onclick="event.stopPropagation()">
+          <button class="rq-x" onclick="this.closest('.rq').hidden=true">✕</button>
+          <div class="rq-h">3 · תשלום בכרטיס-אונ׳ מול תשלום באשראי</div>
+          <div class="rq-sit">תשלום בכרטיס-אוניברסיטה נושא <span class="en">universityId</span>; תשלום באשראי נושא <span class="en">last4</span> ו-<span class="en">gatewayRef</span>. איך ממדלים את שני הסוגים?</div>
+          <div class="rq-opts">
+            <div class="rq-opt">
+              <div class="rq-t">א <span>— הורשה ▷</span></div>
+              <svg viewBox="0 0 300 145" xmlns="http://www.w3.org/2000/svg">
+                <rect x="105" y="8" width="90" height="32" rx="6" fill="#fff" stroke="#2980b9" stroke-width="1.4"/>
+                <text x="150" y="28" text-anchor="middle" direction="rtl" font-size="11" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">תשלום</text>
+                <line x1="150" y1="40" x2="150" y2="48" stroke="#334155" stroke-width="1.5"/>
+                <polygon points="150,48 140,62 160,62" fill="#fff" stroke="#334155" stroke-width="1.4"/>
+                <line x1="150" y1="62" x2="150" y2="78" stroke="#334155" stroke-width="1.4"/>
+                <line x1="58" y1="78" x2="242" y2="78" stroke="#334155" stroke-width="1.4"/>
+                <line x1="58" y1="78" x2="58" y2="96" stroke="#334155" stroke-width="1.4"/>
+                <line x1="242" y1="78" x2="242" y2="96" stroke="#334155" stroke-width="1.4"/>
+                <rect x="8" y="96" width="100" height="42" rx="6" fill="#fff" stroke="#2980b9" stroke-width="1.4"/>
+                <text x="58" y="112" text-anchor="middle" direction="rtl" font-size="9.5" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">תשלום בכרטיס</text>
+                <text x="58" y="126" text-anchor="middle" direction="rtl" font-size="9.5" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">אוניברסיטה</text>
+                <rect x="192" y="96" width="100" height="42" rx="6" fill="#fff" stroke="#2980b9" stroke-width="1.4"/>
+                <text x="242" y="120" text-anchor="middle" direction="rtl" font-size="9.5" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">תשלום באשראי</text>
+              </svg>
+              <p class="rq-cap">משולש חלול בצד ההורה — כל תת-סוג מוסיף את התכונות שלו.</p>
+            </div>
+            <div class="rq-opt">
+              <div class="rq-t">ב <span>— <span class="en">enum</span></span></div>
+              <svg viewBox="0 0 300 145" xmlns="http://www.w3.org/2000/svg">
+                <rect x="85" y="24" width="130" height="100" rx="4" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.4" stroke-dasharray="5 3"/>
+                <text x="150" y="44" text-anchor="middle" font-size="11" fill="#64748b" font-family="Consolas,monospace">«enumeration»</text>
+                <text x="150" y="62" text-anchor="middle" font-size="12" font-weight="700" fill="#334155" font-family="Consolas,monospace">PaymentType</text>
+                <line x1="93" y1="72" x2="207" y2="72" stroke="#cbd5e1" stroke-width="1"/>
+                <text x="150" y="92" text-anchor="middle" direction="rtl" font-size="10.5" fill="#475569" font-family="'Noto Sans Hebrew',sans-serif">כרטיס אוניברסיטה</text>
+                <text x="150" y="112" text-anchor="middle" direction="rtl" font-size="10.5" fill="#475569" font-family="'Noto Sans Hebrew',sans-serif">אשראי</text>
+              </svg>
+              <p class="rq-cap">רשימת ערכים סגורה — בלי תכונות משלה לכל ערך.</p>
+            </div>
+          </div>
+          <p class="rq-q">האם לכל סוג תשלום יש <u>תכונות משלו</u>? זה מה שמכריע בין הורשה ל-<span class="en">enum</span>.</p>
+        </div>
+      </div>
+
+      <!-- ══ 4 · הזמנה ↔ פריט תפריט (כמות) — plain M:N vs mediating class ══ -->
+      <div class="rq" id="cr4" hidden onclick="this.hidden=true">
+        <div class="rq-box" onclick="event.stopPropagation()">
+          <button class="rq-x" onclick="this.closest('.rq').hidden=true">✕</button>
+          <div class="rq-h">4 · הזמנה ופריט תפריט — עם כמות</div>
+          <div class="rq-sit">הזמנה מכילה כמה פריטים, וכל פריט מופיע בכמה הזמנות (<span class="en">M:N</span>). לכל פריט בהזמנה יש <b>כמות</b>. איפה נשמרת הכמות?</div>
+          <div class="rq-opts">
+            <div class="rq-opt">
+              <div class="rq-t">א <span>— קשר <span class="en">M:N</span> רגיל</span></div>
+              <svg viewBox="0 0 300 92" xmlns="http://www.w3.org/2000/svg">
+                <rect x="18" y="40" width="124" height="40" rx="6" fill="#fff" stroke="#2980b9" stroke-width="1.4"/>
+                <text x="80" y="64" text-anchor="middle" direction="rtl" font-size="11" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">פריט תפריט</text>
+                <rect x="196" y="40" width="92" height="40" rx="6" fill="#fff" stroke="#2980b9" stroke-width="1.4"/>
+                <text x="242" y="64" text-anchor="middle" direction="rtl" font-size="11" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">הזמנה</text>
+                <line x1="196" y1="60" x2="142" y2="60" stroke="#334155" stroke-width="1.5"/>
+                <text x="190" y="34" text-anchor="middle" font-size="11" fill="#64748b" font-family="Consolas,monospace">*</text>
+                <text x="148" y="34" text-anchor="middle" font-size="11" fill="#64748b" font-family="Consolas,monospace">*</text>
+                <text x="169" y="54" text-anchor="middle" font-size="11" font-weight="700" fill="#C62828" font-family="'Noto Sans Hebrew',sans-serif">כמות?</text>
+              </svg>
+              <p class="rq-cap">אין לקשר תכונות — אין איפה לתלות את הכמות של כל פריט.</p>
+            </div>
+            <div class="rq-opt">
+              <div class="rq-t">ב <span>— מחלקה מתווכת</span></div>
+              <svg viewBox="0 0 320 92" xmlns="http://www.w3.org/2000/svg">
+                <rect x="10" y="44" width="92" height="38" rx="6" fill="#fff" stroke="#2980b9" stroke-width="1.4"/>
+                <text x="56" y="67" text-anchor="middle" direction="rtl" font-size="10" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">פריט תפריט</text>
+                <rect x="118" y="34" width="86" height="52" rx="6" fill="#EDE9FE" stroke="#7c3aed" stroke-width="1.5"/>
+                <text x="161" y="52" text-anchor="middle" direction="rtl" font-size="10" font-weight="700" fill="#4C1D95" font-family="'Noto Sans Hebrew',sans-serif">שורת הזמנה</text>
+                <line x1="126" y1="60" x2="196" y2="60" stroke="#c4b5fd" stroke-width="1"/>
+                <text x="161" y="74" text-anchor="middle" direction="rtl" font-size="9" fill="#4C1D95" font-family="'Noto Sans Hebrew',sans-serif">- כמות</text>
+                <rect x="220" y="44" width="90" height="38" rx="6" fill="#fff" stroke="#2980b9" stroke-width="1.4"/>
+                <text x="265" y="67" text-anchor="middle" direction="rtl" font-size="10" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">הזמנה</text>
+                <line x1="220" y1="63" x2="204" y2="63" stroke="#334155" stroke-width="1.4"/>
+                <line x1="118" y1="63" x2="102" y2="63" stroke="#334155" stroke-width="1.4"/>
+                <text x="212" y="38" text-anchor="middle" font-size="9.5" fill="#64748b" font-family="Consolas,monospace">1</text>
+                <text x="110" y="38" text-anchor="middle" font-size="9.5" fill="#64748b" font-family="Consolas,monospace">1</text>
+              </svg>
+              <p class="rq-cap">שורת הזמנה נושאת את הכמות — ומחליפה את ה-<span class="en">M:N</span> בשני קשרים.</p>
+            </div>
+          </div>
+          <p class="rq-q">איפה יכולה לגור <u>כמות</u> — על קו, או על מחלקה?</p>
+        </div>
+      </div>
+
+      <!-- ══ 5 · סטטוס הזמנה — THE TRAP: inheritance vs enum ══ -->
+      <div class="rq" id="cr5" hidden onclick="this.hidden=true">
+        <div class="rq-box" onclick="event.stopPropagation()">
+          <button class="rq-x" onclick="this.closest('.rq').hidden=true">✕</button>
+          <div class="rq-h">5 · סטטוס הזמנה — המלכודת</div>
+          <div class="rq-sit">להזמנה יש סטטוס: ממתין / בהכנה / מוכן / נאסף / בוטל. איך ממדלים את חמשת המצבים?</div>
+          <div class="rq-opts">
+            <div class="rq-opt">
+              <div class="rq-t">א <span>— הורשה ▷ (מחלקה לכל מצב)</span></div>
+              <svg viewBox="0 0 300 132" xmlns="http://www.w3.org/2000/svg">
+                <rect x="115" y="6" width="70" height="30" rx="6" fill="#fff" stroke="#2980b9" stroke-width="1.4"/>
+                <text x="150" y="25" text-anchor="middle" direction="rtl" font-size="11" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">הזמנה</text>
+                <line x1="150" y1="36" x2="150" y2="46" stroke="#334155" stroke-width="1.4"/>
+                <polygon points="150,46 141,58 159,58" fill="#fff" stroke="#334155" stroke-width="1.4"/>
+                <line x1="150" y1="58" x2="150" y2="72" stroke="#334155" stroke-width="1.3"/>
+                <line x1="45" y1="72" x2="255" y2="72" stroke="#334155" stroke-width="1.3"/>
+                <line x1="45" y1="72" x2="45" y2="88" stroke="#334155" stroke-width="1.3"/>
+                <line x1="150" y1="72" x2="150" y2="88" stroke="#334155" stroke-width="1.3"/>
+                <line x1="255" y1="72" x2="255" y2="88" stroke="#334155" stroke-width="1.3"/>
+                <rect x="12" y="88" width="66" height="30" rx="6" fill="#fff" stroke="#2980b9" stroke-width="1.3"/>
+                <text x="45" y="107" text-anchor="middle" direction="rtl" font-size="10" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">ממתין</text>
+                <rect x="117" y="88" width="66" height="30" rx="6" fill="#fff" stroke="#2980b9" stroke-width="1.3"/>
+                <text x="150" y="107" text-anchor="middle" direction="rtl" font-size="10" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">מוכן</text>
+                <rect x="222" y="88" width="66" height="30" rx="6" fill="#fff" stroke="#2980b9" stroke-width="1.3"/>
+                <text x="255" y="107" text-anchor="middle" direction="rtl" font-size="10" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">בוטל</text>
+              </svg>
+              <p class="rq-cap">מחלקה לכל מצב — אבל ל״הזמנה ממתינה״ ול״הזמנה מוכנה״ אותן תכונות בדיוק.</p>
+            </div>
+            <div class="rq-opt">
+              <div class="rq-t">ב <span>— <span class="en">enum</span> (ערך של תכונה)</span></div>
+              <svg viewBox="0 0 300 132" xmlns="http://www.w3.org/2000/svg">
+                <rect x="16" y="40" width="104" height="52" rx="6" fill="#fff" stroke="#2980b9" stroke-width="1.4"/>
+                <text x="68" y="60" text-anchor="middle" direction="rtl" font-size="11" font-weight="700" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">הזמנה</text>
+                <line x1="16" y1="68" x2="120" y2="68" stroke="#cbd5e1" stroke-width="1"/>
+                <text x="24" y="84" text-anchor="start" direction="ltr" font-size="9" fill="#1e293b" font-family="Consolas,monospace">- status : OrderStatus</text>
+                <rect x="152" y="14" width="138" height="104" rx="4" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.4" stroke-dasharray="5 3"/>
+                <text x="221" y="31" text-anchor="middle" font-size="10" fill="#64748b" font-family="Consolas,monospace">«enumeration»</text>
+                <text x="221" y="46" text-anchor="middle" font-size="11" font-weight="700" fill="#334155" font-family="Consolas,monospace">OrderStatus</text>
+                <line x1="160" y1="54" x2="282" y2="54" stroke="#cbd5e1" stroke-width="1"/>
+                <text x="221" y="70" text-anchor="middle" direction="rtl" font-size="9.5" fill="#475569" font-family="'Noto Sans Hebrew',sans-serif">ממתין · בהכנה</text>
+                <text x="221" y="86" text-anchor="middle" direction="rtl" font-size="9.5" fill="#475569" font-family="'Noto Sans Hebrew',sans-serif">מוכן · נאסף</text>
+                <text x="221" y="102" text-anchor="middle" direction="rtl" font-size="9.5" fill="#475569" font-family="'Noto Sans Hebrew',sans-serif">בוטל</text>
+              </svg>
+              <p class="rq-cap">קופסה <b>לא מחוברת</b> — סוג התכונה <span class="en">status</span> הוא הקישור היחיד.</p>
+            </div>
+          </div>
+          <p class="rq-q">האם ל״הזמנה ממתינה״ יש תכונות שאין ל״הזמנה מוכנה״? אם לא — מה זה אומר?</p>
+        </div>
+      </div>
+
+      <!-- ══ 6 · דוח מכירות — class vs not-a-class (persistence test) ══ -->
+      <div class="rq" id="cr6" hidden onclick="this.hidden=true">
+        <div class="rq-box" onclick="event.stopPropagation()">
+          <button class="rq-x" onclick="this.closest('.rq').hidden=true">✕</button>
+          <div class="rq-h">6 · דוח מכירות סוף-יום</div>
+          <div class="rq-sit">המנהל רואה בסוף היום מה נמכר. האם המערכת <b>שומרת ומנהלת</b> רשומת ״דוח מכירות״ — או מחשבת אותה מההזמנות?</div>
+          <div class="rq-opts">
+            <div class="rq-opt">
+              <div class="rq-t">א <span>— מחלקה ככל מחלקה</span></div>
+              <svg viewBox="0 0 300 132" xmlns="http://www.w3.org/2000/svg">
+                <rect x="85" y="12" width="130" height="108" fill="#fff"/>
+                <rect x="85" y="12" width="130" height="30" fill="#1e40af"/>
+                <text x="150" y="32" text-anchor="middle" direction="rtl" font-size="12" font-weight="700" fill="#fff" font-family="'Noto Sans Hebrew',sans-serif">דוח מכירות</text>
+                <line x1="85" y1="42" x2="215" y2="42" stroke="#3b82f6" stroke-width="1"/>
+                <text x="93" y="60" text-anchor="start" direction="ltr" font-size="9.5" fill="#1e293b" font-family="Consolas,monospace">- reportDate : Date</text>
+                <text x="93" y="78" text-anchor="start" direction="ltr" font-size="9.5" fill="#1e293b" font-family="Consolas,monospace">- totalSales : Money</text>
+                <text x="93" y="96" text-anchor="start" direction="ltr" font-size="9.5" fill="#1e293b" font-family="Consolas,monospace">- topItems : List</text>
+                <line x1="85" y1="104" x2="215" y2="104" stroke="#3b82f6" stroke-width="1"/>
+                <text x="93" y="117" text-anchor="start" direction="ltr" font-size="9.5" font-style="italic" fill="#1e293b" font-family="Consolas,monospace">+ export()</text>
+                <rect x="85" y="12" width="130" height="108" fill="none" stroke="#3b82f6" stroke-width="1.6"/>
+              </svg>
+              <p class="rq-cap">ישות שנשמרת ומנוהלת — עם תכונות ופעולות משלה.</p>
+            </div>
+            <div class="rq-opt">
+              <div class="rq-t">ב <span>— פלט מחושב, לא מחלקה</span></div>
+              <svg viewBox="0 0 300 132" xmlns="http://www.w3.org/2000/svg">
+                <rect x="60" y="34" width="180" height="66" rx="8" fill="#f8fafc" stroke="#C62828" stroke-width="1.5" stroke-dasharray="6 4"/>
+                <text x="150" y="60" text-anchor="middle" direction="rtl" font-size="13" font-weight="700" fill="#64748b" font-family="'Noto Sans Hebrew',sans-serif">דוח מכירות</text>
+                <line x1="92" y1="55" x2="208" y2="55" stroke="#C62828" stroke-width="1.8"/>
+                <text x="150" y="84" text-anchor="middle" direction="rtl" font-size="10.5" fill="#C62828" font-family="'Noto Sans Hebrew',sans-serif">מחושב מההזמנות — לא נשמר</text>
+              </svg>
+              <p class="rq-cap">מחושב מנתונים שכבר קיימים (הזמנות) — פלט, לא ישות.</p>
+            </div>
+          </div>
+          <p class="rq-q">מבחן ההימצאוּת: המערכת <u>שומרת</u> את הישות הזו, או <u>מחשבת</u> אותה?</p>
+        </div>
+      </div>
+
+      <aside class="notes">
+        לוחצים על מקרה ← נפתחות שתי דרכים למדל. לא מסמנים תשובה — מתווכחים. מפתח:
+        1 א׳ הרכבה (יהלום מלא — שורת הזמנה לא קיימת בלי ההזמנה) ·
+        2 ב׳ צירוף (יהלום חלול — העמדה עצמאית וניתנת לשיוך מחדש; המראָה של 1) ·
+        3 א׳ הורשה (לכל תת-סוג תכונות משלו: universityId מול last4/gatewayRef) ·
+        4 ב׳ מחלקה מתווכת שורת הזמנה (קשר M:N + צורך לשמור כמות — אין איפה לתלות אותה בקשר רגיל) ·
+        5 ב׳ enum «OrderStatus» — לא הורשה! אותן תכונות בדיוק, רק תווית שונה — הטעות הקלאסית, המראָה של 3 ·
+        6 ב׳ לא מחלקה — מבחן ההימצאוּת: הדוח מחושב מההזמנות בזמן אמת, לא נשמר. פלט, לא ישות.
+        שלושה מהשישה אינם ״קשר רגיל״ (4 מתווכת, 5 enum, 6 לא-מחלקה) — וזה בדיוק הלקח.
+      </aside>
+    </section>
+    <!-- Section ג / C — MARQUEE: the complete campus class model. Port per
+         lecture-06-07/PORTING_BRIEF.md (§ slide-campus-model). The live diagram asset
+         (assets/classdiagram-campus-food.html) is produced SEPARATELY via the
+         uml_class_diagram skill; this slide embeds it full-height in ?embed=1 mode with a
+         narrow "מה לראות" side rail (pattern: lecture-04-05/slide-read-a-diagram.html).
+         Per the authoring brief the embed is authored exactly as specified even before the
+         asset exists — the build will show it once the file lands. Everything the rail
+         points at is in the canonical model (PORTING_BRIEF "CANONICAL CAMPUS DOMAIN MODEL"):
+         composition הזמנה◆שורת הזמנה · mediating class שורת הזמנה · generalization תשלום ·
+         enum OrderStatus · multiplicity at both ends. -->
+    <section data-slug="campus-model">
+      <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
+      <style>
+        section[data-slug="campus-model"] > .body { display:flex; flex-direction:column; gap:0; }
+        section[data-slug="campus-model"] .model-row { flex:1 1 auto; min-height:0; display:grid;
+          grid-template-columns:300px 1fr; gap:16px; }
+        section[data-slug="campus-model"] .rail { display:flex; flex-direction:column; gap:9px; min-height:0; overflow:auto; }
+        section[data-slug="campus-model"] .rail .panel-title { font-size:19px; }
+        section[data-slug="campus-model"] .look { list-style:none; margin:0; padding:0; display:flex;
+          flex-direction:column; gap:8px; }
+        section[data-slug="campus-model"] .look > li { display:flex; align-items:flex-start; gap:9px;
+          font-size:15.5px; line-height:1.35; color:#1e293b; }
+        section[data-slug="campus-model"] .look .g { flex:0 0 34px; text-align:center; font-weight:700;
+          font-size:15px; color:#fff; background:var(--blue); border-radius:7px; padding:3px 0; direction:ltr; }
+        section[data-slug="campus-model"] .look .g.purple { background:#7c3aed; }
+        section[data-slug="campus-model"] .look .g.gray { background:#64748b; font-size:11px; padding:6px 0; }
+        section[data-slug="campus-model"] .look b { color:var(--dark-blue); }
+        section[data-slug="campus-model"] .embed { min-height:0; }
+      </style>
+      <h1>מודל המחלקות של הקמפוס — השלם</h1>
+      <div class="subtitle">כל מה שלמדנו, על תרשים אחד — מערכת הזמנת האוכל בקמפוס</div>
+      <div class="body">
+
+        <div class="model-row">
+
+          <!-- right rail (RTL-first): what to look for on the diagram -->
+          <div class="rail">
+            <div class="panel-title">מה לראות בתרשים</div>
+            <ul class="look">
+              <li><span class="g">◆</span><span><b>הרכבה</b> — הזמנה ◆ שורת הזמנה: שורה לא קיימת בלי ההזמנה שלה</span></li>
+              <li><span class="g purple">▭</span><span><b>מחלקה מתווכת</b> — שורת הזמנה על ה-<span class="en">M:N</span> שבין הזמנה לפריט תפריט (נושאת <span class="en">quantity</span>)</span></li>
+              <li><span class="g">◇</span><span><b>צבירה</b> — קפיטריה ◇ עמדה: עמדה יכולה להתקיים גם בנפרד (בניגוד להרכבה)</span></li>
+              <li><span class="g">▷</span><span><b>הורשה</b> — תשלום עם שני תת-סוגים (כרטיס-אונ׳ / אשראי)</span></li>
+              <li><span class="g purple">⇢</span><span><b>תלות</b> — אל <span class="en">«external system»</span> (שער תשלום, זיהוי אוניברסיטה): מצוירת, אך אינה מחלקת תחום</span></li>
+              <li><span class="g gray">«enum»</span><span><b><span class="en">OrderStatus</span></b> — קופסה לא מחוברת ליד הזמנה (סוג התכונה <span class="en">status</span>)</span></li>
+              <li><span class="g">1..*</span><span><b>קרדינליות</b> בשני הקצוות של כל קשר</span></li>
+            </ul>
+            <div class="callout ai" style="font-size:14.5px; padding:9px 12px;">
+              <span class="label" style="font-size:14px;">💡 התרשים חי</span>
+              זהו את מבחן ההימצאוּת: איזו ישות מכאן <b>לא</b> הופכת למחלקה? (דוח מכירות)
+            </div>
+          </div>
+
+          <!-- left: the live class-diagram asset, full height, embed mode -->
+          <div class="embed">
+            <iframe src="assets/classdiagram-campus-food.html?embed=1" title="מודל המחלקות של הזמנת אוכל בקמפוס" loading="lazy"></iframe>
+          </div>
+
+        </div>
+
+      </div>
+      <aside class="notes">
+        המרקיזה של ההרצאה: כל מושג נאסף לתרשים אחד על הדוגמה הרצה. עוברים על הרכבה
+        (הזמנה◆שורת הזמנה), המחלקה המתווכת (שורת הזמנה שמחליפה את ה-M:N בין הזמנה לפריט תפריט
+        ונושאת את הכמות), ההורשה (תשלום ← כרטיס-אונ׳/אשראי), ה-enum הלא-מחובר (OrderStatus),
+        והקרדינליות בשני הקצוות. לסגור עם מבחן ההימצאוּת: דוח מכירות אינו מחלקה — הוא מחושב.
+        התרשים אינטראקטיבי (asset נבנה בנפרד עם כלי uml_class_diagram).
+      </aside>
+    </section>
+    <!-- D1 — normalizing the class model. The course-simplified 1NF/2NF/3NF on campus data:
+         1NF no repeating list inside an attribute · 2NF no embedded object as an attribute
+         (reference the class via an association) · 3NF break a composite attribute into atomic
+         parts. NEW 2026-07-23 for the L6-7 HTML deck (folds old slide 50). -->
+    <section data-slug="normalization">
+      <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
+      <style>
+        section[data-slug="normalization"] > .body { display:flex; flex-direction:column; gap:12px; }
+        section[data-slug="normalization"] .nf { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; flex:1 1 auto; min-height:0; }
+        section[data-slug="normalization"] .nf .card { display:flex; flex-direction:column; gap:8px; padding:14px 16px; }
+        section[data-slug="normalization"] .nf .hdr { display:flex; align-items:center; gap:8px; }
+        section[data-slug="normalization"] .nf .badge { background:var(--blue); color:#fff; font-weight:800; font-size:15px; border-radius:8px; padding:2px 10px; }
+        section[data-slug="normalization"] .nf .rule { font-size:16px; font-weight:700; color:var(--dark-blue); line-height:1.25; }
+        section[data-slug="normalization"] .ex { border-radius:10px; padding:8px 11px; font-size:15px; line-height:1.5; }
+        section[data-slug="normalization"] .ex.bad { background:#FBEAEA; border-inline-start:4px solid var(--red); }
+        section[data-slug="normalization"] .ex.good { background:#EAF6EC; border-inline-start:4px solid var(--green); }
+        section[data-slug="normalization"] .ex .mk { font-weight:800; }
+        section[data-slug="normalization"] .ex.bad .mk { color:var(--red); }
+        section[data-slug="normalization"] .ex.good .mk { color:var(--green); }
+        section[data-slug="normalization"] .nf .note { font-size:14px; color:var(--muted); line-height:1.45; margin-top:auto; }
+      </style>
+      <h1>נירמול מחלקות</h1>
+      <div class="subtitle">שלושה כללים כדי שהמודל יהיה נקי — כל עובדה מיוצגת פעם אחת</div>
+      <div class="body">
+
+        <div class="nf">
+
+          <div class="card fragment">
+            <div class="hdr"><span class="badge"><span class="en">1NF</span></span><span class="rule">אין רשימה בתוך תכונה</span></div>
+            <div class="ex bad"><span class="mk">✗</span> להזמנה תכונה <span class="en">items</span> = ״המבורגר; צ׳יפס; קולה״</div>
+            <div class="ex good"><span class="mk">✓</span> כל פריט ← <b>שורת הזמנה</b> נפרדת (רשומה / מחלקה משלה)</div>
+            <div class="note">תכונה מחזיקה <b>ערך יחיד</b>. רשימה חוזרת = מחלקה או שורות משלה.</div>
+          </div>
+
+          <div class="card fragment">
+            <div class="hdr"><span class="badge"><span class="en">2NF</span></span><span class="rule">אין אובייקט כתכונה</span></div>
+            <div class="ex bad"><span class="mk">✗</span> להזמנה תכונה <span class="en">student</span> שמכילה אובייקט <b>סטודנט</b> שלם</div>
+            <div class="ex good"><span class="mk">✓</span> <b>קשר</b> (<span class="en">association</span>) אל <b>סטודנט</b> — מפנים למחלקה, לא מטמיעים</div>
+            <div class="note">תכונה מכילה טיפוס פשוט. ישות אחרת = קשר, לא הטמעה.</div>
+          </div>
+
+          <div class="card fragment">
+            <div class="hdr"><span class="badge"><span class="en">3NF</span></span><span class="rule">פרק תכונה מורכבת</span></div>
+            <div class="ex bad"><span class="mk">✗</span> <span class="en">pickupLocation</span> = ״בניין 72 / קומה 2 / עמדה חמה״</div>
+            <div class="ex good"><span class="mk">✓</span> <span class="en">building</span>, <span class="en">floor</span>, <span class="en">station</span> בנפרד — כמו <b>כתובת</b> ← רחוב, עיר, מיקוד</div>
+            <div class="note">פצל ערך מורכב לרכיביו האטומיים.</div>
+          </div>
+
+        </div>
+
+        <p class="bottom-line fragment">מודל מנורמל — כל עובדה במקום אחד: קל לתחזק, וקשה שייסתר את עצמו.</p>
+
+      </div>
+      <aside class="notes">
+        נירמול בגרסה מפושטת של הקורס (לא נירמול בסיסי-נתונים פורמלי): 1NF — אין רשימה חוזרת בתוך תכונה; פריטי
+        ההזמנה הם שורות הזמנה, לא מחרוזת מופרדת בפסיקים. 2NF — לא מטמיעים אובייקט שלם כתכונה; מפנים אל המחלקה
+        דרך קשר (הזמנה↔סטודנט). 3NF — מפרקים תכונה מורכבת לרכיבים אטומיים (מיקום איסוף ← בניין/קומה/עמדה; כתובת
+        ← רחוב/עיר/מיקוד). המסר: מבנה נקי מונע כפילות וסתירות, ומייצר מודל שקל לגזור ממנו בסיס נתונים וקוד.
+      </aside>
+    </section>
+    <!-- D2 — the class diagram is ONE design artifact; design owns much more. Callback to L4-5
+         non-functional requirements, and a forward preview of the sibling design diagrams:
+         תרשים מצבים (L8) = the order's lifecycle, תרשים רצף (L9) = the interactions.
+         REFRESH of old slide 51. NEW 2026-07-23 for the L6-7 HTML deck. -->
+    <section data-slug="design-phase-more">
+      <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
+      <style>
+        section[data-slug="design-phase-more"] > .body { display:flex; flex-direction:column; gap:12px; }
+        section[data-slug="design-phase-more"] .hero { flex:0 0 auto; }
+        section[data-slug="design-phase-more"] .split { display:grid; grid-template-columns:1.15fr 1fr; gap:14px; flex:1 1 auto; min-height:0; align-items:stretch; }
+        section[data-slug="design-phase-more"] .split > .card { display:flex; flex-direction:column; }
+        section[data-slug="design-phase-more"] ul.bullets > li { font-size:18px !important; line-height:1.4; margin-bottom:9px; }
+        section[data-slug="design-phase-more"] .rail { display:flex; flex-direction:column; gap:12px; }
+        section[data-slug="design-phase-more"] .sib { flex:1 1 0; display:flex; flex-direction:column; gap:5px; justify-content:center;
+          border-radius:14px; padding:12px 16px; background:#EAF3FB; border:1px solid #cfe3f5; }
+        section[data-slug="design-phase-more"] .sib .tag { align-self:flex-start; }
+        section[data-slug="design-phase-more"] .sib .nm { font-size:19px; font-weight:800; color:var(--dark-blue); }
+        section[data-slug="design-phase-more"] .sib .nm .en { color:var(--dark-blue); }
+        section[data-slug="design-phase-more"] .sib .ds { font-size:15px; color:var(--muted); line-height:1.45; }
+        section[data-slug="design-phase-more"] .sib .ds b { color:var(--blue); }
+      </style>
+      <h1>עוד על שלב העיצוב</h1>
+      <div class="subtitle">תרשים המחלקות הוא תוצר עיצוב אחד — לעיצוב יש עוד הרבה</div>
+      <div class="body">
+
+        <div class="hero">
+          <h3>המודל עונה על ״<b>איזה</b> מידע?״ — העיצוב עונה על ״<b>איך</b> המערכת בנויה?״</h3>
+          <p>תרשים המחלקות מגדיר את מבנה הנתונים. זו התחלה של העיצוב, לא כולו.</p>
+        </div>
+
+        <div class="split">
+
+          <div class="card fragment">
+            <div class="panel-title">העיצוב אחראי גם ל…</div>
+            <ul class="bullets">
+              <li>ארכיטקטורת שכבות (<span class="en">N-tier</span>) — הצגה · לוגיקה · נתונים</li>
+              <li>חומרה, שרתים ותקשורת</li>
+              <li>אינטגרציה למערכות קיימות — זיהוי האוניברסיטה, שער תשלום</li>
+              <li>אבטחה ופרטיות נתונים</li>
+              <li><b>כל הדרישות הלא-פונקציונליות</b> — עומס שיא, ביצועים, מדרגיות (מ-<span class="en">L4-5</span>)</li>
+            </ul>
+          </div>
+
+          <div class="rail fragment">
+            <div class="sib">
+              <span class="tag">הרצאה 8</span>
+              <div class="nm">תרשים מצבים <span class="en">(State)</span></div>
+              <div class="ds">מחזור החיים של ההזמנה: <b>ממתין ← בהכנה ← מוכן ← נאסף</b></div>
+            </div>
+            <!-- NO lecture number here on purpose (David, 2026-08-09): Sequence IS lecture 9 in the
+                 course's general structure, but it wasn't taught this year (12-week semester instead
+                 of 13). Keep it as a complementary UML diagram so the slide stays year-agnostic. -->
+            <div class="sib">
+              <span class="tag">תרשים משלים</span>
+              <div class="nm">תרשים רצף <span class="en">(Sequence)</span></div>
+              <div class="ds">האינטראקציות בין האובייקטים לאורך זמן — <b>מי קורא למי, ובאיזה סדר</b></div>
+            </div>
+          </div>
+
+        </div>
+
+        <p class="bottom-line fragment">תרשים המחלקות אומר מה המערכת מחזיקה; שאר העיצוב קובע איך היא בנויה ומתנהגת.</p>
+
+      </div>
+      <aside class="notes">
+        תרשים המחלקות הוא תוצר עיצוב אחד מני רבים. העיצוב מגדיר גם ארכיטקטורה (N-tier), חומרה ושרתים, אינטגרציה
+        למערכות קיימות (זיהוי האוניברסיטה ושער התשלום — אותן תלויות מ-C6), אבטחה, ובעיקר את כל הדרישות
+        הלא-פונקציונליות שאספנו ב-L4-5 (עומס 12:00-14:00, 5000 סטודנטים). הצצה קדימה: L8 — תרשים מצבים ילכוד את
+        מחזור החיים של ההזמנה (ערכי OrderStatus כמצבים); תרשים רצף (Sequence) משלים אותו ומראה את האינטראקציה בין האובייקטים בזמן.
+      </aside>
+    </section>
+    <!-- D3 — from the class model to running code (the L13 bridge). Mirror of L4-5's
+         analysis-to-code slide. Pipeline: מודל המחלקות + תרחישים → CLAUDE.md → פיתוח → L13.
+         FRAMING (auto-memory ai-developer-framing): AI is the coder handed a spec — it writes
+         the CRUD/data layer; the TEAM still owns the non-functional requirements and integration.
+         Never "AI builds the system". Thesis: the model is the CEILING on the AI's output.
+         NEW 2026-07-23 for the L6-7 HTML deck. -->
+    <section data-slug="model-to-code" class="has-acro-footer">
+      <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
+      <style>
+        section[data-slug="model-to-code"] > .body { display:flex; flex-direction:column; gap:12px; }
+        section[data-slug="model-to-code"] .pipe { display:flex; align-items:stretch; gap:8px; flex:0 0 auto; }
+        section[data-slug="model-to-code"] .step { flex:1 1 0; border:1.5px solid #cbd5e1; border-radius:12px;
+          background:#f8fafc; padding:8px 10px; text-align:center; display:flex; flex-direction:column; gap:3px; justify-content:center; }
+        section[data-slug="model-to-code"] .step .n { font-size:22px; font-weight:700; color:var(--blue); line-height:1; }
+        section[data-slug="model-to-code"] .step .st { font-size:16px; font-weight:700; color:#1e293b; }
+        section[data-slug="model-to-code"] .step .sub { font-size:12.5px; color:var(--muted); line-height:1.35; }
+        section[data-slug="model-to-code"] .step.l13 { background:#1e40af; border-color:#1e40af; flex:0 0 150px; }
+        section[data-slug="model-to-code"] .step.l13 .st { color:#fff; }
+        section[data-slug="model-to-code"] .step.l13 .sub { color:#c7d2fe; }
+        section[data-slug="model-to-code"] .arw { align-self:center; font-size:24px; color:#94a3b8; flex:0 0 auto; }
+        section[data-slug="model-to-code"] .cols { flex:1 1 auto; min-height:0; align-items:stretch; }
+        section[data-slug="model-to-code"] .cols .callout { display:flex; flex-direction:column; justify-content:center; }
+        section[data-slug="model-to-code"] .cols .callout p { margin:0; }
+        section[data-slug="model-to-code"] .callout.ai.thesis { flex:0 0 auto; }
+      </style>
+      <h1>🤖 מהמודל לקוד</h1>
+      <div class="subtitle">מודל המחלקות הוא המפרט — ה-<span class="en">AI</span> כותב את שכבת הנתונים, ואתם מחליטים ומאתגרים</div>
+      <div class="body">
+
+        <div class="pipe fragment">
+          <div class="step">
+            <div class="n">1</div><div class="st">מודל המחלקות + תרחישים</div>
+            <div class="sub">מה שבנינו בהרצאה</div>
+          </div>
+          <div class="arw">←</div>
+          <div class="step">
+            <div class="n">2</div><div class="st"><span class="en">CLAUDE.md</span></div>
+            <div class="sub">המפרט שנמסר לפיתוח</div>
+          </div>
+          <div class="arw">←</div>
+          <div class="step">
+            <div class="n">3</div><div class="st">פיתוח</div>
+            <div class="sub">ה-<span class="en">AI</span> כותב <span class="en term" data-term="crud">CRUD</span> · הצוות: לא-פונקציונלי ושילוב</div>
+          </div>
+          <div class="arw">←</div>
+          <div class="step l13">
+            <div class="st">הרצאה 13</div>
+            <div class="sub">מהמפרט למערכת רצה</div>
+          </div>
+        </div>
+
+        <div class="cols">
+          <div class="callout good fragment">
+            <span class="label">✅ ה-<span class="en">AI</span> גוזר מהמודל</span>
+            <p>סכימת בסיס נתונים ופעולות <span class="en">CRUD</span> לכל מחלקה (<b>הזמנה</b>, <b>פריט תפריט</b>, <b>תשלום</b>),
+              וולידציות ישירות מהאילוצים — <span class="en">quantity {&gt; 0}</span>, <span class="en">price {≥ 0}</span>.</p>
+          </div>
+          <div class="callout warn fragment">
+            <span class="label">👥 הצוות עדיין אחראי</span>
+            <p>מה שאין במודל: הדרישות הלא-פונקציונליות (עומס שיא, אבטחה) והאינטגרציה למערכות החיצוניות —
+              זיהוי האוניברסיטה ושער התשלום. ה-<span class="en">AI</span> אינו מחליט אותן במקומכם.</p>
+          </div>
+        </div>
+
+        <div class="callout ai thesis fragment">
+          <span class="label">💡 המודל הוא התקרה</span>
+          מה שהמודל אומר בבירור — ה-<span class="en">AI</span> יממש; מה שהוא משאיר מעורפל — יהפוך לקוד שגוי, <b>בביטחון</b>.
+          מודל חד ← מערכת נכונה; מודל מעורפל ← אותו באג בקנה מידה.
+        </div>
+
+      </div>
+      <aside class="notes">
+        הגשר להרצאה 13, במקביל ל-analysis-to-code של L4-5. הצינור: מודל המחלקות + תרחישי השימוש ← CLAUDE.md
+        (המפרט) ← פיתוח ← מערכת רצה ב-L13. המסגור (auto-memory): ה-AI הוא המתכנת שקיבל מפרט — הוא כותב את שכבת
+        הנתונים וה-CRUD מהמחלקות והאילוצים; הצוות עדיין אחראי ללא-פונקציונלי (עומס, אבטחה) ולאינטגרציה (זיהוי
+        אוניברסיטה, שער תשלום). לא אומרים ״ה-AI בונה את המערכת״. התזה: המודל הוא התקרה של מה שה-AI יכול לייצר —
+        מודל מעורפל מייצר קוד שגוי בביטחון. פרויקט הדוגמה: github.com/dcodish/SAD-sample-project.
+      </aside>
+    <div class="acro-footer"><span class="acro"><span class="en">CRUD</span> = <span class="en">Create, Read, Update, Delete</span> · יצירה, קריאה, עדכון, מחיקה</span> &nbsp;·&nbsp; <span class="acro"><span class="en">AI</span> = <span class="en">Artificial Intelligence</span> · בינה מלאכותית</span></div>
+    </section>
+    <!-- E1 — in-class practice. Feed a fresh operations spec (מעונות / dormitories — one of the
+         classic identification scenarios, per REDESIGN_OUTLINE) to Claude, get a class model, then
+         CRITIQUE it by this lecture's doctrine. The graded skill is the critique, not the draw —
+         same thread as L4-5's exercises-ai-critique. The dorm spec is seeded with the traps we
+         taught: M:N-with-data (mediating class), enum-not-inheritance, composition, a report that
+         fails the persistence test. NEW 2026-07-23 for the L6-7 HTML deck. -->
+    <section data-slug="exercise" class="has-acro-footer">
+      <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
+      <style>
+        section[data-slug="exercise"] > .body { display:flex; flex-direction:column; gap:13px; }
+        section[data-slug="exercise"] .steps { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; flex:1 1 auto; min-height:0; }
+        section[data-slug="exercise"] .step { border:1.5px solid #cbd5e1; border-radius:12px; background:#f8fafc;
+          padding:12px 14px; display:flex; flex-direction:column; gap:5px; }
+        section[data-slug="exercise"] .step .n { font-size:22px; font-weight:800; color:var(--blue); line-height:1; }
+        section[data-slug="exercise"] .step .t { font-size:17px; font-weight:700; color:#1e293b; }
+        section[data-slug="exercise"] .step .d { font-size:14px; color:var(--muted); line-height:1.5; }
+        section[data-slug="exercise"] .hero p { font-size:18px; }
+        section[data-slug="exercise"] .hero b.hl { color:var(--dark-blue); }
+      </style>
+      <h1>תרגיל: זהו את המחלקות</h1>
+      <div class="subtitle">מזינים תרחיש חדש ל-<span class="en">AI</span>, מקבלים מודל מחלקות — <b>ואתם מבקרים אותו</b></div>
+      <div class="body">
+
+        <div class="hero fragment">
+          <h3>מערכת לניהול <b>מעונות הסטודנטים</b></h3>
+          <p>לכל <b class="hl">בניין</b> יש <b class="hl">חדרים</b> (יחיד / זוגי). סטודנט חותם על <b class="hl">חוזה שכירות</b>
+            לחדר לתקופה, עם דמי שכירות חודשיים; חדר מתחלף בין דיירים לאורך השנים. דיירים פותחים
+            <b class="hl">קריאות תחזוקה</b> (נפתחה / בטיפול / נסגרה), וההנהלה מפיקה <b class="hl">דוח תפוסה</b> חודשי.</p>
+        </div>
+
+        <div class="steps">
+          <div class="step fragment"><div class="n">1</div><div class="t">הזינו ל-<span class="en">AI</span></div>
+            <div class="d">תנו את התרחיש ל-<span class="en">Claude</span> ובקשו <b>מודל מחלקות</b> — מחלקות, תכונות, קשרים וקרדינליות.</div></div>
+          <div class="step fragment"><div class="n">2</div><div class="t">בקרו לפי הדוקטרינה</div>
+            <div class="d">מבחן קיימוּת (״דוח תפוסה״ מחלקה?), קרדינליות בשני הקצוות, אגרגציה מול קומפוזיציה, <span class="en">enum</span> מול הורשה, ו<b>מחלקה מתווכת</b> ל-<span class="en">M:N</span> עם נתונים.</div></div>
+          <div class="step fragment"><div class="n">3</div><div class="t">תקנו ונמקו</div>
+            <div class="d">הציעו מודל מתוקן, והסבירו <b>כל</b> שינוי — מה ה-<span class="en">AI</span> פספס, המציא, או הניח, ולמה התיקון נכון.</div></div>
+        </div>
+
+        <div class="callout warn fragment">
+          <span class="label">⚠️ המלכודות שנחפש</span>
+          חדר↔דייר עם דמי שכירות = <b>מחלקה מתווכת</b> (חוזה), לא קשר פשוט · בניין <b>◆</b> חדר (קומפוזיציה) ·
+          מצב קריאת תחזוקה = <span class="en">enum</span>, <b>לא</b> הורשה · ״דוח תפוסה״ הוא פלט מחושב — <b>לא מחלקה</b>.
+        </div>
+
+        <p class="bottom-line fragment">לא מדרגים כמה מהר ה-<span class="en">AI</span> צייר — מדרגים <b>כמה חדה הביקורת שלכם</b>.</p>
+
+      </div>
+      <aside class="notes">
+        תרגול בכיתה על תרחיש טרי (מעונות) — מכוון כדי שהסטודנטים יעבירו את הדוקטרינה מהקמפוס לתחום חדש. מזינים
+        ל-Claude, מקבלים מודל מחלקות, ומבקרים: (1) ״דוח תפוסה״ נכשל במבחן הקיימות — פלט מחושב, לא מחלקה; (2)
+        חדר↔דייר עם דמי שכירות ותקופה דורש מחלקה מתווכת (חוזה שכירות), לא קשר M:N פשוט; (3) בניין◆חדר קומפוזיציה
+        (חדר לא קיים בלי בניין); (4) מצב קריאת תחזוקה וסוג חדר הם enum, לא היררכיית הורשה; (5) קרדינליות בשני
+        הקצוות. אין תשובה ״נכונה״ אחת — הערך הוא בזיהוי מה ה-AI פספס/המציא/הניח. את מלצר-אוטומטי משאירים למטלת הבית.
+      </aside>
+    <div class="acro-footer"><span class="acro"><span class="en">AI</span> = <span class="en">Artificial Intelligence</span> · בינה מלאכותית</span></div>
+    </section>
+    <!-- E2 — recap + close. The arc (class → members → relationships → good design), the five
+         doctrine takeaways, and the bridge to L8: the OrderStatus enum values become STATES in a
+         state diagram (the campus order's lifecycle). NEW 2026-07-23 for the L6-7 HTML deck. -->
+    <section data-slug="summary">
+      <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
+      <style>
+        section[data-slug="summary"] > .body { display:flex; flex-direction:column; gap:13px; }
+        section[data-slug="summary"] .arc { display:flex; align-items:center; gap:8px; flex:0 0 auto; }
+        section[data-slug="summary"] .arc .stage { flex:1 1 0; text-align:center; border-radius:12px; padding:10px 8px;
+          background:#EAF3FB; border:1px solid #cfe3f5; font-size:16px; font-weight:700; color:var(--dark-blue); line-height:1.25; }
+        section[data-slug="summary"] .arc .arw { flex:0 0 auto; font-size:22px; color:#94a3b8; }
+        section[data-slug="summary"] .take { flex:1 1 auto; min-height:0; display:flex; flex-direction:column; }
+        section[data-slug="summary"] .take ul.bullets > li { font-size:18px !important; line-height:1.45; margin-bottom:8px; }
+        section[data-slug="summary"] .take ul.bullets > li b { color:var(--dark-blue); }
+        section[data-slug="summary"] .next h3 { display:flex; align-items:center; gap:8px; }
+        section[data-slug="summary"] .next .tag { background:var(--orange); }
+      </style>
+      <h1>סיכום וסגירה</h1>
+      <div class="subtitle">מהמחלקה הבודדת — למודל תחום נקי</div>
+      <div class="body">
+
+        <div class="arc fragment">
+          <div class="stage">מחלקה ואובייקט</div>
+          <div class="arw">←</div>
+          <div class="stage">אנטומיה — תכונות, פעולות, נראות</div>
+          <div class="arw">←</div>
+          <div class="stage">קשרים בין מחלקות</div>
+          <div class="arw">←</div>
+          <div class="stage">עיצוב טוב — נירמול</div>
+        </div>
+
+        <div class="card take fragment">
+          <div class="panel-title">חמישה עקרונות שנשארים איתכם</div>
+          <ul class="bullets">
+            <li><b>מבחן הקיימוּת:</b> ישות היא מחלקה רק אם המערכת שומרת ומנהלת רשומות שלה — דוח וקבלה הם פלט, לא מחלקה.</li>
+            <li><b>קרדינליות בשני הקצוות</b> תמיד — <span class="en">1 / 0..1 / 1..* / 0..*</span>.</li>
+            <li><b>מחלקה מתווכת</b> ל-<span class="en">M:N</span> עם נתונים משלו — <b>שורת הזמנה</b> נושאת את הכמות.</li>
+            <li><b>אגרגציה <span class="en">◇</span> מול קומפוזיציה <span class="en">◆</span>:</b> היהלום יושב אצל השלם; מלא = החלק לא קיים בלעדיו.</li>
+            <li><b><span class="en">enum</span> ולא הורשה</b> כשמדובר ברשימת ערכים סגורה (סטטוס), ולא בתתי-מחלקות שונות.</li>
+          </ul>
+        </div>
+
+        <div class="hero next fragment">
+          <h3><span class="tag">הרצאה 8</span> הבא — תרשים מצבים <span class="en">(State Diagram)</span></h3>
+          <p>מחזור החיים של הזמנה בקמפוס: ערכי ה-<span class="en">enum</span> <span class="en">OrderStatus</span> —
+            <b>ממתין ← בהכנה ← מוכן ← נאסף</b> — קמים לחיים כ<b>מצבים</b> וכמעברים ביניהם.</p>
+        </div>
+
+      </div>
+      <aside class="notes">
+        סוגרים את הקשת: מחלקה ואובייקט ← אנטומיה (תכונות/פעולות/נראות) ← קשרים ← עיצוב טוב (נירמול). חמשת
+        העקרונות לחזור עליהם: מבחן הקיימות, קרדינליות בשני הקצוות, מחלקה מתווכת ל-M:N-עם-נתונים, אגרגציה מול
+        קומפוזיציה (מיקום היהלום ומשמעות המילוי), ו-enum-ולא-הורשה לרשימה סגורה. גשר להרצאה 8: תרשים מצבים —
+        ערכי OrderStatus שראינו (ממתין/בהכנה/מוכן/נאסף) הופכים למצבים במחזור החיים של ההזמנה, והמעברים ביניהם.
+      </aside>
+    </section>
+    <!-- E3 — the home assignment (the lecture's last taught slide; David: "the last slide is always
+         a home assignment"). Mirror of L4-5's homework slide. Students take the spec we did NOT run
+         in class (מלצר אוטומטי / automatic waiter — the second classic identification scenario) and
+         repeat the workflow: feed the spec to Claude, get a class model + assumptions, then CRITIQUE
+         it by the lecture's doctrine and submit a corrected model with reasoning. The graded artifact
+         is the CRITIQUE. The waiter spec is deliberately parallel to campus food so the doctrine
+         transfers. NEW 2026-07-23 for the L6-7 HTML deck. -->
+    <section data-slug="homework" class="has-acro-footer">
+      <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
+      <style>
+        section[data-slug="homework"] > .body { display:flex; flex-direction:column; gap:13px; }
+        section[data-slug="homework"] .steps { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
+        section[data-slug="homework"] .step { border:1.5px solid #cbd5e1; border-radius:12px; background:#f8fafc;
+          padding:12px 14px; display:flex; flex-direction:column; gap:5px; }
+        section[data-slug="homework"] .step .n { font-size:22px; font-weight:800; color:var(--blue); line-height:1; }
+        section[data-slug="homework"] .step .t { font-size:17px; font-weight:700; color:#1e293b; }
+        section[data-slug="homework"] .step .d { font-size:14px; color:var(--muted); line-height:1.5; }
+        section[data-slug="homework"] .submit .label { color:#166534; }
+        section[data-slug="homework"] .submit { border-color:#86efac; background:#f0fdf4; }
+        section[data-slug="homework"] .submit ul { margin:2px 0 0; }
+        section[data-slug="homework"] .hero p { font-size:17px; }
+        section[data-slug="homework"] .hero b.hl { color:var(--dark-blue); }
+      </style>
+      <h1>מטלת בית 🏠</h1>
+      <div class="subtitle">אותו תהליך שעשינו בכיתה — על התרחיש שלא הרצנו</div>
+      <div class="body">
+
+        <div class="hero fragment">
+          <h3>מסעדת ה<b>מלצר האוטומטי</b></h3>
+          <p>לכל <b class="hl">שולחן</b> יש קוד; סועד סורק, בוחר <b class="hl">מנות</b> מ<b class="hl">תפריט</b>
+            (מנה זמינה / אזלה) ומזמין בכמויות שונות עם הערות (״בלי בצל״). המנות נשלחות ל<b class="hl">תחנת הכנה</b>
+            (בשרי / חלבי / קינוחים); מצב הזמנה: התקבלה / בהכנה / הוגשה / שולמה. ההנהלה מפיקה <b class="hl">דוח מכירות</b> יומי.</p>
+        </div>
+
+        <div class="steps">
+          <div class="step fragment"><div class="n">1</div><div class="t">הזינו ל-<span class="en">AI</span></div>
+            <div class="d">תנו את התרחיש ל-<span class="en">Claude</span> ובקשו <b>מודל מחלקות</b> + רשימת ה<b>הנחות</b> שהניח.</div></div>
+          <div class="step fragment"><div class="n">2</div><div class="t">בקרו לפי הדוקטרינה</div>
+            <div class="d">מבחן קיימוּת (״דוח מכירות״?), קרדינליות בשני הקצוות, <b>מחלקה מתווכת</b> ל-<span class="en">M:N</span> עם כמות, קומפוזיציה מול אגרגציה, <span class="en">enum</span> מול הורשה.</div></div>
+          <div class="step fragment"><div class="n">3</div><div class="t">תקנו ונמקו</div>
+            <div class="d">הציעו מודל מתוקן, והסבירו <b>כל</b> שינוי — מה ה-<span class="en">AI</span> פספס, המציא, או הניח, ולמה התיקון נכון.</div></div>
+        </div>
+
+        <div class="callout good submit fragment">
+          <span class="label">📤 מה מגישים</span>
+          <ul class="bullets" style="margin:0;">
+            <li>הפלט המקורי של ה-<span class="en">AI</span> (המודל וההנחות) + הפרומפט ששלחתם.</li>
+            <li>טבלת ביקורת: לכל ליקוי — מה הבעיה, לאיזה כלל היא נוגעת, והתיקון.</li>
+            <li>המודל המתוקן שלכם (מהכלי או ביד), ופסקה קצרה: מה ה-<span class="en">AI</span> דווקא עשה <b>טוב</b>.</li>
+          </ul>
+        </div>
+
+        <p class="bottom-line fragment">לא מדרגים כמה יפה ה-<span class="en">AI</span> צייר — מדרגים <b>כמה חדה הייתה הביקורת שלכם</b>.</p>
+
+      </div>
+      <aside class="notes">
+        מטלת הבית = מראה של התרגיל בכיתה, על התרחיש השני (מלצר אוטומטי) — מכוון להיות מקביל לקמפוס כדי שהדוקטרינה
+        תעבור. התוצר המדורג הוא הביקורת, לא ציור ה-AI — אותו חוט של כל ההרצאה. לוודא שהסטודנטים תופסים: הזמנה↔מנה
+        עם כמות/הערות דורש מחלקה מתווכת (שורת הזמנה); הזמנה◆שורת-הזמנה קומפוזיציה; מצב הזמנה וסוג תחנה הם enum ולא
+        הורשה; ״דוח מכירות״ נכשל במבחן הקיימות (פלט מחושב, לא מחלקה); קרדינליות בשני הקצוות. אין תשובה נכונה אחת.
+      </aside>
+    <div class="acro-footer"><span class="acro"><span class="en">AI</span> = <span class="en">Artificial Intelligence</span> · בינה מלאכותית</span></div>
+    </section>
+    <!-- Closing slide — תודה! + the next-lecture teaser over a licensed Adobe Stock photo
+         (Adobe Stock #272102292 "Technology blueprints" — the structure/blueprint motif of a
+         class diagram; licensed 2026-08-09 → assets/closing.jpg).
+         Full-bleed on purpose: no blue title bar and no left accent bar (same treatment as
+         the cover, section.title-slide). The SDLC chip is suppressed from slides.yaml
+         (sdlc_phase: "") so the bottom-left band stays clear.
+         Keep the wording in sync with slide-summary.html (L6-7 → תרשים מצבים in L8). -->
+    <section data-slug="closing">
+      <style>
+        /* ---- full-bleed photo + dark scrim so the Hebrew stays legible ------------- */
+        .reveal section[data-slug="closing"] { background: #04263F; }
+        .reveal .slides > section[data-slug="closing"]::before { display: none; }  /* no accent bar */
+
+        .reveal section[data-slug="closing"] > .body {
+          padding: 0; gap: 0;
+          position: relative; overflow: hidden;
+          align-items: center; justify-content: center;
+          background-image: url("assets/closing.jpg");
+          background-size: cover;
+          background-position: center 45%;
+          background-repeat: no-repeat;
+        }
+        .reveal section[data-slug="closing"] > .body::before {   /* the scrim */
+          content: ""; position: absolute; inset: 0;
+          background:
+            radial-gradient(ellipse at 50% 46%, rgba(0,28,52,.58) 0%, rgba(0,24,46,.78) 58%, rgba(0,18,36,.90) 100%),
+            linear-gradient(180deg, rgba(0,78,140,.30) 0%, rgba(0,20,40,.58) 100%);
+        }
+
+        /* ---- centred sign-off ------------------------------------------------------ */
+        .reveal section[data-slug="closing"] .closing-wrap {
+          position: relative; z-index: 1;
+          display: flex; flex-direction: column; align-items: center;
+          text-align: center;
+          padding: 0 90px 40px;          /* bottom pad keeps text out of the chrome band */
+        }
+        .reveal section[data-slug="closing"] .closing-thanks {
+          font-size: 108px; font-weight: 800; line-height: 1; color: #fff;
+          letter-spacing: .01em;
+          text-shadow: 0 4px 26px rgba(0,0,0,.60);
+        }
+        .reveal section[data-slug="closing"] .closing-rule {
+          width: 132px; height: 4px; border-radius: 2px; margin: 26px 0 24px;
+          background: rgba(255,255,255,.88);
+          box-shadow: 0 2px 10px rgba(0,0,0,.45);
+        }
+        .reveal section[data-slug="closing"] .closing-next {
+          font-size: 31px; font-weight: 600; line-height: 1.42; color: #fff;
+          max-width: 1030px;
+          text-wrap: balance;            /* if it must wrap, split it evenly - no 2-word orphan */
+          text-shadow: 0 2px 12px rgba(0,0,0,.65);
+        }
+        /* Keep a Latin term (and its parentheses) on ONE line: a mid-term break lands the
+           brackets on opposite lines and the bidi mirroring then reads backwards. */
+        .reveal section[data-slug="closing"] .closing-next .en { white-space: nowrap; }
+        .reveal section[data-slug="closing"] .closing-course {
+          margin-top: 30px;
+          font-size: 18px; font-weight: 600; line-height: 1.4;
+          color: rgba(255,255,255,.80); letter-spacing: .03em;
+          text-shadow: 0 1px 8px rgba(0,0,0,.6);
+        }
+        /* the auto acronym footer sits on the photo — make it readable, not gray-on-dark */
+        .reveal section[data-slug="closing"] > .acro-footer,
+        .reveal section[data-slug="closing"] .acro-footer .en {
+          color: rgba(255,255,255,.70); text-shadow: 0 1px 4px rgba(0,0,0,.7);
+        }
+      </style>
+
+      <div class="body">
+        <div class="closing-wrap">
+          <div class="closing-thanks">תודה!</div>
+          <div class="closing-rule"></div>
+          <div class="closing-next">
+            הבא בתור — תרשים מצבים <span class="en">(State Diagram)</span>: מחזור החיים של ההזמנה
+          </div>
+          <div class="closing-course">
+            ניתוח ועיצוב מערכות מידע &nbsp;·&nbsp; הרצאות 6-7 — תרשים מחלקות <span class="en">Class Diagram</span>
+          </div>
+        </div>
+      </div>
+
+      <aside class="notes">סוגרים: תודה, ותזכורת שבהרצאה 8 ערכי OrderStatus הופכים למצבים במחזור החיים של ההזמנה.</aside>
+    </section>
+  </div>
+</div>
+<script src="../web/vendor/reveal/dist/reveal.js"></script>
+<script src="../web/vendor/reveal/plugin/notes/notes.js"></script>
+<script src="../web/vendor/reveal/plugin/highlight/highlight.js"></script>
+<script src="../web/theme/sad.js"></script>
+<script src="../web/theme/glossary.js"></script>
+</body>
+</html>

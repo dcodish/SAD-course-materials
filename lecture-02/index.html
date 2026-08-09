@@ -32,20 +32,18 @@
       </div>
     <div class="acro-footer"><span class="acro"><span class="en">BPMN</span> = <span class="en">Business Process Model and Notation</span> · מידול וסימון תהליכים עסקיים</span></div>
     </section>
-    <section class="sdlc-map has-acro-footer" data-slug="lecture-02-sdlc-asis">
+    <!-- Where-are-we transition slide (Section A: as-is study). Replaces the old simple
+         SDLC phase-map (source: sdlc) with the live, interactive SDLC x roles rail
+         (assets/sdlc_roles_rtl.html), flagged on the current phase via ?here=asis.
+         Same asset is reused in L1 (?here=init) and L4-5 (?here=req). -->
+    <section data-slug="sdlc-roles-asis" class="has-acro-footer">
+      <div class="sdlc-chip" title="שלב 2 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>חקר מצב קיים</div>
       <h1>היכן אנחנו ב-<span class="en">SDLC</span></h1>
+      <div class="subtitle">שלב <b>חקר מצב קיים</b> — כל שלב במחזור החיים ובעלי התפקידים המעורבים בו</div>
       <div class="body">
-        <div class="sdlc-stepper">
-          <div class="sdlc-step done"><span class="n">1</span><span class="nm">ייזום</span></div>
-          <div class="sdlc-step active"><span class="n">2</span><span class="nm">חקר מצב קיים</span></div>
-          <div class="sdlc-step todo"><span class="n">3</span><span class="nm">ניתוח דרישות</span></div>
-          <div class="sdlc-step todo"><span class="n">4</span><span class="nm">חקר ישימות</span></div>
-          <div class="sdlc-step todo"><span class="n">5</span><span class="nm">עיצוב</span></div>
-          <div class="sdlc-step todo"><span class="n">6</span><span class="nm">פיתוח</span></div>
-          <div class="sdlc-step todo"><span class="n">7</span><span class="nm">בדיקות</span></div>
-          <div class="sdlc-step todo"><span class="n">8</span><span class="nm">הטמעה ותפעול</span></div>
+        <div class="embed">
+          <iframe src="assets/sdlc_roles_rtl.html?here=asis" title="SDLC stages and roles" loading="lazy"></iframe>
         </div>
-        <p class="sdlc-now">בשלב זה: <b>חקר מצב קיים</b> — ממפים את התהליך הקיים ואת בעלי העניין</p>
       </div>
     <div class="acro-footer"><span class="acro"><span class="en">SDLC</span> = <span class="en">Software Development Life Cycle</span> · מחזור פיתוח תוכנה</span></div>
     </section>
@@ -1540,7 +1538,7 @@
                 <text x="170" y="183" text-anchor="middle" font-size="16" fill="var(--body)">המשך לתשלום</text>
                 <!-- flow labels = the OUTCOME on each branch (kept clear of the lines) -->
                 <text x="154" y="149" text-anchor="end" font-size="15" font-weight="700" fill="var(--green)">במלאי</text>
-                <text x="238" y="90" text-anchor="middle" font-size="15" font-weight="700" fill="var(--red)">אזל ↺</text>
+                <text x="238" y="90" text-anchor="middle" font-size="15" font-weight="700" fill="var(--red)">אזל</text>
                 <!-- token: cycle 1 — כן (continue down); cycle 2 — לא (loop back to the task) -->
                 <circle r="8" fill="#2e7d32" stroke="#fff" stroke-width="2" opacity="0">
                   <animateMotion dur="7s" repeatCount="indefinite" calcMode="linear"
@@ -3213,7 +3211,7 @@
         <div class="cols-3" style="align-items:stretch;">
           <div class="card fragment" style="border-inline-start:5px solid var(--blue);">
             <div class="panel-title">1️⃣ הורידו את החומר</div>
-            <p style="margin:0;">במאגר הקורס: <code class="inline">materials/2-חקר-מצב-קיים/תרגיל-בית</code><br>
+            <p style="margin:0;">במאגר הקורס: <code class="inline" dir="ltr" style="unicode-bidi:isolate; white-space:nowrap;">materials/2-חקר-מצב-קיים/תרגיל-בית</code><br>
               ראיונות עם <b>פקידת הקבלה</b>, <b>המכונאי</b> ו<b>בעל המוסך</b> · זווית <b>לקוח</b> + נתונים. כל אחד מספר חלק — <b>לא לפי הסדר</b>.</p>
           </div>
           <div class="card fragment" style="border-inline-start:5px solid var(--blue);">
@@ -3237,6 +3235,90 @@
 
       </div>
     <div class="acro-footer"><span class="acro"><span class="en">BPMN</span> = <span class="en">Business Process Model and Notation</span> · מידול וסימון תהליכים עסקיים</span> &nbsp;·&nbsp; <span class="acro"><span class="en">AI</span> = <span class="en">Artificial Intelligence</span> · בינה מלאכותית</span></div>
+    </section>
+    <!-- Closing slide — תודה! + the next-lecture teaser over a licensed Adobe Stock photo
+         (Adobe Stock #306095499 "Futuristic technological background" — a blue mesh of
+         connected nodes, the flow motif of BPMN; licensed 2026-08-09 → assets/closing.jpg).
+         Full-bleed on purpose: no blue title bar and no left accent bar (same treatment as
+         the cover, section.title-slide). The SDLC chip is suppressed from slides.yaml
+         (sdlc_phase: "") so the bottom-left band stays clear.
+         Keep the wording in sync with slide-summary.html (L2 → דרישות in L3). -->
+    <section data-slug="closing" class="has-acro-footer">
+      <style>
+        /* ---- full-bleed photo + dark scrim so the Hebrew stays legible ------------- */
+        .reveal section[data-slug="closing"] { background: #04263F; }
+        .reveal .slides > section[data-slug="closing"]::before { display: none; }  /* no accent bar */
+
+        .reveal section[data-slug="closing"] > .body {
+          padding: 0; gap: 0;
+          position: relative; overflow: hidden;
+          align-items: center; justify-content: center;
+          background-image: url("assets/closing.jpg");
+          background-size: cover;
+          background-position: center center;
+          background-repeat: no-repeat;
+        }
+        .reveal section[data-slug="closing"] > .body::before {   /* the scrim */
+          content: ""; position: absolute; inset: 0;
+          background:
+            radial-gradient(ellipse at 50% 46%, rgba(0,28,52,.58) 0%, rgba(0,24,46,.78) 58%, rgba(0,18,36,.90) 100%),
+            linear-gradient(180deg, rgba(0,78,140,.30) 0%, rgba(0,20,40,.58) 100%);
+        }
+
+        /* ---- centred sign-off ------------------------------------------------------ */
+        .reveal section[data-slug="closing"] .closing-wrap {
+          position: relative; z-index: 1;
+          display: flex; flex-direction: column; align-items: center;
+          text-align: center;
+          padding: 0 90px 40px;          /* bottom pad keeps text out of the chrome band */
+        }
+        .reveal section[data-slug="closing"] .closing-thanks {
+          font-size: 108px; font-weight: 800; line-height: 1; color: #fff;
+          letter-spacing: .01em;
+          text-shadow: 0 4px 26px rgba(0,0,0,.60);
+        }
+        .reveal section[data-slug="closing"] .closing-rule {
+          width: 132px; height: 4px; border-radius: 2px; margin: 26px 0 24px;
+          background: rgba(255,255,255,.88);
+          box-shadow: 0 2px 10px rgba(0,0,0,.45);
+        }
+        .reveal section[data-slug="closing"] .closing-next {
+          font-size: 31px; font-weight: 600; line-height: 1.42; color: #fff;
+          max-width: 1030px;
+          text-wrap: balance;            /* if it must wrap, split it evenly - no 2-word orphan */
+          text-shadow: 0 2px 12px rgba(0,0,0,.65);
+        }
+        /* Keep a Latin term (and its parentheses) on ONE line: a mid-term break lands the
+           brackets on opposite lines and the bidi mirroring then reads backwards. */
+        .reveal section[data-slug="closing"] .closing-next .en { white-space: nowrap; }
+        .reveal section[data-slug="closing"] .closing-course {
+          margin-top: 30px;
+          font-size: 18px; font-weight: 600; line-height: 1.4;
+          color: rgba(255,255,255,.80); letter-spacing: .03em;
+          text-shadow: 0 1px 8px rgba(0,0,0,.6);
+        }
+        /* the auto acronym footer sits on the photo — make it readable, not gray-on-dark */
+        .reveal section[data-slug="closing"] > .acro-footer,
+        .reveal section[data-slug="closing"] .acro-footer .en {
+          color: rgba(255,255,255,.70); text-shadow: 0 1px 4px rgba(0,0,0,.7);
+        }
+      </style>
+
+      <div class="body">
+        <div class="closing-wrap">
+          <div class="closing-thanks">תודה!</div>
+          <div class="closing-rule"></div>
+          <div class="closing-next">
+            בשבוע הבא — מתהליך מובן לדרישות: מה המערכת צריכה לעשות
+          </div>
+          <div class="closing-course">
+            ניתוח ועיצוב מערכות מידע &nbsp;·&nbsp; הרצאה 2 — תיעוד תהליכים עסקיים <span class="en">BPMN</span>
+          </div>
+        </div>
+      </div>
+
+      <aside class="notes">סוגרים: תודה, ותזכורת שבשבוע הבא הופכים את התהליך שתיעדנו לדרישות למערכת.</aside>
+    <div class="acro-footer"><span class="acro"><span class="en">BPMN</span> = <span class="en">Business Process Model and Notation</span> · מידול וסימון תהליכים עסקיים</span></div>
     </section>
   </div>
 </div>

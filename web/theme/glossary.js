@@ -5,9 +5,9 @@
    Click it → a small popover shows a short reminder. Entries live in GLOSSARY below,
    so a concept defined once is reusable on every slide and in every lecture.
 
-   Optional "see more" link per entry:
-     more: { label, slug }  → jumps to a slide in THIS deck by its data-slug
-     more: { label, href }  → any URL, e.g. another lecture: 'lecture-03.html#/4'
+   Popups are self-contained: NO "see more" / deep links that leave the current
+   slide (David, 2026-07-14 — a jump has no way back and loses the student's place).
+   Keep each reminder short; if a term needs more, teach it on its own slide.
 */
 (function () {
   "use strict";
@@ -21,10 +21,18 @@
           <li><b>M</b> · <span dir="ltr">Measurable</span> — מדידה</li>
           <li><b>A</b> · <span dir="ltr">Achievable</span> — בת-השגה</li>
           <li><b>R</b> · <span dir="ltr">Relevant</span> — רלוונטית למטרה</li>
-          <li><b>T</b> · <span dir="ltr">Time-bound</span> — תחומה בזמן</li>
+          <li><b>T</b> · <span dir="ltr">Traceable</span> — עקיבה: מזהה, מקור, ושיוך לבדיקה ולתרחיש</li>
         </ul>`,
-      // When lecture 3 exists, point students to its SMART slide:
-      // more: { label: "להרחבה — הרצאה 3", href: "lecture-03.html#/SLUG" }
+    },
+    moscow: {
+      title: "MoSCoW — תעדוף דרישות",
+      html: `<p>תעדוף לפי מידת ההכרחיות ל<b>גרסה</b> — מה נכנס עכשיו, לא סדר הפיתוח:</p>
+        <ul class="g-list">
+          <li><b>M</b> · <span dir="ltr">Must</span> — חובה; בלעדיה הגרסה נכשלת</li>
+          <li><b>S</b> · <span dir="ltr">Should</span> — רצוי; חשוב אך לא קריטי</li>
+          <li><b>C</b> · <span dir="ltr">Could</span> — אפשרי; אם יישאר זמן</li>
+          <li><b>W</b> · <span dir="ltr">Won't</span> — לא בגרסה זו (במכוון)</li>
+        </ul>`,
     },
     crud: {
       title: "CRUD",
@@ -38,9 +46,11 @@
         במקום סבב ראיונות נפרדים — מקצר זמן ומפחית אי-הבנות.</p>`,
     },
     wetherbe: {
-      title: "מסגרת Wetherbe (PIECES)",
-      html: `<p>שיטה לזיהוי צרכים דרך שאלות על קשיים קיימים: ביצועים, מידע, כלכלה,
-        בקרה, יעילות ושירות — כדי לחשוף דרישות שלא עלו מעצמן.</p>`,
+      title: "Wetherbe — “Getting It Right” (1991)",
+      html: `<p>המאמר (חומר הקריאה של הרצאה 3): מנהלים לא יודעים איזה מידע הם צריכים,
+        ולכן קביעת דרישות נכשלת בארבע טעויות — מבט מחלקתי, ראיונות אישיים, השאלה
+        הלא-נכונה, ובלי ניסוי-וטעייה. הפתרונות: עיצוב חוצה-פונקציות · סדנת JAD ·
+        ראיון מובנה בשאלות עקיפות · אב-טיפוס.</p>`,
     },
     "user-story": {
       title: "User Story",
@@ -51,7 +61,6 @@
       title: "Use Case — תרחיש שימוש",
       html: `<p>רצף פעולות שהמערכת מבצעת ומניב תוצאה בעלת ערך לשחקן — מה המערכת
         עושה, מנקודת מבטו של המשתמש.</p>`,
-      more: { label: "להגדרה המלאה →", slug: "use-case-definition" },
     },
   };
 
@@ -61,12 +70,6 @@
   function close() {
     if (pop) { pop.remove(); pop = null; }
     if (current) { current.setAttribute("aria-expanded", "false"); current = null; }
-  }
-
-  function gotoSlug(slug) {
-    const sections = Array.from(document.querySelectorAll(".reveal .slides > section"));
-    const idx = sections.findIndex((s) => s.getAttribute("data-slug") === slug);
-    if (idx >= 0 && window.Reveal && Reveal.slide) { close(); Reveal.slide(idx); }
   }
 
   function open(el) {
@@ -82,13 +85,6 @@
       '<button class="glossary-close" aria-label="סגור">×</button>' +
       "<h4>" + entry.title + "</h4>" +
       '<div class="glossary-body">' + entry.html + "</div>";
-    if (entry.more) {
-      if (entry.more.slug) {
-        html += '<a class="glossary-more" href="#" data-goto-slug="' + entry.more.slug + '">' + entry.more.label + "</a>";
-      } else if (entry.more.href) {
-        html += '<a class="glossary-more" href="' + entry.more.href + '">' + entry.more.label + " ↗</a>";
-      }
-    }
     pop.innerHTML = html;
     document.body.appendChild(pop);
 
@@ -97,8 +93,6 @@
     el.setAttribute("aria-expanded", "true");
 
     pop.querySelector(".glossary-close").addEventListener("click", close);
-    const goto = pop.querySelector("[data-goto-slug]");
-    if (goto) goto.addEventListener("click", (ev) => { ev.preventDefault(); gotoSlug(goto.getAttribute("data-goto-slug")); });
   }
 
   function position(el) {

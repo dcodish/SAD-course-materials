@@ -14,6 +14,7 @@
 - **הרצאה 2** — תיעוד תהליכים עסקיים — BPMN → [צפייה במצגת](https://dcodish.github.io/SAD-course-materials/lecture-02/)
 - **הרצאה 3** — דרישות → [צפייה במצגת](https://dcodish.github.io/SAD-course-materials/lecture-03/)
 - **הרצאה 4-5** — תרשים תרחישי שימוש — Use Case → [צפייה במצגת](https://dcodish.github.io/SAD-course-materials/lecture-04-05/)
+- **הרצאה 6-7** — תרשים מחלקות — Class Diagram → [צפייה במצגת](https://dcodish.github.io/SAD-course-materials/lecture-06-07/)
 
 עמוד נחיתה מסודר לכל ההרצאות: <https://dcodish.github.io/SAD-course-materials/>
 

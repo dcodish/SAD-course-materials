@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Visual Paradigm — Use Case Specification (גיבוי לשקף)</title>
+<!--
+  BACKUP for the live VP demo (David, 2026-07-16). The real teaching move is opening
+  Visual Paradigm on screen; this asset stands in when VP misbehaves.
+
+  The five screenshots are the ORIGINAL ones from the old deck (slides 32-36 of
+  "שיעורים 4-5- Use Case .pptx") — real VP UI, so the backup looks like the tool the
+  students must use for the project. Example is VP's "Manage taskboard" UC, not the
+  campus one; that mismatch is deliberate (authentic UI > example consistency, since
+  this only shows when the live demo already failed).
+
+  Each tab carries a Hebrew caption naming what to look at, so the slide teaches the
+  same points as the concept slides that precede it:
+    Info            -> ID + primary actor (one initiator)
+    Flow of Events  -> CRUD scenarios in the left rail + numbered steps + if/end if
+    Details         -> pre / post conditions
+    Requirements    -> traceability back to the requirement IDs
+    Diagrams        -> the wireframe / prototype attached to the UC
+  Self-contained: images are plain relative refs (assets/vp/*.png), no scripts beyond
+  the tab switch, no external fetches. ?embed=1 hides the chrome for the slide iframe.
+-->
+<style>
+  :root { --vp-blue:#1e40af; --vp-line:#cbd5e1; }
+  * { box-sizing: border-box; }
+  body { margin:0; padding:16px; background:#f8fafc; color:#1e293b;
+         font-family:'Noto Sans Hebrew','Segoe UI',Arial,sans-serif; }
+  h1.page-title { text-align:center; font-size:17px; color:var(--vp-blue); margin:0 0 10px; font-weight:700; }
+
+  .wrap { max-width:1180px; margin:0 auto; display:flex; flex-direction:column; height:100%; }
+
+  /* VP-like tab strip */
+  .tabs { display:flex; gap:4px; border-bottom:2px solid var(--vp-blue); padding-inline:6px; flex-wrap:wrap; }
+  .tab { appearance:none; border:1px solid var(--vp-line); border-bottom:none;
+         background:#eef2f7; color:#475569; font-size:13px; font-weight:600; cursor:pointer;
+         padding:7px 16px; border-radius:6px 6px 0 0; font-family:inherit; direction:ltr; }
+  .tab:hover { background:#e2e8f0; }
+  .tab[aria-selected="true"] { background:var(--vp-blue); color:#fff; border-color:var(--vp-blue); }
+
+  .panel { display:none; flex:1 1 auto; min-height:0; flex-direction:column; gap:8px; padding-top:10px; }
+  .panel[data-active="1"] { display:flex; }
+
+  .shot { flex:1 1 auto; min-height:0; display:flex; align-items:center; justify-content:center;
+          background:#fff; border:1px solid var(--vp-line); border-radius:8px; padding:8px; }
+  .shot img { max-width:100%; max-height:100%; object-fit:contain; display:block; }
+
+  .caption { background:#EAF3FB; border-inline-start:4px solid var(--vp-blue);
+             border-radius:6px; padding:8px 12px; font-size:15px; line-height:1.5; }
+  .caption b { color:var(--vp-blue); }
+  .caption .muted { color:#64748b; }
+
+  /* Embed mode (?embed=1): chrome-less, fit the slide iframe, never scroll. */
+  body.embed { padding:8px; height:100vh; overflow:hidden; background:#fff; }
+  body.embed .page-title { display:none; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1 class="page-title">Visual Paradigm — תיעוד <span dir="ltr">Use Case</span> (גיבוי)</h1>
+
+  <div class="tabs" role="tablist">
+    <button class="tab" role="tab" aria-selected="true"  data-tab="info">Info</button>
+    <button class="tab" role="tab" aria-selected="false" data-tab="flow">Flow of Events</button>
+    <button class="tab" role="tab" aria-selected="false" data-tab="details">Details</button>
+    <button class="tab" role="tab" aria-selected="false" data-tab="reqs">Requirements</button>
+    <button class="tab" role="tab" aria-selected="false" data-tab="diagrams">Diagrams</button>
+  </div>
+
+  <div class="panel" data-panel="info" data-active="1">
+    <div class="shot"><img src="vp/vp-info.png" alt="VP Info tab — ID, Primary Actors, Description"></div>
+    <div class="caption">
+      <b>מי ומה.</b> לכל <span dir="ltr">use case</span> יש <b>מזהה</b> (<span dir="ltr">UC10</span>)
+      ו<b>שחקן</b> — מי שיוזם. <span class="muted">שימו לב לשפה של הכלי:
+      <span dir="ltr">VP</span> קורא לשדה <span dir="ltr">"Primary Actors"</span> ומוסיף
+      <span dir="ltr">"Supporting Actors"</span> — אצלנו יש פשוט <b>שחקנים</b>, וכולם יוזמים.</span>
+    </div>
+  </div>
+
+  <div class="panel" data-panel="flow">
+    <div class="shot"><img src="vp/vp-flow-of-events.png" alt="VP Flow of Events tab — CRUD scenarios and numbered steps"></div>
+    <div class="caption">
+      <b>הזרימה.</b> משמאל — <b>תרחישים</b>: <span dir="ltr">Create / Read / Update / Delete</span>,
+      תרחיש לכל פעולה (זה ה-<span dir="ltr">CRUD</span> שדיברנו עליו). מימין — הצעדים הממוספרים:
+      כל צעד אומר <b>מי עושה מה</b>, ותנאי הוא <b>מבנה</b> (<span dir="ltr">if … end if</span>) — לא פרוזה.
+    </div>
+  </div>
+
+  <div class="panel" data-panel="details">
+    <div class="shot"><img src="vp/vp-details-prepost.png" alt="VP Details tab — Preconditions and Post-conditions"></div>
+    <div class="caption">
+      <b>החוזה.</b> <span dir="ltr">Preconditions</span> — מה מונח שנכון לפני שמתחילים
+      (״המשתמש מחובר״ — ולכן <span dir="ltr">login</span> אינו <span dir="ltr">use case</span>).
+      <span dir="ltr">Post-conditions</span> — מה מובטח אחרי הצלחה (״בסיס הנתונים עודכן״).
+    </div>
+  </div>
+
+  <div class="panel" data-panel="reqs">
+    <div class="shot"><img src="vp/vp-requirements.png" alt="VP Requirements tab — requirement IDs traced to the use case"></div>
+    <div class="caption">
+      <b>עקיבות.</b> ה-<span dir="ltr">use case</span> מקושר חזרה ל<b>דרישות</b> שהוא מממש
+      (<span dir="ltr">UC11.REQ019</span>…). <span class="muted">בדיוק הטבלה הממוספרת שכתבנו בתחילת ההרצאה — עכשיו סוגרת מעגל.</span>
+    </div>
+  </div>
+
+  <div class="panel" data-panel="diagrams">
+    <div class="shot"><img src="vp/vp-diagrams-prototype.png" alt="VP Diagrams tab — attached wireframe prototype"></div>
+    <div class="caption">
+      <b>אב-הטיפוס.</b> לתרחיש מצורפת <b>סקיצת מסך</b> — קופסאות אפורות, בלי עיצוב.
+      <span class="muted">זה מה שבעל העניין באמת יודע לבקר.</span>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.body.classList.toggle('embed', /\bembed\b/.test(location.search));
+  var tabs = document.querySelectorAll('.tab');
+  var panels = document.querySelectorAll('.panel');
+  tabs.forEach(function (t) {
+    t.addEventListener('click', function () {
+      tabs.forEach(function (x) { x.setAttribute('aria-selected', String(x === t)); });
+      panels.forEach(function (p) {
+        if (p.getAttribute('data-panel') === t.getAttribute('data-tab')) p.setAttribute('data-active', '1');
+        else p.removeAttribute('data-active');
+      });
+    });
+  });
+</script>
+</body>
+</html>

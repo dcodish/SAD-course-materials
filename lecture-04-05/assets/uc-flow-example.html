@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Flow of Events — דוגמה מלאה (הזמנת אוכל בקמפוס)</title>
+<!--
+  GENERATED — do not hand-edit. Source: scratchpad/build_flow_example.py, which reads
+  useCaseDocs out of assets/usecase-campus-simple.html so this worked example and the
+  modal behind the diagram (slide 31) can never drift apart.
+
+  Shown on slide-uc-flow-example.html ("כך נראה Flow of Events מלא"), right after the
+  flow-of-events concept slide: students asked to SEE a full flow and several scenarios
+  (David, 2026-07-16). Layout deliberately mirrors Visual Paradigm's Flow of Events tab
+  (scenario rail + numbered steps) so the VP backup slide later reads as the same thing.
+
+  Two use cases:
+    uc-order-pay    — one rich scenario: loop (cart) + alt (payment) + 3 extensions
+    uc-manage-menu  — a CRUD "ניהול X": FOUR scenarios, one per operation
+-->
+<style>
+/* uc-diagram-common.css — SAD MCP shared styles for use case diagrams */
+
+/* ── Base layout ─────────────────────────────────────────────────────────── */
+body { margin: 0; padding: 20px 0; background: #f8fafc;
+  font-family: 'Noto Sans Hebrew', sans-serif; color: #1e293b; }
+h1.page-title { text-align: center; font-size: 18px; color: #1e40af;
+  margin: 0 0 10px; font-weight: 700; }
+.diagram-part { display: flex; justify-content: center; }
+
+/* ── Tab bar ─────────────────────────────────────────────────────────────── */
+.tab-bar { display: flex; justify-content: center; gap: 8px; margin: 12px 0 4px; }
+.tab { padding: 7px 20px; border: 1px solid #cbd5e1; background: #f8fafc;
+  color: #475569; font-size: 13px; font-weight: 600; cursor: pointer;
+  border-radius: 6px; font-family: 'Noto Sans Hebrew', sans-serif; }
+.tab.active { background: #1e40af; color: #fff; border-color: #1e40af; }
+.split-rationale { text-align: center; font-size: 11px; color: #64748b;
+  margin: 0 0 8px; font-style: italic; }
+
+/* ── Buttons ─────────────────────────────────────────────────────────────── */
+.fix-btn { padding: 8px 20px; border: 1px solid #3b82f6; background: #eff6ff;
+  color: #1e40af; font-size: 12px; font-weight: 600; cursor: pointer;
+  border-radius: 6px; font-family: 'Noto Sans Hebrew', sans-serif; }
+.fix-btn:hover { background: #dbeafe; }
+.vp-export-btn { position: fixed; bottom: 20px; right: 20px; z-index: 1000;
+  background: #1e40af; color: #fff; border: none; border-radius: 6px;
+  padding: 8px 16px; font-size: 13px; cursor: pointer;
+  font-family: 'IBM Plex Mono', monospace; }
+.vp-export-btn:hover { background: #1e3a8a; }
+
+/* ── Assumptions panel ───────────────────────────────────────────────────── */
+.assumptions-panel { display: flex; gap: 24px; max-width: 1000px;
+  margin: 20px auto; padding: 16px 20px; background: #fff;
+  border: 1px solid #cbd5e1; border-radius: 8px; direction: rtl; }
+.assumptions-col { flex: 1; min-width: 0; }
+.assumptions-col h3 { margin: 0 0 6px; font-size: 13px; font-weight: 600; color: #1e40af; }
+.assumptions-col ul { margin: 0; padding-right: 18px; }
+.assumptions-col li { color: #334155; font-size: 12px; line-height: 1.6; }
+
+/* ── User stories summary panel ──────────────────────────────────────────── */
+.user-stories-panel { max-width: 1000px; margin: 12px auto 20px; padding: 16px 20px;
+  background: #fff; border: 1px solid #cbd5e1; border-radius: 8px; direction: rtl; }
+.user-stories-panel h3 { margin: 0 0 8px; font-size: 13px; font-weight: 600; color: #1e40af; }
+.user-stories-panel ul { margin: 0; padding-right: 18px; }
+.user-stories-panel li { color: #334155; font-size: 12px; line-height: 1.7; }
+
+/* ── UC modal ────────────────────────────────────────────────────────────── */
+body.uc-modal-open { overflow: hidden; }
+.uc-modal[hidden] { display: none !important; }
+.uc-modal { position: fixed; inset: 0; z-index: 2000; display: flex;
+  align-items: flex-start; justify-content: center; padding: 40px 20px;
+  overflow-y: auto; direction: rtl; font-family: 'Noto Sans Hebrew', sans-serif; }
+.uc-modal-backdrop { position: absolute; inset: 0; background: rgba(15,23,42,0.55); }
+.uc-modal-body { position: relative; z-index: 1; width: 100%; max-width: 960px;
+  background: #fff; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,.25);
+  padding: 28px 32px 32px; color: #1e293b; }
+.uc-modal-close { position: absolute; top: 10px; left: 14px; background: none;
+  border: none; font-size: 24px; color: #64748b; cursor: pointer; }
+.uc-modal-body header { border-bottom: 1px solid #e2e8f0; padding-bottom: 12px;
+  margin-bottom: 18px; }
+.uc-modal-body .uc-id { display: inline-block; font-family: 'IBM Plex Mono',monospace;
+  font-size: 11px; color: #64748b; background: #f1f5f9; padding: 2px 8px;
+  border-radius: 4px; margin-bottom: 6px; }
+.uc-modal-body .uc-name { margin: 0 0 4px; font-size: 20px; color: #1e40af; font-weight: 700; }
+.uc-modal-body .uc-primary { font-size: 13px; color: #334155; }
+.uc-modal-body .uc-primary-label { color: #64748b; margin-left: 6px; }
+.uc-modal-body .uc-primary-link { color: #1e40af; cursor: pointer; font-weight: 600;
+  text-decoration: underline dotted; }
+.uc-description { margin-bottom: 20px; font-size: 14px; line-height: 1.7; color: #334155; }
+.uc-scenarios h3 { font-size: 14px; color: #1e40af; margin: 18px 0 6px;
+  border-right: 3px solid #3b82f6; padding-right: 10px; }
+.uc-scenarios ol { margin: 0 0 14px; padding-right: 22px; }
+.uc-scenarios ol li { color: #1e293b; font-size: 13px; line-height: 1.9; }
+.step-actor { color: #1e40af; font-weight: 600; cursor: pointer; text-decoration: underline dotted; }
+.step-system { color: #475569; font-style: italic; }
+.step-include { color: #7c3aed; font-family: 'IBM Plex Mono', monospace; font-size: 11px; }
+.step-uc-ref { color: #7c3aed; cursor: pointer; text-decoration: underline; }
+
+/* ── Flow of events (§4.4a / NOTATION §11b) ──────────────────────────────
+   Step labels are printed by the JS, not by list-style, so the number a reader
+   sees always matches what an extension's "חזרה לשלב 2.1" points at. */
+.uc-scenarios ul.flow { list-style: none; margin: 0 0 14px; padding: 0; }
+.uc-scenarios ul.flow ul.flow { margin: 4px 0 6px; padding-right: 14px;
+  border-right: 2px solid #e2e8f0; }
+.flow-step { color: #1e293b; font-size: 13px; line-height: 1.9; }
+.step-label { display: inline-block; min-width: 34px; color: #64748b;
+  font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600; }
+
+/* loop / alt — control structures read as keywords, not as prose */
+.flow-loop > .ctrl-kw, .flow-alt > .ctrl-kw { font-weight: 700; font-size: 11px;
+  padding: 1px 7px; border-radius: 10px; letter-spacing: .02em; }
+.flow-loop > .ctrl-kw { color: #0369a1; background: #e0f2fe; }
+.flow-alt  > .ctrl-kw { color: #92400e; background: #fef3c7; }
+.ctrl-cond { color: #334155; font-style: italic; }
+.flow-loop > ul.flow { border-right-color: #7dd3fc; }
+.flow-alt  > ul.flow, .flow-branches { border-right-color: #fcd34d; }
+.flow-branches { list-style: none; margin: 4px 0 6px; padding-right: 14px;
+  border-right: 2px solid #fcd34d; }
+.flow-branch { font-size: 13px; line-height: 1.9; }
+.branch-label { color: #92400e; font-weight: 600; font-size: 12px;
+  background: #fffbeb; border: 1px solid #fde68a; border-radius: 4px; padding: 0 6px; }
+.flow-branch > ul.flow { border-right-color: #fde68a; }
+
+/* extensions — the not-happy path */
+.ext-holder { list-style: none; }
+.ext-list { list-style: none; margin: 2px 0 8px; padding-right: 34px; }
+.ext-inline, .ext-sub { list-style: none; color: #64748b; font-size: 12px;
+  padding-right: 24px; line-height: 1.7; }
+.ext-sub { padding-right: 0; border-right: 2px solid #fecaca; padding-right: 10px;
+  margin-bottom: 4px; }
+.ext-label { color: #b91c1c; min-width: 42px; }
+.ext-steps { list-style: none; margin: 2px 0; padding-right: 12px; }
+.ext-steps li { font-size: 12px; color: #64748b; line-height: 1.7; }
+.ext-steps .step-label { min-width: 48px; color: #94a3b8; }
+.ext-outcome { font-size: 11.5px; font-weight: 600; margin: 2px 0 2px 0;
+  padding-right: 12px; }
+.ext-resume { color: #0f766e; }
+.ext-terminate { color: #b91c1c; }
+.uc-prepostuser { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 18px;
+  margin: 18px 0 20px; }
+.uc-prepostuser > div { background: #f8fafc; border: 1px solid #e2e8f0;
+  border-radius: 8px; padding: 12px 14px; }
+.uc-prepostuser h4 { margin: 0 0 6px; font-size: 12px; color: #1e40af; font-weight: 600; }
+.uc-prepostuser ul { margin: 0; padding-right: 18px; font-size: 12px;
+  color: #334155; line-height: 1.7; }
+.uc-wireframe { border-top: 1px dashed #cbd5e1; padding-top: 16px; margin-top: 6px; }
+.uc-wireframe:empty, .uc-wireframe[hidden] { display: none; }
+
+/* ── Actor pulse ─────────────────────────────────────────────────────────── */
+.actor-pulse { animation: actor-pulse 0.6s ease-in-out 3; }
+@keyframes actor-pulse {
+  0%, 100% { filter: none; }
+  50%      { filter: drop-shadow(0 0 8px #3b82f6); }
+}
+
+/* ── Wireframe scoped theme (wf-*) ───────────────────────────────────────── */
+.wf-screen { background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px;
+  padding: 18px 20px; font-family: 'Noto Sans Hebrew', sans-serif;
+  color: #1e293b; direction: rtl; max-width: 760px; margin: 0 auto; }
+.wf-heading { margin: 0 0 14px; font-size: 15px; color: #1e40af; font-weight: 700;
+  border-bottom: 1px solid #e2e8f0; padding-bottom: 6px; }
+.wf-section { margin: 14px 0; }
+.wf-row { display: flex; gap: 10px; align-items: center; margin: 6px 0; }
+.wf-label { font-size: 12px; color: #475569; min-width: 120px; }
+.wf-input, .wf-textarea, .wf-select { flex: 1; background: #fff;
+  border: 1px solid #cbd5e1; border-radius: 4px; padding: 6px 8px;
+  font-size: 12px; color: #334155; }
+.wf-textarea { min-height: 60px; }
+.wf-table { width: 100%; border-collapse: collapse; margin: 10px 0; font-size: 12px; }
+.wf-table th, .wf-table td { border: 1px solid #cbd5e1; padding: 6px 8px; text-align: right; }
+.wf-table th { background: #e2e8f0; color: #1e40af; font-weight: 600; }
+.wf-actions { display: flex; gap: 8px; margin-top: 12px; justify-content: flex-start; }
+.wf-button { background: #fff; border: 1px solid #64748b; border-radius: 4px;
+  padding: 6px 14px; font-size: 12px; color: #334155; cursor: default; }
+.wf-primary { background: #1e40af; color: #fff; border-color: #1e40af; }
+.wf-image-box { border: 1px dashed #94a3b8; background: #f1f5f9; color: #64748b;
+  text-align: center; padding: 24px; border-radius: 4px; font-size: 12px; margin: 10px 0; }
+.wf-hint { font-size: 11px; color: #64748b; font-style: italic; margin: 6px 0; }
+.wf-badge { display: inline-block; background: #e0f2fe; color: #0369a1;
+  padding: 2px 8px; border-radius: 999px; font-size: 10px; font-weight: 600; }
+
+
+/* ── Page chrome (this viewer only) ───────────────────────────────────────── */
+body { padding:14px 16px; }
+.uc-picker { display:flex; gap:8px; justify-content:center; margin:0 0 10px; }
+.uc-pick { appearance:none; border:1px solid #cbd5e1; background:#eef2f7; color:#475569;
+  font-family:'Noto Sans Hebrew',sans-serif; font-size:14px; font-weight:600;
+  padding:7px 18px; border-radius:8px; cursor:pointer; }
+.uc-pick[aria-selected="true"] { background:#1e40af; color:#fff; border-color:#1e40af; }
+
+.spec { max-width:1180px; margin:0 auto; background:#fff; border:1px solid #cbd5e1;
+  border-radius:10px; padding:14px 18px; }
+.spec-head { display:flex; align-items:baseline; gap:10px; flex-wrap:wrap;
+  border-bottom:1px solid #e2e8f0; padding-bottom:8px; margin-bottom:10px; }
+.spec-head h2 { margin:0; font-size:19px; color:#1e40af; font-weight:700; }
+.spec-head .who { font-size:13px; color:#334155; }
+.spec-head .who b { color:#1e40af; }
+
+.conds { display:flex; gap:10px; margin-bottom:10px; }
+.cond { flex:1; background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:7px 10px; }
+.cond h4 { margin:0 0 3px; font-size:11px; color:#1e40af; font-weight:600; }
+.cond ul { margin:0; padding-inline-start:16px; }
+.cond li { font-size:12px; color:#334155; line-height:1.5; }
+
+/* VP-like: scenario rail on the right, the selected flow on the left */
+.fow { display:grid; grid-template-columns:210px 1fr; gap:12px; align-items:start; }
+.rail { display:flex; flex-direction:column; gap:5px; }
+.rail-title { font-size:11px; color:#64748b; font-weight:600; margin-bottom:2px; }
+.sc { appearance:none; text-align:start; border:1px solid #cbd5e1; background:#f8fafc;
+  border-radius:6px; padding:7px 10px; cursor:pointer; font-family:'Noto Sans Hebrew',sans-serif;
+  font-size:13px; color:#334155; }
+.sc:hover { background:#eef2f7; }
+.sc[aria-selected="true"] { background:#e0f2fe; border-color:#0284c7; color:#0c4a6e; font-weight:600; }
+.sc .n { font-size:10px; color:#64748b; display:block; }
+.rail-note { font-size:11px; color:#64748b; line-height:1.5; margin-top:4px;
+  background:#EAF3FB; border-inline-start:3px solid #1e40af; border-radius:5px; padding:6px 8px; }
+
+.flow-pane { min-width:0; }
+.uc-scenarios h3 { margin-top:0; }
+
+body.embed { padding:6px 8px; height:100vh; overflow:hidden; }
+body.embed .spec { height:calc(100vh - 52px); overflow:auto; padding:10px 14px; }
+/* Inside a slide iframe the viewer is small — tighten it so a long flow fits with
+   little or no scrolling. It still scrolls (like VP) for the richest use case. */
+body.embed .uc-pick { font-size:13px; padding:5px 14px; }
+body.embed .spec-head { padding-bottom:6px; margin-bottom:7px; }
+body.embed .spec-head h2 { font-size:17px; }
+body.embed .conds { margin-bottom:7px; }
+body.embed .cond li { font-size:11px; line-height:1.4; }
+body.embed .uc-scenarios h3 { font-size:13px; margin:0 0 5px; }
+body.embed .flow-step, body.embed .flow-branch { font-size:12.5px; line-height:1.7; }
+body.embed .ext-sub, body.embed .ext-steps li { font-size:11.5px; line-height:1.55; }
+body.embed .ext-outcome { font-size:11px; }
+body.embed .sc { padding:5px 9px; font-size:12.5px; }
+</style>
+</head>
+<body>
+
+<div class="uc-picker" id="picker"></div>
+
+<div class="spec">
+  <div class="spec-head">
+    <h2 id="uc-name"></h2>
+    <span class="who">שחקן: <b id="uc-actor"></b></span>
+  </div>
+
+  <div class="conds">
+    <div class="cond"><h4>תנאי קדם</h4><ul id="uc-pre"></ul></div>
+    <div class="cond"><h4>תנאי סיום</h4><ul id="uc-post"></ul></div>
+  </div>
+
+  <div class="fow">
+    <div class="rail">
+      <div class="rail-title">תרחישים <span id="sc-count"></span></div>
+      <div id="rail" style="display:flex; flex-direction:column; gap:5px;"></div>
+      <div class="rail-note" id="rail-note"></div>
+    </div>
+    <div class="flow-pane uc-scenarios" id="flow"></div>
+  </div>
+</div>
+
+<script>
+var useCaseDocs       = {"uc-order-pay": {"id": "uc-order-pay", "name": "הזמנה ותשלום", "primaryActor": "student", "description": "הסטודנט מרכיב הזמנה מפריטי התפריט, משלם עליה בתוך האפליקציה ומקבל מספר הזמנה וקוד איסוף.", "preconditions": ["הסטודנט מזוהה באפליקציה.", "לקפיטריה שנבחרה יש תפריט פעיל."], "postconditions": ["ההזמנה נקלטה בסטטוס \"שולמה\" ושובצה לתור ההכנה.", "לסטודנט הוצגו מספר הזמנה וקוד איסוף."], "scenarios": [{"id": "sc-happy", "name": "מסלול מרכזי", "flow": [{"kind": "actor", "actor": "student", "text": "בוחר קפיטריה ופותח את התפריט שלה"}, {"kind": "loop", "condition": "הסטודנט מוסיף פריטים להזמנה", "steps": [{"kind": "actor", "actor": "student", "text": "בוחר פריט מהתפריט ומזין כמות"}, {"kind": "system", "text": "מוסיפה את הפריט לעגלה ומחשבת סכום ביניים"}, {"kind": "actor", "actor": "student", "text": "מעדכן כמות או מסיר פריט מהעגלה במידת הצורך"}]}, {"kind": "actor", "actor": "student", "text": "מאשר את העגלה ועובר לתשלום"}, {"kind": "alt", "condition": "אמצעי התשלום שבחר הסטודנט", "branches": [{"label": "כרטיס סטודנט", "steps": [{"kind": "actor", "actor": "student", "text": "מאשר חיוב של חשבון הסטודנט שלו"}, {"kind": "system", "text": "שולחת בקשת חיוב למערכת החשבונות של האוניברסיטה ומקבלת אישור"}]}, {"label": "כרטיס אשראי", "steps": [{"kind": "actor", "actor": "student", "text": "מזין מספר כרטיס, תוקף ו-CVV"}, {"kind": "system", "text": "שולחת בקשת חיוב לשער התשלומים ומקבלת אישור"}]}]}, {"kind": "system", "text": "פותחת את ההזמנה בסטטוס \"שולמה\", משבצת אותה לתור ההכנה ומציגה מספר הזמנה וקוד איסוף"}], "extensions": [{"at": "2.2", "text": "הפריט אזל מהמלאי בזמן הרכבת ההזמנה", "steps": ["המערכת מסמנת את הפריט \"אזל\" ומסירה אותו מהעגלה", "המערכת מציעה פריטים חלופיים מאותה קטגוריה"], "outcome": {"kind": "resume", "at": "2.1"}}, {"at": "4.1.2", "text": "מערכת החשבונות דוחה את החיוב (יתרה לא מספיקה)", "steps": ["המערכת מציגה את סיבת הדחייה ומשאירה את העגלה שמורה"], "outcome": {"kind": "resume", "at": "4"}}, {"at": "4.2.2", "text": "שער התשלומים דוחה את החיוב", "steps": ["המערכת מציגה את סיבת הדחייה ומשאירה את העגלה שמורה"], "outcome": {"kind": "resume", "at": "4"}}]}], "userStories": [{"role": "סטודנט", "want": "להזמין ולשלם מהטלפון לפני שאני מגיע", "so": "לא אעמוד בתור בהפסקה של רבע שעה"}, {"role": "סטודנט", "want": "לשלם בכרטיס הסטודנט שלי", "so": "לא אצטרך להקליד פרטי אשראי בכל הזמנה"}], "wireframe": "<div class=\"wf-screen\"><div class=\"wf-heading\">העגלה שלי — הזמנה ותשלום</div><table class=\"wf-table\"><thead><tr><th>פריט</th><th>כמות</th><th>מחיר</th></tr></thead><tbody><tr><td>סלט יווני</td><td>1</td><td>28 ₪</td></tr><tr><td>מיץ תפוזים</td><td>2</td><td>16 ₪</td></tr></tbody></table><div class=\"wf-row\"><span class=\"wf-label\">סה״כ לתשלום:</span><span>44 ₪</span></div><div class=\"wf-row\"><label class=\"wf-label\">אמצעי תשלום</label><select class=\"wf-select\" disabled><option>כרטיס סטודנט</option></select></div><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">לתשלום</button><button class=\"wf-button\">חזרה לתפריט</button></div><p class=\"wf-hint\">לאחר אישור התשלום יוצגו מספר הזמנה וקוד איסוף.</p></div>"}, "uc-manage-menu": {"id": "uc-manage-menu", "name": "ניהול תפריט ומלאי", "primaryActor": "cafe-manager", "description": "מנהל הקפיטריה מוסיף פריטים לתפריט, צופה בו, מעדכן מחירים וזמינות ומסיר פריטים שיצאו מהתפריט.", "preconditions": ["המנהל מחובר עם הרשאת ניהול לקפיטריה שלו."], "postconditions": ["התפריט והמלאי המוצגים לסטודנטים משקפים את המצב העדכני."], "scenarios": [{"id": "sc-add", "name": "הוספת פריט לתפריט", "flow": [{"kind": "actor", "actor": "cafe-manager", "text": "פותח את מסך ניהול התפריט ובוחר \"הוספת פריט\""}, {"kind": "actor", "actor": "cafe-manager", "text": "מזין שם פריט, קטגוריה, מחיר וכמות מלאי התחלתית"}, {"kind": "system", "text": "מוודאת שהשם אינו קיים כבר בתפריט ושהמחיר והכמות חיוביים"}, {"kind": "system", "text": "שומרת את הפריט ומציגה אותו בתפריט הקפיטריה"}], "extensions": [{"at": "3", "text": "פריט בשם זהה כבר קיים בתפריט", "steps": ["המערכת מציגה את הפריט הקיים ומציעה לעדכן אותו במקום להוסיף חדש"], "outcome": {"kind": "resume", "at": "2"}}, {"at": "3", "text": "המחיר או הכמות אינם תקינים (ערך שלילי או ריק)", "steps": ["המערכת מסמנת את השדה השגוי"], "outcome": {"kind": "resume", "at": "2"}}]}, {"id": "sc-view", "name": "צפייה בתפריט ובמלאי", "flow": [{"kind": "actor", "actor": "cafe-manager", "text": "פותח את מסך ניהול התפריט"}, {"kind": "system", "text": "מציגה טבלת פריטים — שם, קטגוריה, מחיר, כמות במלאי וסטטוס זמינות"}, {"kind": "actor", "actor": "cafe-manager", "text": "ממיין או מסנן את הטבלה — לפי קטגוריה או לפי פריטים שאזלו"}, {"kind": "system", "text": "מציגה את הרשימה המסוננת ומדגישה פריטים שכמותם במלאי נמוכה"}], "extensions": [{"at": "2", "text": "לקפיטריה אין עדיין פריטים בתפריט", "steps": ["המערכת מציגה מסך ריק עם הנחיה להוסיף פריט ראשון"], "outcome": {"kind": "terminate", "text": "אין תפריט לצפייה — נדרשת הוספת פריטים."}}]}, {"id": "sc-update", "name": "עדכון פריט וסימון \"אזל\"", "flow": [{"kind": "actor", "actor": "cafe-manager", "text": "בוחר פריט מטבלת התפריט"}, {"kind": "actor", "actor": "cafe-manager", "text": "מעדכן מחיר או כמות מלאי, או מסמן את הפריט \"אזל\""}, {"kind": "system", "text": "מוודאת שהערכים החדשים תקינים"}, {"kind": "system", "text": "שומרת את השינוי ומעדכנת את התצוגה לסטודנטים — פריט שסומן \"אזל\" מוצג \"לא זמין\" ואינו ניתן להזמנה"}], "extensions": [{"at": "3", "text": "הערך שהוזן אינו תקין (מחיר שלילי או כמות לא מספרית)", "steps": ["המערכת מסמנת את השדה השגוי ומשאירה את הערך הקודם בתוקף"], "outcome": {"kind": "resume", "at": "2"}}]}, {"id": "sc-delete", "name": "הסרת פריט מהתפריט", "flow": [{"kind": "actor", "actor": "cafe-manager", "text": "בוחר פריט ומפעיל \"הסרה מהתפריט\""}, {"kind": "system", "text": "מוודאת שהפריט אינו כלול בהזמנות פעילות שטרם נמסרו"}, {"kind": "system", "text": "מבקשת מהמנהל אישור להסרה"}, {"kind": "actor", "actor": "cafe-manager", "text": "מאשר את ההסרה"}, {"kind": "system", "text": "מסירה את הפריט מהתפריט ושומרת את נתוני המכירות ההיסטוריים שלו"}], "extensions": [{"at": "2", "text": "הפריט כלול בהזמנות פעילות", "steps": ["המערכת חוסמת את ההסרה ומציעה לסמן את הפריט \"אזל\" עד למסירת ההזמנות"], "outcome": {"kind": "terminate", "text": "הפריט לא הוסר — סומן \"אזל\" במקום."}}]}], "userStories": [{"role": "מנהל קפיטריה", "want": "לעדכן זמינות ומחירים מכל מקום בקפיטריה", "so": "הסטודנטים יראו מידע מדויק גם בשעות העומס"}, {"role": "מנהל קפיטריה", "want": "שפריט שאזל יוצג \"לא זמין\" מיד", "so": "סטודנטים לא יזמינו מנות שאינן קיימות"}], "wireframe": "<div class=\"wf-screen\"><div class=\"wf-heading\">ניהול תפריט ומלאי — קפיטריית הנדסה</div><table class=\"wf-table\"><thead><tr><th>פריט</th><th>קטגוריה</th><th>מחיר</th><th>מלאי</th><th>זמינות</th></tr></thead><tbody><tr><td>סלט יווני</td><td>עיקריות</td><td>28 ₪</td><td>12</td><td><span class=\"wf-badge\">זמין</span></td></tr><tr><td>כריך טונה</td><td>עיקריות</td><td>22 ₪</td><td>0</td><td><span class=\"wf-badge\">אזל</span></td></tr></tbody></table><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">הוסף פריט</button><button class=\"wf-button\">שמור שינויים</button><button class=\"wf-button\">הסר פריט</button></div><p class=\"wf-hint\">פריט שסומן \"אזל\" מוצג לסטודנטים \"לא זמין\" — הוא אינו נמחק מהתפריט.</p></div>"}};
+var actorDescriptions = {"student": {"name": "סטודנט", "desc": "סטודנט בקמפוס המזמין אוכל מהקפיטריות דרך האפליקציה — מעיין, מזמין, משלם, עוקב ואוסף."}, "counter-staff": {"name": "עובד דלפק", "desc": "עובד דלפק האיסוף — מאמת שההזמנה שולמה ושייכת לסטודנט שמולו, ומוסר אותה."}, "cafe-manager": {"name": "מנהל קפיטריה", "desc": "מנהל הקפיטריה — אחראי לתפריט, למחירים ולמלאי המוצגים לסטודנטים."}};
+
+/* Flow renderer — lifted verbatim from sad-mcp uc-diagram-common.js so this example
+   renders identically to the modal behind the diagram. */
+function ucEsc(s) {
+  return String(s == null ? '' : s)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function ucOutcomeHtml(outcome) {
+  if (!outcome) return '';
+  if (outcome.kind === 'resume')
+    return `<div class="ext-outcome ext-resume">↩ חזרה לשלב ${ucEsc(outcome.at)}</div>`;
+  if (outcome.kind === 'terminate')
+    return `<div class="ext-outcome ext-terminate">⛔ המקרה מסתיים ללא הצלחה${
+      outcome.text ? ' — ' + ucEsc(outcome.text) : ''}</div>`;
+  return '';
+}
+
+function ucExtensionHtml(ext, label, letter) {
+  // Legacy extensions (text-only, pre-2.6) carry the whole sentence in `text`
+  // and already read as prose — don't prefix them with "אם".
+  const structured = Array.isArray(ext.steps) || !!ext.outcome;
+  const head = structured
+    ? `אם ${ucEsc(ext.text)}:`
+    : ucEsc(ext.text);
+  const subSteps = (ext.steps || []).length
+    ? `<ul class="ext-steps">${(ext.steps || []).map((s, k) =>
+        `<li><span class="step-label">${label}${letter}${k + 1}</span>${ucEsc(s)}</li>`).join('')}</ul>`
+    : '';
+  return `<li class="ext-sub"><span class="step-label ext-label">${label}${letter}</span>${head}` +
+         `${subSteps}${ucOutcomeHtml(ext.outcome)}</li>`;
+}
+
+function ucStepBodyHtml(step, ctx) {
+  if (step.kind === 'actor')
+    return `<strong class="step-actor" data-actor-id="${ucEsc(step.actor)}">${ucEsc(ctx.actorName(step.actor))}</strong>: ${ucEsc(step.text)}`;
+  if (step.kind === 'system')
+    return `<em class="step-system">המערכת</em>: ${ucEsc(step.text)}`;
+  if (step.kind === 'include')
+    return `<span class="step-include">«include» </span><a class="step-uc-ref" data-uc-ref="${ucEsc(step.uc)}">${ucEsc(ctx.ucName(step.uc))}</a>${step.text ? ' — ' + ucEsc(step.text) : ''}`;
+  if (step.kind === 'extension')  // legacy inline extension pseudo-step
+    return ucEsc(step.text);
+  return ucEsc(step.text);
+}
+
+function ucFlowHtml(flow, prefix, extByAt, ctx) {
+  let html = '<ul class="flow">';
+  (flow || []).forEach((step, i) => {
+    const label = `${prefix}${i + 1}`;
+
+    if (step.kind === 'loop') {
+      html += `<li class="flow-step flow-loop"><span class="step-label">${label}</span>` +
+              `<span class="ctrl-kw">חזור</span> <span class="ctrl-cond">${ucEsc(step.condition)}</span>:` +
+              ucFlowHtml(step.steps, `${label}.`, extByAt, ctx) + '</li>';
+    } else if (step.kind === 'alt') {
+      let branches = '<ul class="flow-branches">';
+      (step.branches || []).forEach((b, bi) => {
+        const bLabel = `${label}.${bi + 1}`;
+        branches += `<li class="flow-branch"><span class="step-label">${bLabel}</span>` +
+                    `<span class="branch-label">${ucEsc(b.label)}</span>` +
+                    ucFlowHtml(b.steps, `${bLabel}.`, extByAt, ctx) + '</li>';
+      });
+      branches += '</ul>';
+      html += `<li class="flow-step flow-alt"><span class="step-label">${label}</span>` +
+              `<span class="ctrl-kw">לפי</span> <span class="ctrl-cond">${ucEsc(step.condition)}</span>:` +
+              branches + '</li>';
+    } else if (step.kind === 'extension') {
+      html += `<li class="ext-inline">${step.at ? ucEsc(step.at) + 'a. ' : ''}${ucEsc(step.text)}</li>`;
+    } else {
+      html += `<li class="flow-step"><span class="step-label">${label}</span>${ucStepBodyHtml(step, ctx)}</li>`;
+    }
+
+    const exts = extByAt.get(label) || [];
+    if (exts.length)
+      html += '<li class="ext-holder"><ul class="ext-list">' +
+              exts.map((e, j) => ucExtensionHtml(e, label, String.fromCharCode(97 + j))).join('') +
+              '</ul></li>';
+  });
+  return html + '</ul>';
+}
+
+var RAIL_NOTE = {
+  'uc-order-pay':   'תרחיש אחד — אבל בתוכו לולאה, החלטה עסקית ושלושה חריגים.',
+  'uc-manage-menu': 'ארבעה תרחישים — אחד לכל פעולת CRUD. זה מה ש-״ניהול X״ מחייב.'
+};
+
+var ctx = {
+  actorName: function (id) { return (actorDescriptions[id] || {}).name || id; },
+  ucName:    function (id) { return (useCaseDocs[id] || {}).name || id; }
+};
+
+var currentUc = 'uc-order-pay';
+var currentSc = 0;
+
+function li(items) {
+  return (items || []).map(function (s) { return '<li>' + ucEsc(s) + '</li>'; }).join('');
+}
+
+function renderFlow() {
+  var doc = useCaseDocs[currentUc];
+  var sce = doc.scenarios[currentSc];
+  var extByAt = new Map();
+  (sce.extensions || []).forEach(function (e) {
+    var at = String(e.at == null ? '' : e.at);
+    if (!extByAt.has(at)) extByAt.set(at, []);
+    extByAt.get(at).push(e);
+  });
+  document.getElementById('flow').innerHTML =
+    '<h3>' + ucEsc(sce.name || sce.id) + '</h3>' + ucFlowHtml(sce.flow, '', extByAt, ctx);
+}
+
+function renderRail() {
+  var doc = useCaseDocs[currentUc];
+  document.getElementById('sc-count').textContent = '(' + doc.scenarios.length + ')';
+  document.getElementById('rail-note').textContent = RAIL_NOTE[currentUc] || '';
+  var rail = document.getElementById('rail');
+  rail.innerHTML = '';
+  doc.scenarios.forEach(function (sc, i) {
+    var b = document.createElement('button');
+    b.className = 'sc';
+    b.setAttribute('aria-selected', String(i === currentSc));
+    b.innerHTML = '<span class="n">' + (i + 1) + '</span>' + ucEsc(sc.name || sc.id);
+    b.onclick = function () { currentSc = i; renderRail(); renderFlow(); };
+    rail.appendChild(b);
+  });
+}
+
+function renderUc() {
+  var doc = useCaseDocs[currentUc];
+  document.getElementById('uc-name').textContent  = doc.name;
+  document.getElementById('uc-actor').textContent = ctx.actorName(doc.primaryActor);
+  document.getElementById('uc-pre').innerHTML  = li(doc.preconditions);
+  document.getElementById('uc-post').innerHTML = li(doc.postconditions);
+  renderRail();
+  renderFlow();
+}
+
+function renderPicker() {
+  var p = document.getElementById('picker');
+  p.innerHTML = '';
+  Object.keys(useCaseDocs).forEach(function (id) {
+    var b = document.createElement('button');
+    b.className = 'uc-pick';
+    b.setAttribute('aria-selected', String(id === currentUc));
+    b.textContent = useCaseDocs[id].name;
+    b.onclick = function () { currentUc = id; currentSc = 0; renderPicker(); renderUc(); };
+    p.appendChild(b);
+  });
+}
+
+document.body.classList.toggle('embed', /\bembed\b/.test(location.search));
+renderPicker();
+renderUc();
+</script>
+</body>
+</html>
