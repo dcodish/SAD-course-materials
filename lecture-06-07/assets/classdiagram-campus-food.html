@@ -98,34 +98,35 @@
      ============================================================ */
   const CLASSES = [
     {
-      id: 'Student', name: 'סטודנט', stereotype: null, isEnum: false, isAbstract: false, isExternal: false,
+      id: 'Student', name: 'Student', stereotype: null, isEnum: false, isAbstract: false, isExternal: false,
       attrs: ['- studentId : String', '- name : String', '- email : String'],
       ops: [],
       x: 60, y: 230,
       desc: 'מי שמזמין. המערכת שומרת רשומה לכל סטודנט — מספר סטודנט (מספר עסקי שהאוניברסיטה משתמשת בו), שם ודוא״ל. לסטודנט אחד יכולות להיות <b>0..*</b> הזמנות; לכל הזמנה יש בדיוק סטודנט אחד.'
     },
     {
-      id: 'Order', name: 'הזמנה', stereotype: null, isEnum: false, isAbstract: false, isExternal: false,
+      id: 'Order', name: 'Order', stereotype: null, isEnum: false, isAbstract: false, isExternal: false,
       attrs: [
         '- orderId : String',
         '- createdAt : DateTime',
         '- pickupTime : DateTime',
         '- pickupCode : String',
-        '- status : OrderStatus'
+        '- status : OrderStatus',
+        '/ itemCount : int'
       ],
       ops: ['+ total() : Money', '+ cancel()'],
       x: 290, y: 230,
-      desc: 'ההזמנה עצמה. שימו לב ש-<span class="en">total()</span> היא <b>פעולה</b> ולא תכונה — הסכום מחושב מהשורות ולכן לא נשמר. התכונה <span class="en">status</span> היא מטיפוס <span class="en">OrderStatus</span> — זו כל החוליה אל קופסת ה-<span class="en">enumeration</span>.'
+      desc: 'ההזמנה עצמה. שימו לב ל<b>שתי דרכים לערך מחושב</b> על אותה מחלקה: <span class="en">total()</span> היא <b>פעולה</b>, ו-<span class="en">/ itemCount</span> היא <b>תכונה נגזרת</b> — שתיהן מחושבות מהשורות ואף אחת מהן אינה נשמרת. הקו הנטוי הוא ההצהרה ״מחושב, לא מאוחסן״. התכונה <span class="en">status</span> היא מטיפוס <span class="en">OrderStatus</span> — זו כל החוליה אל קופסת ה-<span class="en">enumeration</span>.'
     },
     {
-      id: 'OrderLine', name: 'שורת הזמנה', stereotype: null, isEnum: false, isAbstract: false, isExternal: false,
-      attrs: ['- quantity : int {>0}', '- notes : String'],
+      id: 'OrderLine', name: 'OrderLine', stereotype: null, isEnum: false, isAbstract: false, isExternal: false,
+      attrs: ['- quantity : int {>0}', '- unitPrice : Money {>=0}', '- notes : String'],
       ops: ['+ lineTotal() : Money'],
       x: 540, y: 230,
-      desc: '<b>מחלקה מתווכת</b> (מחלקה מתווכת): היא מחליפה את הקשר רבים-לרבים שבין הזמנה לפריט תפריט, ונושאת את הנתון שנולד מהקשר — <span class="en">quantity</span> וההערות. הקשר המקורי <span class="en">M:N</span> נמחק ובמקומו שני קשרים נפרדים.'
+      desc: '<b>מחלקה מתווכת</b> (מחלקה מתווכת): היא מחליפה את הקשר רבים-לרבים שבין הזמנה לפריט תפריט, ונושאת את הנתונים שנולדו מהקשר — <span class="en">quantity</span>, ההערות, ו-<span class="en">unitPrice</span>. שימו לב ל-<span class="en">unitPrice</span>: הוא <b>משוכפל לכאורה</b> מ-<span class="en">MenuItem.price</span>, ובכל זאת חייב להישמר — מחיר בתפריט משתנה, והזמנה מלפני חודש חייבת להישאר נכונה. לכן <span class="en">lineTotal()</span> מחושב מ-<span class="en">quantity × unitPrice</span> ולא מהמחיר הנוכחי. הקשר המקורי <span class="en">M:N</span> נמחק ובמקומו שני קשרים נפרדים.'
     },
     {
-      id: 'MenuItem', name: 'פריט תפריט', stereotype: null, isEnum: false, isAbstract: false, isExternal: false,
+      id: 'MenuItem', name: 'MenuItem', stereotype: null, isEnum: false, isAbstract: false, isExternal: false,
       attrs: [
         '- itemId : String',
         '- name : String',
@@ -138,35 +139,35 @@
       desc: 'מה שאפשר להזמין: שם, מחיר עם אילוץ <span class="en">{&gt;=0}</span>, האם צמחוני והאם זמין כרגע. הפריט קיים בתפריט גם בלי אף הזמנה — ולכן הקשר אל שורת הזמנה הוא קשר רגיל ולא הרכבה.'
     },
     {
-      id: 'Station', name: 'עמדה', stereotype: null, isEnum: false, isAbstract: false, isExternal: false,
+      id: 'Station', name: 'Station', stereotype: null, isEnum: false, isAbstract: false, isExternal: false,
       attrs: ['- name : String', '- type : StationType'],
       ops: [],
       x: 1033, y: 230,
       desc: 'עמדת ההגשה שממנה אוספים את הפריט (פיצה, סלטים, שתייה). כל פריט תפריט משויך לעמדה אחת; לעמדה יש <b>*</b> פריטים.'
     },
     {
-      id: 'Cafeteria', name: 'קפיטריה', stereotype: null, isEnum: false, isAbstract: false, isExternal: false,
+      id: 'Cafeteria', name: 'Cafeteria', stereotype: null, isEnum: false, isAbstract: false, isExternal: false,
       attrs: ['- name : String', '- location : String'],
       ops: [],
       x: 1036, y: 90,
       desc: '<b>צבירה (◇ יהלום ריק)</b>: הקפיטריה מכילה עמדות, אבל העמדה יכולה להתקיים בלעדיה — אם סוגרים קפיטריה אפשר להעביר את העמדה לקפיטריה אחרת. זה ההבדל מהרכבה: שם המחיקה מוחקת גם את החלק.'
     },
     {
-      id: 'Payment', name: 'תשלום', stereotype: null, isEnum: false, isAbstract: false, isExternal: false,
+      id: 'Payment', name: 'Payment', stereotype: null, isEnum: false, isAbstract: false, isExternal: false,
       attrs: ['- paymentId : String', '- amount : Money', '- paidAt : DateTime'],
       ops: [],
       x: 560, y: 470,
       desc: 'רשומת התשלום של ההזמנה. הקרדינליות <b>0..1</b> מספרת סיפור: יש הזמנות שבוטלו לפני שנוצר תשלום. תשלום פונה למערכת חיצונית — ראו את קו התלות אל שער התשלום.'
     },
     {
-      id: 'UniversityCardPayment', name: 'תשלום בכרטיס אוניברסיטה', stereotype: null, isEnum: false, isAbstract: false, isExternal: false,
+      id: 'UniversityCardPayment', name: 'UniversityCardPayment', stereotype: null, isEnum: false, isAbstract: false, isExternal: false,
       attrs: ['- universityId : String'],
       ops: [],
       x: 470, y: 620,
       desc: '<b>הכללה (▷ משולש ריק)</b>: כל תכונות תשלום קיימות גם כאן, ובנוסף מספר הכרטיס האוניברסיטאי. ההורשה מוצדקת כי לשני תתי-הסוגים יש נתונים <b>שונים</b> — לא רק שם אחר.'
     },
     {
-      id: 'CreditCardPayment', name: 'תשלום באשראי', stereotype: null, isEnum: false, isAbstract: false, isExternal: false,
+      id: 'CreditCardPayment', name: 'CreditCardPayment', stereotype: null, isEnum: false, isAbstract: false, isExternal: false,
       attrs: ['- last4 : String', '- gatewayRef : String'],
       ops: [],
       x: 700, y: 620,
@@ -174,20 +175,20 @@
     },
     {
       id: 'OrderStatus', name: 'OrderStatus', stereotype: '«enumeration»', isEnum: true, isAbstract: false, isExternal: false,
-      attrs: ['ממתין', 'בהכנה', 'מוכן', 'נאסף', 'בוטל'],
+      attrs: ['Pending', 'InPreparation', 'Ready', 'Collected', 'Cancelled'],
       ops: [],
       x: 300, y: 80,
       desc: 'רשימה סגורה של מצבי ההזמנה — ערכים טקסטואליים, מעטים, ולא משתנים לעתים קרובות. הקופסה <b>אינה מחוברת בקו</b> לאף מחלקה: ההפניה היחידה היא טיפוס התכונה <span class="en">status : OrderStatus</span>.'
     },
     {
-      id: 'PaymentGateway', name: 'שער תשלום', stereotype: '«external system»', isEnum: false, isAbstract: false, isExternal: true,
-      attrs: ['אין רשומות אצלנו'], ops: [], minW: 170,
+      id: 'PaymentGateway', name: 'PaymentGateway', stereotype: '«external system»', isEnum: false, isAbstract: false, isExternal: true,
+      attrs: ['no records on our side'], ops: [], minW: 170,
       x: 900, y: 480,
       desc: '<b>מערכת חיצונית</b> — הסולק שמחייב את כרטיס האשראי. אנחנו <b>לא</b> שומרים אותה: אין לה תכונות ואין לה פעולות, ואין קרדינליות על הקו. הקשר הוא <b>תלות</b> (קו מקווקו + חץ פתוח) — "תשלום משתמש בשער התשלום".'
     },
     {
-      id: 'UniversityIdentity', name: 'זיהוי אוניברסיטה', stereotype: '«external system»', isEnum: false, isAbstract: false, isExternal: true,
-      attrs: ['אין רשומות אצלנו'], ops: [], minW: 170,
+      id: 'UniversityIdentity', name: 'UniversityIdentity', stereotype: '«external system»', isEnum: false, isAbstract: false, isExternal: true,
+      attrs: ['no records on our side'], ops: [], minW: 170,
       x: 60, y: 400,
       desc: '<b>מערכת חיצונית</b> — שירות ה-<span class="en">SSO</span> של האוניברסיטה שמאמת מי הסטודנט. אין לנו רשומות שלה, רק <b>תלות</b> עליה. אם מישהו הפך אותה למחלקה עם תכונות — זו טעות קלאסית במבחן.'
     }
@@ -569,7 +570,7 @@ ${body}
         label: 'Domain Model',
         splitRationale: '',
         elements: [
-          { kind: 'class', id: 'Student', name: 'סטודנט', isAbstract: false, stereotype: null,
+          { kind: 'class', id: 'Student', name: 'Student', isAbstract: false, stereotype: null,
             attributes: [
               { visibility: '-', name: 'studentId', type: 'String', defaultValue: null, constraint: null },
               { visibility: '-', name: 'name', type: 'String', defaultValue: null, constraint: null },
@@ -577,29 +578,31 @@ ${body}
             ],
             operations: [],
             x: 60, y: 230, w: 146, h: 82 },
-          { kind: 'class', id: 'Order', name: 'הזמנה', isAbstract: false, stereotype: null,
+          { kind: 'class', id: 'Order', name: 'Order', isAbstract: false, stereotype: null,
             attributes: [
               { visibility: '-', name: 'orderId', type: 'String', defaultValue: null, constraint: null },
               { visibility: '-', name: 'createdAt', type: 'DateTime', defaultValue: null, constraint: null },
               { visibility: '-', name: 'pickupTime', type: 'DateTime', defaultValue: null, constraint: null },
               { visibility: '-', name: 'pickupCode', type: 'String', defaultValue: null, constraint: null },
-              { visibility: '-', name: 'status', type: 'OrderStatus', defaultValue: null, constraint: null }
+              { visibility: '-', name: 'status', type: 'OrderStatus', defaultValue: null, constraint: null },
+              { visibility: '/', name: 'itemCount', type: 'int', defaultValue: null, constraint: null }
             ],
             operations: [
               { visibility: '+', name: 'total', params: [], returnType: 'Money' },
               { visibility: '+', name: 'cancel', params: [], returnType: null }
             ],
             x: 290, y: 230, w: 166, h: 139 },
-          { kind: 'class', id: 'OrderLine', name: 'שורת הזמנה', isAbstract: false, stereotype: null,
+          { kind: 'class', id: 'OrderLine', name: 'OrderLine', isAbstract: false, stereotype: null,
             attributes: [
               { visibility: '-', name: 'quantity', type: 'int', defaultValue: null, constraint: '>0' },
+              { visibility: '-', name: 'unitPrice', type: 'Money', defaultValue: null, constraint: '>=0' },
               { visibility: '-', name: 'notes', type: 'String', defaultValue: null, constraint: null }
             ],
             operations: [
               { visibility: '+', name: 'lineTotal', params: [], returnType: 'Money' }
             ],
             x: 540, y: 230, w: 153, h: 83 },
-          { kind: 'class', id: 'MenuItem', name: 'פריט תפריט', isAbstract: false, stereotype: null,
+          { kind: 'class', id: 'MenuItem', name: 'MenuItem', isAbstract: false, stereotype: null,
             attributes: [
               { visibility: '-', name: 'itemId', type: 'String', defaultValue: null, constraint: null },
               { visibility: '-', name: 'name', type: 'String', defaultValue: null, constraint: null },
@@ -609,21 +612,21 @@ ${body}
             ],
             operations: [],
             x: 777, y: 230, w: 172, h: 110 },
-          { kind: 'class', id: 'Station', name: 'עמדה', isAbstract: false, stereotype: null,
+          { kind: 'class', id: 'Station', name: 'Station', isAbstract: false, stereotype: null,
             attributes: [
               { visibility: '-', name: 'name', type: 'String', defaultValue: null, constraint: null },
               { visibility: '-', name: 'type', type: 'StationType', defaultValue: null, constraint: null }
             ],
             operations: [],
             x: 1033, y: 230, w: 146, h: 68 },
-          { kind: 'class', id: 'Cafeteria', name: 'קפיטריה', isAbstract: false, stereotype: null,
+          { kind: 'class', id: 'Cafeteria', name: 'Cafeteria', isAbstract: false, stereotype: null,
             attributes: [
               { visibility: '-', name: 'name', type: 'String', defaultValue: null, constraint: null },
               { visibility: '-', name: 'location', type: 'String', defaultValue: null, constraint: null }
             ],
             operations: [],
             x: 1036, y: 90, w: 140, h: 68 },
-          { kind: 'class', id: 'Payment', name: 'תשלום', isAbstract: false, stereotype: null,
+          { kind: 'class', id: 'Payment', name: 'Payment', isAbstract: false, stereotype: null,
             attributes: [
               { visibility: '-', name: 'paymentId', type: 'String', defaultValue: null, constraint: null },
               { visibility: '-', name: 'amount', type: 'Money', defaultValue: null, constraint: null },
@@ -631,13 +634,13 @@ ${body}
             ],
             operations: [],
             x: 560, y: 470, w: 146, h: 82 },
-          { kind: 'class', id: 'UniversityCardPayment', name: 'תשלום בכרטיס אוניברסיטה', isAbstract: false, stereotype: null,
+          { kind: 'class', id: 'UniversityCardPayment', name: 'UniversityCardPayment', isAbstract: false, stereotype: null,
             attributes: [
               { visibility: '-', name: 'universityId', type: 'String', defaultValue: null, constraint: null }
             ],
             operations: [],
             x: 470, y: 620, w: 166, h: 54 },
-          { kind: 'class', id: 'CreditCardPayment', name: 'תשלום באשראי', isAbstract: false, stereotype: null,
+          { kind: 'class', id: 'CreditCardPayment', name: 'CreditCardPayment', isAbstract: false, stereotype: null,
             attributes: [
               { visibility: '-', name: 'last4', type: 'String', defaultValue: null, constraint: null },
               { visibility: '-', name: 'gatewayRef', type: 'String', defaultValue: null, constraint: null }
@@ -646,18 +649,18 @@ ${body}
             x: 700, y: 620, w: 153, h: 68 },
           { kind: 'class', id: 'OrderStatus', name: 'OrderStatus', isAbstract: false, stereotype: 'enumeration',
             attributes: [
-              { visibility: '', name: 'ממתין', type: null, defaultValue: null, constraint: null },
-              { visibility: '', name: 'בהכנה', type: null, defaultValue: null, constraint: null },
-              { visibility: '', name: 'מוכן', type: null, defaultValue: null, constraint: null },
-              { visibility: '', name: 'נאסף', type: null, defaultValue: null, constraint: null },
-              { visibility: '', name: 'בוטל', type: null, defaultValue: null, constraint: null }
+              { visibility: '', name: 'Pending', type: null, defaultValue: null, constraint: null },
+              { visibility: '', name: 'InPreparation', type: null, defaultValue: null, constraint: null },
+              { visibility: '', name: 'Ready', type: null, defaultValue: null, constraint: null },
+              { visibility: '', name: 'Collected', type: null, defaultValue: null, constraint: null },
+              { visibility: '', name: 'Cancelled', type: null, defaultValue: null, constraint: null }
             ],
             operations: [],
             x: 300, y: 80, w: 120, h: 120 },
-          { kind: 'class', id: 'PaymentGateway', name: 'שער תשלום', isAbstract: false, stereotype: 'external system',
+          { kind: 'class', id: 'PaymentGateway', name: 'PaymentGateway', isAbstract: false, stereotype: 'external system',
             attributes: [], operations: [],
             x: 900, y: 480, w: 170, h: 64 },
-          { kind: 'class', id: 'UniversityIdentity', name: 'זיהוי אוניברסיטה', isAbstract: false, stereotype: 'external system',
+          { kind: 'class', id: 'UniversityIdentity', name: 'UniversityIdentity', isAbstract: false, stereotype: 'external system',
             attributes: [], operations: [],
             x: 60, y: 400, w: 170, h: 64 }
         ],

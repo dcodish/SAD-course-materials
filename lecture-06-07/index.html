@@ -29,61 +29,123 @@
         </ol>
       </div>
     </section>
-    <!-- A3 — Previously on SAD: the bridge from L4-5 into the design phase.
-         A left→right (RTL: right→left) strip of the pipeline so far — ראיונות → דרישות →
-         תרחישי שימוש (L4-5) → מודל מחלקות (עכשיו) — with ← arrows (forward = reading flow).
-         The big orange ← marks the phase crossing from ניתוח into עיצוב. One .hero states the
-         new question (מה→איך). A short setting slide; the SDLC chip (design) is build-injected. -->
-    <section data-slug="previously-on-sad" class="has-acro-footer">
+    <!-- A3 — what actually happens in a project at this point: the ANALYSIS → DESIGN handoff.
+         Replaces the old "previously on SAD" pipeline chain (David, 2026-08-10: the plain
+         "use cases ← class diagram" jump is wrong — show the handoff between the business-analysis
+         team and the technical team, and that a WHOLE team works here in parallel: DB, UI, NFRs).
+         RTL layout: right = the package the BA team hands over (which doubles as the L2/L3/L4-5
+         recap), middle = the handoff itself, left = the design team's parallel workstreams with
+         the data model flagged as the one seat we occupy today. Role names deliberately match the
+         SDLC×roles rail on the next slide (BA owns דרישות, System Analyst owns עיצוב). -->
+    <section data-slug="analysis-to-design-handoff" class="has-acro-footer">
       <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
       <style>
-        section[data-slug="previously-on-sad"] .chain-wrap{ flex:1; display:flex; flex-direction:column; justify-content:center; gap:14px; min-height:0; }
-        section[data-slug="previously-on-sad"] .chain{ display:flex; align-items:stretch; justify-content:center; gap:8px; }
-        section[data-slug="previously-on-sad"] .chip{ background:var(--card-bg); border:1px solid var(--card-border); border-radius:14px;
-          padding:16px 18px; text-align:center; display:flex; flex-direction:column; justify-content:center; gap:5px; min-width:158px; }
-        section[data-slug="previously-on-sad"] .chip .t{ font-size:22px; font-weight:700; color:var(--dark-blue); }
-        section[data-slug="previously-on-sad"] .chip small{ font-size:14px; color:var(--muted); }
-        section[data-slug="previously-on-sad"] .chip.now{ background:var(--hero-bg); border:2px solid var(--orange); }
-        section[data-slug="previously-on-sad"] .chip.now .t{ color:var(--orange); }
-        section[data-slug="previously-on-sad"] .arr{ align-self:center; font-size:28px; color:var(--light-blue); font-weight:700; }
-        section[data-slug="previously-on-sad"] .cross{ align-self:center; font-size:40px; color:var(--orange); font-weight:700; }
-        section[data-slug="previously-on-sad"] .cap{ margin:0; text-align:center; font-size:18px; color:var(--muted); }
-        section[data-slug="previously-on-sad"] .cap .an{ color:var(--dark-blue); }
-        section[data-slug="previously-on-sad"] .cap .de{ color:var(--orange); }
-        section[data-slug="previously-on-sad"] .hero > p{ font-size:22px; }
+        section[data-slug="analysis-to-design-handoff"] .ho{ flex:1; display:grid; grid-template-columns:0.95fr auto 1.55fr;
+          gap:12px; align-items:stretch; min-height:0; }
+        section[data-slug="analysis-to-design-handoff"] .side{ display:flex; flex-direction:column; gap:8px; min-height:0;
+          border-radius:16px; padding:12px 14px; }
+        section[data-slug="analysis-to-design-handoff"] .side.ba{ background:#EAF3FB; border:1px solid #cfe3f5; }
+        section[data-slug="analysis-to-design-handoff"] .side.tech{ background:var(--card-bg); border:1px solid var(--card-border); }
+        section[data-slug="analysis-to-design-handoff"] .side-h{ font-size:22px; font-weight:800; color:var(--dark-blue); }
+        section[data-slug="analysis-to-design-handoff"] .side-h .en{ color:var(--dark-blue); }
+        section[data-slug="analysis-to-design-handoff"] .side-s{ font-size:15px; color:var(--muted); line-height:1.35; }
+
+        /* the handed-over package = also the L2/L3/L4-5 recap */
+        section[data-slug="analysis-to-design-handoff"] .pkg{ flex:1; display:flex; flex-direction:column; gap:7px; min-height:0; }
+        section[data-slug="analysis-to-design-handoff"] .pk{ flex:1; display:flex; flex-direction:column; justify-content:center;
+          background:#fff; border:1px solid #cfe3f5; border-radius:10px; padding:6px 12px; }
+        section[data-slug="analysis-to-design-handoff"] .pk b{ font-size:20px; font-weight:700; color:var(--body); }
+        section[data-slug="analysis-to-design-handoff"] .pk small{ font-size:14px; color:var(--muted); }
+
+        /* the handoff column */
+        section[data-slug="analysis-to-design-handoff"] .mid{ width:190px; display:flex; flex-direction:column;
+          align-items:center; justify-content:center; gap:5px; text-align:center; }
+        section[data-slug="analysis-to-design-handoff"] .mid .arrow{ font-size:62px; line-height:1; color:var(--orange); font-weight:700; }
+        section[data-slug="analysis-to-design-handoff"] .mid .mt{ font-size:22px; font-weight:800; color:var(--orange); }
+        section[data-slug="analysis-to-design-handoff"] .mid .ms{ font-size:14px; color:var(--muted); line-height:1.4; }
+
+        /* the design team's parallel workstreams */
+        section[data-slug="analysis-to-design-handoff"] .lanes{ flex:1; display:grid; grid-template-columns:1fr 1fr;
+          grid-auto-rows:1fr; gap:8px; min-height:0; }
+        section[data-slug="analysis-to-design-handoff"] .lane{ background:#fff; border:1px solid var(--card-border);
+          border-radius:12px; padding:8px 12px; display:flex; flex-direction:column; justify-content:center; gap:3px; }
+        section[data-slug="analysis-to-design-handoff"] .lane.now{ background:var(--hero-bg); border:2px solid var(--orange); }
+        section[data-slug="analysis-to-design-handoff"] .lane .ln{ font-size:22px; font-weight:800; color:var(--dark-blue); }
+        section[data-slug="analysis-to-design-handoff"] .lane.now .ln{ color:var(--orange); }
+        section[data-slug="analysis-to-design-handoff"] .lane .ld{ font-size:16.5px; color:var(--body); line-height:1.35; }
+        section[data-slug="analysis-to-design-handoff"] .lane .who{ font-size:14px; color:var(--muted); }
+        section[data-slug="analysis-to-design-handoff"] .lane .who .en{ color:var(--muted); }
+        section[data-slug="analysis-to-design-handoff"] .lane .tag{ align-self:flex-start; font-size:12.5px; padding:1px 9px; }
+        /* the acronym footer here runs to TWO lines (SDLC/BPMN/BA/SMART) — the theme reserves only
+           28px, so lift the takeaway clear of it. */
+        section[data-slug="analysis-to-design-handoff"] .bottom-line{ margin-bottom:12px; }
       </style>
-      <h1>מ-<span class="en">Use Case</span> למודל נתונים</h1>
-      <div class="subtitle"><span class="en">Previously on SAD</span> — מניתוח (הרצאה 4-5) לעיצוב</div>
+      <h1>מה קורה בפרויקט בנקודה הזו</h1>
+      <div class="subtitle">סוף שלב הניתוח — מסירה מצוות הניתוח העסקי לצוות הטכני</div>
       <div class="body">
 
-        <div class="chain-wrap">
-          <div class="chain">
-            <div class="chip"><span class="t">ראיונות</span><small>הרצאה 3</small></div>
-            <span class="arr">←</span>
-            <div class="chip"><span class="t">דרישות</span><small>הרצאה 3</small></div>
-            <span class="arr">←</span>
-            <div class="chip"><span class="t">תרחישי שימוש</span><small><span class="en">Use Case</span> · הרצאה 4-5</small></div>
-            <span class="cross">←</span>
-            <div class="chip now"><span class="t">מודל מחלקות</span><small>עכשיו · הרצאה 6-7</small></div>
+        <div class="ho">
+
+          <div class="side ba">
+            <div class="side-h">צוות ניתוח עסקי <span class="en">(BA)</span></div>
+            <div class="side-s">סיים לענות על <b>מה</b> המערכת צריכה לעשות — ומוסר חבילת תוצרים:</div>
+            <div class="pkg">
+              <div class="pk"><b>דרישות <span class="en">SMART</span></b><small>הרצאה 3</small></div>
+              <div class="pk"><b>תרחישי שימוש <span class="en">(Use&#160;Case)</span></b><small>הרצאה 4-5</small></div>
+              <div class="pk"><b>תרשימי תהליך <span class="en">(BPMN)</span></b><small>הרצאה 2</small></div>
+              <div class="pk"><b>דרישות לא-פונקציונליות</b><small>עומס, זמינות, אבטחה, ביצועים</small></div>
+            </div>
           </div>
-          <p class="cap">שלושת הראשונים = <b class="an">ניתוח</b> (מה המערכת עושה) · האחרון = <b class="de">עיצוב</b> (איך בנוי המידע) — כאן חוצים.</p>
+
+          <div class="mid">
+            <span class="arrow">←</span>
+            <div class="mt">מסירה</div>
+            <div class="ms">סקירה משותפת ואישור התוצרים — לא ״זריקה מעבר לגדר״. ה-<span class="en">BA</span> נשאר זמין להבהרות לאורך העיצוב.</div>
+          </div>
+
+          <div class="side tech">
+            <div class="side-h">צוות טכני — עיצוב</div>
+            <div class="side-s">עונה על <b>איך</b> המערכת תיבנה. לא איש אחד: כמה בעלי תפקיד עובדים <b>במקביל</b> על אותו קלט.</div>
+            <div class="lanes">
+              <div class="lane now">
+                <span class="tag warn">היום</span>
+                <div class="ln">מודל הנתונים</div>
+                <div class="ld">אילו ישויות המערכת מחזיקה ואיך הן קשורות — <b>תרשים מחלקות</b></div>
+                <div class="who">מנתח מערכת <span class="en">(System Analyst)</span></div>
+              </div>
+              <div class="lane">
+                <div class="ln">מסד הנתונים</div>
+                <div class="ld">טבלאות, מפתחות, אינדקסים, גיבוי ושחזור</div>
+                <div class="who"><span class="en">DBA</span> · מהנדס נתונים</div>
+              </div>
+              <div class="lane">
+                <div class="ln">ממשק המשתמש</div>
+                <div class="ld">מסכים, זרימות עבודה, נגישות ושפה ויזואלית</div>
+                <div class="who"><span class="en">UX / UI</span></div>
+              </div>
+              <div class="lane">
+                <div class="ln">ארכיטקטורה ותשתית</div>
+                <div class="ld">שכבות, אינטגרציה למערכות קיימות, אבטחה, עמידה בעומס</div>
+                <div class="who">ארכיטקט · <span class="en">DevOps</span></div>
+              </div>
+            </div>
+          </div>
+
         </div>
 
-        <div class="hero">
-          <h3>השאלה שמשתנה</h3>
-          <p>עד עכשיו שאלנו <b>מה</b> המערכת עושה — תרחישי שימוש ותהליכים. מהיום שואלים <b>איך</b> בנוי המידע שהיא מחזיקה.</p>
-        </div>
-
-        <!-- nbsp binds the last two words so the line can't wrap leaving one word orphaned. -->
-        <p class="bottom-line">הדרישות ותרחישי השימוש הם הקלט; היום נהפוך אותם למודל המחלקות — הנתונים&#160;שהמערכת&#160;שומרת.</p>
+        <p class="bottom-line">כל הכיסאות עובדים על אותה חבילת דרישות — היום אנחנו יושבים באחד&#160;מהם:&#160;מודל&#160;הנתונים.</p>
 
       </div>
       <aside class="notes">
-        שקופית מעבר: זו הנקודה שבה הקורס חוצה מ<b>ניתוח דרישות</b> ל<b>עיצוב</b> — השקופית הבאה (מפת SDLC) מסמנת זאת מפורשות.
-        ב-L4-5 הפקנו תרחישי שימוש ותהליכים (מה + למי); עכשיו שואלים שאלה חדשה — אילו נתונים המערכת חייבת להחזיק כדי לבצע אותם.
-        זה הקלט למודל המחלקות: אותה דוגמה רצה (הזמנת אוכל בקמפוס), שלב הבא.
+        זו נקודת המעבר בפרויקט אמיתי: צוות הניתוח העסקי סיים, ומוסר חבילה — דרישות SMART, תרחישי שימוש,
+        תרשימי תהליך והדרישות הלא-פונקציונליות. המסירה היא אירוע מנוהל: סקירה משותפת ואישור, וה-BA נשאר
+        זמין. שווה להדגיש לסטודנטים שמכאן זה לא איש אחד שמצייר תרשים — יושבים כאן במקביל מנתח מערכת (מודל
+        הנתונים — מה שנלמד היום), DBA (מסד הנתונים), UX/UI (המסכים) וארכיטקט/DevOps (שכבות, אינטגרציה,
+        אבטחה, עומסים). כל אחד לוקח את אותה חבילה וגוזר ממנה תוצר אחר.
+        הדרישות הלא-פונקציונליות מופיעות פעמיים בכוונה: ה-BA אסף אותן, העיצוב הוא זה שצריך לעמוד בהן.
+        השקופית הבאה (מפת SDLC×תפקידים) מראה את אותם תפקידים לאורך כל מחזור החיים.
       </aside>
-    <div class="acro-footer"><span class="acro"><span class="en">SDLC</span> = <span class="en">Software Development Life Cycle</span> · מחזור פיתוח תוכנה</span></div>
+    <div class="acro-footer"><span class="acro"><span class="en">SDLC</span> = <span class="en">Software Development Life Cycle</span> · מחזור פיתוח תוכנה</span> &nbsp;·&nbsp; <span class="acro"><span class="en">BPMN</span> = <span class="en">Business Process Model and Notation</span> · מידול וסימון תהליכים עסקיים</span> &nbsp;·&nbsp; <span class="acro"><span class="en">BA</span> = <span class="en">Business Analyst</span> · אנליסט/ית עסקי/ת</span> &nbsp;·&nbsp; <span class="acro"><span class="en">SMART</span> = <span class="en">Specific, Measurable, Achievable, Relevant, Traceable</span> · ספציפי, מדיד, בר-השגה, רלוונטי, עקיב</span></div>
     </section>
     <!-- Where-are-we transition: crossing from ניתוח דרישות into עיצוב (what -> how). Uses the
          shared interactive SDLC x roles rail (assets/sdlc_roles_rtl.html), flagged on the current
@@ -133,9 +195,9 @@
         </div>
 
         <div class="card viz">
-          <div class="panel-title" style="text-align:center;">מחלקה אחת <span class="en">הזמנה</span> — הרבה מופעים</div>
+          <div class="panel-title" style="text-align:center;">מחלקה אחת — <span class="en">Order</span> — הרבה מופעים</div>
           <svg viewBox="0 0 500 240" xmlns="http://www.w3.org/2000/svg" role="img"
-               aria-label="מחלקת הזמנה כתבנית מימין, ושתי הזמנות קונקרטיות כמופעים משמאל, מחוברות בקווים מקווקווים">
+               aria-label="מחלקת Order כתבנית מימין, ושתי הזמנות קונקרטיות כמופעים משמאל, מחוברות בקווים מקווקווים">
 
             <!-- dashed connectors (NOT association lines — instance-of, drawn first, boxes cover ends) -->
             <line x1="315" y1="100" x2="200" y2="80"  stroke="#94a3b8" stroke-width="1.4" stroke-dasharray="4 4"/>
@@ -146,8 +208,8 @@
                   fill="#1e40af" font-family="'Noto Sans Hebrew',sans-serif">מחלקה — תבנית</text>
             <rect x="315" y="30" width="165" height="182" fill="#fff" stroke="#3b82f6" stroke-width="1.8" rx="3"/>
             <rect x="315" y="30" width="165" height="30" fill="#1e40af" stroke="#3b82f6" stroke-width="1.8" rx="3"/>
-            <text x="397" y="50" text-anchor="middle" direction="rtl" font-size="15" font-weight="700"
-                  fill="#fff" font-family="'Noto Sans Hebrew',sans-serif">הזמנה</text>
+            <text x="397" y="50" text-anchor="middle" direction="ltr" font-size="15" font-weight="700"
+                  fill="#fff" font-family="'Segoe UI',Arial,sans-serif">Order</text>
             <line x1="315" y1="60" x2="480" y2="60" stroke="#3b82f6" stroke-width="1"/>
             <line x1="315" y1="150" x2="480" y2="150" stroke="#3b82f6" stroke-width="1"/>
             <!-- font-size 11 (was 12.5): at 12.5 the longest attribute line ran past the
@@ -166,17 +228,17 @@
 
             <rect x="25" y="45" width="175" height="68" fill="#f0fdf9" stroke="#0F766E" stroke-width="1.6" rx="3"/>
             <text x="112" y="63" text-anchor="middle" direction="ltr" text-decoration="underline"
-                  font-family="'Consolas','Courier New',monospace" font-size="12.5" font-weight="700" fill="#0F766E">#1042 : הזמנה</text>
+                  font-family="'Consolas','Courier New',monospace" font-size="12.5" font-weight="700" fill="#0F766E">#1042 : Order</text>
             <g font-family="'Consolas','Courier New',monospace" font-size="12" fill="#334155" direction="ltr" text-anchor="start">
-              <text x="34" y="84">status = בהכנה</text>
+              <text x="34" y="84">status = InPreparation</text>
               <text x="34" y="102">pickupTime = 12:30</text>
             </g>
 
             <rect x="25" y="150" width="175" height="68" fill="#f0fdf9" stroke="#0F766E" stroke-width="1.6" rx="3"/>
             <text x="112" y="168" text-anchor="middle" direction="ltr" text-decoration="underline"
-                  font-family="'Consolas','Courier New',monospace" font-size="12.5" font-weight="700" fill="#0F766E">#1043 : הזמנה</text>
+                  font-family="'Consolas','Courier New',monospace" font-size="12.5" font-weight="700" fill="#0F766E">#1043 : Order</text>
             <g font-family="'Consolas','Courier New',monospace" font-size="12" fill="#334155" direction="ltr" text-anchor="start">
-              <text x="34" y="189">status = מוכן</text>
+              <text x="34" y="189">status = Ready</text>
               <text x="34" y="207">pickupTime = 13:00</text>
             </g>
 
@@ -205,8 +267,13 @@
          system manages + the relationships between them. Contrast with the use-case diagram
          (behavior / what) vs class diagram (structure / data). LEFT: a labelled 3-compartment box
          preview (שם / תכונות / פעולות) on the canonical הזמנה class. RIGHT: "why it's good for" —
-         shared vocabulary · the blueprint the DB + code are built from · what AI reads to generate
-         the data layer (the 🤖 thread). Box notation obeys the tool doctrine. -->
+         shared vocabulary · the skeleton the DB + code are DERIVED from · what AI reads to generate
+         the data layer (the 🤖 thread). Box notation obeys the tool doctrine.
+         2026-08-10 (David): the second bullet used to claim "כל תכונה הופכת לעמודה/שדה" — deleted, it
+         is not true (derived attributes aren't stored, multi-valued ones become their own table,
+         composites split across columns, and the DB adds FKs/surrogate keys/audit fields that are not
+         attributes at all). It now says derivation ≠ copy, which also sets up the full class-diagram ↔
+         database slide planned for section ד after נירמול. -->
     <section data-slug="what-is-class-diagram" class="has-acro-footer">
       <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
       <style>
@@ -231,7 +298,7 @@
           <div class="card anatomy">
             <div class="panel-title" style="text-align:center;">שלושה חלקים לכל מחלקה</div>
             <svg viewBox="0 0 360 230" xmlns="http://www.w3.org/2000/svg" role="img"
-                 aria-label="תיבת המחלקה הזמנה עם שלושה חלקים מסומנים: שם, תכונות, פעולות">
+                 aria-label="תיבת המחלקה Order עם שלושה חלקים מסומנים: שם, תכונות, פעולות">
               <!-- leader lines: label (left) → compartment (box left edge) -->
               <line x1="156" y1="43"  x2="175" y2="43"  stroke="#94a3b8" stroke-width="1"/>
               <line x1="156" y1="100" x2="175" y2="100" stroke="#94a3b8" stroke-width="1"/>
@@ -246,8 +313,8 @@
               <!-- the class box -->
               <rect x="175" y="27" width="160" height="185" fill="#fff" stroke="#3b82f6" stroke-width="1.8" rx="3"/>
               <rect x="175" y="27" width="160" height="30"  fill="#1e40af" stroke="#3b82f6" stroke-width="1.8" rx="3"/>
-              <text x="255" y="47" text-anchor="middle" direction="rtl" font-size="15" font-weight="700"
-                    fill="#fff" font-family="'Noto Sans Hebrew',sans-serif">הזמנה</text>
+              <text x="255" y="47" text-anchor="middle" direction="ltr" font-size="15" font-weight="700"
+                    fill="#fff" font-family="'Segoe UI',Arial,sans-serif">Order</text>
               <line x1="175" y1="57"  x2="335" y2="57"  stroke="#3b82f6" stroke-width="1"/>
               <line x1="175" y1="145" x2="335" y2="145" stroke="#3b82f6" stroke-width="1"/>
               <!-- font-size 11 (was 12.5): at 12.5 the longest line "- pickupTime : DateTime"
@@ -266,7 +333,7 @@
             <div class="panel-title">למה זה שימושי</div>
             <ul class="bullets">
               <li><b>אוצר מילים משותף</b> — שפה אחת לכל בעלי העניין על ישויות המערכת.</li>
-              <li><b>השלד</b> שעליו נבנים בסיס הנתונים והקוד — כל תכונה הופכת לעמודה/שדה.</li>
+              <li><b>השלד</b> שממנו נגזרים בסיס הנתונים והקוד — <b>גזירה, לא העתקה</b>: המודל קובע איזה מידע קיים; איך הוא נשמר בפועל זו החלטת עיצוב בפני עצמה.</li>
             </ul>
             <div class="callout ai">
               <span class="label">🤖 שכבת הנתונים</span>
@@ -283,16 +350,25 @@
         תרשים מחלקות = המבנה הסטטי / מודל התחום: המחלקות שהמערכת מנהלת + הקשרים ביניהן. ניגוד מועיל: תרשים תרחישי שימוש
         מתאר התנהגות (מה עושים), תרשים מחלקות מתאר מבנה ונתונים (מה מחזיקים). שלושת החלקים: שם, תכונות, פעולות (נרחיב בחלק ב').
         למה חשוב: שפה משותפת, שלד לבסיס הנתונים ולקוד, והקלט ש-AI קורא כדי לייצר את שכבת הנתונים — ולכן מודל מעורפל ⇒ קוד שגוי.
+        ⚠️ להיזהר מלהבטיח ״כל תכונה = עמודה״ — זה פשוט לא נכון (תכונות מחושבות שלא נשמרות, תכונות מרובות-ערך שהופכות לטבלה,
+        תכונות מורכבות שנפרסות לכמה עמודות, ומנגד מפתחות זרים ושדות ניהול שאינם תכונות במודל). המסר כאן: המודל הוא המקור,
+        והגזירה למסד הנתונים היא החלטת עיצוב. כאן בדרך כלל עולה ההשוואה לקורס בסיסי נתונים — לאשר שההשוואה נכונה
+        (ERD ומודל מחלקות מתארים את אותה מציאות) ולהבטיח שנעשה את ההשוואה המלאה בחלק ד׳, אחרי הנירמול.
       </aside>
     <div class="acro-footer"><span class="acro"><span class="en">AI</span> = <span class="en">Artificial Intelligence</span> · בינה מלאכותית</span></div>
     </section>
     <!-- A7 — 🤖 מ-use cases למודל מחלקות. The design-phase AI beat, re-setting the ⚠️ challenge
          habit for class diagrams. 🤖 callout: paste the L4-5 use cases/requirements → AI drafts a
          candidate class list + first relationships in seconds. ⚠️ callout: it LOOKS complete, but AI
-         reliably (a) turns דוח מכירות/קבלה into a class (persistence test — previews B7); (b) invents
-         entities the boundary excluded (משלוח, OUT per running-example §0); (c) guesses multiplicity;
-         (d) picks inheritance where an enum belongs. Habit hero: the model is your verification
-         surface — what did it invent / miss / assume? Candidate names verbatim from PORTING_BRIEF. -->
+         reliably (a) turns דוח מכירות/קבלה into a class (persistence test, taught in full on page 14);
+         (b) invents entities the boundary excluded (משלוח, OUT per running-example §0); (c) guesses
+         multiplicity; (d) subclasses what is really a status. Habit hero: the model is your verification
+         surface — what did it invent / miss / assume? Candidate names verbatim from PORTING_BRIEF.
+         2026-08-10 (David) — NO FORWARD VOCABULARY ON THIS SLIDE. Two authoring leaks removed:
+         the internal outline code "B7" (meaningless to a student) and the word "enum", which is not
+         introduced until page 11. Failure (d) is now phrased in plain language (תת-מחלקות מול סטטוס),
+         which needs no term the student doesn't have yet. General rule for section א: it sets the AI
+         habit BEFORE the notation is taught, so every beat must survive without notation vocabulary. -->
     <section data-slug="ai-domain-model" class="has-acro-footer">
       <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
       <style>
@@ -339,10 +415,10 @@
           <div class="callout warn">
             <span class="label">⚠️ נראה שלם — אבל ה-<span class="en">AI</span> נופל שוב ושוב</span>
             <ul class="fails">
-              <li>הופך <b>דוח מכירות / קבלה</b> למחלקה — זה פלט מחושב שלא נשמר (מבחן ההתמדה, נרחיב ב-B7).</li>
+              <li>הופך <b>דוח מכירות / קבלה</b> למחלקה — זה פלט מחושב שלא נשמר (מבחן ההתמדה — נרחיב בהמשך ההרצאה).</li>
               <li>ממציא ישויות שהוצאו מהגבול — <b>משלוח</b> (מחוץ ל-<span class="en">scope</span>).</li>
               <li>מנחש <b>קרדינליות</b> במקום לברר אותה.</li>
-              <li>בוחר <b>הורשה</b> במקום <span class="en">enum</span> (סטטוס הזמנה אינו תת-מחלקה).</li>
+              <li>בונה <b>תת-מחלקות</b> שאין להן הצדקה — ״הזמנה ממתינה״ ו״הזמנה מוכנה״ אינן סוגים של הזמנה, אלא <b>סטטוס</b> של אותה הזמנה.</li>
             </ul>
           </div>
 
@@ -357,8 +433,11 @@
       <aside class="notes">
         הביט של שלב העיצוב, במקביל ל-L4-5: ה-AI מנסח בשניות מודל מחלקות מלא-למראה מתוך תרחישי השימוש והדרישות — וזו בדיוק הסכנה.
         ארבעת הכשלים החוזרים בתרשים מחלקות: (א) קבלה/דוח כמחלקה — מבחן ההתמדה (המערכת שומרת רשומות של הישות?); (ב) המצאת ישויות
-        שמחוץ לגבול (משלוח — OUT ב-running-example §0); (ג) ניחוש קרדינליות; (ד) הורשה במקום enum (סטטוס הזמנה). מְקבעים את ההרגל:
-        המודל הוא משטח האימות — מה הומצא, מה חסר, מה הונח. נאתגר כל נקודה כזו לאורך ההרצאה.
+        שמחוץ לגבול (משלוח — OUT ב-running-example §0); (ג) ניחוש קרדינליות; (ד) הורשה במקום סטטוס (הזמנה ממתינה/מוכנה).
+        מְקבעים את ההרגל: המודל הוא משטח האימות — מה הומצא, מה חסר, מה הונח. נאתגר כל נקודה כזו לאורך ההרצאה.
+        ⚠️ הערת ניסוח (David, 2026-08-10): בשקופית הזו אין עדיין את המילים <b>enum</b> ו<b>מבחן ההתמדה</b> כמונחים מוגדרים —
+        enumeration נלמד רק בשקופית 11 והמבחן המלא בשקופית 14, ולכן הכשל הרביעי מנוסח כ״תת-מחלקות מול סטטוס״ בשפה רגילה.
+        אם רוצים, אפשר לומר בעל-פה ״למי שמכיר — זה מקרה של enum״, אבל לא להסתמך על זה.
       </aside>
     <div class="acro-footer"><span class="acro"><span class="en">SDLC</span> = <span class="en">Software Development Life Cycle</span> · מחזור פיתוח תוכנה</span> &nbsp;·&nbsp; <span class="acro"><span class="en">AI</span> = <span class="en">Artificial Intelligence</span> · בינה מלאכותית</span></div>
     </section>
@@ -404,34 +483,41 @@
           </div>
 
           <div class="card">
-            <svg class="class-svg" viewBox="0 0 380 236" xmlns="http://www.w3.org/2000/svg" role="img"
-                 aria-label="תיבת המחלקה הזמנה עם שלושה תאים: שם, תכונות ופעולות">
+            <svg class="class-svg" viewBox="0 0 470 306" xmlns="http://www.w3.org/2000/svg" role="img"
+                 aria-label="תיבת המחלקה הזמנה עם שלושה תאים: שם, שלוש תכונות, וחמש פעולות הכוללות שולפת, קובעת ופעולה עם פרמטרים וערך מוחזר">
               <!-- header band -->
-              <rect x="20" y="8" width="340" height="52" fill="#1e40af"/>
-              <text x="190" y="34" text-anchor="middle" direction="rtl" font-size="21" font-weight="700"
-                    fill="#ffffff" font-family="'Noto Sans Hebrew',sans-serif">הזמנה</text>
-              <text x="190" y="52" text-anchor="middle" font-size="13" fill="#dbeafe"
-                    font-family="'Segoe UI',Arial,sans-serif" font-style="italic">Order</text>
+              <rect x="20" y="8" width="430" height="52" fill="#1e40af"/>
+              <!-- Class names are English identifiers (David, 2026-08-10) — the Hebrew name that used
+                   to sit here, with Order as an italic subtitle, is gone; the diagram is English-only. -->
+              <text x="235" y="43" text-anchor="middle" direction="ltr" font-size="22" font-weight="700"
+                    fill="#ffffff" font-family="'Segoe UI',Arial,sans-serif">Order</text>
 
               <!-- attributes compartment -->
-              <text x="34" y="88"  text-anchor="start" direction="ltr" font-size="16" fill="#1e293b"
+              <text x="34" y="88"  text-anchor="start" direction="ltr" font-size="15" fill="#1e293b"
                     font-family="'Consolas','Courier New',monospace">- orderId : String</text>
-              <text x="34" y="117" text-anchor="start" direction="ltr" font-size="16" fill="#1e293b"
+              <text x="34" y="115" text-anchor="start" direction="ltr" font-size="15" fill="#1e293b"
                     font-family="'Consolas','Courier New',monospace">- pickupTime : DateTime</text>
-              <text x="34" y="146" text-anchor="start" direction="ltr" font-size="16" fill="#1e293b"
+              <text x="34" y="142" text-anchor="start" direction="ltr" font-size="15" fill="#1e293b"
                     font-family="'Consolas','Courier New',monospace">- status : OrderStatus</text>
 
-              <!-- operations compartment (italic) -->
-              <text x="34" y="188" text-anchor="start" direction="ltr" font-size="16" fill="#1e293b" font-style="italic"
+              <!-- Operations compartment (italic). Deliberately covers all four signature shapes so
+                   there is something to discuss: no-in/no-out, no-in/out, in/no-out, in+out. -->
+              <text x="34" y="182" text-anchor="start" direction="ltr" font-size="14" fill="#1e293b" font-style="italic"
                     font-family="'Consolas','Courier New',monospace">+ total() : Money</text>
-              <text x="34" y="217" text-anchor="start" direction="ltr" font-size="16" fill="#1e293b" font-style="italic"
+              <text x="34" y="207" text-anchor="start" direction="ltr" font-size="14" fill="#1e293b" font-style="italic"
                     font-family="'Consolas','Courier New',monospace">+ cancel()</text>
+              <text x="34" y="232" text-anchor="start" direction="ltr" font-size="14" fill="#1e293b" font-style="italic"
+                    font-family="'Consolas','Courier New',monospace">+ addItem(item : MenuItem, qty : int) : OrderLine</text>
+              <text x="34" y="257" text-anchor="start" direction="ltr" font-size="14" fill="#1e293b" font-style="italic"
+                    font-family="'Consolas','Courier New',monospace">+ getStatus() : OrderStatus</text>
+              <text x="34" y="282" text-anchor="start" direction="ltr" font-size="14" fill="#1e293b" font-style="italic"
+                    font-family="'Consolas','Courier New',monospace">+ setStatus(newStatus : OrderStatus)</text>
 
               <!-- dividers between compartments -->
-              <line x1="20" y1="60"  x2="360" y2="60"  stroke="#3b82f6" stroke-width="1.4"/>
-              <line x1="20" y1="160" x2="360" y2="160" stroke="#3b82f6" stroke-width="1.4"/>
+              <line x1="20" y1="60"  x2="450" y2="60"  stroke="#3b82f6" stroke-width="1.4"/>
+              <line x1="20" y1="158" x2="450" y2="158" stroke="#3b82f6" stroke-width="1.4"/>
               <!-- outer border last, so it sits above the fills -->
-              <rect x="20" y="8" width="340" height="216" fill="none" stroke="#3b82f6" stroke-width="2"/>
+              <rect x="20" y="8" width="430" height="288" fill="none" stroke="#3b82f6" stroke-width="2"/>
             </svg>
           </div>
 
@@ -442,109 +528,231 @@
       </div>
       <aside class="notes">
         התיבה היא לב תרשים המחלקות: מלבן חצוי לשלושה תאים. השם למעלה (על הרקע הכחול, UpperCamelCase
-        ביחיד), אחריו התכונות — הנתונים שנשמרים על כל אובייקט — ולבסוף הפעולות בכתב נטוי. כאן מוצגת
-        גרסה מצומצמת של הזמנה; בשקופית התכונות נרחיב את תא התכונות המלא. הפורמט המדויק של תכונה
-        ופעולה מגיע בשקופיות הבאות.
+        ביחיד), אחריו התכונות — הנתונים שנשמרים על כל אובייקט — ולבסוף הפעולות בכתב נטוי.
+        הפורמט המדויק של תכונה ופעולה מגיע בשקופיות הבאות; כאן רק מראים את המבנה.
+
+        <b>תא הפעולות נבנה בכוונה כך שיש על מה לדבר</b> — ארבע הצורות של חתימת פעולה, כולן על אותה מחלקה:
+        (1) <b>ללא קלט וללא פלט</b> — cancel(); (2) <b>בלי קלט, עם ערך מוחזר</b> — total() : Money;
+        (3) <b>עם קלט, בלי ערך מוחזר</b> — setStatus(newStatus : OrderStatus);
+        (4) <b>עם קלט ועם פלט</b> — addItem(item : MenuItem, qty : int) : OrderLine. שם הפעולה בשתי מילים
+        נכתב ב-lowerCamelCase (addItem, getStatus) — בניגוד לשם המחלקה שנפתח באות גדולה.
+
+        <b>שולפת/קובעת (getter/setter):</b> התכונות מסומנות בּ-מינוס (פרטיות) — אף אחד מבחוץ לא ניגש
+        ל-status ישירות; הגישה עוברת דרך פעולות ציבוריות (+). זו הכמסה (encapsulation): המחלקה שומרת
+        על הנתונים שלה ומחליטה מה מותר. שווה לשאול את הכיתה למה בכלל צריך setStatus אם אפשר היה לכתוב
+        ישירות לשדה — התשובה: כי ה-setter יכול לאכוף חוקיות (אי אפשר לקפוץ מ״ממתין״ ל״נאסף״), וזו בדיוק
+        הכניסה לתרשים המצבים בהרצאה 8.
+        ⚠️ הסתייגות מקצועית שכדאי לומר: במודל תחום אמיתי <b>לא</b> מציירים getter/setter לכל תכונה — זה
+        רעש. הם מופיעים כאן פעם אחת כדי להמחיש את הרעיון, ולא כתקן לחזור עליו בכל תרשים.
+
+        OrderLine (שורת הזמנה) מופיע כאן כטיפוס מוחזר — טיזר קטן למחלקה המתווכת שנלמד בחלק ג׳.
       </aside>
     </section>
-    <!-- B2 — שם המחלקה + חבילות (packages).
-         Naming rules (UpperCamelCase, singular, no spaces) with good/bad campus examples;
-         then package = grouping/namespacing mechanism, drawn as a UML folder-tab rectangle
-         grouping Order + OrderLine, with the הזמנות::הזמנה namespacing note.
-         SVG conventions per slide-association.html (blue border, header band #1e40af). -->
-    <section data-slug="class-name">
+    <!-- B2 — שם המחלקה. Naming rules only: UpperCamelCase, singular, no spaces/underscores, a noun
+         not a verb, and ALWAYS English.
+         2026-08-10 (David): packages used to share this slide; they now have their own slide at the
+         end of section ב (slide-packages.html), so the freed half became a proper ✗/✓/why table —
+         the rules are only memorable next to the mistake each one prevents. The last table row
+         teaches the English rule itself, which is the course-wide convention as of this date:
+         class/attribute/operation/package names are English identifiers even though the domain,
+         the interviews and the requirements are Hebrew. -->
+    <section data-slug="class-name" class="has-acro-footer">
       <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
       <style>
-        section[data-slug="class-name"] .name-cols { flex:1 1 auto; min-height:0; align-items:stretch; }
-        section[data-slug="class-name"] .name-cols > .card { display:flex; flex-direction:column; }
-        section[data-slug="class-name"] ul.bullets > li { font-size:19px !important; line-height:1.4; margin-bottom:9px; }
-        section[data-slug="class-name"] .ex-row { display:flex; gap:10px; margin-top:8px; }
-        section[data-slug="class-name"] .callout { font-size:17px; padding:8px 12px; }
-        section[data-slug="class-name"] .callout .label { margin-bottom:2px; font-size:15px; }
-        section[data-slug="class-name"] .callout .en { font-weight:700; }
-        section[data-slug="class-name"] .bad-x { text-decoration:line-through; text-decoration-color:var(--red); }
-        section[data-slug="class-name"] .pkg-svg { display:block; width:100%; max-height:250px; height:auto; }
-        section[data-slug="class-name"] .ns { text-align:center; margin:8px 0 0; font-size:18px; color:var(--muted); }
-        section[data-slug="class-name"] .ns .en { color:var(--dark-blue); font-weight:700; }
+        section[data-slug="class-name"] .lead{ background:var(--light-blue); border:1px solid var(--blue); }
+        section[data-slug="class-name"] .lead p{ margin:0; font-weight:700; color:#fff; font-size:20px; }
+        section[data-slug="class-name"] .name-cols{ flex:1 1 auto; min-height:0; display:grid;
+          grid-template-columns:0.85fr 1.15fr; gap:14px; align-items:stretch; }
+        section[data-slug="class-name"] .name-cols > .card{ display:flex; flex-direction:column; }
+        section[data-slug="class-name"] ul.bullets > li{ font-size:21px !important; line-height:1.4; margin-bottom:20px; }
+        section[data-slug="class-name"] table.sad{ width:100%; border-collapse:collapse; }
+        section[data-slug="class-name"] table.sad th{ font-size:17px; padding:10px 10px; }
+        section[data-slug="class-name"] table.sad td{ font-size:17.5px; padding:13px 10px; vertical-align:middle; }
+        section[data-slug="class-name"] .corollary{ margin-top:auto; font-size:16.5px; }
+        section[data-slug="class-name"] .callout{ margin-top:auto; font-size:17px; padding:9px 13px; }
+        section[data-slug="class-name"] table.sad td.bad{ color:var(--red); text-decoration:line-through;
+          text-decoration-color:var(--red); font-weight:700; direction:ltr; text-align:center; white-space:nowrap; }
+        section[data-slug="class-name"] table.sad td.good{ color:var(--green); font-weight:700;
+          direction:ltr; text-align:center; white-space:nowrap; }
+        section[data-slug="class-name"] table.sad td.why{ color:var(--muted); font-size:15.5px; }
       </style>
-      <h1>שם המחלקה וחבילות</h1>
-      <div class="subtitle">איך מזהים מחלקה — ואיך מקבצים מחלקות יחד</div>
+      <h1>שם המחלקה</h1>
+      <div class="subtitle">איך נראה שם תקין — ולמה הוא תמיד באנגלית</div>
       <div class="body">
 
-        <div class="cols name-cols">
+        <div class="card lead">
+          <p>שם מחלקה הוא <b>מזהה</b> — הוא יהפוך לשם טבלה ולשם מחלקה בקוד. לכן יש לו כללי כתיבה, והוא לא טקסט חופשי.</p>
+        </div>
+
+        <div class="name-cols">
 
           <div class="card">
             <div class="panel-title">כללי מתן שם</div>
             <ul class="bullets">
               <li>מתחיל ב<b>אות גדולה</b></li>
-              <li><span class="en">UpperCamelCase</span> — כל מילה באות גדולה, ללא מקף</li>
+              <li><span class="en">UpperCamelCase</span> — כל מילה באות גדולה, בלי רווח ובלי מקף</li>
               <li>ב<b>יחיד</b> — מחלקה מתארת אובייקט אחד, לא אוסף</li>
-              <li>בלי רווחים ובלי סימנים</li>
+              <li><b>שם עצם</b>, לא פעולה</li>
+              <li><b>באנגלית — תמיד</b>, גם כשכל השאר בעברית</li>
             </ul>
-            <div class="ex-row">
-              <div class="callout good" style="flex:1;">
-                <span class="label">✓ תקין</span>
-                <span class="en">Order</span> · <span class="en">MenuItem</span>
-              </div>
-              <div class="callout bad" style="flex:1;">
-                <span class="label">✗ שגוי</span>
-                <span class="en bad-x">orders</span> · <span class="en bad-x">menu item</span>
-              </div>
+            <div class="callout ai">
+              <span class="label">💡 למה זה לא קפריזה</span>
+              התרשים נקרא גם על ידי מפתח או <span class="en">AI</span> שלא דובר עברית — ובסוף הוא הופך לשם טבלה ולשדה ב-<span class="en">API</span>.
             </div>
           </div>
 
           <div class="card">
-            <div class="panel-title">חבילה (<span class="en">package</span>)</div>
-            <p style="margin:0 0 6px; font-size:17px; color:var(--body);">
-              מנגנון <b>קיבוץ</b>: אוסף מחלקות הקשורות לאותו נושא לתוך יחידה אחת.
-            </p>
-            <svg class="pkg-svg" viewBox="0 0 360 210" xmlns="http://www.w3.org/2000/svg" role="img"
-                 aria-label="חבילה בשם הזמנות המקבצת את המחלקות הזמנה ושורת הזמנה">
-              <!-- folder tab -->
-              <rect x="24" y="16" width="120" height="26" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.6"/>
-              <text x="84" y="34" text-anchor="middle" direction="rtl" font-size="15" font-weight="700"
-                    fill="#1e40af" font-family="'Noto Sans Hebrew',sans-serif">הזמנות</text>
-              <!-- package body -->
-              <rect x="24" y="42" width="312" height="152" fill="#ffffff" stroke="#3b82f6" stroke-width="1.6"/>
-
-              <!-- grouped class: הזמנה -->
-              <rect x="52" y="70" width="120" height="46" fill="#ffffff" stroke="#3b82f6" stroke-width="1.6"/>
-              <rect x="52" y="70" width="120" height="26" fill="#1e40af"/>
-              <text x="112" y="88" text-anchor="middle" direction="rtl" font-size="14" font-weight="700"
-                    fill="#ffffff" font-family="'Noto Sans Hebrew',sans-serif">הזמנה</text>
-              <text x="112" y="110" text-anchor="middle" font-size="12" fill="#64748b"
-                    font-family="'Segoe UI',Arial,sans-serif" font-style="italic">Order</text>
-
-              <!-- grouped class: שורת הזמנה -->
-              <rect x="188" y="70" width="124" height="46" fill="#ffffff" stroke="#3b82f6" stroke-width="1.6"/>
-              <rect x="188" y="70" width="124" height="26" fill="#1e40af"/>
-              <text x="250" y="88" text-anchor="middle" direction="rtl" font-size="14" font-weight="700"
-                    fill="#ffffff" font-family="'Noto Sans Hebrew',sans-serif">שורת הזמנה</text>
-              <text x="250" y="110" text-anchor="middle" font-size="12" fill="#64748b"
-                    font-family="'Segoe UI',Arial,sans-serif" font-style="italic">OrderLine</text>
-
-              <text x="180" y="160" text-anchor="middle" direction="rtl" font-size="14" fill="#475569"
-                    font-family="'Noto Sans Hebrew',sans-serif">מחלקות הקשורות לתחום ההזמנות</text>
-            </svg>
-            <p class="ns">שיוך במרחב שם: <span class="en" dir="ltr">הזמנות::הזמנה</span></p>
+            <div class="panel-title">אותו רעיון, שני ניסוחים</div>
+            <table class="sad">
+              <tr><th>✗ שגוי</th><th>✓ תקין</th><th>למה</th></tr>
+              <tr><td class="bad">orders</td><td class="good">Order</td><td class="why">ביחיד — המחלקה היא התבנית לאובייקט אחד</td></tr>
+              <tr><td class="bad">menu item</td><td class="good">MenuItem</td><td class="why">בלי רווח; כל מילה נפתחת באות גדולה</td></tr>
+              <tr><td class="bad">order_line</td><td class="good">OrderLine</td><td class="why">בלי קו תחתון או מקף</td></tr>
+              <tr><td class="bad">PlaceOrder</td><td class="good">Order</td><td class="why">שם עצם — פעולה היא <span class="en">operation</span> בתוך המחלקה</td></tr>
+              <tr><td class="bad">הזמנה</td><td class="good">Order</td><td class="why">מזהים נכתבים באנגלית — אין שמות טבלאות ומחלקות בעברית</td></tr>
+            </table>
+            <div class="corollary callout good">
+              <span class="label">✓ אותו היגיון לתכונות ולפעולות</span>
+              גם הן באנגלית — רק שהן נפתחות ב<b>אות קטנה</b> (<span class="en">lowerCamelCase</span>):
+              <span class="en" dir="ltr">orderId · pickupTime · addItem() · getStatus()</span>. האות הראשונה היא מה שמבדיל מחלקה מתכונה.
+            </div>
           </div>
 
         </div>
 
+        <p class="bottom-line">מדברים על ההזמנה בעברית — וכותבים <span class="en">Order</span> בתרשים. זו העבודה בשטח.</p>
+
       </div>
       <aside class="notes">
-        שם מחלקה מזוהה מיד לפי הצורה: אות גדולה, UpperCamelCase, ביחיד, בלי רווחים. orders (רבים)
-        ו-"menu item" (רווח + אות קטנה) שגויים. חבילה היא מנגנון קיבוץ — אוסף מחלקות של אותו נושא;
-        כאן חבילת "הזמנות" מכילה את Order ו-OrderLine. הסימון הזמנות::הזמנה מציין מחלקה בתוך מרחב
-        השם של החבילה, בדיוק כמו Household::WashingMachine. חבילות עוזרות לארגן מודל גדול.
+        שם מחלקה מזוהה מיד לפי הצורה: אות גדולה, UpperCamelCase, ביחיד, בלי רווחים, שם עצם.
+        הטבלה בנויה כך שכל כלל מופיע ליד הטעות שהוא מונע — orders (רבים), "menu item" (רווח), order_line (קו תחתון),
+        PlaceOrder (פעולה במקום ישות).
+        <b>השורה האחרונה היא הכלל הרוחבי:</b> שמות מחלקות, תכונות, פעולות וחבילות נכתבים <b>באנגלית</b> — גם כשהתחום,
+        הראיונות והדרישות בעברית. הסיבה פרקטית ולא אסתטית: זה מה שהופך לשם טבלה, לשם מחלקה בקוד ולשדה ב-API, ואין
+        מזהים בעברית. אנחנו מדברים על ״ההזמנה״ בעברית וכותבים Order בתרשים — בדיוק כמו בשטח.
+        שווה להזכיר שזו גם הסיבה שהתרשים קריא למפתח או ל-AI שלא דובר עברית.
       </aside>
+    <div class="acro-footer"><span class="acro"><span class="en">AI</span> = <span class="en">Artificial Intelligence</span> · בינה מלאכותית</span></div>
+    </section>
+    <!-- B3 — UML מול שפת תכנות. NEW 2026-08-10 (David: "I want to discuss the difference between UML
+         and a specific language — all conventions here are UML, but when switching to other languages
+         conventions may change and so can capabilities, such as different data types").
+         Placed immediately BEFORE the attributes slide, which is where types first get written down,
+         so students never assume `String` / `Money` are literal code.
+         Three beats: (1) the same attribute in four targets — the type name is NOT a language type;
+         (2) UML has constructs a language may not (multiple inheritance, ◆/◇); (3) the model is not
+         written for a language, so don't shrink it to a language's limits during analysis.
+         Same thesis as A6's "גזירה, לא העתקה" and the planned class-diagram↔database slide. -->
+    <section data-slug="uml-vs-language" class="has-acro-footer">
+      <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
+      <style>
+        section[data-slug="uml-vs-language"] .hero > p{ font-size:19px; }
+        section[data-slug="uml-vs-language"] .mid{ flex:1 1 auto; min-height:0; display:grid;
+          grid-template-columns:1.62fr 1fr; gap:14px; align-items:stretch; }
+        section[data-slug="uml-vs-language"] .mid > .card{ display:flex; flex-direction:column; }
+        section[data-slug="uml-vs-language"] table.sad{ width:100%; border-collapse:collapse; }
+        section[data-slug="uml-vs-language"] table.sad th{ font-size:14.5px; padding:9px 5px; text-align:center; }
+        section[data-slug="uml-vs-language"] table.sad th.uml{ background:var(--dark-blue); }
+        section[data-slug="uml-vs-language"] table.sad td{ font-size:13.5px; padding:13px 5px; text-align:center;
+          direction:ltr; font-family:'Consolas','Courier New',monospace; }
+        section[data-slug="uml-vs-language"] table.sad td.uml{ font-weight:700; color:var(--dark-blue); background:#E1EFF7; }
+        section[data-slug="uml-vs-language"] table.sad td.he{ direction:rtl; font-family:inherit; font-size:12.5px; color:var(--muted); line-height:1.3; }
+        /* C# is the language the course project is built in, so it gets the eye. */
+        section[data-slug="uml-vs-language"] table.sad th.mine{ background:var(--orange); }
+        section[data-slug="uml-vs-language"] table.sad th.mine .yours{ display:block; font-size:10.5px;
+          font-weight:400; opacity:.95; direction:rtl; }
+        section[data-slug="uml-vs-language"] table.sad td.mine{ background:var(--hero-bg); font-weight:700; color:#7c3a00; }
+        section[data-slug="uml-vs-language"] .tcap{ margin:8px 0 0; font-size:14px; color:var(--muted); line-height:1.4; }
+        section[data-slug="uml-vs-language"] .gaps{ flex:1; display:flex; flex-direction:column; gap:10px; }
+        section[data-slug="uml-vs-language"] .gap{ flex:1; display:flex; flex-direction:column; justify-content:center; }
+        section[data-slug="uml-vs-language"] .gap{ background:#fff; border:1px solid var(--card-border);
+          border-inline-start:4px solid var(--orange); border-radius:10px; padding:8px 12px; }
+        section[data-slug="uml-vs-language"] .gap .gt{ font-size:17.5px; font-weight:800; color:var(--dark-blue); }
+        section[data-slug="uml-vs-language"] .gap .gd{ font-size:15.5px; color:var(--body); line-height:1.4; }
+      </style>
+      <h1><span class="en">UML</span> מול שפת תכנות</h1>
+      <div class="subtitle">התרשים הוא ה<b>סימון</b> — השפה היא ה<b>מימוש</b>, והמעבר ביניהם אינו אוטומטי</div>
+      <div class="body">
+
+        <div class="hero">
+          <h3>כל מה שנלמד בהרצאה הוא תקן <span class="en">UML</span> — ולא שייך לאף שפה</h3>
+          <p><span class="en">UML</span> נוצר כדי שמהנדס יוכל לתאר מערכת בלי להתחייב ל-<span class="en">Java</span>, ל-<span class="en">Python</span> או ל-<span class="en">SQL</span>. לכן שם הטיפוס בתרשים הוא <b>שם שאנחנו בוחרים</b>, לא מילה שמורה בשפה.</p>
+        </div>
+
+        <div class="mid">
+
+          <div class="card">
+            <div class="panel-title">אותו מרכיב במודל, חמישה יעדים</div>
+            <table class="sad">
+              <tr>
+                <th class="uml">בתרשים <span class="en">(UML)</span></th>
+                <th class="mine"><span dir="ltr">C#</span><span class="yours">הפרויקט שלכם</span></th>
+                <th>Java</th><th>Python</th><th>SQL</th>
+              </tr>
+              <tr><td class="uml">String</td><td class="mine">string</td><td>String</td><td>str</td><td>VARCHAR(n)</td></tr>
+              <tr><td class="uml">DateTime</td><td class="mine">DateTime</td><td>LocalDateTime</td><td>datetime</td><td>TIMESTAMP</td></tr>
+              <tr><td class="uml">Money</td><td class="mine">decimal</td><td>BigDecimal</td><td>Decimal</td><td>NUMERIC(10,2)</td></tr>
+              <tr><td class="uml">- private</td><td class="mine">private</td><td>private</td><td class="he">מוסכמה בלבד — אין אכיפה</td><td class="he">הרשאות / <span class="en">View</span></td></tr>
+              <tr><td class="uml">Phone [0..*]</td><td class="mine">List&lt;Phone&gt;</td><td>List&lt;Phone&gt;</td><td>list[Phone]</td><td class="he">טבלה עם מפתח זר</td></tr>
+            </table>
+            <p class="tcap">השורה האחרונה היא <b>קשר</b> ולא תכונה — ולכן הריבוי בה חוקי. בקוד הוא הופך ל<b>אוסף של אובייקטים</b>, ובמסד הנתונים ל<b>טבלה עם מפתח זר</b> — אין שם רשימה בכלל.</p>
+          </div>
+
+          <div class="card">
+            <div class="panel-title">איפה השפה לא עוקבת</div>
+            <div class="gaps">
+              <div class="gap">
+                <div class="gt"><span class="en">Money</span> אינו טיפוס בשום שפה</div>
+                <div class="gd">זה <b>טיפוס תחום</b> שאנחנו הגדרנו. מותר וכדאי — התרשים מדבר בשפת העסק.</div>
+              </div>
+              <div class="gap">
+                <div class="gt">הורשה מרובה</div>
+                <div class="gd">קיימת ב-<span class="en">UML</span> וב-<span class="en" dir="ltr">C++</span>; ב-<span class="en">Java</span> וב-<span class="en" dir="ltr">C#</span> רק דרך <span class="en">interface</span>.</div>
+              </div>
+              <div class="gap">
+                <div class="gt">הרכבה וצבירה <span class="en">◆ ◇</span></div>
+                <div class="gd">אין להן מילה שמורה באף שפה — הן הופכות ל<b>כלל מחיקה</b> ולבדיקות בקוד ובמסד הנתונים.</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <p class="bottom-line">המודל לא נכתב עבור שפה מסוימת — אל תצמצמו אותו למגבלות של שפה בשלב הניתוח.</p>
+
+      </div>
+      <aside class="notes">
+        המסר: כל מה שאנחנו מלמדים כאן — ‎+/-/#‎, ◆/◇, ריבוי, שמות טיפוסים — הוא <b>תקן UML</b>, לא תחביר של שפה.
+        UML הומצא בדיוק כדי לתאר מערכת בלי להתחייב לטכנולוגיה, ולכן אותו תרשים יכול להתממש ב-Java, ב-Python או
+        כסכימה במסד נתונים — אחרת בכל אחד מהם.
+        הטבלה: String הוא str ב-Python ו-VARCHAR ב-SQL.
+        <b>השורה האחרונה עדינה וכדאי לעצור עליה.</b> היא מכוונת ל<b>קשר</b> ‎Student —— 0..* Phone‎, לא לתכונה
+        רב-ערכית: תכונה עם ‎[0..*]‎ מפרה 1ONF (ראו שקופית הנירמול), ואילו ריבוי על <b>קשר</b> חוקי ואף חובה.
+        בקוד שניהם נראים אותו דבר — ‎<code>List&lt;T&gt;</code>‎ — וזו בדיוק המלכודת: <b>ההבדל הוא מה נמצא בתוך הרשימה</b>.
+        ‎<code>List&lt;string&gt;</code>‎ = ערכים בלי זהות ובלי תכונות משלהם (הפרה); ‎<code>List&lt;Phone&gt;</code>‎ = אוסף של
+        <b>אובייקטים</b> עם זהות (תקין). במסד הנתונים אין רשימה כלל — יש טבלת Phone עם <b>מפתח זר</b> חזרה ל-Student,
+        וה-ORM הוא זה שמרכיב מהן את האוסף. אם ישאלו: כן, בקוד אמיתי ‎<code>List&lt;string&gt;</code>‎ כן שורד לפעמים
+        (תגיות שאף אחד לא מחפש בנפרד) — זו החלטת עיצוב מודעת, מאותה משפחה של דה-נורמליזציה.
+        <b>עמודת C# היא השפה שבה הם יכתבו את הפרויקט — אליה להצביע.</b> שתי נקודות שכדאי לומר עליה:
+        (1) <b>DateTime</b> ב-C# נכתב בדיוק כמו בתרשים — צירוף מקרים נוח, ולא כלל; ב-Java זה LocalDateTime.
+        (2) <b>decimal</b> הוא הכי קרוב שיש לטיפוס כסף — הוא נבנה בדיוק כדי למנוע שגיאות עיגול בכסף — ובכל זאת
+        הוא <b>לא</b> Money: אין בו מטבע. כלומר גם השפה הכי נוחה עדיין לא נותנת את הטיפוס שהתרשים ביקש,
+        ומישהו יצטרך לממש אותו. זו ההדגמה הכי חדה לכך שהתרשים מתאר <b>כוונה</b> והשפה מספקת <b>אמצעים</b>.
+        השורה הכי מעניינת לדיון היא הנראות: ב-Python אין private אמיתי — קו תחתון הוא מוסכמה בלבד וכל אחד יכול
+        לגשת. כלומר אותו סימן מינוס בתרשים <b>נאכף</b> בשפה אחת ורק <b>מומלץ</b> באחרת. זו דוגמה טובה לכך
+        שהתרשים מבטא <b>כוונת עיצוב</b>, והשפה מחליטה כמה היא אוכפת אותה.
+        ⚠️ הטעות שכדאי למנוע: סטודנט שמכיר שפה אחת מנסה לכתוב את התרשים בתחביר שלה (int, str, void) — ומקבל
+        מודל שקשור לטכנולוגיה לפני שהוחלט עליה. בשלב הניתוח בוחרים שם טיפוס שמובן לאיש העסקים.
+        זו אותה תזה של השקופית ״מהו תרשים מחלקות״: <b>גזירה, לא העתקה</b> — וגם ההקדמה להשוואה מול מסד הנתונים.
+      </aside>
+    <div class="acro-footer"><span class="acro"><span class="en">UML</span> = <span class="en">Unified Modeling Language</span> · שפת מידול אחידה</span></div>
     </section>
     <!-- B3 — תכונות / Attributes.
          Format + name : Type [= default] {constraint}; rules (camelCase name, dataType,
          default, {} constraint, visibility). Right: the הזמנה attribute compartment expanded
          (full canonical 5 attrs), the attributes tinted to draw the eye. Visibility kept
          brief here — the full +/#/- table is B6 (slide-visibility). -->
-    <section data-slug="attributes">
+    <section data-slug="attributes" class="has-acro-footer">
       <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
       <style>
         section[data-slug="attributes"] .fmt {
@@ -561,7 +769,16 @@
         section[data-slug="attributes"] ul.bullets > li { font-size:18px !important; line-height:1.4; margin-bottom:10px; }
         section[data-slug="attributes"] ul.bullets > li b { color:var(--dark-blue); }
         section[data-slug="attributes"] ul.bullets .en { font-weight:700; }
-        section[data-slug="attributes"] .class-svg { display:block; width:100%; max-height:280px; height:auto; }
+        section[data-slug="attributes"] .class-svg { display:block; width:100%; max-height:230px; height:auto; }
+        section[data-slug="attributes"] .fmt-cap { margin:-4px 0 0; text-align:center; font-size:15px; color:var(--muted); }
+        section[data-slug="attributes"] .extras { display:grid; grid-template-columns:repeat(2,1fr); gap:12px; flex:0 0 auto; }
+        section[data-slug="attributes"] .ex { background:var(--card-bg); border:1px solid var(--card-border);
+          border-radius:12px; padding:8px 12px; display:flex; flex-direction:column; gap:3px; }
+        section[data-slug="attributes"] .ex .eh { font-size:16px; color:var(--dark-blue); }
+        section[data-slug="attributes"] .ex .eh .en { color:var(--orange); font-weight:800; }
+        section[data-slug="attributes"] .ex code { font-size:14.5px; color:#0f172a; background:#e8eef5;
+          border-radius:6px; padding:2px 7px; align-self:flex-start; }
+        section[data-slug="attributes"] .ex .ed { font-size:13.5px; color:var(--muted); line-height:1.35; }
       </style>
       <!-- Title pattern: keep the em dash OUTSIDE the .en span. With the dash inside the LTR
            isolate it rendered as "תכונות Attributes —" with the dash dangling at the far left.
@@ -570,10 +787,14 @@
       <div class="subtitle">הנתונים שהמחלקה מחזיקה על כל אובייקט</div>
       <div class="body">
 
+        <!-- The old line wrote the default as "[= default]", using [] to mean "optional".
+             That collides with UML's real multiplicity brackets, now taught in the strip below,
+             so optionality is stated in words instead. -->
         <div class="fmt">
-          <span class="vis">+</span> <span class="nm">name</span> :
-          <span class="ty">Type</span> <span class="df">[= default]</span> <span class="cn">{constraint}</span>
+          <span class="vis">-</span> <span class="nm">name</span> :
+          <span class="ty">Type</span> <span class="df">= default</span> <span class="cn">{constraint}</span>
         </div>
+        <p class="fmt-cap">רק ה<b>שם</b> חובה — כל שאר המרכיבים לפי הצורך</p>
 
         <div class="cols attr-cols">
 
@@ -589,17 +810,17 @@
           </div>
 
           <div class="card">
-            <svg class="class-svg" viewBox="0 0 380 240" xmlns="http://www.w3.org/2000/svg" role="img"
+            <svg class="class-svg" viewBox="0 0 380 267" xmlns="http://www.w3.org/2000/svg" role="img"
                  aria-label="תא התכונות המורחב של המחלקה הזמנה">
               <!-- header band -->
               <rect x="20" y="8" width="340" height="46" fill="#1e40af"/>
-              <text x="190" y="30" text-anchor="middle" direction="rtl" font-size="19" font-weight="700"
-                    fill="#ffffff" font-family="'Noto Sans Hebrew',sans-serif">הזמנה</text>
-              <text x="190" y="47" text-anchor="middle" font-size="12" fill="#dbeafe"
-                    font-family="'Segoe UI',Arial,sans-serif" font-style="italic">Order</text>
+              <!-- One name only: the Hebrew header + italic English subtitle collapsed into a
+                   duplicate "Order / Order" when class names went English (2026-08-10). -->
+              <text x="190" y="38" text-anchor="middle" direction="ltr" font-size="20" font-weight="700"
+                    fill="#ffffff" font-family="'Segoe UI',Arial,sans-serif">Order</text>
 
               <!-- attributes compartment, tinted to draw the eye -->
-              <rect x="20" y="54" width="340" height="150" fill="#eff6ff"/>
+              <rect x="20" y="54" width="340" height="177" fill="#eff6ff"/>
               <text x="34" y="80"  text-anchor="start" direction="ltr" font-size="15" fill="#1e293b"
                     font-family="'Consolas','Courier New',monospace">- orderId : String</text>
               <text x="34" y="107" text-anchor="start" direction="ltr" font-size="15" fill="#1e293b"
@@ -610,18 +831,36 @@
                     font-family="'Consolas','Courier New',monospace">- pickupCode : String</text>
               <text x="34" y="188" text-anchor="start" direction="ltr" font-size="15" fill="#1e293b"
                     font-family="'Consolas','Courier New',monospace">- status : OrderStatus</text>
+              <!-- The derived attribute, in the orange of the "/" card below so the eye pairs them.
+                   itemCount and NOT total: the marquee teaches total() as an OPERATION ("מחושב
+                   מהשורות ולכן לא נשמר"), so using it here would contradict the running model. -->
+              <text x="34" y="215" text-anchor="start" direction="ltr" font-size="15" fill="#E86C00" font-weight="700"
+                    font-family="'Consolas','Courier New',monospace">/ itemCount : int</text>
 
               <!-- operations compartment (collapsed context, italic) -->
-              <text x="34" y="228" text-anchor="start" direction="ltr" font-size="14" fill="#94a3b8" font-style="italic"
+              <text x="34" y="255" text-anchor="start" direction="ltr" font-size="14" fill="#94a3b8" font-style="italic"
                     font-family="'Consolas','Courier New',monospace">+ total() : Money  ...</text>
 
               <!-- dividers + outer border last -->
               <line x1="20" y1="54"  x2="360" y2="54"  stroke="#3b82f6" stroke-width="1.4"/>
-              <line x1="20" y1="204" x2="360" y2="204" stroke="#3b82f6" stroke-width="1.4"/>
-              <rect x="20" y="8" width="340" height="224" fill="none" stroke="#3b82f6" stroke-width="2"/>
+              <line x1="20" y1="231" x2="360" y2="231" stroke="#3b82f6" stroke-width="1.4"/>
+              <rect x="20" y="8" width="340" height="251" fill="none" stroke="#3b82f6" stroke-width="2"/>
             </svg>
           </div>
 
+        </div>
+
+        <div class="extras">
+          <div class="ex">
+            <div class="eh"><span class="en">/</span> — תכונה <b>נגזרת</b></div>
+            <code class="en" dir="ltr">/ itemCount : int</code>
+            <div class="ed">מחושבת מנתונים אחרים ולא נשמרת — כאן: מספר השורות בהזמנה. הקו הנטוי אומר זאת מפורשות (ראו בתיבה).</div>
+          </div>
+          <div class="ex">
+            <div class="eh"><span class="en">{ }</span> — גם <b>מילות מפתח תקניות</b></div>
+            <code class="en" dir="ltr">{readOnly} {unique} {ordered}</code>
+            <div class="ed">לצד אילוץ חופשי כמו <span class="en" dir="ltr">{&#8805; 0}</span>.</div>
+          </div>
         </div>
 
       </div>
@@ -630,14 +869,36 @@
         ברירת מחדל אחרי = ואילוץ ב-{}. הזמנה מחזיקה orderId, createdAt, pickupTime, pickupCode
         ו-status (מטיפוס ה-enum OrderStatus). הטיפוס יכול להיות פרימיטיבי (String, DateTime) או
         מחלקה/enum אחרת. את הנראות (+/#/-) נפרט בשקופית הנראות; כאן די לציין שהיא הסימן בתחילת השורה.
+
+        <b>התכונה הנגזרת בתיבה:</b> <code>/ itemCount : int</code> — כמה שורות יש בהזמנה. אף אחד לא מקליד אותה
+        ואף אחד לא שומר אותה; היא נספרת מהשורות ברגע שצריך. הקו הנטוי הוא ההצהרה ״מחושב, לא מאוחסן״,
+        וזה בדיוק אותו היגיון של מבחן ההתמדה.
+        ⚠️ <b>למה davka itemCount ולא total?</b> כי במודל הרץ שלנו <code>total()</code> היא <b>פעולה</b> ולא תכונה
+        (כך גם בתרשים המלא בהמשך). זה מוביל לשאלה טובה אם תעלה: אותו ערך מחושב אפשר לבטא <b>או</b> כתכונה נגזרת
+        <code>/total</code> <b>או</b> כפעולה <code>total()</code> — שתי הצורות תקינות ב-UML. הכלל שלנו: אם זה נתון
+        שמסתכלים עליו — תכונה נגזרת; אם זה חישוב שמפעילים — פעולה. העיקר לא לכתוב את שניהם.
+
+        <b>התחביר המלא של תכונה ב-UML</b> (למקרה שנשאל — מה שעל השקופית הוא הליבה, לא הכול):
+        <code>[נראות] ['/'] שם [':' טיפוס] ['[' ריבוי ']'] ['=' ברירת-מחדל] ['{' מאפיינים '}']</code>.
+        שניים מהם מוצגים ברצועה התחתונה: <b>נגזרת</b> ‎/‎ (מחושבת ולא נשמרת — בדיוק ההיגיון של מבחן
+        ההתמדה בשקופית ״מה אינו מחלקה״) ומילות מפתח תקניות בתוך {} מעבר לאילוץ החופשי.
+
+        ⚠️ <b>ריבוי על תכונה (‎[0..*]‎) — לא מלמדים ולא משתמשים</b> (החלטת דוד, 2026-08-10). הוא קיים בתקן,
+        אבל אנחנו לא רוצים שהסטודנטים יכתבו אותו: תכונה רב-ערכית היא ״רשימה בתוך תכונה״, כלומר הפרה של
+        <b>1ONF</b>, והתשובה הנכונה תמיד היא <b>מחלקה נפרדת בקשר</b>. לכן הוא הוסר מהשקופית כדי לא לתת לו
+        לגיטימציה. <b>אם בכל זאת ייתקלו בו</b> — בפלט של כלי, במודל אמיתי או בטיוטה של AI — זו התשובה לתת:
+        ״זו רשימה בתוך תכונה; הפכו אותה למחלקה״. שימו לב שאין לזה שום קשר לריבוי על <b>קשר</b>, שהוא חובה
+        בשני הקצוות ונלמד בחלק ג׳.
+        שניים נוספים שלא על השקופית: תכונת <b>מחלקה</b> (static) מסומנת ב<b>קו תחתון</b> — נדיר במודל תחום;
+        ונראות <b>~</b> (package), רביעית ל-+/#/- ולא בשימוש בקורס.
       </aside>
+    <div class="acro-footer"><span class="acro"><span class="en">UML</span> = <span class="en">Unified Modeling Language</span> · שפת מידול אחידה</span> &nbsp;·&nbsp; <span class="acro"><span class="en">AI</span> = <span class="en">Artificial Intelligence</span> · בינה מלאכותית</span></div>
     </section>
-    <!-- B4 — דוגמאות, אילוצים {} ו-enumeration.
-         3-column slide. Left col (right in RTL): attribute VALUE examples on the campus
-         price attr (MenuItem). Middle: constraints always in {}, may lean on a Note.
-         Right col (left in RTL): the «enumeration» OrderStatus box — gray DASHED border
-         #94a3b8, header #475569 — drawn UNCONNECTED to any class (per tool doctrine: the
-         attribute status : OrderStatus is the only link, no line to the box). -->
+    <!-- B4 — דוגמאות ואילוצים. Two columns: attribute VALUE examples on the campus price
+         attribute (MenuItem), and constraints — always in {}, optionally hung on a Note.
+         2026-08-10 (David): «enumeration» used to be a third column here and now has its own
+         slide (slide-enumeration.html) — it is a type in its own right, not a footnote to
+         attribute syntax, and it needs room for the when-NOT-to-use rules. -->
     <section data-slug="attribute-examples">
       <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
       <style>
@@ -656,10 +917,11 @@
         section[data-slug="attribute-examples"] ul.bullets > li { font-size:15px !important; line-height:1.35; margin-bottom:6px; }
         section[data-slug="attribute-examples"] .panel-title { font-size:19px; }
       </style>
-      <h1>דוגמאות, אילוצים ו-<span class="en">enumeration</span></h1>
+      <h1>דוגמאות ואילוצים</h1>
+      <div class="subtitle">איך מפרטים ערך של תכונה — ואיך כותבים עליו חוק</div>
       <div class="body">
 
-        <div class="cols-3 ex3">
+        <div class="cols ex3">
 
           <!-- col 1: value examples (campus price attr) -->
           <div class="card">
@@ -687,57 +949,165 @@
             </svg>
           </div>
 
-          <!-- col 3: «enumeration» OrderStatus — gray dashed, UNCONNECTED -->
+        </div>
+
+        <p class="bottom-line">אילוץ נכתב <b>תמיד</b> בסוגריים מסולסלים — הוא חלק מהמודל, לא הערה בצד.</p>
+
+      </div>
+      <aside class="notes">
+        שלוש דרכים לפרט תכונה: טיפוס בלבד, ברירת מחדל אחרי =, ואילוץ ב-{}. האילוץ נכתב <b>תמיד</b> בסוגריים
+        מסולסלים ואינו הערה בצד — הוא חלק מהמודל, ומתרגם ישירות לוולידציה בקוד ולאילוץ CHECK במסד הנתונים.
+        אילוץ ארוך או מורכב מדי לשורה אחת אפשר לתלות ב-Note (פתק) מחובר לתכונה או למחלקה.
+        ה-enumeration עבר לשקופית משלו (הבאה) — הוא טיפוס בפני עצמו, לא פרט תחבירי של תכונה.
+      </aside>
+    </section>
+    <!-- B5 — «enumeration». NEW 2026-08-10 (David: "I want a separate slide for enumeration").
+         Was a cramped third column on the attribute-examples slide; it is a TYPE in its own right and
+         needs room for the part that actually gets examined: when NOT to use one.
+         Notation doctrine (must match NOTATION.md): «enumeration» stereotype, closed textual list
+         ≤~20 values, drawn as an UNCONNECTED box beside the class that uses it — the attribute's type
+         is the only link, and drawing a line to it is the classic mistake.
+         Forward hook: these five values become the STATES of the order in L8 (state diagram), so keep
+         them in sync with that deck. -->
+    <section data-slug="enumeration" class="has-acro-footer">
+      <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
+      <style>
+        section[data-slug="enumeration"] .en-cols{ flex:1 1 auto; min-height:0; display:grid;
+          grid-template-columns:1fr 1.25fr; gap:14px; align-items:stretch; }
+        section[data-slug="enumeration"] .en-cols > .card{ display:flex; flex-direction:column; }
+        section[data-slug="enumeration"] .enum-svg{ display:block; width:100%; max-height:330px; height:auto; margin:auto; }
+        section[data-slug="enumeration"] .link{ margin:6px 0 0; text-align:center; font-size:15px; color:var(--muted); line-height:1.4; }
+        section[data-slug="enumeration"] .link .en{ color:var(--dark-blue); font-weight:700; }
+        section[data-slug="enumeration"] .rules{ display:flex; flex-direction:column; gap:8px; flex:1; }
+        section[data-slug="enumeration"] .r{ border-radius:10px; padding:5px 11px; font-size:14px; line-height:1.35; }
+        section[data-slug="enumeration"] .rules.tight{ flex:0 0 auto; gap:6px; }
+        section[data-slug="enumeration"] .code-t{ margin-top:8px; }
+        section[data-slug="enumeration"] .conv{ margin-top:8px; background:#EAF3FB; border:1px solid #cfe3f5;
+          border-radius:10px; padding:8px 12px; font-size:14px; color:var(--body); line-height:1.45; }
+        section[data-slug="enumeration"] .conv b{ color:var(--dark-blue); }
+        section[data-slug="enumeration"] .r.yes{ background:#EAF6EC; border-inline-start:4px solid var(--green); }
+        section[data-slug="enumeration"] .r.no{ background:#FBEAEA; border-inline-start:4px solid var(--red); }
+        section[data-slug="enumeration"] .r .mk{ font-weight:800; }
+        section[data-slug="enumeration"] .r.yes .mk{ color:var(--green); }
+        section[data-slug="enumeration"] .r.no  .mk{ color:var(--red); }
+        section[data-slug="enumeration"] .r b{ color:var(--dark-blue); }
+        section[data-slug="enumeration"] .callout{ font-size:14px; padding:7px 12px; margin-top:7px; }
+      </style>
+      <h1><span class="en">Enumeration</span> — רשימת ערכים סגורה</h1>
+      <div class="subtitle">טיפוס שהערכים שלו ידועים מראש, מעטים, וכמעט לא משתנים</div>
+      <div class="body">
+
+        <div class="en-cols">
+
           <div class="card">
-            <div class="panel-title"><span class="en">&laquo;enumeration&raquo;</span></div>
-            <svg class="enum-svg" viewBox="0 0 220 196" xmlns="http://www.w3.org/2000/svg" role="img"
-                 aria-label="תיבת enumeration בשם OrderStatus עם חמישה ערכים, אינה מחוברת למחלקה">
-              <!-- header band -->
-              <rect x="18" y="6" width="184" height="44" fill="#475569"/>
-              <text x="110" y="24" text-anchor="middle" font-size="12" fill="#e2e8f0" font-style="italic"
+            <div class="panel-title" style="text-align:center;">הסימון</div>
+            <!-- Stacked, NOT side by side: at 260 wide the Order box's "- status : OrderStatus"
+                 ran straight under the enum box. Enum on top, the using class below it, and the
+                 "there is no line" note under both. -->
+            <svg class="enum-svg" viewBox="0 0 300 320" xmlns="http://www.w3.org/2000/svg" role="img"
+                 aria-label="תיבת enumeration בשם OrderStatus עם חמישה ערכים, ומתחתיה מחלקת Order עם התכונה status — בלי קו ביניהן">
+              <!-- the enum box: gray, DASHED, unconnected -->
+              <rect x="86" y="6" width="128" height="44" fill="#475569"/>
+              <text x="150" y="24" text-anchor="middle" font-size="11" fill="#e2e8f0" font-style="italic"
                     font-family="'Segoe UI',Arial,sans-serif">&laquo;enumeration&raquo;</text>
-              <text x="110" y="43" text-anchor="middle" font-size="16" font-weight="700" fill="#ffffff"
+              <text x="150" y="42" text-anchor="middle" font-size="14" font-weight="700" fill="#ffffff"
                     font-family="'Segoe UI',Arial,sans-serif">OrderStatus</text>
-              <!-- literal values, right-aligned Hebrew inside the box.
-                   RTL GOTCHA (fixed 2026-07-16): these MUST be text-anchor="start", not "end".
-                   SVG text inherits direction:rtl from the RTL page, and in RTL the "end" edge is the
-                   LEFT one — so text-anchor="end" anchored the left edge at x=188 and the labels grew
-                   RIGHTWARD, out of the dashed box, leaving it visually empty. With "start" the right
-                   edge sits at x=188 and text grows leftward, inside the box (18..202).
-                   Removing direction="rtl" does NOT help: rtl is inherited from the page. -->
-              <text x="188" y="70"  text-anchor="start" direction="rtl" font-size="15" fill="#1e293b"
-                    font-family="'Noto Sans Hebrew',sans-serif">ממתין</text>
-              <text x="188" y="96"  text-anchor="start" direction="rtl" font-size="15" fill="#1e293b"
-                    font-family="'Noto Sans Hebrew',sans-serif">בהכנה</text>
-              <text x="188" y="122" text-anchor="start" direction="rtl" font-size="15" fill="#1e293b"
-                    font-family="'Noto Sans Hebrew',sans-serif">מוכן</text>
-              <text x="188" y="148" text-anchor="start" direction="rtl" font-size="15" fill="#1e293b"
-                    font-family="'Noto Sans Hebrew',sans-serif">נאסף</text>
-              <text x="188" y="174" text-anchor="start" direction="rtl" font-size="15" fill="#1e293b"
-                    font-family="'Noto Sans Hebrew',sans-serif">בוטל</text>
-              <!-- divider + dashed gray border last -->
-              <line x1="18" y1="50" x2="202" y2="50" stroke="#94a3b8" stroke-width="1.4" stroke-dasharray="5 3"/>
-              <rect x="18" y="6" width="184" height="180" fill="none" stroke="#94a3b8" stroke-width="1.8" stroke-dasharray="5 3"/>
+              <!-- literals: LTR, anchored from the LEFT inner edge (box spans 86..214) -->
+              <text x="98" y="72"  text-anchor="start" direction="ltr" font-size="14" fill="#1e293b"
+                    font-family="'Segoe UI',Arial,sans-serif">Pending</text>
+              <text x="98" y="98"  text-anchor="start" direction="ltr" font-size="14" fill="#1e293b"
+                    font-family="'Segoe UI',Arial,sans-serif">InPreparation</text>
+              <text x="98" y="124" text-anchor="start" direction="ltr" font-size="14" fill="#1e293b"
+                    font-family="'Segoe UI',Arial,sans-serif">Ready</text>
+              <text x="98" y="150" text-anchor="start" direction="ltr" font-size="14" fill="#1e293b"
+                    font-family="'Segoe UI',Arial,sans-serif">Collected</text>
+              <text x="98" y="176" text-anchor="start" direction="ltr" font-size="14" fill="#1e293b"
+                    font-family="'Segoe UI',Arial,sans-serif">Cancelled</text>
+              <line x1="86" y1="50" x2="214" y2="50" stroke="#94a3b8" stroke-width="1.4" stroke-dasharray="5 3"/>
+              <rect x="86" y="6" width="128" height="182" fill="none" stroke="#94a3b8" stroke-width="1.8" stroke-dasharray="5 3"/>
+
+              <!-- the class that USES it, below and deliberately unconnected -->
+              <rect x="40" y="214" width="180" height="58" fill="#fff" stroke="#3b82f6" stroke-width="1.6"/>
+              <rect x="40" y="214" width="180" height="26" fill="#1e40af"/>
+              <text x="130" y="232" text-anchor="middle" direction="ltr" font-size="14" font-weight="700"
+                    fill="#fff" font-family="'Segoe UI',Arial,sans-serif">Order</text>
+              <text x="48" y="258" text-anchor="start" direction="ltr" font-size="11" fill="#1e293b"
+                    font-family="'Consolas','Courier New',monospace">- status : OrderStatus</text>
+
+              <!-- the point of the whole picture: there is NO line between them -->
+              <text x="150" y="296" text-anchor="middle" direction="rtl" font-size="13" fill="#C62828" font-weight="700"
+                    font-family="'Noto Sans Hebrew',sans-serif">אין קו בין השתיים!</text>
+              <text x="150" y="314" text-anchor="middle" direction="rtl" font-size="12" fill="#94a3b8"
+                    font-family="'Noto Sans Hebrew',sans-serif">טיפוס התכונה הוא כל הקישור</text>
             </svg>
-            <ul class="bullets">
-              <li>רשימה <b>סגורה</b> של ערכי טקסט, <span class="en" dir="ltr">&#8804; 20</span> בערך</li>
-              <li>לא למספרים / כמויות</li>
-              <li><b>אינה מחוברת בקו</b> — הטיפוס <span class="en" dir="ltr">status : OrderStatus</span> הוא הקשר היחיד</li>
-            </ul>
+            <p class="link">הקשר היחיד: <span class="en" dir="ltr">status : OrderStatus</span></p>
+            <div class="conv">
+              <b>מה תקני ומה שלנו:</b> התקן דורש את הסטריאוטיפ <span class="en" dir="ltr">&laquo;enumeration&raquo;</span>,
+              את רשימת הערכים, ו<b>שלא יימתח קו</b> אל המחלקה. הרקע האפור והמסגרת המקווקוות הם <b>מוסכמת התצוגה
+              של הקורס</b> — כדי שתזהו enum במבט — ולא דרישה של <span class="en">UML</span>. בכלי אחר תראו בדיוק
+              את אותו <span class="en">enum</span> בתיבה רגילה.
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="panel-title">מתי כן — ומתי לא</div>
+            <div class="rules">
+              <div class="r yes"><span class="mk">✓</span> רשימה <b>סגורה</b> וקצרה של ערכי טקסט — עד ~20, שכמעט לא משתנה. סטטוס, סוג תשלום, יום בשבוע.</div>
+              <div class="r no"><span class="mk">✗</span> <b>מספרים וכמויות</b> — אלה טיפוסים רגילים, לא רשימת ערכים.</div>
+              <div class="r no"><span class="mk">✗</span> רשימה ש<b>משתנה תוך כדי</b> — קטגוריות שהמנהל מוסיף ומוחק הן <b>נתונים</b>, כלומר מחלקה וטבלה, לא <span class="en">enum</span>. הכלל: אם צריך מסך ניהול לרשימה — היא מחלקה.</div>
+              <div class="r no"><span class="mk">✗</span> כשלערכים יש <b>תכונות משלהם</b> — אז זו הורשה או מחלקה, לא רשימת ערכים.</div>
+            </div>
+            <div class="panel-title code-t">למה זה טוב כשמגיעים לקוד</div>
+            <div class="rules tight">
+              <div class="r yes"><span class="mk">✓</span> <b>הקומפיילר תופס שגיאות כתיב.</b> אם הסטטוס הוא מחרוזת, <span class="en" dir="ltr">"Redy"</span> יתגלה רק כשלקוח יתלונן; <span class="en" dir="ltr">OrderStatus.Redy</span> פשוט לא מתקמפל.</div>
+              <div class="r yes"><span class="mk">✓</span> <b>הרשימה החוקית ידועה מראש.</b> סביבת הפיתוח משלימה את הערכים, ואי אפשר להכניס ערך שלא קיים — <b>מצב לא חוקי לא ניתן לביטוי</b>.</div>
+              <div class="r yes"><span class="mk">✓</span> <b>מוסיפים ערך — והקומפיילר מראה איפה לטפל בו.</b> ערך חדש כמו <span class="en" dir="ltr">Refunded</span> יצוף בכל מקום שמפצל לפי סטטוס, במקום להישכח.</div>
+              <div class="r yes"><span class="mk">✓</span> <b>ייצוג יעיל.</b> ב-<span class="en" dir="ltr">C#</span> הקומפיילר ממפה כל שם ל<b>מספר</b> — השוואת סטטוסים היא השוואת מספרים, לא של מחרוזות.</div>
+            </div>
+            <div class="callout ai">
+              <span class="label">💡 בקוד ובמסד</span>
+              <span class="en" dir="ltr">C#</span>: <span class="en" dir="ltr">enum OrderStatus { Pending, … }</span> · במסד: אילוץ <span class="en" dir="ltr">CHECK</span> או טבלת ערכים קטנה.
+            </div>
           </div>
 
         </div>
 
-        <p class="bottom-line">אילוץ תמיד ב-<span class="en">{ }</span> · <span class="en">enumeration</span> = תיבה אפורה מקווקוות, לא מחוברת.</p>
+        <p class="bottom-line">רשימה סגורה, ליד המחלקה ו<b>בלי קו</b> אליה — ובהרצאה 8 הערכים האלה יהפכו ל<b>מצבים</b>.</p>
 
       </div>
       <aside class="notes">
-        שלוש דרכים לפרט תכונה: טיפוס בלבד, ברירת מחדל אחרי =, ואילוץ ב-{}. האילוץ נכתב תמיד בסוגריים
-        מסולסלים; אילוץ מורכב אפשר לתלות ב-Note. ה-enumeration הוא טיפוס עם רשימת ערכי טקסט סגורה
-        (עד ~20, לא למספרים) — כאן OrderStatus עם ממתין/בהכנה/מוכן/נאסף/בוטל. חשוב: תיבת ה-enum
-        מצוירת ליד המחלקה אך אינה מחוברת אליה בקו — הקשר היחיד הוא שהתכונה status היא מטיפוס
-        OrderStatus. זו טעות נפוצה למתוח קו למחלקה. בהרצאה 8 (תרשים מצבים) הערכים האלה יהפכו למצבים.
+        enumeration הוא <b>טיפוס</b>, לא מחלקה: רשימה סגורה של ערכי טקסט שהמערכת בוחרת מתוכה. כאן OrderStatus עם
+        חמשת מצבי ההזמנה.
+        <b>הטעות הקלאסית שנבדקת במבחן:</b> למתוח קו מהמחלקה לתיבת ה-enum. אין קו. הקישור היחיד הוא שהתכונה
+        <code>status</code> היא מטיפוס <code>OrderStatus</code> — בדיוק כמו שלא מותחים קו למחלקה בגלל
+        <code>name : String</code>. התיבה פשוט עומדת ליד המחלקה שמשתמשת בה.
+        <b>הכלל המעשי להבחין enum מנתונים:</b> אם מישהו בארגון צריך <b>מסך ניהול</b> כדי להוסיף ולמחוק ערכים —
+        זו לא רשימת ערכים אלא מחלקה (וטבלה). ״קטגוריות מוצר״ שהמנהל עורך = מחלקה; ״ממתין/מוכן/נאסף״ שקבוע בקוד = enum.
+        שאלה טובה לכיתה: ״סוגי תשלום — enum או מחלקות?״ התשובה תלויה בשאלה אם לכל סוג יש <b>תכונות משלו</b>:
+        לתשלום באשראי יש last4 ו-gatewayRef ולכן שם זו הורשה (נראה בחלק ג׳), בעוד שסטטוס הזמנה הוא רק שם — enum.
+        זו בדיוק ההבחנה שנחזור אליה בשקופית ההורשה.
+        <b>להיזהר מלהציג את הצבע כתקן:</b> מה ש-UML דורש הוא הסטריאוטיפ «enumeration», רשימת הערכים, ושאין קו
+        אל המחלקה (בדיוק כמו שאין קו אל String). הרקע האפור והמסגרת המקווקוות הם <b>מוסכמת התצוגה שלנו</b> —
+        נוחה לזיהוי מהיר בכיתה ובכלי הקורס, אבל בכלי אחר או במבחן ממקור אחר אותו enum ייראה בתיבה רגילה,
+        וזה תקין לגמרי. אל תורידו לסטודנט נקודות על מסגרת מלאה.
+        <b>למה זה טוב בקוד (השאלה ״למה בכלל לטרוח״):</b> ההבדל הוא בין מחרוזת לבין טיפוס. מחרוזת מקבלת כל דבר —
+        "Redy" יתגלה רק בזמן ריצה, ואצל הלקוח. enum נבדק בזמן קומפילציה, סביבת הפיתוח משלימה את הערכים החוקיים,
+        ומצב לא חוקי פשוט לא ניתן לביטוי. והבונוס הגדול: כשמוסיפים ערך (נניח Refunded), הקומפיילר/המנתח מצביע על
+        כל מקום בקוד שמפצל לפי סטטוס וצריך עדכון — במקום שנגלה חודש אחר כך שאיפשהו שכחו. זו בדיוק הסיבה שמודל
+        טוב חוסך באגים: ההחלטה בתרשים הופכת לבדיקה אוטומטית בקוד.
+        <b>על ה״מספר״ — לדייק:</b> ב-C# (וב-C++) enum הוא <b>טיפוס ערך מעל מספר שלם</b>: הקומפיילר נותן לכל שם
+        ערך מספרי (0,1,2… כברירת מחדל), ובזמן ריצה מדובר ב-4 בתים ובהשוואת מספרים — לעומת מחרוזת, שהיא אובייקט
+        בזיכרון והשוואה שלה עוברת תו-תו. ב-<b>Java ובפייתון</b> זה לא כך: שם ה-enum הוא <b>אובייקט</b>, וההשוואה
+        היא השוואת הפניה (מהירה גם היא, אבל מנגנון אחר). כלומר ״זה נהיה מספר״ נכון למשפחת C#/C++ ולא באופן
+        אוניברסלי — עוד דוגמה לשקופית UML מול שפה.
+        ⚠️ <b>אבל שימו לב לסדר גודל:</b> החיסכון הזה זניח במערכת עסקית. הסיבה האמיתית ל-enum היא <b>נכונות</b>
+        (הקומפיילר תופס טעויות), והיעילות היא בונוס. אל תמכרו את זה כשיקול ביצועים.
+        ⚠️ <b>והמלכודת שנובעת מזה:</b> בגלל שהערך הוא מספר, מתפתים לשמור את ה<b>מספר</b> במסד הנתונים. אסור —
+        אם מישהו יוסיף ערך <i>באמצע</i> הרשימה, כל השורות הישנות ישנו משמעות בשקט. שומרים את <b>השם</b>, או
+        מקצים מספרים <b>מפורשות</b> בקוד (<code>Pending = 1</code>) ולא נוגעים בהם לעולם.
+        קדימה: בהרצאה 8 (תרשים מצבים) חמשת הערכים האלה הופכים למצבים ולמעברים ביניהם — לשמור אותם זהים בין הדקים.
       </aside>
+    <div class="acro-footer"><span class="acro"><span class="en">UML</span> = <span class="en">Unified Modeling Language</span> · שפת מידול אחידה</span></div>
     </section>
     <!-- B5 — Operations: the third compartment. Format + method(param:Type):Return, rendered
          ITALIC (tool doctrine, NOTATION.md — operations compartment is italic). SVG shows the
@@ -791,7 +1161,7 @@
               <!-- header band -->
               <rect x="14" y="6" width="222" height="32" fill="#1e40af"/>
               <text x="125" y="27" text-anchor="middle" direction="rtl" font-size="15" font-weight="700"
-                    fill="#fff" font-family="'Noto Sans Hebrew',sans-serif">הזמנה</text>
+                    fill="#fff" font-family="'Segoe UI',Arial,sans-serif">Order</text>
               <!-- attributes compartment -->
               <line x1="14" y1="112" x2="236" y2="112" stroke="#cbd5e1" stroke-width="1"/>
               <text x="24" y="58"  text-anchor="start" font-size="12" fill="#334155" font-family="Consolas,monospace">- orderId : String</text>
@@ -831,6 +1201,126 @@
         cancel() בלי ערך מוחזר, markReady() משנה מצב. בשלב הניתוח לרוב מספיק לזהות מעט פעולות
         מפתח; העומק המלא מתחדד בעיצוב ובקוד.
       </aside>
+    </section>
+    <!-- B6 — מאוחסן / נגזר / פעולה. NEW 2026-08-10 (David: "this decision is worth a slide in its own").
+         Sits right after Operations, because it is the first moment both halves of the box exist and the
+         student can be asked "so which one do I use?".
+         Two questions, in order: (1) must it be stored at all? (2) if computed — attribute or operation?
+         The ⚠️ beat is the stored-copy-of-a-derivable-value, which is the most common inconsistency bug
+         and a very common AI-draft mistake. The exception card is what makes it honest: unitPrice on
+         OrderLine looks derivable from MenuItem.price and must still be stored, because a menu price
+         changes and last month's order has to stay true. That example was also a genuine flaw in the
+         running model until 2026-08-10 — see the dossier. -->
+    <section data-slug="stored-derived-operation" class="has-acro-footer">
+      <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
+      <style>
+        section[data-slug="stored-derived-operation"] .three{ display:grid; grid-template-columns:repeat(3,1fr);
+          gap:12px; flex:0 0 auto; }
+        section[data-slug="stored-derived-operation"] .k{ background:var(--card-bg); border:1px solid var(--card-border);
+          border-radius:14px; padding:10px 13px; display:flex; flex-direction:column; gap:5px; }
+        section[data-slug="stored-derived-operation"] .k.store{ border-top:5px solid var(--blue); }
+        section[data-slug="stored-derived-operation"] .k.deriv{ border-top:5px solid var(--orange); }
+        section[data-slug="stored-derived-operation"] .k.op{ border-top:5px solid var(--green); }
+        section[data-slug="stored-derived-operation"] .k .kt{ font-size:19px; font-weight:800; color:var(--dark-blue); }
+        section[data-slug="stored-derived-operation"] .k.deriv .kt{ color:var(--orange); }
+        section[data-slug="stored-derived-operation"] .k.op .kt{ color:var(--green); }
+        section[data-slug="stored-derived-operation"] .k code{ font-size:14.5px; background:#e8eef5; border-radius:6px;
+          padding:2px 7px; align-self:flex-start; color:#0f172a; }
+        section[data-slug="stored-derived-operation"] .k .kd{ font-size:14.5px; color:var(--body); line-height:1.4; }
+        section[data-slug="stored-derived-operation"] .k .kcs{ font-size:13px; color:var(--muted); margin-top:auto; }
+        section[data-slug="stored-derived-operation"] .k .kcs b{ color:var(--dark-blue); }
+        section[data-slug="stored-derived-operation"] .low{ flex:1 1 auto; min-height:0; display:grid;
+          grid-template-columns:1.1fr 1fr; gap:12px; }
+        section[data-slug="stored-derived-operation"] .low > div{ display:flex; flex-direction:column; }
+        section[data-slug="stored-derived-operation"] .q{ background:var(--hero-bg); border:2px solid var(--orange);
+          border-radius:14px; padding:12px 16px; display:flex; flex-direction:column; gap:11px; flex:1; justify-content:center; }
+        section[data-slug="stored-derived-operation"] .worked{ border-top:1px dashed var(--orange); padding-top:10px; font-size:16px; line-height:1.5; color:var(--body); }
+        section[data-slug="stored-derived-operation"] .worked b{ color:var(--dark-blue); }
+        section[data-slug="stored-derived-operation"] .worked .en{ font-weight:700; color:var(--orange); }
+        section[data-slug="stored-derived-operation"] .q .qq{ font-size:19px; font-weight:800; color:var(--dark-blue); }
+        section[data-slug="stored-derived-operation"] .q .qa{ font-size:17px; color:var(--body); line-height:1.4; padding-inline-start:14px; }
+        section[data-slug="stored-derived-operation"] .q .qa b{ color:var(--orange); }
+        section[data-slug="stored-derived-operation"] .callout{ font-size:15.5px; padding:9px 13px; }
+        section[data-slug="stored-derived-operation"] .callout.warn{ flex:0 0 auto; margin-bottom:10px; }
+        section[data-slug="stored-derived-operation"] .callout.good{ flex:1; }
+        section[data-slug="stored-derived-operation"] .callout .ex2{ display:block; margin-top:4px; }
+      </style>
+      <h1>מאוחסן, נגזר, או פעולה?</h1>
+      <div class="subtitle">אותו ערך — שלוש דרכים לייצג אותו. איך בוחרים</div>
+      <div class="body">
+
+        <div class="three">
+          <div class="k store">
+            <div class="kt">מאוחסן</div>
+            <code class="en" dir="ltr">- unitPrice : Money</code>
+            <div class="kd">נשמר בפועל. יש לו מקור — מישהו הזין אותו, או המערכת קבעה אותו ברגע מסוים.</div>
+            <div class="kcs"><span class="en" dir="ltr">C#</span>: <b class="en" dir="ltr">{ get; set; }</b> · במסד: <b>עמודה</b></div>
+          </div>
+          <div class="k deriv">
+            <div class="kt">נגזר <span class="en">/</span></div>
+            <code class="en" dir="ltr">/ itemCount : int</code>
+            <div class="kd">לא נשמר. נספר מחדש מהנתונים שכבר יש, בכל פעם שמסתכלים עליו.</div>
+            <div class="kcs"><span class="en" dir="ltr">C#</span>: <b class="en" dir="ltr">=&gt; Lines.Count</b> · במסד: <b>אין עמודה</b></div>
+          </div>
+          <div class="k op">
+            <div class="kt">פעולה <span class="en">( )</span></div>
+            <code class="en" dir="ltr">+ total() : Money</code>
+            <div class="kd">חישוב שמפעילים. יכול לקבל פרמטרים ולעשות עבודה אמיתית.</div>
+            <div class="kcs"><span class="en" dir="ltr">C#</span>: <b class="en" dir="ltr">Total()</b> · במסד: <b>כלום</b></div>
+          </div>
+        </div>
+
+        <div class="low">
+
+          <div>
+            <div class="q">
+              <div class="qq">שאלה 1 — האם בכלל צריך לאחסן?</div>
+              <div class="qa">אפשר לחשב אותו מחדש ממה שכבר שמור, ותמיד לקבל <b>אותה תשובה</b>?
+                אם כן — <b>אל תאחסנו</b>. אם לא — <b>מאוחסן</b>.</div>
+              <div class="qq">שאלה 2 — ואם הוא מחושב: תכונה או פעולה?</div>
+              <div class="qa">צריך <b>פרמטרים</b>, או שזה משהו ש<b>מפעילים</b>? ← פעולה.
+                סתם ערך ש<b>מסתכלים</b> עליו במסך? ← תכונה נגזרת. <b>לא שניהם לאותו ערך.</b></div>
+              <div class="worked">
+                <b>נריץ את זה על מספר השורות בהזמנה:</b> אפשר לספור מחדש מהשורות ותמיד נקבל אותו מספר ⇒ <b>לא מאחסנים</b>.
+                אין פרמטרים ואף אחד לא ״מפעיל״ אותו — רק מציגים ⇒ <span class="en" dir="ltr">/ itemCount : int</span>.
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div class="callout warn">
+              <span class="label">⚠️ הטעות הנפוצה</span>
+              לאחסן ערך שאפשר לגזור — זה <b>מקור אמת שני</b>. מוסיפים שורה להזמנה, שוכחים לעדכן את המונה, והמודל סותר את עצמו.
+              <span class="ex2">זו גם טעות אהובה על <span class="en">AI</span>: טיוטות נוטות להוסיף <span class="en" dir="ltr">totalAmount</span> ו-<span class="en" dir="ltr">itemCount</span> כשדות שמורים.</span>
+            </div>
+            <div class="callout good">
+              <span class="label">✓ מתי כן מאחסנים למרות שנראה מחושב</span>
+              <b>ערך של רגע מסוים</b> — <span class="en" dir="ltr">unitPrice</span> בשורת ההזמנה: מחיר בתפריט משתנה,
+              וההזמנה מלפני חודש חייבת להישאר נכונה. גם: <b>ביקורת ורגולציה</b> (הערך מוקפא כפי שהיה),
+              ו<b>ביצועים</b> על נפחים גדולים — החלטה מודעת, לא שכחה.
+            </div>
+          </div>
+
+        </div>
+
+        <p class="bottom-line">״האם זה ייקבע, או ייחשב?״ — זו השאלה. מה שנחשב, לא נשמר.</p>
+
+      </div>
+      <aside class="notes">
+        זו ההחלטה שסטודנטים הכי טועים בה, ובמבחן היא נבדקת: לא <b>איך</b> כותבים תכונה, אלא <b>אם</b> היא בכלל צריכה להיות תכונה.
+        <b>שאלה 1 — מאוחסן או מחושב.</b> המבחן: אפשר לחשב מחדש ממה שכבר שמור ולקבל תמיד אותה תשובה? אם כן — לא לאחסן.
+        ערך שמור שאפשר לגזור הוא מקור אמת שני, והוא <b>יסתור</b> את עצמו ברגע שמישהו יעדכן צד אחד ולא את השני.
+        זהו בעצם מבחן ההתמדה (מ״מה אינו מחלקה״) רמה אחת למטה: שם שאלנו אם ישות ראויה למחלקה, כאן אם ערך ראוי לאחסון.
+        <b>שאלה 2 — נגזר או פעולה.</b> פרמטרים ⇒ תמיד פעולה (אי אפשר להעביר ארגומנט לתכונה). יקר או עושה משהו ⇒ פעולה.
+        ערך שפשוט מציגים במסך ⇒ תכונה נגזרת. ב-C# ההבחנה קיימת בשפה עצמה: תכונה נגזרת היא property לקריאה בלבד
+        (<code>public int ItemCount =&gt; Lines.Count;</code>) ופעולה היא מתודה (<code>CountItems()</code>). ב-Java אין properties
+        ולכן הכול הופך ל-getX() — ומי שלמד Java חושב שהכול פעולה.
+        <b>החריג הוא הלב של השקופית — unitPrice.</b> הוא נראה משוכפל מ-MenuItem.price, וזה בדיוק המקרה שבו <b>חייבים</b> לאחסן:
+        מחיר בתפריט משתנה, ואם lineTotal() יחושב מהמחיר הנוכחי — הזמנה מלפני חודש תשנה את הסכום שלה רטרואקטיבית.
+        שאלה טובה לכיתה: ״מה קורה למחיר של הזמנה ישנה אם הקפיטריה מעלה מחירים?״ מי שעונה ״כלום, זה שמור״ הבין.
+        להוסיף: זה בדיוק ההבדל בין ״כמה זה עולה״ (חישוב) לבין ״כמה זה עלה״ (עובדה היסטורית).
+      </aside>
+    <div class="acro-footer"><span class="acro"><span class="en">AI</span> = <span class="en">Artificial Intelligence</span> · בינה מלאכותית</span></div>
     </section>
     <!-- B6 — Visibility: the + / # / - markers. A table.sad (סימון | נראות | משמעות | דוגמה מהקמפוס)
          with one campus line each. pickupCode(-) and total(+) are canonical members; validate() on
@@ -1011,7 +1501,7 @@
                  aria-label="תיבה מלאה של המחלקה הזמנה: שם, תכונות ופעולות">
               <rect x="8" y="6" width="184" height="168" fill="#fff" stroke="#3b82f6" stroke-width="2"/>
               <rect x="8" y="6" width="184" height="28" fill="#1e40af"/>
-              <text x="100" y="25" text-anchor="middle" direction="rtl" font-size="14" font-weight="700" fill="#fff" font-family="'Noto Sans Hebrew',sans-serif">הזמנה</text>
+              <text x="100" y="25" text-anchor="middle" direction="ltr" font-size="14" font-weight="700" fill="#fff" font-family="'Segoe UI',Arial,sans-serif">Order</text>
               <line x1="8" y1="112" x2="192" y2="112" stroke="#cbd5e1" stroke-width="1"/>
               <text x="16" y="52" text-anchor="start" font-size="11" fill="#334155" font-family="Consolas,monospace">- orderId : String</text>
               <text x="16" y="74" text-anchor="start" font-size="11" fill="#334155" font-family="Consolas,monospace">- status : OrderStatus</text>
@@ -1028,7 +1518,7 @@
                  aria-label="תיבה מקוצרת של הזמנה: שם ותכונות בלבד">
               <rect x="8" y="6" width="184" height="118" fill="#fff" stroke="#3b82f6" stroke-width="2"/>
               <rect x="8" y="6" width="184" height="28" fill="#1e40af"/>
-              <text x="100" y="25" text-anchor="middle" direction="rtl" font-size="14" font-weight="700" fill="#fff" font-family="'Noto Sans Hebrew',sans-serif">הזמנה</text>
+              <text x="100" y="25" text-anchor="middle" direction="ltr" font-size="14" font-weight="700" fill="#fff" font-family="'Segoe UI',Arial,sans-serif">Order</text>
               <text x="16" y="56" text-anchor="start" font-size="11" fill="#334155" font-family="Consolas,monospace">- orderId : String</text>
               <text x="16" y="80" text-anchor="start" font-size="11" fill="#334155" font-family="Consolas,monospace">- status : OrderStatus</text>
               <text x="16" y="104" text-anchor="start" font-size="11" fill="#334155" font-family="Consolas,monospace">- pickupTime : DateTime</text>
@@ -1041,7 +1531,7 @@
             <svg class="cn-svg" viewBox="0 0 200 70" xmlns="http://www.w3.org/2000/svg" role="img"
                  aria-label="תיבה מכווצת של הזמנה: שם בלבד">
               <rect x="8" y="10" width="184" height="46" fill="#1e40af" stroke="#3b82f6" stroke-width="2"/>
-              <text x="100" y="39" text-anchor="middle" direction="rtl" font-size="16" font-weight="700" fill="#fff" font-family="'Noto Sans Hebrew',sans-serif">הזמנה</text>
+              <text x="100" y="39" text-anchor="middle" direction="ltr" font-size="16" font-weight="700" fill="#fff" font-family="'Segoe UI',Arial,sans-serif">Order</text>
             </svg>
             <p class="cap">שם בלבד</p>
           </div>
@@ -1056,6 +1546,123 @@
         זו אותה מחלקה הזמנה בשלוש רמות פירוט; היא עדיין מכילה את כל התכונות והפעולות. משמיטים פרטים
         כדי לשמור על קריאוּת תרשים הקשרים, לא כדי לוותר עליהם.
       </aside>
+    </section>
+    <!-- B9 — חבילות (packages). NEW 2026-08-10 (David's call: packages get their own slide instead of
+         sharing the naming slide). Placed at the END of section ב on purpose: it comes after
+         compact-notation (B8), so the package can be drawn with name-only boxes that the students have
+         just been taught, and it can group the WHOLE campus model rather than a two-class toy.
+         Anchor that makes it land in seconds: they imported a turtle package their lecturer wrote in
+         the programming course — same idea, same mechanics.
+         HONESTY BEAT (kept on the slide, not just in the notes): this course never uses packages
+         again — no exercise, no project deliverable requires them. They are here so the term is
+         familiar when they meet it in a real model or in generated code. -->
+    <section data-slug="packages" class="has-acro-footer">
+      <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
+      <style>
+        section[data-slug="packages"] .pk-cols{ flex:1 1 auto; min-height:0; display:grid;
+          grid-template-columns:0.82fr 1.18fr; gap:14px; align-items:stretch; }
+        section[data-slug="packages"] .pk-cols > .card{ display:flex; flex-direction:column; }
+        section[data-slug="packages"] ul.bullets > li{ font-size:18px !important; line-height:1.4; margin-bottom:10px; }
+        section[data-slug="packages"] .pkg-svg{ display:block; width:100%; height:auto; margin:auto; max-height:300px; }
+        section[data-slug="packages"] .ns{ text-align:center; margin:8px 0 0; font-size:17px; color:var(--muted); }
+        section[data-slug="packages"] .ns .en{ color:var(--dark-blue); font-weight:700; }
+        section[data-slug="packages"] .callout{ font-size:17px; padding:9px 13px; margin-top:auto; }
+      </style>
+      <h1>חבילות — <span class="en">Packages</span></h1>
+      <div class="subtitle">איך שומרים על מודל גדול קריא: מקבצים מחלקות לפי נושא</div>
+      <div class="body">
+
+        <div class="pk-cols">
+
+          <div class="card">
+            <div class="panel-title">מה זו חבילה</div>
+            <ul class="bullets">
+              <li>יחידת <b>קיבוץ</b>: מחלקות של אותו נושא נכנסות לתיקייה אחת</li>
+              <li>מודל של 40 מחלקות הופך לתרשים של <b>4 חבילות</b> — קודם רואים את המבנה, אחר כך נכנסים פנימה</li>
+              <li><b>מרחב שם</b>: <span class="en" dir="ltr">Ordering::Order</span> — שם המחלקה ייחודי בתוך החבילה שלה</li>
+              <li>שם חבילה נכתב <b>באנגלית</b>, כמו שם מחלקה</li>
+            </ul>
+            <div class="callout ai">
+              <span class="label">💡 אתם כבר מכירים את זה</span>
+              ה-<span class="en" dir="ltr">import turtle</span> מקורס התכנות — חבילה שהמרצה שלכם כתב ואתם ייבאתם. אותו רעיון בדיוק, רק שכאן מציירים אותו.
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="panel-title" style="text-align:center;">מודל הקמפוס — מקובץ לשלוש חבילות</div>
+            <svg class="pkg-svg" viewBox="0 0 620 290" xmlns="http://www.w3.org/2000/svg" role="img"
+                 aria-label="שלוש חבילות: Ordering ובה Order ו-OrderLine, Catalog ובה MenuItem, Station ו-Cafeteria, ו-Billing ובה Payment ושתי תת-המחלקות שלו">
+
+              <!-- ── package: Ordering ── -->
+              <rect x="12" y="26" width="120" height="24" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.6"/>
+              <text x="72" y="43" text-anchor="middle" direction="ltr" font-size="14" font-weight="700"
+                    fill="#1e40af" font-family="'Segoe UI',Arial,sans-serif">Ordering</text>
+              <rect x="12" y="50" width="186" height="112" fill="#fff" stroke="#3b82f6" stroke-width="1.6"/>
+              <rect x="34" y="72" width="142" height="30" fill="#1e40af"/>
+              <text x="105" y="92" text-anchor="middle" direction="ltr" font-size="14" font-weight="700"
+                    fill="#fff" font-family="'Segoe UI',Arial,sans-serif">Order</text>
+              <rect x="34" y="116" width="142" height="30" fill="#1e40af"/>
+              <text x="105" y="136" text-anchor="middle" direction="ltr" font-size="14" font-weight="700"
+                    fill="#fff" font-family="'Segoe UI',Arial,sans-serif">OrderLine</text>
+
+              <!-- ── package: Catalog ── -->
+              <rect x="218" y="26" width="120" height="24" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.6"/>
+              <text x="278" y="43" text-anchor="middle" direction="ltr" font-size="14" font-weight="700"
+                    fill="#1e40af" font-family="'Segoe UI',Arial,sans-serif">Catalog</text>
+              <rect x="218" y="50" width="186" height="156" fill="#fff" stroke="#3b82f6" stroke-width="1.6"/>
+              <rect x="240" y="72" width="142" height="30" fill="#1e40af"/>
+              <text x="311" y="92" text-anchor="middle" direction="ltr" font-size="14" font-weight="700"
+                    fill="#fff" font-family="'Segoe UI',Arial,sans-serif">MenuItem</text>
+              <rect x="240" y="116" width="142" height="30" fill="#1e40af"/>
+              <text x="311" y="136" text-anchor="middle" direction="ltr" font-size="14" font-weight="700"
+                    fill="#fff" font-family="'Segoe UI',Arial,sans-serif">Station</text>
+              <rect x="240" y="160" width="142" height="30" fill="#1e40af"/>
+              <text x="311" y="180" text-anchor="middle" direction="ltr" font-size="14" font-weight="700"
+                    fill="#fff" font-family="'Segoe UI',Arial,sans-serif">Cafeteria</text>
+
+              <!-- ── package: Billing ── -->
+              <rect x="424" y="26" width="120" height="24" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.6"/>
+              <text x="484" y="43" text-anchor="middle" direction="ltr" font-size="14" font-weight="700"
+                    fill="#1e40af" font-family="'Segoe UI',Arial,sans-serif">Billing</text>
+              <rect x="424" y="50" width="186" height="156" fill="#fff" stroke="#3b82f6" stroke-width="1.6"/>
+              <rect x="446" y="72" width="142" height="30" fill="#1e40af"/>
+              <text x="517" y="92" text-anchor="middle" direction="ltr" font-size="14" font-weight="700"
+                    fill="#fff" font-family="'Segoe UI',Arial,sans-serif">Payment</text>
+              <rect x="440" y="116" width="154" height="30" fill="#fff" stroke="#3b82f6" stroke-width="1.4"/>
+              <text x="517" y="136" text-anchor="middle" direction="ltr" font-size="11.5" font-weight="700"
+                    fill="#1e40af" font-family="'Segoe UI',Arial,sans-serif">UniversityCardPayment</text>
+              <rect x="440" y="160" width="154" height="30" fill="#fff" stroke="#3b82f6" stroke-width="1.4"/>
+              <text x="517" y="180" text-anchor="middle" direction="ltr" font-size="11.5" font-weight="700"
+                    fill="#1e40af" font-family="'Segoe UI',Arial,sans-serif">CreditCardPayment</text>
+
+              <!-- dashed cross-package references: Ordering -> Catalog -> ... -> Billing -->
+              <line x1="198" y1="131" x2="218" y2="131" stroke="#94a3b8" stroke-width="1.4" stroke-dasharray="5 4"/>
+              <line x1="404" y1="131" x2="424" y2="131" stroke="#94a3b8" stroke-width="1.4" stroke-dasharray="5 4"/>
+              <text x="311" y="240" text-anchor="middle" direction="rtl" font-size="14" fill="#475569"
+                    font-family="'Noto Sans Hebrew',sans-serif">הקשרים בין המחלקות נשארים — החבילות רק מארגנות אותן</text>
+              <text x="311" y="266" text-anchor="middle" direction="rtl" font-size="13.5" fill="#94a3b8"
+                    font-family="'Noto Sans Hebrew',sans-serif">התיבות בהצגה מקוצרת — שם בלבד</text>
+            </svg>
+            <p class="ns">שיוך במרחב שם: <span class="en" dir="ltr">Ordering::Order</span> · <span class="en" dir="ltr">Billing::Payment</span></p>
+          </div>
+
+        </div>
+
+        <p class="bottom-line">בקורס הזה לא נשתמש בחבילות — מכירים את המונח, ולא נדרשים אליו בתרגילים.</p>
+
+      </div>
+      <aside class="notes">
+        חבילה היא מנגנון ארגון, לא מנגנון מידול: היא לא משנה אף מחלקה ואף קשר — היא רק אורזת אותן.
+        הערך מתגלה בקנה מידה: מודל של 40 מחלקות בלתי-קריא כתרשים אחד; כשלוש-ארבע חבילות רואים קודם את השלד
+        ואז נכנסים פנימה. כאן מודל הקמפוס מחולק ל-Ordering (ההזמנה ושורותיה), Catalog (מה שאפשר להזמין ואיפה
+        מכינים) ו-Billing (התשלום וסוגיו). הקשרים בין המחלקות ממשיכים לחצות חבילות — זה תקין ורגיל.
+        מרחב שם: Ordering::Order. השם המלא מונע התנגשות — אפשר שתהיה מחלקה בשם Order גם בחבילה אחרת של מערכת אחרת.
+        <b>העוגן שכדאי לפתוח בו:</b> ״מי מכם ייבא turtle בקורס התכנות?״ — זו בדיוק חבילה: קוד של מישהו אחר,
+        ארוז ביחידה אחת עם שם, שאתם מייבאים בשלמותה. ההבדל היחיד הוא שכאן מציירים אותה.
+        ⚠️ להיות ישרים: בקורס הזה לא נחזור לחבילות — אין תרגיל ואין תוצר בפרויקט שדורש אותן. הן כאן כדי
+        שהמונח לא יהיה זר כשייתקלו בו במודל אמיתי או בקוד ש-AI ייצר (שם החבילה הוא לרוב שם התיקייה).
+      </aside>
+    <div class="acro-footer"><span class="acro"><span class="en">AI</span> = <span class="en">Artificial Intelligence</span> · בינה מלאכותית</span></div>
     </section>
     <!-- C (Section ג, part 1) — מפת הקשרים: the whole relationship set as a legend grid.
          Each card carries the glyph (inline SVG), the He+En name, and a one-liner. Below:
@@ -1212,7 +1819,7 @@
               <g transform="translate(380,28)">
                 <rect width="165" height="64" fill="#fff" stroke="#3b82f6" stroke-width="1.6"/>
                 <rect width="165" height="24" fill="#1e40af"/>
-                <text x="82" y="16.5" text-anchor="middle" font-size="13.5" font-weight="700" fill="#fff" direction="rtl" font-family="'Noto Sans Hebrew',sans-serif">סטודנט</text>
+                <text x="82" y="16.5" text-anchor="middle" font-size="13.5" font-weight="700" fill="#fff" direction="ltr" font-family="'Segoe UI',Arial,sans-serif">Student</text>
                 <text x="8" y="40" font-size="11.5" fill="#1e293b" font-family="Arial,sans-serif">- studentId : String</text>
                 <text x="8" y="57" font-size="11.5" fill="#1e293b" font-family="Arial,sans-serif">- name : String</text>
               </g>
@@ -1221,7 +1828,7 @@
               <g transform="translate(20,28)">
                 <rect width="175" height="64" fill="#fff" stroke="#3b82f6" stroke-width="1.6"/>
                 <rect width="175" height="24" fill="#1e40af"/>
-                <text x="87" y="16.5" text-anchor="middle" font-size="13.5" font-weight="700" fill="#fff" direction="rtl" font-family="'Noto Sans Hebrew',sans-serif">הזמנה</text>
+                <text x="87" y="16.5" text-anchor="middle" font-size="13.5" font-weight="700" fill="#fff" direction="ltr" font-family="'Segoe UI',Arial,sans-serif">Order</text>
                 <text x="8" y="40" font-size="11.5" fill="#1e293b" font-family="Arial,sans-serif">- orderId : String</text>
                 <text x="8" y="57" font-size="11.5" fill="#1e293b" font-family="Arial,sans-serif">- status : OrderStatus</text>
               </g>
@@ -1260,7 +1867,7 @@
               <g transform="translate(52,52)">
                 <rect width="94" height="34" fill="#fff" stroke="#3b82f6" stroke-width="1.6"/>
                 <rect width="94" height="24" fill="#1e40af"/>
-                <text x="47" y="16.5" text-anchor="middle" font-size="13" font-weight="700" fill="#fff" direction="rtl" font-family="'Noto Sans Hebrew',sans-serif">קטגוריה</text>
+                <text x="47" y="16.5" text-anchor="middle" font-size="13" font-weight="700" fill="#fff" direction="ltr" font-family="'Segoe UI',Arial,sans-serif">Category</text>
               </g>
             </svg>
             <p style="text-align:center;">לקטגוריה יש הורה אחד ו<b>תת-קטגוריות</b> משלה — אותה מחלקה בשני הקצוות.</p>
@@ -1339,21 +1946,24 @@
               <g transform="translate(520,37)">
                 <rect width="110" height="38" fill="#fff" stroke="#3b82f6" stroke-width="1.6"/>
                 <rect width="110" height="24" fill="#1e40af"/>
-                <text x="55" y="16.5" text-anchor="middle" font-size="13" font-weight="700" fill="#fff" direction="rtl" font-family="'Noto Sans Hebrew',sans-serif">הזמנה</text>
+                <text x="55" y="16.5" text-anchor="middle" font-size="13" font-weight="700" fill="#fff" direction="ltr" font-family="'Segoe UI',Arial,sans-serif">Order</text>
               </g>
               <!-- שורת הזמנה (center, WITH attributes — it's a real class) -->
+              <!-- unitPrice added 2026-08-10: the line must freeze the price at order time, otherwise
+                   lineTotal() recomputed from MenuItem.price would restate history. -->
               <g transform="translate(248,24)">
-                <rect width="155" height="64" fill="#fff" stroke="#3b82f6" stroke-width="1.6"/>
+                <rect width="155" height="81" fill="#fff" stroke="#3b82f6" stroke-width="1.6"/>
                 <rect width="155" height="24" fill="#1e40af"/>
-                <text x="77" y="16.5" text-anchor="middle" font-size="13" font-weight="700" fill="#fff" direction="rtl" font-family="'Noto Sans Hebrew',sans-serif">שורת הזמנה</text>
+                <text x="77" y="16.5" text-anchor="middle" font-size="13" font-weight="700" fill="#fff" direction="ltr" font-family="'Segoe UI',Arial,sans-serif">OrderLine</text>
                 <text x="8" y="40" font-size="11" fill="#1e293b" font-family="Arial,sans-serif">- quantity : int {&gt;0}</text>
-                <text x="8" y="57" font-size="11" fill="#1e293b" font-family="Arial,sans-serif">- notes : String</text>
+                <text x="8" y="57" font-size="11" fill="#1e293b" font-family="Arial,sans-serif">- unitPrice : Money</text>
+                <text x="8" y="74" font-size="11" fill="#1e293b" font-family="Arial,sans-serif">- notes : String</text>
               </g>
               <!-- פריט תפריט (left, name-only) -->
               <g transform="translate(20,37)">
                 <rect width="125" height="38" fill="#fff" stroke="#3b82f6" stroke-width="1.6"/>
                 <rect width="125" height="24" fill="#1e40af"/>
-                <text x="62" y="16.5" text-anchor="middle" font-size="13" font-weight="700" fill="#fff" direction="rtl" font-family="'Noto Sans Hebrew',sans-serif">פריט תפריט</text>
+                <text x="62" y="16.5" text-anchor="middle" font-size="13" font-weight="700" fill="#fff" direction="ltr" font-family="'Segoe UI',Arial,sans-serif">MenuItem</text>
               </g>
             </svg>
             <p class="cap">מחלקה רגילה עם זהות משלה, ש<b>מפצלת</b> את ה-<span class="en">M:N</span> לשתי אסוציאציות.
@@ -1376,19 +1986,19 @@
               <g transform="translate(430,23)">
                 <rect width="125" height="38" fill="#fff" stroke="#3b82f6" stroke-width="1.6"/>
                 <rect width="125" height="24" fill="#1e40af"/>
-                <text x="62" y="16.5" text-anchor="middle" font-size="13" font-weight="700" fill="#fff" direction="rtl" font-family="'Noto Sans Hebrew',sans-serif">סטודנט</text>
+                <text x="62" y="16.5" text-anchor="middle" font-size="13" font-weight="700" fill="#fff" direction="ltr" font-family="'Segoe UI',Arial,sans-serif">Student</text>
               </g>
               <!-- קורס (left, name-only) -->
               <g transform="translate(70,23)">
                 <rect width="110" height="38" fill="#fff" stroke="#3b82f6" stroke-width="1.6"/>
                 <rect width="110" height="24" fill="#1e40af"/>
-                <text x="55" y="16.5" text-anchor="middle" font-size="13" font-weight="700" fill="#fff" direction="rtl" font-family="'Noto Sans Hebrew',sans-serif">קורס</text>
+                <text x="55" y="16.5" text-anchor="middle" font-size="13" font-weight="700" fill="#fff" direction="ltr" font-family="'Segoe UI',Arial,sans-serif">Course</text>
               </g>
               <!-- הרשמה (association class, with attribute) -->
               <g transform="translate(235,120)">
                 <rect width="140" height="52" fill="#fff" stroke="#3b82f6" stroke-width="1.6"/>
                 <rect width="140" height="24" fill="#1e40af"/>
-                <text x="70" y="16.5" text-anchor="middle" font-size="13" font-weight="700" fill="#fff" direction="rtl" font-family="'Noto Sans Hebrew',sans-serif">הרשמה</text>
+                <text x="70" y="16.5" text-anchor="middle" font-size="13" font-weight="700" fill="#fff" direction="ltr" font-family="'Segoe UI',Arial,sans-serif">Enrollment</text>
                 <text x="8" y="41" font-size="11" fill="#1e293b" font-family="Arial,sans-serif">- grade : Grade</text>
               </g>
             </svg>
@@ -1475,13 +2085,13 @@
               <g transform="translate(340,41)">
                 <rect width="110" height="38" fill="#fff" stroke="#3b82f6" stroke-width="1.6"/>
                 <rect width="110" height="24" fill="#1e40af"/>
-                <text x="55" y="16.5" text-anchor="middle" font-size="13" font-weight="700" fill="#fff" direction="rtl" font-family="'Noto Sans Hebrew',sans-serif">הזמנה</text>
+                <text x="55" y="16.5" text-anchor="middle" font-size="13" font-weight="700" fill="#fff" direction="ltr" font-family="'Segoe UI',Arial,sans-serif">Order</text>
               </g>
               <!-- שורת הזמנה (part, left) -->
               <g transform="translate(20,37)">
                 <rect width="150" height="52" fill="#fff" stroke="#3b82f6" stroke-width="1.6"/>
                 <rect width="150" height="24" fill="#1e40af"/>
-                <text x="75" y="16.5" text-anchor="middle" font-size="13" font-weight="700" fill="#fff" direction="rtl" font-family="'Noto Sans Hebrew',sans-serif">שורת הזמנה</text>
+                <text x="75" y="16.5" text-anchor="middle" font-size="13" font-weight="700" fill="#fff" direction="ltr" font-family="'Segoe UI',Arial,sans-serif">OrderLine</text>
                 <text x="8" y="41" font-size="11" fill="#1e293b" font-family="Arial,sans-serif">- quantity : int {&gt;0}</text>
               </g>
             </svg>
@@ -1503,14 +2113,14 @@
               <g transform="translate(320,37)">
                 <rect width="130" height="52" fill="#fff" stroke="#3b82f6" stroke-width="1.6"/>
                 <rect width="130" height="24" fill="#1e40af"/>
-                <text x="65" y="16.5" text-anchor="middle" font-size="13" font-weight="700" fill="#fff" direction="rtl" font-family="'Noto Sans Hebrew',sans-serif">קפיטריה</text>
+                <text x="65" y="16.5" text-anchor="middle" font-size="13" font-weight="700" fill="#fff" direction="ltr" font-family="'Segoe UI',Arial,sans-serif">Cafeteria</text>
                 <text x="8" y="41" font-size="11" fill="#1e293b" font-family="Arial,sans-serif">- location : String</text>
               </g>
               <!-- עמדה (part, left) -->
               <g transform="translate(20,37)">
                 <rect width="150" height="52" fill="#fff" stroke="#3b82f6" stroke-width="1.6"/>
                 <rect width="150" height="24" fill="#1e40af"/>
-                <text x="75" y="16.5" text-anchor="middle" font-size="13" font-weight="700" fill="#fff" direction="rtl" font-family="'Noto Sans Hebrew',sans-serif">עמדה</text>
+                <text x="75" y="16.5" text-anchor="middle" font-size="13" font-weight="700" fill="#fff" direction="ltr" font-family="'Segoe UI',Arial,sans-serif">Station</text>
                 <text x="8" y="41" font-size="11" fill="#1e293b" font-family="Arial,sans-serif">- type : StationType</text>
               </g>
             </svg>
@@ -1593,15 +2203,16 @@
           <!-- left: the generalization diagram -->
           <div class="diagram-wrap">
             <svg class="gen-svg" viewBox="0 0 820 330" xmlns="http://www.w3.org/2000/svg" role="img"
-                 aria-label="תשלום כמחלקת-על עם משולש חלול, ושתי תת-מחלקות: תשלום בכרטיס אוניברסיטה ותשלום באשראי">
+                 aria-label="Payment כמחלקת-על עם משולש חלול, ושתי תת-מחלקות: UniversityCardPayment ו-CreditCardPayment">
 
               <!-- ── parent: תשלום / Payment ── -->
               <rect x="300" y="8" width="220" height="100" fill="#fff"/>
               <rect x="300" y="8" width="220" height="40" fill="#1e40af"/>
-              <text x="410" y="28" text-anchor="middle" direction="rtl" font-size="17" font-weight="700"
-                    fill="#fff" font-family="'Noto Sans Hebrew',sans-serif">תשלום</text>
-              <text x="410" y="43" text-anchor="middle" font-size="11" fill="#cbd5e1"
-                    font-family="Consolas,monospace">«Payment»</text>
+              <!-- The header used to be the Hebrew name with the English identifier as a «…»
+                   subtitle underneath. Class names are English now (David, 2026-08-10), so the
+                   subtitle was a duplicate — removed, and the name recentred in the band. -->
+              <text x="410" y="35" text-anchor="middle" direction="ltr" font-size="18" font-weight="700"
+                    fill="#fff" font-family="'Segoe UI',Arial,sans-serif">Payment</text>
               <line x1="300" y1="48" x2="520" y2="48" stroke="#3b82f6" stroke-width="1"/>
               <text x="310" y="66" text-anchor="start" direction="ltr" font-size="12.5" fill="#1e293b" font-family="Consolas,monospace">- paymentId : String</text>
               <text x="310" y="84" text-anchor="start" direction="ltr" font-size="12.5" fill="#1e293b" font-family="Consolas,monospace">- amount : Money</text>
@@ -1620,10 +2231,8 @@
               <!-- ── child 1: תשלום בכרטיס אוניברסיטה / UniversityCardPayment ── -->
               <rect x="40" y="210" width="260" height="110" fill="#fff"/>
               <rect x="40" y="210" width="260" height="44" fill="#1e40af"/>
-              <text x="170" y="231" text-anchor="middle" direction="rtl" font-size="13" font-weight="700"
-                    fill="#fff" font-family="'Noto Sans Hebrew',sans-serif">תשלום בכרטיס אוניברסיטה</text>
-              <text x="170" y="247" text-anchor="middle" font-size="10" fill="#cbd5e1"
-                    font-family="Consolas,monospace">«UniversityCardPayment»</text>
+              <text x="170" y="239" text-anchor="middle" direction="ltr" font-size="15" font-weight="700"
+                    fill="#fff" font-family="'Segoe UI',Arial,sans-serif">UniversityCardPayment</text>
               <line x1="40" y1="254" x2="300" y2="254" stroke="#3b82f6" stroke-width="1"/>
               <text x="50" y="288" text-anchor="start" direction="ltr" font-size="12.5" fill="#1e293b" font-family="Consolas,monospace">+ universityId : String</text>
               <rect x="40" y="210" width="260" height="110" fill="none" stroke="#3b82f6" stroke-width="1.6"/>
@@ -1631,10 +2240,8 @@
               <!-- ── child 2: תשלום באשראי / CreditCardPayment ── -->
               <rect x="520" y="210" width="260" height="110" fill="#fff"/>
               <rect x="520" y="210" width="260" height="44" fill="#1e40af"/>
-              <text x="650" y="231" text-anchor="middle" direction="rtl" font-size="13" font-weight="700"
-                    fill="#fff" font-family="'Noto Sans Hebrew',sans-serif">תשלום באשראי</text>
-              <text x="650" y="247" text-anchor="middle" font-size="10" fill="#cbd5e1"
-                    font-family="Consolas,monospace">«CreditCardPayment»</text>
+              <text x="650" y="239" text-anchor="middle" direction="ltr" font-size="15" font-weight="700"
+                    fill="#fff" font-family="'Segoe UI',Arial,sans-serif">CreditCardPayment</text>
               <line x1="520" y1="254" x2="780" y2="254" stroke="#3b82f6" stroke-width="1"/>
               <text x="530" y="281" text-anchor="start" direction="ltr" font-size="12.5" fill="#1e293b" font-family="Consolas,monospace">+ last4 : String</text>
               <text x="530" y="301" text-anchor="start" direction="ltr" font-size="12.5" fill="#1e293b" font-family="Consolas,monospace">+ gatewayRef : String</text>
@@ -1694,7 +2301,7 @@
           <div class="card">
             <div class="panel-title">איפה זה כן חי — מערכות חיצוניות שאנחנו קוראים להן</div>
             <svg class="dep-svg" viewBox="0 0 640 150" xmlns="http://www.w3.org/2000/svg" role="img"
-                 aria-label="המערכת שלנו תלויה בשער תשלום חיצוני, בקו מקווקו עם חץ פתוח">
+                 aria-label="המחלקה Payment תלויה בשער תשלום חיצוני, בקו מקווקו עם חץ פתוח">
               <defs>
                 <marker id="depOpen" markerWidth="11" markerHeight="9" refX="9" refY="4.2" orient="auto">
                   <polyline points="0 0, 9 4.2, 0 8.4" fill="none" stroke="#7c3aed" stroke-width="1.3"/>
@@ -1702,13 +2309,15 @@
               </defs>
               <!-- our system (client) — right -->
               <rect x="430" y="45" width="180" height="66" rx="10" fill="#EAF3FB" stroke="#0070C0" stroke-width="1.8"/>
-              <text x="520" y="83" text-anchor="middle" direction="rtl" font-size="15" font-weight="700"
-                    fill="#004E8C" font-family="'Noto Sans Hebrew',sans-serif">המערכת שלנו</text>
+              <!-- The client of the dependency is the CLASS Payment (per the tool contract:
+                   תשלום ⇢ «external system» שער תשלום), not a vague "our system" box. -->
+              <text x="520" y="83" text-anchor="middle" direction="ltr" font-size="15" font-weight="700"
+                    fill="#004E8C" font-family="'Segoe UI',Arial,sans-serif">Payment</text>
               <!-- external system (supplier) — left, dashed border to signal "outside the boundary" -->
               <rect x="40" y="45" width="180" height="66" rx="10" fill="#F5F3FF" stroke="#7c3aed" stroke-width="1.6" stroke-dasharray="6 4"/>
-              <text x="130" y="79" text-anchor="middle" direction="rtl" font-size="14" font-weight="700"
-                    fill="#4C1D95" font-family="'Noto Sans Hebrew',sans-serif">שער תשלום</text>
-              <text x="130" y="97" text-anchor="middle" direction="rtl" font-size="10.5"
+              <text x="130" y="79" text-anchor="middle" direction="ltr" font-size="14" font-weight="700"
+                    fill="#4C1D95" font-family="'Segoe UI',Arial,sans-serif">PaymentGateway</text>
+              <text x="130" y="97" text-anchor="middle" font-size="10.5"
                     fill="#7c3aed" font-family="'Segoe UI',Arial,sans-serif" direction="ltr">«external system»</text>
               <!-- dependency: DASHED line, OPEN arrow, from client(right) to supplier(left) -->
               <line x1="430" y1="78" x2="226" y2="78" stroke="#7c3aed" stroke-width="1.5" stroke-dasharray="6 4" marker-end="url(#depOpen)"/>
@@ -1836,9 +2445,9 @@
               <div class="rq-t">א <span>— יהלום מלא ◆</span></div>
               <svg viewBox="0 0 300 90" xmlns="http://www.w3.org/2000/svg">
                 <rect x="18" y="34" width="116" height="40" rx="6" fill="#fff" stroke="#2980b9" stroke-width="1.4"/>
-                <text x="76" y="58" text-anchor="middle" direction="rtl" font-size="11" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">שורת הזמנה</text>
+                <text x="76" y="58" text-anchor="middle" direction="ltr" font-size="11" fill="#1a1a2e" font-family="'Segoe UI',Arial,sans-serif">OrderLine</text>
                 <rect x="190" y="34" width="92" height="40" rx="6" fill="#fff" stroke="#2980b9" stroke-width="1.4"/>
-                <text x="236" y="58" text-anchor="middle" direction="rtl" font-size="11" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">הזמנה</text>
+                <text x="236" y="58" text-anchor="middle" direction="ltr" font-size="11" fill="#1a1a2e" font-family="'Segoe UI',Arial,sans-serif">Order</text>
                 <line x1="176" y1="54" x2="134" y2="54" stroke="#334155" stroke-width="1.5"/>
                 <polygon points="190,54 176,47 162,54 176,61" fill="#334155" stroke="#334155" stroke-width="1"/>
                 <text x="184" y="28" text-anchor="middle" font-size="10" fill="#64748b" font-family="Consolas,monospace">1</text>
@@ -1850,9 +2459,9 @@
               <div class="rq-t">ב <span>— יהלום חלול ◇</span></div>
               <svg viewBox="0 0 300 90" xmlns="http://www.w3.org/2000/svg">
                 <rect x="18" y="34" width="116" height="40" rx="6" fill="#fff" stroke="#2980b9" stroke-width="1.4"/>
-                <text x="76" y="58" text-anchor="middle" direction="rtl" font-size="11" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">שורת הזמנה</text>
+                <text x="76" y="58" text-anchor="middle" direction="ltr" font-size="11" fill="#1a1a2e" font-family="'Segoe UI',Arial,sans-serif">OrderLine</text>
                 <rect x="190" y="34" width="92" height="40" rx="6" fill="#fff" stroke="#2980b9" stroke-width="1.4"/>
-                <text x="236" y="58" text-anchor="middle" direction="rtl" font-size="11" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">הזמנה</text>
+                <text x="236" y="58" text-anchor="middle" direction="ltr" font-size="11" fill="#1a1a2e" font-family="'Segoe UI',Arial,sans-serif">Order</text>
                 <line x1="176" y1="54" x2="134" y2="54" stroke="#334155" stroke-width="1.5"/>
                 <polygon points="190,54 176,47 162,54 176,61" fill="#fff" stroke="#334155" stroke-width="1.4"/>
                 <text x="184" y="28" text-anchor="middle" font-size="10" fill="#64748b" font-family="Consolas,monospace">1</text>
@@ -1876,9 +2485,9 @@
               <div class="rq-t">א <span>— יהלום מלא ◆</span></div>
               <svg viewBox="0 0 300 90" xmlns="http://www.w3.org/2000/svg">
                 <rect x="18" y="34" width="100" height="40" rx="6" fill="#fff" stroke="#2980b9" stroke-width="1.4"/>
-                <text x="68" y="58" text-anchor="middle" direction="rtl" font-size="11" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">עמדה</text>
+                <text x="68" y="58" text-anchor="middle" direction="ltr" font-size="11" fill="#1a1a2e" font-family="'Segoe UI',Arial,sans-serif">Station</text>
                 <rect x="182" y="34" width="100" height="40" rx="6" fill="#fff" stroke="#2980b9" stroke-width="1.4"/>
-                <text x="232" y="58" text-anchor="middle" direction="rtl" font-size="11" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">קפיטריה</text>
+                <text x="232" y="58" text-anchor="middle" direction="ltr" font-size="11" fill="#1a1a2e" font-family="'Segoe UI',Arial,sans-serif">Cafeteria</text>
                 <line x1="168" y1="54" x2="118" y2="54" stroke="#334155" stroke-width="1.5"/>
                 <polygon points="182,54 168,47 154,54 168,61" fill="#334155" stroke="#334155" stroke-width="1"/>
                 <text x="176" y="28" text-anchor="middle" font-size="10" fill="#64748b" font-family="Consolas,monospace">1</text>
@@ -1890,9 +2499,9 @@
               <div class="rq-t">ב <span>— יהלום חלול ◇</span></div>
               <svg viewBox="0 0 300 90" xmlns="http://www.w3.org/2000/svg">
                 <rect x="18" y="34" width="100" height="40" rx="6" fill="#fff" stroke="#2980b9" stroke-width="1.4"/>
-                <text x="68" y="58" text-anchor="middle" direction="rtl" font-size="11" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">עמדה</text>
+                <text x="68" y="58" text-anchor="middle" direction="ltr" font-size="11" fill="#1a1a2e" font-family="'Segoe UI',Arial,sans-serif">Station</text>
                 <rect x="182" y="34" width="100" height="40" rx="6" fill="#fff" stroke="#2980b9" stroke-width="1.4"/>
-                <text x="232" y="58" text-anchor="middle" direction="rtl" font-size="11" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">קפיטריה</text>
+                <text x="232" y="58" text-anchor="middle" direction="ltr" font-size="11" fill="#1a1a2e" font-family="'Segoe UI',Arial,sans-serif">Cafeteria</text>
                 <line x1="168" y1="54" x2="118" y2="54" stroke="#334155" stroke-width="1.5"/>
                 <polygon points="182,54 168,47 154,54 168,61" fill="#fff" stroke="#334155" stroke-width="1.4"/>
                 <text x="176" y="28" text-anchor="middle" font-size="10" fill="#64748b" font-family="Consolas,monospace">1</text>
@@ -1916,7 +2525,7 @@
               <div class="rq-t">א <span>— הורשה ▷</span></div>
               <svg viewBox="0 0 300 145" xmlns="http://www.w3.org/2000/svg">
                 <rect x="105" y="8" width="90" height="32" rx="6" fill="#fff" stroke="#2980b9" stroke-width="1.4"/>
-                <text x="150" y="28" text-anchor="middle" direction="rtl" font-size="11" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">תשלום</text>
+                <text x="150" y="28" text-anchor="middle" direction="ltr" font-size="11" fill="#1a1a2e" font-family="'Segoe UI',Arial,sans-serif">Payment</text>
                 <line x1="150" y1="40" x2="150" y2="48" stroke="#334155" stroke-width="1.5"/>
                 <polygon points="150,48 140,62 160,62" fill="#fff" stroke="#334155" stroke-width="1.4"/>
                 <line x1="150" y1="62" x2="150" y2="78" stroke="#334155" stroke-width="1.4"/>
@@ -1924,10 +2533,10 @@
                 <line x1="58" y1="78" x2="58" y2="96" stroke="#334155" stroke-width="1.4"/>
                 <line x1="242" y1="78" x2="242" y2="96" stroke="#334155" stroke-width="1.4"/>
                 <rect x="8" y="96" width="100" height="42" rx="6" fill="#fff" stroke="#2980b9" stroke-width="1.4"/>
-                <text x="58" y="112" text-anchor="middle" direction="rtl" font-size="9.5" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">תשלום בכרטיס</text>
-                <text x="58" y="126" text-anchor="middle" direction="rtl" font-size="9.5" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">אוניברסיטה</text>
+                <text x="58" y="112" text-anchor="middle" direction="ltr" font-size="9.5" fill="#1a1a2e" font-family="'Segoe UI',Arial,sans-serif">UniversityCard</text>
+                <text x="58" y="126" text-anchor="middle" direction="ltr" font-size="9.5" fill="#1a1a2e" font-family="'Segoe UI',Arial,sans-serif">Payment</text>
                 <rect x="192" y="96" width="100" height="42" rx="6" fill="#fff" stroke="#2980b9" stroke-width="1.4"/>
-                <text x="242" y="120" text-anchor="middle" direction="rtl" font-size="9.5" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">תשלום באשראי</text>
+                <text x="242" y="120" text-anchor="middle" direction="ltr" font-size="9.5" fill="#1a1a2e" font-family="'Segoe UI',Arial,sans-serif">CreditCardPayment</text>
               </svg>
               <p class="rq-cap">משולש חלול בצד ההורה — כל תת-סוג מוסיף את התכונות שלו.</p>
             </div>
@@ -1938,8 +2547,8 @@
                 <text x="150" y="44" text-anchor="middle" font-size="11" fill="#64748b" font-family="Consolas,monospace">«enumeration»</text>
                 <text x="150" y="62" text-anchor="middle" font-size="12" font-weight="700" fill="#334155" font-family="Consolas,monospace">PaymentType</text>
                 <line x1="93" y1="72" x2="207" y2="72" stroke="#cbd5e1" stroke-width="1"/>
-                <text x="150" y="92" text-anchor="middle" direction="rtl" font-size="10.5" fill="#475569" font-family="'Noto Sans Hebrew',sans-serif">כרטיס אוניברסיטה</text>
-                <text x="150" y="112" text-anchor="middle" direction="rtl" font-size="10.5" fill="#475569" font-family="'Noto Sans Hebrew',sans-serif">אשראי</text>
+                <text x="150" y="92" text-anchor="middle" direction="ltr" font-size="10.5" fill="#475569" font-family="'Segoe UI',Arial,sans-serif">UniversityCard</text>
+                <text x="150" y="112" text-anchor="middle" direction="ltr" font-size="10.5" fill="#475569" font-family="'Segoe UI',Arial,sans-serif">CreditCard</text>
               </svg>
               <p class="rq-cap">רשימת ערכים סגורה — בלי תכונות משלה לכל ערך.</p>
             </div>
@@ -1959,13 +2568,13 @@
               <div class="rq-t">א <span>— קשר <span class="en">M:N</span> רגיל</span></div>
               <svg viewBox="0 0 300 92" xmlns="http://www.w3.org/2000/svg">
                 <rect x="18" y="40" width="124" height="40" rx="6" fill="#fff" stroke="#2980b9" stroke-width="1.4"/>
-                <text x="80" y="64" text-anchor="middle" direction="rtl" font-size="11" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">פריט תפריט</text>
+                <text x="80" y="64" text-anchor="middle" direction="ltr" font-size="11" fill="#1a1a2e" font-family="'Segoe UI',Arial,sans-serif">MenuItem</text>
                 <rect x="196" y="40" width="92" height="40" rx="6" fill="#fff" stroke="#2980b9" stroke-width="1.4"/>
-                <text x="242" y="64" text-anchor="middle" direction="rtl" font-size="11" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">הזמנה</text>
+                <text x="242" y="64" text-anchor="middle" direction="ltr" font-size="11" fill="#1a1a2e" font-family="'Segoe UI',Arial,sans-serif">Order</text>
                 <line x1="196" y1="60" x2="142" y2="60" stroke="#334155" stroke-width="1.5"/>
                 <text x="190" y="34" text-anchor="middle" font-size="11" fill="#64748b" font-family="Consolas,monospace">*</text>
                 <text x="148" y="34" text-anchor="middle" font-size="11" fill="#64748b" font-family="Consolas,monospace">*</text>
-                <text x="169" y="54" text-anchor="middle" font-size="11" font-weight="700" fill="#C62828" font-family="'Noto Sans Hebrew',sans-serif">כמות?</text>
+                <text x="169" y="54" text-anchor="middle" font-size="11" font-weight="700" fill="#C62828" font-family="'Segoe UI',Arial,sans-serif" direction="ltr">quantity?</text>
               </svg>
               <p class="rq-cap">אין לקשר תכונות — אין איפה לתלות את הכמות של כל פריט.</p>
             </div>
@@ -1973,13 +2582,13 @@
               <div class="rq-t">ב <span>— מחלקה מתווכת</span></div>
               <svg viewBox="0 0 320 92" xmlns="http://www.w3.org/2000/svg">
                 <rect x="10" y="44" width="92" height="38" rx="6" fill="#fff" stroke="#2980b9" stroke-width="1.4"/>
-                <text x="56" y="67" text-anchor="middle" direction="rtl" font-size="10" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">פריט תפריט</text>
+                <text x="56" y="67" text-anchor="middle" direction="ltr" font-size="10" fill="#1a1a2e" font-family="'Segoe UI',Arial,sans-serif">MenuItem</text>
                 <rect x="118" y="34" width="86" height="52" rx="6" fill="#EDE9FE" stroke="#7c3aed" stroke-width="1.5"/>
-                <text x="161" y="52" text-anchor="middle" direction="rtl" font-size="10" font-weight="700" fill="#4C1D95" font-family="'Noto Sans Hebrew',sans-serif">שורת הזמנה</text>
+                <text x="161" y="52" text-anchor="middle" direction="ltr" font-size="10" font-weight="700" fill="#4C1D95" font-family="'Segoe UI',Arial,sans-serif">OrderLine</text>
                 <line x1="126" y1="60" x2="196" y2="60" stroke="#c4b5fd" stroke-width="1"/>
-                <text x="161" y="74" text-anchor="middle" direction="rtl" font-size="9" fill="#4C1D95" font-family="'Noto Sans Hebrew',sans-serif">- כמות</text>
+                <text x="161" y="74" text-anchor="middle" direction="rtl" font-size="9" fill="#4C1D95" font-family="'Segoe UI',Arial,sans-serif">- quantity</text>
                 <rect x="220" y="44" width="90" height="38" rx="6" fill="#fff" stroke="#2980b9" stroke-width="1.4"/>
-                <text x="265" y="67" text-anchor="middle" direction="rtl" font-size="10" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">הזמנה</text>
+                <text x="265" y="67" text-anchor="middle" direction="ltr" font-size="10" fill="#1a1a2e" font-family="'Segoe UI',Arial,sans-serif">Order</text>
                 <line x1="220" y1="63" x2="204" y2="63" stroke="#334155" stroke-width="1.4"/>
                 <line x1="118" y1="63" x2="102" y2="63" stroke="#334155" stroke-width="1.4"/>
                 <text x="212" y="38" text-anchor="middle" font-size="9.5" fill="#64748b" font-family="Consolas,monospace">1</text>
@@ -2003,7 +2612,7 @@
               <div class="rq-t">א <span>— הורשה ▷ (מחלקה לכל מצב)</span></div>
               <svg viewBox="0 0 300 132" xmlns="http://www.w3.org/2000/svg">
                 <rect x="115" y="6" width="70" height="30" rx="6" fill="#fff" stroke="#2980b9" stroke-width="1.4"/>
-                <text x="150" y="25" text-anchor="middle" direction="rtl" font-size="11" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">הזמנה</text>
+                <text x="150" y="25" text-anchor="middle" direction="ltr" font-size="11" fill="#1a1a2e" font-family="'Segoe UI',Arial,sans-serif">Order</text>
                 <line x1="150" y1="36" x2="150" y2="46" stroke="#334155" stroke-width="1.4"/>
                 <polygon points="150,46 141,58 159,58" fill="#fff" stroke="#334155" stroke-width="1.4"/>
                 <line x1="150" y1="58" x2="150" y2="72" stroke="#334155" stroke-width="1.3"/>
@@ -2012,11 +2621,11 @@
                 <line x1="150" y1="72" x2="150" y2="88" stroke="#334155" stroke-width="1.3"/>
                 <line x1="255" y1="72" x2="255" y2="88" stroke="#334155" stroke-width="1.3"/>
                 <rect x="12" y="88" width="66" height="30" rx="6" fill="#fff" stroke="#2980b9" stroke-width="1.3"/>
-                <text x="45" y="107" text-anchor="middle" direction="rtl" font-size="10" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">ממתין</text>
+                <text x="45" y="107" text-anchor="middle" direction="ltr" font-size="10" fill="#1a1a2e" font-family="'Segoe UI',Arial,sans-serif">Pending</text>
                 <rect x="117" y="88" width="66" height="30" rx="6" fill="#fff" stroke="#2980b9" stroke-width="1.3"/>
-                <text x="150" y="107" text-anchor="middle" direction="rtl" font-size="10" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">מוכן</text>
+                <text x="150" y="107" text-anchor="middle" direction="ltr" font-size="10" fill="#1a1a2e" font-family="'Segoe UI',Arial,sans-serif">Ready</text>
                 <rect x="222" y="88" width="66" height="30" rx="6" fill="#fff" stroke="#2980b9" stroke-width="1.3"/>
-                <text x="255" y="107" text-anchor="middle" direction="rtl" font-size="10" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">בוטל</text>
+                <text x="255" y="107" text-anchor="middle" direction="ltr" font-size="10" fill="#1a1a2e" font-family="'Segoe UI',Arial,sans-serif">Cancelled</text>
               </svg>
               <p class="rq-cap">מחלקה לכל מצב — אבל ל״הזמנה ממתינה״ ול״הזמנה מוכנה״ אותן תכונות בדיוק.</p>
             </div>
@@ -2024,16 +2633,18 @@
               <div class="rq-t">ב <span>— <span class="en">enum</span> (ערך של תכונה)</span></div>
               <svg viewBox="0 0 300 132" xmlns="http://www.w3.org/2000/svg">
                 <rect x="16" y="40" width="104" height="52" rx="6" fill="#fff" stroke="#2980b9" stroke-width="1.4"/>
-                <text x="68" y="60" text-anchor="middle" direction="rtl" font-size="11" font-weight="700" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">הזמנה</text>
+                <text x="68" y="60" text-anchor="middle" direction="ltr" font-size="11" font-weight="700" fill="#1a1a2e" font-family="'Segoe UI',Arial,sans-serif">Order</text>
                 <line x1="16" y1="68" x2="120" y2="68" stroke="#cbd5e1" stroke-width="1"/>
                 <text x="24" y="84" text-anchor="start" direction="ltr" font-size="9" fill="#1e293b" font-family="Consolas,monospace">- status : OrderStatus</text>
                 <rect x="152" y="14" width="138" height="104" rx="4" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.4" stroke-dasharray="5 3"/>
                 <text x="221" y="31" text-anchor="middle" font-size="10" fill="#64748b" font-family="Consolas,monospace">«enumeration»</text>
                 <text x="221" y="46" text-anchor="middle" font-size="11" font-weight="700" fill="#334155" font-family="Consolas,monospace">OrderStatus</text>
                 <line x1="160" y1="54" x2="282" y2="54" stroke="#cbd5e1" stroke-width="1"/>
-                <text x="221" y="70" text-anchor="middle" direction="rtl" font-size="9.5" fill="#475569" font-family="'Noto Sans Hebrew',sans-serif">ממתין · בהכנה</text>
-                <text x="221" y="86" text-anchor="middle" direction="rtl" font-size="9.5" fill="#475569" font-family="'Noto Sans Hebrew',sans-serif">מוכן · נאסף</text>
-                <text x="221" y="102" text-anchor="middle" direction="rtl" font-size="9.5" fill="#475569" font-family="'Noto Sans Hebrew',sans-serif">בוטל</text>
+                <!-- font-size 8.5 (was 9.5): the English literals are longer than the Hebrew ones
+                     and overran the 122px-wide enum box. -->
+                <text x="221" y="70" text-anchor="middle" direction="ltr" font-size="8.5" fill="#475569" font-family="'Segoe UI',Arial,sans-serif">Pending · InPreparation</text>
+                <text x="221" y="86" text-anchor="middle" direction="ltr" font-size="8.5" fill="#475569" font-family="'Segoe UI',Arial,sans-serif">Ready · Collected</text>
+                <text x="221" y="102" text-anchor="middle" direction="ltr" font-size="9.5" fill="#475569" font-family="'Segoe UI',Arial,sans-serif">Cancelled</text>
               </svg>
               <p class="rq-cap">קופסה <b>לא מחוברת</b> — סוג התכונה <span class="en">status</span> הוא הקישור היחיד.</p>
             </div>
@@ -2054,7 +2665,7 @@
               <svg viewBox="0 0 300 132" xmlns="http://www.w3.org/2000/svg">
                 <rect x="85" y="12" width="130" height="108" fill="#fff"/>
                 <rect x="85" y="12" width="130" height="30" fill="#1e40af"/>
-                <text x="150" y="32" text-anchor="middle" direction="rtl" font-size="12" font-weight="700" fill="#fff" font-family="'Noto Sans Hebrew',sans-serif">דוח מכירות</text>
+                <text x="150" y="32" text-anchor="middle" direction="rtl" font-size="12" font-weight="700" fill="#fff" font-family="'Segoe UI',Arial,sans-serif">SalesReport</text>
                 <line x1="85" y1="42" x2="215" y2="42" stroke="#3b82f6" stroke-width="1"/>
                 <text x="93" y="60" text-anchor="start" direction="ltr" font-size="9.5" fill="#1e293b" font-family="Consolas,monospace">- reportDate : Date</text>
                 <text x="93" y="78" text-anchor="start" direction="ltr" font-size="9.5" fill="#1e293b" font-family="Consolas,monospace">- totalSales : Money</text>
@@ -2069,7 +2680,7 @@
               <div class="rq-t">ב <span>— פלט מחושב, לא מחלקה</span></div>
               <svg viewBox="0 0 300 132" xmlns="http://www.w3.org/2000/svg">
                 <rect x="60" y="34" width="180" height="66" rx="8" fill="#f8fafc" stroke="#C62828" stroke-width="1.5" stroke-dasharray="6 4"/>
-                <text x="150" y="60" text-anchor="middle" direction="rtl" font-size="13" font-weight="700" fill="#64748b" font-family="'Noto Sans Hebrew',sans-serif">דוח מכירות</text>
+                <text x="150" y="60" text-anchor="middle" direction="rtl" font-size="13" font-weight="700" fill="#64748b" font-family="'Segoe UI',Arial,sans-serif">SalesReport</text>
                 <line x1="92" y1="55" x2="208" y2="55" stroke="#C62828" stroke-width="1.8"/>
                 <text x="150" y="84" text-anchor="middle" direction="rtl" font-size="10.5" fill="#C62828" font-family="'Noto Sans Hebrew',sans-serif">מחושב מההזמנות — לא נשמר</text>
               </svg>
@@ -2160,11 +2771,22 @@
         התרשים אינטראקטיבי (asset נבנה בנפרד עם כלי uml_class_diagram).
       </aside>
     </section>
-    <!-- D1 — normalizing the class model. The course-simplified 1NF/2NF/3NF on campus data:
-         1NF no repeating list inside an attribute · 2NF no embedded object as an attribute
-         (reference the class via an association) · 3NF break a composite attribute into atomic
-         parts. NEW 2026-07-23 for the L6-7 HTML deck (folds old slide 50). -->
-    <section data-slug="normalization">
+    <!-- D1 — normalizing the class model: OBJECT normal form, 1ONF / 2ONF / 3ONF.
+         1ONF no repeating list inside an attribute · 2ONF no embedded object as an attribute
+         (reference the class via an association) · 3ONF break a composite attribute into atomic
+         parts. Campus examples; folds old slide 50 of the source deck.
+         ⚠️ 2026-08-10 (David) — REGRESSION FIXED. The original pptx (slide 50) labelled these
+         "1ONF / 2ONF / 3ONF"; the 2026-07-23 HTML conversion silently dropped the O and shipped them
+         as 1NF/2NF/3NF, i.e. the RELATIONAL names. That is not a cosmetic slip: students take the
+         database course in parallel, where 2NF means partial-key dependencies and 3NF means transitive
+         dependencies — neither is what these three cards say. Wrong labels on right content is the
+         single most likely source of the comparison confusion. Labels restored, plus an explicit line
+         telling students these are the OBJECT counterparts of the table rules they already know.
+         NOTE for future edits: this is David's own ONF formulation (from his source deck), which is
+         NOT identical to Scott Ambler's widely-cited 1ONF/2ONF/3ONF (his 2ONF = shared data duplicated
+         across instances; his 3ONF = one cohesive responsibility per class). Both schemes exist; do not
+         "correct" these three rules toward Ambler without asking David first. -->
+    <section data-slug="normalization" class="has-acro-footer">
       <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
       <style>
         section[data-slug="normalization"] > .body { display:flex; flex-direction:column; gap:12px; }
@@ -2182,27 +2804,28 @@
         section[data-slug="normalization"] .nf .note { font-size:14px; color:var(--muted); line-height:1.45; margin-top:auto; }
       </style>
       <h1>נירמול מחלקות</h1>
-      <div class="subtitle">שלושה כללים כדי שהמודל יהיה נקי — כל עובדה מיוצגת פעם אחת</div>
+      <div class="subtitle"><span class="en" dir="ltr">Object Normal Form</span> — שלושה כללים כדי שהמודל יהיה נקי: כל עובדה מיוצגת פעם אחת</div>
       <div class="body">
 
         <div class="nf">
 
           <div class="card fragment">
-            <div class="hdr"><span class="badge"><span class="en">1NF</span></span><span class="rule">אין רשימה בתוך תכונה</span></div>
+            <div class="hdr"><span class="badge"><span class="en">1ONF</span></span><span class="rule">אין רשימה בתוך תכונה</span></div>
             <div class="ex bad"><span class="mk">✗</span> להזמנה תכונה <span class="en">items</span> = ״המבורגר; צ׳יפס; קולה״</div>
             <div class="ex good"><span class="mk">✓</span> כל פריט ← <b>שורת הזמנה</b> נפרדת (רשומה / מחלקה משלה)</div>
-            <div class="note">תכונה מחזיקה <b>ערך יחיד</b>. רשימה חוזרת = מחלקה או שורות משלה.</div>
+            <div class="note">תכונה מחזיקה <b>ערך יחיד</b>. רשימה חוזרת = מחלקה או שורות משלה.
+              <br><b>אין ריבוי על תכונה</b> — רשימה בתוך תכונה תמיד הופכת למחלקה. ריבוי מקומו על ה<b>קשר</b>, בשני הקצוות.</div>
           </div>
 
           <div class="card fragment">
-            <div class="hdr"><span class="badge"><span class="en">2NF</span></span><span class="rule">אין אובייקט כתכונה</span></div>
+            <div class="hdr"><span class="badge"><span class="en">2ONF</span></span><span class="rule">אין אובייקט כתכונה</span></div>
             <div class="ex bad"><span class="mk">✗</span> להזמנה תכונה <span class="en">student</span> שמכילה אובייקט <b>סטודנט</b> שלם</div>
             <div class="ex good"><span class="mk">✓</span> <b>קשר</b> (<span class="en">association</span>) אל <b>סטודנט</b> — מפנים למחלקה, לא מטמיעים</div>
             <div class="note">תכונה מכילה טיפוס פשוט. ישות אחרת = קשר, לא הטמעה.</div>
           </div>
 
           <div class="card fragment">
-            <div class="hdr"><span class="badge"><span class="en">3NF</span></span><span class="rule">פרק תכונה מורכבת</span></div>
+            <div class="hdr"><span class="badge"><span class="en">3ONF</span></span><span class="rule">פרק תכונה מורכבת</span></div>
             <div class="ex bad"><span class="mk">✗</span> <span class="en">pickupLocation</span> = ״בניין 72 / קומה 2 / עמדה חמה״</div>
             <div class="ex good"><span class="mk">✓</span> <span class="en">building</span>, <span class="en">floor</span>, <span class="en">station</span> בנפרד — כמו <b>כתובת</b> ← רחוב, עיר, מיקוד</div>
             <div class="note">פצל ערך מורכב לרכיביו האטומיים.</div>
@@ -2210,15 +2833,37 @@
 
         </div>
 
+        <div class="callout ai fragment">
+          <span class="label">↔ מול קורס בסיסי נתונים</span>
+          אלה כללי הנירמול של <b>מודל מחלקות</b> (<span class="en" dir="ltr">Object Normal Form</span>) — האחים של
+          <span class="en" dir="ltr">1NF/2NF/3NF</span> שלמדתם על <b>טבלאות</b>. הרעיון זהה — כל עובדה במקום אחד — אבל הכללים
+          מנוסחים על מחלקות ותכונות, לא על מפתחות ותלויות פונקציונליות. לכן השמות שונים.
+        </div>
+
         <p class="bottom-line fragment">מודל מנורמל — כל עובדה במקום אחד: קל לתחזק, וקשה שייסתר את עצמו.</p>
 
       </div>
       <aside class="notes">
-        נירמול בגרסה מפושטת של הקורס (לא נירמול בסיסי-נתונים פורמלי): 1NF — אין רשימה חוזרת בתוך תכונה; פריטי
-        ההזמנה הם שורות הזמנה, לא מחרוזת מופרדת בפסיקים. 2NF — לא מטמיעים אובייקט שלם כתכונה; מפנים אל המחלקה
-        דרך קשר (הזמנה↔סטודנט). 3NF — מפרקים תכונה מורכבת לרכיבים אטומיים (מיקום איסוף ← בניין/קומה/עמדה; כתובת
+        <b>אלה 1ONF/2ONF/3ONF — נירמול מודל מחלקות (Object Normal Form), לא נירמול טבלאות.</b>
+        זו הצורה שבה זה מופיע במצגת המקורית, וחשוב לשמור עליה: לסטודנטים יש במקביל קורס בסיסי נתונים שבו
+        2NF ו-3NF פירושם דברים אחרים לגמרי (תלות חלקית במפתח, תלות טרנזיטיבית). אותם שמות על תוכן אחר = בלבול מובטח.
+        התוכן: 1ONF — אין רשימה חוזרת בתוך תכונה; פריטי
+        ההזמנה הם שורות הזמנה, לא מחרוזת מופרדת בפסיקים.
+        <b>אם מישהו יכתוב <code>- phones : String [0..*]</code>:</b> בקורס הזה <b>לא מלמדים ריבוי על תכונה
+        ולא משתמשים בו</b> (החלטת דוד, 2026-08-10) — הוא הוסר משקופית התכונות בכוונה, כדי לא לתת לו לגיטימציה.
+        הוא אמנם חוקי בתקן UML, אבל התשובה אצלנו תמיד אחת: <b>זו רשימה בתוך תכונה, כלומר הפרת 1ONF — הפכו אותה
+        למחלקה נפרדת בקשר.</b>
+        איך מפרקים: אם לערך החוזר <b>אין</b> תכונות משלו — מחלקה קטנה משלו בקשר ‎1..*‎; אם <b>יש</b> לו תכונות
+        (סוג הטלפון, מתי אומת) — ממילא מגיעה לו מחלקה מלאה.
+        <b>ואל תבלבלו בין השניים:</b> ריבוי על <b>קשר</b> הוא חובה בשני הקצוות (חלק ג׳); ריבוי על <b>תכונה</b>
+        הוא הפרה. בקוד שניהם ייראו <code>List&lt;T&gt;</code> — ההבדל הוא מה בתוך הרשימה: ערכים בלי זהות מול
+        אובייקטים עם זהות.
+        בהיבט מסד הנתונים זה גם 1NF, ושם זה נגמר בטבלה נפרדת עם מפתח זר (הערת שוליים לסטודנט מדייק: Postgres
+        תומך במערך בעמודה, כך שגם זה אינו חוק טבע — אבל בקורס נדרוש פירוק). 2ONF — לא מטמיעים אובייקט שלם כתכונה; מפנים אל המחלקה
+        דרך קשר (הזמנה↔סטודנט). 3ONF — מפרקים תכונה מורכבת לרכיבים אטומיים (מיקום איסוף ← בניין/קומה/עמדה; כתובת
         ← רחוב/עיר/מיקוד). המסר: מבנה נקי מונע כפילות וסתירות, ומייצר מודל שקל לגזור ממנו בסיס נתונים וקוד.
       </aside>
+    <div class="acro-footer"><span class="acro"><span class="en">UML</span> = <span class="en">Unified Modeling Language</span> · שפת מידול אחידה</span></div>
     </section>
     <!-- D2 — the class diagram is ONE design artifact; design owns much more. Callback to L4-5
          non-functional requirements, and a forward preview of the sibling design diagrams:
@@ -2286,7 +2931,7 @@
       </div>
       <aside class="notes">
         תרשים המחלקות הוא תוצר עיצוב אחד מני רבים. העיצוב מגדיר גם ארכיטקטורה (N-tier), חומרה ושרתים, אינטגרציה
-        למערכות קיימות (זיהוי האוניברסיטה ושער התשלום — אותן תלויות מ-C6), אבטחה, ובעיקר את כל הדרישות
+        למערכות קיימות (זיהוי האוניברסיטה ושער התשלום — אותן תלויות מהשקופית על תלות וממשקים), אבטחה, ובעיקר את כל הדרישות
         הלא-פונקציונליות שאספנו ב-L4-5 (עומס 12:00-14:00, 5000 סטודנטים). הצצה קדימה: L8 — תרשים מצבים ילכוד את
         מחזור החיים של ההזמנה (ערכי OrderStatus כמצבים); תרשים רצף (Sequence) משלים אותו ומראה את האינטראקציה בין האובייקטים בזמן.
       </aside>
