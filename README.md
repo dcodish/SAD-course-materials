@@ -38,7 +38,7 @@
 1. ודאו ש-[Claude Desktop](https://claude.ai/download) מותקן (אין צורך בשום דבר אחר — לא Node ולא עריכת קבצים).
 2. הורידו את [`sad-mcp.mcpb`](downloads/sad-mcp.mcpb).
 3. ב-Claude Desktop פתחו **הגדרות (Settings) → Extensions** וגררו את הקובץ שהורדתם לתוך העמוד (או: Advanced settings → Install extension… ובחרו אותו). אשרו את ההתקנה.
-4. בשימוש הראשון תיפתח הזדהות Google — היכנסו עם חשבון **@post.bgu.ac.il**.
+4. זהו — אין שלב הזדהות. חומרי הקורס נטענים אוטומטית בשימוש הראשון.
 
 בדיקה שהכול עובד: שאלו את Claude "אילו כלים יש ב-sad-mcp?" — אם מופיעה רשימת הכלים של הקורס, אתם מחוברים.
 
