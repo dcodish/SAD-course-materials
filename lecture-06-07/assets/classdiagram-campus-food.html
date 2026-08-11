@@ -111,12 +111,11 @@
         '- createdAt : DateTime',
         '- pickupTime : DateTime',
         '- pickupCode : String',
-        '- status : OrderStatus',
-        '/ itemCount : int'
+        '- status : OrderStatus'
       ],
       ops: ['+ total() : Money', '+ cancel()'],
       x: 290, y: 230,
-      desc: 'ההזמנה עצמה. שימו לב ל<b>שתי דרכים לערך מחושב</b> על אותה מחלקה: <span class="en">total()</span> היא <b>פעולה</b>, ו-<span class="en">/ itemCount</span> היא <b>תכונה נגזרת</b> — שתיהן מחושבות מהשורות ואף אחת מהן אינה נשמרת. הקו הנטוי הוא ההצהרה ״מחושב, לא מאוחסן״. התכונה <span class="en">status</span> היא מטיפוס <span class="en">OrderStatus</span> — זו כל החוליה אל קופסת ה-<span class="en">enumeration</span>.'
+      desc: 'ההזמנה עצמה. שימו לב ש-<span class="en">total()</span> היא <b>פעולה</b> ולא תכונה — הסכום מחושב מהשורות ולכן לא נשמר. התכונה <span class="en">status</span> היא מטיפוס <span class="en">OrderStatus</span> — זו כל החוליה אל קופסת ה-<span class="en">enumeration</span>.'
     },
     {
       id: 'OrderLine', name: 'OrderLine', stereotype: null, isEnum: false, isAbstract: false, isExternal: false,
@@ -584,8 +583,7 @@ ${body}
               { visibility: '-', name: 'createdAt', type: 'DateTime', defaultValue: null, constraint: null },
               { visibility: '-', name: 'pickupTime', type: 'DateTime', defaultValue: null, constraint: null },
               { visibility: '-', name: 'pickupCode', type: 'String', defaultValue: null, constraint: null },
-              { visibility: '-', name: 'status', type: 'OrderStatus', defaultValue: null, constraint: null },
-              { visibility: '/', name: 'itemCount', type: 'int', defaultValue: null, constraint: null }
+              { visibility: '-', name: 'status', type: 'OrderStatus', defaultValue: null, constraint: null }
             ],
             operations: [
               { visibility: '+', name: 'total', params: [], returnType: 'Money' },

@@ -769,10 +769,8 @@
         section[data-slug="attributes"] ul.bullets > li { font-size:18px !important; line-height:1.4; margin-bottom:10px; }
         section[data-slug="attributes"] ul.bullets > li b { color:var(--dark-blue); }
         section[data-slug="attributes"] ul.bullets .en { font-weight:700; }
-        section[data-slug="attributes"] .class-svg { display:block; width:100%; max-height:230px; height:auto; }
+        section[data-slug="attributes"] .class-svg { display:block; width:100%; max-height:280px; height:auto; }
         section[data-slug="attributes"] .fmt-cap { margin:-4px 0 0; text-align:center; font-size:15px; color:var(--muted); }
-        section[data-slug="attributes"] .extras { display:grid; grid-template-columns:repeat(2,1fr); gap:12px; flex:0 0 auto; }
-        section[data-slug="attributes"] .ex { background:var(--card-bg); border:1px solid var(--card-border);
           border-radius:12px; padding:8px 12px; display:flex; flex-direction:column; gap:3px; }
         section[data-slug="attributes"] .ex .eh { font-size:16px; color:var(--dark-blue); }
         section[data-slug="attributes"] .ex .eh .en { color:var(--orange); font-weight:800; }
@@ -810,7 +808,7 @@
           </div>
 
           <div class="card">
-            <svg class="class-svg" viewBox="0 0 380 267" xmlns="http://www.w3.org/2000/svg" role="img"
+            <svg class="class-svg" viewBox="0 0 380 240" xmlns="http://www.w3.org/2000/svg" role="img"
                  aria-label="תא התכונות המורחב של המחלקה הזמנה">
               <!-- header band -->
               <rect x="20" y="8" width="340" height="46" fill="#1e40af"/>
@@ -820,7 +818,7 @@
                     fill="#ffffff" font-family="'Segoe UI',Arial,sans-serif">Order</text>
 
               <!-- attributes compartment, tinted to draw the eye -->
-              <rect x="20" y="54" width="340" height="177" fill="#eff6ff"/>
+              <rect x="20" y="54" width="340" height="150" fill="#eff6ff"/>
               <text x="34" y="80"  text-anchor="start" direction="ltr" font-size="15" fill="#1e293b"
                     font-family="'Consolas','Courier New',monospace">- orderId : String</text>
               <text x="34" y="107" text-anchor="start" direction="ltr" font-size="15" fill="#1e293b"
@@ -831,36 +829,17 @@
                     font-family="'Consolas','Courier New',monospace">- pickupCode : String</text>
               <text x="34" y="188" text-anchor="start" direction="ltr" font-size="15" fill="#1e293b"
                     font-family="'Consolas','Courier New',monospace">- status : OrderStatus</text>
-              <!-- The derived attribute, in the orange of the "/" card below so the eye pairs them.
-                   itemCount and NOT total: the marquee teaches total() as an OPERATION ("מחושב
-                   מהשורות ולכן לא נשמר"), so using it here would contradict the running model. -->
-              <text x="34" y="215" text-anchor="start" direction="ltr" font-size="15" fill="#E86C00" font-weight="700"
-                    font-family="'Consolas','Courier New',monospace">/ itemCount : int</text>
-
               <!-- operations compartment (collapsed context, italic) -->
-              <text x="34" y="255" text-anchor="start" direction="ltr" font-size="14" fill="#94a3b8" font-style="italic"
+              <text x="34" y="228" text-anchor="start" direction="ltr" font-size="14" fill="#94a3b8" font-style="italic"
                     font-family="'Consolas','Courier New',monospace">+ total() : Money  ...</text>
 
               <!-- dividers + outer border last -->
               <line x1="20" y1="54"  x2="360" y2="54"  stroke="#3b82f6" stroke-width="1.4"/>
-              <line x1="20" y1="231" x2="360" y2="231" stroke="#3b82f6" stroke-width="1.4"/>
-              <rect x="20" y="8" width="340" height="251" fill="none" stroke="#3b82f6" stroke-width="2"/>
+              <line x1="20" y1="204" x2="360" y2="204" stroke="#3b82f6" stroke-width="1.4"/>
+              <rect x="20" y="8" width="340" height="224" fill="none" stroke="#3b82f6" stroke-width="2"/>
             </svg>
           </div>
 
-        </div>
-
-        <div class="extras">
-          <div class="ex">
-            <div class="eh"><span class="en">/</span> — תכונה <b>נגזרת</b></div>
-            <code class="en" dir="ltr">/ itemCount : int</code>
-            <div class="ed">מחושבת מנתונים אחרים ולא נשמרת — כאן: מספר השורות בהזמנה. הקו הנטוי אומר זאת מפורשות (ראו בתיבה).</div>
-          </div>
-          <div class="ex">
-            <div class="eh"><span class="en">{ }</span> — גם <b>מילות מפתח תקניות</b></div>
-            <code class="en" dir="ltr">{readOnly} {unique} {ordered}</code>
-            <div class="ed">לצד אילוץ חופשי כמו <span class="en" dir="ltr">{&#8805; 0}</span>.</div>
-          </div>
         </div>
 
       </div>
@@ -870,18 +849,11 @@
         ו-status (מטיפוס ה-enum OrderStatus). הטיפוס יכול להיות פרימיטיבי (String, DateTime) או
         מחלקה/enum אחרת. את הנראות (+/#/-) נפרט בשקופית הנראות; כאן די לציין שהיא הסימן בתחילת השורה.
 
-        <b>התכונה הנגזרת בתיבה:</b> <code>/ itemCount : int</code> — כמה שורות יש בהזמנה. אף אחד לא מקליד אותה
-        ואף אחד לא שומר אותה; היא נספרת מהשורות ברגע שצריך. הקו הנטוי הוא ההצהרה ״מחושב, לא מאוחסן״,
-        וזה בדיוק אותו היגיון של מבחן ההתמדה.
-        ⚠️ <b>למה davka itemCount ולא total?</b> כי במודל הרץ שלנו <code>total()</code> היא <b>פעולה</b> ולא תכונה
-        (כך גם בתרשים המלא בהמשך). זה מוביל לשאלה טובה אם תעלה: אותו ערך מחושב אפשר לבטא <b>או</b> כתכונה נגזרת
-        <code>/total</code> <b>או</b> כפעולה <code>total()</code> — שתי הצורות תקינות ב-UML. הכלל שלנו: אם זה נתון
-        שמסתכלים עליו — תכונה נגזרת; אם זה חישוב שמפעילים — פעולה. העיקר לא לכתוב את שניהם.
-
-        <b>התחביר המלא של תכונה ב-UML</b> (למקרה שנשאל — מה שעל השקופית הוא הליבה, לא הכול):
+        <b>התחביר המלא של תכונה ב-UML</b> (למקרה שנשאל — מה שעל השקופית הוא מה שנדרש בקורס, לא כל התקן):
         <code>[נראות] ['/'] שם [':' טיפוס] ['[' ריבוי ']'] ['=' ברירת-מחדל] ['{' מאפיינים '}']</code>.
-        שניים מהם מוצגים ברצועה התחתונה: <b>נגזרת</b> ‎/‎ (מחושבת ולא נשמרת — בדיוק ההיגיון של מבחן
-        ההתמדה בשקופית ״מה אינו מחלקה״) ומילות מפתח תקניות בתוך {} מעבר לאילוץ החופשי.
+        ⚠️ <b>תכונה נגזרת (הקו הנטוי ‎/‎) — לא מלמדים ולא משתמשים</b> (החלטת דוד, 2026-08-11), בדיוק כמו ריבוי
+        על תכונה. הסימון קיים בתקן, אבל אצלנו ערך מחושב מיוצג <b>כפעולה</b>. אין טעם להראות סימון ולומר
+        ״קיים אבל לא נשתמש״ — זה רק מבלבל. אם ייתקלו בו בפלט של כלי: זה ערך מחושב, ואצלנו הוא פעולה.
 
         ⚠️ <b>ריבוי על תכונה (‎[0..*]‎) — לא מלמדים ולא משתמשים</b> (החלטת דוד, 2026-08-10). הוא קיים בתקן,
         אבל אנחנו לא רוצים שהסטודנטים יכתבו אותו: תכונה רב-ערכית היא ״רשימה בתוך תכונה״, כלומר הפרה של
@@ -893,6 +865,103 @@
         ונראות <b>~</b> (package), רביעית ל-+/#/- ולא בשימוש בקורס.
       </aside>
     <div class="acro-footer"><span class="acro"><span class="en">UML</span> = <span class="en">Unified Modeling Language</span> · שפת מידול אחידה</span> &nbsp;·&nbsp; <span class="acro"><span class="en">AI</span> = <span class="en">Artificial Intelligence</span> · בינה מלאכותית</span></div>
+    </section>
+    <!-- B4 — מזהים. NEW 2026-08-11 (David: build a slide on the identity/PK issue).
+         This is the answer to the single loudest question students import from the database course,
+         where every table has a primary key: does every class need an id?
+         Three beats:
+           1. the test — does anyone OUTSIDE the system refer to this thing on its own?
+           2. the split, straight from the campus model, so the examples are ones they already know
+              (Student/Order/MenuItem/Payment have one · OrderLine/Station/Cafeteria do not)
+           3. the persistence beat — object identity is free in memory (the reference); a ROW needs an
+              address for UPDATE/DELETE, so a class with no business id still gets a key in the table,
+              invented by the database and kept OUT of the class diagram.
+         Plus the FK rule, which is the other half of "what is not an attribute".
+         ⚠️ Makes one light forward reference to section ג (the association) — deliberately tagged as
+         such on the slide. If that bothers, the FK card is the part to move later. -->
+    <section data-slug="identity" class="has-acro-footer">
+      <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
+      <style>
+        section[data-slug="identity"] .lead{ background:var(--light-blue); border:1px solid var(--blue); flex:0 0 auto; }
+        section[data-slug="identity"] .lead p{ margin:0; font-weight:700; color:#fff; font-size:19px; line-height:1.4; }
+        section[data-slug="identity"] .split{ display:grid; grid-template-columns:1fr 1fr; gap:14px; flex:1 1 auto; min-height:0; }
+        section[data-slug="identity"] .bx{ border-radius:14px; padding:12px 16px; display:flex; flex-direction:column; gap:14px; }
+        section[data-slug="identity"] .bx.has{ background:#EAF6EC; border:2px solid var(--green); }
+        section[data-slug="identity"] .bx.no{ background:#FFF6E6; border:2px solid var(--orange); }
+        section[data-slug="identity"] .bx .bt{ font-size:20px; font-weight:800; }
+        section[data-slug="identity"] .bx.has .bt{ color:var(--green); }
+        section[data-slug="identity"] .bx.no  .bt{ color:var(--orange); }
+        section[data-slug="identity"] .bx .it{ font-size:17.5px; line-height:1.4; }
+        section[data-slug="identity"] .bx .it .nm{ font-weight:800; color:var(--dark-blue); direction:ltr;
+          font-family:'Consolas','Courier New',monospace; }
+        section[data-slug="identity"] .bx .it .rs{ color:var(--muted); }
+        section[data-slug="identity"] .low{ display:grid; grid-template-columns:1.15fr 1fr; gap:12px; flex:0 0 auto; }
+        section[data-slug="identity"] .callout{ font-size:15px; padding:9px 13px; margin:0; }
+        section[data-slug="identity"] .callout .ln{ display:block; margin-top:3px; }
+      </style>
+      <h1>מזהים — למי יש, ולמי אין</h1>
+      <div class="subtitle">מזהה נכנס לתרשים רק אם ה<b>עסק</b> משתמש בו — לא כי הטבלה צריכה מפתח</div>
+      <div class="body">
+
+        <div class="card lead">
+          <p>המבחן: האם מישהו <b>מחוץ למערכת</b> מפנה לדבר הזה בעצמו? אם אומרים בקול ״הזמנה 1042״ — יש מזהה. אם אומרים ״השניצל שבהזמנה 1042״ — אין.</p>
+        </div>
+
+        <div class="split">
+
+          <div class="bx has">
+            <div class="bt">✓ יש מזהה עסקי</div>
+            <div class="it"><span class="nm">Student</span> · <span class="nm">studentId</span> — <span class="rs">מודפס על כרטיס הסטודנט</span></div>
+            <div class="it"><span class="nm">Order</span> · <span class="nm">orderId</span>, <span class="nm">pickupCode</span> — <span class="rs">הסטודנט מקריא אותו בדלפק</span></div>
+            <div class="it"><span class="nm">MenuItem</span> · <span class="nm">itemId</span> — <span class="rs">קוד הפריט בקטלוג של הקפיטריה</span></div>
+            <div class="it"><span class="nm">Payment</span> · <span class="nm">paymentId</span> — <span class="rs">מופיע בקבלה ובאישור החיוב</span></div>
+          </div>
+
+          <div class="bx no">
+            <div class="bt">✗ אין מזהה משלו</div>
+            <div class="it"><span class="nm">OrderLine</span> — <span class="rs">אף אחד לא אומר ״שורה 3״. אומרים ״השניצל בהזמנה 1042״</span></div>
+            <div class="it"><span class="nm">Station</span> — <span class="rs">מזוהה בתוך הקפיטריה שלה: ״העמדה החמה״</span></div>
+            <div class="it"><span class="nm">Cafeteria</span> — <span class="rs">מזוהה בשם ובמיקום</span></div>
+            <div class="it" style="margin-top:auto;"><span class="rs"><b>ולא ממציאים להן מזהה</b> רק כדי שיהיה.</span></div>
+          </div>
+
+        </div>
+
+        <div class="low">
+          <div class="callout ai">
+            <span class="label">💾 אז איך מעדכנים אותן במסד הנתונים?</span>
+            לאובייקט בזיכרון יש זהות <b>בחינם</b> — ההפניה עצמה. לשורה בטבלה אין: כדי לעדכן צריך לדעת <b>לאן לפנות</b>.
+            <span class="ln"><b>הוספה</b> לא דורשת מזהה · <b>עדכון ומחיקה</b> — כן. לכן למחלקה בלי מזהה עסקי המסד <b>ממציא</b> מפתח משלו — והוא נשאר במסד, לא בתרשים.</span>
+          </div>
+          <div class="callout warn">
+            <span class="label">⚠️ ומפתח זר אינו תכונה</span>
+            אל תוסיפו <span class="en" dir="ltr">studentId</span> ל-<span class="en">Order</span>. מי הזמין — זה ה<b>קשר</b> בין המחלקות (חלק ג׳). המפתח הזר מופיע רק בטבלה.
+          </div>
+        </div>
+
+        <p class="bottom-line">רשומה צריכה מזהה ברגע שהיא יכולה <b>להשתנות</b> — לא כי היא רשומה.</p>
+
+      </div>
+      <aside class="notes">
+        זו התשובה לשאלה הכי חוזרת שמגיעה מקורס בסיסי נתונים: ״לכל טבלה יש מפתח ראשי — אז לכל מחלקה יש מזהה?״
+        <b>לא.</b> ב-UML אין מושג של מפתח ראשי. מזהה נכנס לתרשים רק כשהוא <b>עובדה עסקית</b> — מספר שמישהו
+        מקריא, מדפיס או סורק.
+        <b>המבחן להעביר לכיתה:</b> האם מישהו מחוץ למערכת מפנה לדבר הזה בעצמו? ״הזמנה 1042״ — כן. ״השורה
+        השלישית בהזמנה 1042״ — לא, ולכן ל-OrderLine אין מזהה. שווה לעבור על המודל של הקמפוס ולשאול על כל
+        מחלקה בתורה; החלוקה כבר קיימת שם.
+        <b>הביט של הזיכרון מול המסד</b> (זה מה שסוגר את הפינה): בזיכרון הזהות של אובייקט היא <b>ההפניה</b> אליו —
+        שני אובייקטים עם אותם ערכים הם עדיין שני אובייקטים, ואף אחד לא צריך לשמור כלום כדי שזה יהיה נכון.
+        ברגע שכותבים לטבלה, הזהות חייבת להיות מפורשת: ל-<code>UPDATE</code> ול-<code>DELETE</code> יש
+        <code>WHERE</code>, וצריך משהו לשים בו. <b>הוספה היא היוצא מן הכלל</b> — אין צורך במזהה כדי להכניס שורה
+        חדשה. ולכן הניסוח המדויק: רשומה צריכה מזהה ברגע שהיא עשויה <b>להשתנות</b>.
+        <b>ומה עושים כשאין מזהה טבעי?</b> שלוש אפשרויות אמיתיות, וכולן החלטות <b>אחסון</b> ולא מידול: מפתח מורכב
+        מההורים (הזמנה + פריט), מספר סידורי בתוך ההורה (שורה 1, 2, 3), או מפתח שהמסד ממציא (מספר רץ). כולן
+        נשארות בתכן הטבלאות — <b>לא</b> נכנסות לתרשים המחלקות. אם ישאלו ״ומה אם אותו פריט מופיע פעמיים
+        בהזמנה?״ — זו בדיוק הסיבה שלפעמים חייבים מספר סידורי או מפתח שהמסד ממציא.
+        <b>המפתח הזר:</b> הטעות שמייבאים מקורס בסיסי הנתונים היא להוסיף studentId כתכונה של Order <b>וגם</b>
+        לצייר קשר — אותה עובדה פעמיים, ומקור אמת שני. בתרשים יש קשר; בטבלה יש מפתח זר. (הקשרים עצמם — חלק ג׳.)
+      </aside>
+    <div class="acro-footer"><span class="acro"><span class="en">UML</span> = <span class="en">Unified Modeling Language</span> · שפת מידול אחידה</span></div>
     </section>
     <!-- B4 — דוגמאות ואילוצים. Two columns: attribute VALUE examples on the campus price
          attribute (MenuItem), and constraints — always in {}, optionally hung on a Note.
@@ -939,7 +1008,8 @@
               אילוץ נכתב <b>תמיד</b> בסוגריים מסולסלים ומגדיר חוק על הערך:
               <br><span class="en">quantity {&gt; 0}</span> · <span class="en">price {&#8805; 0}</span>
             </p>
-            <p class="cn-text" style="color:var(--muted);">אפשר לתלות אילוץ מורכב ב-<b>Note</b> (פתק):</p>
+            <p class="cn-text">יש גם <b>מילות מפתח תקניות</b>: <span class="en" dir="ltr">{readOnly}</span> · <span class="en" dir="ltr">{unique}</span> — לצד אילוץ חופשי משלכם.</p>
+            <p class="cn-text" style="color:var(--muted);">אילוץ מורכב אפשר לתלות ב-<b>Note</b> (פתק):</p>
             <svg class="note-svg" viewBox="0 0 220 96" xmlns="http://www.w3.org/2000/svg" role="img"
                  aria-label="פתק Note ובו אילוץ על הכמות">
               <path d="M14 14 L176 14 L206 44 L206 84 L14 84 Z" fill="#fffbeb" stroke="#d1a441" stroke-width="1.6"/>
@@ -961,58 +1031,54 @@
         ה-enumeration עבר לשקופית משלו (הבאה) — הוא טיפוס בפני עצמו, לא פרט תחבירי של תכונה.
       </aside>
     </section>
-    <!-- B5 — «enumeration». NEW 2026-08-10 (David: "I want a separate slide for enumeration").
-         Was a cramped third column on the attribute-examples slide; it is a TYPE in its own right and
-         needs room for the part that actually gets examined: when NOT to use one.
-         Notation doctrine (must match NOTATION.md): «enumeration» stereotype, closed textual list
-         ≤~20 values, drawn as an UNCONNECTED box beside the class that uses it — the attribute's type
-         is the only link, and drawing a line to it is the classic mistake.
-         Forward hook: these five values become the STATES of the order in L8 (state diagram), so keep
-         them in sync with that deck. -->
+    <!-- B5a — «enumeration»: what it is, and why it beats a number or a string in code.
+         SIMPLIFIED 2026-08-11 (David: "we need to simplify slide 13"). The when-to-use / when-NOT and the
+         enum-vs-class decision moved to their own slide (slide-enum-or-class.html) — that half is the more
+         important one and was crowding this slide out.
+         The code demo is the one David asked for: three ways to write the same condition — a magic number
+         (unreadable), a raw string (readable but unchecked), an enum (both).
+         Notation honesty: «enumeration» + the literal list + NO line to the class is the standard; the gray
+         fill and dashed border are OUR house rendering and are labelled as such.
+         C#-SPECIFIC claims are marked: the name→number mapping is a C#/C++ family fact, not universal
+         (Java/Python enum members are objects). -->
     <section data-slug="enumeration" class="has-acro-footer">
       <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
       <style>
         section[data-slug="enumeration"] .en-cols{ flex:1 1 auto; min-height:0; display:grid;
-          grid-template-columns:1fr 1.25fr; gap:14px; align-items:stretch; }
+          grid-template-columns:0.88fr 1.12fr; gap:14px; align-items:stretch; }
         section[data-slug="enumeration"] .en-cols > .card{ display:flex; flex-direction:column; }
-        section[data-slug="enumeration"] .enum-svg{ display:block; width:100%; max-height:330px; height:auto; margin:auto; }
-        section[data-slug="enumeration"] .link{ margin:6px 0 0; text-align:center; font-size:15px; color:var(--muted); line-height:1.4; }
-        section[data-slug="enumeration"] .link .en{ color:var(--dark-blue); font-weight:700; }
-        section[data-slug="enumeration"] .rules{ display:flex; flex-direction:column; gap:8px; flex:1; }
-        section[data-slug="enumeration"] .r{ border-radius:10px; padding:5px 11px; font-size:14px; line-height:1.35; }
-        section[data-slug="enumeration"] .rules.tight{ flex:0 0 auto; gap:6px; }
-        section[data-slug="enumeration"] .code-t{ margin-top:8px; }
+        section[data-slug="enumeration"] .enum-svg{ display:block; width:100%; max-height:290px; height:auto; margin:auto; }
         section[data-slug="enumeration"] .conv{ margin-top:8px; background:#EAF3FB; border:1px solid #cfe3f5;
           border-radius:10px; padding:8px 12px; font-size:14px; color:var(--body); line-height:1.45; }
         section[data-slug="enumeration"] .conv b{ color:var(--dark-blue); }
-        section[data-slug="enumeration"] .r.yes{ background:#EAF6EC; border-inline-start:4px solid var(--green); }
-        section[data-slug="enumeration"] .r.no{ background:#FBEAEA; border-inline-start:4px solid var(--red); }
-        section[data-slug="enumeration"] .r .mk{ font-weight:800; }
-        section[data-slug="enumeration"] .r.yes .mk{ color:var(--green); }
-        section[data-slug="enumeration"] .r.no  .mk{ color:var(--red); }
-        section[data-slug="enumeration"] .r b{ color:var(--dark-blue); }
-        section[data-slug="enumeration"] .callout{ font-size:14px; padding:7px 12px; margin-top:7px; }
+        section[data-slug="enumeration"] .cmp{ display:flex; flex-direction:column; gap:10px; flex:1; justify-content:center; }
+        section[data-slug="enumeration"] .row{ border-radius:10px; padding:9px 13px; }
+        section[data-slug="enumeration"] .row.bad{ background:#FBEAEA; border-inline-start:4px solid var(--red); }
+        section[data-slug="enumeration"] .row.mid{ background:#FFF6E6; border-inline-start:4px solid var(--orange); }
+        section[data-slug="enumeration"] .row.good{ background:#EAF6EC; border-inline-start:4px solid var(--green); }
+        section[data-slug="enumeration"] .row code{ display:block; direction:ltr; text-align:left;
+          font-family:'Consolas','Courier New',monospace; font-size:16px; color:#0f172a; }
+        section[data-slug="enumeration"] .row .why{ font-size:14.5px; line-height:1.4; margin-top:4px; }
+        section[data-slug="enumeration"] .row.bad .why{ color:#8b1f1f; }
+        section[data-slug="enumeration"] .row.mid .why{ color:#8a4b00; }
+        section[data-slug="enumeration"] .row.good .why{ color:#1b5e20; }
+        section[data-slug="enumeration"] .callout{ font-size:14.5px; padding:8px 12px; margin-top:6px; }
       </style>
       <h1><span class="en">Enumeration</span> — רשימת ערכים סגורה</h1>
-      <div class="subtitle">טיפוס שהערכים שלו ידועים מראש, מעטים, וכמעט לא משתנים</div>
+      <div class="subtitle">עד עכשיו כתבנו <span class="en" dir="ltr">: String</span>, <span class="en" dir="ltr">: DateTime</span> — כאן <b>מגדירים טיפוס משלנו</b>, שהערכים החוקיים שלו ידועים מראש</div>
       <div class="body">
 
         <div class="en-cols">
 
           <div class="card">
             <div class="panel-title" style="text-align:center;">הסימון</div>
-            <!-- Stacked, NOT side by side: at 260 wide the Order box's "- status : OrderStatus"
-                 ran straight under the enum box. Enum on top, the using class below it, and the
-                 "there is no line" note under both. -->
             <svg class="enum-svg" viewBox="0 0 300 320" xmlns="http://www.w3.org/2000/svg" role="img"
                  aria-label="תיבת enumeration בשם OrderStatus עם חמישה ערכים, ומתחתיה מחלקת Order עם התכונה status — בלי קו ביניהן">
-              <!-- the enum box: gray, DASHED, unconnected -->
               <rect x="86" y="6" width="128" height="44" fill="#475569"/>
               <text x="150" y="24" text-anchor="middle" font-size="11" fill="#e2e8f0" font-style="italic"
                     font-family="'Segoe UI',Arial,sans-serif">&laquo;enumeration&raquo;</text>
               <text x="150" y="42" text-anchor="middle" font-size="14" font-weight="700" fill="#ffffff"
                     font-family="'Segoe UI',Arial,sans-serif">OrderStatus</text>
-              <!-- literals: LTR, anchored from the LEFT inner edge (box spans 86..214) -->
               <text x="98" y="72"  text-anchor="start" direction="ltr" font-size="14" fill="#1e293b"
                     font-family="'Segoe UI',Arial,sans-serif">Pending</text>
               <text x="98" y="98"  text-anchor="start" direction="ltr" font-size="14" fill="#1e293b"
@@ -1026,7 +1092,6 @@
               <line x1="86" y1="50" x2="214" y2="50" stroke="#94a3b8" stroke-width="1.4" stroke-dasharray="5 3"/>
               <rect x="86" y="6" width="128" height="182" fill="none" stroke="#94a3b8" stroke-width="1.8" stroke-dasharray="5 3"/>
 
-              <!-- the class that USES it, below and deliberately unconnected -->
               <rect x="40" y="214" width="180" height="58" fill="#fff" stroke="#3b82f6" stroke-width="1.6"/>
               <rect x="40" y="214" width="180" height="26" fill="#1e40af"/>
               <text x="130" y="232" text-anchor="middle" direction="ltr" font-size="14" font-weight="700"
@@ -1034,80 +1099,180 @@
               <text x="48" y="258" text-anchor="start" direction="ltr" font-size="11" fill="#1e293b"
                     font-family="'Consolas','Courier New',monospace">- status : OrderStatus</text>
 
-              <!-- the point of the whole picture: there is NO line between them -->
               <text x="150" y="296" text-anchor="middle" direction="rtl" font-size="13" fill="#C62828" font-weight="700"
                     font-family="'Noto Sans Hebrew',sans-serif">אין קו בין השתיים!</text>
               <text x="150" y="314" text-anchor="middle" direction="rtl" font-size="12" fill="#94a3b8"
                     font-family="'Noto Sans Hebrew',sans-serif">טיפוס התכונה הוא כל הקישור</text>
             </svg>
-            <p class="link">הקשר היחיד: <span class="en" dir="ltr">status : OrderStatus</span></p>
             <div class="conv">
-              <b>מה תקני ומה שלנו:</b> התקן דורש את הסטריאוטיפ <span class="en" dir="ltr">&laquo;enumeration&raquo;</span>,
-              את רשימת הערכים, ו<b>שלא יימתח קו</b> אל המחלקה. הרקע האפור והמסגרת המקווקוות הם <b>מוסכמת התצוגה
-              של הקורס</b> — כדי שתזהו enum במבט — ולא דרישה של <span class="en">UML</span>. בכלי אחר תראו בדיוק
-              את אותו <span class="en">enum</span> בתיבה רגילה.
+              <b>מה תקני ומה שלנו:</b> תקני — <span class="en" dir="ltr">&laquo;enumeration&raquo;</span>,
+              רשימת הערכים, ו<b>בלי קו</b> אל המחלקה. הרקע האפור והמסגרת המקווקוות הם <b>מוסכמת התצוגה שלנו</b>,
+              לא דרישה — בכלי אחר אותו <span class="en">enum</span> ייראה בתיבה רגילה.
             </div>
           </div>
 
           <div class="card">
-            <div class="panel-title">מתי כן — ומתי לא</div>
-            <div class="rules">
-              <div class="r yes"><span class="mk">✓</span> רשימה <b>סגורה</b> וקצרה של ערכי טקסט — עד ~20, שכמעט לא משתנה. סטטוס, סוג תשלום, יום בשבוע.</div>
-              <div class="r no"><span class="mk">✗</span> <b>מספרים וכמויות</b> — אלה טיפוסים רגילים, לא רשימת ערכים.</div>
-              <div class="r no"><span class="mk">✗</span> רשימה ש<b>משתנה תוך כדי</b> — קטגוריות שהמנהל מוסיף ומוחק הן <b>נתונים</b>, כלומר מחלקה וטבלה, לא <span class="en">enum</span>. הכלל: אם צריך מסך ניהול לרשימה — היא מחלקה.</div>
-              <div class="r no"><span class="mk">✗</span> כשלערכים יש <b>תכונות משלהם</b> — אז זו הורשה או מחלקה, לא רשימת ערכים.</div>
-            </div>
-            <div class="panel-title code-t">למה זה טוב כשמגיעים לקוד</div>
-            <div class="rules tight">
-              <div class="r yes"><span class="mk">✓</span> <b>הקומפיילר תופס שגיאות כתיב.</b> אם הסטטוס הוא מחרוזת, <span class="en" dir="ltr">"Redy"</span> יתגלה רק כשלקוח יתלונן; <span class="en" dir="ltr">OrderStatus.Redy</span> פשוט לא מתקמפל.</div>
-              <div class="r yes"><span class="mk">✓</span> <b>הרשימה החוקית ידועה מראש.</b> סביבת הפיתוח משלימה את הערכים, ואי אפשר להכניס ערך שלא קיים — <b>מצב לא חוקי לא ניתן לביטוי</b>.</div>
-              <div class="r yes"><span class="mk">✓</span> <b>מוסיפים ערך — והקומפיילר מראה איפה לטפל בו.</b> ערך חדש כמו <span class="en" dir="ltr">Refunded</span> יצוף בכל מקום שמפצל לפי סטטוס, במקום להישכח.</div>
-              <div class="r yes"><span class="mk">✓</span> <b>ייצוג יעיל.</b> ב-<span class="en" dir="ltr">C#</span> הקומפיילר ממפה כל שם ל<b>מספר</b> — השוואת סטטוסים היא השוואת מספרים, לא של מחרוזות.</div>
+            <div class="panel-title">אותו תנאי — שלוש דרכים לכתוב אותו</div>
+            <div class="cmp">
+              <div class="row bad">
+                <code>if (day == 1)</code>
+                <div class="why">✗ <b>מה זה 1?</b> מספר קסם. צריך לזכור את הטבלה או לחפש אותה.</div>
+              </div>
+              <div class="row mid">
+                <code>if (day == "Sunday")</code>
+                <div class="why">✗ קריא — <b>אבל אף אחד לא בודק</b>. <span class="en" dir="ltr">"Sundey"</span> יתקמפל מצוין, וייכשל אצל הלקוח.</div>
+              </div>
+              <div class="row good">
+                <code>if (day == DayOfWeek.Sunday)</code>
+                <div class="why">✓ <b>קריא וגם נבדק.</b> טעות כתיב לא מתקמפלת, וסביבת הפיתוח משלימה את הערכים החוקיים.</div>
+              </div>
             </div>
             <div class="callout ai">
-              <span class="label">💡 בקוד ובמסד</span>
-              <span class="en" dir="ltr">C#</span>: <span class="en" dir="ltr">enum OrderStatus { Pending, … }</span> · במסד: אילוץ <span class="en" dir="ltr">CHECK</span> או טבלת ערכים קטנה.
+              <span class="label">💡 מתחת למכסה המנוע</span>
+              ב-<span class="en" dir="ltr">C#</span> הקומפיילר ממפה כל שם ל<b>מספר</b> — כותבים <span class="en" dir="ltr">Sunday</span>, ומשווים מספרים.
+              <b>לא בכל שפה כך</b>: ב-<span class="en">Java</span> וב-<span class="en">Python</span> ערך <span class="en">enum</span> הוא אובייקט.
             </div>
           </div>
 
         </div>
 
-        <p class="bottom-line">רשימה סגורה, ליד המחלקה ו<b>בלי קו</b> אליה — ובהרצאה 8 הערכים האלה יהפכו ל<b>מצבים</b>.</p>
+        <p class="bottom-line">שם קריא — בלי לוותר על בדיקה. זה כל הרווח.</p>
 
       </div>
       <aside class="notes">
-        enumeration הוא <b>טיפוס</b>, לא מחלקה: רשימה סגורה של ערכי טקסט שהמערכת בוחרת מתוכה. כאן OrderStatus עם
-        חמשת מצבי ההזמנה.
-        <b>הטעות הקלאסית שנבדקת במבחן:</b> למתוח קו מהמחלקה לתיבת ה-enum. אין קו. הקישור היחיד הוא שהתכונה
-        <code>status</code> היא מטיפוס <code>OrderStatus</code> — בדיוק כמו שלא מותחים קו למחלקה בגלל
-        <code>name : String</code>. התיבה פשוט עומדת ליד המחלקה שמשתמשת בה.
-        <b>הכלל המעשי להבחין enum מנתונים:</b> אם מישהו בארגון צריך <b>מסך ניהול</b> כדי להוסיף ולמחוק ערכים —
-        זו לא רשימת ערכים אלא מחלקה (וטבלה). ״קטגוריות מוצר״ שהמנהל עורך = מחלקה; ״ממתין/מוכן/נאסף״ שקבוע בקוד = enum.
-        שאלה טובה לכיתה: ״סוגי תשלום — enum או מחלקות?״ התשובה תלויה בשאלה אם לכל סוג יש <b>תכונות משלו</b>:
-        לתשלום באשראי יש last4 ו-gatewayRef ולכן שם זו הורשה (נראה בחלק ג׳), בעוד שסטטוס הזמנה הוא רק שם — enum.
-        זו בדיוק ההבחנה שנחזור אליה בשקופית ההורשה.
-        <b>להיזהר מלהציג את הצבע כתקן:</b> מה ש-UML דורש הוא הסטריאוטיפ «enumeration», רשימת הערכים, ושאין קו
-        אל המחלקה (בדיוק כמו שאין קו אל String). הרקע האפור והמסגרת המקווקוות הם <b>מוסכמת התצוגה שלנו</b> —
-        נוחה לזיהוי מהיר בכיתה ובכלי הקורס, אבל בכלי אחר או במבחן ממקור אחר אותו enum ייראה בתיבה רגילה,
-        וזה תקין לגמרי. אל תורידו לסטודנט נקודות על מסגרת מלאה.
-        <b>למה זה טוב בקוד (השאלה ״למה בכלל לטרוח״):</b> ההבדל הוא בין מחרוזת לבין טיפוס. מחרוזת מקבלת כל דבר —
-        "Redy" יתגלה רק בזמן ריצה, ואצל הלקוח. enum נבדק בזמן קומפילציה, סביבת הפיתוח משלימה את הערכים החוקיים,
-        ומצב לא חוקי פשוט לא ניתן לביטוי. והבונוס הגדול: כשמוסיפים ערך (נניח Refunded), הקומפיילר/המנתח מצביע על
-        כל מקום בקוד שמפצל לפי סטטוס וצריך עדכון — במקום שנגלה חודש אחר כך שאיפשהו שכחו. זו בדיוק הסיבה שמודל
-        טוב חוסך באגים: ההחלטה בתרשים הופכת לבדיקה אוטומטית בקוד.
-        <b>על ה״מספר״ — לדייק:</b> ב-C# (וב-C++) enum הוא <b>טיפוס ערך מעל מספר שלם</b>: הקומפיילר נותן לכל שם
-        ערך מספרי (0,1,2… כברירת מחדל), ובזמן ריצה מדובר ב-4 בתים ובהשוואת מספרים — לעומת מחרוזת, שהיא אובייקט
-        בזיכרון והשוואה שלה עוברת תו-תו. ב-<b>Java ובפייתון</b> זה לא כך: שם ה-enum הוא <b>אובייקט</b>, וההשוואה
-        היא השוואת הפניה (מהירה גם היא, אבל מנגנון אחר). כלומר ״זה נהיה מספר״ נכון למשפחת C#/C++ ולא באופן
-        אוניברסלי — עוד דוגמה לשקופית UML מול שפה.
-        ⚠️ <b>אבל שימו לב לסדר גודל:</b> החיסכון הזה זניח במערכת עסקית. הסיבה האמיתית ל-enum היא <b>נכונות</b>
-        (הקומפיילר תופס טעויות), והיעילות היא בונוס. אל תמכרו את זה כשיקול ביצועים.
-        ⚠️ <b>והמלכודת שנובעת מזה:</b> בגלל שהערך הוא מספר, מתפתים לשמור את ה<b>מספר</b> במסד הנתונים. אסור —
-        אם מישהו יוסיף ערך <i>באמצע</i> הרשימה, כל השורות הישנות ישנו משמעות בשקט. שומרים את <b>השם</b>, או
-        מקצים מספרים <b>מפורשות</b> בקוד (<code>Pending = 1</code>) ולא נוגעים בהם לעולם.
-        קדימה: בהרצאה 8 (תרשים מצבים) חמשת הערכים האלה הופכים למצבים ולמעברים ביניהם — לשמור אותם זהים בין הדקים.
+        <b>למה זה יושב דווקא כאן, בפרק התכונות:</b> enumeration הוא <b>טיפוס</b> — הוא מה שכותבים <b>אחרי
+        הנקודתיים</b>. עד עכשיו השתמשנו בטיפוסים מוכנים (String, DateTime) ובטיפוס תחום שהמצאנו (Money);
+        כאן אנחנו <b>מגדירים טיפוס חדש בעצמנו</b> ומפרטים בדיוק אילו ערכים חוקיים בו. זו הדרך הכי טבעית
+        להציג את זה: לא ״עוד סימון בתרשים״ אלא הרחבה של רשימת הטיפוסים שעומדים לרשותנו.
+        הוא <b>לא</b> מחלקה — אין לו זהות, אין לו התנהגות, ואין לו מופעים שנשמרים.
+        <b>הטעות הקלאסית שנבדקת במבחן:</b> למתוח קו מהמחלקה לתיבת ה-enum. אין קו — בדיוק כמו שאין קו למחלקה
+        בגלל <code>name : String</code>. הקישור היחיד הוא טיפוס התכונה.
+        <b>להיזהר מלהציג את הצבע כתקן:</b> UML דורש את הסטריאוטיפ ואת רשימת הערכים; הרקע האפור והמסגרת
+        המקווקוות הם מוסכמת התצוגה שלנו, נוחה לזיהוי מהיר. אל תורידו נקודות על תיבה רגילה.
+        <b>הדגמת הקוד — שלוש שורות שמספרות את כל הסיפור.</b> לעבור עליהן לפי הסדר ולשאול בכל אחת ״מה רע כאן?״:
+        <code>day == 1</code> — קריא רק למי שזוכר את הטבלה; <code>day == "Sunday"</code> — קריא, אבל מחרוזת מקבלת
+        <b>כל</b> טקסט, כולל "Sundey", והשגיאה תתגלה בייצור; <code>day == DayOfWeek.Sunday</code> — קריא <b>וגם</b>
+        נבדק בזמן קומפילציה, וה-IDE משלים את הערכים. <code>DayOfWeek</code> הוא enum מובנה ב-C#, כך שיפגשו אותו
+        ממש בפרויקט. אפשר להוסיף בעל-פה: זו גם הסיבה שאפשר לעשות <code>switch</code> על enum ולקבל התרעה על ערך
+        שלא טופל.
+        <b>על ה״מספר״ — לדייק:</b> ב-C#/C++ enum הוא טיפוס ערך מעל מספר שלם (0,1,2… כברירת מחדל) ולכן ההשוואה
+        היא בין מספרים; ב-Java ובפייתון ערך ה-enum הוא <b>אובייקט</b> וההשוואה היא בין הפניות. כלומר ״זה נהיה
+        מספר״ נכון למשפחת C# ולא באופן אוניברסלי — עוד דוגמה לשקופית UML מול שפה. וממילא החיסכון זניח במערכת
+        עסקית: הסיבה ל-enum היא <b>נכונות</b>, לא ביצועים.
+        ⚠️ <b>מלכודת שנובעת מזה:</b> אל תשמרו את ה<b>מספר</b> במסד הנתונים. אם יוסיפו ערך באמצע הרשימה, כל
+        השורות הישנות ישנו משמעות בשקט. שומרים את <b>השם</b>, או מקצים מספרים מפורשות (<code>Pending = 1</code>)
+        ולא נוגעים בהם לעולם.
+        השקופית הבאה עונה על השאלה החשובה יותר: מתי בכלל enum — ומתי זו מחלקה.
       </aside>
     <div class="acro-footer"><span class="acro"><span class="en">UML</span> = <span class="en">Unified Modeling Language</span> · שפת מידול אחידה</span></div>
+    </section>
+    <!-- B5b — enum או מחלקה. NEW 2026-08-11 (David: the management question is the important half, and
+         it deserves its own slide; he also asked directly "can we have an admin page to manage enums?").
+         The answer, stated plainly on the slide: NO. An enum is compiled into the build, so changing it
+         means a code change and a new release. An admin screen implies a table, and a table implies a class.
+         Two decisive tests, in this order:
+           1. does the CODE branch on the value (if/switch)? → the code must know the values → enum
+           2. who OWNS the list — a developer (release) or a business user (admin screen)? → class
+         The dropdown case David raised (gender) lands in the class column on purpose: if all you need is a
+         list to display and someone may extend it, that is a lookup table, not an enum. -->
+    <section data-slug="enum-or-class">
+      <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
+      <style>
+        section[data-slug="enum-or-class"] .lead{ background:var(--light-blue); border:1px solid var(--blue); flex:0 0 auto; }
+        section[data-slug="enum-or-class"] .lead .lt{ font-size:18px; font-weight:800; color:#fff; margin-bottom:5px; }
+        section[data-slug="enum-or-class"] .tests{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+        section[data-slug="enum-or-class"] .tst{ background:rgba(255,255,255,.92); border-radius:10px; padding:7px 12px;
+          font-size:15.5px; line-height:1.4; color:var(--body); }
+        section[data-slug="enum-or-class"] .tst b{ color:var(--dark-blue); }
+        section[data-slug="enum-or-class"] .vs{ flex:1 1 auto; min-height:0; display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+        section[data-slug="enum-or-class"] .col{ border-radius:14px; padding:11px 15px; display:flex; flex-direction:column; gap:7px; }
+        section[data-slug="enum-or-class"] .col.e{ background:#EAF6EC; border:2px solid var(--green); }
+        section[data-slug="enum-or-class"] .col.c{ background:#EAF3FB; border:2px solid var(--blue); }
+        section[data-slug="enum-or-class"] .col .ct{ font-size:21px; font-weight:800; }
+        section[data-slug="enum-or-class"] .col.e .ct{ color:var(--green); }
+        section[data-slug="enum-or-class"] .col.c .ct{ color:var(--dark-blue); }
+        section[data-slug="enum-or-class"] .col ul{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:13px; }
+        section[data-slug="enum-or-class"] .col li{ position:relative; padding-inline-start:22px; font-size:17.5px; line-height:1.45; }
+        section[data-slug="enum-or-class"] .col li::before{ content:"•"; position:absolute; inset-inline-start:4px; font-weight:800; }
+        section[data-slug="enum-or-class"] .col.e li::before{ color:var(--green); }
+        section[data-slug="enum-or-class"] .col.c li::before{ color:var(--blue); }
+        section[data-slug="enum-or-class"] .col .egs{ margin-top:auto; font-size:15.5px; color:var(--muted); border-top:1px dashed #b9c6d4; padding-top:7px; }
+        section[data-slug="enum-or-class"] .col .egs b{ color:var(--dark-blue); }
+        section[data-slug="enum-or-class"] .callout{ flex:0 0 auto; font-size:15.5px; padding:9px 13px; }
+        section[data-slug="enum-or-class"] .callout .q2{ display:block; margin-top:4px; }
+      </style>
+      <h1><span class="en">enum</span> או מחלקה?</h1>
+      <div class="subtitle">השאלה המכריעה אינה כמה ערכים יש — אלא <b>מי מנהל את הרשימה</b></div>
+      <div class="body">
+
+        <div class="card lead">
+          <div class="lt">שתי שאלות, בסדר הזה:</div>
+          <div class="tests">
+            <div class="tst"><b>1.</b> האם ה<b>קוד מתפצל</b> לפי הערך (<span class="en" dir="ltr">if</span> / <span class="en" dir="ltr">switch</span>)? אם כן — הקוד חייב להכיר את הערכים.</div>
+            <div class="tst"><b>2.</b> מי <b>בעל הרשימה</b> — מפתח, או משתמש עסקי שרוצה לשנות אותה בעצמו?</div>
+          </div>
+        </div>
+
+        <div class="vs">
+
+          <div class="col e">
+            <div class="ct"><span class="en">enum</span> — כשהרשימה של המפתח</div>
+            <ul>
+              <li>סגורה ו<b>יציבה</b> — משתנה פעם בשנים, אם בכלל</li>
+              <li>ה<b>קוד מתפצל</b> לפיה: מה שקורה ל״מוכן״ שונה ממה שקורה ל״בוטל״</li>
+              <li>שינוי בה הוא <b>שינוי קוד</b> — וזה בסדר, כי ממילא צריך לכתוב את ההתנהגות החדשה</li>
+              <li><b>האורך הוא סימפטום, לא כלל</b> — עשרות ערכים כמעט תמיד אומרים ״טבלה״, כי אף קוד לא מתפצל ל-80 מקרים</li>
+            </ul>
+            <div class="egs"><b>דוגמאות:</b> <span class="en" dir="ltr">OrderStatus</span> · <span class="en" dir="ltr">DayOfWeek</span> · סוג תשלום</div>
+          </div>
+
+          <div class="col c">
+            <div class="ct">מחלקה — כשהרשימה של העסק</div>
+            <ul>
+              <li>ה<b>עסק משנה</b> אותה: מוסיפים, מוציאים משימוש, משנים שם</li>
+              <li>לערכים יש <b>נתונים משלהם</b> — סדר תצוגה, פעיל/לא פעיל, תרגום, תיאור</li>
+              <li>הקוד <b>לא מתפצל</b> לפיה — רק מציג, שומר ומסנן</li>
+            </ul>
+            <div class="egs"><b>דוגמאות:</b> קטגוריות פריטים · סיבות ביטול · מגדר (ארגונים מרחיבים את הרשימה עם הזמן)</div>
+          </div>
+
+        </div>
+
+        <div class="callout warn">
+          <span class="label">⚠️ ואי אפשר מסך ניהול ל-<span class="en">enum</span></span>
+          ה-<span class="en">enum</span> <b>מהודר לתוך התוכנה</b>. הוספת ערך = שינוי קוד ← בנייה ← בדיקות ← <b>גרסה חדשה בייצור</b>.
+          <span class="q2">ולכן: אם כל מה שצריך זו <b>רשימה נפתחת</b> שמישהו בארגון עשוי להרחיב — זו <b>טבלה עם מסך ניהול</b>, כלומר מחלקה. מסך ניהול מחייב טבלה; טבלה מחייבת מחלקה.</span>
+        </div>
+
+        <p class="bottom-line">אם משתמש צריך להוסיף ערך ביום שלישי בצהריים — זה כבר לא <span class="en">enum</span>.</p>
+
+      </div>
+      <aside class="notes">
+        זו השקופית שמכריעה, ולא ״כמה ערכים יש״. הרבה סטודנטים בוחרים enum לפי גודל הרשימה; הקריטריון האמיתי
+        הוא <b>בעלות</b> ו<b>התפצלות בקוד</b>.
+        <b>שאלה 1 — האם הקוד מתפצל לפי הערך?</b> אם יש if/switch שמתנהג אחרת לכל ערך, הקוד <b>חייב</b> להכיר את
+        הרשימה, וממילא ערך חדש דורש קוד חדש (מישהו צריך לכתוב מה קורה כשהזמנה ״הוחזרה״). זה enum.
+        <b>שאלה 2 — מי בעל הרשימה?</b> אם התשובה היא ״המנהל בקפיטריה״, ולא ״המפתח״ — זו מחלקה.
+        <b>התשובה הישירה לשאלה ששואלים כל שנה: לא, אי אפשר מסך ניהול ל-enum.</b> ה-enum הוא חלק מהקוד המהודר;
+        אין דרך להוסיף לו ערך בזמן ריצה. כל שינוי עובר את המסלול המלא: קוד ← בנייה ← בדיקות ← פריסה. בארגון עם
+        מחזור שחרור של שבועות, זה אומר שהוספת ״קטגוריה חדשה״ לוקחת שבועות — וזה בדיוק מה שלא רוצים.
+        <b>המקרה של רשימה נפתחת (מגדר, ערים, סיבות ביטול):</b> אם רק מציגים ושומרים, ואין התנהגות שונה לכל ערך,
+        זו <b>טבלת ערכים</b> (lookup table) עם מסך ניהול — כלומר מחלקה קטנה בתרשים. זה גם מה שמאפשר סדר תצוגה,
+        השבתה של ערך ישן בלי למחוק היסטוריה, ותרגום.
+        <b>ואפשר גם שילוב</b>, אם ישאלו: טבלה לניהול הרשימה ולתצוגה, ו-enum בקוד רק לערכים הבודדים שהקוד באמת
+        מתפצל לפיהם. זה נפוץ במערכות אמיתיות, ולא נדרוש אותו בקורס.
+        <b>״יש הגבלה על אורך רשימת ה-enum?״ (שאלה שחוזרת):</b> <u>טכנית — לא</u>. ב-C# ה-enum יושב על int,
+        כלומר מיליארדי ערכים אפשריים (ואפשר לבחור byte/long). ב-Java יש תקרה מעשית של הקומפיילר סביב אלפי
+        ערכים, ובפייתון אין מגבלה. כלומר שום רשימה עסקית סבירה לא תיתקל במגבלה טכנית.
+        <u>עיצובית — האורך הוא סימפטום ולא כלל</u>. ה-≈20 שמופיע בכלי הקורס הוא <b>כלל אצבע</b>, לא גבול: רשימה
+        ארוכה כמעט תמיד נכשלת בשתי השאלות שלמעלה — אף קוד לא מתפצל ל-80 מקרים (אז אין סיבה שהקוד יכיר אותם),
+        ורשימות ארוכות נוטות להשתנות ולדרוש תרגום/סדר/השבתה. גם <code>switch</code> על 80 ערכים בלתי-אפשרי לתחזוקה.
+        ולכן בשני הכיוונים: enum של 40 ערכים יכול להיות תקין לגמרי אם הם קבועים והקוד באמת מתפצל לפיהם
+        (קודי שגיאה, מטבעות); ורשימה של <b>שלושה</b> ערכים יכולה להיות טעות אם העסק רוצה לערוך אותה.
+        <b>המסר לכיתה:</b> אל תספרו ערכים — תשאלו מי הבעלים והאם הקוד מתפצל.
+        קישור קדימה: אם לערכים יש <b>תכונות והתנהגות</b> שונות — זו כבר לא רשימה ולא טבלה אלא <b>הורשה</b>,
+        ונראה את זה בחלק ג׳ עם שני סוגי התשלום.
+      </aside>
     </section>
     <!-- B5 — Operations: the third compartment. Format + method(param:Type):Return, rendered
          ITALIC (tool doctrine, NOTATION.md — operations compartment is italic). SVG shows the
@@ -1202,7 +1367,12 @@
         מפתח; העומק המלא מתחדד בעיצוב ובקוד.
       </aside>
     </section>
-    <!-- B6 — מאוחסן / נגזר / פעולה. NEW 2026-08-10 (David: "this decision is worth a slide in its own").
+    <!-- B7 — מאוחסן או מחושב. NEW 2026-08-10 (David: "this decision is worth a slide in its own").
+         2026-08-11: the DERIVED-ATTRIBUTE column was removed with the rest of the `/` notation (David:
+         "it will just confuse students if I say it exists but we don't use and teach it"). The decision
+         is now binary and cleaner: a value is either STORED, or COMPUTED — and a computed value is an
+         OPERATION. The two callouts (the second-source-of-truth trap and the store-anyway exceptions)
+         were always the valuable half and are untouched.
          Sits right after Operations, because it is the first moment both halves of the box exist and the
          student can be asked "so which one do I use?".
          Two questions, in order: (1) must it be stored at all? (2) if computed — attribute or operation?
@@ -1214,7 +1384,7 @@
     <section data-slug="stored-derived-operation" class="has-acro-footer">
       <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
       <style>
-        section[data-slug="stored-derived-operation"] .three{ display:grid; grid-template-columns:repeat(3,1fr);
+        section[data-slug="stored-derived-operation"] .three{ display:grid; grid-template-columns:repeat(2,1fr);
           gap:12px; flex:0 0 auto; }
         section[data-slug="stored-derived-operation"] .k{ background:var(--card-bg); border:1px solid var(--card-border);
           border-radius:14px; padding:10px 13px; display:flex; flex-direction:column; gap:5px; }
@@ -1245,28 +1415,22 @@
         section[data-slug="stored-derived-operation"] .callout.good{ flex:1; }
         section[data-slug="stored-derived-operation"] .callout .ex2{ display:block; margin-top:4px; }
       </style>
-      <h1>מאוחסן, נגזר, או פעולה?</h1>
-      <div class="subtitle">אותו ערך — שלוש דרכים לייצג אותו. איך בוחרים</div>
+      <h1>מאוחסן או מחושב?</h1>
+      <div class="subtitle">ההחלטה שקובעת אם ערך הוא <b>תכונה</b> או <b>פעולה</b></div>
       <div class="body">
 
         <div class="three">
           <div class="k store">
-            <div class="kt">מאוחסן</div>
+            <div class="kt">מאוחסן ← <b>תכונה</b></div>
             <code class="en" dir="ltr">- unitPrice : Money</code>
             <div class="kd">נשמר בפועל. יש לו מקור — מישהו הזין אותו, או המערכת קבעה אותו ברגע מסוים.</div>
             <div class="kcs"><span class="en" dir="ltr">C#</span>: <b class="en" dir="ltr">{ get; set; }</b> · במסד: <b>עמודה</b></div>
           </div>
-          <div class="k deriv">
-            <div class="kt">נגזר <span class="en">/</span></div>
-            <code class="en" dir="ltr">/ itemCount : int</code>
-            <div class="kd">לא נשמר. נספר מחדש מהנתונים שכבר יש, בכל פעם שמסתכלים עליו.</div>
-            <div class="kcs"><span class="en" dir="ltr">C#</span>: <b class="en" dir="ltr">=&gt; Lines.Count</b> · במסד: <b>אין עמודה</b></div>
-          </div>
           <div class="k op">
-            <div class="kt">פעולה <span class="en">( )</span></div>
+            <div class="kt">מחושב ← <b>פעולה</b></div>
             <code class="en" dir="ltr">+ total() : Money</code>
-            <div class="kd">חישוב שמפעילים. יכול לקבל פרמטרים ולעשות עבודה אמיתית.</div>
-            <div class="kcs"><span class="en" dir="ltr">C#</span>: <b class="en" dir="ltr">Total()</b> · במסד: <b>כלום</b></div>
+            <div class="kd">לא נשמר בשום מקום. מחושב מהנתונים שכבר יש, ברגע שמבקשים אותו.</div>
+            <div class="kcs"><span class="en" dir="ltr">C#</span>: <b class="en" dir="ltr">Total()</b> · במסד: <b>אין עמודה</b></div>
           </div>
         </div>
 
@@ -1274,15 +1438,15 @@
 
           <div>
             <div class="q">
-              <div class="qq">שאלה 1 — האם בכלל צריך לאחסן?</div>
-              <div class="qa">אפשר לחשב אותו מחדש ממה שכבר שמור, ותמיד לקבל <b>אותה תשובה</b>?
-                אם כן — <b>אל תאחסנו</b>. אם לא — <b>מאוחסן</b>.</div>
-              <div class="qq">שאלה 2 — ואם הוא מחושב: תכונה או פעולה?</div>
-              <div class="qa">צריך <b>פרמטרים</b>, או שזה משהו ש<b>מפעילים</b>? ← פעולה.
-                סתם ערך ש<b>מסתכלים</b> עליו במסך? ← תכונה נגזרת. <b>לא שניהם לאותו ערך.</b></div>
+              <div class="qq">השאלה האחת: אפשר לחשב אותו מחדש?</div>
+              <div class="qa">אם אפשר לחשב אותו ממה ש<b>כבר שמור</b>, ותמיד לקבל <b>אותה תשובה</b> —
+                <b>אל תאחסנו</b>. הוא <b>פעולה</b>.<br>
+                אם אי אפשר — הוא עובדה בפני עצמה, ולכן <b>תכונה מאוחסנת</b>.</div>
               <div class="worked">
-                <b>נריץ את זה על מספר השורות בהזמנה:</b> אפשר לספור מחדש מהשורות ותמיד נקבל אותו מספר ⇒ <b>לא מאחסנים</b>.
-                אין פרמטרים ואף אחד לא ״מפעיל״ אותו — רק מציגים ⇒ <span class="en" dir="ltr">/ itemCount : int</span>.
+                <b>נריץ את זה על סכום ההזמנה:</b> אפשר לחשב מהשורות ותמיד נקבל אותו סכום ⇒ לא מאחסנים ⇒
+                <span class="en" dir="ltr">+ total() : Money</span>.<br>
+                <b>ועל מחיר היחידה בשורה:</b> אי אפשר — המחיר בתפריט השתנה מאז ⇒ <b>מאחסנים</b> ⇒
+                <span class="en" dir="ltr">- unitPrice : Money</span>.
               </div>
             </div>
           </div>
@@ -1290,7 +1454,7 @@
           <div>
             <div class="callout warn">
               <span class="label">⚠️ הטעות הנפוצה</span>
-              לאחסן ערך שאפשר לגזור — זה <b>מקור אמת שני</b>. מוסיפים שורה להזמנה, שוכחים לעדכן את המונה, והמודל סותר את עצמו.
+              לאחסן ערך שאפשר לחשב — זה <b>מקור אמת שני</b>. מוסיפים שורה להזמנה, שוכחים לעדכן את המונה, והמודל סותר את עצמו.
               <span class="ex2">זו גם טעות אהובה על <span class="en">AI</span>: טיוטות נוטות להוסיף <span class="en" dir="ltr">totalAmount</span> ו-<span class="en" dir="ltr">itemCount</span> כשדות שמורים.</span>
             </div>
             <div class="callout good">
@@ -1303,24 +1467,23 @@
 
         </div>
 
-        <p class="bottom-line">״האם זה ייקבע, או ייחשב?״ — זו השאלה. מה שנחשב, לא נשמר.</p>
+        <p class="bottom-line">מה שאפשר לחשב — לא מאחסנים. מה שלא — זו עובדה, ומאחסנים אותה.</p>
 
       </div>
       <aside class="notes">
         זו ההחלטה שסטודנטים הכי טועים בה, ובמבחן היא נבדקת: לא <b>איך</b> כותבים תכונה, אלא <b>אם</b> היא בכלל צריכה להיות תכונה.
-        <b>שאלה 1 — מאוחסן או מחושב.</b> המבחן: אפשר לחשב מחדש ממה שכבר שמור ולקבל תמיד אותה תשובה? אם כן — לא לאחסן.
+        <b>המבחן:</b> אפשר לחשב מחדש ממה שכבר שמור ולקבל תמיד אותה תשובה? אם כן — לא לאחסן.
         ערך שמור שאפשר לגזור הוא מקור אמת שני, והוא <b>יסתור</b> את עצמו ברגע שמישהו יעדכן צד אחד ולא את השני.
         זהו בעצם מבחן ההתמדה (מ״מה אינו מחלקה״) רמה אחת למטה: שם שאלנו אם ישות ראויה למחלקה, כאן אם ערך ראוי לאחסון.
-        <b>שאלה 2 — נגזר או פעולה.</b> פרמטרים ⇒ תמיד פעולה (אי אפשר להעביר ארגומנט לתכונה). יקר או עושה משהו ⇒ פעולה.
-        ערך שפשוט מציגים במסך ⇒ תכונה נגזרת. ב-C# ההבחנה קיימת בשפה עצמה: תכונה נגזרת היא property לקריאה בלבד
-        (<code>public int ItemCount =&gt; Lines.Count;</code>) ופעולה היא מתודה (<code>CountItems()</code>). ב-Java אין properties
-        ולכן הכול הופך ל-getX() — ומי שלמד Java חושב שהכול פעולה.
+        <b>ולמה ערך מחושב הוא פעולה ולא תכונה?</b> כי בקורס הזה תכונה = משהו שהמערכת <b>שומרת</b>. ל-UML יש
+        אמנם סימון לתכונה נגזרת (קו נטוי), ואנחנו <b>לא משתמשים בו</b> — ערך מחושב מיוצג אצלנו כפעולה, נקודה.
+        זה גם מה שקורה בקוד: <code>total()</code> היא מתודה שמחשבת מהשורות.
         <b>החריג הוא הלב של השקופית — unitPrice.</b> הוא נראה משוכפל מ-MenuItem.price, וזה בדיוק המקרה שבו <b>חייבים</b> לאחסן:
         מחיר בתפריט משתנה, ואם lineTotal() יחושב מהמחיר הנוכחי — הזמנה מלפני חודש תשנה את הסכום שלה רטרואקטיבית.
         שאלה טובה לכיתה: ״מה קורה למחיר של הזמנה ישנה אם הקפיטריה מעלה מחירים?״ מי שעונה ״כלום, זה שמור״ הבין.
         להוסיף: זה בדיוק ההבדל בין ״כמה זה עולה״ (חישוב) לבין ״כמה זה עלה״ (עובדה היסטורית).
       </aside>
-    <div class="acro-footer"><span class="acro"><span class="en">AI</span> = <span class="en">Artificial Intelligence</span> · בינה מלאכותית</span></div>
+    <div class="acro-footer"><span class="acro"><span class="en">UML</span> = <span class="en">Unified Modeling Language</span> · שפת מידול אחידה</span> &nbsp;·&nbsp; <span class="acro"><span class="en">AI</span> = <span class="en">Artificial Intelligence</span> · בינה מלאכותית</span></div>
     </section>
     <!-- B6 — Visibility: the + / # / - markers. A table.sad (סימון | נראות | משמעות | דוגמה מהקמפוס)
          with one campus line each. pickupCode(-) and total(+) are canonical members; validate() on
