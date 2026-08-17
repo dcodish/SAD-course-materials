@@ -1901,24 +1901,34 @@
     <section data-slug="business-rules" class="has-acro-footer">
       <div class="sdlc-chip" title="שלב 3 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>ניתוח דרישות</div>
       <style>
-        section[data-slug="business-rules"] .defs { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
-        section[data-slug="business-rules"] .defs .card p { margin:0; font-size:15.5px; line-height:1.45; }
-        section[data-slug="business-rules"] table.sad { font-size:15.5px; }
-        section[data-slug="business-rules"] table.sad th { padding:7px 12px; font-size:15px; }
-        section[data-slug="business-rules"] table.sad td { padding:6px 12px; line-height:1.35; vertical-align:middle; }
+        section[data-slug="business-rules"] .defs { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
+        section[data-slug="business-rules"] td.or { text-align:center; font-weight:700; white-space:nowrap; }
+        section[data-slug="business-rules"] td.or.ex { color:#475569; }
+        section[data-slug="business-rules"] td.or.nw { color:#2E7D32; }
+        section[data-slug="business-rules"] td.or.op { color:#B45309; }
+        section[data-slug="business-rules"] .defs .card p { margin:0; font-size:14.5px; line-height:1.38; }
+        section[data-slug="business-rules"] table.sad { font-size:14px; }
+        section[data-slug="business-rules"] table.sad th { padding:4px 9px; font-size:13.5px; }
+        section[data-slug="business-rules"] table.sad td { padding:4px 9px; line-height:1.28; vertical-align:middle; }
         section[data-slug="business-rules"] td.br-id { font-family:'IBM Plex Mono',monospace; font-weight:700; color:var(--dark-blue); white-space:nowrap; text-align:center; }
         section[data-slug="business-rules"] td.br-fr { font-family:'IBM Plex Mono',monospace; color:#475569; white-space:nowrap; text-align:center; font-size:13.5px; }
         section[data-slug="business-rules"] td .open { color:#B45309; font-weight:700; }
       </style>
       <h1>חוקים עסקיים — ומה הקשר לדרישות</h1>
-      <div class="subtitle">חוק עסקי הוא מדיניות של <b>הארגון</b> — נכון גם בלי מערכת · הדרישות הן מי ש<b>אוכף</b> אותו</div>
+      <div class="subtitle">חוק עסקי הוא מדיניות של <b>הארגון</b> — הבעלים שלו עסקי ולא טכני · הדרישות הן מי ש<b>אוכף</b> אותו</div>
       <div class="body">
 
         <div class="defs fragment">
           <div class="card">
             <div class="panel-title">מה זה חוק עסקי (<span class="en">Business Rule</span>)</div>
             <p>הצהרת מדיניות או אילוץ של הארגון: מי מוסמך, מה מותר, מתי ובאילו תנאים.
-               הוא היה נכון גם כשהקפיטריה עבדה עם דף ועט — המערכת רק אוכפת אותו.</p>
+               <b>המבחן הוא מי הבעלים</b> — החלטה של העסק היא חוק; החלטה של הפיתוח היא דרישה טכנית.</p>
+          </div>
+          <div class="card">
+            <div class="panel-title">מאיפה החוק מגיע</div>
+            <p><b>קיים</b> (<span class="en">AS-IS</span>) — היה כאן לפנינו, לרוב לא כתוב. <u>מגלים ומתעדים</u>.<br>
+               <b>טרם הוחלט</b> — הארגון הסתדר בעמימות, ותוכנה לא יכולה. <u>מעלים להחלטה</u>.<br>
+               <b>חדש</b> (<span class="en">TO-BE</span>) — התהליך החדש מביא מדיניות חדשה. <u>צריך אישור</u>.</p>
           </div>
           <div class="card">
             <div class="panel-title">איך מנהלים אותו</div>
@@ -1931,12 +1941,13 @@
         <div class="card fragment" style="display:flex; flex-direction:column; gap:6px;">
           <div class="panel-title">קטלוג החוקים של הקמפוס — וההפניות מהדרישות</div>
           <table class="sad">
-            <tr><th style="width:64px;">מזהה</th><th>החוק העסקי</th><th style="width:120px;">בעלים</th><th style="width:150px;">נאכף ע"י</th></tr>
-            <tr><td class="br-id">BR-1</td><td>שינוי תפריט, מלאי וזמינות — בסמכות מנהל קפיטריה בלבד.</td><td>הנהלת הקפיטריות</td><td class="br-fr">FR-4.4 · FR-6.3</td></tr>
-            <tr><td class="br-id">BR-2</td><td>הזמנה נמסרת אך ורק למי שהזמין ושילם.</td><td>הנהלת הקפיטריות</td><td class="br-fr">FR-3.2</td></tr>
-            <tr><td class="br-id">BR-3</td><td>הזמנה ששולמה ולא נאספה עד סוף חלון האיסוף — <span class="open">מדיניות טרם הוחלטה</span> (זיכוי? חיוב? חסימה?).</td><td>אגף שירותי קמפוס</td><td class="br-fr">— ממתין להחלטה</td></tr>
+            <tr><th style="width:54px;">מזהה</th><th>החוק העסקי</th><th style="width:88px;">מקור</th><th style="width:134px;">בעלים</th><th style="width:124px;">נאכף ע"י</th></tr>
+            <tr><td class="br-id">BR-1</td><td>שינוי תפריט, מלאי וזמינות — בסמכות מנהל קפיטריה בלבד.</td><td class="or ex">קיים</td><td>הנהלת הקפיטריות</td><td class="br-fr">FR-4.4 · FR-6.3</td></tr>
+            <tr><td class="br-id">BR-2</td><td>הזמנה נמסרת אך ורק למי שהזמין ושילם.</td><td class="or ex">קיים</td><td>הנהלת הקפיטריות</td><td class="br-fr">FR-3.2</td></tr>
+            <tr><td class="br-id">BR-4</td><td>ביטול הזמנה מותר עד שהיא עוברת ל״בהכנה״ — לא אחריה.</td><td class="or nw">חדש</td><td>הנהלת הקפיטריות</td><td class="br-fr">FR-3.5</td></tr>
+            <tr><td class="br-id">BR-3</td><td>הזמנה ששולמה ולא נאספה עד סוף חלון האיסוף — <span class="open">מדיניות טרם הוחלטה</span> (זיכוי? חיוב? חסימה?).</td><td class="or op">טרם הוחלט</td><td>אגף שירותי קמפוס</td><td class="br-fr">— ממתין להחלטה</td></tr>
           </table>
-          <span class="src">חוק אחד יכול להוליד כמה דרישות; ודרישה בלי חוק מאחוריה — שווה לשאול למה היא קיימת.</span>
+          <span class="src">חוק אחד יכול להוליד כמה דרישות · <b>BR-4 קיים רק בזכות המערכת</b> — בלי מעקב סטטוס אין רגע לתלות בו את הכלל.</span>
         </div>
 
         <div class="callout warn fragment" style="font-size:15.5px;">
@@ -1952,6 +1963,18 @@
           BR-3 הוא בכוונה השאלה הפתוחה של הקמפוס — אותה שאלה שבהרצאה 4-5 עולה מהתרחיש מוזנק-הזמן
           (טיפול בהזמנה שלא נאספה): המערכת מזהה ומדווחת; מה עושים — עדיין החלטת הנהלה.
           נקודת דיון: מי "הבעלים" של כל חוק אצלכם בפרויקט?
+          <b>עמודת ה״מקור״ (נוסף 2026-08-15, דוד): לא כל החוקים נולדו באותו מקום, וזה משנה מה עושים איתם.</b>
+          <u>קיים (AS-IS)</u> — היה בארגון לפנינו, ולרוב <b>איש לא כתב אותו</b>; העבודה שלנו היא לגלות ולתעד,
+          והסיכון הוא לפספס ואז לבנות מערכת שמפרה מדיניות שאיש לא סיפר עליה. <u>טרם הוחלט</u> — הארגון הסתדר
+          עד היום בעמימות כי <b>בן אדם ספג אותה</b>; תוכנה לא יכולה להיות עמומה, ולכן הפרויקט מכריח החלטה
+          שמעולם לא נדרשה. כאן הניתוח <b>יוצר ערך</b> ולא רק מתעד — שווה לומר את זה במפורש. <u>חדש (TO-BE)</u> —
+          מדיניות שהתהליך החדש מביא איתו (BR-4: ביטול רק לפני ״בהכנה״ — אין לו בכלל משמעות בלי מעקב סטטוס).
+          זה דורש <b>אישור</b>, לא רק אימות: משנים את אופן העבודה של הארגון, ולפעמים מול גורם אחר לגמרי.
+          <b>והגבול שחשוב לשמור:</b> לא כל אילוץ הוא חוק עסקי. ״סיסמה באורך 8 תווים״ היא דרישת מערכת. שני
+          צירים בלתי-תלויים: <b>מי הבעלים</b> (עסק ⇒ חוק · פיתוח ⇒ דרישה) ו<b>מאיפה הגיע</b> (קיים ⇒ מגלים ·
+          חדש ⇒ מאשרים · פתוח ⇒ מעלים להחלטה).
+          <b>ולמה זה יחזור בהרצאות 6-7 ו-8:</b> חוק שטרם הוחלט הוא <b>חור בעיצוב</b>. אם BR-3 פתוח, אי אפשר
+          לסגור את מודל המחלקות ואת תרשים המצבים — אין תשובה אם קיים מצב ״זוכה״, דגל חסימה או מחלקת זיכוי.
         </aside>
 
       </div>

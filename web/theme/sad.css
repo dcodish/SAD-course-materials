@@ -14,6 +14,14 @@
   /* Primary */
   --blue:        #0070C0;   /* PRIMARY_BLUE */
   --dark-blue:   #004E8C;
+  /* ⚠️ KNOWN CONTRAST ISSUE, deliberately NOT fixed here (2026-08-17). This token is used in two
+     CONFLICTING roles: as a dark chip fill carrying WHITE text (lecture 6-7's lead bars, the
+     .sdlc-step.done dot — 3.09:1), and as a tint carrying DARK-BLUE text (lectures 3 and 4-5,
+     ~45 spots incl. lecture-03 `smart`'s convention pill — 2.75:1). No single value satisfies
+     both: darkening it to #1C7FB8 lifts the white cases to 4.40 but drops the dark-blue cases
+     to 1.94. The real fix is to SPLIT the token — --light-blue as the chip fill (white text)
+     plus a new pale --tint-blue (dark text) — and repoint the dark-text rules in lectures 3
+     and 4-5. That is a course-wide pass, so it is logged rather than done piecemeal. */
   --light-blue:  #2E9ADE;
   --gray:        #9EA2A8;
   /* Text */
@@ -29,7 +37,12 @@
   /* Semantic */
   --green:       #2E7D32;
   --red:         #C62828;
-  --orange:      #E86C00;
+  /* DARKENED 2026-08-17 for projector/whiteboard legibility. Was #E86C00, which is used as the
+     ⚠️ TEXT colour (44 `color:` uses across the decks) on the pale tints below — only 2.75:1 on
+     --hero-bg and 2.98:1 on the .callout.warn tint, i.e. the single lowest-contrast text in the
+     course, on the highest-value line of many slides. Now 4.52 / 4.89 / 5.24 on white. The
+     border and background uses (46 more) gain too: white on the .tag.warn fill goes 3.19 → 5.24. */
+  --orange:      #B34E00;
   --hero-bg:     #FBECD9;   /* light orange hero tint */
   /* Chrome metrics (logical px on the 1280x720 canvas) */
   --accent-w:    12px;
@@ -240,7 +253,11 @@
 .reveal .tag.warn { background: var(--orange); }
 /* slate, not --gray (#9EA2A8): white bold text on the light gray was the weakest
    contrast in the decks (~2.4:1). #4A5A6A gives ~7:1 and still reads as "muted". */
-.reveal .tag.muted { background: #4A5A6A; }
+/* `.muted` below sets color:var(--muted) and, being later in the file at equal specificity, it
+   beat `.reveal .tag { color:#fff }` — so every `class="tag muted"` rendered dark-on-dark and was
+   effectively invisible. Restate the colour here. (Found on L6-7's «external system» tag, 2026-08-11;
+   also affects three L2 slides.) */
+.reveal .tag.muted { background: #4A5A6A; color: #fff; }
 
 /* =============================================================================
    Layout helpers

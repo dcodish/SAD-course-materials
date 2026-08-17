@@ -111,19 +111,18 @@
         '- createdAt : DateTime',
         '- pickupTime : DateTime',
         '- pickupCode : String',
-        '- status : OrderStatus',
-        '/ itemCount : int'
+        '- status : OrderStatus'
       ],
       ops: ['+ total() : Money', '+ cancel()'],
       x: 290, y: 230,
-      desc: 'ההזמנה עצמה. שימו לב ל<b>שתי דרכים לערך מחושב</b> על אותה מחלקה: <span class="en">total()</span> היא <b>פעולה</b>, ו-<span class="en">/ itemCount</span> היא <b>תכונה נגזרת</b> — שתיהן מחושבות מהשורות ואף אחת מהן אינה נשמרת. הקו הנטוי הוא ההצהרה ״מחושב, לא מאוחסן״. התכונה <span class="en">status</span> היא מטיפוס <span class="en">OrderStatus</span> — זו כל החוליה אל קופסת ה-<span class="en">enumeration</span>.'
+      desc: 'ההזמנה עצמה. שימו לב ש-<span class="en">total()</span> היא <b>פעולה</b> ולא תכונה — הסכום מחושב מהשורות ולכן לא נשמר. התכונה <span class="en">status</span> היא מטיפוס <span class="en">OrderStatus</span> — זו כל החוליה אל קופסת ה-<span class="en">enumeration</span>.'
     },
     {
       id: 'OrderLine', name: 'OrderLine', stereotype: null, isEnum: false, isAbstract: false, isExternal: false,
       attrs: ['- quantity : int {>0}', '- unitPrice : Money {>=0}', '- notes : String'],
       ops: ['+ lineTotal() : Money'],
       x: 540, y: 230,
-      desc: '<b>מחלקה מתווכת</b> (מחלקה מתווכת): היא מחליפה את הקשר רבים-לרבים שבין הזמנה לפריט תפריט, ונושאת את הנתונים שנולדו מהקשר — <span class="en">quantity</span>, ההערות, ו-<span class="en">unitPrice</span>. שימו לב ל-<span class="en">unitPrice</span>: הוא <b>משוכפל לכאורה</b> מ-<span class="en">MenuItem.price</span>, ובכל זאת חייב להישמר — מחיר בתפריט משתנה, והזמנה מלפני חודש חייבת להישאר נכונה. לכן <span class="en">lineTotal()</span> מחושב מ-<span class="en">quantity × unitPrice</span> ולא מהמחיר הנוכחי. הקשר המקורי <span class="en">M:N</span> נמחק ובמקומו שני קשרים נפרדים.'
+      desc: '<b>מחלקה מתווכת</b> (מחלקה מתווכת): היא מחליפה את הקשר רבים-לרבים שבין הזמנה לפריט תפריט, ונושאת את הנתונים שנולדו מהקשר — <span class="en">quantity</span>, ההערות, ו-<span class="en">unitPrice</span>. שימו לב ל-<span class="en">unitPrice</span>: הוא <b>משוכפל לכאורה</b> מ-<span class="en">MenuItem.price</span>, ובכל זאת חייב להישמר — מחיר בתפריט משתנה, והזמנה מלפני חודש חייבת להישאר נכונה. לכן <span class="en">lineTotal()</span> מחושב מ-<span class="en">quantity × unitPrice</span> ולא מהמחיר הנוכחי. קשר ה<b>רבים-לרבים</b> המקורי נמחק ובמקומו שני קשרים נפרדים.'
     },
     {
       id: 'MenuItem', name: 'MenuItem', stereotype: null, isEnum: false, isAbstract: false, isExternal: false,
@@ -143,14 +142,14 @@
       attrs: ['- name : String', '- type : StationType'],
       ops: [],
       x: 1033, y: 230,
-      desc: 'עמדת ההגשה שממנה אוספים את הפריט (פיצה, סלטים, שתייה). כל פריט תפריט משויך לעמדה אחת; לעמדה יש <b>*</b> פריטים.'
+      desc: 'עמדת ההגשה שממנה אוספים את הפריט (פיצה, סלטים, שתייה). כל פריט תפריט משויך לעמדה אחת; לעמדה יש <b>0..*</b> פריטים.'
     },
     {
       id: 'Cafeteria', name: 'Cafeteria', stereotype: null, isEnum: false, isAbstract: false, isExternal: false,
       attrs: ['- name : String', '- location : String'],
       ops: [],
       x: 1036, y: 90,
-      desc: '<b>צבירה (◇ יהלום ריק)</b>: הקפיטריה מכילה עמדות, אבל העמדה יכולה להתקיים בלעדיה — אם סוגרים קפיטריה אפשר להעביר את העמדה לקפיטריה אחרת. זה ההבדל מהרכבה: שם המחיקה מוחקת גם את החלק.'
+      desc: '<b>צבירה (◇ יהלום ריק)</b>: הקפיטריה מכילה עמדות, אבל העמדה יכולה להתקיים בלעדיה — אם סוגרים קפיטריה אפשר להעביר את העמדה לקפיטריה אחרת. זה ההבדל מהרכבה: שם המחיקה מוחקת גם את החלק. <b>שימו לב:</b> הסימון מופיע כאן כדי שתדעו לזהות אותו — בקורס <b>לא מייצרים ◇</b>, אלא קו רגיל.'
     },
     {
       id: 'Payment', name: 'Payment', stereotype: null, isEnum: false, isAbstract: false, isExternal: false,
@@ -164,7 +163,7 @@
       attrs: ['- universityId : String'],
       ops: [],
       x: 470, y: 620,
-      desc: '<b>הכללה (▷ משולש ריק)</b>: כל תכונות תשלום קיימות גם כאן, ובנוסף מספר הכרטיס האוניברסיטאי. ההורשה מוצדקת כי לשני תתי-הסוגים יש נתונים <b>שונים</b> — לא רק שם אחר.'
+      desc: '<b>הכללה (▷ משולש ריק)</b>: כל תכונות תשלום קיימות גם כאן, ובנוסף מספר הכרטיס האוניברסיטאי. ההורשה מוצדקת <b>לא</b> משום ש״לכל אחד יש שדה אחר״ — תכונה ריקה אינה בעיה — אלא משום ש<b>הקשרים שונים</b>: רק תשלום באשראי פונה לשער התשלום החיצוני. ובנוסף התכונות <b>סותרות</b>: מזהה אוניברסיטאי ו-last4 לעולם לא יחיו יחד.'
     },
     {
       id: 'CreditCardPayment', name: 'CreditCardPayment', stereotype: null, isEnum: false, isAbstract: false, isExternal: false,
@@ -184,7 +183,7 @@
       id: 'PaymentGateway', name: 'PaymentGateway', stereotype: '«external system»', isEnum: false, isAbstract: false, isExternal: true,
       attrs: ['no records on our side'], ops: [], minW: 170,
       x: 900, y: 480,
-      desc: '<b>מערכת חיצונית</b> — הסולק שמחייב את כרטיס האשראי. אנחנו <b>לא</b> שומרים אותה: אין לה תכונות ואין לה פעולות, ואין קרדינליות על הקו. הקשר הוא <b>תלות</b> (קו מקווקו + חץ פתוח) — "תשלום משתמש בשער התשלום".'
+      desc: '<b>מערכת חיצונית</b> — הסולק שמחייב את כרטיס האשראי. אנחנו <b>לא</b> שומרים אותה: אין לה תכונות ואין לה פעולות, ואין קרדינליות על הקו. הקשר הוא <b>תלות</b> (קו מקווקו + חץ פתוח) — ושימו לב שהוא יוצא מ<b>תשלום באשראי</b> ולא מ״תשלום״: תשלום בכרטיס אוניברסיטה מחייב חשבון פנימי ואינו עובר בשער. זה בדיוק ההבדל ב<b>קשרים</b> שמצדיק את ההורשה.'
     },
     {
       id: 'UniversityIdentity', name: 'UniversityIdentity', stereotype: '«external system»', isEnum: false, isAbstract: false, isExternal: true,
@@ -200,24 +199,27 @@
       fromMult: '1', toMult: '0..*', fromRole: null, toRole: null, label: null,
       points: [[206, 270], [290, 270]] },
 
-    // הזמנה (1) ◆—— (1..*) שורת הזמנה  (composition — FILLED diamond at הזמנה)
+    // הזמנה (1) ◆—— (0..*) שורת הזמנה  (composition — FILLED diamond at הזמנה)
     { type: 'comp', from: 'Order', to: 'OrderLine',
-      fromMult: '1', toMult: '1..*', fromRole: null, toRole: null, label: null,
+      fromMult: '1', toMult: '0..*', fromRole: null, toRole: null, label: null,
       points: [[456, 270], [540, 270]] },
 
     // שורת הזמנה (*) —— (1) פריט תפריט
     { type: 'assoc', from: 'OrderLine', to: 'MenuItem',
-      fromMult: '*', toMult: '1', fromRole: null, toRole: null, label: null,
-      points: [[693, 270], [777, 270]] },
+      fromMult: '0..*', toMult: '1', fromRole: null, toRole: null, label: null,
+      // FIXED 2026-08-15: started at x=693, which is INSIDE the OrderLine box (540..719) — so the
+      // multiplicity label, placed 22px along the line, was painted over by the box (boxes render
+      // after edges) and only the trailing "*" of "0..*" was visible. Now starts at the real edge.
+      points: [[719, 270], [777, 270]] },
 
     // פריט תפריט (*) —— (1) עמדה
     { type: 'assoc', from: 'MenuItem', to: 'Station',
-      fromMult: '*', toMult: '1', fromRole: null, toRole: null, label: null,
+      fromMult: '0..*', toMult: '1', fromRole: null, toRole: null, label: null,
       points: [[949, 270], [1033, 270]] },
 
-    // קפיטריה (1) ◇—— (1..*) עמדה  (aggregation — HOLLOW diamond at קפיטריה)
+    // קפיטריה (0..1) ◇—— (0..*) עמדה  (aggregation — HOLLOW diamond at קפיטריה)
     { type: 'agg', from: 'Cafeteria', to: 'Station',
-      fromMult: '1', toMult: '1..*', fromRole: null, toRole: null, label: null,
+      fromMult: '0..1', toMult: '0..*', fromRole: null, toRole: null, label: null,
       points: [[1106, 158], [1106, 230]] },
 
     // הזמנה (1) —— (0..1) תשלום
@@ -235,10 +237,14 @@
       fromMult: null, toMult: null, fromRole: null, toRole: null, label: null,
       points: [[776, 620], [776, 588], [633, 588], [633, 552]] },
 
-    // תשלום ⇢ «external system» שער תשלום   (dependency — dashed + open arrow, NO multiplicity)
-    { type: 'dep', from: 'Payment', to: 'PaymentGateway',
+    // תשלום באשראי ⇢ «external system» שער תשלום  (dependency — dashed + open arrow, NO multiplicity)
+    // MOVED off the parent 2026-08-15: only a CREDIT CARD payment goes through the gateway; a
+    // university-card payment debits an internal account. Drawing it from Payment claimed every
+    // payment uses the gateway — and it also erased the very thing that justifies the inheritance
+    // (different RELATIONS, see the generalization slide).
+    { type: 'dep', from: 'CreditCardPayment', to: 'PaymentGateway',
       fromMult: null, toMult: null, fromRole: null, toRole: null, label: null,
-      points: [[706, 505], [900, 505]] },
+      points: [[853, 655], [876, 655], [876, 505], [900, 505]] },
 
     // סטודנט ⇢ «external system» זיהוי אוניברסיטה  (dependency)
     { type: 'dep', from: 'Student', to: 'UniversityIdentity',
@@ -584,8 +590,7 @@ ${body}
               { visibility: '-', name: 'createdAt', type: 'DateTime', defaultValue: null, constraint: null },
               { visibility: '-', name: 'pickupTime', type: 'DateTime', defaultValue: null, constraint: null },
               { visibility: '-', name: 'pickupCode', type: 'String', defaultValue: null, constraint: null },
-              { visibility: '-', name: 'status', type: 'OrderStatus', defaultValue: null, constraint: null },
-              { visibility: '/', name: 'itemCount', type: 'int', defaultValue: null, constraint: null }
+              { visibility: '-', name: 'status', type: 'OrderStatus', defaultValue: null, constraint: null }
             ],
             operations: [
               { visibility: '+', name: 'total', params: [], returnType: 'Money' },
@@ -669,23 +674,23 @@ ${body}
             multFrom: '1', multTo: '0..*', roleFrom: null, roleTo: null,
             directed: false, aggregation: false, composition: false },
           { kind: 'association', id: 'comp_order_orderline', from: 'Order', to: 'OrderLine',
-            multFrom: '1', multTo: '1..*', roleFrom: null, roleTo: null,
+            multFrom: '1', multTo: '0..*', roleFrom: null, roleTo: null,
             directed: false, aggregation: false, composition: true },
           { kind: 'association', id: 'assoc_orderline_menuitem', from: 'OrderLine', to: 'MenuItem',
-            multFrom: '*', multTo: '1', roleFrom: null, roleTo: null,
+            multFrom: '0..*', multTo: '1', roleFrom: null, roleTo: null,
             directed: false, aggregation: false, composition: false },
           { kind: 'association', id: 'assoc_menuitem_station', from: 'MenuItem', to: 'Station',
-            multFrom: '*', multTo: '1', roleFrom: null, roleTo: null,
+            multFrom: '0..*', multTo: '1', roleFrom: null, roleTo: null,
             directed: false, aggregation: false, composition: false },
           { kind: 'association', id: 'agg_cafeteria_station', from: 'Cafeteria', to: 'Station',
-            multFrom: '1', multTo: '1..*', roleFrom: null, roleTo: null,
+            multFrom: '0..1', multTo: '0..*', roleFrom: null, roleTo: null,
             directed: false, aggregation: true, composition: false },
           { kind: 'association', id: 'assoc_order_payment', from: 'Order', to: 'Payment',
             multFrom: '1', multTo: '0..1', roleFrom: null, roleTo: null,
             directed: false, aggregation: false, composition: false },
           { kind: 'generalization', id: 'gen_unicard_payment', from: 'UniversityCardPayment', to: 'Payment' },
           { kind: 'generalization', id: 'gen_credit_payment', from: 'CreditCardPayment', to: 'Payment' },
-          { kind: 'dependency', id: 'dep_payment_gateway', from: 'Payment', to: 'PaymentGateway', stereotype: null },
+          { kind: 'dependency', id: 'dep_payment_gateway', from: 'CreditCardPayment', to: 'PaymentGateway', stereotype: null },
           { kind: 'dependency', id: 'dep_student_identity', from: 'Student', to: 'UniversityIdentity', stereotype: null }
         ]
       }
