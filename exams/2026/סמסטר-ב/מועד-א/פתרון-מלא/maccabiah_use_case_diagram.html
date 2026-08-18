@@ -1,0 +1,1676 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>מערכת ניהול משלחות המכביה, Use Case Diagram</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Hebrew:wght@400;600&family=IBM+Plex+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+/* inlined uc-diagram-common.css */
+/* uc-diagram-common.css, SAD MCP shared styles for use case diagrams */
+
+/* ── Base layout ─────────────────────────────────────────────────────────── */
+body { margin: 0; padding: 20px 0; background: #f8fafc;
+  font-family: 'Noto Sans Hebrew', sans-serif; color: #1e293b; }
+h1.page-title { text-align: center; font-size: 18px; color: #1e40af;
+  margin: 0 0 10px; font-weight: 700; }
+.diagram-part { display: flex; justify-content: center; }
+
+/* ── Tab bar ─────────────────────────────────────────────────────────────── */
+.tab-bar { display: flex; justify-content: center; gap: 8px; margin: 12px 0 4px; }
+.tab { padding: 7px 20px; border: 1px solid #cbd5e1; background: #f8fafc;
+  color: #475569; font-size: 13px; font-weight: 600; cursor: pointer;
+  border-radius: 6px; font-family: 'Noto Sans Hebrew', sans-serif; }
+.tab.active { background: #1e40af; color: #fff; border-color: #1e40af; }
+.split-rationale { text-align: center; font-size: 11px; color: #64748b;
+  margin: 0 0 8px; font-style: italic; }
+
+/* ── Buttons ─────────────────────────────────────────────────────────────── */
+.fix-btn { padding: 8px 20px; border: 1px solid #3b82f6; background: #eff6ff;
+  color: #1e40af; font-size: 12px; font-weight: 600; cursor: pointer;
+  border-radius: 6px; font-family: 'Noto Sans Hebrew', sans-serif; }
+.fix-btn:hover { background: #dbeafe; }
+.vp-export-btn { position: fixed; bottom: 20px; right: 20px; z-index: 1000;
+  background: #1e40af; color: #fff; border: none; border-radius: 6px;
+  padding: 8px 16px; font-size: 13px; cursor: pointer;
+  font-family: 'IBM Plex Mono', monospace; }
+.vp-export-btn:hover { background: #1e3a8a; }
+
+/* ── Assumptions panel ───────────────────────────────────────────────────── */
+.assumptions-panel { display: flex; gap: 24px; max-width: 1000px;
+  margin: 20px auto; padding: 16px 20px; background: #fff;
+  border: 1px solid #cbd5e1; border-radius: 8px; direction: rtl; }
+.assumptions-col { flex: 1; min-width: 0; }
+.assumptions-col h3 { margin: 0 0 6px; font-size: 13px; font-weight: 600; color: #1e40af; }
+.assumptions-col ul { margin: 0; padding-right: 18px; }
+.assumptions-col li { color: #334155; font-size: 12px; line-height: 1.6; }
+
+/* ── User stories summary panel ──────────────────────────────────────────── */
+.user-stories-panel { max-width: 1000px; margin: 12px auto 20px; padding: 16px 20px;
+  background: #fff; border: 1px solid #cbd5e1; border-radius: 8px; direction: rtl; }
+.user-stories-panel h3 { margin: 0 0 8px; font-size: 13px; font-weight: 600; color: #1e40af; }
+.user-stories-panel ul { margin: 0; padding-right: 18px; }
+.user-stories-panel li { color: #334155; font-size: 12px; line-height: 1.7; }
+
+/* ── UC modal ────────────────────────────────────────────────────────────── */
+body.uc-modal-open { overflow: hidden; }
+.uc-modal[hidden] { display: none !important; }
+.uc-modal { position: fixed; inset: 0; z-index: 2000; display: flex;
+  align-items: flex-start; justify-content: center; padding: 40px 20px;
+  overflow-y: auto; direction: rtl; font-family: 'Noto Sans Hebrew', sans-serif; }
+.uc-modal-backdrop { position: absolute; inset: 0; background: rgba(15,23,42,0.55); }
+.uc-modal-body { position: relative; z-index: 1; width: 100%; max-width: 960px;
+  background: #fff; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,.25);
+  padding: 28px 32px 32px; color: #1e293b; }
+.uc-modal-close { position: absolute; top: 10px; left: 14px; background: none;
+  border: none; font-size: 24px; color: #64748b; cursor: pointer; }
+.uc-modal-body header { border-bottom: 1px solid #e2e8f0; padding-bottom: 12px;
+  margin-bottom: 18px; }
+.uc-modal-body .uc-id { display: inline-block; font-family: 'IBM Plex Mono',monospace;
+  font-size: 11px; color: #64748b; background: #f1f5f9; padding: 2px 8px;
+  border-radius: 4px; margin-bottom: 6px; }
+.uc-modal-body .uc-name { margin: 0 0 4px; font-size: 20px; color: #1e40af; font-weight: 700; }
+.uc-modal-body .uc-primary { font-size: 13px; color: #334155; }
+.uc-modal-body .uc-primary-label { color: #64748b; margin-left: 6px; }
+.uc-modal-body .uc-primary-link { color: #1e40af; cursor: pointer; font-weight: 600;
+  text-decoration: underline dotted; }
+.uc-description { margin-bottom: 20px; font-size: 14px; line-height: 1.7; color: #334155; }
+.uc-scenarios h3 { font-size: 14px; color: #1e40af; margin: 18px 0 6px;
+  border-right: 3px solid #3b82f6; padding-right: 10px; }
+.uc-scenarios ol { margin: 0 0 14px; padding-right: 22px; }
+.uc-scenarios ol li { color: #1e293b; font-size: 13px; line-height: 1.9; }
+.step-actor { color: #1e40af; font-weight: 600; cursor: pointer; text-decoration: underline dotted; }
+.step-system { color: #475569; font-style: italic; }
+.step-include { color: #7c3aed; font-family: 'IBM Plex Mono', monospace; font-size: 11px; }
+.step-uc-ref { color: #7c3aed; cursor: pointer; text-decoration: underline; }
+.ext-inline, .ext-sub { list-style: none; color: #64748b; font-size: 12px;
+  padding-right: 24px; line-height: 1.7; }
+.uc-prepostuser { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 18px;
+  margin: 18px 0 20px; }
+.uc-prepostuser > div { background: #f8fafc; border: 1px solid #e2e8f0;
+  border-radius: 8px; padding: 12px 14px; }
+.uc-prepostuser h4 { margin: 0 0 6px; font-size: 12px; color: #1e40af; font-weight: 600; }
+.uc-prepostuser ul { margin: 0; padding-right: 18px; font-size: 12px;
+  color: #334155; line-height: 1.7; }
+.uc-wireframe { border-top: 1px dashed #cbd5e1; padding-top: 16px; margin-top: 6px; }
+.uc-wireframe:empty, .uc-wireframe[hidden] { display: none; }
+
+/* ── Actor pulse ─────────────────────────────────────────────────────────── */
+.actor-pulse { animation: actor-pulse 0.6s ease-in-out 3; }
+@keyframes actor-pulse {
+  0%, 100% { filter: none; }
+  50%      { filter: drop-shadow(0 0 8px #3b82f6); }
+}
+
+/* ── Wireframe scoped theme (wf-*) ───────────────────────────────────────── */
+.wf-screen { background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px;
+  padding: 18px 20px; font-family: 'Noto Sans Hebrew', sans-serif;
+  color: #1e293b; direction: rtl; max-width: 760px; margin: 0 auto; }
+.wf-heading { margin: 0 0 14px; font-size: 15px; color: #1e40af; font-weight: 700;
+  border-bottom: 1px solid #e2e8f0; padding-bottom: 6px; }
+.wf-section { margin: 14px 0; }
+.wf-row { display: flex; gap: 10px; align-items: center; margin: 6px 0; }
+.wf-label { font-size: 12px; color: #475569; min-width: 120px; }
+.wf-input, .wf-textarea, .wf-select { flex: 1; background: #fff;
+  border: 1px solid #cbd5e1; border-radius: 4px; padding: 6px 8px;
+  font-size: 12px; color: #334155; }
+.wf-textarea { min-height: 60px; }
+.wf-table { width: 100%; border-collapse: collapse; margin: 10px 0; font-size: 12px; }
+.wf-table th, .wf-table td { border: 1px solid #cbd5e1; padding: 6px 8px; text-align: right; }
+.wf-table th { background: #e2e8f0; color: #1e40af; font-weight: 600; }
+.wf-actions { display: flex; gap: 8px; margin-top: 12px; justify-content: flex-start; }
+.wf-button { background: #fff; border: 1px solid #64748b; border-radius: 4px;
+  padding: 6px 14px; font-size: 12px; color: #334155; cursor: default; }
+.wf-primary { background: #1e40af; color: #fff; border-color: #1e40af; }
+.wf-image-box { border: 1px dashed #94a3b8; background: #f1f5f9; color: #64748b;
+  text-align: center; padding: 24px; border-radius: 4px; font-size: 12px; margin: 10px 0; }
+.wf-hint { font-size: 11px; color: #64748b; font-style: italic; margin: 6px 0; }
+.wf-badge { display: inline-block; background: #e0f2fe; color: #0369a1;
+  padding: 2px 8px; border-radius: 999px; font-size: 10px; font-weight: 600; }
+
+</style>
+  <!-- REQUIRED: uc-diagram-common.css sets display:flex on .diagram-part, which overrides
+       the browser's [hidden]{display:none}. This one-liner restores correct tab switching. -->
+  <style>[hidden] { display: none !important; }</style>
+</head>
+<body>
+  <!-- Tab bar -->
+  <div class="tab-bar">
+    <button class="tab active" onclick="showDiagram(0)">ניהול משלחת ואישורה</button>
+    <button class="tab"        onclick="showDiagram(1)">ניהול מערכת</button>
+    <button class="tab"        onclick="showDiagram(2)">תהליכים אוטומטיים וממשקים</button>
+  </div>
+
+  <!-- Split rationale -->
+  <div class="split-rationale">Split by responsibility: תפעול משלחת / נתוני אב (מנהל מערכת) / טריגרים אוטומטיים וממשקים חיצוניים — 14 UCs</div>
+
+  <!-- Fix Layout button -->
+  <div style="text-align:center;margin:8px 0;">
+    <button onclick="fixLayout(currentLayout())" class="fix-btn">Fix Layout</button>
+  </div>
+
+  <!-- ══════════════════════ TAB 1, ניהול משלחת ואישורה ══════════════════════ -->
+  <div class="diagram-part" id="diagram-0">
+    <svg id="diagram-svg-0" viewBox="0 0 1300 780" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <pattern id="dot-grid-0" width="24" height="24" patternUnits="userSpaceOnUse">
+          <circle cx="1" cy="1" r="0.8" fill="#cbd5e1"/>
+        </pattern>
+        <marker id="arrow-include-0" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+          <polyline points="0 0, 9 3.5, 0 7" fill="none" stroke="#7c3aed" stroke-width="1.2"/>
+        </marker>
+      </defs>
+
+      <rect x="0" y="0" width="1300" height="780" fill="#f8fafc"/>
+      <rect x="0" y="0" width="1300" height="780" fill="url(#dot-grid-0)"/>
+
+      <!-- System boundary -->
+      <rect class="system-boundary" x="230" y="70" width="840" height="560" rx="12"
+            fill="#ffffff" stroke="#3b82f6" stroke-width="2.5"/>
+      <rect x="230" y="70" width="840" height="44" rx="12" fill="#1e40af"/>
+      <rect x="230" y="92" width="840" height="22" fill="#1e40af"/>
+      <text x="650" y="98" text-anchor="middle" font-size="14" font-weight="700" fill="#ffffff"
+            font-family="'Noto Sans Hebrew',sans-serif">מערכת ניהול משלחות המכביה</text>
+
+      <!-- ── Association lines (visible + hitbox) ── -->
+      <line data-conn-from="head" data-conn-to="uc-update-deleg" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+      <line class="conn-hitbox" data-conn-id="a-update" data-hitbox-from="head" data-hitbox-to="uc-update-deleg" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('a-update','assoc',event)"/>
+
+      <line data-conn-from="head" data-conn-to="uc-manage-participants" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+      <line class="conn-hitbox" data-conn-id="a-participants" data-hitbox-from="head" data-hitbox-to="uc-manage-participants" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('a-participants','assoc',event)"/>
+
+      <line data-conn-from="head" data-conn-to="uc-upload-docs" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+      <line class="conn-hitbox" data-conn-id="a-upload" data-hitbox-from="head" data-hitbox-to="uc-upload-docs" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('a-upload','assoc',event)"/>
+
+      <line data-conn-from="head" data-conn-to="uc-view-status" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+      <line class="conn-hitbox" data-conn-id="a-viewstatus" data-hitbox-from="head" data-hitbox-to="uc-view-status" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('a-viewstatus','assoc',event)"/>
+
+      <line data-conn-from="head" data-conn-to="uc-submit-deleg" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+      <line class="conn-hitbox" data-conn-id="a-submit" data-hitbox-from="head" data-hitbox-to="uc-submit-deleg" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('a-submit','assoc',event)"/>
+
+      <line data-conn-from="coordinator" data-conn-to="uc-review-deleg" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+      <line class="conn-hitbox" data-conn-id="a-review" data-hitbox-from="coordinator" data-hitbox-to="uc-review-deleg" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('a-review','assoc',event)"/>
+
+      <line data-conn-from="coordinator" data-conn-to="uc-reports-coord" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+      <line class="conn-hitbox" data-conn-id="a-reports" data-hitbox-from="coordinator" data-hitbox-to="uc-reports-coord" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('a-reports','assoc',event)"/>
+
+      <!-- ── «include» lines (base → target) ── -->
+      <line data-conn-from="uc-view-status" data-conn-to="uc-missing-docs" x1="0" y1="0" x2="0" y2="0" stroke="#7c3aed" stroke-width="1.6" stroke-dasharray="6 4" marker-end="url(#arrow-include-0)"/>
+      <line class="conn-hitbox" data-conn-id="inc-view" data-hitbox-from="uc-view-status" data-hitbox-to="uc-missing-docs" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('inc-view','assoc',event)"/>
+      <text data-label-for="uc-view-status uc-missing-docs" x="0" y="0" text-anchor="middle" font-size="9.5" fill="#7c3aed" font-family="'IBM Plex Mono',monospace">«include»</text>
+
+      <line data-conn-from="uc-review-deleg" data-conn-to="uc-missing-docs" x1="0" y1="0" x2="0" y2="0" stroke="#7c3aed" stroke-width="1.6" stroke-dasharray="6 4" marker-end="url(#arrow-include-0)"/>
+      <line class="conn-hitbox" data-conn-id="inc-review" data-hitbox-from="uc-review-deleg" data-hitbox-to="uc-missing-docs" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('inc-review','assoc',event)"/>
+      <text data-label-for="uc-review-deleg uc-missing-docs" x="0" y="0" text-anchor="middle" font-size="9.5" fill="#7c3aed" font-family="'IBM Plex Mono',monospace">«include»</text>
+
+      <!-- ── Use case ellipses ── -->
+      <g id="uc-group-uc-update-deleg" data-uc-id="uc-update-deleg" onclick="showDesc('uc-update-deleg','uc',event)" style="cursor:pointer">
+        <ellipse cx="380" cy="172" rx="100" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+        <text x="380" y="176" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">עדכון פרטי משלחת</text>
+      </g>
+      <g id="uc-group-uc-manage-participants" data-uc-id="uc-manage-participants" onclick="showDesc('uc-manage-participants','uc',event)" style="cursor:pointer">
+        <ellipse cx="380" cy="240" rx="92" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+        <text x="380" y="244" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">ניהול משתתפים</text>
+      </g>
+      <g id="uc-group-uc-upload-docs" data-uc-id="uc-upload-docs" onclick="showDesc('uc-upload-docs','uc',event)" style="cursor:pointer">
+        <ellipse cx="380" cy="308" rx="105" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+        <text x="380" y="312" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">העלאת מסמכי משתתף</text>
+      </g>
+      <g id="uc-group-uc-view-status" data-uc-id="uc-view-status" onclick="showDesc('uc-view-status','uc',event)" style="cursor:pointer">
+        <ellipse cx="380" cy="376" rx="98" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+        <text x="380" y="380" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">הצגת מצב המשלחת</text>
+      </g>
+      <g id="uc-group-uc-submit-deleg" data-uc-id="uc-submit-deleg" onclick="showDesc('uc-submit-deleg','uc',event)" style="cursor:pointer">
+        <ellipse cx="380" cy="444" rx="105" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+        <text x="380" y="448" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">הגשת משלחת לאישור</text>
+      </g>
+      <g id="uc-group-uc-missing-docs" data-uc-id="uc-missing-docs" onclick="showDesc('uc-missing-docs','uc',event)" style="cursor:pointer">
+        <ellipse cx="650" cy="410" rx="105" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+        <text x="650" y="414" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">הצגת מסמכים חסרים</text>
+      </g>
+      <g id="uc-group-uc-review-deleg" data-uc-id="uc-review-deleg" onclick="showDesc('uc-review-deleg','uc',event)" style="cursor:pointer">
+        <ellipse cx="920" cy="376" rx="110" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+        <text x="920" y="380" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">בדיקת ואישור משלחת</text>
+      </g>
+      <g id="uc-group-uc-reports-coord" data-uc-id="uc-reports-coord" onclick="showDesc('uc-reports-coord','uc',event)" style="cursor:pointer">
+        <ellipse cx="920" cy="444" rx="82" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+        <text x="920" y="448" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">הפקת דוחות</text>
+      </g>
+
+      <!-- ── Actors ── -->
+      <g id="actor-group-head" data-actor-id="head" onclick="showDesc('head','actor',event)" style="cursor:pointer" transform="translate(150,308)">
+        <circle cx="0" cy="-60" r="14" fill="#e0f0ff" stroke="#334155" stroke-width="2"/>
+        <line x1="0" y1="-46" x2="0" y2="-10" stroke="#334155" stroke-width="2"/>
+        <line x1="-18" y1="-36" x2="18" y2="-36" stroke="#334155" stroke-width="2"/>
+        <line x1="0" y1="-10" x2="-14" y2="14" stroke="#334155" stroke-width="2"/>
+        <line x1="0" y1="-10" x2="14" y2="14" stroke="#334155" stroke-width="2"/>
+        <text x="0" y="30" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b" font-family="'Noto Sans Hebrew',sans-serif">ראש משלחת</text>
+      </g>
+      <g id="actor-group-coordinator" data-actor-id="coordinator" onclick="showDesc('coordinator','actor',event)" style="cursor:pointer" transform="translate(1150,410)">
+        <circle cx="0" cy="-60" r="14" fill="#e0f0ff" stroke="#334155" stroke-width="2"/>
+        <line x1="0" y1="-46" x2="0" y2="-10" stroke="#334155" stroke-width="2"/>
+        <line x1="-18" y1="-36" x2="18" y2="-36" stroke="#334155" stroke-width="2"/>
+        <line x1="0" y1="-10" x2="-14" y2="14" stroke="#334155" stroke-width="2"/>
+        <line x1="0" y1="-10" x2="14" y2="14" stroke="#334155" stroke-width="2"/>
+        <text x="0" y="30" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b" font-family="'Noto Sans Hebrew',sans-serif">רכז מכביה</text>
+      </g>
+    </svg>
+  </div>
+
+  <!-- ══════════════════════ TAB 2, ניהול מערכת ══════════════════════ -->
+  <div class="diagram-part" id="diagram-1" hidden>
+    <svg id="diagram-svg-1" viewBox="0 0 1250 680" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <pattern id="dot-grid-1" width="24" height="24" patternUnits="userSpaceOnUse">
+          <circle cx="1" cy="1" r="0.8" fill="#cbd5e1"/>
+        </pattern>
+      </defs>
+
+      <rect x="0" y="0" width="1250" height="680" fill="#f8fafc"/>
+      <rect x="0" y="0" width="1250" height="680" fill="url(#dot-grid-1)"/>
+
+      <!-- System boundary -->
+      <rect class="system-boundary" x="260" y="70" width="720" height="430" rx="12"
+            fill="#ffffff" stroke="#3b82f6" stroke-width="2.5"/>
+      <rect x="260" y="70" width="720" height="44" rx="12" fill="#1e40af"/>
+      <rect x="260" y="92" width="720" height="22" fill="#1e40af"/>
+      <text x="620" y="98" text-anchor="middle" font-size="14" font-weight="700" fill="#ffffff"
+            font-family="'Noto Sans Hebrew',sans-serif">מערכת ניהול משלחות המכביה</text>
+
+      <!-- ── Association lines (visible + hitbox) ── -->
+      <line data-conn-from="admin" data-conn-to="uc-manage-doctypes" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+      <line class="conn-hitbox" data-conn-id="a-doctypes" data-hitbox-from="admin" data-hitbox-to="uc-manage-doctypes" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('a-doctypes','assoc',event)"/>
+
+      <line data-conn-from="admin" data-conn-to="uc-manage-sports" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+      <line class="conn-hitbox" data-conn-id="a-sports" data-hitbox-from="admin" data-hitbox-to="uc-manage-sports" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('a-sports','assoc',event)"/>
+
+      <line data-conn-from="admin" data-conn-to="uc-manage-roles" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+      <line class="conn-hitbox" data-conn-id="a-roles" data-hitbox-from="admin" data-hitbox-to="uc-manage-roles" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('a-roles','assoc',event)"/>
+
+      <line data-conn-from="admin" data-conn-to="uc-manage-users" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+      <line class="conn-hitbox" data-conn-id="a-users" data-hitbox-from="admin" data-hitbox-to="uc-manage-users" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('a-users','assoc',event)"/>
+
+      <!-- ── Use case ellipses ── -->
+      <g id="uc-group-uc-manage-doctypes" data-uc-id="uc-manage-doctypes" onclick="showDesc('uc-manage-doctypes','uc',event)" style="cursor:pointer">
+        <ellipse cx="830" cy="172" rx="105" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+        <text x="830" y="176" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">ניהול סוגי מסמכים</text>
+      </g>
+      <g id="uc-group-uc-manage-sports" data-uc-id="uc-manage-sports" onclick="showDesc('uc-manage-sports','uc',event)" style="cursor:pointer">
+        <ellipse cx="830" cy="252" rx="100" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+        <text x="830" y="256" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">ניהול ענפי ספורט</text>
+      </g>
+      <g id="uc-group-uc-manage-roles" data-uc-id="uc-manage-roles" onclick="showDesc('uc-manage-roles','uc',event)" style="cursor:pointer">
+        <ellipse cx="830" cy="332" rx="88" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+        <text x="830" y="336" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">ניהול תפקידים</text>
+      </g>
+      <g id="uc-group-uc-manage-users" data-uc-id="uc-manage-users" onclick="showDesc('uc-manage-users','uc',event)" style="cursor:pointer">
+        <ellipse cx="830" cy="412" rx="95" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+        <text x="830" y="416" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">ניהול משתמשים</text>
+      </g>
+
+      <!-- ── Actors ── -->
+      <g id="actor-group-admin" data-actor-id="admin" onclick="showDesc('admin','actor',event)" style="cursor:pointer" transform="translate(1060,292)">
+        <circle cx="0" cy="-60" r="14" fill="#e0f0ff" stroke="#334155" stroke-width="2"/>
+        <line x1="0" y1="-46" x2="0" y2="-10" stroke="#334155" stroke-width="2"/>
+        <line x1="-18" y1="-36" x2="18" y2="-36" stroke="#334155" stroke-width="2"/>
+        <line x1="0" y1="-10" x2="-14" y2="14" stroke="#334155" stroke-width="2"/>
+        <line x1="0" y1="-10" x2="14" y2="14" stroke="#334155" stroke-width="2"/>
+        <text x="0" y="30" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b" font-family="'Noto Sans Hebrew',sans-serif">מנהל מערכת</text>
+      </g>
+    </svg>
+  </div>
+
+  <!-- ══════════════════════ TAB 3, תהליכים אוטומטיים וממשקים ══════════════════════ -->
+  <div class="diagram-part" id="diagram-2" hidden>
+    <svg id="diagram-svg-2" viewBox="0 0 1250 560" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <pattern id="dot-grid-2" width="24" height="24" patternUnits="userSpaceOnUse">
+          <circle cx="1" cy="1" r="0.8" fill="#cbd5e1"/>
+        </pattern>
+      </defs>
+
+      <rect x="0" y="0" width="1250" height="560" fill="#f8fafc"/>
+      <rect x="0" y="0" width="1250" height="560" fill="url(#dot-grid-2)"/>
+
+      <!-- System boundary -->
+      <rect class="system-boundary" x="260" y="70" width="720" height="380" rx="12"
+            fill="#ffffff" stroke="#3b82f6" stroke-width="2.5"/>
+      <rect x="260" y="70" width="720" height="44" rx="12" fill="#1e40af"/>
+      <rect x="260" y="92" width="720" height="22" fill="#1e40af"/>
+      <text x="620" y="98" text-anchor="middle" font-size="14" font-weight="700" fill="#ffffff"
+            font-family="'Noto Sans Hebrew',sans-serif">מערכת ניהול משלחות המכביה</text>
+
+      <!-- ── Association lines (visible + hitbox) ── -->
+      <line data-conn-from="time" data-conn-to="uc-close-registration" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+      <line class="conn-hitbox" data-conn-id="a-close" data-hitbox-from="time" data-hitbox-to="uc-close-registration" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('a-close','assoc',event)"/>
+
+      <line data-conn-from="intlSys" data-conn-to="uc-receive-deleg" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+      <line class="conn-hitbox" data-conn-id="a-receive" data-hitbox-from="intlSys" data-hitbox-to="uc-receive-deleg" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('a-receive','assoc',event)"/>
+
+      <!-- ── Use case ellipses ── -->
+      <g id="uc-group-uc-close-registration" data-uc-id="uc-close-registration" onclick="showDesc('uc-close-registration','uc',event)" style="cursor:pointer">
+        <ellipse cx="620" cy="192" rx="118" ry="34" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+        <text x="620" y="186" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">סגירת ההרשמה וסימון</text>
+        <text x="620" y="202" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">משלחות באיחור</text>
+      </g>
+      <g id="uc-group-uc-receive-deleg" data-uc-id="uc-receive-deleg" onclick="showDesc('uc-receive-deleg','uc',event)" style="cursor:pointer">
+        <ellipse cx="620" cy="330" rx="105" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+        <text x="620" y="334" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">קליטת משלחת חדשה</text>
+      </g>
+
+      <!-- ── Actors ── -->
+      <g id="actor-group-time" data-actor-id="time" onclick="showDesc('time','actor',event)" style="cursor:pointer" transform="translate(180,192)">
+        <circle cx="0" cy="-60" r="14" fill="#fef3c7" stroke="#334155" stroke-width="2"/>
+        <line x1="0" y1="-46" x2="0" y2="-10" stroke="#334155" stroke-width="2"/>
+        <line x1="-18" y1="-36" x2="18" y2="-36" stroke="#334155" stroke-width="2"/>
+        <line x1="0" y1="-10" x2="-14" y2="14" stroke="#334155" stroke-width="2"/>
+        <line x1="0" y1="-10" x2="14" y2="14" stroke="#334155" stroke-width="2"/>
+        <text x="0" y="30" text-anchor="middle" font-size="9" font-style="italic" fill="#64748b" font-family="'IBM Plex Mono',monospace">«system»</text>
+        <text x="0" y="44" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b" font-family="'Noto Sans Hebrew',sans-serif">שחקן זמן</text>
+      </g>
+      <g id="actor-group-intlSys" data-actor-id="intlSys" onclick="showDesc('intlSys','actor',event)" style="cursor:pointer" transform="translate(180,330)">
+        <circle cx="0" cy="-60" r="14" fill="#fef3c7" stroke="#334155" stroke-width="2"/>
+        <line x1="0" y1="-46" x2="0" y2="-10" stroke="#334155" stroke-width="2"/>
+        <line x1="-18" y1="-36" x2="18" y2="-36" stroke="#334155" stroke-width="2"/>
+        <line x1="0" y1="-10" x2="-14" y2="14" stroke="#334155" stroke-width="2"/>
+        <line x1="0" y1="-10" x2="14" y2="14" stroke="#334155" stroke-width="2"/>
+        <text x="0" y="30" text-anchor="middle" font-size="9" font-style="italic" fill="#64748b" font-family="'IBM Plex Mono',monospace">«system»</text>
+        <text x="0" y="44" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b" font-family="'Noto Sans Hebrew',sans-serif">מערכת הרישום הבינלאומית</text>
+      </g>
+    </svg>
+  </div>
+
+  <!-- Assumptions / open-questions panel -->
+  <div id="assumptions-panel" class="assumptions-panel" hidden>
+    <div class="assumptions-col" id="assumptions-col">
+      <h3>הנחות</h3><ul id="assumptions-list"></ul>
+    </div>
+    <div class="assumptions-col" id="open-questions-col">
+      <h3>שאלות פתוחות</h3><ul id="open-questions-list"></ul>
+    </div>
+  </div>
+
+  <!-- User stories summary -->
+  <div id="user-stories-panel" class="user-stories-panel" hidden>
+    <h3>סיפורי משתמש</h3>
+    <ul id="user-stories-list"></ul>
+  </div>
+
+  <!-- UC modal -->
+  <div id="uc-modal" class="uc-modal" hidden role="dialog" aria-modal="true">
+    <div class="uc-modal-backdrop" onclick="closeUcModal()"></div>
+    <div class="uc-modal-body"></div>
+  </div>
+
+  <!-- VP export button -->
+  <button class="vp-export-btn" onclick="exportXMI()">Download .xmi (Visual Paradigm)</button>
+
+  <!-- DIAGRAM DATA ONLY, all functions live in uc-diagram-common.js. -->
+  <script>
+    var diagramLayouts = [
+      {
+        svgId: 'diagram-svg-0',
+        boundary: { x: 230, y: 70, width: 840, height: 560 },
+        actors: [
+          { id: 'head',        label: 'ראש משלחת', side: 'left',  x: 150,  y: 308, ucIds: ['uc-update-deleg','uc-manage-participants','uc-upload-docs','uc-view-status','uc-submit-deleg'] },
+          { id: 'coordinator', label: 'רכז מכביה', side: 'right', x: 1150, y: 410, ucIds: ['uc-review-deleg','uc-reports-coord'] }
+        ],
+        useCases: [
+          { id: 'uc-update-deleg',        cx: 380, cy: 172, rx: 100, ry: 28 },
+          { id: 'uc-manage-participants', cx: 380, cy: 240, rx: 92,  ry: 28 },
+          { id: 'uc-upload-docs',         cx: 380, cy: 308, rx: 105, ry: 28 },
+          { id: 'uc-view-status',         cx: 380, cy: 376, rx: 98,  ry: 28 },
+          { id: 'uc-submit-deleg',        cx: 380, cy: 444, rx: 105, ry: 28 },
+          { id: 'uc-missing-docs',        cx: 650, cy: 410, rx: 105, ry: 28 },
+          { id: 'uc-review-deleg',        cx: 920, cy: 376, rx: 110, ry: 28 },
+          { id: 'uc-reports-coord',       cx: 920, cy: 444, rx: 82,  ry: 28 }
+        ],
+        connections: [
+          { from: 'head',            to: 'uc-update-deleg',        type: 'association' },
+          { from: 'head',            to: 'uc-manage-participants', type: 'association' },
+          { from: 'head',            to: 'uc-upload-docs',         type: 'association' },
+          { from: 'head',            to: 'uc-view-status',         type: 'association' },
+          { from: 'head',            to: 'uc-submit-deleg',        type: 'association' },
+          { from: 'coordinator',     to: 'uc-review-deleg',        type: 'association' },
+          { from: 'coordinator',     to: 'uc-reports-coord',       type: 'association' },
+          { from: 'uc-view-status',  to: 'uc-missing-docs',        type: 'include' },
+          { from: 'uc-review-deleg', to: 'uc-missing-docs',        type: 'include' }
+        ]
+      },
+      {
+        svgId: 'diagram-svg-1',
+        boundary: { x: 260, y: 70, width: 720, height: 430 },
+        actors: [
+          { id: 'admin', label: 'מנהל מערכת', side: 'right', x: 1060, y: 292, ucIds: ['uc-manage-doctypes','uc-manage-sports','uc-manage-roles','uc-manage-users'] }
+        ],
+        useCases: [
+          { id: 'uc-manage-doctypes', cx: 830, cy: 172, rx: 105, ry: 28 },
+          { id: 'uc-manage-sports',   cx: 830, cy: 252, rx: 100, ry: 28 },
+          { id: 'uc-manage-roles',    cx: 830, cy: 332, rx: 88,  ry: 28 },
+          { id: 'uc-manage-users',    cx: 830, cy: 412, rx: 95,  ry: 28 }
+        ],
+        connections: [
+          { from: 'admin', to: 'uc-manage-doctypes', type: 'association' },
+          { from: 'admin', to: 'uc-manage-sports',   type: 'association' },
+          { from: 'admin', to: 'uc-manage-roles',    type: 'association' },
+          { from: 'admin', to: 'uc-manage-users',    type: 'association' }
+        ]
+      },
+      {
+        svgId: 'diagram-svg-2',
+        boundary: { x: 260, y: 70, width: 720, height: 380 },
+        actors: [
+          { id: 'time',    label: 'שחקן זמן',                side: 'left', x: 180, y: 192, ucIds: ['uc-close-registration'] },
+          { id: 'intlSys', label: 'מערכת הרישום הבינלאומית', side: 'left', x: 180, y: 330, ucIds: ['uc-receive-deleg'] }
+        ],
+        useCases: [
+          { id: 'uc-close-registration', cx: 620, cy: 192, rx: 118, ry: 34 },
+          { id: 'uc-receive-deleg',      cx: 620, cy: 330, rx: 105, ry: 28 }
+        ],
+        connections: [
+          { from: 'time',    to: 'uc-close-registration', type: 'association', timing: 'בהגיע מועד סגירת ההרשמה' },
+          { from: 'intlSys', to: 'uc-receive-deleg',      type: 'association' }
+        ]
+      }
+    ];
+
+    var actorDescriptions = {
+      'head':        { name: 'ראש משלחת',              desc: 'ראש המשלחת המדינתית. מנהל את פרטי המשלחת, המשתתפים והמסמכים, ומגיש את המשלחת לאישור.' },
+      'coordinator': { name: 'רכז מכביה',              desc: 'רכז מטעם הנהלת המכביה הבודק ומאשר את המשלחות שהוגשו ומפיק דוחות מעקב.' },
+      'admin':       { name: 'מנהל מערכת',             desc: 'מנהל האחראי לנתוני האב של המערכת: סוגי מסמכים, ענפי ספורט, תפקידים ומשתמשים. לכל ישות נתוני-אב UC ניהול ייעודי משלה.' },
+      'time':        { name: 'שחקן זמן',               desc: 'שחקן זמן מערכתי היוזם את סגירת ההרשמה במועד הסגירה שנקבע.' },
+      'intlSys':     { name: 'מערכת הרישום הבינלאומית', desc: 'מערכת חיצונית של הנהלת המכביה הבינלאומית היוזמת כלפי המערכת יצירת משלחות חדשות למדינות המשתתפות.' }
+    };
+
+    var assocDescriptions = {
+      'a-update':       { name: 'ראש משלחת ↔ עדכון פרטי משלחת',        desc: 'ראש המשלחת יוזם את עדכון פרטי המשלחת. תפקיד: יוזם.' },
+      'a-participants':  { name: 'ראש משלחת ↔ ניהול משתתפים',          desc: 'ראש המשלחת יוזם הוספה, עדכון והסרה של משתתפים עד למועד הסגירה. תפקיד: יוזם.' },
+      'a-upload':       { name: 'ראש משלחת ↔ העלאת מסמכי משתתף',       desc: 'ראש המשלחת יוזם את העלאת מסמכי המשתתפים. תפקיד: יוזם.' },
+      'a-viewstatus':   { name: 'ראש משלחת ↔ הצגת מצב המשלחת',         desc: 'ראש המשלחת יוזם את הצגת מצב המשלחת והשלמת המסמכים. תפקיד: יוזם.' },
+      'a-submit':       { name: 'ראש משלחת ↔ הגשת משלחת לאישור',       desc: 'ראש המשלחת יוזם את הגשת המשלחת לאישור הרכז. תפקיד: יוזם.' },
+      'a-review':       { name: 'רכז מכביה ↔ בדיקת ואישור משלחת',       desc: 'הרכז יוזם את בדיקת המשלחת ואישורה או החזרתה בצירוף הערות. תפקיד: יוזם.' },
+      'a-reports':      { name: 'רכז מכביה ↔ הפקת דוחות',              desc: 'הרכז יוזם את הפקת דוחות המעקב על המשלחות. תפקיד: יוזם.' },
+      'inc-view':       { name: '«include»: הצגת מצב המשלחת → הצגת מסמכים חסרים', desc: 'הצגת מצב המשלחת כוללת תמיד את הצגת המסמכים החסרים. תת-התנהגות משותפת חובה.' },
+      'inc-review':     { name: '«include»: בדיקת ואישור משלחת → הצגת מסמכים חסרים', desc: 'בדיקת המשלחת כוללת תמיד את הצגת המסמכים החסרים. תת-התנהגות משותפת חובה.' },
+      'a-doctypes':     { name: 'מנהל מערכת ↔ ניהול סוגי מסמכים',       desc: 'מנהל המערכת יוזם את ניהול קטלוג סוגי המסמכים והגדרת חובה/רשות. תפקיד: יוזם.' },
+      'a-sports':       { name: 'מנהל מערכת ↔ ניהול ענפי ספורט',        desc: 'מנהל המערכת יוזם את ניהול קטלוג ענפי הספורט. תפקיד: יוזם.' },
+      'a-roles':        { name: 'מנהל מערכת ↔ ניהול תפקידים',           desc: 'מנהל המערכת יוזם את ניהול קטלוג התפקידים בענפי הספורט. תפקיד: יוזם.' },
+      'a-users':        { name: 'מנהל מערכת ↔ ניהול משתמשים',          desc: 'מנהל המערכת יוזם את ניהול המשתמשים וההרשאות. תפקיד: יוזם.' },
+      'a-close':        { name: 'שחקן זמן ↔ סגירת ההרשמה וסימון משלחות באיחור', desc: 'שחקן הזמן יוזם את סגירת ההרשמה בהגיע מועד סגירת ההרשמה. תווית התזמון על הקשר מציינת מתי הטריגר פועל. תפקיד: יוזם.' },
+      'a-receive':      { name: 'מערכת הרישום הבינלאומית ↔ קליטת משלחת חדשה', desc: 'מערכת הרישום הבינלאומית יוזמת יצירת משלחת חדשה במערכת. תפקיד: יוזם (מערכת חיצונית).' }
+    };
+
+    var useCaseDocs = {
+      'uc-update-deleg': {
+        id: 'uc-update-deleg', name: 'עדכון פרטי משלחת', primaryActor: 'head', secondaryActors: [],
+        description: 'ראש המשלחת מעדכן את פרטי המשלחת המדינתית: שם, מדינה, אנשי קשר ופרטי לוגיסטיקה.',
+        preconditions: ['ראש המשלחת מאומת במערכת.', 'קיימת רשומת משלחת שנקלטה עבור המדינה.'],
+        postconditions: ['פרטי המשלחת המעודכנים נשמרו במערכת.'],
+        scenarios: [
+          { id: 'sc-happy', name: 'מסלול מרכזי',
+            flow: [
+              { kind: 'actor',  actor: 'head', text: 'נכנס למסך פרטי המשלחת של מדינתו' },
+              { kind: 'system',                text: 'מציג את פרטי המשלחת הקיימים לעריכה' },
+              { kind: 'actor',  actor: 'head', text: 'מעדכן את שם ראש המשלחת, מספר הטלפון וכתובת הדוא"ל' },
+              { kind: 'actor',  actor: 'head', text: 'מעדכן את פרטי הלוגיסטיקה: מלון, מועדי טיסה ואיש קשר חירום' },
+              { kind: 'system',                text: 'מוודא כי כל שדות החובה מולאו בפורמט תקין' },
+              { kind: 'system',                text: 'שומר את פרטי המשלחת ומציג הודעת אישור' }
+            ],
+            extensions: [
+              { at: 5, text: 'אם כתובת הדוא"ל אינה בפורמט תקין, המערכת מסמנת את השדה ומונעת את השמירה.' }
+            ] }
+        ],
+        userStories: [
+          { role: 'ראש משלחת', want: 'לעדכן את פרטי המשלחת שלי', so: 'ההנהלה תוכל ליצור איתי קשר בפרטים מעודכנים' },
+          { role: 'רכז מכביה', want: 'שפרטי המשלחת יהיו מלאים ומעודכנים', so: 'אוכל לתאם מול ראש משלחת נכון בעת הבדיקה' }
+        ],
+        wireframe: `<div class="wf-screen">
+          <h3 class="wf-heading">עדכון פרטי משלחת</h3>
+          <div class="wf-section">
+            <div class="wf-row"><label class="wf-label">מדינה</label><input class="wf-input" disabled placeholder="ארגנטינה" /></div>
+            <div class="wf-row"><label class="wf-label">שם ראש המשלחת</label><input class="wf-input" disabled placeholder="שם מלא" /></div>
+            <div class="wf-row"><label class="wf-label">טלפון</label><input class="wf-input" disabled placeholder="+54 ..." /></div>
+            <div class="wf-row"><label class="wf-label">דוא"ל</label><input class="wf-input" disabled placeholder="head@delegation.org" /></div>
+          </div>
+          <div class="wf-section">
+            <div class="wf-row"><label class="wf-label">מלון אירוח</label><input class="wf-input" disabled placeholder="שם המלון" /></div>
+            <div class="wf-row"><label class="wf-label">מועד הגעה</label><input class="wf-input" disabled placeholder="12/07/2025" /></div>
+            <div class="wf-row"><label class="wf-label">איש קשר חירום</label><input class="wf-input" disabled placeholder="שם וטלפון" /></div>
+          </div>
+          <div class="wf-actions">
+            <button class="wf-button wf-primary">שמירה</button>
+            <button class="wf-button">ביטול</button>
+          </div>
+          <p class="wf-hint">שדות החובה מסומנים. לא ניתן לשמור כל עוד כתובת הדוא"ל אינה בפורמט תקין.</p>
+        </div>`
+      },
+      'uc-manage-participants': {
+        id: 'uc-manage-participants', name: 'ניהול משתתפים', primaryActor: 'head', secondaryActors: [],
+        description: 'ראש המשלחת מוסיף, מעדכן ומסיר משתתפים במשלחת עד למועד סגירת ההרשמה.',
+        preconditions: ['ראש המשלחת מאומת במערכת.', 'מועד סגירת ההרשמה למשלחת טרם חלף.'],
+        postconditions: ['רשימת המשתתפים במשלחת עודכנה בהתאם לפעולה.'],
+        scenarios: [
+          { id: 'sc-happy', name: 'מסלול מרכזי: הוספת משתתף',
+            flow: [
+              { kind: 'actor',  actor: 'head', text: 'נכנס למסך ניהול המשתתפים של המשלחת' },
+              { kind: 'system',                text: 'מציג את טבלת המשתתפים הקיימים ואת מספרם הכולל' },
+              { kind: 'actor',  actor: 'head', text: 'בוחר "הוספת משתתף" ומזין שם פרטי, שם משפחה ומספר דרכון' },
+              { kind: 'actor',  actor: 'head', text: 'בוחר את תפקיד המשתתף ואת ענף הספורט מתוך הקטלוג' },
+              { kind: 'system',                text: 'מוודא כי מספר הדרכון אינו קיים כבר במשלחת' },
+              { kind: 'system',                text: 'שומר את המשתתף עם סטטוס "חסרים מסמכים" ומעדכן את מונה המשתתפים' }
+            ],
+            extensions: [
+              { at: 5, text: 'אם מספר הדרכון כבר קיים במשלחת, המערכת מציגה הודעה ומפנה למשתתף הקיים.' }
+            ] },
+          { id: 'sc-remove', name: 'מסלול חלופי: הסרת משתתף',
+            flow: [
+              { kind: 'actor',  actor: 'head', text: 'בוחר משתתף קיים מטבלת המשתתפים' },
+              { kind: 'actor',  actor: 'head', text: 'בוחר בפעולת "הסרה" ומזין סיבת הסרה' },
+              { kind: 'system',                text: 'מוודא כי מועד סגירת ההרשמה טרם חלף' },
+              { kind: 'system',                text: 'מסיר את המשתתף מהמשלחת ומעדכן את מונה המשתתפים' },
+              { kind: 'system',                text: 'רושם ביומן את פרטי ההסרה ואת הסיבה' }
+            ],
+            extensions: [
+              { at: 3, text: 'אם מועד ההרשמה כבר נסגר, המערכת חוסמת את ההסרה ומפנה את ראש המשלחת לפנות לרכז.' }
+            ] }
+        ],
+        userStories: [
+          { role: 'ראש משלחת', want: 'להוסיף משתתפים למשלחת', so: 'הרכב הנבחרת שלי יעודכן במערכת' },
+          { role: 'ראש משלחת', want: 'להסיר משתתף שפרש', so: 'רשימת המשלחת תשקף את המצב בפועל' },
+          { role: 'רכז מכביה', want: 'שרשימת המשתתפים תינעל במועד הסגירה', so: 'הבדיקה תתבצע על הרכב סופי' }
+        ],
+        wireframe: `<div class="wf-screen">
+          <h3 class="wf-heading">ניהול משתתפים, משלחת ארגנטינה</h3>
+          <table class="wf-table">
+            <thead><tr><th>שם</th><th>תפקיד</th><th>ענף</th><th>מסמכים</th></tr></thead>
+            <tbody>
+              <tr><td>חואן פרס</td><td><span class="wf-badge">ספורטאי</span></td><td>שחייה</td><td><span class="wf-badge">הושלמו</span></td></tr>
+              <tr><td>מריה גומז</td><td><span class="wf-badge">ספורטאי</span></td><td>אתלטיקה</td><td><span class="wf-badge">חסרים</span></td></tr>
+              <tr><td>דוד לוי</td><td><span class="wf-badge">מאמן</span></td><td>שחייה</td><td><span class="wf-badge">הושלמו</span></td></tr>
+            </tbody>
+          </table>
+          <div class="wf-section">
+            <div class="wf-row"><label class="wf-label">שם פרטי</label><input class="wf-input" disabled placeholder="שם פרטי" /></div>
+            <div class="wf-row"><label class="wf-label">שם משפחה</label><input class="wf-input" disabled placeholder="שם משפחה" /></div>
+            <div class="wf-row"><label class="wf-label">מספר דרכון</label><input class="wf-input" disabled placeholder="AA0000000" /></div>
+            <div class="wf-row"><label class="wf-label">תפקיד</label><select class="wf-select" disabled><option>ספורטאי</option><option>מאמן</option><option>רופא</option><option>מלווה</option></select></div>
+            <div class="wf-row"><label class="wf-label">ענף ספורט</label><select class="wf-select" disabled><option>בחר ענף...</option><option>שחייה</option><option>אתלטיקה</option><option>כדורסל</option></select></div>
+          </div>
+          <div class="wf-actions">
+            <button class="wf-button wf-primary">הוספת משתתף לשורה</button>
+          </div>
+          <p class="wf-hint">ניתן להוסיף, לעדכן ולהסיר משתתפים עד מועד סגירת ההרשמה. לאחר מכן הרשימה ננעלת.</p>
+        </div>`
+      },
+      'uc-upload-docs': {
+        id: 'uc-upload-docs', name: 'העלאת מסמכי משתתף', primaryActor: 'head', secondaryActors: [],
+        description: 'ראש המשלחת מעלה עבור כל משתתף את המסמכים הנדרשים לפי סוגי המסמכים המוגדרים.',
+        preconditions: ['ראש המשלחת מאומת במערכת.', 'המשתתף קיים ברשימת המשלחת.'],
+        postconditions: ['המסמכים שהועלו נשמרו ומשויכים למשתתף עם סטטוס עדכני.'],
+        scenarios: [
+          { id: 'sc-happy', name: 'מסלול מרכזי',
+            flow: [
+              { kind: 'actor',  actor: 'head', text: 'בוחר משתתף מרשימת המשלחת' },
+              { kind: 'system',                text: 'מציג את סוגי המסמכים הנדרשים ואת סימון חובה/רשות לכל אחד' },
+              { kind: 'actor',  actor: 'head', text: 'בוחר סוג מסמך ומעלה קובץ מהמחשב שלו' },
+              { kind: 'system',                text: 'מוודא כי סוג הקובץ וגודלו עומדים במגבלות המערכת' },
+              { kind: 'system',                text: 'שומר את המסמך ומעדכן את סטטוס המשתתף לפי המסמכים החסרים' }
+            ],
+            extensions: [
+              { at: 4, text: 'אם סוג הקובץ אינו נתמך או שגודלו חורג מהמותר, המערכת דוחה את ההעלאה ומציגה את המגבלה.' }
+            ] }
+        ],
+        userStories: [
+          { role: 'ראש משלחת', want: 'להעלות את מסמכי המשתתפים', so: 'המשלחת תעמוד בדרישות הרישום' },
+          { role: 'רכז מכביה', want: 'שכל מסמכי החובה יצורפו לפני ההגשה', so: 'אוכל לבדוק את המשלחת על סמך מסמכים מלאים' }
+        ],
+        wireframe: `<div class="wf-screen">
+          <h3 class="wf-heading">העלאת מסמכי משתתף, מריה גומז</h3>
+          <table class="wf-table">
+            <thead><tr><th>סוג מסמך</th><th>נדרש</th><th>סטטוס</th><th>פעולה</th></tr></thead>
+            <tbody>
+              <tr><td>דרכון בתוקף</td><td><span class="wf-badge">חובה</span></td><td><span class="wf-badge">הועלה</span></td><td><button class="wf-button" disabled>החלפה</button></td></tr>
+              <tr><td>אישור רפואי</td><td><span class="wf-badge">חובה</span></td><td><span class="wf-badge">חסר</span></td><td><button class="wf-button wf-primary" disabled>העלאה</button></td></tr>
+              <tr><td>ביטוח נסיעות</td><td><span class="wf-badge">חובה</span></td><td><span class="wf-badge">חסר</span></td><td><button class="wf-button wf-primary" disabled>העלאה</button></td></tr>
+              <tr><td>תמונת פספורט</td><td><span class="wf-badge">רשות</span></td><td><span class="wf-badge">הועלה</span></td><td><button class="wf-button" disabled>החלפה</button></td></tr>
+            </tbody>
+          </table>
+          <div class="wf-image-box">[גרירת קובץ לכאן או בחירה מהמחשב]</div>
+          <p class="wf-hint">מסמכי חובה חסרים מונעים את הגשת המשלחת. סוגי הקבצים והגודל המרבי מוגדרים על ידי מנהל המערכת.</p>
+        </div>`
+      },
+      'uc-view-status': {
+        id: 'uc-view-status', name: 'הצגת מצב המשלחת', primaryActor: 'head', secondaryActors: [],
+        description: 'ראש המשלחת צופה בתמונת מצב כוללת של המשלחת, כולל מסמכים חסרים לכל משתתף.',
+        preconditions: ['ראש המשלחת מאומת במערכת.', 'קיימת משלחת עם משתתפים.'],
+        postconditions: ['הוצגה לראש המשלחת תמונת מצב עדכנית של המשלחת.'],
+        scenarios: [
+          { id: 'sc-happy', name: 'מסלול מרכזי',
+            flow: [
+              { kind: 'actor',   actor: 'head',            text: 'נכנס למסך "מצב המשלחת"' },
+              { kind: 'system',                            text: 'מציג סיכום: מספר משתתפים, מספר ענפים וסטטוס ההגשה' },
+              { kind: 'include', uc: 'uc-missing-docs',    text: 'הצגת המסמכים החסרים לכל משתתף' },
+              { kind: 'actor',   actor: 'head',            text: 'מסנן את התצוגה לפי ענף או לפי משתתפים עם חוסרים' },
+              { kind: 'system',                            text: 'מציג את הרשימה המסוננת ואת מוכנות המשלחת להגשה' }
+            ],
+            extensions: [
+              { at: 2, text: 'אם למשלחת אין עדיין משתתפים, המערכת מציגה הודעה ומפנה למסך ניהול המשתתפים.' }
+            ] }
+        ],
+        userStories: [
+          { role: 'ראש משלחת', want: 'לראות תמונת מצב כוללת של המשלחת', so: 'אדע מה חסר לפני ההגשה' },
+          { role: 'ראש משלחת', want: 'לזהות אילו משתתפים חסרים מסמכים', so: 'אוכל להשלים את החוסרים בזמן' }
+        ],
+        wireframe: `<div class="wf-screen">
+          <h3 class="wf-heading">מצב המשלחת, ארגנטינה</h3>
+          <div class="wf-section">
+            <div class="wf-row"><label class="wf-label">משתתפים</label><span class="wf-badge">128</span></div>
+            <div class="wf-row"><label class="wf-label">ענפים</label><span class="wf-badge">9</span></div>
+            <div class="wf-row"><label class="wf-label">סטטוס הגשה</label><span class="wf-badge">טרם הוגשה</span></div>
+          </div>
+          <p class="wf-hint">משתתפים עם מסמכים חסרים:</p>
+          <table class="wf-table">
+            <thead><tr><th>משתתף</th><th>ענף</th><th>מסמכים חסרים</th></tr></thead>
+            <tbody>
+              <tr><td>מריה גומז</td><td>אתלטיקה</td><td>אישור רפואי, ביטוח נסיעות</td></tr>
+              <tr><td>פבלו דיאז</td><td>כדורסל</td><td>דרכון בתוקף</td></tr>
+            </tbody>
+          </table>
+          <div class="wf-row"><label class="wf-label">סינון</label><select class="wf-select" disabled><option>כל המשתתפים</option><option>רק עם חוסרים</option><option>לפי ענף</option></select></div>
+          <p class="wf-hint">כל עוד יש מסמכי חובה חסרים לא ניתן להגיש את המשלחת לאישור.</p>
+        </div>`
+      },
+      'uc-submit-deleg': {
+        id: 'uc-submit-deleg', name: 'הגשת משלחת לאישור', primaryActor: 'head', secondaryActors: [],
+        description: 'ראש המשלחת מגיש את המשלחת המלאה לבדיקת רכז המכביה.',
+        preconditions: ['ראש המשלחת מאומת במערכת.', 'לכל המשתתפים הועלו מסמכי החובה.'],
+        postconditions: ['סטטוס המשלחת עודכן ל"הוגשה" וממתין לבדיקת רכז.'],
+        scenarios: [
+          { id: 'sc-happy', name: 'מסלול מרכזי',
+            flow: [
+              { kind: 'actor',  actor: 'head', text: 'נכנס למסך "הגשת משלחת"' },
+              { kind: 'system',                text: 'מציג סיכום מוכנות: מספר משתתפים ומספר החוסרים שנותרו' },
+              { kind: 'system',                text: 'מוודא כי לא נותרו מסמכי חובה חסרים באף משתתף' },
+              { kind: 'actor',  actor: 'head', text: 'מאשר את הצהרת נכונות הפרטים ולוחץ על "הגש משלחת"' },
+              { kind: 'system',                text: 'משנה את סטטוס המשלחת ל"הוגשה", נועל את הרשימה ורושם חותמת זמן' }
+            ],
+            extensions: [
+              { at: 3, text: 'אם נותרו מסמכי חובה חסרים, המערכת חוסמת את ההגשה ומציגה את רשימת החוסרים.' }
+            ] }
+        ],
+        userStories: [
+          { role: 'ראש משלחת', want: 'להגיש את המשלחת לאישור', so: 'תהליך אישור המשלחת יתחיל' },
+          { role: 'רכז מכביה', want: 'לקבל משלחות מלאות בלבד', so: 'לא אבזבז זמן על משלחות חסרות מסמכים' }
+        ],
+        wireframe: `<div class="wf-screen">
+          <h3 class="wf-heading">הגשת משלחת לאישור</h3>
+          <div class="wf-section">
+            <div class="wf-row"><label class="wf-label">משלחת</label><span class="wf-badge">ארגנטינה</span></div>
+            <div class="wf-row"><label class="wf-label">משתתפים</label><span class="wf-badge">128</span></div>
+            <div class="wf-row"><label class="wf-label">מסמכי חובה חסרים</label><span class="wf-badge">0</span></div>
+          </div>
+          <div class="wf-row">
+            <label class="wf-label">הצהרה</label>
+            <p class="wf-hint">אני מאשר כי כל הפרטים והמסמכים שהוזנו נכונים ומלאים.</p>
+          </div>
+          <div class="wf-actions">
+            <button class="wf-button wf-primary">הגשת משלחת</button>
+            <button class="wf-button">חזרה</button>
+          </div>
+          <p class="wf-hint">לאחר ההגשה רשימת המשתתפים ננעלת והמשלחת עוברת לבדיקת רכז המכביה. לא ניתן להגיש כל עוד קיימים מסמכי חובה חסרים.</p>
+        </div>`
+      },
+      'uc-review-deleg': {
+        id: 'uc-review-deleg', name: 'בדיקת ואישור משלחת', primaryActor: 'coordinator', secondaryActors: [],
+        description: 'רכז המכביה בודק את המשלחת שהוגשה ומאשר אותה או מחזיר אותה לראש המשלחת בצירוף הערות בדוא"ל.',
+        preconditions: ['קיימת משלחת בסטטוס "הוגשה".', 'הרכז מאומת בהרשאת בדיקה.'],
+        postconditions: ['סטטוס המשלחת עודכן ל"אושרה" או ל"הוחזרה לתיקון".'],
+        scenarios: [
+          { id: 'sc-happy', name: 'מסלול מרכזי: אישור',
+            flow: [
+              { kind: 'actor',   actor: 'coordinator',     text: 'פותח את רשימת המשלחות הממתינות לבדיקה' },
+              { kind: 'actor',   actor: 'coordinator',     text: 'בוחר משלחת לבדיקה' },
+              { kind: 'system',                            text: 'מציג את סיכום המשלחת ואת סטטוס המסמכים של כל משתתף' },
+              { kind: 'include', uc: 'uc-missing-docs',    text: 'הצגת מסמכים חסרים לצורך הבדיקה' },
+              { kind: 'actor',   actor: 'coordinator',     text: 'מוודא כי המשלחת עומדת בכללי הרישום ומאשר אותה' },
+              { kind: 'system',                            text: 'מעדכן את סטטוס המשלחת ל"אושרה" ורושם את זהות הרכז וחותמת הזמן' }
+            ],
+            extensions: [
+              { at: 5, text: 'אם המשלחת חורגת ממכסת המשתתפים לענף, המערכת מסמנת את החריגה ומונעת אישור עד לתיקון.' }
+            ] },
+          { id: 'sc-return', name: 'מסלול חלופי: החזרה לתיקון',
+            flow: [
+              { kind: 'actor',   actor: 'coordinator',     text: 'מזהה ליקויים בבדיקת המשלחת' },
+              { kind: 'actor',   actor: 'coordinator',     text: 'מזין הערות תיקון מפורטות לראש המשלחת' },
+              { kind: 'actor',   actor: 'coordinator',     text: 'בוחר בפעולת "החזרה לתיקון"' },
+              { kind: 'system',                            text: 'מעדכן את סטטוס המשלחת ל"הוחזרה לתיקון" ופותח מחדש את הרשימה לעריכה' },
+              { kind: 'system',                            text: 'שולח לראש המשלחת את ההערות בדוא"ל בלבד כחלק מפעולת ההחזרה' }
+            ],
+            extensions: [
+              { at: 2, text: 'אם לא הוזנו הערות, המערכת מונעת את ההחזרה ומחייבת ציון נימוק.' }
+            ] }
+        ],
+        userStories: [
+          { role: 'רכז מכביה', want: 'לאשר משלחות שעומדות בכללים', so: 'רק משלחות תקינות ימשיכו בתהליך' },
+          { role: 'רכז מכביה', want: 'להחזיר משלחת עם הערות בדוא"ל', so: 'ראש המשלחת ידע בדיוק מה לתקן' },
+          { role: 'ראש משלחת', want: 'לקבל הערות מפורטות בעת החזרה', so: 'אוכל להשלים את הליקויים ולהגיש מחדש' }
+        ],
+        wireframe: `<div class="wf-screen">
+          <h3 class="wf-heading">בדיקת ואישור משלחת, ארגנטינה</h3>
+          <div class="wf-section">
+            <div class="wf-row"><label class="wf-label">ראש משלחת</label><input class="wf-input" disabled placeholder="חואן פרס" /></div>
+            <div class="wf-row"><label class="wf-label">משתתפים</label><span class="wf-badge">128</span></div>
+            <div class="wf-row"><label class="wf-label">מסמכי חובה חסרים</label><span class="wf-badge">2</span></div>
+          </div>
+          <p class="wf-hint">סטטוס מסמכי המשתתפים:</p>
+          <table class="wf-table">
+            <thead><tr><th>משתתף</th><th>ענף</th><th>מסמכים</th></tr></thead>
+            <tbody>
+              <tr><td>חואן פרס</td><td>שחייה</td><td><span class="wf-badge">הושלמו</span></td></tr>
+              <tr><td>מריה גומז</td><td>אתלטיקה</td><td><span class="wf-badge">חסרים</span></td></tr>
+            </tbody>
+          </table>
+          <div class="wf-row">
+            <label class="wf-label">הערות תיקון</label>
+            <textarea class="wf-textarea" disabled placeholder="הערות שיישלחו לראש המשלחת בדואר בעת החזרה..."></textarea>
+          </div>
+          <div class="wf-actions">
+            <button class="wf-button wf-primary">אישור המשלחת</button>
+            <button class="wf-button">החזרה לתיקון</button>
+          </div>
+          <p class="wf-hint">אישור נועל את המשלחת. החזרה לתיקון מחייבת הערות ושולחת אותן לראש המשלחת בדוא"ל בלבד.</p>
+        </div>`
+      },
+      'uc-reports-coord': {
+        id: 'uc-reports-coord', name: 'הפקת דוחות', primaryActor: 'coordinator', secondaryActors: [],
+        description: 'רכז המכביה מפיק דוחות מעקב על המשלחות: משלחות שטרם אושרו, משתתפים עם מסמכים חסרים ומספר משתתפים לפי ענף.',
+        preconditions: ['הרכז מאומת בהרשאת צפייה בדוחות.'],
+        postconditions: ['הדוח המבוקש הופק והוצג לרכז.'],
+        scenarios: [
+          { id: 'sc-happy', name: 'מסלול מרכזי',
+            flow: [
+              { kind: 'actor',  actor: 'coordinator', text: 'נכנס למסך הפקת הדוחות' },
+              { kind: 'actor',  actor: 'coordinator', text: 'בוחר את סוג הדוח: משלחות שטרם אושרו, משתתפים עם מסמכים חסרים או מספר משתתפים לפי ענף' },
+              { kind: 'actor',  actor: 'coordinator', text: 'מגדיר מסננים: מדינה, ענף וטווח תאריכים' },
+              { kind: 'system',                       text: 'אוסף את הנתונים לפי הבחירה והמסננים' },
+              { kind: 'system',                       text: 'מציג את הדוח בטבלה ומאפשר ייצוא לקובץ' }
+            ],
+            extensions: [
+              { at: 4, text: 'אם לא נמצאו נתונים התואמים למסננים, המערכת מציגה דוח ריק עם הודעה מתאימה.' }
+            ] }
+        ],
+        userStories: [
+          { role: 'רכז מכביה', want: 'להפיק דוח משלחות שטרם אושרו', so: 'אוכל לתעדף את הבדיקות שלי' },
+          { role: 'רכז מכביה', want: 'להפיק דוח משתתפים עם מסמכים חסרים', so: 'אוכל לתזכר משלחות להשלמת מסמכים' },
+          { role: 'רכז מכביה', want: 'לראות את מספר המשתתפים לפי ענף', so: 'ההנהלה תיערך לוגיסטית נכון' }
+        ],
+        wireframe: `<div class="wf-screen">
+          <h3 class="wf-heading">הפקת דוחות</h3>
+          <div class="wf-section">
+            <div class="wf-row"><label class="wf-label">סוג דוח</label><select class="wf-select" disabled><option>משלחות שטרם אושרו</option><option>משתתפים עם מסמכים חסרים</option><option>מספר משתתפים לפי ענף</option></select></div>
+            <div class="wf-row"><label class="wf-label">מדינה</label><select class="wf-select" disabled><option>כל המדינות</option><option>ארגנטינה</option><option>אוסטרליה</option></select></div>
+            <div class="wf-row"><label class="wf-label">ענף</label><select class="wf-select" disabled><option>כל הענפים</option><option>שחייה</option><option>אתלטיקה</option></select></div>
+          </div>
+          <div class="wf-actions">
+            <button class="wf-button wf-primary">הפקת דוח</button>
+            <button class="wf-button">ייצוא לקובץ</button>
+          </div>
+          <p class="wf-hint">תוצאות, מספר משתתפים לפי ענף:</p>
+          <table class="wf-table">
+            <thead><tr><th>ענף</th><th>משתתפים</th><th>משלחות</th></tr></thead>
+            <tbody>
+              <tr><td>שחייה</td><td>642</td><td>38</td></tr>
+              <tr><td>אתלטיקה</td><td>511</td><td>34</td></tr>
+              <tr><td>כדורסל</td><td>288</td><td>21</td></tr>
+            </tbody>
+          </table>
+        </div>`
+      },
+      'uc-missing-docs': {
+        id: 'uc-missing-docs', name: 'הצגת מסמכים חסרים', primaryActor: 'coordinator', secondaryActors: ['head'],
+        description: 'תת-התנהגות משותפת המרכזת ומציגה את המסמכים החסרים לכל משתתף במשלחת. משמשת גם את הצגת מצב המשלחת וגם את בדיקת המשלחת.',
+        preconditions: ['קיימת משלחת עם משתתפים והוגדרו סוגי מסמכי חובה.'],
+        postconditions: ['הוצגה רשימת המסמכים החסרים לכל משתתף.'],
+        scenarios: [
+          { id: 'sc-happy', name: 'מסלול מרכזי',
+            flow: [
+              { kind: 'system', text: 'שולף את רשימת סוגי מסמכי החובה המוגדרים' },
+              { kind: 'system', text: 'עובר על משתתפי המשלחת ומשווה את המסמכים שהועלו מול מסמכי החובה' },
+              { kind: 'system', text: 'מרכיב לכל משתתף את רשימת המסמכים החסרים' },
+              { kind: 'system', text: 'מסכם את מספר המשתתפים עם חוסרים ואת מספר המסמכים החסרים הכולל' },
+              { kind: 'system', text: 'מציג את הרשימה למשתמש שהפעיל את ההתנהגות' }
+            ],
+            extensions: [
+              { at: 2, text: 'אם למשתתף אין כלל מסמכים, המערכת מסמנת את כל מסמכי החובה כחסרים.' }
+            ] }
+        ],
+        userStories: [
+          { role: 'ראש משלחת', want: 'לראות רשימה מרוכזת של המסמכים החסרים', so: 'אשלים אותם ביעילות' },
+          { role: 'רכז מכביה', want: 'לראות את המסמכים החסרים בעת הבדיקה', so: 'אחליט על אישור על סמך תמונה מלאה' }
+        ]
+      },
+      'uc-manage-doctypes': {
+        id: 'uc-manage-doctypes', name: 'ניהול סוגי מסמכים', primaryActor: 'admin', secondaryActors: [],
+        description: 'מנהל המערכת מנהל את קטלוג סוגי המסמכים ומגדיר לכל סוג שם וסיווג חובה או רשות.',
+        preconditions: ['מנהל המערכת מאומת בהרשאת ניהול.'],
+        postconditions: ['קטלוג סוגי המסמכים עודכן.'],
+        scenarios: [
+          { id: 'sc-happy', name: 'מסלול מרכזי',
+            flow: [
+              { kind: 'actor',  actor: 'admin', text: 'נכנס למסך ניהול סוגי המסמכים' },
+              { kind: 'system',                 text: 'מציג את סוגי המסמכים הקיימים ואת סיווג החובה/רשות של כל אחד' },
+              { kind: 'actor',  actor: 'admin', text: 'מוסיף סוג מסמך חדש או בוחר סוג קיים לעריכה' },
+              { kind: 'actor',  actor: 'admin', text: 'מזין את שם סוג המסמך ומסמן אם הוא חובה או רשות' },
+              { kind: 'system',                 text: 'מוודא כי שם סוג המסמך ייחודי ושומר אותו בקטלוג' }
+            ],
+            extensions: [
+              { at: 5, text: 'אם שם סוג המסמך כבר קיים, המערכת מציגה הודעת כפילות ומונעת שמירה.' }
+            ] }
+        ],
+        userStories: [
+          { role: 'מנהל מערכת', want: 'להגדיר אילו מסמכים נדרשים מכל משתתף', so: 'ראשי המשלחות יעלו את המסמכים הנכונים' },
+          { role: 'מנהל מערכת', want: 'לסמן מסמך כחובה או רשות', so: 'רק חוסר במסמכי חובה יעכב הגשת משלחת' }
+        ],
+        wireframe: `<div class="wf-screen">
+          <h3 class="wf-heading">ניהול סוגי מסמכים</h3>
+          <table class="wf-table">
+            <thead><tr><th>שם סוג המסמך</th><th>סיווג</th><th>סטטוס</th></tr></thead>
+            <tbody>
+              <tr><td>דרכון בתוקף</td><td><span class="wf-badge">חובה</span></td><td><span class="wf-badge">פעיל</span></td></tr>
+              <tr><td>אישור רפואי</td><td><span class="wf-badge">חובה</span></td><td><span class="wf-badge">פעיל</span></td></tr>
+              <tr><td>ביטוח נסיעות</td><td><span class="wf-badge">חובה</span></td><td><span class="wf-badge">פעיל</span></td></tr>
+              <tr><td>תמונת פספורט</td><td><span class="wf-badge">רשות</span></td><td><span class="wf-badge">פעיל</span></td></tr>
+            </tbody>
+          </table>
+          <div class="wf-section">
+            <div class="wf-row"><label class="wf-label">שם סוג מסמך</label><input class="wf-input" disabled placeholder="לדוגמה: אישור ותק ספורטיבי" /></div>
+            <div class="wf-row"><label class="wf-label">סיווג</label><select class="wf-select" disabled><option>חובה</option><option>רשות</option></select></div>
+          </div>
+          <div class="wf-actions">
+            <button class="wf-button wf-primary">הוספת סוג מסמך</button>
+          </div>
+          <p class="wf-hint">שם סוג המסמך חייב להיות ייחודי. מסמכי חובה מעכבים את הגשת המשלחת עד להעלאתם.</p>
+        </div>`
+      },
+      'uc-manage-sports': {
+        id: 'uc-manage-sports', name: 'ניהול ענפי ספורט', primaryActor: 'admin', secondaryActors: [],
+        description: 'מנהל המערכת מנהל את קטלוג ענפי הספורט: הוספה, עדכון והשבתה של ענפים.',
+        preconditions: ['מנהל המערכת מאומת בהרשאת ניהול.'],
+        postconditions: ['קטלוג ענפי הספורט עודכן.'],
+        scenarios: [
+          { id: 'sc-happy', name: 'מסלול מרכזי',
+            flow: [
+              { kind: 'actor',  actor: 'admin', text: 'נכנס למסך ניהול ענפי ספורט' },
+              { kind: 'system',                 text: 'מציג את רשימת הענפים הקיימים ואת סטטוס כל אחד' },
+              { kind: 'actor',  actor: 'admin', text: 'מוסיף ענף חדש או בוחר ענף קיים לעריכה' },
+              { kind: 'actor',  actor: 'admin', text: 'מזין את שם הענף ואת סוגו: יחיד או קבוצתי' },
+              { kind: 'system',                 text: 'מוודא כי שם הענף ייחודי ושומר את הענף בקטלוג' }
+            ],
+            extensions: [
+              { at: 5, text: 'אם שם הענף כבר קיים, המערכת מציגה הודעת כפילות ומונעת שמירה.' }
+            ] }
+        ],
+        userStories: [
+          { role: 'מנהל מערכת', want: 'לנהל את קטלוג ענפי הספורט', so: 'ראשי המשלחות יבחרו מתוך רשימה מעודכנת' },
+          { role: 'מנהל מערכת', want: 'להשבית ענף שאינו רלוונטי', so: 'לא ייבחר בטעות למשלחות חדשות' }
+        ],
+        wireframe: `<div class="wf-screen">
+          <h3 class="wf-heading">ניהול ענפי ספורט</h3>
+          <table class="wf-table">
+            <thead><tr><th>שם הענף</th><th>סוג</th><th>סטטוס</th></tr></thead>
+            <tbody>
+              <tr><td>שחייה</td><td><span class="wf-badge">יחיד</span></td><td><span class="wf-badge">פעיל</span></td></tr>
+              <tr><td>כדורסל</td><td><span class="wf-badge">קבוצתי</span></td><td><span class="wf-badge">פעיל</span></td></tr>
+              <tr><td>אתלטיקה</td><td><span class="wf-badge">יחיד</span></td><td><span class="wf-badge">מושבת</span></td></tr>
+            </tbody>
+          </table>
+          <div class="wf-section">
+            <div class="wf-row"><label class="wf-label">שם ענף</label><input class="wf-input" disabled placeholder="לדוגמה: טניס שולחן" /></div>
+            <div class="wf-row"><label class="wf-label">סוג</label><select class="wf-select" disabled><option>בחר...</option><option>יחיד</option><option>קבוצתי</option></select></div>
+          </div>
+          <div class="wf-actions">
+            <button class="wf-button wf-primary">הוספת ענף</button>
+          </div>
+          <p class="wf-hint">שם הענף חייב להיות ייחודי. ניתן להשבית ענף כדי שלא ייבחר במשלחות חדשות.</p>
+        </div>`
+      },
+      'uc-manage-roles': {
+        id: 'uc-manage-roles', name: 'ניהול תפקידים', primaryActor: 'admin', secondaryActors: [],
+        description: 'מנהל המערכת מנהל את קטלוג התפקידים בענפי הספורט: שחקן, מאמן, שופט וכדומה — כל תפקיד משויך לענף אחד.',
+        preconditions: ['מנהל המערכת מאומת בהרשאת ניהול.'],
+        postconditions: ['קטלוג התפקידים עודכן.'],
+        scenarios: [
+          { id: 'sc-happy', name: 'מסלול מרכזי',
+            flow: [
+              { kind: 'actor',  actor: 'admin', text: 'נכנס למסך ניהול התפקידים' },
+              { kind: 'system',                 text: 'מציג את רשימת התפקידים הקיימים, הענף של כל תפקיד וסטטוס כל אחד' },
+              { kind: 'actor',  actor: 'admin', text: 'מוסיף תפקיד חדש או בוחר תפקיד קיים לעריכה' },
+              { kind: 'actor',  actor: 'admin', text: 'מזין את שם התפקיד ובוחר את הענף שאליו הוא משויך' },
+              { kind: 'system',                 text: 'מוודא כי שם התפקיד ייחודי בתוך הענף ושומר אותו בקטלוג' }
+            ],
+            extensions: [
+              { at: 5, text: 'אם שם התפקיד כבר קיים באותו ענף, המערכת מציגה הודעת כפילות ומונעת שמירה.' }
+            ] }
+        ],
+        userStories: [
+          { role: 'מנהל מערכת', want: 'לנהל את קטלוג התפקידים לפי ענף', so: 'ראשי המשלחות ישייכו משתתפים לתפקידים מתוך רשימה מעודכנת' },
+          { role: 'מנהל מערכת', want: 'להשבית תפקיד שאינו בשימוש', so: 'לא ישויך בטעות למשתתפים חדשים' }
+        ],
+        wireframe: `<div class="wf-screen">
+          <h3 class="wf-heading">ניהול תפקידים</h3>
+          <table class="wf-table">
+            <thead><tr><th>שם התפקיד</th><th>ענף</th><th>סטטוס</th></tr></thead>
+            <tbody>
+              <tr><td>שחקן</td><td>כדורסל</td><td><span class="wf-badge">פעיל</span></td></tr>
+              <tr><td>מאמן</td><td>כדורסל</td><td><span class="wf-badge">פעיל</span></td></tr>
+              <tr><td>מאמן</td><td>אתלטיקה</td><td><span class="wf-badge">פעיל</span></td></tr>
+              <tr><td>שופט מלווה</td><td>אתלטיקה</td><td><span class="wf-badge">מושבת</span></td></tr>
+            </tbody>
+          </table>
+          <div class="wf-section">
+            <div class="wf-row"><label class="wf-label">שם תפקיד</label><input class="wf-input" disabled placeholder="לדוגמה: פיזיותרפיסט" /></div>
+            <div class="wf-row"><label class="wf-label">ענף</label><select class="wf-select" disabled><option>בחר ענף...</option><option>שחייה</option><option>כדורסל</option><option>אתלטיקה</option></select></div>
+          </div>
+          <div class="wf-actions">
+            <button class="wf-button wf-primary">הוספת תפקיד</button>
+          </div>
+          <p class="wf-hint">שם התפקיד ייחודי בתוך הענף. משתתף יכול להחזיק יותר מתפקיד אחד באותו ענף (שחקן וגם מאמן). תפקיד מושבת אינו מוצע בשיוך חדש.</p>
+        </div>`
+      },
+      'uc-manage-users': {
+        id: 'uc-manage-users', name: 'ניהול משתמשים', primaryActor: 'admin', secondaryActors: [],
+        description: 'מנהל המערכת מנהל את חשבונות המשתמשים ואת ההרשאות שלהם במערכת.',
+        preconditions: ['מנהל המערכת מאומת בהרשאת ניהול.'],
+        postconditions: ['רשומת המשתמש וההרשאות נשמרו או עודכנו.'],
+        scenarios: [
+          { id: 'sc-happy', name: 'מסלול מרכזי',
+            flow: [
+              { kind: 'actor',  actor: 'admin', text: 'נכנס למסך ניהול משתמשים' },
+              { kind: 'actor',  actor: 'admin', text: 'מחפש משתמש קיים או יוצר משתמש חדש' },
+              { kind: 'actor',  actor: 'admin', text: 'מזין את פרטי המשתמש ואת תפקידו' },
+              { kind: 'actor',  actor: 'admin', text: 'מקצה למשתמש את קבוצת ההרשאות המתאימה' },
+              { kind: 'system',                 text: 'מוודא ייחודיות מזהה המשתמש ושומר את הרשומה' }
+            ],
+            extensions: [
+              { at: 5, text: 'אם מזהה המשתמש כבר קיים, המערכת מציגה הודעה ומונעת יצירה כפולה.' }
+            ] }
+        ],
+        userStories: [
+          { role: 'מנהל מערכת', want: 'ליצור חשבונות משתמש ולהקצות הרשאות', so: 'כל בעל תפקיד יקבל גישה מתאימה' },
+          { role: 'מנהל מערכת', want: 'לעדכן הרשאות של משתמש קיים', so: 'שינויי תפקיד ישתקפו במערכת' }
+        ],
+        wireframe: `<div class="wf-screen">
+          <h3 class="wf-heading">ניהול משתמשים</h3>
+          <table class="wf-table">
+            <thead><tr><th>שם</th><th>דוא"ל</th><th>תפקיד</th></tr></thead>
+            <tbody>
+              <tr><td>חואן פרס</td><td>juan@arg.org</td><td><span class="wf-badge">ראש משלחת</span></td></tr>
+              <tr><td>דנה כהן</td><td>dana@maccabiah.org</td><td><span class="wf-badge">רכז מכביה</span></td></tr>
+            </tbody>
+          </table>
+          <div class="wf-section">
+            <div class="wf-row"><label class="wf-label">שם מלא</label><input class="wf-input" disabled placeholder="שם המשתמש" /></div>
+            <div class="wf-row"><label class="wf-label">דוא"ל</label><input class="wf-input" disabled placeholder="name@maccabiah.org" /></div>
+            <div class="wf-row"><label class="wf-label">תפקיד</label><select class="wf-select" disabled><option>בחר תפקיד...</option><option>ראש משלחת</option><option>רכז מכביה</option><option>מנהל מערכת</option></select></div>
+          </div>
+          <div class="wf-actions">
+            <button class="wf-button wf-primary">שמירה</button>
+          </div>
+          <p class="wf-hint">מזהה המשתמש חייב להיות ייחודי. ההרשאות נגזרות מהתפקיד שהוקצה.</p>
+        </div>`
+      },
+      'uc-close-registration': {
+        id: 'uc-close-registration', name: 'סגירת ההרשמה וסימון משלחות באיחור', primaryActor: 'time', secondaryActors: [],
+        description: 'במועד סגירת ההרשמה המערכת נועלת את המשלחות שטרם הוגשו ומסמנת אותן כמשלחות באיחור.',
+        preconditions: ['הוגדר מועד סגירת הרשמה למכביה.'],
+        postconditions: ['ההרשמה נסגרה ומשלחות שלא הוגשו סומנו כ"באיחור".'],
+        scenarios: [
+          { id: 'sc-happy', name: 'מסלול מרכזי',
+            flow: [
+              { kind: 'actor',  actor: 'time', text: 'מפעיל את תהליך סגירת ההרשמה במועד הסגירה שנקבע' },
+              { kind: 'system',                text: 'נועל את קליטת המשתתפים החדשים בכל המשלחות' },
+              { kind: 'system',                text: 'מאתר משלחות שסטטוסן אינו "הוגשה" או "אושרה"' },
+              { kind: 'system',                text: 'מסמן את המשלחות שאותרו כ"באיחור"' },
+              { kind: 'system',                text: 'רושם ביומן את מספר המשלחות שנסגרו ואת אלו שסומנו באיחור' }
+            ],
+            extensions: [
+              { at: 3, text: 'אם כל המשלחות הוגשו במועד, המערכת מסיימת את התהליך ללא סימון משלחות באיחור.' }
+            ] }
+        ],
+        userStories: [
+          { role: 'רכז מכביה', want: 'שההרשמה תיסגר אוטומטית במועד', so: 'לא יתקבלו משתתפים באיחור' },
+          { role: 'מנהל מערכת', want: 'שמשלחות שלא הוגשו יסומנו באיחור', so: 'ההנהלה תוכל לטפל בהן בנפרד' }
+        ]
+      },
+      'uc-receive-deleg': {
+        id: 'uc-receive-deleg', name: 'קליטת משלחת חדשה', primaryActor: 'intlSys', secondaryActors: [],
+        description: 'מערכת הרישום הבינלאומית יוזמת קליטת משלחת מדינתית חדשה: המערכת יוצרת את כרטיס המשלחת ופותחת חשבון עבור ראש המשלחת.',
+        preconditions: ['קיים ממשק פעיל מול מערכת הרישום הבינלאומית.'],
+        postconditions: ['נוצר כרטיס משלחת חדש.', 'נפתח חשבון עבור ראש המשלחת.'],
+        scenarios: [
+          { id: 'sc-happy', name: 'מסלול מרכזי',
+            flow: [
+              { kind: 'actor',  actor: 'intlSys', text: 'שולח למערכת בקשת קליטה של משלחת מדינתית חדשה עם פרטי המדינה וראש המשלחת' },
+              { kind: 'system',                    text: 'מאמת את מבנה ההודעה ואת זהות המקור' },
+              { kind: 'system',                    text: 'מוודא כי אין כבר כרטיס משלחת פעיל לאותה מדינה' },
+              { kind: 'system',                    text: 'יוצר כרטיס משלחת חדש עם פרטי המדינה ומועד סגירת רישום ברירת מחדל' },
+              { kind: 'system',                    text: 'פותח חשבון עבור ראש המשלחת ומשייך אותו לכרטיס המשלחת' }
+            ],
+            extensions: [
+              { at: 3, text: 'אם כבר קיים כרטיס משלחת פעיל לאותה מדינה, המערכת דוחה את הקליטה ורושמת אותה ביומן.' }
+            ] }
+        ],
+        userStories: [
+          { role: 'מנהל מערכת', want: 'שמשלחות ייקלטו אוטומטית ממערכת הרישום הבינלאומית', so: 'לא אצטרך להקים כל משלחת ידנית' },
+          { role: 'ראש משלחת', want: 'שייפתח לי חשבון עם קליטת המשלחת', so: 'אוכל להתחיל לנהל את המשלחת מיד' }
+        ]
+      }
+    };
+
+    var diagramModel = {
+      kind: 'use-case',
+      title: 'מערכת ניהול משלחות המכביה',
+      assumptions: [
+        'למשתתפי המשלחת אין גישה ישירה למערכת: ראש המשלחת מזין את פרטיהם ומעלה את מסמכיהם בשמם. אילו הייתה למשתתפים גישה, היה נדרש אקטור "משתתף" נפרד עם ה-Use Cases שלו.',
+        'כל משתתף מזוהה במשלחת באמצעות מספר דרכון ייחודי.',
+        'אימות המשתמשים מתבצע מחוץ למערכת ומהווה תנאי מוקדם לכל תרחיש.',
+        'ממשק קליטת המשלחות ממערכת הרישום הבינלאומית מבוסס על הודעות API ולא על קובץ ידני.',
+        'סיווג מסמך כחובה או רשות נקבע ברמת המערכת ותקף לכל המשלחות.'
+      ],
+      openQuestions: [
+        'האם ראש משלחת רשאי לעדכן משתתפים לאחר החזרת המשלחת לתיקון, או רק להשלים מסמכים?',
+        'האם נדרש אישור סופי של גורם הנהלה מעבר לאישור רכז המכביה?',
+        'האם משלחת שסומנה "באיחור" יכולה עדיין להיות מוגשת, ובאילו תנאים?'
+      ],
+      parts: [
+        {
+          id: 'part-1',
+          label: 'ניהול משלחת ואישורה',
+          splitRationale: 'Split by responsibility: delegation operations (human business actors)',
+          elements: [
+            { kind: 'actor', id: 'head',        name: 'ראש משלחת', actorType: 'human', side: 'left',  x: 150,  y: 308 },
+            { kind: 'actor', id: 'coordinator', name: 'רכז מכביה', actorType: 'human', side: 'right', x: 1150, y: 410 },
+            { kind: 'system', id: 'sys-1', name: 'מערכת ניהול משלחות המכביה', x: 230, y: 70, w: 840, h: 560 },
+            Object.assign({ kind: 'useCase' }, useCaseDocs['uc-update-deleg'],        { x: 380, y: 172, rx: 100, ry: 28 }),
+            Object.assign({ kind: 'useCase' }, useCaseDocs['uc-manage-participants'], { x: 380, y: 240, rx: 92,  ry: 28 }),
+            Object.assign({ kind: 'useCase' }, useCaseDocs['uc-upload-docs'],         { x: 380, y: 308, rx: 105, ry: 28 }),
+            Object.assign({ kind: 'useCase' }, useCaseDocs['uc-view-status'],         { x: 380, y: 376, rx: 98,  ry: 28 }),
+            Object.assign({ kind: 'useCase' }, useCaseDocs['uc-submit-deleg'],        { x: 380, y: 444, rx: 105, ry: 28 }),
+            Object.assign({ kind: 'useCase' }, useCaseDocs['uc-missing-docs'],        { x: 650, y: 410, rx: 105, ry: 28 }),
+            Object.assign({ kind: 'useCase' }, useCaseDocs['uc-review-deleg'],        { x: 920, y: 376, rx: 110, ry: 28 }),
+            Object.assign({ kind: 'useCase' }, useCaseDocs['uc-reports-coord'],       { x: 920, y: 444, rx: 82,  ry: 28 })
+          ],
+          relationships: [
+            { kind: 'actorAssoc', id: 'a-update',       actorId: 'head',        ucId: 'uc-update-deleg',        role: 'initiator',   description: 'ראש המשלחת יוזם את עדכון פרטי המשלחת.' },
+            { kind: 'actorAssoc', id: 'a-participants', actorId: 'head',        ucId: 'uc-manage-participants', role: 'initiator',   description: 'ראש המשלחת יוזם את ניהול המשתתפים.' },
+            { kind: 'actorAssoc', id: 'a-upload',       actorId: 'head',        ucId: 'uc-upload-docs',         role: 'initiator',   description: 'ראש המשלחת יוזם את העלאת מסמכי המשתתפים.' },
+            { kind: 'actorAssoc', id: 'a-viewstatus',   actorId: 'head',        ucId: 'uc-view-status',         role: 'initiator',   description: 'ראש המשלחת יוזם את הצגת מצב המשלחת.' },
+            { kind: 'actorAssoc', id: 'a-submit',       actorId: 'head',        ucId: 'uc-submit-deleg',        role: 'initiator',   description: 'ראש המשלחת יוזם את הגשת המשלחת לאישור.' },
+            { kind: 'actorAssoc', id: 'a-review',       actorId: 'coordinator', ucId: 'uc-review-deleg',        role: 'initiator',   description: 'רכז המכביה יוזם את בדיקת המשלחת ואישורה.' },
+            { kind: 'actorAssoc', id: 'a-reports',      actorId: 'coordinator', ucId: 'uc-reports-coord',       role: 'initiator',   description: 'רכז המכביה יוזם את הפקת הדוחות.' },
+            { kind: 'include', id: 'inc-view',   from: 'uc-view-status',  to: 'uc-missing-docs' },
+            { kind: 'include', id: 'inc-review', from: 'uc-review-deleg', to: 'uc-missing-docs' }
+          ]
+        },
+        {
+          id: 'part-2',
+          label: 'ניהול מערכת',
+          splitRationale: 'Split by responsibility: system administration (master data) gets its own diagram',
+          elements: [
+            { kind: 'actor', id: 'admin', name: 'מנהל מערכת', actorType: 'human', side: 'right', x: 1060, y: 292 },
+            { kind: 'system', id: 'sys-2', name: 'מערכת ניהול משלחות המכביה', x: 260, y: 70, w: 720, h: 430 },
+            Object.assign({ kind: 'useCase' }, useCaseDocs['uc-manage-doctypes'], { x: 830, y: 172, rx: 105, ry: 28 }),
+            Object.assign({ kind: 'useCase' }, useCaseDocs['uc-manage-sports'],   { x: 830, y: 252, rx: 100, ry: 28 }),
+            Object.assign({ kind: 'useCase' }, useCaseDocs['uc-manage-roles'],    { x: 830, y: 332, rx: 88,  ry: 28 }),
+            Object.assign({ kind: 'useCase' }, useCaseDocs['uc-manage-users'],    { x: 830, y: 412, rx: 95,  ry: 28 })
+          ],
+          relationships: [
+            { kind: 'actorAssoc', id: 'a-doctypes', actorId: 'admin', ucId: 'uc-manage-doctypes', role: 'initiator', description: 'מנהל המערכת יוזם את ניהול סוגי המסמכים.' },
+            { kind: 'actorAssoc', id: 'a-sports',   actorId: 'admin', ucId: 'uc-manage-sports',   role: 'initiator', description: 'מנהל המערכת יוזם את ניהול ענפי הספורט.' },
+            { kind: 'actorAssoc', id: 'a-roles',    actorId: 'admin', ucId: 'uc-manage-roles',    role: 'initiator', description: 'מנהל המערכת יוזם את ניהול קטלוג התפקידים.' },
+            { kind: 'actorAssoc', id: 'a-users',    actorId: 'admin', ucId: 'uc-manage-users',    role: 'initiator', description: 'מנהל המערכת יוזם את ניהול המשתמשים.' }
+          ]
+        },
+        {
+          id: 'part-3',
+          label: 'תהליכים אוטומטיים וממשקים',
+          splitRationale: 'Split by responsibility: automatic (time-triggered) and external-system interfaces separated from human actors',
+          elements: [
+            { kind: 'actor', id: 'time',    name: 'שחקן זמן',               actorType: 'system', stereotype: 'system', side: 'left', x: 180, y: 192 },
+            { kind: 'actor', id: 'intlSys', name: 'מערכת הרישום הבינלאומית', actorType: 'system', stereotype: 'system', side: 'left', x: 180, y: 330 },
+            { kind: 'system', id: 'sys-3', name: 'מערכת ניהול משלחות המכביה', x: 260, y: 70, w: 720, h: 380 },
+            Object.assign({ kind: 'useCase' }, useCaseDocs['uc-close-registration'], { x: 620, y: 192, rx: 118, ry: 34 }),
+            Object.assign({ kind: 'useCase' }, useCaseDocs['uc-receive-deleg'],      { x: 620, y: 330, rx: 105, ry: 28 })
+          ],
+          relationships: [
+            { kind: 'actorAssoc', id: 'a-close',   actorId: 'time',    ucId: 'uc-close-registration', role: 'initiator', timing: 'בהגיע מועד סגירת ההרשמה', description: 'שחקן הזמן יוזם את סגירת ההרשמה בהגיע מועד סגירת ההרשמה.' },
+            { kind: 'actorAssoc', id: 'a-receive', actorId: 'intlSys', ucId: 'uc-receive-deleg',      role: 'initiator', description: 'מערכת הרישום הבינלאומית יוזמת את קליטת המשלחת החדשה.' }
+          ]
+        }
+      ]
+    };
+  </script>
+  <script>
+/* inlined uc-diagram-common.js */
+/* uc-diagram-common.js, SAD MCP shared runtime for use case diagrams
+   Depends on globals defined in the inline <script> of each diagram:
+   diagramLayouts, actorDescriptions, assocDescriptions, useCaseDocs, diagramModel
+
+   This file is deployed by hand to themathbible.com (see CLAUDE.md → Static Assets).
+   Keep UC_RUNTIME_VERSION in sync with package.json on every deploy, it prints to the
+   browser console so you can confirm which runtime is actually live vs. the repo.
+*/
+const UC_RUNTIME_VERSION = '2.3.2';
+if (typeof console !== 'undefined') console.info('[sad-mcp] uc-diagram runtime v' + UC_RUNTIME_VERSION);
+
+// ── fixLayout constants ───────────────────────────────────────────────────
+const HEADER_H  = 44;
+const UC_PAD    = 30;
+const UC_GAP    = 14;
+const ACTOR_PAD = 80;
+
+// ── fixLayout ─────────────────────────────────────────────────────────────
+function fixLayout(layout) {
+  const svg = document.getElementById(layout.svgId);
+  if (!svg) return;
+  const b = layout.boundary;
+
+  // Step 1, Group UCs by the side of their owning actor.
+  const ucSide = {};
+  layout.actors.forEach(a =>
+    a.ucIds.forEach(uid => {
+      ucSide[uid] = ucSide[uid] && ucSide[uid] !== a.side ? 'center' : a.side;
+    })
+  );
+  const cols = { left: [], right: [], center: [] };
+  layout.useCases.forEach(uc => cols[ucSide[uc.id] || 'center'].push(uc));
+
+  // Step 2, Sort each column by actor order (top-to-bottom on that side).
+  function sortCol(ucs, side) {
+    const ordered = layout.actors.filter(a => a.side === side).sort((a, bb) => a.y - bb.y);
+    ucs.sort((a, bb) => {
+      const ai = ordered.findIndex(act => act.ucIds.includes(a.id));
+      const bi = ordered.findIndex(act => act.ucIds.includes(bb.id));
+      return (ai < 0 ? 999 : ai) - (bi < 0 ? 999 : bi);
+    });
+  }
+  sortCol(cols.left,  'left');
+  sortCol(cols.right, 'right');
+
+  // Step 3, Adaptive column X positions. Widen boundary if needed.
+  const COL_GAP = 30;
+  const maxRx = ucs => (ucs.length ? Math.max(...ucs.map(u => u.rx)) : 0);
+  const lRx = maxRx(cols.left), cRx = maxRx(cols.center), rRx = maxRx(cols.right);
+  const gaps = (cRx ? 2 * COL_GAP : (lRx && rRx ? 2 * COL_GAP : 0));
+  const needed = 2 * UC_PAD + 2 * lRx + 2 * cRx + 2 * rRx + gaps;
+  if (b.width < needed) b.width = needed;
+
+  const leftX   = b.x + UC_PAD + lRx;
+  const rightX  = b.x + b.width - UC_PAD - rRx;
+  const centerX = (leftX + rightX) / 2;
+
+  function place(ucs, colX, colName) {
+    ucs.forEach((uc, i) => {
+      uc.cy = b.y + HEADER_H + UC_PAD + uc.ry + i * (uc.ry * 2 + UC_GAP);
+      uc.cx = colX;
+      uc.col = colName;
+    });
+  }
+  place(cols.left,   leftX,   'left');
+  place(cols.right,  rightX,  'right');
+  place(cols.center, centerX, 'center');
+
+  // Step 4, Clamp and resolve overlaps. Idempotent fixed-point loop.
+  const minX = b.x + UC_PAD;
+  const maxX = b.x + b.width - UC_PAD;
+  const minY = b.y + HEADER_H + UC_PAD;
+  let changed = true, iter = 0;
+  while (changed && iter++ < 40) {
+    changed = false;
+    for (const uc of layout.useCases) {
+      const nx = Math.max(minX + uc.rx, Math.min(maxX - uc.rx, uc.cx));
+      if (nx !== uc.cx) { uc.cx = nx; changed = true; }
+      const ny = Math.max(minY + uc.ry, uc.cy);
+      if (ny !== uc.cy) { uc.cy = ny; changed = true; }
+    }
+    for (const col of Object.values(cols)) {
+      col.sort((a, bb) => a.cy - bb.cy);
+      for (let i = 1; i < col.length; i++) {
+        const prev = col[i - 1], cur = col[i];
+        const nd = prev.cy + prev.ry + UC_GAP + cur.ry;
+        if (cur.cy < nd) { cur.cy = nd; changed = true; }
+      }
+    }
+  }
+
+  // Step 5, Expand boundary height to fit all UCs.
+  const maxBottom = Math.max(...layout.useCases.map(uc => uc.cy + uc.ry));
+  b.height = Math.max(b.height, maxBottom - b.y + UC_PAD);
+
+  // Step 6, Re-center actors on their UC group; push bottom actors below boundary.
+  layout.actors.forEach(actor => {
+    const myUCs = layout.useCases.filter(u => actor.ucIds.includes(u.id));
+    if (actor.side === 'left' || actor.side === 'right') {
+      if (myUCs.length) actor.y = myUCs.reduce((s, u) => s + u.cy, 0) / myUCs.length;
+      actor.x = actor.side === 'left' ? b.x - ACTOR_PAD : b.x + b.width + ACTOR_PAD;
+    } else if (actor.side === 'bottom') {
+      actor.y = b.y + b.height + ACTOR_PAD;
+    }
+  });
+
+  // Step 6b, Enforce a minimum vertical gap between actors on the same side.
+  // Step 6 centers each actor on its UCs' mean cy, which can place two single-UC
+  // actors barely one row apart (~UC_GAP) so their stick figures + labels overlap.
+  // Push later actors down to keep centers at least ACTOR_MIN_GAP apart (CR #6).
+  const ACTOR_MIN_GAP = 150;
+  ['left', 'right'].forEach(side => {
+    const col = layout.actors.filter(a => a.side === side).sort((a, bb) => a.y - bb.y);
+    for (let i = 1; i < col.length; i++) {
+      const need = col[i - 1].y + ACTOR_MIN_GAP;
+      if (col[i].y < need) col[i].y = need;
+    }
+  });
+
+  // Step 7, Write UC positions to the SVG (absolute attributes).
+  layout.useCases.forEach(uc => {
+    const g = svg.querySelector('[id="uc-group-' + uc.id + '"]');
+    if (!g) return;
+    const el = g.querySelector('ellipse');
+    if (!el) return;
+    const dx = uc.cx - parseFloat(el.getAttribute('cx'));
+    const dy = uc.cy - parseFloat(el.getAttribute('cy'));
+    el.setAttribute('cx', uc.cx);
+    el.setAttribute('cy', uc.cy);
+    g.querySelectorAll('text').forEach(t => {
+      t.setAttribute('x', parseFloat(t.getAttribute('x') || 0) + dx);
+      t.setAttribute('y', parseFloat(t.getAttribute('y') || 0) + dy);
+    });
+    g.removeAttribute('transform');
+  });
+  layout.actors.forEach(actor => {
+    // Scope to THIS svg: a shared actor id (e.g. 'head') repeats across tabs, so
+    // document.getElementById returns the first tab's figure and moves the wrong
+    // one, leaving this tab's figure detached from its (correctly placed) line.
+    const g = svg.querySelector('[id="actor-group-' + actor.id + '"]');
+    if (g) g.setAttribute('transform', `translate(${actor.x},${actor.y})`);
+  });
+
+  // Step 8, Recalculate every connection line endpoint.
+  svg.querySelectorAll('[data-conn-from][data-conn-to]').forEach(line => {
+    const fId = line.getAttribute('data-conn-from');
+    const tId = line.getAttribute('data-conn-to');
+    const fUC = layout.useCases.find(u => u.id === fId);
+    const fAc = layout.actors.find(a => a.id === fId);
+    const tUC = layout.useCases.find(u => u.id === tId);
+    const tAc = layout.actors.find(a => a.id === tId);
+    const from = fAc ? { x: fAc.x, y: fAc.y } : fUC ? { x: fUC.cx, y: fUC.cy } : null;
+    const to   = tAc ? { x: tAc.x, y: tAc.y } : tUC ? { x: tUC.cx, y: tUC.cy } : null;
+    if (!from || !to) return;
+    let x1 = from.x, y1 = from.y, x2 = to.x, y2 = to.y;
+    if (fUC) { const a = Math.atan2(to.y - fUC.cy, to.x - fUC.cx);     x1 = fUC.cx + fUC.rx * Math.cos(a); y1 = fUC.cy + fUC.ry * Math.sin(a); }
+    if (tUC) { const a = Math.atan2(from.y - tUC.cy, from.x - tUC.cx); x2 = tUC.cx + tUC.rx * Math.cos(a); y2 = tUC.cy + tUC.ry * Math.sin(a); }
+    line.setAttribute('x1', x1); line.setAttribute('y1', y1);
+    line.setAttribute('x2', x2); line.setAttribute('y2', y2);
+
+    const hitbox = svg.querySelector(
+      `.conn-hitbox[data-hitbox-from="${fId}"][data-hitbox-to="${tId}"]`);
+    if (hitbox) {
+      hitbox.setAttribute('x1', x1); hitbox.setAttribute('y1', y1);
+      hitbox.setAttribute('x2', x2); hitbox.setAttribute('y2', y2);
+    }
+
+    // Reposition «include»/«extend» text label associated with this line.
+    const lbl = svg.querySelector(`[data-label-for="${fId} ${tId}"]`);
+    if (lbl) {
+      lbl.setAttribute('x', (x1 + x2) / 2);
+      lbl.setAttribute('y', (y1 + y2) / 2 - 8);
+    }
+  });
+
+  // Step 9, Resize boundary rect and SVG viewBox (both width and height).
+  const br = svg.querySelector('.system-boundary, rect[rx="12"]');
+  if (br) { br.setAttribute('width', b.width); br.setAttribute('height', b.height); }
+  const vb = svg.getAttribute('viewBox');
+  if (vb) {
+    const p = vb.split(/\s+/);
+    p[3] = Math.max(parseFloat(p[3]), b.y + b.height + 120);
+    const ACTOR_LABEL_MARGIN = 120;
+    const maxActorX = layout.actors.length
+      ? Math.max(...layout.actors.map(a => a.x))
+      : b.x + b.width;
+    p[2] = Math.max(parseFloat(p[2]), maxActorX + ACTOR_LABEL_MARGIN);
+    svg.setAttribute('viewBox', p.join(' '));
+  }
+
+  // Step 10, Timing labels.
+  renderTimingLabels(layout);
+}
+
+// ── renderTimingLabels ────────────────────────────────────────────────────
+function renderTimingLabels(layout) {
+  const svg = document.getElementById(layout.svgId);
+  if (!svg) return;
+  svg.querySelectorAll('.timing-label').forEach(el => el.remove());
+  const NS = 'http://www.w3.org/2000/svg';
+  (layout.connections || []).forEach(conn => {
+    if (!conn.timing) return;
+    const line = svg.querySelector(
+      `[data-conn-from="${conn.from}"][data-conn-to="${conn.to}"]`);
+    if (!line) return;
+    const x1 = +line.getAttribute('x1'), y1 = +line.getAttribute('y1');
+    const x2 = +line.getAttribute('x2'), y2 = +line.getAttribute('y2');
+    const mx = (x1 + x2) / 2, my = (y1 + y2) / 2;
+    const w = 10 + conn.timing.length * 7, h = 16;
+    const g = document.createElementNS(NS, 'g');
+    g.setAttribute('class', 'timing-label');
+    const rect = document.createElementNS(NS, 'rect');
+    rect.setAttribute('x', mx - w / 2); rect.setAttribute('y', my - h / 2);
+    rect.setAttribute('width', w);      rect.setAttribute('height', h);
+    rect.setAttribute('fill', 'white'); rect.setAttribute('stroke', '#334155');
+    rect.setAttribute('stroke-width', '0.8'); rect.setAttribute('rx', '3');
+    const text = document.createElementNS(NS, 'text');
+    text.setAttribute('x', mx); text.setAttribute('y', my + 4);
+    text.setAttribute('font-size', '10'); text.setAttribute('text-anchor', 'middle');
+    text.setAttribute('fill', '#334155');
+    text.setAttribute('font-family', "'Noto Sans Hebrew', sans-serif");
+    text.setAttribute('direction', 'rtl');
+    text.textContent = conn.timing;
+    g.appendChild(rect); g.appendChild(text);
+    svg.appendChild(g);
+  });
+}
+
+// ── Tabs ──────────────────────────────────────────────────────────────────
+let activeTab = 0;
+function currentLayout() { return diagramLayouts[activeTab]; }
+function showDiagram(index) {
+  activeTab = index;
+  document.querySelectorAll('.diagram-part').forEach((p, i) => p.hidden = i !== index);
+  document.querySelectorAll('.tab').forEach((t, i) => t.classList.toggle('active', i === index));
+  fixLayout(diagramLayouts[index]);
+}
+
+// ── Small popup (actors & associations) ───────────────────────────────────
+function showDesc(id, type, event) {
+  if (type === 'uc') { openUcModal(id); event.stopPropagation(); return; }
+  showPopup(id, type, event);
+}
+
+function showPopup(id, type, event) {
+  hideDesc();
+  const data = type === 'actor' ? actorDescriptions[id]
+             : type === 'assoc' ? assocDescriptions[id]
+             : null;
+  if (!data) return;
+  const panel = document.createElement('div');
+  panel.id = 'desc-panel';
+  panel.innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+      <strong style="font-size:12px;color:#1e40af;direction:rtl;">${data.name}</strong>
+      <span onclick="hideDesc()" style="cursor:pointer;color:#94a3b8;font-size:18px;line-height:1;margin-right:6px;">×</span>
+    </div>
+    <div style="font-size:11px;color:#334155;line-height:1.6;direction:rtl;">${data.desc}</div>`;
+  Object.assign(panel.style, {
+    position:'fixed', background:'#fff', border:'1.5px solid #2980b9',
+    borderRadius:'8px', padding:'12px 16px', maxWidth:'300px',
+    boxShadow:'0 4px 14px rgba(0,0,0,.15)', zIndex:'1000',
+    left: event.clientX + 'px', top: event.clientY + 'px'
+  });
+  document.body.appendChild(panel);
+  const r = panel.getBoundingClientRect();
+  if (r.right  > window.innerWidth)  panel.style.left = (window.innerWidth  - r.width  - 10) + 'px';
+  if (r.bottom > window.innerHeight) panel.style.top  = (event.clientY - r.height - 10) + 'px';
+  event.stopPropagation();
+}
+
+function hideDesc() { document.getElementById('desc-panel')?.remove(); }
+
+document.addEventListener('click', e => {
+  if (!e.target.closest('[data-uc-id]') &&
+      !e.target.closest('[data-actor-id]') &&
+      !e.target.closest('[data-conn-id]')) hideDesc();
+});
+
+// ── UC modal ──────────────────────────────────────────────────────────────
+function wireframeSafe(html) {
+  const forbidden = [/<script\b/i, /\son\w+\s*=/i, /<iframe\b/i,
+    /src\s*=\s*["']https?:/i, /href\s*=\s*["']https?:/i, /@import\b/i, /<style\b/i];
+  return !forbidden.some(rx => rx.test(html));
+}
+
+function openUcModal(id) {
+  const doc = useCaseDocs[id];
+  if (!doc) return;
+  const actorName = aid => (actorDescriptions[aid]?.name) || aid;
+  const ucName    = uid => (useCaseDocs[uid]?.name) || uid;
+  const esc = s => String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+
+  let scenariosHtml = '';
+  (doc.scenarios || []).forEach(sce => {
+    scenariosHtml += `<h3>${esc(sce.name || sce.id)}</h3><ol>`;
+    (sce.flow || []).forEach((step, i) => {
+      if (step.kind === 'actor') {
+        scenariosHtml += `<li><strong class="step-actor" data-actor-id="${esc(step.actor)}">${esc(actorName(step.actor))}</strong>: ${esc(step.text || '')}</li>`;
+      } else if (step.kind === 'system') {
+        scenariosHtml += `<li><em class="step-system">המערכת</em>: ${esc(step.text || '')}</li>`;
+      } else if (step.kind === 'include') {
+        scenariosHtml += `<li><span class="step-include">«include» </span><a class="step-uc-ref" data-uc-ref="${esc(step.uc)}">${esc(ucName(step.uc))}</a>${step.text ? ', ' + esc(step.text) : ''}</li>`;
+      } else if (step.kind === 'extension') {
+        scenariosHtml += `<li class="ext-inline">${step.at ? esc(String(step.at)) + 'a. ' : ''}${esc(step.text || '')}</li>`;
+      }
+      (sce.extensions || []).filter(e => e.at === i + 1).forEach((ext, j) => {
+        scenariosHtml += `<li class="ext-sub">${i + 1}${String.fromCharCode(97 + j)}. ${esc(ext.text)}</li>`;
+      });
+    });
+    scenariosHtml += '</ol>';
+  });
+
+  const listItems = items => (items || []).map(s => `<li>${esc(s)}</li>`).join('');
+  const usItems   = (doc.userStories || []).map(us =>
+    `<li>${esc('בתור ' + us.role + ', אני רוצה ' + us.want + ', כדי ש' + us.so)}</li>`).join('');
+
+  const wfHtml = (doc.wireframe && wireframeSafe(doc.wireframe))
+    ? `<section class="uc-wireframe">${doc.wireframe}</section>` : '';
+  if (doc.wireframe && !wireframeSafe(doc.wireframe))
+    console.warn(`Wireframe for ${id} failed safety check.`);
+
+  // Single innerHTML write, avoids silent failures in sandboxed iframe environments.
+  const body = document.querySelector('#uc-modal .uc-modal-body');
+  body.innerHTML = `
+    <button class="uc-modal-close" onclick="closeUcModal()" aria-label="Close">×</button>
+    <header>
+      <span class="uc-id">${esc(doc.id)}</span>
+      <h2 class="uc-name">${esc(doc.name)}</h2>
+      <div class="uc-primary">
+        <span class="uc-primary-label">שחקן ראשי:</span>
+        <a class="uc-primary-link" data-actor-pulse="${esc(doc.primaryActor)}">${esc(actorName(doc.primaryActor))}</a>
+      </div>
+    </header>
+    <section class="uc-description">${esc(doc.description || '')}</section>
+    <section class="uc-scenarios">${scenariosHtml}</section>
+    <section class="uc-prepostuser">
+      <div class="uc-pre"><h4>תנאים מוקדמים</h4><ul>${listItems(doc.preconditions)}</ul></div>
+      <div class="uc-post"><h4>תנאים סופיים</h4><ul>${listItems(doc.postconditions)}</ul></div>
+      <div class="uc-stories"><h4>סיפורי משתמש</h4><ul>${usItems}</ul></div>
+    </section>
+    ${wfHtml}`;
+
+  body.querySelector('.uc-primary-link').onclick = () => { closeUcModal(); pulseActor(doc.primaryActor); };
+  body.querySelectorAll('.step-actor').forEach(el => {
+    el.onclick = () => { closeUcModal(); pulseActor(el.dataset.actorId); };
+  });
+  body.querySelectorAll('.step-uc-ref').forEach(el => {
+    el.onclick = () => openUcModal(el.dataset.ucRef);
+  });
+
+  const modal = document.getElementById('uc-modal');
+  modal.hidden = false;
+  document.body.classList.add('uc-modal-open');
+}
+
+function closeUcModal() {
+  const modal = document.getElementById('uc-modal');
+  if (modal) modal.hidden = true;
+  document.body.classList.remove('uc-modal-open');
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeUcModal(); });
+
+function pulseActor(actorId) {
+  const g = document.getElementById('actor-group-' + actorId);
+  if (!g) return;
+  g.classList.add('actor-pulse');
+  setTimeout(() => g.classList.remove('actor-pulse'), 2000);
+}
+
+// ── Assumptions panel ─────────────────────────────────────────────────────
+function renderAssumptions() {
+  const a = (diagramModel && diagramModel.assumptions)   || [];
+  const q = (diagramModel && diagramModel.openQuestions) || [];
+  const panel = document.getElementById('assumptions-panel');
+  if (!panel) return;
+  if (!a.length && !q.length) { panel.hidden = true; return; }
+  panel.hidden = false;
+  const fillList = (listEl, items) => {
+    listEl.innerHTML = '';
+    items.forEach(s => { const li = document.createElement('li'); li.textContent = s; listEl.appendChild(li); });
+  };
+  fillList(document.getElementById('assumptions-list'),    a);
+  fillList(document.getElementById('open-questions-list'), q);
+  document.getElementById('assumptions-col').hidden    = !a.length;
+  document.getElementById('open-questions-col').hidden = !q.length;
+}
+
+// ── XMI export ────────────────────────────────────────────────────────────
+function xmlEscape(s) {
+  return String(s == null ? '' : s)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;').replace(/'/g,'&apos;');
+}
+
+function downloadFile(filename, mimeType, content) {
+  const blob = new Blob([content], { type: mimeType });
+  const url  = URL.createObjectURL(blob);
+  const a = Object.assign(document.createElement('a'), { href: url, download: filename });
+  document.body.appendChild(a); a.click();
+  setTimeout(() => { URL.revokeObjectURL(url); a.remove(); }, 1000);
+}
+
+function xmiBody(elements, rels) {
+  const lines = [];
+  function flowText(uc) {
+    const actorName = id => (elements.find(e => e.kind === 'actor'   && e.id === id) || {}).name || id;
+    const ucName    = id => (elements.find(e => e.kind === 'useCase' && e.id === id) || {}).name || id;
+    const out = [];
+    (uc.scenarios || []).forEach(sc => {
+      out.push((sc.name || sc.id) + ':');
+      (sc.flow || []).forEach((step, i) => {
+        const n = i + 1;
+        if      (step.kind === 'actor')     out.push('  ' + n + '. ' + actorName(step.actor) + ': ' + step.text);
+        else if (step.kind === 'system')    out.push('  ' + n + '. System: ' + step.text);
+        else if (step.kind === 'include')   out.push('  ' + n + '. «include» ' + ucName(step.uc) + (step.text ? ', ' + step.text : ''));
+        else if (step.kind === 'extension') out.push('  ' + n + 'a. ' + step.text);
+        (sc.extensions || []).filter(e => e.at === n).forEach((e, j) => {
+          out.push('  ' + n + String.fromCharCode(97 + j) + '. ' + e.text);
+        });
+      });
+    });
+    return out.join('\n');
+  }
+
+  for (const el of elements) {
+    if (el.kind === 'useCase') {
+      const hasDocs = (el.preconditions  && el.preconditions.length)
+                   || (el.postconditions && el.postconditions.length)
+                   || (el.scenarios      && el.scenarios.length);
+      if (!hasDocs) {
+        lines.push('    <packagedElement xmi:type="uml:UseCase" xmi:id="' + el.id + '" name="' + xmlEscape(el.name) + '"/>');
+      } else {
+        lines.push('    <packagedElement xmi:type="uml:UseCase" xmi:id="' + el.id + '" name="' + xmlEscape(el.name) + '">');
+        (el.preconditions || []).forEach((p, i) => {
+          lines.push('      <precondition xmi:type="uml:Constraint" xmi:id="' + el.id + '-pre-' + (i+1) + '" name="pre-' + (i+1) + '">');
+          lines.push('        <specification xmi:type="uml:OpaqueExpression" xmi:id="' + el.id + '-pre-' + (i+1) + '-s"><body>' + xmlEscape(p) + '</body></specification>');
+          lines.push('      </precondition>');
+        });
+        (el.postconditions || []).forEach((p, i) => {
+          lines.push('      <postcondition xmi:type="uml:Constraint" xmi:id="' + el.id + '-post-' + (i+1) + '" name="post-' + (i+1) + '">');
+          lines.push('        <specification xmi:type="uml:OpaqueExpression" xmi:id="' + el.id + '-post-' + (i+1) + '-s"><body>' + xmlEscape(p) + '</body></specification>');
+          lines.push('      </postcondition>');
+        });
+        if (el.scenarios && el.scenarios.length) {
+          lines.push('      <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="' + el.id + '-flow" name="Flow of Events">');
+          lines.push('        <body>' + xmlEscape(flowText(el)) + '</body>');
+          lines.push('      </ownedBehavior>');
+        }
+        lines.push('    </packagedElement>');
+      }
+    }
+    if (el.kind === 'actor')
+      lines.push('    <packagedElement xmi:type="uml:Actor" xmi:id="' + el.id + '" name="' + xmlEscape(el.name) + '"/>');
+  }
+  for (const r of rels) {
+    if (r.kind === 'actorAssoc') {
+      lines.push('    <packagedElement xmi:type="uml:Association" xmi:id="' + r.id + '">');
+      lines.push('      <ownedEnd xmi:type="uml:Property" xmi:id="' + r.id + '-e1" association="' + r.id + '" type="' + r.actorId + '"/>');
+      lines.push('      <ownedEnd xmi:type="uml:Property" xmi:id="' + r.id + '-e2" association="' + r.id + '" type="' + r.ucId   + '"/>');
+      lines.push('    </packagedElement>');
+    }
+    if (r.kind === 'include')
+      lines.push('    <packagedElement xmi:type="uml:Include" xmi:id="' + r.id + '" includingCase="' + r.from + '" addition="' + r.to + '"/>');
+    if (r.kind === 'extend')
+      lines.push('    <packagedElement xmi:type="uml:Extend"  xmi:id="' + r.id + '" extendedCase="'  + r.to   + '" extension="' + r.from + '"/>');
+    if (r.kind === 'generalization')
+      lines.push('    <packagedElement xmi:type="uml:Generalization" xmi:id="' + r.id + '" specific="' + r.from + '" general="' + r.to + '"/>');
+  }
+  return lines.join('\n');
+}
+
+function exportXMI() {
+  const m     = diagramModel;
+  const title = xmlEscape(m.title || 'diagram');
+  const body  = xmiBody(m.parts.flatMap(p => p.elements), m.parts.flatMap(p => p.relationships));
+  const xmi   =
+    '<?xml version="1.0" encoding="UTF-8"?>\n' +
+    '<xmi:XMI xmi:version="2.1"\n' +
+    '  xmlns:xmi="http://www.omg.org/XMI"\n' +
+    '  xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML">\n' +
+    '  <uml:Model xmi:id="model_1" name="' + title + '">\n' +
+    body + '\n' +
+    '  </uml:Model>\n' +
+    '</xmi:XMI>';
+  downloadFile(title.replace(/\s+/g, '_') + '.xmi', 'application/xml', xmi);
+}
+
+// ── User stories summary panel ────────────────────────────────────────────
+function renderUserStoriesSummary() {
+  const panel = document.getElementById('user-stories-panel');
+  if (!panel) return;
+  const seen = new Set();
+  const stories = [];
+  Object.values(useCaseDocs).forEach(doc => {
+    (doc.userStories || []).forEach(us => {
+      const key = us.role + '|' + us.want + '|' + us.so;
+      if (!seen.has(key)) { seen.add(key); stories.push(us); }
+    });
+  });
+  if (!stories.length) { panel.hidden = true; return; }
+  panel.hidden = false;
+  const list = document.getElementById('user-stories-list');
+  if (!list) return;
+  list.innerHTML = '';
+  stories.forEach(us => {
+    const li = document.createElement('li');
+    li.textContent = 'בתור ' + us.role + ', אני רוצה ' + us.want + ', כדי ש' + us.so;
+    list.appendChild(li);
+  });
+}
+
+// ── Init ──────────────────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  diagramLayouts.forEach(l => fixLayout(l));
+  renderAssumptions();
+  renderUserStoriesSummary();
+});
+
+</script>
+</body>
+</html>

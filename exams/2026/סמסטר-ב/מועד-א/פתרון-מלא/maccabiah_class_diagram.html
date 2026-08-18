@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="he">
+<head>
+  <meta charset="UTF-8">
+  <title>תרשים מחלקות, ניהול משלחות למכביה</title>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    body { margin: 0; background: #f1f5f9; font-family: 'IBM Plex Mono', monospace; }
+    .split-rationale { font-size: 11px; color: #64748b; padding: 6px 10px; }
+    .wrap { overflow: auto; }
+    svg { display: block; }
+    .vp-export-btn {
+      position: fixed; bottom: 20px; right: 20px; z-index: 1000;
+      background: #1e40af; color: #fff; border: none; border-radius: 6px;
+      padding: 8px 16px; font-size: 13px; cursor: pointer;
+      font-family: 'IBM Plex Mono', monospace;
+    }
+    .vp-export-btn:hover { background: #1e3a8a; }
+  </style>
+</head>
+<body>
+  <div class="split-rationale">תרשים מחלקות יחיד, 9 מחלקות, ללא פיצול (לפי דרישת המרצה). 4 מנייות (enumerations) מוצבות ליד המחלקה המשתמשת, ללא קו חיבור.</div>
+
+  <div class="wrap">
+    <svg id="diagram-svg" xmlns="http://www.w3.org/2000/svg"></svg>
+  </div>
+
+  <button class="vp-export-btn" onclick="exportXMI()">Download .xmi (Visual Paradigm)</button>
+
+  <script>
+  /* ============================================================
+     1. DATA, CLASSES + RELS  (§9b / §9c)
+     ============================================================ */
+
+  const CLASSES = [
+    {
+      id: 'MaccabiahGames', name: 'MaccabiahGames', stereotype: null, isEnum: false, isAbstract: false,
+      attrs: [
+        '+ edition : String',
+        '+ year : Integer',
+        '+ registrationDeadline : Date'
+      ],
+      ops: [],
+      x: 60, y: 170
+    },
+    {
+      id: 'Delegation', name: 'Delegation', stereotype: null, isEnum: false, isAbstract: false,
+      attrs: [
+        '+ country : String',
+        '+ name : String',
+        '+ expectedParticipants : Integer',
+        '+ status : DelegationStatus',
+        '+ submissionDate : Date'
+      ],
+      ops: [],
+      x: 360, y: 150
+    },
+    {
+      id: 'Participant', name: 'Participant', stereotype: null, isEnum: false, isAbstract: false,
+      attrs: [
+        '+ passportNumber : String',
+        '+ firstName : String',
+        '+ lastName : String',
+        '+ phone : String',
+        '+ email : String',
+        '+ mainRole : MainRole'
+      ],
+      ops: [],
+      x: 700, y: 170
+    },
+    {
+      id: 'User', name: 'User', stereotype: null, isEnum: false, isAbstract: false,
+      attrs: [
+        '+ userId : String',
+        '+ fullName : String',
+        '+ email : String',
+        '+ role : UserRole'
+      ],
+      ops: [],
+      x: 500, y: 420
+    },
+    {
+      id: 'Role', name: 'Role', stereotype: null, isEnum: false, isAbstract: false,
+      attrs: [
+        '+ name : String'
+      ],
+      ops: [],
+      x: 1020, y: 150
+    },
+    {
+      id: 'Sport', name: 'Sport', stereotype: null, isEnum: false, isAbstract: false,
+      attrs: [
+        '+ name : String'
+      ],
+      ops: [],
+      x: 1020, y: 300
+    },
+    {
+      id: 'ParticipantDocument', name: 'ParticipantDocument', stereotype: null, isEnum: false, isAbstract: false,
+      attrs: [
+        '+ fileRef : String',
+        '+ uploadDate : Date',
+        '+ status : DocumentStatus'
+      ],
+      ops: [],
+      x: 760, y: 430
+    },
+    {
+      id: 'DocumentType', name: 'DocumentType', stereotype: null, isEnum: false, isAbstract: false,
+      attrs: [
+        '+ name : String',
+        '+ mandatory : MandatoryFlag'
+      ],
+      ops: [],
+      x: 760, y: 610
+    },
+    {
+      id: 'Message', name: 'Message', stereotype: null, isEnum: false, isAbstract: false,
+      attrs: [
+        '+ content : String',
+        '+ sentDate : Date'
+      ],
+      ops: [],
+      x: 150, y: 470
+    },
+
+    /* ── Enumerations, unconnected boxes placed near their using class ── */
+    {
+      id: 'DelegationStatus', name: 'DelegationStatus', stereotype: '«enumeration»', isEnum: true, isAbstract: false,
+      attrs: [
+        'Draft',
+        'Submitted',
+        'UnderReview',
+        'ReturnedForCorrections',
+        'Approved',
+        'Late'
+      ],
+      ops: [],
+      x: 120, y: 300
+    },
+    {
+      id: 'UserRole', name: 'UserRole', stereotype: '«enumeration»', isEnum: true, isAbstract: false,
+      attrs: [
+        'DelegationHead',
+        'Coordinator',
+        'Admin'
+      ],
+      ops: [],
+      x: 500, y: 560
+    },
+    {
+      id: 'MainRole', name: 'MainRole', stereotype: '«enumeration»', isEnum: true, isAbstract: false,
+      attrs: [
+        'Athlete',
+        'Coach',
+        'Doctor',
+        'Escort'
+      ],
+      ops: [],
+      x: 700, y: 20
+    },
+    {
+      id: 'MandatoryFlag', name: 'MandatoryFlag', stereotype: '«enumeration»', isEnum: true, isAbstract: false,
+      attrs: [
+        'Mandatory',
+        'Optional'
+      ],
+      ops: [],
+      x: 980, y: 610
+    },
+    {
+      id: 'DocumentStatus', name: 'DocumentStatus', stereotype: '«enumeration»', isEnum: true, isAbstract: false,
+      attrs: [
+        'Uploaded',
+        'Missing',
+        'Rejected'
+      ],
+      ops: [],
+      x: 760, y: 720
+    }
+  ];
+
+  const RELS = [
+    /* MaccabiahGames (1) -- (1..*) Delegation */
+    {
+      type: 'assoc', from: 'MaccabiahGames', to: 'Delegation',
+      fromMult: '1', toMult: '1..*', fromRole: null, toRole: null, label: null,
+      points: [ [265, 210], [360, 210] ]
+    },
+    /* Delegation ◆-- Participant  (composition, filled diamond at Delegation) */
+    {
+      type: 'comp', from: 'Delegation', to: 'Participant',
+      fromMult: '1', toMult: '0..*', fromRole: null, toRole: null, label: null,
+      points: [ [584, 220], [700, 220] ]
+    },
+    /* Delegation (0..1) -- (1) User , head of delegation (only users have accounts) */
+    {
+      type: 'assoc', from: 'Delegation', to: 'User',
+      fromMult: '0..1', toMult: '1', fromRole: null, toRole: 'ראש משלחת', label: 'ראש משלחת',
+      points: [ [560, 260], [560, 340], [560, 420] ]
+    },
+    /* Participant (0..*) -- (0..*) Role , roles held per sport (player AND coach allowed) */
+    {
+      type: 'assoc', from: 'Participant', to: 'Role',
+      fromMult: '0..*', toMult: '0..*', fromRole: null, toRole: 'תפקיד בענף', label: 'תפקיד בענף',
+      points: [ [879, 190], [950, 190], [1020, 190] ]
+    },
+    /* Sport (1) -- (0..*) Role , every role belongs to exactly one sport */
+    {
+      type: 'assoc', from: 'Sport', to: 'Role',
+      fromMult: '1', toMult: '0..*', fromRole: null, toRole: null, label: null,
+      points: [ [1080, 300], [1080, 204] ]
+    },
+    /* ParticipantDocument, uploaded per participant, typed by the admin catalog */
+    {
+      type: 'assoc', from: 'Participant', to: 'ParticipantDocument',
+      fromMult: '1', toMult: '0..*', fromRole: null, toRole: null, label: null,
+      points: [ [800, 294], [800, 430] ]
+    },
+    {
+      type: 'assoc', from: 'ParticipantDocument', to: 'DocumentType',
+      fromMult: '0..*', toMult: '1', fromRole: null, toRole: null, label: null,
+      points: [ [830, 512], [830, 610] ]
+    },
+    /* Message, in-system communication (instead of email) between users about a delegation */
+    {
+      type: 'assoc', from: 'Message', to: 'User',
+      fromMult: '0..*', toMult: '1', fromRole: null, toRole: 'שולח', label: 'שולח',
+      points: [ [283, 480], [390, 480], [500, 480] ]
+    },
+    {
+      type: 'assoc', from: 'Message', to: 'User',
+      fromMult: '0..*', toMult: '1', fromRole: null, toRole: 'נמען', label: 'נמען',
+      points: [ [283, 505], [390, 505], [500, 505] ]
+    },
+    {
+      type: 'assoc', from: 'Message', to: 'Delegation',
+      fromMult: '0..*', toMult: '1', fromRole: null, toRole: 'בנוגע למשלחת', label: 'בנוגע למשלחת',
+      points: [ [250, 470], [250, 450], [380, 450], [380, 260] ]
+    }
+  ];
+
+  /* ============================================================
+     2. ENGINE, §9d, verbatim
+     ============================================================ */
+
+  const HDR_H = 28, PAD = 6, LINE_H = 14, DIV_H = 1;
+  const FM = 'font-family="IBM Plex Mono, monospace"';
+
+  function escXml(s) {
+    return String(s)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+
+  function boxH(cls) {
+    const hdrH = cls.stereotype ? 38 : HDR_H;
+    return hdrH + PAD + cls.attrs.length * LINE_H +
+      (cls.ops.length > 0 ? DIV_H + cls.ops.length * LINE_H : 0) + PAD;
+  }
+
+  function boxW(cls) {
+    const longest = [...cls.attrs, ...cls.ops, cls.name]
+      .reduce((m, s) => Math.max(m, s.length), 0);
+    return Math.max(120, Math.ceil(longest * 6.5) + 16);
+  }
+
+  function svgBox(cls) {
+    const w = boxW(cls), h = boxH(cls), { x, y } = cls;
+    const hdrH = cls.stereotype ? 38 : HDR_H;
+    const border   = cls.isEnum ? '#94a3b8' : '#3b82f6';
+    const hdrFill  = cls.isEnum ? '#475569' : '#1e40af';
+    const bodyFill = cls.isEnum ? '#f8fafc' : 'white';
+    const dash     = cls.isEnum ? 'stroke-dasharray="5 3"' : '';
+
+    let s = `<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="${bodyFill}" stroke="${border}" stroke-width="2" ${dash} rx="2"/>`;
+    s += `<rect x="${x}" y="${y}" width="${w}" height="${hdrH}" fill="${hdrFill}" rx="2"/>`;
+
+    if (cls.stereotype) {
+      s += `<text x="${x + w/2}" y="${y + 13}" text-anchor="middle" fill="white" font-size="9" ${FM}>${escXml(cls.stereotype)}</text>`;
+    }
+    const nameStyle = cls.isAbstract ? 'font-style:italic' : '';
+    const nameY = cls.stereotype ? y + hdrH - 8 : y + hdrH / 2 + 4;
+    s += `<text x="${x + w/2}" y="${nameY}" text-anchor="middle" fill="white" font-size="11" font-weight="700" ${FM} style="${nameStyle}">${escXml(cls.name)}</text>`;
+
+    const divY = y + hdrH;
+    s += `<line x1="${x}" y1="${divY}" x2="${x + w}" y2="${divY}" stroke="${border}" stroke-width="1"/>`;
+
+    let curY = divY + PAD + 10;
+    for (const a of cls.attrs) {
+      s += `<text x="${x + 6}" y="${curY}" text-anchor="start" fill="#1e293b" font-size="10.5" ${FM}>${escXml(a)}</text>`;
+      curY += LINE_H;
+    }
+    if (cls.ops.length > 0) {
+      const opDivY = divY + PAD + cls.attrs.length * LINE_H;
+      s += `<line x1="${x}" y1="${opDivY}" x2="${x + w}" y2="${opDivY}" stroke="${border}" stroke-width="1"/>`;
+      curY = opDivY + PAD + 10;
+      for (const o of cls.ops) {
+        s += `<text x="${x + 6}" y="${curY}" text-anchor="start" fill="#2563eb" font-size="10.5" font-style="italic" ${FM}>${escXml(o)}</text>`;
+        curY += LINE_H;
+      }
+    }
+    return s;
+  }
+
+  function svgRel(rel) {
+    const pts = rel.points.map(([px, py]) => `${px},${py}`).join(' ');
+    let mS = '', mE = '', dash = '';
+    if (rel.type === 'comp') mS = 'marker-start="url(#compFill)"';
+    if (rel.type === 'agg')  mS = 'marker-start="url(#aggHollow)"';
+    if (rel.type === 'gen')  mE = 'marker-end="url(#genHollow)"';
+    if (rel.type === 'dep')  { mE = 'marker-end="url(#arrOpen)"'; dash = 'stroke-dasharray="6 3"'; }
+    // 'assoc': no markers, plain line
+
+    let s = `<polyline points="${pts}" fill="none" stroke="#334155" stroke-width="1.8" ${dash} ${mS} ${mE}/>`;
+    // Multiplicity labels, placed just OUTSIDE each box, offset along the line
+    // (away from the box) and beside it, so BOTH ends are always legible.
+    const multLabel = (end, adj, txt) => {
+      const dx = adj[0] - end[0], dy = adj[1] - end[1];
+      const L = Math.hypot(dx, dy) || 1, ux = dx / L, uy = dy / L;
+      const x = end[0] + ux * 16 - uy * 9, y = end[1] + uy * 16 + ux * 9 + 3;
+      return `<text x="${x}" y="${y}" text-anchor="middle" fill="#64748b" font-size="9.5" ${FM}>${escXml(txt)}</text>`;
+    };
+    if (rel.fromMult) s += multLabel(rel.points[0], rel.points[1], rel.fromMult);
+    if (rel.toMult) {
+      const n = rel.points.length;
+      s += multLabel(rel.points[n - 1], rel.points[n - 2], rel.toMult);
+    }
+    if (rel.label) {
+      const mid = rel.points[Math.floor(rel.points.length / 2)];
+      s += `<text x="${mid[0]}" y="${mid[1] - 6}" text-anchor="middle" fill="#64748b" font-size="9.5" ${FM}>${escXml(rel.label)}</text>`;
+    }
+    return s;
+  }
+
+  function render() {
+    let maxX = 600, maxY = 400;
+    for (const cls of CLASSES) {
+      maxX = Math.max(maxX, cls.x + boxW(cls) + 60);
+      maxY = Math.max(maxY, cls.y + boxH(cls) + 80);
+    }
+
+    const defs = `<defs>
+      <pattern id="dotgrid" width="24" height="24" patternUnits="userSpaceOnUse">
+        <circle cx="12" cy="12" r="0.8" fill="#cbd5e1"/>
+      </pattern>
+      <marker id="genHollow" markerWidth="12" markerHeight="10" refX="10" refY="5" orient="auto">
+        <polygon points="0,0 10,5 0,10" fill="white" stroke="#334155" stroke-width="1.5"/>
+      </marker>
+      <marker id="arrOpen" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+        <polyline points="0,0 9,4 0,8" fill="none" stroke="#334155" stroke-width="1.5"/>
+      </marker>
+      <marker id="compFill" markerWidth="14" markerHeight="10" refX="1" refY="5" orient="auto">
+        <polygon points="0,5 7,0 14,5 7,10" fill="#1e40af" stroke="#1e40af"/>
+      </marker>
+      <marker id="aggHollow" markerWidth="14" markerHeight="10" refX="1" refY="5" orient="auto">
+        <polygon points="0,5 7,0 14,5 7,10" fill="white" stroke="#334155"/>
+      </marker>
+    </defs>`;
+
+    const totalWidth  = maxX;
+    const totalHeight = maxY;
+
+    const bg    = `<rect width="${totalWidth}" height="${totalHeight}" fill="url(#dotgrid)"/>`;
+    const rels  = RELS.map(svgRel).join('');
+    const boxes = CLASSES.map(svgBox).join('');
+    const legend = `<text x="16" y="${totalHeight - 60}" fill="#64748b" font-size="9" ${FM}>── Association  ◇── Aggregation  ◆── Composition  ──▷ Generalization  |  קרדינליות בשני קצות הקשר</text>`;
+
+    const svg = document.getElementById('diagram-svg');
+    svg.setAttribute('width',   totalWidth);
+    svg.setAttribute('height',  totalHeight);
+    svg.setAttribute('viewBox', `0 0 ${totalWidth} ${totalHeight}`);
+    svg.innerHTML = defs + bg + rels + boxes + legend;
+  }
+
+  /* ============================================================
+     3. diagramModel, §8 / model-shape.md (kind:'class')
+     ============================================================ */
+
+  const diagramModel = {
+    kind: 'class',
+    title: 'תרשים מחלקות, ניהול משלחות למכביה',
+    parts: [
+      {
+        id: 'part-1',
+        label: 'Delegation Management',
+        splitRationale: '',
+        elements: [
+          { kind: 'class', id: 'MaccabiahGames', name: 'MaccabiahGames', isAbstract: false, stereotype: null,
+            attributes: [
+              { visibility: '+', name: 'edition', type: 'String' },
+              { visibility: '+', name: 'year', type: 'Integer' },
+              { visibility: '+', name: 'registrationDeadline', type: 'Date' }
+            ], operations: [], x: 60, y: 170, w: 205, h: 82 },
+          { kind: 'class', id: 'Delegation', name: 'Delegation', isAbstract: false, stereotype: null,
+            attributes: [
+              { visibility: '+', name: 'country', type: 'String' },
+              { visibility: '+', name: 'name', type: 'String' },
+              { visibility: '+', name: 'expectedParticipants', type: 'Integer' },
+              { visibility: '+', name: 'status', type: 'DelegationStatus' },
+              { visibility: '+', name: 'submissionDate', type: 'Date' }
+            ], operations: [], x: 360, y: 150, w: 224, h: 110 },
+          { kind: 'class', id: 'Participant', name: 'Participant', isAbstract: false, stereotype: null,
+            attributes: [
+              { visibility: '+', name: 'passportNumber', type: 'String' },
+              { visibility: '+', name: 'firstName', type: 'String' },
+              { visibility: '+', name: 'lastName', type: 'String' },
+              { visibility: '+', name: 'phone', type: 'String' },
+              { visibility: '+', name: 'email', type: 'String' },
+              { visibility: '+', name: 'mainRole', type: 'MainRole' }
+            ], operations: [], x: 700, y: 170, w: 179, h: 124 },
+          { kind: 'class', id: 'User', name: 'User', isAbstract: false, stereotype: null,
+            attributes: [
+              { visibility: '+', name: 'userId', type: 'String' },
+              { visibility: '+', name: 'fullName', type: 'String' },
+              { visibility: '+', name: 'email', type: 'String' },
+              { visibility: '+', name: 'role', type: 'UserRole' }
+            ], operations: [], x: 500, y: 420, w: 140, h: 96 },
+          { kind: 'class', id: 'Role', name: 'Role', isAbstract: false, stereotype: null,
+            attributes: [
+              { visibility: '+', name: 'name', type: 'String' }
+            ], operations: [], x: 1020, y: 150, w: 120, h: 54 },
+          { kind: 'class', id: 'Sport', name: 'Sport', isAbstract: false, stereotype: null,
+            attributes: [
+              { visibility: '+', name: 'name', type: 'String' }
+            ], operations: [], x: 1020, y: 300, w: 120, h: 54 },
+          { kind: 'class', id: 'ParticipantDocument', name: 'ParticipantDocument', isAbstract: false, stereotype: null,
+            attributes: [
+              { visibility: '+', name: 'fileRef', type: 'String' },
+              { visibility: '+', name: 'uploadDate', type: 'Date' },
+              { visibility: '+', name: 'status', type: 'DocumentStatus' }
+            ], operations: [], x: 760, y: 430, w: 179, h: 82 },
+          { kind: 'class', id: 'DocumentType', name: 'DocumentType', isAbstract: false, stereotype: null,
+            attributes: [
+              { visibility: '+', name: 'name', type: 'String' },
+              { visibility: '+', name: 'mandatory', type: 'MandatoryFlag' }
+            ], operations: [], x: 760, y: 610, w: 192, h: 68 },
+          { kind: 'class', id: 'Message', name: 'Message', isAbstract: false, stereotype: null,
+            attributes: [
+              { visibility: '+', name: 'content', type: 'String' },
+              { visibility: '+', name: 'sentDate', type: 'Date' }
+            ], operations: [], x: 150, y: 470, w: 133, h: 68 },
+
+          { kind: 'class', id: 'DelegationStatus', name: 'DelegationStatus', isAbstract: false, stereotype: 'enumeration',
+            attributes: [
+              { visibility: '', name: 'Draft', type: '' },
+              { visibility: '', name: 'Submitted', type: '' },
+              { visibility: '', name: 'UnderReview', type: '' },
+              { visibility: '', name: 'ReturnedForCorrections', type: '' },
+              { visibility: '', name: 'Approved', type: '' },
+              { visibility: '', name: 'Late', type: '' }
+            ], operations: [], x: 120, y: 300, w: 159, h: 134 },
+          { kind: 'class', id: 'UserRole', name: 'UserRole', isAbstract: false, stereotype: 'enumeration',
+            attributes: [
+              { visibility: '', name: 'DelegationHead', type: '' },
+              { visibility: '', name: 'Coordinator', type: '' },
+              { visibility: '', name: 'Admin', type: '' }
+            ], operations: [], x: 500, y: 560, w: 120, h: 92 },
+          { kind: 'class', id: 'MainRole', name: 'MainRole', isAbstract: false, stereotype: 'enumeration',
+            attributes: [
+              { visibility: '', name: 'Athlete', type: '' },
+              { visibility: '', name: 'Coach', type: '' },
+              { visibility: '', name: 'Doctor', type: '' },
+              { visibility: '', name: 'Escort', type: '' }
+            ], operations: [], x: 700, y: 20, w: 120, h: 106 },
+          { kind: 'class', id: 'MandatoryFlag', name: 'MandatoryFlag', isAbstract: false, stereotype: 'enumeration',
+            attributes: [
+              { visibility: '', name: 'Mandatory', type: '' },
+              { visibility: '', name: 'Optional', type: '' }
+            ], operations: [], x: 980, y: 610, w: 120, h: 78 },
+          { kind: 'class', id: 'DocumentStatus', name: 'DocumentStatus', isAbstract: false, stereotype: 'enumeration',
+            attributes: [
+              { visibility: '', name: 'Uploaded', type: '' },
+              { visibility: '', name: 'Missing', type: '' },
+              { visibility: '', name: 'Rejected', type: '' }
+            ], operations: [], x: 760, y: 720, w: 120, h: 92 }
+        ],
+        relationships: [
+          { kind: 'association', id: 'rel_games_del', from: 'MaccabiahGames', to: 'Delegation',
+            multFrom: '1', multTo: '1..*', roleFrom: null, roleTo: null,
+            directed: false, aggregation: false, composition: false },
+          { kind: 'association', id: 'rel_del_part', from: 'Delegation', to: 'Participant',
+            multFrom: '1', multTo: '0..*', roleFrom: null, roleTo: null,
+            directed: false, aggregation: false, composition: true },
+          { kind: 'association', id: 'rel_del_user', from: 'Delegation', to: 'User',
+            multFrom: '0..1', multTo: '1', roleFrom: null, roleTo: 'ראש משלחת',
+            directed: false, aggregation: false, composition: false },
+          { kind: 'association', id: 'rel_part_role', from: 'Participant', to: 'Role',
+            multFrom: '0..*', multTo: '0..*', roleFrom: null, roleTo: 'תפקיד בענף',
+            directed: false, aggregation: false, composition: false },
+          { kind: 'association', id: 'rel_sport_role', from: 'Sport', to: 'Role',
+            multFrom: '1', multTo: '0..*', roleFrom: null, roleTo: null,
+            directed: false, aggregation: false, composition: false },
+          { kind: 'association', id: 'rel_part_doc', from: 'Participant', to: 'ParticipantDocument',
+            multFrom: '1', multTo: '0..*', roleFrom: null, roleTo: null,
+            directed: false, aggregation: false, composition: false },
+          { kind: 'association', id: 'rel_doc_doctype', from: 'ParticipantDocument', to: 'DocumentType',
+            multFrom: '0..*', multTo: '1', roleFrom: null, roleTo: null,
+            directed: false, aggregation: false, composition: false },
+          { kind: 'association', id: 'rel_msg_sender', from: 'Message', to: 'User',
+            multFrom: '0..*', multTo: '1', roleFrom: null, roleTo: 'שולח',
+            directed: false, aggregation: false, composition: false },
+          { kind: 'association', id: 'rel_msg_recipient', from: 'Message', to: 'User',
+            multFrom: '0..*', multTo: '1', roleFrom: null, roleTo: 'נמען',
+            directed: false, aggregation: false, composition: false },
+          { kind: 'association', id: 'rel_msg_del', from: 'Message', to: 'Delegation',
+            multFrom: '0..*', multTo: '1', roleFrom: null, roleTo: 'בנוגע למשלחת',
+            directed: false, aggregation: false, composition: false }
+        ]
+      }
+    ]
+  };
+
+  /* ============================================================
+     4. VP EXPORT, export-buttons.md (XMI 2.1)
+     ============================================================ */
+
+  function xmlEscape(s) {
+    return String(s ?? '')
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&apos;');
+  }
+
+  function downloadFile(filename, mimeType, content) {
+    const blob = new Blob([content], { type: mimeType });
+    const url  = URL.createObjectURL(blob);
+    const a    = Object.assign(document.createElement('a'),
+                   { href: url, download: filename });
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(() => { URL.revokeObjectURL(url); a.remove(); }, 1000);
+  }
+
+  function xmiBody(elements, rels) {
+    const lines = [];
+    for (const el of elements) {
+      if (el.kind === 'class' && el.stereotype === 'enumeration') {
+        lines.push(`    <packagedElement xmi:type="uml:Enumeration" xmi:id="${el.id}" name="${xmlEscape(el.name)}">`);
+        for (const a of el.attributes)
+          lines.push(`      <ownedLiteral xmi:id="${el.id}_${xmlEscape(a.name)}" name="${xmlEscape(a.name)}"/>`);
+        lines.push(`    </packagedElement>`);
+      } else if (el.kind === 'class') {
+        lines.push(`    <packagedElement xmi:type="uml:Class" xmi:id="${el.id}" name="${xmlEscape(el.name)}"${el.isAbstract?' isAbstract="true"':''}>`);
+        for (const a of el.attributes)
+          lines.push(`      <ownedAttribute xmi:id="${el.id}_${a.name}" name="${xmlEscape(a.name)}" visibility="${a.visibility==='+'?'public':a.visibility==='-'?'private':a.visibility==='#'?'protected':'public'}"/>`);
+        for (const op of el.operations)
+          lines.push(`      <ownedOperation xmi:id="${el.id}_${op.name}" name="${xmlEscape(op.name)}"/>`);
+        lines.push(`    </packagedElement>`);
+      }
+    }
+    for (const r of rels) {
+      if (r.kind === 'generalization')
+        lines.push(`    <packagedElement xmi:type="uml:Generalization" xmi:id="${r.id}" specific="${r.from}" general="${r.to}"/>`);
+      if (r.kind === 'association')
+        lines.push(`    <packagedElement xmi:type="uml:Association" xmi:id="${r.id}" memberEnd="${r.from}_end ${r.to}_end"/>`);
+    }
+    return lines.join('\n');
+  }
+
+  function exportXMI() {
+    const m = diagramModel;
+    const title = xmlEscape(m.title || 'diagram');
+    const allElements = m.parts.flatMap(p => p.elements);
+    const allRelationships = m.parts.flatMap(p => p.relationships);
+    const body = xmiBody(allElements, allRelationships);
+
+    const xmi = `<?xml version="1.0" encoding="UTF-8"?>
+<xmi:XMI xmi:version="2.1"
+  xmlns:xmi="http://www.omg.org/XMI"
+  xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML">
+  <uml:Model xmi:id="model_1" name="${title}">
+${body}
+  </uml:Model>
+</xmi:XMI>`;
+
+    downloadFile((title.replace(/\s+/g, '_') || 'diagram') + '.xmi', 'application/xml', xmi);
+  }
+
+  document.addEventListener('DOMContentLoaded', render);
+  </script>
+</body>
+</html>

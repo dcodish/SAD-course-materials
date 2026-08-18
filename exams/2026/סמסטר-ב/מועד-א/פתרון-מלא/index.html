@@ -1,0 +1,1169 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>פתרון הבחינה - ניתוח ועיצוב מערכות מידע | ניהול משלחות למכביה</title>
+<style>
+:root{
+  --ink:#1a2332; --muted:#5b6b7f; --line:#dfe5ec; --bg:#f7f9fb; --card:#fff;
+  --accent:#1d4ed8; --accent-soft:#eff4ff;
+  --ans:#065f46; --ans-bg:#ecfdf5; --ans-line:#6ee7b7;
+  --warn:#8a3d12; --warn-bg:#fff5ed; --warn-line:#f7b98a;
+}
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--bg); color:var(--ink); direction:rtl;
+  font-family:"Segoe UI","Noto Sans Hebrew",Arial,sans-serif;
+  font-size:16px; line-height:1.75;
+}
+.wrap{max-width:1180px; margin:0 auto; padding:32px 20px 80px}
+header.page{
+  background:linear-gradient(135deg,#1e3a8a,#1d4ed8); color:#fff;
+  border-radius:14px; padding:28px 30px; margin-bottom:28px;
+}
+header.page h1{margin:0 0 6px; font-size:1.75rem; letter-spacing:-.01em}
+header.page p{margin:0; opacity:.92; font-size:.95rem}
+.meta{margin-top:16px; display:flex; flex-wrap:wrap; gap:8px}
+.chip{background:rgba(255,255,255,.16); border:1px solid rgba(255,255,255,.28);
+  padding:4px 12px; border-radius:999px; font-size:.82rem}
+
+section.q{background:var(--card); border:1px solid var(--line); border-radius:12px;
+  padding:24px 26px; margin-bottom:22px; scroll-margin-top:16px}
+section.q > h2{
+  margin:0 0 4px; font-size:1.28rem; color:var(--accent);
+  border-bottom:2px solid var(--accent-soft); padding-bottom:10px;
+}
+.pts{float:left; font-size:.85rem; font-weight:600; color:var(--muted);
+  background:var(--bg); border:1px solid var(--line); border-radius:999px; padding:2px 11px}
+
+.qtext{color:var(--muted); font-size:.95rem; margin:14px 0}
+.box{background:var(--bg); border:1px solid var(--line); border-right:4px solid var(--accent);
+  border-radius:8px; padding:14px 18px; margin:14px 0; font-size:.93rem; color:#374a5e}
+.box p{margin:.5em 0}
+
+h3.sub{margin:26px 0 8px; font-size:1.02rem; color:var(--ink);
+  background:var(--accent-soft); border-radius:6px; padding:8px 12px}
+
+.answer{background:var(--ans-bg); border:1px solid var(--ans-line); border-radius:8px;
+  padding:14px 18px; margin:10px 0}
+.answer::before{content:"תשובה"; display:block; font-weight:700; font-size:.78rem;
+  letter-spacing:.06em; color:var(--ans); margin-bottom:6px}
+.answer p:last-child, .answer ul:last-child{margin-bottom:0}
+.answer p:first-of-type{margin-top:0}
+
+.mistake{background:var(--warn-bg); border:1px solid var(--warn-line); border-radius:8px;
+  padding:12px 18px; margin:10px 0; font-size:.92rem; color:#5c2c0d}
+.mistake::before{content:"טעות נפוצה"; display:block; font-weight:700; font-size:.78rem;
+  letter-spacing:.06em; color:var(--warn); margin-bottom:5px}
+.alt{font-size:.9rem; color:var(--muted); margin:8px 0 0; padding-right:2px}
+.alt b{color:var(--ink)}
+
+/* direction:ltr on the FIGURE too, an RTL scroll container starts pinned to the
+   right, which hides the left edge of any diagram wider than the page. */
+figure.diagram{margin:18px 0 6px; border:1px solid var(--line); border-radius:10px;
+  background:#fff; padding:12px; overflow-x:auto; direction:ltr}
+/* Never shrink a diagram below legibility: scroll sideways instead. */
+/* direction:ltr is REQUIRED, the page is RTL, and inheriting that into the SVG
+   flips how text-anchor:start resolves, throwing every label out of its box. */
+figure.diagram svg{display:block; width:100%; height:auto; min-width:1040px; direction:ltr}
+/* The BPMN is 1788px wide. Do NOT full-bleed it with 100vw + translateX: inside the
+   RTL wrap that shifts the whole document and adds body-level horizontal scroll.
+   Let it scroll inside its own frame instead. */
+figure.diagram.wide svg{min-width:1500px}
+.scrollhint{font-size:.78rem; color:var(--muted); margin:0 0 6px; display:none}
+figure.diagram.wide + .scrollhint{display:block}
+figcaption{margin-top:8px; font-size:.85rem; color:var(--muted); text-align:center; direction:rtl}
+.difflink{margin:8px 0 0; font-size:.88rem}
+.difflink a{display:inline-flex; align-items:center; gap:6px; text-decoration:none;
+  color:var(--accent); background:var(--accent-soft); border:1px solid #c7d7fe;
+  border-radius:999px; padding:5px 14px; font-weight:600}
+.difflink a:hover{background:#dbe6ff}
+.difflink small{color:var(--muted); font-weight:400; margin-inline-start:8px}
+
+ul{margin:.4em 0; padding-right:1.2em}
+li{margin:.3em 0}
+code{background:#eef2f7; border:1px solid var(--line); border-radius:4px;
+  padding:1px 5px; font-family:"Consolas","IBM Plex Mono",monospace;
+  font-size:.88em; direction:ltr; display:inline-block}
+.en{direction:ltr; unicode-bidi:embed; display:inline-block}
+
+footer{color:var(--muted); font-size:.85rem; text-align:center; margin-top:34px}
+
+@media print{
+  body{background:#fff}
+  section.q{break-inside:avoid; border:none; padding:0; margin-bottom:26px}
+  header.page{background:#1e3a8a !important; -webkit-print-color-adjust:exact; print-color-adjust:exact}
+  figure.diagram{overflow:visible}
+  figure.diagram svg, figure.diagram.wide svg{min-width:0}
+  .scrollhint{display:none !important}
+}
+@media (max-width:640px){ .wrap{padding:16px 10px 50px} section.q{padding:16px 14px} }
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="page">
+  <h1>פתרון הבחינה - ניהול משלחות למכביה</h1>
+  <p>ניתוח ועיצוב מערכות מידע (364-1-1411) | 2026, סמסטר ב׳, מועד א׳</p>
+  <div class="meta">
+    <span class="chip">100 נקודות</span>
+    <span class="chip">8 שאלות</span>
+    <span class="chip">4 תרשימים</span>
+    <span class="chip">ד״ר דוד קודיש | מר איציק גורביץ</span>
+  </div>
+</header>
+<section class="q" id="q1">
+<h2><span class="pts">15 נק׳</span>שאלה 1: תרשים BPMN</h2>
+
+<p class="qtext">תארו את התהליך העסקי שלהלן באמצעות תרשים BPMN. התשובה נסמכת על תיאור התהליך בלבד, ללא קשר לסיפור המסגרת.</p>
+<div class="box">
+  <p><b>תהליך: אישור משלחת להשתתפות במכביה.</b> התהליך מתחיל כאשר ראש המשלחת מגיש את המשלחת לאישור הנהלת המכביה, ומסתיים כאשר המשלחת מאושרת, וראש המשלחת מקבל הודעה שניתן להתחיל בשיבוץ המשתתפים לבתי המלון, או, לחלופין, כאשר המשלחת נדחית.</p>
+  <p>המערכת בודקת אוטומטית מול מאגר המשלחות אם הועלו כל מסמכי החובה; אם חסרים, הרכז מחזיר את המשלחת בצירוף הערות, וראש המשלחת משלים ומגיש שוב. אם הועלו, הרכז בודק את תקינות המסמכים, ואם אינם תקינים המשלחת מוחזרת אף היא לתיקון והגשה מחדש.</p>
+  <p>כאשר כל המסמכים תקינים, המערכת בודקת את גודל המשלחת. אם מספר המשתתפים עולה על 50, נשלחת בקשת מכסה לוועדת הרישום הבינלאומית והתהליך ממתין להחלטתה. אם הוועדה אינה מאשרת, הסטטוס מתעדכן ל״נדחתה״ והתהליך מסתיים. אחרת הרכז מאשר, הסטטוס מתעדכן ל״מאושרת״ ונשלחת הודעה לראש המשלחת.</p>
+</div>
+
+<h3 class="sub">1.1 (6 נק׳): תרשים ה-BPMN</h3>
+<figure class="diagram wide"><svg width="1788" height="696" viewBox="0 0 1788 696" xmlns="http://www.w3.org/2000/svg">
+      
+    <defs>
+      <pattern id="dot-grid" x="0" y="0" width="24" height="24" patternUnits="userSpaceOnUse">
+        <circle cx="1" cy="1" r="0.8" fill="#cbd5e1"></circle>
+      </pattern>
+      <marker id="arrow-seq" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="10" markerHeight="10" orient="auto-start-reverse">
+        <path d="M 0 0 L 10 5 L 0 10 Z" fill="#455a64"></path>
+      </marker>
+      <marker id="msg-start" viewBox="-10 -10 20 20" refX="0" refY="0" markerWidth="10" markerHeight="10" orient="auto">
+        <circle cx="0" cy="0" r="4" fill="#ffffff" stroke="#37474f" stroke-width="1.2"></circle>
+      </marker>
+      <marker id="msg-end" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="10" markerHeight="10" orient="auto-start-reverse">
+        <path d="M 0 0 L 10 5 L 0 10 Z" fill="#37474f"></path>
+      </marker>
+      <marker id="arrow-data" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+        <path d="M 0 0 L 10 5 L 0 10 Z" fill="#7986cb"></path>
+      </marker>
+    </defs>
+      <rect x="0" y="0" width="1788" height="696" fill="#f8fafc"></rect>
+    <rect x="0" y="0" width="1788" height="696" fill="url(#dot-grid)"></rect>
+      
+    <!-- pool: pool-head -->
+    <g class="bpmn-pool" data-pool="pool-head">
+      <rect x="20" y="72" width="1728" height="96" fill="#faf7f2" stroke="#8d6e63" stroke-width="1.5"></rect>
+      <rect x="20" y="72" width="30" height="96" fill="#6d4c41" stroke="#8d6e63" stroke-width="1.5"></rect>
+      <text x="35" y="120" text-anchor="middle" dominant-baseline="middle" transform="rotate(-90, 35, 120)" fill="#ffffff" font-size="12" font-weight="600" direction="rtl">ראש המשלחת</text>
+      <line x1="50" y1="72" x2="50" y2="168" stroke="#8d6e63" stroke-width="1"></line>
+    </g>
+
+    <!-- pool: pool-org -->
+    <g class="bpmn-pool" data-pool="pool-org">
+      <rect x="20" y="184" width="1728" height="364" fill="#ffffff" stroke="#455a64" stroke-width="1.5"></rect>
+      <rect x="20" y="184" width="30" height="364" fill="#37474f" stroke="#455a64" stroke-width="1.5"></rect>
+      <text x="35" y="366" text-anchor="middle" dominant-baseline="middle" transform="rotate(-90, 35, 366)" fill="#ffffff" font-size="12" font-weight="600" direction="rtl">הנהלת המכביה</text>
+      <line x1="50" y1="184" x2="50" y2="548" stroke="#455a64" stroke-width="1"></line>
+    </g>
+
+    <!-- pool: pool-committee -->
+    <g class="bpmn-pool" data-pool="pool-committee">
+      <rect x="20" y="564" width="1728" height="96" fill="#faf7f2" stroke="#8d6e63" stroke-width="1.5"></rect>
+      <rect x="20" y="564" width="30" height="96" fill="#6d4c41" stroke="#8d6e63" stroke-width="1.5"></rect>
+      <text x="29" y="612" text-anchor="middle" dominant-baseline="middle" transform="rotate(-90, 29, 612)" fill="#ffffff" font-size="11" font-weight="600" direction="rtl">ועדת הרישום</text>
+      <text x="41" y="612" text-anchor="middle" dominant-baseline="middle" transform="rotate(-90, 41, 612)" fill="#ffffff" font-size="11" font-weight="600" direction="rtl">הבינלאומית</text>
+      <line x1="50" y1="564" x2="50" y2="660" stroke="#8d6e63" stroke-width="1"></line>
+    </g>
+      
+    <g class="bpmn-lane" data-lane="lane-coord">
+      <rect x="74" y="184" width="1674" height="140" fill="#fafafa" fill-opacity="0.6" stroke="none"></rect>
+      <rect x="50" y="184" width="24" height="140" fill="#546e7a" stroke="#455a64" stroke-width="1"></rect>
+      <text x="62" y="254" text-anchor="middle" dominant-baseline="middle" transform="rotate(-90, 62, 254)" fill="#ffffff" font-size="11" font-weight="500" direction="rtl">רכז המכביה</text>
+      
+    </g>
+
+    <g class="bpmn-lane" data-lane="lane-sys">
+      <rect x="74" y="324" width="1674" height="224" fill="#fafafa" fill-opacity="0.6" stroke="none"></rect>
+      <rect x="50" y="324" width="24" height="224" fill="#546e7a" stroke="#455a64" stroke-width="1"></rect>
+      <text x="62" y="436" text-anchor="middle" dominant-baseline="middle" transform="rotate(-90, 62, 436)" fill="#ffffff" font-size="11" font-weight="500" direction="rtl">המערכת</text>
+      <line x1="50" y1="324" x2="1748" y2="324" stroke="#90a4ae" stroke-width="1" stroke-dasharray="4 3"></line>
+    </g>
+      
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf-1">
+      <path d="M 144.0 244.0 L 144.0 376.0" fill="none" stroke="#455a64" stroke-width="1.6" marker-end="url(#arrow-seq)"></path>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf-2">
+      <path d="M 214.0 408.0 L 306.0 408.0" fill="none" stroke="#455a64" stroke-width="1.6" marker-end="url(#arrow-seq)"></path>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf-4">
+      <path d="M 330.0 384.0 L 330.0 258.0" fill="none" stroke="#455a64" stroke-width="1.6" marker-end="url(#arrow-seq)"></path>
+      
+      
+    <g class="bpmn-flow-label">
+      <rect x="309.5" y="310" width="41" height="14" rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"></rect>
+      <text x="330" y="317" text-anchor="middle" dominant-baseline="middle" font-size="10" fill="#263238" direction="rtl">הועלו</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf-3">
+      <path d="M 354.0 412.0 L 400.0 412.0 L 400.0 450.0 L 446.0 450.0" fill="none" stroke="#455a64" stroke-width="1.6" marker-end="url(#arrow-seq)"></path>
+      
+      
+    <g class="bpmn-flow-label">
+      <rect x="356.5" y="401" width="41" height="14" rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"></rect>
+      <text x="377" y="408" text-anchor="middle" dominant-baseline="middle" font-size="10" fill="#263238" direction="rtl">חסרים</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf-5">
+      <path d="M 400.0 226.0 L 492.0 226.0" fill="none" stroke="#455a64" stroke-width="1.6" marker-end="url(#arrow-seq)"></path>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf-6">
+      <path d="M 540.0 222.0 L 586.0 222.0 L 586.0 226.0 L 632.0 226.0" fill="none" stroke="#455a64" stroke-width="1.6" marker-end="url(#arrow-seq)"></path>
+      
+      
+    <g class="bpmn-flow-label">
+      <rect x="530.1" y="211" width="65.80000000000001" height="14" rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"></rect>
+      <text x="563" y="218" text-anchor="middle" dominant-baseline="middle" font-size="10" fill="#263238" direction="rtl">לא תקינים</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf-7">
+      <path d="M 516.0 250.0 L 516.0 342.0" fill="none" stroke="#455a64" stroke-width="1.6" marker-end="url(#arrow-seq)"></path>
+      
+      
+    <g class="bpmn-flow-label">
+      <rect x="492.4" y="285" width="47.2" height="14" rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"></rect>
+      <text x="516" y="292" text-anchor="middle" dominant-baseline="middle" font-size="10" fill="#263238" direction="rtl">תקינים</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf-9">
+      <path d="M 516.0 342.0 L 516.0 300.0 L 1074.0 300.0 L 1074.0 258.0" fill="none" stroke="#455a64" stroke-width="1.6" marker-end="url(#arrow-seq)"></path>
+      
+      
+    <g class="bpmn-flow-label">
+      <rect x="774.5" y="289" width="41" height="14" rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"></rect>
+      <text x="795" y="296" text-anchor="middle" dominant-baseline="middle" font-size="10" fill="#263238" direction="rtl">עד 50</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf-8">
+      <path d="M 540.0 370.0 L 586.0 370.0 L 586.0 408.0 L 632.0 408.0" fill="none" stroke="#455a64" stroke-width="1.6" marker-end="url(#arrow-seq)"></path>
+      
+      
+    <g class="bpmn-flow-label">
+      <rect x="539.4" y="359" width="47.2" height="14" rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"></rect>
+      <text x="563" y="366" text-anchor="middle" dominant-baseline="middle" font-size="10" fill="#263238" direction="rtl">מעל 50</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf-10">
+      <path d="M 772.0 408.0 L 870.0 408.0" fill="none" stroke="#455a64" stroke-width="1.6" marker-end="url(#arrow-seq)"></path>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf-11">
+      <path d="M 906.0 408.0 L 1050.0 408.0" fill="none" stroke="#455a64" stroke-width="1.6" marker-end="url(#arrow-seq)"></path>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf-13">
+      <path d="M 1074.0 384.0 L 1074.0 258.0" fill="none" stroke="#455a64" stroke-width="1.6" marker-end="url(#arrow-seq)"></path>
+      
+      
+    <g class="bpmn-flow-label">
+      <rect x="1053.5" y="310" width="41" height="14" rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"></rect>
+      <text x="1074" y="317" text-anchor="middle" dominant-baseline="middle" font-size="10" fill="#263238" direction="rtl">אושרה</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf-12">
+      <path d="M 1098.0 412.0 L 1144.0 412.0 L 1144.0 408.0 L 1190.0 408.0" fill="none" stroke="#455a64" stroke-width="1.6" marker-end="url(#arrow-seq)"></path>
+      
+      
+    <g class="bpmn-flow-label">
+      <rect x="1091.2" y="401" width="59.6" height="14" rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"></rect>
+      <text x="1121" y="408" text-anchor="middle" dominant-baseline="middle" font-size="10" fill="#263238" direction="rtl">לא אושרה</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf-14">
+      <path d="M 1330.0 408.0 L 1428.0 408.0" fill="none" stroke="#455a64" stroke-width="1.6" marker-end="url(#arrow-seq)"></path>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf-15">
+      <path d="M 1144.0 226.0 L 1190.0 226.0" fill="none" stroke="#455a64" stroke-width="1.6" marker-end="url(#arrow-seq)"></path>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf-16">
+      <path d="M 1330.0 226.0 L 1376.0 226.0" fill="none" stroke="#455a64" stroke-width="1.6" marker-end="url(#arrow-seq)"></path>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf-17">
+      <path d="M 1516.0 226.0 L 1614.0 226.0" fill="none" stroke="#455a64" stroke-width="1.6" marker-end="url(#arrow-seq)"></path>
+      
+      
+    </g>
+      
+    <g class="bpmn-flow bpmn-message" data-flow="mf-2a">
+      <path d="M 450.0 418.0 L 450.0 176.0 L 372.0 176.0 L 372.0 168.0" fill="none" stroke="#37474f" stroke-width="1.3" stroke-dasharray="10 5" marker-start="url(#msg-start)" marker-end="url(#msg-end)"></path>
+      
+    <g class="bpmn-flow-label">
+      <rect x="383" y="276" width="134" height="14" rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"></rect>
+      <text x="450" y="283" text-anchor="middle" dominant-baseline="middle" font-size="10" fill="#263238" direction="rtl">החזרה - מסמכים חסרים</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-message" data-flow="mf-2b">
+      <path d="M 678.0 194.0 L 678.0 176.0 L 654.0 176.0 L 654.0 168.0" fill="none" stroke="#37474f" stroke-width="1.3" stroke-dasharray="10 5" marker-start="url(#msg-start)" marker-end="url(#msg-end)"></path>
+      
+    <g class="bpmn-flow-label">
+      <rect x="586.6" y="155" width="158.8" height="14" rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"></rect>
+      <text x="666" y="162" text-anchor="middle" dominant-baseline="middle" font-size="10" fill="#263238" direction="rtl">החזרה - מסמכים לא תקינים</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-message" data-flow="mf-3">
+      <path d="M 192.0 168.0 L 192.0 176.0 L 168.0 176.0 L 168.0 376.0" fill="none" stroke="#37474f" stroke-width="1.3" stroke-dasharray="10 5" marker-start="url(#msg-start)" marker-end="url(#msg-end)"></path>
+      
+    <g class="bpmn-flow-label">
+      <rect x="101" y="275" width="134" height="14" rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"></rect>
+      <text x="168" y="282" text-anchor="middle" dominant-baseline="middle" font-size="10" fill="#263238" direction="rtl">הגשה מחדש לאחר תיקון</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-message" data-flow="mf-6">
+      <path d="M 1512.0 194.0 L 1512.0 176.0 L 1590.0 176.0 L 1590.0 168.0" fill="none" stroke="#37474f" stroke-width="1.3" stroke-dasharray="10 5" marker-start="url(#msg-start)" marker-end="url(#msg-end)"></path>
+      
+    <g class="bpmn-flow-label">
+      <rect x="1511.9" y="175" width="78.2" height="14" rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"></rect>
+      <text x="1551" y="182" text-anchor="middle" dominant-baseline="middle" font-size="10" fill="#263238" direction="rtl">הודעת אישור</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-message" data-flow="mf-4">
+      <path d="M 678.0 440.0 L 658.0 440.0 L 658.0 556.0 L 654.0 556.0 L 654.0 564.0" fill="none" stroke="#37474f" stroke-width="1.3" stroke-dasharray="10 5" marker-start="url(#msg-start)" marker-end="url(#msg-end)"></path>
+      
+    <g class="bpmn-flow-label">
+      <rect x="606.5" y="477" width="103" height="14" rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"></rect>
+      <text x="658" y="484" text-anchor="middle" dominant-baseline="middle" font-size="10" fill="#263238" direction="rtl">בקשת אישור מכסה</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-message" data-flow="mf-5">
+      <path d="M 936.0 564.0 L 936.0 556.0 L 902.0 556.0 L 902.0 426.0" fill="none" stroke="#37474f" stroke-width="1.3" stroke-dasharray="10 5" marker-start="url(#msg-start)" marker-end="url(#msg-end)"></path>
+      
+    <g class="bpmn-flow-label">
+      <rect x="866" y="490" width="72" height="14" rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"></rect>
+      <text x="902" y="497" text-anchor="middle" dominant-baseline="middle" font-size="10" fill="#263238" direction="rtl">החלטת מכסה</text>
+    </g>
+    </g>
+      
+    <g class="bpmn-flow bpmn-data-assoc" data-flow="da-1" data-dir="read">
+      <path d="M 702.0 498.0 L 702.0 440.0 L 144.0 440.0" fill="none" stroke="#7986cb" stroke-width="1.1" stroke-dasharray="4 3" marker-end="url(#arrow-data)"></path>
+    </g>
+
+    <g class="bpmn-flow bpmn-data-assoc" data-flow="da-2" data-dir="read">
+      <path d="M 702.0 498.0 L 702.0 258.0 L 330.0 258.0" fill="none" stroke="#7986cb" stroke-width="1.1" stroke-dasharray="4 3" marker-end="url(#arrow-data)"></path>
+    </g>
+
+    <g class="bpmn-flow bpmn-data-assoc" data-flow="da-3" data-dir="write">
+      <path d="M 1260.0 440.0 L 1260.0 498.0 L 702.0 498.0" fill="none" stroke="#7986cb" stroke-width="1.1" stroke-dasharray="4 3" marker-end="url(#arrow-data)"></path>
+    </g>
+
+    <g class="bpmn-flow bpmn-data-assoc" data-flow="da-4" data-dir="write">
+      <path d="M 1260.0 258.0 L 1260.0 498.0 L 702.0 498.0" fill="none" stroke="#7986cb" stroke-width="1.1" stroke-dasharray="4 3" marker-end="url(#arrow-data)"></path>
+    </g>
+      
+    <g class="bpmn-element bpmn-event" id="start-1" data-kind="event" data-event="start">
+      <circle cx="144" cy="226" r="18" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2"></circle>
+      <text text-anchor="middle" font-size="10.5" fill="#37474f" direction="rtl" font-weight="500"><tspan x="144" y="258">המשלחת הוגשה</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-task" id="c2" data-kind="task">
+      <rect x="260" y="194" width="140" height="64" rx="8" ry="8" fill="#ffffff" stroke="#546e7a" stroke-width="1.5"></rect>
+      <text text-anchor="middle" dominant-baseline="middle" font-size="11.5" font-weight="500" fill="#1a1a2e" direction="rtl"><tspan x="330" y="219">בדוק תקינות</tspan><tspan x="330" y="233">מסמכים</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-gateway" id="gw2" data-kind="gateway" data-gw="XOR">
+      <text text-anchor="middle" font-size="10.5" fill="#37474f" direction="rtl" font-weight="500"><tspan x="516" y="192">המסמכים תקינים?</tspan></text>
+      <rect x="499" y="209" width="34" height="34" fill="#fff8e1" stroke="#f9a825" stroke-width="2" transform="rotate(45, 516, 226)"></rect>
+      
+      <line x1="508" y1="218" x2="524" y2="234" stroke="#e65100" stroke-width="3" stroke-linecap="round"></line>
+      <line x1="524" y1="218" x2="508" y2="234" stroke="#e65100" stroke-width="3" stroke-linecap="round"></line>
+    </g>
+
+    <g class="bpmn-element bpmn-task" id="rb" data-kind="task">
+      <rect x="632" y="194" width="140" height="64" rx="8" ry="8" fill="#ffffff" stroke="#546e7a" stroke-width="1.5"></rect>
+      <text text-anchor="middle" dominant-baseline="middle" font-size="11.5" font-weight="500" fill="#1a1a2e" direction="rtl"><tspan x="702" y="219">החזר לתיקון</tspan><tspan x="702" y="233">מסמכים</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-task" id="c4" data-kind="task">
+      <rect x="1004" y="194" width="140" height="64" rx="8" ry="8" fill="#ffffff" stroke="#546e7a" stroke-width="1.5"></rect>
+      <text text-anchor="middle" dominant-baseline="middle" font-size="11.5" font-weight="500" fill="#1a1a2e" direction="rtl"><tspan x="1074" y="226">אשר משלחת</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-task" id="s3" data-kind="task">
+      <rect x="1190" y="194" width="140" height="64" rx="8" ry="8" fill="#ffffff" stroke="#546e7a" stroke-width="1.5"></rect>
+      <text text-anchor="middle" dominant-baseline="middle" font-size="11.5" font-weight="500" fill="#1a1a2e" direction="rtl"><tspan x="1260" y="226">עדכן ל'מאושרת'</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-task" id="s4" data-kind="task">
+      <rect x="1376" y="194" width="140" height="64" rx="8" ry="8" fill="#ffffff" stroke="#546e7a" stroke-width="1.5"></rect>
+      <text text-anchor="middle" dominant-baseline="middle" font-size="11.5" font-weight="500" fill="#1a1a2e" direction="rtl"><tspan x="1446" y="219">שלח הודעה לראש</tspan><tspan x="1446" y="233">המשלחת</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-event" id="end-approved" data-kind="event" data-event="end">
+      <circle cx="1632" cy="226" r="18" fill="#ffebee" stroke="#c62828" stroke-width="3.5"></circle>
+      <text text-anchor="middle" font-size="10.5" fill="#37474f" direction="rtl" font-weight="500"><tspan x="1632" y="258">המשלחת אושרה</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-task" id="s1" data-kind="task">
+      <rect x="74" y="376" width="140" height="64" rx="8" ry="8" fill="#ffffff" stroke="#546e7a" stroke-width="1.5"></rect>
+      <text text-anchor="middle" dominant-baseline="middle" font-size="11.5" font-weight="500" fill="#1a1a2e" direction="rtl"><tspan x="144" y="401">בדוק שלמות</tspan><tspan x="144" y="415">מסמכים</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-gateway" id="gw1" data-kind="gateway" data-gw="XOR">
+      <text text-anchor="middle" font-size="10.5" fill="#37474f" direction="rtl" font-weight="500"><tspan x="330" y="374">חסרים מסמכי חובה?</tspan></text>
+      <rect x="313" y="391" width="34" height="34" fill="#fff8e1" stroke="#f9a825" stroke-width="2" transform="rotate(45, 330, 408)"></rect>
+      
+      <line x1="322" y1="400" x2="338" y2="416" stroke="#e65100" stroke-width="3" stroke-linecap="round"></line>
+      <line x1="338" y1="400" x2="322" y2="416" stroke="#e65100" stroke-width="3" stroke-linecap="round"></line>
+    </g>
+
+    <g class="bpmn-element bpmn-gateway" id="gw3" data-kind="gateway" data-gw="XOR">
+      <text text-anchor="middle" font-size="10.5" fill="#37474f" direction="rtl" font-weight="500"><tspan x="516" y="332">מעל 50 משתתפים?</tspan></text>
+      <rect x="499" y="349" width="34" height="34" fill="#fff8e1" stroke="#f9a825" stroke-width="2" transform="rotate(45, 516, 366)"></rect>
+      
+      <line x1="508" y1="358" x2="524" y2="374" stroke="#e65100" stroke-width="3" stroke-linecap="round"></line>
+      <line x1="524" y1="358" x2="508" y2="374" stroke="#e65100" stroke-width="3" stroke-linecap="round"></line>
+    </g>
+
+    <g class="bpmn-element bpmn-task" id="ra" data-kind="task">
+      <rect x="446" y="418" width="140" height="64" rx="8" ry="8" fill="#ffffff" stroke="#546e7a" stroke-width="1.5"></rect>
+      <text text-anchor="middle" dominant-baseline="middle" font-size="11.5" font-weight="500" fill="#1a1a2e" direction="rtl"><tspan x="516" y="443">החזר להשלמת</tspan><tspan x="516" y="457">מסמכים</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-task" id="s2" data-kind="task">
+      <rect x="632" y="376" width="140" height="64" rx="8" ry="8" fill="#ffffff" stroke="#546e7a" stroke-width="1.5"></rect>
+      <text text-anchor="middle" dominant-baseline="middle" font-size="11.5" font-weight="500" fill="#1a1a2e" direction="rtl"><tspan x="702" y="408">שלח בקשת מכסה</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-event" id="ie-1" data-kind="event" data-event="intermediate">
+      
+      <circle cx="888" cy="408" r="18" fill="#ffffff" stroke="#1565c0" stroke-width="2"></circle>
+      <circle cx="888" cy="408" r="13.5" fill="none" stroke="#1565c0" stroke-width="1.2"></circle>
+      <text text-anchor="middle" font-size="10.5" fill="#37474f" direction="rtl" font-weight="500"><tspan x="888" y="440">החלטת מכסה התקבלה</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-gateway" id="gw4" data-kind="gateway" data-gw="XOR">
+      <text text-anchor="middle" font-size="10.5" fill="#37474f" direction="rtl" font-weight="500"><tspan x="1074" y="374">המכסה אושרה?</tspan></text>
+      <rect x="1057" y="391" width="34" height="34" fill="#fff8e1" stroke="#f9a825" stroke-width="2" transform="rotate(45, 1074, 408)"></rect>
+      
+      <line x1="1066" y1="400" x2="1082" y2="416" stroke="#e65100" stroke-width="3" stroke-linecap="round"></line>
+      <line x1="1082" y1="400" x2="1066" y2="416" stroke="#e65100" stroke-width="3" stroke-linecap="round"></line>
+    </g>
+
+    <g class="bpmn-element bpmn-task" id="c3" data-kind="task">
+      <rect x="1190" y="376" width="140" height="64" rx="8" ry="8" fill="#ffffff" stroke="#546e7a" stroke-width="1.5"></rect>
+      <text text-anchor="middle" dominant-baseline="middle" font-size="11.5" font-weight="500" fill="#1a1a2e" direction="rtl"><tspan x="1260" y="408">עדכן ל'נדחתה'</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-event" id="end-rejected" data-kind="event" data-event="end">
+      <circle cx="1446" cy="408" r="18" fill="#ffebee" stroke="#c62828" stroke-width="3.5"></circle>
+      <text text-anchor="middle" font-size="10.5" fill="#37474f" direction="rtl" font-weight="500"><tspan x="1446" y="440">המשלחת נדחתה</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-data-store" id="ds-1" data-kind="dataStore">
+      <path d="M 674 504 L 674 536
+               A 28 6 0 0 0 730 536
+               L 730 504
+               A 28 6 0 0 0 674 504 Z" fill="#ffffff" stroke="#2e7d32" stroke-width="1.4"></path>
+      <path d="M 674 504
+               A 28 6 0 0 0 730 504" fill="none" stroke="#2e7d32" stroke-width="1.4"></path>
+      <text x="702" y="556" text-anchor="middle" font-size="10" fill="#263238" direction="rtl">מאגר המשלחות</text>
+    </g>
+    </svg>
+<figcaption>פתרון לדוגמה: שלושה מסלולים (Pools), הנהלת המכביה עם שני נתיבים (מערכת, רכז), וכן ראש המשלחת וּועדת הרישום כמסלולים חיצוניים; 4 שערי XOR, לולאת החזרה לתיקון, מאגר נתונים, אירוע המתנה ושני אירועי סיום.</figcaption>
+</figure>
+<p class="scrollhint">↔ התרשים רחב מן העמוד, ניתן לגלול אותו לצדדים.</p>
+<p class="difflink"><a href="maccabiah_bpmn_q1.html" target="_blank" rel="noopener">↗ פתחו את תרשים ה-BPMN המלא</a><small>עמוד נפרד, ניתן להגדלה ולהדפסה</small></p>
+
+<h3 class="sub">1.2 (3 נק׳): ייצוג המשתתפים החיצוניים</h3>
+<p class="qtext">בתהליך משתתפים גם ראש המשלחת וגם ועדת הרישום הבינלאומית, לצד הנהלת המכביה. כיצד ייצגתם את התהליך הפנימי של כל אחד מהם, ובאיזו רמת פירוט, ומדוע?</p>
+<div class="answer"><p>התהליך שאנו מדגמים שייך ל<b>הנהלת המכביה</b>. ראש המשלחת וּועדת הרישום הם <b>משתתפים עסקיים נפרדים</b>, ולכן כל אחד מהם מיוצג ב<b>מסלול (Pool) משלו</b>, והתקשורת איתם נעשית ב<b>זרימת הודעה (Message Flow)</b> בלבד.</p>
+<p><b>שתי רמות פירוט מזכות בניקוד מלא</b>, ובלבד שהנימוק עקבי עם מה שצויר:</p>
+<ul><li><b>מסלול ללא פירוט פנימי</b>: התהליך הפנימי של הוועדה אינו בשליטת ההנהלה ואינו מעניינו של המודל; ההודעות נוגעות בגבול המסלול בלבד. (זו הבחירה בתרשים שלמעלה.)</li>
+<li><b>מסלול מורחב</b>: למשל ראש המשלחת, שפעילויות ההגשה והתיקון שלו ידועות ורלוונטיות לתהליך.</li></ul></div>
+<p class="alt"><b>הערה:</b> הבחירה בין שתי רמות הפירוט היא שיקול דעת. מה שנבדק הוא <b>הנימוק</b>: מדוע דווקא רמת הפירוט הזו עבור אותו משתתף.</p>
+<div class="mistake">ציור ועדת הרישום כ־<b>נתיב (Lane)</b> בתוך מסלול הנהלת המכביה. נתיב מציין חלוקת אחריות בתוך אותו ארגון; הוועדה היא גוף חיצוני, ואי-אפשר להסביר מדוע ההנהלה ״מבצעת״ את החלטתה.</div>
+
+<h3 class="sub">1.3 (3 נק׳): סוג החיבור בין המשתתפים</h3>
+<p class="qtext">הרכז מחזיר את המשלחת בצירוף הערות אל ראש המשלחת, שהוא משתתף נפרד בתהליך. באיזה סוג חיבור ייצגתם את המעבר, ובמה הוא נבדל מהחיבור בין שתי פעילויות בתוך אותו משתתף?</p>
+<div class="answer"><p><b>זרימת הודעה (Message Flow)</b>: חץ מקווקו. המעבר חוצה גבול בין שני Pools, ובין מסלולים התקשורת נעשית בהודעות בלבד. לעומת זאת <b>זרימת רצף (Sequence Flow)</b> מחברת פעילויות <em>בתוך</em> אותו מסלול ומתארת סדר ביצוע, היא אינה יכולה לחצות גבול בין משתתפים.</p></div>
+<div class="mistake">מתיחת Sequence Flow מהרכז אל ראש המשלחת. זו השגיאה הנפוצה ביותר בתרשימי BPMN עם מספר משתתפים.</div>
+
+<h3 class="sub">1.4 (3 נק׳): ייצוג ההמתנה להחלטה חיצונית</h3>
+<p class="qtext">לאחר שליחת בקשת המכסה לוועדת הרישום, התהליך אינו יכול להמשיך עד שהחלטתה מגיעה מבחוץ. באיזה רכיב ייצגתם את ההמתנה, ומדוע דווקא הוא?</p>
+<div class="answer"><p><b>אירוע המתנה</b> (Wait Event) הממוקם על קו הזרימה, האירוע המתאר <b>המתנה לגורם חיצוני</b>. התהליך עוצר עד שהודעת הוועדה מגיעה.</p>
+<p>מדוע לא חלופה אחרת: <b>פעילות</b> מייצגת עבודה שמבצע משתתף בתהליך, ואינה חוסמת בהמתנה לאירוע חיצוני; <b>שער</b> מנתב זרימה שכבר הגיעה אליו על פי תנאי, ואינו יוצר עיכוב כלל.</p></div>
+<div class="mistake">ציור פעילות בשם ״המתנה לתשובת הוועדה״, או שער XOR הבודק ״האם התקבלה החלטה?״. שניהם אינם מייצגים עצירה עד להגעת ההודעה.</div>
+
+</section>
+<section class="q" id="q2">
+<h2><span class="pts">10 נק׳</span>שאלה 2: הגדרת הבעיה העסקית</h2>
+
+<h3 class="sub">א (5 נק׳): הגדרת הבעיה העסקית</h3>
+<p class="qtext">הגדירו במדויק את הבעיה העסקית שהמערכת באה לפתור, על כל מרכיביה, והימנעו מניסוח במונחים של פתרון.</p>
+<div class="answer">
+<p><b>מהי הבעיה:</b> המידע על המשלחות מפוזר בין מספר מערכות, קבצי אקסל והתכתבויות דוא״ל, ואין לו מקור אמת יחיד. כתוצאה מכך נוצרות כפילויות מידע ונתונים סותרים, מתרחשות טעויות, ואין דרך אמינה לדעת בכל רגע נתון מהו מצב ההכנות של כל משלחת.</p>
+<p><b>למי הבעיה (בעלי עניין):</b> <b>ראש המשלחת</b>: אינו יודע אילו מסמכים חסרים למשתתפיו ומתנהל מול ערוצים שונים; <b>רכז המכביה</b>: בודק ידנית עשרות משלחות ואלפי מסמכים, ללא דוחות מרוכזים; <b>הנהלת המכביה</b>: חסרה בקרה על מוכנות כלל המשלחות לקראת פתיחת המשחקים.</p>
+<p><b>היקף וחומרה:</b> עשרות משלחות ואלפי משתתפים, אחת לארבע שנים, בתוך חלון זמן קשיח המסתיים במועד סגירת ההרשמה ובתחילת המשחקים. העבודה ידנית, חוזרת ונשנית, ומתרכזת בשיא העומס.</p>
+<p><b>השלכות עסקיות:</b> משלחות שלא יאושרו במועד; משתתפים שיגיעו ללא מסמכי חובה ולא יורשו להתחרות; פגיעה בעמידה בלוח הזמנים של המשחקים; אמינות מידע נמוכה המובילה להחלטות שגויות; ועלות תפעולית גבוהה בזמן הרכזים.</p>
+</div>
+<div class="mistake">ניסוח הבעיה כפתרון (״אין מערכת מרכזית״), או תיאור תסמין בודד (״יש הרבה אקסלים״) בלי בעלי עניין, היקף והשלכות עסקיות.</div>
+
+<h3 class="sub">ב (5 נק׳): בעיה עסקית מול פתרון טכנולוגי</h3>
+<div class="answer">
+<p><b>הניסוח השגוי:</b> ״אין למכביה מערכת מרכזית אחת.״ זהו תיאור של <b>היעדר פתרון</b>, לא של בעיה.</p>
+<p><b>מדוע הוא בעייתי:</b> (1) הוא <b>נועל את מרחב הפתרונות</b> מראש, מניח שהפתרון הוא מערכת מרכזית, ומונע בחינת חלופות (שיפור תהליך, אינטגרציה בין מערכות קיימות, רכש COTS); (2) הוא <b>אינו מדיד</b>: אי-אפשר לכמת אותו ולכן אי-אפשר לדעת אם נפתר; (3) הוא <b>מסתיר את הנזק העסקי</b> האמיתי ואינו מאפשר להצדיק את ההשקעה.</p>
+<p><b>ניסוח מחדש כבעיה עסקית:</b> ״נתוני המשלחות מפוזרים בין מספר מקורות ואינם מסונכרנים, ולכן רכז המכביה אינו יכול לדעת בזמן אמת אילו משלחות מוכנות ואילו מסמכי חובה חסרים. כתוצאה מכך אישור המשלחות מתעכב, וקיים סיכון שמשלחות לא יאושרו עד מועד סגירת ההרשמה.״</p>
+</div>
+
+</section>
+<section class="q" id="q3">
+<h2><span class="pts">12 נק׳</span>שאלה 3: רכש: RFI ו-RFP</h2>
+
+<h3 class="sub">א (4 נק׳): מטרת ה-RFP ושני פרטים שייכללו בו</h3>
+<div class="answer">
+<p><b>מטרת ה-RFP</b> (<span class="en">Request for Proposal</span>): לפנות לספקים בבקשה להצעה מפורטת לפתרון, על בסיס <b>דרישות מוגדרות</b>, ולקבל הצעות הניתנות ל<b>השוואה אחידה</b>: היקף, ארכיטקטורה, לוח זמנים, מחיר ומידת ההתאמה לדרישות, כדי לבחור ספק בצורה מבוססת.</p>
+<p><b>פרט 1, הממשק האוטומטי אל מערכת הרישום הבינלאומית.</b> חשוב כי הוא קובע את אופן האינטגרציה, פורמט הנתונים, תדירות הסנכרון וטיפול בכשלים. ספק חייב לתמחר אותו ולהוכיח יכולת; ממשק חיצוני הוא מקור סיכון ועלות מרכזי, והשמטתו תייצר פערי תמחור גדולים בין ההצעות.</p>
+<p><b>פרט 2, תהליך אישור המשלחת הרב-שלבי, על החזרותיו לתיקון, ולצדו הפעולות האוטומטיות במועד סגירת ההרשמה.</b> חשוב כי הוא מגדיר מנוע <span class="en">workflow</span> וניהול סטטוסים, וכן מתזמן (scheduler) לפעולות מבוססות-זמן. אלה משפיעים מהותית על היקף הפיתוח, ובלעדיהם הספק יציע מערכת ניהול רשומות פשוטה שאינה עונה על הצורך.</p>
+</div>
+
+<h3 class="sub">ב (5 נק׳): הסיכון בהוצאת RFP מוקדם מדי</h3>
+<div class="answer">
+<p><b>הסיכון:</b> RFP נשען על דרישות. אם הוא יוצא לפני חקירת המצב הקיים ואיסוף הדרישות, הוא מתאר צורך <b>לא מגובש</b>, ולעיתים אף שגוי, והדרישות השגויות ננעלות בחוזה.</p>
+<p><b>ההשפעה על ההצעות:</b> כל ספק ישלים את הפערים ב<b>הנחות משלו</b>, ולכן ההצעות <b>לא יהיו ברות-השוואה</b>: הן יתארו היקפים שונים. ספקים זהירים <b>ינפחו מחיר</b> כדי לתמחר את אי-הוודאות; ספקים אגרסיביים יציעו מחיר נמוך ואז יגבו את ההפרש ב-<span class="en">change requests</span> לאחר הזכייה.</p>
+<p><b>ההשפעה על איכות ההחלטה:</b> המכביה תבחר ספק על בסיס מידע חסר, ותשווה תפוחים לתפוזים. סביר שיידרש RFP חוזר או שינוי היקף מהותי, עיכוב יקר במיוחד כאן, שכן מועד המשחקים קבוע ואינו ניתן לדחייה.</p>
+</div>
+
+<h3 class="sub">ג (3 נק׳): ההבדל בין RFI ל-RFP</h3>
+<div class="answer">
+<p><b>RFI</b> (<span class="en">Request for Information</span>), בקשת <b>מידע</b>, בשלב מוקדם: מי הספקים בשוק, אילו פתרונות וטכנולוגיות קיימים, מה ניתן לעשות בכלל. אינו מחייב הצעת מחיר ואינו מחייב דרישות סגורות; מטרתו <b>ללמוד</b>.</p>
+<p><b>RFP</b>: בקשת <b>הצעה</b>, מבוססת דרישות מוגדרות: פתרון, מחיר, לוח זמנים והתחייבויות. מטרתו <b>לבחור</b>.</p>
+<p><b>מדוע להקדים RFI במקרה זה:</b> אופן האינטגרציה עם מערכת הרישום הבינלאומית עדיין אינו ברור. RFI יאפשר ללמוד אילו ממשקים ספקים תומכים בהם, מה מקובל בתחום ומה עלות ההתממשקות, ורק אז לנסח RFP מדויק, שהצעות הספקים לו יהיו ברות-השוואה.</p>
+</div>
+
+</section>
+<section class="q" id="q4">
+<h2><span class="pts">8 נק׳</span>שאלה 4: מתודולוגיות פיתוח</h2>
+
+<h3 class="sub">א (5 נק׳): מודל המפל (Waterfall) והתאמתו לפרויקט</h3>
+<div class="answer">
+<p><b>מתי מודל המפל מתאים:</b> כאשר הדרישות <b>ידועות, יציבות ומתועדות מראש</b>; הטכנולוגיה מוכרת והסיכון הטכני נמוך; ההיקף מוגדר והפרויקט קצר עד בינוני; קיימת דרישה חוזית או רגולטורית לתיעוד מלא ולאבני דרך; וצפויים מעט שינויים במהלך הפיתוח.</p>
+<p><b>האם מתאים למערכת המכביה, לא, ומשלוש סיבות:</b></p>
+<ul>
+  <li><b>אי-ודאות בדרישות.</b> הדרישות עדיין נאספות, ומאפיין מרכזי, אופן האינטגרציה עם מערכת הרישום הבינלאומית, טרם הובהר. מפל דורש להקפיא את הדרישות לפני שהן ידועות.</li>
+  <li><b>דרישות שנוספות תוך כדי.</b> בקשת ראשי המשלחות להזמנת חולצות ומזכרות עלתה לאחר שההיקף כבר הוגדר. במפל שינוי כזה יקר ומאוחר.</li>
+  <li><b>ריבוי בעלי עניין וסוגי משתמשים.</b> ראשי משלחות, רכזים, מנהל מערכת, מערכת חיצונית ושחקן זמן, לכל אחד צרכים שונים, ונדרש משוב מוקדם וחוזר על גרסאות ביניים.</li>
+</ul>
+<p><b>המלצה:</b> מודל <b>איטרטיבי / אבולוציוני</b> (אב-טיפוס אבולוציוני או פיתוח מצטבר), המאפשר לחשוף את הדרישות בהדרגה ולהתמודד מוקדם עם סיכון האינטגרציה.</p>
+</div>
+<p class="alt"><b>מזכה גם:</b> ציון העובדה שקיים לוח זמנים קשיח (מועד המשחקים), ולכן נדרשים תכנון ואבני דרך, נכון, אך אין בכך כדי להצדיק מפל.</p>
+
+<h3 class="sub">ב (3 נק׳): השלב הראשון בספירלה</h3>
+<div class="answer">
+<p><b>השלב הראשון של הספירלה</b> הוא <b>קביעת מטרות, חלופות ואילוצים</b> (ובעקבותיו, באותו סיבוב, זיהוי והערכת הסיכונים).</p>
+<p><b>קונקרטית עבור מערכת ניהול המשלחות:</b></p>
+<ul>
+  <li><b>מטרות:</b> מקור אמת יחיד לניהול משלחות; אישור כל המשלחות עד מועד סגירת ההרשמה; מעקב בזמן אמת אחר מסמכים חסרים.</li>
+  <li><b>חלופות:</b> פיתוח עצמי; רכש מוצר מדף (COTS) והתאמתו; הרחבת מערכת הרישום הבינלאומית הקיימת.</li>
+  <li><b>אילוצים:</b> לוח זמנים קשיח עד תחילת המשחקים; תלות במערכת הרישום הבינלאומית ובממשק אליה; תקציב; אבטחת מידע אישי של אלפי משתתפים; ריבוי שפות ומדינות.</li>
+</ul>
+<p>בתום השלב מזוהה הסיכון המרכזי, <b>האינטגרציה עם מערכת הרישום</b>: והסיבוב הראשון מוקדש לצמצומו, למשל באמצעות אב-טיפוס או <span class="en">PoC</span> של הממשק.</p>
+</div>
+
+</section>
+<section class="q" id="q5">
+<h2><span class="pts">8 נק׳</span>שאלה 5: כתיבת דרישות</h2>
+
+<p class="qtext">הניקוד בשאלה זו ניתן על <b>דיוק הניסוח</b> בלבד: דרישה אטומית (פעולה אחת), ספציפית, בת-בדיקה (verifiable) ועוקבת לסיפור. כל צירוף תקין מזכה בניקוד מלא.</p>
+
+<h3 class="sub">א (4 נק׳): שתי דרישות פונקציונליות</h3>
+<div class="answer">
+<p>לדוגמה (די בשתיים):</p>
+<ul>
+  <li>עם קליטת פרטי משלחת מאושרת ממערכת הרישום הבינלאומית, המערכת <b>תיצור</b> עבורה כרטיס משלחת.</li>
+  <li>המערכת <b>תאפשר</b> לראש המשלחת לשייך משתתף לענף ספורט ולקבוע את תפקידו באותו ענף, עד למועד סגירת ההרשמה.</li>
+  <li>המערכת <b>תציג</b> לראש המשלחת, לפי בקשתו, את רשימת מסמכי החובה החסרים במשלחתו.</li>
+  <li>המערכת <b>תמנע</b> מתן אישור השתתפות למשתתף כל עוד חסר לו לפחות מסמך חובה אחד.</li>
+  <li>במועד סגירת ההרשמה, המערכת <b>תסמן</b> כל משלחת שטרם אושרה כ״משלחת באיחור״.</li>
+</ul>
+</div>
+
+<h3 class="sub">ב (2 נק׳): סיפור משתמש (User Story)</h3>
+<div class="answer">
+<p>בתבנית ״כ&lt;תפקיד&gt;, אני רוצה &lt;מטרה&gt;, כדי ש&lt;תועלת&gt;״:</p>
+<ul>
+  <li>כראש משלחת, אני רוצה לצפות בכל עת ברשימת מסמכי החובה החסרים במשלחתי, כדי שאוכל להשלימם לפני מועד סגירת ההרשמה.</li>
+  <li>כרכז מכביה, אני רוצה להחזיר משלחת לתיקון בצירוף הערות, כדי שראש המשלחת יתקן את הליקויים מבלי שהמשלחת תאושר במצב חסר.</li>
+</ul>
+</div>
+
+<h3 class="sub">ג (2 נק׳): דרישה לא-פונקציונלית</h3>
+<div class="answer">
+<p>חייבת לכלול קריטריון מדיד:</p>
+<ul>
+  <li>כל דוח יופק ויוצג למשתמש תוך <b>פחות מ-5 שניות</b> בעומס רגיל. <i>(ביצועים)</i></li>
+  <li>גישה לפרטי משלחת תותר <b>אך ורק</b> לראש המשלחת שלה ולרכזי המכביה; כל ניסיון גישה לא-מורשה ייחסם ויירשם ביומן. <i>(אבטחה)</i></li>
+  <li>המערכת תהיה זמינה <b>לפחות 99.5%</b> מהזמן בחודשיים שלפני תחילת המשחקים. <i>(זמינות)</i></li>
+</ul>
+</div>
+
+<div class="mistake">
+<ul style="margin:0">
+  <li>ניסוח כללי ולא בר-בדיקה (״המערכת תהיה ידידותית / תנהל משלחות״).</li>
+  <li>דרישה מרובת-פעולות במשפט אחד.</li>
+  <li>דרישה לא-פונקציונלית ללא קריטריון מדיד (״תהיה מהירה״, ״תהיה בטוחה״).</li>
+  <li><b>מחוץ להיקף:</b> הזמנת חולצות ומזכרות, ניהול תוצאות ומדליות או מידע רפואי מפורט, הסיפור מוציא אותם במפורש, ולא יזכו בניקוד גם אם נוסחו היטב.</li>
+  <li><b>דרישה גרועה מהסיפור:</b> הצגת ״הערות התיקון לא יישמרו אלא יישלחו בדוא״ל בלבד״ כדרישה <i>טובה</i>. שליחת הדוא״ל תקינה; הפגם הוא ההחלטה שלא לשמור.</li>
+</ul>
+</div>
+
+</section>
+<section class="q" id="q6">
+<h2><span class="pts">15 נק׳</span>שאלה 6: תרשים Use Case</h2>
+
+<p class="qtext">הכינו תרשים Use Case עבור המערכת המתוארת בסיפור המעשה, הכולל לפחות קשר <code>include</code> אחד.</p>
+
+<h3 class="sub">6.1 (6 נק׳): תרשים ה-Use Case</h3>
+<figure class="diagram"><svg id="diagram-svg-0" viewBox="0 0 1300 780" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <pattern id="dot-grid-0" width="24" height="24" patternUnits="userSpaceOnUse">
+          <circle cx="1" cy="1" r="0.8" fill="#cbd5e1"></circle>
+        </pattern>
+        <marker id="arrow-include-0" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+          <polyline points="0 0, 9 3.5, 0 7" fill="none" stroke="#7c3aed" stroke-width="1.2"></polyline>
+        </marker>
+      </defs>
+
+      <rect x="0" y="0" width="1300" height="780" fill="#f8fafc"></rect>
+      <rect x="0" y="0" width="1300" height="780" fill="url(#dot-grid-0)"></rect>
+
+      <!-- System boundary -->
+      <rect class="system-boundary" x="230" y="70" width="840" height="560" rx="12" fill="#ffffff" stroke="#3b82f6" stroke-width="2.5"></rect>
+      <rect x="230" y="70" width="840" height="44" rx="12" fill="#1e40af"></rect>
+      <rect x="230" y="92" width="840" height="22" fill="#1e40af"></rect>
+      <text x="650" y="98" text-anchor="middle" font-size="14" font-weight="700" fill="#ffffff" font-family="'Noto Sans Hebrew',sans-serif">מערכת ניהול משלחות המכביה</text>
+
+      <!-- ── Association lines (visible + hitbox) ── -->
+      <line data-conn-from="head" data-conn-to="uc-update-deleg" x1="150" y1="312" x2="281.20019152925147" y2="187.2788488002481" stroke="#334155" stroke-width="1.8"></line>
+      <line class="conn-hitbox" data-conn-id="a-update" data-hitbox-from="head" data-hitbox-to="uc-update-deleg" x1="150" y1="312" x2="281.20019152925147" y2="187.2788488002481" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('a-update','assoc',event)"></line>
+
+      <line data-conn-from="head" data-conn-to="uc-manage-participants" x1="150" y1="312" x2="277.51982830322174" y2="250.6684093289022" stroke="#334155" stroke-width="1.8"></line>
+      <line class="conn-hitbox" data-conn-id="a-participants" data-hitbox-from="head" data-hitbox-to="uc-manage-participants" x1="150" y1="312" x2="277.51982830322174" y2="250.6684093289022" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('a-participants','assoc',event)"></line>
+
+      <line data-conn-from="head" data-conn-to="uc-upload-docs" x1="150" y1="312" x2="260" y2="312" stroke="#334155" stroke-width="1.8"></line>
+      <line class="conn-hitbox" data-conn-id="a-upload" data-hitbox-from="head" data-hitbox-to="uc-upload-docs" x1="150" y1="312" x2="260" y2="312" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('a-upload','assoc',event)"></line>
+
+      <line data-conn-from="head" data-conn-to="uc-view-status" x1="150" y1="312" x2="271.81459971430144" y2="373.33159067109784" stroke="#334155" stroke-width="1.8"></line>
+      <line class="conn-hitbox" data-conn-id="a-viewstatus" data-hitbox-from="head" data-hitbox-to="uc-view-status" x1="150" y1="312" x2="271.81459971430144" y2="373.33159067109784" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('a-viewstatus','assoc',event)"></line>
+
+      <line data-conn-from="head" data-conn-to="uc-submit-deleg" x1="150" y1="312" x2="277.01020110571403" y2="436.7211511997519" stroke="#334155" stroke-width="1.8"></line>
+      <line class="conn-hitbox" data-conn-id="a-submit" data-hitbox-from="head" data-hitbox-to="uc-submit-deleg" x1="150" y1="312" x2="277.01020110571403" y2="436.7211511997519" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('a-submit','assoc',event)"></line>
+
+      <line data-conn-from="coordinator" data-conn-to="uc-review-deleg" x1="1150" y1="207" x2="1038.6338336968624" y2="176.3992213645837" stroke="#334155" stroke-width="1.8"></line>
+      <line class="conn-hitbox" data-conn-id="a-review" data-hitbox-from="coordinator" data-hitbox-to="uc-review-deleg" x1="1150" y1="207" x2="1038.6338336968624" y2="176.3992213645837" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('a-review','assoc',event)"></line>
+
+      <line data-conn-from="coordinator" data-conn-to="uc-reports-coord" x1="1150" y1="207" x2="1010.9815851194793" y2="237.6007786354163" stroke="#334155" stroke-width="1.8"></line>
+      <line class="conn-hitbox" data-conn-id="a-reports" data-hitbox-from="coordinator" data-hitbox-to="uc-reports-coord" x1="1150" y1="207" x2="1010.9815851194793" y2="237.6007786354163" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('a-reports','assoc',event)"></line>
+
+      <!-- ── «include» lines (base → target) ── -->
+      <line data-conn-from="uc-view-status" data-conn-to="uc-missing-docs" x1="443.64985407505685" y1="365.2956062141472" x2="563.2322992052962" y2="188.7043937858528" stroke="#7c3aed" stroke-width="1.6" stroke-dasharray="6 4" marker-end="url(#arrow-include-0)"></line>
+      <line class="conn-hitbox" data-conn-id="inc-view" data-hitbox-from="uc-view-status" data-hitbox-to="uc-missing-docs" x1="443.64985407505685" y1="365.2956062141472" x2="563.2322992052962" y2="188.7043937858528" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('inc-view','assoc',event)"></line>
+      <text data-label-for="uc-view-status uc-missing-docs" x="503.4410766401765" y="269" text-anchor="middle" font-size="9.5" fill="#7c3aed" font-family="'IBM Plex Mono',monospace">«include»</text>
+
+      <line data-conn-from="uc-review-deleg" data-conn-to="uc-missing-docs" x1="820" y1="172" x2="752.5" y2="172" stroke="#7c3aed" stroke-width="1.6" stroke-dasharray="6 4" marker-end="url(#arrow-include-0)"></line>
+      <line class="conn-hitbox" data-conn-id="inc-review" data-hitbox-from="uc-review-deleg" data-hitbox-to="uc-missing-docs" x1="820" y1="172" x2="752.5" y2="172" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('inc-review','assoc',event)"></line>
+      <text data-label-for="uc-review-deleg uc-missing-docs" x="786.25" y="164" text-anchor="middle" font-size="9.5" fill="#7c3aed" font-family="'IBM Plex Mono',monospace">«include»</text>
+
+      <!-- ── Use case ellipses ── -->
+      <g id="uc-group-uc-update-deleg" data-uc-id="uc-update-deleg" onclick="showDesc('uc-update-deleg','uc',event)" style="cursor:pointer">
+        <ellipse cx="365" cy="172" rx="100" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"></ellipse>
+        <text x="365" y="176" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">עדכון פרטי משלחת</text>
+      </g>
+      <g id="uc-group-uc-manage-participants" data-uc-id="uc-manage-participants" onclick="showDesc('uc-manage-participants','uc',event)" style="cursor:pointer">
+        <ellipse cx="365" cy="242" rx="92" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"></ellipse>
+        <text x="365" y="246" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">ניהול משתתפים</text>
+      </g>
+      <g id="uc-group-uc-upload-docs" data-uc-id="uc-upload-docs" onclick="showDesc('uc-upload-docs','uc',event)" style="cursor:pointer">
+        <ellipse cx="365" cy="312" rx="105" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"></ellipse>
+        <text x="365" y="316" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">העלאת מסמכי משתתף</text>
+      </g>
+      <g id="uc-group-uc-view-status" data-uc-id="uc-view-status" onclick="showDesc('uc-view-status','uc',event)" style="cursor:pointer">
+        <ellipse cx="365" cy="382" rx="98" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"></ellipse>
+        <text x="365" y="386" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">הצגת מצב המשלחת</text>
+      </g>
+      <g id="uc-group-uc-submit-deleg" data-uc-id="uc-submit-deleg" onclick="showDesc('uc-submit-deleg','uc',event)" style="cursor:pointer">
+        <ellipse cx="365" cy="452" rx="105" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"></ellipse>
+        <text x="365" y="456" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">הגשת משלחת לאישור</text>
+      </g>
+      <g id="uc-group-uc-missing-docs" data-uc-id="uc-missing-docs" onclick="showDesc('uc-missing-docs','uc',event)" style="cursor:pointer">
+        <ellipse cx="647.5" cy="172" rx="105" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"></ellipse>
+        <text x="647.5" y="176" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">הצגת מסמכים חסרים</text>
+      </g>
+      <g id="uc-group-uc-review-deleg" data-uc-id="uc-review-deleg" onclick="showDesc('uc-review-deleg','uc',event)" style="cursor:pointer">
+        <ellipse cx="930" cy="172" rx="110" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"></ellipse>
+        <text x="930" y="176" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">בדיקת ואישור משלחת</text>
+      </g>
+      <g id="uc-group-uc-reports-coord" data-uc-id="uc-reports-coord" onclick="showDesc('uc-reports-coord','uc',event)" style="cursor:pointer">
+        <ellipse cx="930" cy="242" rx="82" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"></ellipse>
+        <text x="930" y="246" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">הפקת דוחות</text>
+      </g>
+
+      <!-- ── Actors ── -->
+      <g id="actor-group-head" data-actor-id="head" onclick="showDesc('head','actor',event)" style="cursor:pointer" transform="translate(150,312)">
+        <circle cx="0" cy="-60" r="14" fill="#e0f0ff" stroke="#334155" stroke-width="2"></circle>
+        <line x1="0" y1="-46" x2="0" y2="-10" stroke="#334155" stroke-width="2"></line>
+        <line x1="-18" y1="-36" x2="18" y2="-36" stroke="#334155" stroke-width="2"></line>
+        <line x1="0" y1="-10" x2="-14" y2="14" stroke="#334155" stroke-width="2"></line>
+        <line x1="0" y1="-10" x2="14" y2="14" stroke="#334155" stroke-width="2"></line>
+        <text x="0" y="30" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b" font-family="'Noto Sans Hebrew',sans-serif">ראש משלחת</text>
+      </g>
+      <g id="actor-group-coordinator" data-actor-id="coordinator" onclick="showDesc('coordinator','actor',event)" style="cursor:pointer" transform="translate(1150,207)">
+        <circle cx="0" cy="-60" r="14" fill="#e0f0ff" stroke="#334155" stroke-width="2"></circle>
+        <line x1="0" y1="-46" x2="0" y2="-10" stroke="#334155" stroke-width="2"></line>
+        <line x1="-18" y1="-36" x2="18" y2="-36" stroke="#334155" stroke-width="2"></line>
+        <line x1="0" y1="-10" x2="-14" y2="14" stroke="#334155" stroke-width="2"></line>
+        <line x1="0" y1="-10" x2="14" y2="14" stroke="#334155" stroke-width="2"></line>
+        <text x="0" y="30" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b" font-family="'Noto Sans Hebrew',sans-serif">רכז מכביה</text>
+      </g>
+    </svg>
+<figcaption>חלק 1 מתוך 3: ניהול משלחת ואישורה — ראש המשלחת ורכז המכביה.</figcaption>
+</figure>
+<figure class="diagram"><svg id="diagram-svg-1" viewBox="0 0 1250 680" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <pattern id="dot-grid-1" width="24" height="24" patternUnits="userSpaceOnUse">
+          <circle cx="1" cy="1" r="0.8" fill="#cbd5e1"></circle>
+        </pattern>
+      </defs>
+
+      <rect x="0" y="0" width="1250" height="680" fill="#f8fafc"></rect>
+      <rect x="0" y="0" width="1250" height="680" fill="url(#dot-grid-1)"></rect>
+
+      <!-- System boundary -->
+      <rect class="system-boundary" x="260" y="70" width="720" height="430" rx="12" fill="#ffffff" stroke="#3b82f6" stroke-width="2.5"></rect>
+      <rect x="260" y="70" width="720" height="44" rx="12" fill="#1e40af"></rect>
+      <rect x="260" y="92" width="720" height="22" fill="#1e40af"></rect>
+      <text x="620" y="98" text-anchor="middle" font-size="14" font-weight="700" fill="#ffffff" font-family="'Noto Sans Hebrew',sans-serif">מערכת ניהול משלחות המכביה</text>
+
+      <!-- ── Association lines (visible + hitbox) ── -->
+      <line data-conn-from="admin" data-conn-to="uc-manage-doctypes" x1="1060" y1="277" x2="939.3495891785753" y2="184.28738835814005" stroke="#334155" stroke-width="1.8"></line>
+      <line class="conn-hitbox" data-conn-id="a-doctypes" data-hitbox-from="admin" data-hitbox-to="uc-manage-doctypes" x1="1060" y1="277" x2="939.3495891785753" y2="184.28738835814005" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('a-doctypes','assoc',event)"></line>
+
+      <line data-conn-from="admin" data-conn-to="uc-manage-sports" x1="1060" y1="277" x2="943.700726993051" y2="246.4989168582879" stroke="#334155" stroke-width="1.8"></line>
+      <line class="conn-hitbox" data-conn-id="a-sports" data-hitbox-from="admin" data-hitbox-to="uc-manage-sports" x1="1060" y1="277" x2="943.700726993051" y2="246.4989168582879" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('a-sports','assoc',event)"></line>
+
+      <line data-conn-from="admin" data-conn-to="uc-manage-roles" x1="1060" y1="277" x2="931.8566397538849" y2="307.5010831417121" stroke="#334155" stroke-width="1.8"></line>
+      <line class="conn-hitbox" data-conn-id="a-roles" data-hitbox-from="admin" data-hitbox-to="uc-manage-roles" x1="1060" y1="277" x2="931.8566397538849" y2="307.5010831417121" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('a-roles','assoc',event)"></line>
+
+      <line data-conn-from="admin" data-conn-to="uc-manage-users" x1="1060" y1="277" x2="930.3639140187111" y2="369.71261164185995" stroke="#334155" stroke-width="1.8"></line>
+      <line class="conn-hitbox" data-conn-id="a-users" data-hitbox-from="admin" data-hitbox-to="uc-manage-users" x1="1060" y1="277" x2="930.3639140187111" y2="369.71261164185995" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('a-users','assoc',event)"></line>
+
+      <!-- ── Use case ellipses ── -->
+      <g id="uc-group-uc-manage-doctypes" data-uc-id="uc-manage-doctypes" onclick="showDesc('uc-manage-doctypes','uc',event)" style="cursor:pointer">
+        <ellipse cx="845" cy="172" rx="105" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"></ellipse>
+        <text x="845" y="176" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">ניהול סוגי מסמכים</text>
+      </g>
+      <g id="uc-group-uc-manage-sports" data-uc-id="uc-manage-sports" onclick="showDesc('uc-manage-sports','uc',event)" style="cursor:pointer">
+        <ellipse cx="845" cy="242" rx="100" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"></ellipse>
+        <text x="845" y="246" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">ניהול ענפי ספורט</text>
+      </g>
+      <g id="uc-group-uc-manage-roles" data-uc-id="uc-manage-roles" onclick="showDesc('uc-manage-roles','uc',event)" style="cursor:pointer">
+        <ellipse cx="845" cy="312" rx="88" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"></ellipse>
+        <text x="845" y="316" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">ניהול תפקידים</text>
+      </g>
+      <g id="uc-group-uc-manage-users" data-uc-id="uc-manage-users" onclick="showDesc('uc-manage-users','uc',event)" style="cursor:pointer">
+        <ellipse cx="845" cy="382" rx="95" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"></ellipse>
+        <text x="845" y="386" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">ניהול משתמשים</text>
+      </g>
+
+      <!-- ── Actors ── -->
+      <g id="actor-group-admin" data-actor-id="admin" onclick="showDesc('admin','actor',event)" style="cursor:pointer" transform="translate(1060,277)">
+        <circle cx="0" cy="-60" r="14" fill="#e0f0ff" stroke="#334155" stroke-width="2"></circle>
+        <line x1="0" y1="-46" x2="0" y2="-10" stroke="#334155" stroke-width="2"></line>
+        <line x1="-18" y1="-36" x2="18" y2="-36" stroke="#334155" stroke-width="2"></line>
+        <line x1="0" y1="-10" x2="-14" y2="14" stroke="#334155" stroke-width="2"></line>
+        <line x1="0" y1="-10" x2="14" y2="14" stroke="#334155" stroke-width="2"></line>
+        <text x="0" y="30" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b" font-family="'Noto Sans Hebrew',sans-serif">מנהל מערכת</text>
+      </g>
+    </svg>
+<figcaption>חלק 2 מתוך 3: ניהול מערכת — מנהל המערכת מנהל את נתוני-האב, עם UC ניהול ייעודי לכל ישות: סוגי מסמכים, ענפי ספורט, תפקידים ומשתמשים.</figcaption>
+</figure>
+<figure class="diagram"><svg id="diagram-svg-2" viewBox="0 0 1250 570" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <pattern id="dot-grid-2" width="24" height="24" patternUnits="userSpaceOnUse">
+          <circle cx="1" cy="1" r="0.8" fill="#cbd5e1"></circle>
+        </pattern>
+      </defs>
+
+      <rect x="0" y="0" width="1250" height="560" fill="#f8fafc"></rect>
+      <rect x="0" y="0" width="1250" height="560" fill="url(#dot-grid-2)"></rect>
+
+      <!-- System boundary -->
+      <rect class="system-boundary" x="260" y="70" width="720" height="380" rx="12" fill="#ffffff" stroke="#3b82f6" stroke-width="2.5"></rect>
+      <rect x="260" y="70" width="720" height="44" rx="12" fill="#1e40af"></rect>
+      <rect x="260" y="92" width="720" height="22" fill="#1e40af"></rect>
+      <text x="620" y="98" text-anchor="middle" font-size="14" font-weight="700" fill="#ffffff" font-family="'Noto Sans Hebrew',sans-serif">מערכת ניהול משלחות המכביה</text>
+
+      <!-- ── Association lines (visible + hitbox) ── -->
+      <line data-conn-from="time" data-conn-to="uc-close-registration" x1="180" y1="178" x2="290" y2="178" stroke="#334155" stroke-width="1.8"></line>
+      <line class="conn-hitbox" data-conn-id="a-close" data-hitbox-from="time" data-hitbox-to="uc-close-registration" x1="180" y1="178" x2="290" y2="178" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('a-close','assoc',event)"></line>
+
+      <line data-conn-from="intlSys" data-conn-to="uc-receive-deleg" x1="180" y1="328" x2="308.1285546119494" y2="262.6438443961588" stroke="#334155" stroke-width="1.8"></line>
+      <line class="conn-hitbox" data-conn-id="a-receive" data-hitbox-from="intlSys" data-hitbox-to="uc-receive-deleg" x1="180" y1="328" x2="308.1285546119494" y2="262.6438443961588" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('a-receive','assoc',event)"></line>
+
+      <!-- ── Use case ellipses ── -->
+      <g id="uc-group-uc-close-registration" data-uc-id="uc-close-registration" onclick="showDesc('uc-close-registration','uc',event)" style="cursor:pointer">
+        <ellipse cx="408" cy="178" rx="118" ry="34" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"></ellipse>
+        <text x="408" y="172" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">סגירת ההרשמה וסימון</text>
+        <text x="408" y="188" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">משלחות באיחור</text>
+      </g>
+      <g id="uc-group-uc-receive-deleg" data-uc-id="uc-receive-deleg" onclick="showDesc('uc-receive-deleg','uc',event)" style="cursor:pointer">
+        <ellipse cx="408" cy="254" rx="105" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"></ellipse>
+        <text x="408" y="258" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">קליטת משלחת חדשה</text>
+      </g>
+
+      <!-- ── Actors ── -->
+      <g id="actor-group-time" data-actor-id="time" onclick="showDesc('time','actor',event)" style="cursor:pointer" transform="translate(180,178)">
+        <circle cx="0" cy="-60" r="14" fill="#fef3c7" stroke="#334155" stroke-width="2"></circle>
+        <line x1="0" y1="-46" x2="0" y2="-10" stroke="#334155" stroke-width="2"></line>
+        <line x1="-18" y1="-36" x2="18" y2="-36" stroke="#334155" stroke-width="2"></line>
+        <line x1="0" y1="-10" x2="-14" y2="14" stroke="#334155" stroke-width="2"></line>
+        <line x1="0" y1="-10" x2="14" y2="14" stroke="#334155" stroke-width="2"></line>
+        <text x="0" y="30" text-anchor="middle" font-size="9" font-style="italic" fill="#64748b" font-family="'IBM Plex Mono',monospace">«system»</text>
+        <text x="0" y="44" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b" font-family="'Noto Sans Hebrew',sans-serif">שחקן זמן</text>
+      </g>
+      <g id="actor-group-intlSys" data-actor-id="intlSys" onclick="showDesc('intlSys','actor',event)" style="cursor:pointer" transform="translate(180,328)">
+        <circle cx="0" cy="-60" r="14" fill="#fef3c7" stroke="#334155" stroke-width="2"></circle>
+        <line x1="0" y1="-46" x2="0" y2="-10" stroke="#334155" stroke-width="2"></line>
+        <line x1="-18" y1="-36" x2="18" y2="-36" stroke="#334155" stroke-width="2"></line>
+        <line x1="0" y1="-10" x2="-14" y2="14" stroke="#334155" stroke-width="2"></line>
+        <line x1="0" y1="-10" x2="14" y2="14" stroke="#334155" stroke-width="2"></line>
+        <text x="0" y="30" text-anchor="middle" font-size="9" font-style="italic" fill="#64748b" font-family="'IBM Plex Mono',monospace">«system»</text>
+        <text x="0" y="44" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b" font-family="'Noto Sans Hebrew',sans-serif">מערכת הרישום הבינלאומית</text>
+      </g>
+    <g class="timing-label"><rect x="149.5" y="170" width="171" height="16" fill="white" stroke="#334155" stroke-width="0.8" rx="3"></rect><text x="235" y="182" font-size="10" text-anchor="middle" fill="#334155" font-family="'Noto Sans Hebrew', sans-serif" direction="rtl">בהגיע מועד סגירת ההרשמה</text></g></svg>
+<figcaption>חלק 3 מתוך 3: תהליכים אוטומטיים וממשקים — שחקן הזמן (סטריאוטיפ «system», תווית תזמון על הקשר) ומערכת הרישום הבינלאומית. התרשים פוצל לפי תחומי אחריות לשם קריאוּת; פתרון בעמוד אחד תקין באותה מידה.</figcaption>
+</figure>
+<div class="box"><p><b>הנחת מודל:</b> למשתתפי המשלחת <b>אין גישה ישירה למערכת</b> — ראש המשלחת מזין את פרטיהם ומעלה את מסמכיהם בשמם, ולכן אין אקטור "משתתף" בתרשים. אילו הייתה למשתתפים גישה עצמאית (למשל העלאת מסמכים בעצמם), היה נדרש אקטור "משתתף" עם ה-Use Cases המתאימים. סטודנט שבחר במפורש בהנחה ההפוכה וצייר אקטור "משתתף" בהתאם — פתרון תקין באותה מידה.</p></div>
+<p class="difflink"><a href="maccabiah_use_case_diagram.html" target="_blank" rel="noopener">↗ פתחו את תרשים ה-Use Case המלא</a><small>כולל תיאורי ה-Use Case ומסכי הדגמה (wireframes) בלחיצה</small></p>
+
+<h3 class="sub">6.2 (3 נק׳): מי מפעיל את סגירת ההרשמה</h3>
+<p class="qtext">בהגעת מועד סגירת ההרשמה המערכת סוגרת את ההרשמה ומסמנת משלחות שטרם אושרו, ללא פעולה של ראש משלחת או רכז. מי השחקן שמפעיל את ה-Use Case?</p>
+<div class="answer"><p><b>שחקן זמן</b> (<span class="en">Time actor</span>). אין יוזם אנושי, הטריגר היחיד הוא הגעת המועד בלוח הזמנים של המכביה.</p></div>
+<div class="mistake"><ul>
+<li>תליית ה-Use Case ברכז המכביה או בראש המשלחת. אף אחד מהם אינו מבצע פעולה במועד זה.</li>
+<li><b>השמטת תווית התזמון</b> על הקשר בין שחקן הזמן ל-Use Case. הקשר חייב לשאת תווית שאומרת מתי הטריגר פועל ("בהגיע מועד סגירת ההרשמה") — בלעדיה לא ברור מה מפעיל את ההתנהגות ומתי.</li>
+<li><b>פיצול ההתנהגות לשני Use Cases נפרדים</b> ("סגירת ההרשמה" ו"סימון משלחות באיחור"). טריגר יחיד שמפעיל תגובה אוטומטית רציפה אחת הוא <b>Use Case אחד</b>: הסימון אינו מטרה עצמאית של שחקן כלשהו, אלא חלק מאותה תגובה.</li>
+</ul></div>
+
+<h3 class="sub">6.3 (3 נק׳): ההתנהגות המשותפת</h3>
+<p class="qtext">הצגת המסמכים החסרים נדרשת גם לראש המשלחת (בצפייה במצב משלחתו) וגם לרכז (בעת בדיקת המשלחת). כיצד ייצגתם את ההתנהגות המשותפת, ומדוע לא שכפלתם אותה?</p>
+<div class="answer"><p>Use Case משותף, ״הצגת מסמכים חסרים״, המחובר בקשר <b>«include»</b> משני ה-Use Cases הרלוונטיים (״הצגת מצב המשלחת״ ו״בדיקת ואישור משלחת״). זוהי תת-התנהגות המתבצעת <b>תמיד</b> כחלק מהם, ולכן היא מחולצת פעם אחת כדי למנוע כפילות ולרכז את התחזוקה במקום אחד.</p></div>
+<div class="mistake"><ul>
+<li>שכפול ההתנהגות בשני ה-Use Cases, או שימוש ב-<b>«extend»</b>: שמייצג התנהגות <i>מותנית</i> המתבצעת רק בהתקיים תנאי, ולא התנהגות שמתרחשת תמיד.</li>
+<li><b>חיבור ה-Use Case המוכלל לבסיס אחד בלבד.</b> «include» מוצדק רק כשה-Use Case המשותף מחובר ל<b>שני Use Cases בסיסיים לפחות</b> — עם בסיס יחיד אין כפילות למנוע, וההתנהגות פשוט שייכת לתוך ה-Use Case הבסיסי.</li>
+</ul></div>
+
+<h3 class="sub">6.4 (3 נק׳): הזמנת חולצות ומזכרות</h3>
+<p class="qtext">בבקשות ראשי המשלחות מוזכרת הזמנת חולצות ומזכרות רשמיות. האם קיים Use Case כזה בתרשים?</p>
+<div class="answer"><p><b>לא.</b> הדרישה נמצאת <b>מחוץ להיקף המערכת</b>: מטרתה היא ניהול המשלחות והבקרה על ההכנות, והסיפור אינו כולל מסחר או ניהול מזכרות. זיהוי הבקשה כדרישה שאינה בהיקף הוא חלק מהתשובה הנכונה.</p></div>
+<div class="mistake">הוספת Use Case ״הזמנת חולצות ומזכרות״. סטודנט שכלל אותו בתרשים אינו יכול לנמק זאת מתוך מטרת המערכת.</div>
+
+</section>
+<section class="q" id="q7">
+<h2><span class="pts">20 נק׳</span>שאלה 7: תרשים מחלקות</h2>
+
+<p class="qtext">הכינו תרשים מחלקות מקיף, הכולל שימוש נכון ב-<code>enumerator</code>, מאפיינים מהותיים וקרדינליות הקשרים.</p>
+
+<h3 class="sub">7.1 (8 נק׳): תרשים המחלקות</h3>
+<figure class="diagram"><svg id="diagram-svg" xmlns="http://www.w3.org/2000/svg" width="1200" height="892" viewBox="0 0 1200 892"><defs>
+      <pattern id="dotgrid" width="24" height="24" patternUnits="userSpaceOnUse">
+        <circle cx="12" cy="12" r="0.8" fill="#cbd5e1"></circle>
+      </pattern>
+      <marker id="genHollow" markerWidth="12" markerHeight="10" refX="10" refY="5" orient="auto">
+        <polygon points="0,0 10,5 0,10" fill="white" stroke="#334155" stroke-width="1.5"></polygon>
+      </marker>
+      <marker id="arrOpen" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+        <polyline points="0,0 9,4 0,8" fill="none" stroke="#334155" stroke-width="1.5"></polyline>
+      </marker>
+      <marker id="compFill" markerWidth="14" markerHeight="10" refX="1" refY="5" orient="auto">
+        <polygon points="0,5 7,0 14,5 7,10" fill="#1e40af" stroke="#1e40af"></polygon>
+      </marker>
+      <marker id="aggHollow" markerWidth="14" markerHeight="10" refX="1" refY="5" orient="auto">
+        <polygon points="0,5 7,0 14,5 7,10" fill="white" stroke="#334155"></polygon>
+      </marker>
+    </defs><rect width="1200" height="892" fill="url(#dotgrid)"></rect><polyline points="265,210 360,210" fill="none" stroke="#334155" stroke-width="1.8"></polyline><text x="281" y="222" text-anchor="middle" fill="#64748b" font-size="9.5" font-family="IBM Plex Mono, monospace">1</text><text x="344" y="204" text-anchor="middle" fill="#64748b" font-size="9.5" font-family="IBM Plex Mono, monospace">1..*</text><polyline points="584,220 700,220" fill="none" stroke="#334155" stroke-width="1.8" marker-start="url(#compFill)"></polyline><text x="600" y="232" text-anchor="middle" fill="#64748b" font-size="9.5" font-family="IBM Plex Mono, monospace">1</text><text x="684" y="214" text-anchor="middle" fill="#64748b" font-size="9.5" font-family="IBM Plex Mono, monospace">0..*</text><polyline points="560,260 560,340 560,420" fill="none" stroke="#334155" stroke-width="1.8"></polyline><text x="551" y="279" text-anchor="middle" fill="#64748b" font-size="9.5" font-family="IBM Plex Mono, monospace">0..1</text><text x="569" y="407" text-anchor="middle" fill="#64748b" font-size="9.5" font-family="IBM Plex Mono, monospace">1</text><text x="560" y="334" text-anchor="middle" fill="#64748b" font-size="9.5" font-family="IBM Plex Mono, monospace">ראש משלחת</text><polyline points="879,190 950,190 1020,190" fill="none" stroke="#334155" stroke-width="1.8"></polyline><text x="895" y="202" text-anchor="middle" fill="#64748b" font-size="9.5" font-family="IBM Plex Mono, monospace">0..*</text><text x="1004" y="184" text-anchor="middle" fill="#64748b" font-size="9.5" font-family="IBM Plex Mono, monospace">0..*</text><text x="950" y="184" text-anchor="middle" fill="#64748b" font-size="9.5" font-family="IBM Plex Mono, monospace">תפקיד בענף</text><polyline points="1080,300 1080,204" fill="none" stroke="#334155" stroke-width="1.8"></polyline><text x="1089" y="287" text-anchor="middle" fill="#64748b" font-size="9.5" font-family="IBM Plex Mono, monospace">1</text><text x="1071" y="223" text-anchor="middle" fill="#64748b" font-size="9.5" font-family="IBM Plex Mono, monospace">0..*</text><polyline points="800,294 800,430" fill="none" stroke="#334155" stroke-width="1.8"></polyline><text x="791" y="313" text-anchor="middle" fill="#64748b" font-size="9.5" font-family="IBM Plex Mono, monospace">1</text><text x="809" y="417" text-anchor="middle" fill="#64748b" font-size="9.5" font-family="IBM Plex Mono, monospace">0..*</text><polyline points="830,512 830,610" fill="none" stroke="#334155" stroke-width="1.8"></polyline><text x="821" y="531" text-anchor="middle" fill="#64748b" font-size="9.5" font-family="IBM Plex Mono, monospace">0..*</text><text x="839" y="597" text-anchor="middle" fill="#64748b" font-size="9.5" font-family="IBM Plex Mono, monospace">1</text><polyline points="283,480 390,480 500,480" fill="none" stroke="#334155" stroke-width="1.8"></polyline><text x="299" y="492" text-anchor="middle" fill="#64748b" font-size="9.5" font-family="IBM Plex Mono, monospace">0..*</text><text x="484" y="474" text-anchor="middle" fill="#64748b" font-size="9.5" font-family="IBM Plex Mono, monospace">1</text><text x="390" y="474" text-anchor="middle" fill="#64748b" font-size="9.5" font-family="IBM Plex Mono, monospace">שולח</text><polyline points="283,505 390,505 500,505" fill="none" stroke="#334155" stroke-width="1.8"></polyline><text x="299" y="517" text-anchor="middle" fill="#64748b" font-size="9.5" font-family="IBM Plex Mono, monospace">0..*</text><text x="484" y="499" text-anchor="middle" fill="#64748b" font-size="9.5" font-family="IBM Plex Mono, monospace">1</text><text x="390" y="499" text-anchor="middle" fill="#64748b" font-size="9.5" font-family="IBM Plex Mono, monospace">נמען</text><polyline points="250,470 250,450 380,450 380,260" fill="none" stroke="#334155" stroke-width="1.8"></polyline><text x="259" y="457" text-anchor="middle" fill="#64748b" font-size="9.5" font-family="IBM Plex Mono, monospace">0..*</text><text x="371" y="279" text-anchor="middle" fill="#64748b" font-size="9.5" font-family="IBM Plex Mono, monospace">1</text><text x="380" y="444" text-anchor="middle" fill="#64748b" font-size="9.5" font-family="IBM Plex Mono, monospace">בנוגע למשלחת</text><rect x="60" y="170" width="205" height="82" fill="white" stroke="#3b82f6" stroke-width="2" rx="2"></rect><rect x="60" y="170" width="205" height="28" fill="#1e40af" rx="2"></rect><text x="162.5" y="188" text-anchor="middle" fill="white" font-size="11" font-weight="700" font-family="IBM Plex Mono, monospace" style="">MaccabiahGames</text><line x1="60" y1="198" x2="265" y2="198" stroke="#3b82f6" stroke-width="1"></line><text x="66" y="214" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ edition : String</text><text x="66" y="228" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ year : Integer</text><text x="66" y="242" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ registrationDeadline : Date</text><rect x="360" y="150" width="224" height="110" fill="white" stroke="#3b82f6" stroke-width="2" rx="2"></rect><rect x="360" y="150" width="224" height="28" fill="#1e40af" rx="2"></rect><text x="472" y="168" text-anchor="middle" fill="white" font-size="11" font-weight="700" font-family="IBM Plex Mono, monospace" style="">Delegation</text><line x1="360" y1="178" x2="584" y2="178" stroke="#3b82f6" stroke-width="1"></line><text x="366" y="194" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ country : String</text><text x="366" y="208" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ name : String</text><text x="366" y="222" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ expectedParticipants : Integer</text><text x="366" y="236" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ status : DelegationStatus</text><text x="366" y="250" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ submissionDate : Date</text><rect x="700" y="170" width="179" height="124" fill="white" stroke="#3b82f6" stroke-width="2" rx="2"></rect><rect x="700" y="170" width="179" height="28" fill="#1e40af" rx="2"></rect><text x="789.5" y="188" text-anchor="middle" fill="white" font-size="11" font-weight="700" font-family="IBM Plex Mono, monospace" style="">Participant</text><line x1="700" y1="198" x2="879" y2="198" stroke="#3b82f6" stroke-width="1"></line><text x="706" y="214" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ passportNumber : String</text><text x="706" y="228" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ firstName : String</text><text x="706" y="242" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ lastName : String</text><text x="706" y="256" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ phone : String</text><text x="706" y="270" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ email : String</text><text x="706" y="284" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ mainRole : MainRole</text><rect x="500" y="420" width="140" height="96" fill="white" stroke="#3b82f6" stroke-width="2" rx="2"></rect><rect x="500" y="420" width="140" height="28" fill="#1e40af" rx="2"></rect><text x="570" y="438" text-anchor="middle" fill="white" font-size="11" font-weight="700" font-family="IBM Plex Mono, monospace" style="">User</text><line x1="500" y1="448" x2="640" y2="448" stroke="#3b82f6" stroke-width="1"></line><text x="506" y="464" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ userId : String</text><text x="506" y="478" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ fullName : String</text><text x="506" y="492" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ email : String</text><text x="506" y="506" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ role : UserRole</text><rect x="1020" y="150" width="120" height="54" fill="white" stroke="#3b82f6" stroke-width="2" rx="2"></rect><rect x="1020" y="150" width="120" height="28" fill="#1e40af" rx="2"></rect><text x="1080" y="168" text-anchor="middle" fill="white" font-size="11" font-weight="700" font-family="IBM Plex Mono, monospace" style="">Role</text><line x1="1020" y1="178" x2="1140" y2="178" stroke="#3b82f6" stroke-width="1"></line><text x="1026" y="194" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ name : String</text><rect x="1020" y="300" width="120" height="54" fill="white" stroke="#3b82f6" stroke-width="2" rx="2"></rect><rect x="1020" y="300" width="120" height="28" fill="#1e40af" rx="2"></rect><text x="1080" y="318" text-anchor="middle" fill="white" font-size="11" font-weight="700" font-family="IBM Plex Mono, monospace" style="">Sport</text><line x1="1020" y1="328" x2="1140" y2="328" stroke="#3b82f6" stroke-width="1"></line><text x="1026" y="344" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ name : String</text><rect x="760" y="430" width="179" height="82" fill="white" stroke="#3b82f6" stroke-width="2" rx="2"></rect><rect x="760" y="430" width="179" height="28" fill="#1e40af" rx="2"></rect><text x="849.5" y="448" text-anchor="middle" fill="white" font-size="11" font-weight="700" font-family="IBM Plex Mono, monospace" style="">ParticipantDocument</text><line x1="760" y1="458" x2="939" y2="458" stroke="#3b82f6" stroke-width="1"></line><text x="766" y="474" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ fileRef : String</text><text x="766" y="488" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ uploadDate : Date</text><text x="766" y="502" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ status : DocumentStatus</text><rect x="760" y="610" width="192" height="68" fill="white" stroke="#3b82f6" stroke-width="2" rx="2"></rect><rect x="760" y="610" width="192" height="28" fill="#1e40af" rx="2"></rect><text x="856" y="628" text-anchor="middle" fill="white" font-size="11" font-weight="700" font-family="IBM Plex Mono, monospace" style="">DocumentType</text><line x1="760" y1="638" x2="952" y2="638" stroke="#3b82f6" stroke-width="1"></line><text x="766" y="654" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ name : String</text><text x="766" y="668" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ mandatory : MandatoryFlag</text><rect x="150" y="470" width="133" height="68" fill="white" stroke="#3b82f6" stroke-width="2" rx="2"></rect><rect x="150" y="470" width="133" height="28" fill="#1e40af" rx="2"></rect><text x="216.5" y="488" text-anchor="middle" fill="white" font-size="11" font-weight="700" font-family="IBM Plex Mono, monospace" style="">Message</text><line x1="150" y1="498" x2="283" y2="498" stroke="#3b82f6" stroke-width="1"></line><text x="156" y="514" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ content : String</text><text x="156" y="528" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ sentDate : Date</text><rect x="120" y="300" width="159" height="134" fill="#f8fafc" stroke="#94a3b8" stroke-width="2" stroke-dasharray="5 3" rx="2"></rect><rect x="120" y="300" width="159" height="38" fill="#475569" rx="2"></rect><text x="199.5" y="313" text-anchor="middle" fill="white" font-size="9" font-family="IBM Plex Mono, monospace">«enumeration»</text><text x="199.5" y="330" text-anchor="middle" fill="white" font-size="11" font-weight="700" font-family="IBM Plex Mono, monospace" style="">DelegationStatus</text><line x1="120" y1="338" x2="279" y2="338" stroke="#94a3b8" stroke-width="1"></line><text x="126" y="354" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">Draft</text><text x="126" y="368" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">Submitted</text><text x="126" y="382" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">UnderReview</text><text x="126" y="396" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">ReturnedForCorrections</text><text x="126" y="410" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">Approved</text><text x="126" y="424" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">Late</text><rect x="500" y="560" width="120" height="92" fill="#f8fafc" stroke="#94a3b8" stroke-width="2" stroke-dasharray="5 3" rx="2"></rect><rect x="500" y="560" width="120" height="38" fill="#475569" rx="2"></rect><text x="560" y="573" text-anchor="middle" fill="white" font-size="9" font-family="IBM Plex Mono, monospace">«enumeration»</text><text x="560" y="590" text-anchor="middle" fill="white" font-size="11" font-weight="700" font-family="IBM Plex Mono, monospace" style="">UserRole</text><line x1="500" y1="598" x2="620" y2="598" stroke="#94a3b8" stroke-width="1"></line><text x="506" y="614" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">DelegationHead</text><text x="506" y="628" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">Coordinator</text><text x="506" y="642" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">Admin</text><rect x="700" y="20" width="120" height="106" fill="#f8fafc" stroke="#94a3b8" stroke-width="2" stroke-dasharray="5 3" rx="2"></rect><rect x="700" y="20" width="120" height="38" fill="#475569" rx="2"></rect><text x="760" y="33" text-anchor="middle" fill="white" font-size="9" font-family="IBM Plex Mono, monospace">«enumeration»</text><text x="760" y="50" text-anchor="middle" fill="white" font-size="11" font-weight="700" font-family="IBM Plex Mono, monospace" style="">MainRole</text><line x1="700" y1="58" x2="820" y2="58" stroke="#94a3b8" stroke-width="1"></line><text x="706" y="74" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">Athlete</text><text x="706" y="88" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">Coach</text><text x="706" y="102" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">Doctor</text><text x="706" y="116" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">Escort</text><rect x="980" y="610" width="120" height="78" fill="#f8fafc" stroke="#94a3b8" stroke-width="2" stroke-dasharray="5 3" rx="2"></rect><rect x="980" y="610" width="120" height="38" fill="#475569" rx="2"></rect><text x="1040" y="623" text-anchor="middle" fill="white" font-size="9" font-family="IBM Plex Mono, monospace">«enumeration»</text><text x="1040" y="640" text-anchor="middle" fill="white" font-size="11" font-weight="700" font-family="IBM Plex Mono, monospace" style="">MandatoryFlag</text><line x1="980" y1="648" x2="1100" y2="648" stroke="#94a3b8" stroke-width="1"></line><text x="986" y="664" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">Mandatory</text><text x="986" y="678" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">Optional</text><rect x="760" y="720" width="120" height="92" fill="#f8fafc" stroke="#94a3b8" stroke-width="2" stroke-dasharray="5 3" rx="2"></rect><rect x="760" y="720" width="120" height="38" fill="#475569" rx="2"></rect><text x="820" y="733" text-anchor="middle" fill="white" font-size="9" font-family="IBM Plex Mono, monospace">«enumeration»</text><text x="820" y="750" text-anchor="middle" fill="white" font-size="11" font-weight="700" font-family="IBM Plex Mono, monospace" style="">DocumentStatus</text><line x1="760" y1="758" x2="880" y2="758" stroke="#94a3b8" stroke-width="1"></line><text x="766" y="774" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">Uploaded</text><text x="766" y="788" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">Missing</text><text x="766" y="802" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">Rejected</text><text x="16" y="832" fill="#64748b" font-size="9" font-family="IBM Plex Mono, monospace">── Association  ◇── Aggregation  ◆── Composition  ──▷ Generalization  |  קרדינליות בשני קצות הקשר</text></svg>
+<figcaption>פתרון לדוגמה: 9 מחלקות. <b>Role</b> ממודר לענף (כל תפקיד שייך לענף אחד בדיוק; משתתף מקושר רבים-לרבים לתפקידיו — יכול להיות שחקן וגם מאמן); <b>DocumentType</b> הוא קטלוג המסמכים הנדרשים שמגדיר מנהל המערכת, ו-<b>ParticipantDocument</b> הוא המסמך שהועלה בפועל עבור משתתף; <b>Message</b> מעבירה את תקשורת ההערות מהדוא״ל אל תוך המערכת. במערכת מוגדרים משתמשים (User) רק לבעלי גישה — למשתתפים אין חשבון. חמשת ה-enumerators מוצגים כתיבות עצמאיות, ללא קווי אסוציאציה.</figcaption>
+</figure>
+<p class="difflink"><a href="maccabiah_class_diagram.html" target="_blank" rel="noopener">↗ פתחו את תרשים המחלקות המלא</a><small>עמוד נפרד, ניתן להגדלה ולהדפסה</small></p>
+
+<h3 class="sub">7.2 (3 נק׳): תפקיד לכל ענף</h3>
+<p class="qtext">משתתף יכול להיות ספורטאי בשחייה ומאמן באתלטיקה. כיצד ייצגתם זאת, וכיצד המבנה יודע איזה תפקיד שייך לאיזה ענף?</p>
+<div class="answer"><p><code>Role</code> היא מחלקה <b>הממודרת לענף</b>: כל תפקיד שייך לענף אחד בדיוק (<code>Sport 1 — 0..* Role</code>), והמשתתף מקושר <b>רבים-לרבים</b> ל-<code>Role</code> (״תפקיד בענף״). כך ״שחיין בשחייה״ ו״מאמן באתלטיקה״ הם שני אובייקטי Role שונים, וכל תפקיד יודע את ענפו דרך הקשר אל <code>Sport</code>. הקרדינליות רבים-לרבים אף מאפשרת למשתתף להחזיק <b>יותר מתפקיד אחד באותו ענף</b> (שחקן וגם מאמן).</p></div>
+<p class="alt"><b>חלופות מזכות:</b> <b>מחלקה מתווכת</b> (SportAssignment) המקשרת Participant × Sport × Role, או <b>מחלקת קשר (Association Class)</b> על הקשר רבים-לרבים בין <code>Participant</code> ל-<code>Sport</code> הנושאת את התפקיד — עקבי עם סולם העדיפויות שנלמד (קשר רגיל → מחלקת קשר → מחלקה מתווכת → קשר טרנרי, שממנו יש להימנע).</p>
+<div class="mistake">רישום <code>role</code> יחיד כתכונה של <code>Participant</code> — לכל משתתף תפקיד אחד, ואי-אפשר להיות ספורטאי באחד ומאמן באחר; או רבים-לרבים ישיר בין <code>Participant</code> ל-<code>Sport</code> ללא <code>Role</code> — המבנה מאבד את התפקיד עצמו.</div>
+
+<h3 class="sub">7.3 (3 נק׳): הקשר בין Delegation ל-Participant</h3>
+<p class="qtext">משתתף רשום תמיד למשלחת אחת בדיוק. מה קורה לרשומות המשתתפים כשהמשלחת נמחקת, וכיצד ייצגתם זאת? ציינו גם את הקרדינליות בשני קצות הקשר.</p>
+<div class="answer"><p><b>קומפוזיציה</b>: מעוין <b>מלא</b> בצד <code>Delegation</code>. המשתתף <b>תלוי-חיים</b> במשלחת: מחיקת המשלחת גוררת את מחיקת משתתפיה. קרדינליות: <b>1</b> בצד המשלחת (כל משתתף שייך למשלחת אחת), ו-<b>1..*</b> (או <code>0..*</code>) בצד המשתתף.</p></div>
+<div class="mistake">אגרגציה (מעוין ריק) או אסוציאציה רגילה. שתיהן אינן מבטאות תלות-חיים, החלקים שורדים את מחיקת השלם, וזה סותר את התשובה ״המשתתפים נמחקים״.</div>
+
+<h3 class="sub">7.4 (3 נק׳): Role מול UserRole</h3>
+<p class="qtext">בסיפור, <code>Role</code> (תפקיד המשתתף בענף) ו-<code>UserRole</code> (סוג המשתמש) הם שני נתונים שונים. כיצד ייצגתם כל אחד, ומדוע כך?</p>
+<div class="answer">
+<p><code>Role</code> חייב להיות <b>מחלקה</b>: הוא <b>משתתף בקשרים</b> (אל <code>Sport</code> ואל <code>Participant</code>) והוא <b>קטלוג נתוני-אב</b> שמנהל המערכת מתחזק בזמן ריצה (UC ״ניהול תפקידים״). ישות שמשתתפת בקשר אינה יכולה להיות ערך בלבד.</p>
+<p><code>UserRole</code> הוא <b>enumerator</b>: <b>רשימת ערכים סגורה, טקסטואלית, קצרה</b> (ראש משלחת / רכז / מנהל) המתארת סוג משתמש בלבד, ואינה משתתפת בשום קשר. הוא מצויר כ<b>תיבה עצמאית שאינה מחוברת בקו</b> לאף מחלקה; הקישור היחיד הוא היותו <b>טיפוס של תכונה</b> במחלקת <code>User</code>. (מאותו טעם גם <code>MainRole</code> — תפקידו העיקרי של המשתתף במשלחת: ספורטאי / מאמן / רופא / מלווה — הוא enum המשמש טיפוס של תכונה ב-<code>Participant</code>.)</p>
+</div>
+<div class="mistake">הפיכת <code>Role</code> ל-enumerator. זו אינה שגיאת סימון בלבד — enumerator אינו יכול להשתתף בקשר אל <code>Sport</code>, ולכן לא ניתן לדעת לאיזה ענף שייך התפקיד (סתירה ל-7.2).</div>
+
+<h3 class="sub">7.5 (3 נק׳): הערות התיקון</h3>
+<p class="qtext">הערות הרכז נשלחות בדוא״ל בלבד ואינן נשמרות במערכת. האם קיימת עבורן מחלקה? נמקו, וציינו מחיר אחד של ההחלטה.</p>
+<div class="answer">
+<p><b>לפי הסיפור — לא:</b> תרשים המחלקות מייצג נתונים שהמערכת <b>שומרת</b>, והסיפור קובע שההערות נשלחות בדוא״ל בלבד. <b>המחיר:</b> אובדן תיעוד והיסטוריית תיקונים — אין מעקב אחר מה נדרש לתקן, מתי ובאיזה סבב, ואין ראיה לְמה נמסר לראש המשלחת.</p>
+<p><b>בפתרון שלנו הכרענו במודע אחרת:</b> מחלקת <code>Message</code> (שולח, נמען, בנוגע למשלחת) מעבירה את התקשורת אל <b>תוך המערכת</b>. משתמשים תמיד יעדיפו להישאר בכלים הקיימים שלהם (דוא״ל); תפקידנו כמנתחי מערכות הוא להעביר אותם אל המערכת כדי לשמר תיעוד ומעקב. <b>המחיר:</b> חריגה מדרישה מפורשת של הלקוח — שינוי כזה חייב להיות מוצג ומאושר מולו.</p>
+</div>
+<div class="mistake">שתי ההכרעות מזכות בניקוד מלא — בתנאי שהן <b>מנומקות ומציינות מחיר</b>. ״אין מחלקה״ בלי לציין את מחיר אובדן התיעוד, או מחלקת <code>Message</code>/<code>Comment</code> בלי נימוק ובלי הצפת החריגה מהדרישה — תשובה חלקית.</div>
+
+</section>
+<section class="q" id="q8">
+<h2><span class="pts">12 נק׳</span>שאלה 8: תרשים מצבים</h2>
+
+<p class="qtext">הכינו תרשים מצבים (State Diagram) עבור מחזור החיים של אובייקט המשלחת (<code>Delegation</code>).</p>
+
+<h3 class="sub">8.1 (6 נק׳): תרשים המצבים</h3>
+<figure class="diagram"><svg width="1250" height="1040" viewBox="0 0 1250 1040" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <pattern id="dotgrid" width="24" height="24" patternUnits="userSpaceOnUse">
+      <circle cx="12" cy="12" r="0.8" fill="#cbd5e1"></circle>
+    </pattern>
+    <marker id="arrow" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#334155"></polygon>
+    </marker>
+  </defs>
+  <rect x="0" y="0" width="1250" height="1040" fill="url(#dotgrid)"></rect>
+
+  <!-- ============ composite state (drawn first, behind) ============ -->
+  <g data-state="st-prep">
+    <title>מצב-על: כל התקופה שבה המשלחת בהכנה וטרם אושרה, לחץ להסבר</title>
+    <rect x="270" y="80" width="910" height="400" rx="20" ry="20" fill="#f0f7ff" stroke="#2563eb" stroke-width="2" stroke-dasharray="8 4"></rect>
+    <text x="300" y="102" font-size="10" fill="#64748b" font-family="'IBM Plex Mono',monospace">«composite»</text>
+    <text x="300" y="120" font-size="13" font-weight="700" fill="#1e293b" font-family="'Noto Sans Hebrew',sans-serif">בהכנה</text>
+    <text x="300" y="138" font-size="10" fill="#334155" font-family="'IBM Plex Mono',monospace">entry / setStatus('IN_PREPARATION')</text>
+  </g>
+
+  <!-- ============ states ============ -->
+  <!-- created -->
+  <g data-state="st-created">
+    <title>מקליטת המשלחת מהמערכת הבינלאומית ועד ההגשה הראשונה לאישור, לחץ להסבר</title>
+    <rect x="930" y="170" width="220" height="80" rx="18" ry="18" fill="#ffffff" stroke="none"></rect>
+    <path d="M 930 196 v -8 a18 18 0 0 1 18 -18 h 184 a18 18 0 0 1 18 18 v 8 z" fill="#eef4ff"></path>
+    <line x1="930" y1="196" x2="1150" y2="196" stroke="#3b82f6" stroke-width="1"></line>
+    <rect x="930" y="170" width="220" height="80" rx="18" ry="18" fill="none" stroke="#3b82f6" stroke-width="2"></rect>
+    <text x="1040" y="188" font-size="12" font-weight="700" fill="#1e293b" text-anchor="middle" font-family="'Noto Sans Hebrew',sans-serif">נוצרה</text>
+    <text x="940" y="216" font-size="10" fill="#334155" font-family="'IBM Plex Mono',monospace">entry / setStatus('CREATED');</text>
+    <text x="985" y="232" font-size="10" fill="#334155" font-family="'IBM Plex Mono','Noto Sans Hebrew',monospace">פתיחת חשבון לראש המשלחת</text>
+  </g>
+  <!-- submitted -->
+  <g data-state="st-submitted">
+    <title>ממתינה בתור לבדיקת רכז המכביה, לחץ להסבר</title>
+    <rect x="610" y="170" width="220" height="80" rx="18" ry="18" fill="#ffffff" stroke="none"></rect>
+    <path d="M 610 196 v -8 a18 18 0 0 1 18 -18 h 184 a18 18 0 0 1 18 18 v 8 z" fill="#eef4ff"></path>
+    <line x1="610" y1="196" x2="830" y2="196" stroke="#3b82f6" stroke-width="1"></line>
+    <rect x="610" y="170" width="220" height="80" rx="18" ry="18" fill="none" stroke="#3b82f6" stroke-width="2"></rect>
+    <text x="720" y="188" font-size="12" font-weight="700" fill="#1e293b" text-anchor="middle" font-family="'Noto Sans Hebrew',sans-serif">הוגשה לאישור</text>
+    <text x="620" y="216" font-size="10" fill="#334155" font-family="'IBM Plex Mono',monospace">entry / setStatus('SUBMITTED')</text>
+  </g>
+  <!-- under review -->
+  <g data-state="st-review">
+    <title>הרכז בודק בפועל את הפרטים והמסמכים, לחץ להסבר</title>
+    <rect x="300" y="170" width="220" height="80" rx="18" ry="18" fill="#ffffff" stroke="none"></rect>
+    <path d="M 300 196 v -8 a18 18 0 0 1 18 -18 h 184 a18 18 0 0 1 18 18 v 8 z" fill="#eef4ff"></path>
+    <line x1="300" y1="196" x2="520" y2="196" stroke="#3b82f6" stroke-width="1"></line>
+    <rect x="300" y="170" width="220" height="80" rx="18" ry="18" fill="none" stroke="#3b82f6" stroke-width="2"></rect>
+    <text x="410" y="188" font-size="12" font-weight="700" fill="#1e293b" text-anchor="middle" font-family="'Noto Sans Hebrew',sans-serif">בבדיקה</text>
+    <text x="310" y="216" font-size="10" fill="#334155" font-family="'IBM Plex Mono',monospace">entry / setStatus('UNDER_REVIEW')</text>
+    <text x="310" y="232" font-size="10" fill="#334155" font-family="'IBM Plex Mono','Noto Sans Hebrew',monospace">do / בדיקת פרטים ומסמכים</text>
+  </g>
+  <!-- returned for fix -->
+  <g data-state="st-returned">
+    <title>חזרה אצל ראש המשלחת לתיקון ליקויים, לחץ להסבר</title>
+    <rect x="610" y="360" width="220" height="80" rx="18" ry="18" fill="#ffffff" stroke="none"></rect>
+    <path d="M 610 386 v -8 a18 18 0 0 1 18 -18 h 184 a18 18 0 0 1 18 18 v 8 z" fill="#eef4ff"></path>
+    <line x1="610" y1="386" x2="830" y2="386" stroke="#3b82f6" stroke-width="1"></line>
+    <rect x="610" y="360" width="220" height="80" rx="18" ry="18" fill="none" stroke="#3b82f6" stroke-width="2"></rect>
+    <text x="720" y="378" font-size="12" font-weight="700" fill="#1e293b" text-anchor="middle" font-family="'Noto Sans Hebrew',sans-serif">הוחזרה לתיקון</text>
+    <text x="620" y="406" font-size="10" fill="#334155" font-family="'IBM Plex Mono',monospace">entry / setStatus('RETURNED')</text>
+  </g>
+  <!-- approved -->
+  <g data-state="st-approved">
+    <title>המשלחת אושרה להשתתפות במכביה, לחץ להסבר</title>
+    <rect x="300" y="580" width="220" height="80" rx="18" ry="18" fill="#ffffff" stroke="none"></rect>
+    <path d="M 300 606 v -8 a18 18 0 0 1 18 -18 h 184 a18 18 0 0 1 18 18 v 8 z" fill="#eef4ff"></path>
+    <line x1="300" y1="606" x2="520" y2="606" stroke="#3b82f6" stroke-width="1"></line>
+    <rect x="300" y="580" width="220" height="80" rx="18" ry="18" fill="none" stroke="#3b82f6" stroke-width="2"></rect>
+    <text x="410" y="598" font-size="12" font-weight="700" fill="#1e293b" text-anchor="middle" font-family="'Noto Sans Hebrew',sans-serif">אושרה</text>
+    <text x="310" y="626" font-size="10" fill="#334155" font-family="'IBM Plex Mono',monospace">entry / setStatus('APPROVED')</text>
+  </g>
+  <!-- late -->
+  <g data-state="st-late">
+    <title>הגיע מועד סגירת ההרשמה והמשלחת טרם אושרה, לחץ להסבר</title>
+    <rect x="880" y="580" width="220" height="80" rx="18" ry="18" fill="#ffffff" stroke="none"></rect>
+    <path d="M 880 606 v -8 a18 18 0 0 1 18 -18 h 184 a18 18 0 0 1 18 18 v 8 z" fill="#eef4ff"></path>
+    <line x1="880" y1="606" x2="1100" y2="606" stroke="#3b82f6" stroke-width="1"></line>
+    <rect x="880" y="580" width="220" height="80" rx="18" ry="18" fill="none" stroke="#3b82f6" stroke-width="2"></rect>
+    <text x="990" y="598" font-size="12" font-weight="700" fill="#1e293b" text-anchor="middle" font-family="'Noto Sans Hebrew',sans-serif">באיחור</text>
+    <text x="890" y="626" font-size="10" fill="#334155" font-family="'IBM Plex Mono',monospace">entry / setStatus('LATE')</text>
+  </g>
+  <!-- archived -->
+  <g data-state="st-archived">
+    <title>המכביה הסתיימה, הרשומה נשמרת לקריאה בלבד, לחץ להסבר</title>
+    <rect x="300" y="780" width="220" height="80" rx="18" ry="18" fill="#ffffff" stroke="none"></rect>
+    <path d="M 300 806 v -8 a18 18 0 0 1 18 -18 h 184 a18 18 0 0 1 18 18 v 8 z" fill="#eef4ff"></path>
+    <line x1="300" y1="806" x2="520" y2="806" stroke="#3b82f6" stroke-width="1"></line>
+    <rect x="300" y="780" width="220" height="80" rx="18" ry="18" fill="none" stroke="#3b82f6" stroke-width="2"></rect>
+    <text x="410" y="798" font-size="12" font-weight="700" fill="#1e293b" text-anchor="middle" font-family="'Noto Sans Hebrew',sans-serif">ארכיון</text>
+    <text x="310" y="826" font-size="10" fill="#334155" font-family="'IBM Plex Mono',monospace">entry / setStatus('ARCHIVED')</text>
+    <text x="310" y="842" font-size="10" fill="#334155" font-family="'IBM Plex Mono',monospace">do / after(180 days) → Final</text>
+  </g>
+
+  <!-- ============ pseudostates ============ -->
+  <g data-state="ps-initial">
+    <title>מצב התחלתי, נקודת הכניסה למחזור החיים, לחץ להסבר</title>
+    <circle cx="1040" cy="25" r="8" fill="#1e293b"></circle>
+  </g>
+  <g data-state="ps-initial-prep">
+    <title>מצב התחלתי פנימי של מצב-העל, לחץ להסבר</title>
+    <circle cx="1040" cy="145" r="8" fill="#1e293b"></circle>
+  </g>
+  <g data-state="ps-final">
+    <title>מצב סיום, סוף מחזור החיים של האובייקט, לחץ להסבר</title>
+    <circle cx="410" cy="930" r="12" fill="none" stroke="#1e293b" stroke-width="2"></circle>
+    <circle cx="410" cy="930" r="7" fill="#1e293b"></circle>
+  </g>
+
+  <!-- ============ transitions ============ -->
+  <path d="M 1040 33 L 1040 80" fill="none" stroke="#334155" stroke-width="1.8" marker-end="url(#arrow)"></path>
+  <path d="M 1040 153 L 1040 170" fill="none" stroke="#334155" stroke-width="1.8" marker-end="url(#arrow)"></path>
+  <path d="M 930 210 L 830 210" fill="none" stroke="#334155" stroke-width="1.8" marker-end="url(#arrow)"></path>
+  <path d="M 610 210 L 520 210" fill="none" stroke="#334155" stroke-width="1.8" marker-end="url(#arrow)"></path>
+  <path d="M 410 250 L 410 400 L 610 400" fill="none" stroke="#334155" stroke-width="1.8" marker-end="url(#arrow)"></path>
+  <path d="M 720 360 L 720 250" fill="none" stroke="#334155" stroke-width="1.8" marker-end="url(#arrow)"></path>
+  <path d="M 985 250 C 985 315, 1095 315, 1095 250" fill="none" stroke="#334155" stroke-width="1.8" marker-end="url(#arrow)"></path>
+  <path d="M 830 385 C 900 385, 900 425, 830 425" fill="none" stroke="#334155" stroke-width="1.8" marker-end="url(#arrow)"></path>
+  <path d="M 335 250 L 335 580" fill="none" stroke="#334155" stroke-width="1.8" marker-end="url(#arrow)"></path>
+  <path d="M 990 480 L 990 580" fill="none" stroke="#334155" stroke-width="1.8" marker-end="url(#arrow)"></path>
+  <path d="M 880 620 L 520 620" fill="none" stroke="#334155" stroke-width="1.8" marker-end="url(#arrow)"></path>
+  <path d="M 945 660 C 945 725, 1035 725, 1035 660" fill="none" stroke="#334155" stroke-width="1.8" marker-end="url(#arrow)"></path>
+  <path d="M 410 660 L 410 780" fill="none" stroke="#334155" stroke-width="1.8" marker-end="url(#arrow)"></path>
+  <path d="M 410 860 L 410 918" fill="none" stroke="#334155" stroke-width="1.8" marker-end="url(#arrow)"></path>
+
+  <!-- ============ transition labels ============ -->
+  <g font-size="10" font-family="'Noto Sans Hebrew','IBM Plex Mono',monospace"><rect x="419" y="881" width="75.56988525390625" height="16" rx="3" fill="#ffffff" fill-opacity="0.92"></rect><rect x="416" y="713" width="76.234375" height="16" rx="3" fill="#ffffff" fill-opacity="0.92"></rect><rect x="417" y="700" width="60.959930419921875" height="16" rx="3" fill="#ffffff" fill-opacity="0.92"></rect><rect x="953.71875" y="746" width="72.5625" height="16" rx="3" fill="#ffffff" fill-opacity="0.92"></rect><rect x="933.703125" y="733" width="112.59375" height="16" rx="3" fill="#ffffff" fill-opacity="0.92"></rect><rect x="651.8984375" y="597" width="96.203125" height="16" rx="3" fill="#ffffff" fill-opacity="0.92"></rect><rect x="635.0703125" y="584" width="130.53118896484375" height="16" rx="3" fill="#ffffff" fill-opacity="0.92"></rect><rect x="998" y="516" width="73.46240234375" height="16" rx="3" fill="#ffffff" fill-opacity="0.92"></rect><rect x="999" y="503" width="116.03125" height="16" rx="3" fill="#ffffff" fill-opacity="0.92"></rect><rect x="342" y="516" width="109.40625" height="16" rx="3" fill="#ffffff" fill-opacity="0.92"></rect><rect x="342" y="503" width="130.53118896484375" height="16" rx="3" fill="#ffffff" fill-opacity="0.92"></rect><rect x="907" y="433" width="127.2149658203125" height="16" rx="3" fill="#ffffff" fill-opacity="0.92"></rect><rect x="1003.71875" y="331" width="72.5625" height="16" rx="3" fill="#ffffff" fill-opacity="0.92"></rect><rect x="986.7109375" y="318" width="106.637451171875" height="16" rx="3" fill="#ffffff" fill-opacity="0.92"></rect><rect x="727" y="299" width="102.671875" height="16" rx="3" fill="#ffffff" fill-opacity="0.92"></rect><rect x="727" y="286" width="58.234375" height="16" rx="3" fill="#ffffff" fill-opacity="0.92"></rect><rect x="457.265625" y="376" width="104.46875" height="16" rx="3" fill="#ffffff" fill-opacity="0.92"></rect><rect x="449.2265625" y="363" width="121.7486572265625" height="16" rx="3" fill="#ffffff" fill-opacity="0.92"></rect><rect x="534.4453125" y="189" width="61.109375" height="16" rx="3" fill="#ffffff" fill-opacity="0.92"></rect><rect x="531.5234375" y="176" width="66.953125" height="16" rx="3" fill="#ffffff" fill-opacity="0.92"></rect><rect x="843.71875" y="189" width="72.5625" height="16" rx="3" fill="#ffffff" fill-opacity="0.92"></rect><rect x="849" y="176" width="62" height="16" rx="3" fill="#ffffff" fill-opacity="0.92"></rect>
+    <!-- created -> submitted -->
+    <text class="tl" x="880" y="188" text-anchor="middle" fill="#334155">הגשה לאישור</text>
+    <text class="tl" x="880" y="201" text-anchor="middle" fill="#0891b2">[ראש המשלחת]</text>
+    <!-- submitted -> review -->
+    <text class="tl" x="565" y="188" text-anchor="middle" fill="#334155">התחלת בדיקה</text>
+    <text class="tl" x="565" y="201" text-anchor="middle" fill="#0891b2">[רכז המכביה]</text>
+    <!-- review -> returned -->
+    <text class="tl" x="510" y="375" text-anchor="middle" fill="#334155">נמצאו ליקויים <tspan fill="#0891b2">[רכז המכביה]</tspan></text>
+    <text class="tl" x="510" y="388" text-anchor="middle" fill="#15803d">/ שליחת הערות בדוא"ל</text>
+    <!-- returned -> submitted (back) -->
+    <text class="tl" x="730" y="298" text-anchor="start" fill="#334155">הגשה מחדש</text>
+    <text class="tl" x="730" y="311" text-anchor="start" fill="#0891b2">[לאחר ביצוע התיקונים]</text>
+    <!-- self loop: created -->
+    <text class="tl" x="1040" y="330" text-anchor="middle" fill="#334155">עדכון פרטים ומשתתפים</text>
+    <text class="tl" x="1040" y="343" text-anchor="middle" fill="#0891b2">[ראש המשלחת]</text>
+    <!-- self loop: returned -->
+    <text class="tl" x="910" y="445" text-anchor="start" fill="#334155">תיקון פרטים <tspan fill="#0891b2">[ראש המשלחת]</tspan></text>
+    <!-- review -> approved -->
+    <text class="tl" x="345" y="515" text-anchor="start" fill="#334155">אישור המשלחת <tspan fill="#0891b2">[רכז המכביה]</tspan></text>
+    <text class="tl" x="345" y="528" text-anchor="start" fill="#0891b2">[כל מסמכי החובה הועלו]</text>
+    <!-- composite -> late -->
+    <text class="tl" x="1002" y="515" text-anchor="start" fill="#334155">הגיע מועד סגירת ההרשמה</text>
+    <text class="tl" x="1002" y="528" text-anchor="start" fill="#15803d">/ סימון כבאיחור</text>
+    <!-- late -> approved -->
+    <text class="tl" x="700" y="596" text-anchor="middle" fill="#334155">אישור המשלחת <tspan fill="#0891b2">[רכז המכביה]</tspan></text>
+    <text class="tl" x="700" y="609" text-anchor="middle" fill="#0891b2">[כל הדרישות הושלמו]</text>
+    <!-- self loop: late -->
+    <text class="tl" x="990" y="745" text-anchor="middle" fill="#334155">השלמת מסמכים ותיקונים</text>
+    <text class="tl" x="990" y="758" text-anchor="middle" fill="#0891b2">[ראש המשלחת]</text>
+    <!-- approved -> archived -->
+    <text class="tl" x="420" y="712" text-anchor="start" fill="#334155">סיום המכביה</text>
+    <text class="tl" x="420" y="725" text-anchor="start" fill="#15803d">/ העברה לארכיון</text>
+    <!-- archived -> final -->
+    <text class="tl" x="422" y="893" text-anchor="start" fill="#334155">after(180 days)</text>
+  </g>
+
+  <!-- ============ legend ============ -->
+  <g font-size="10" font-family="'Noto Sans Hebrew','IBM Plex Mono',monospace" fill="#64748b">
+    <circle cx="80" cy="1006" r="6" fill="#1e293b"></circle>
+    <text x="94" y="1010">מצב התחלתי</text>
+    <circle cx="185" cy="1006" r="8" fill="none" stroke="#1e293b" stroke-width="1.5"></circle>
+    <circle cx="185" cy="1006" r="4" fill="#1e293b"></circle>
+    <text x="200" y="1010">מצב סיום</text>
+    <rect x="280" y="998" width="34" height="16" rx="6" fill="#fff" stroke="#3b82f6" stroke-width="1.5"></rect>
+    <text x="322" y="1010">מצב</text>
+    <rect x="370" y="998" width="34" height="16" rx="6" fill="#f0f7ff" stroke="#2563eb" stroke-width="1.5" stroke-dasharray="5 3"></rect>
+    <text x="412" y="1010">מצב-על (composite)</text>
+    <line x1="540" y1="1006" x2="580" y2="1006" stroke="#334155" stroke-width="1.8" marker-end="url(#arrow)"></line>
+    <text x="590" y="1010">מעבר: אירוע <tspan fill="#0891b2">[תנאי]</tspan> <tspan fill="#15803d">/ פעולה</tspan></text>
+  </g>
+</svg>
+<figcaption>פתרון לדוגמה: מצב-על ״בהכנה״ מקבץ את מצבי ההכנה, כך שאירוע הזמן יוצא מגבולו בחץ אחד אל ״באיחור״. שימו לב לחץ החוזר (back-arc) מ״הוחזרה לתיקון״, למעברים-העצמיים, ולזנב ארכיון ← מצב סיום.</figcaption>
+</figure>
+<p class="difflink"><a href="maccabiah_state_diagram.html" target="_blank" rel="noopener">↗ פתחו את תרשים המצבים המלא</a><small>לחיצה על כל מצב פותחת הסבר: מה המצב מכסה, הלוגיקה, ונקודת הלימוד</small></p>
+
+<h3 class="sub">8.2 (2 נק׳): המעבר ל״משלחת באיחור״</h3>
+<p class="qtext">בהגעת מועד סגירת ההרשמה כל משלחת שטרם אושרה הופכת ל״באיחור״, בין אם היא בטיוטה, הוגשה, נבדקת או הוחזרה לתיקון. מהו האירוע, וכיצד ייצגתם אותו כך שיחול על כל שלבי ההכנה?</p>
+<div class="answer"><p>האירוע הוא <b>הגעת מועד סגירת ההרשמה</b>: אירוע שאינו יזום בידי אף משתמש. הייצוג היעיל הוא <b>חץ יחיד היוצא מגבול מצב-העל</b> המקבץ את מצבי ההכנה (נוצרה / הוגשה / בבדיקה / הוחזרה לתיקון) אל המצב ״באיחור״, מעבר מגבול מצב-על חל על כל תת-המצבים שבתוכו.</p></div>
+<p class="alt"><b>חלופה מזכה:</b> ארבעה חצים נפרדים, אחד מכל מצב הכנה, בליווי נימוק, נכון, אך פחות יעיל.</p>
+<div class="mistake">תליית המעבר בפעולת משתמש (״הרכז מסמן באיחור״), או ציור חץ ממצב הכנה אחד בלבד.</div>
+
+<h3 class="sub">8.3 (2 נק׳): סבבי תיקון חוזרים</h3>
+<p class="qtext">משלחת שהוחזרה לתיקון מוגשת ונבדקת שוב, וייתכן שהדבר יחזור כמה פעמים. כיצד ייצגתם אפשרות זו?</p>
+<div class="answer"><p>באמצעות <b>מעבר החוזר אחורה</b> (back-arc) מן המצב ״הוחזרה לתיקון״ אל ההגשה/בדיקה, היוצר מעגל: הוגשה ← בבדיקה ← הוחזרה לתיקון ← הוגשה. מחזור החיים אינו קווי, אותם מצבים חוזרים על עצמם מספר בלתי-ידוע של פעמים.</p></div>
+<div class="mistake">שרשרת מצבים קווית ללא חץ חוזר, או יצירת ״מצב חדש״ לכל סבב תיקון. שניהם מסגירים תרשים זרימה בתחפושת של תרשים מצבים.</div>
+
+<h3 class="sub">8.4 (2 נק׳): חיי המשלחת לאחר המשחקים</h3>
+<p class="qtext">לאחר סיום המשחקים אין למחוק את רשומת המשלחת מיד, מטעמי דיווח והיסטוריה. כיצד ייצגתם שלב זה, ומה מסמן את קץ מחזור החיים?</p>
+<div class="answer"><p><b>הנדרש לניקוד מלא:</b> מחזור החיים מסתיים ב<b>מצב הסיום (final)</b>: העיגול הכפול, והמשלחת אינה נמחקת עם סיום המשחקים אלא ממשיכה להתקיים לצורכי דיווח והיסטוריה.</p>
+<p><b>דפוס מומלץ (אינו חובה):</b> מצב ביניים <b>״ארכיון״</b> לקריאה בלבד, שאליו עוברים בסיום המשחקים, וממנו אל מצב הסיום בתום תקופת השמירה, כפי שמופיע בתרשים שלמעלה.</p></div>
+<p class="alt"><b>ניקוד:</b> סטודנט שסיים ב<b>מצב סיום</b> ללא מצב ארכיון, <b>ניקוד מלא</b>. מצב הארכיון הוא דפוס מומלץ, לא דרישה.</p>
+<div class="mistake">היעדר מצב סיום כלל, מחזור חיים שאינו נגמר. וכן מחיקה מיידית בתום המשחקים, המתעלמת מדרישת השמירה לדיווח.</div>
+
+</section>
+
+<footer>
+  פתרון רשמי | התרשימים הם פתרון לדוגמה, פתרון שונה אך עקבי ומנומק מזכה אף הוא בניקוד מלא.
+</footer>
+</div>
+</body>
+</html>

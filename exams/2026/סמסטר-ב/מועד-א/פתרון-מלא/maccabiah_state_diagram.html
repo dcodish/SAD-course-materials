@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>משלחת (Delegation), תרשים מצבים</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;700&family=Noto+Sans+Hebrew:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  body { background:#f8fafc; margin:0; padding:20px; font-family:'Noto Sans Hebrew','IBM Plex Mono',monospace; }
+  h1 { font-size:18px; color:#1e293b; margin:0 0 4px; }
+  .sub { font-size:12px; color:#64748b; margin:0 0 14px; }
+  .svg-wrap { background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; overflow:auto; }
+  svg { display:block; direction:ltr; }
+  .vp-export-btn {
+    position:fixed; bottom:20px; right:20px; z-index:1000;
+    background:#1e40af; color:#fff; border:none; border-radius:6px;
+    padding:8px 16px; font-size:13px; cursor:pointer;
+    font-family:'IBM Plex Mono',monospace;
+  }
+  .vp-export-btn:hover { background:#1e3a8a; }
+  [data-state] { cursor:pointer; }
+  [data-state]:hover { filter: drop-shadow(0 2px 6px rgba(37,99,235,.55)); }
+  #modal-overlay {
+    position:fixed; inset:0; background:rgba(15,23,42,.5); z-index:2000;
+    display:flex; align-items:center; justify-content:center; padding:24px;
+  }
+  #modal-overlay[hidden] { display:none; }
+  #modal {
+    background:#fff; border-radius:12px; max-width:600px; width:100%;
+    max-height:82vh; overflow-y:auto; padding:22px 26px;
+    box-shadow:0 20px 50px rgba(15,23,42,.35); position:relative;
+    font-family:'Noto Sans Hebrew',sans-serif;
+  }
+  #modal h2 { margin:0 0 2px; font-size:18px; color:#1e293b; }
+  #modal .status-const {
+    font-family:'IBM Plex Mono',monospace; font-size:11px; color:#64748b;
+    direction:ltr; display:inline-block; margin-bottom:10px;
+  }
+  #modal h3 { font-size:13px; color:#2563eb; margin:14px 0 4px; }
+  #modal p, #modal li { font-size:13.5px; color:#334155; line-height:1.65; margin:0 0 6px; }
+  #modal ul { margin:0; padding-right:18px; }
+  #modal .teach {
+    background:#f0f7ff; border-right:3px solid #2563eb; border-radius:6px;
+    padding:10px 12px; margin-top:14px;
+  }
+  #modal .teach h3 { margin-top:0; }
+  .modal-close {
+    position:absolute; top:12px; left:12px; border:none; background:#f1f5f9;
+    border-radius:6px; width:28px; height:28px; font-size:16px; cursor:pointer; color:#475569;
+  }
+  .modal-close:hover { background:#e2e8f0; }
+</style>
+</head>
+<body>
+<h1>משלחת (Delegation), תרשים מצבים</h1>
+<p class="sub">מחזור החיים של משלחת במערכת ניהול המשלחות למכביה, מקליטתה ממערכת הרישום הבינלאומית ועד לארכיון &nbsp;|&nbsp; 💡 לחצו על כל מצב בתרשים לקבלת הסבר מפורט</p>
+
+<div class="diagram-part" id="part-1">
+<div class="svg-wrap">
+<svg width="1250" height="1040" viewBox="0 0 1250 1040" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <pattern id="dotgrid" width="24" height="24" patternUnits="userSpaceOnUse">
+      <circle cx="12" cy="12" r="0.8" fill="#cbd5e1"/>
+    </pattern>
+    <marker id="arrow" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#334155"/>
+    </marker>
+  </defs>
+  <rect x="0" y="0" width="1250" height="1040" fill="url(#dotgrid)"/>
+
+  <!-- ============ composite state (drawn first, behind) ============ -->
+  <g data-state="st-prep">
+    <title>מצב-על: כל התקופה שבה המשלחת בהכנה וטרם אושרה, לחץ להסבר</title>
+    <rect x="270" y="80" width="910" height="400" rx="20" ry="20"
+          fill="#f0f7ff" stroke="#2563eb" stroke-width="2" stroke-dasharray="8 4"/>
+    <text x="300" y="102" font-size="10" fill="#64748b" font-family="'IBM Plex Mono',monospace">&#171;composite&#187;</text>
+    <text x="300" y="120" font-size="13" font-weight="700" fill="#1e293b" font-family="'Noto Sans Hebrew',sans-serif">בהכנה</text>
+    <text x="300" y="138" font-size="10" fill="#334155" font-family="'IBM Plex Mono',monospace">entry / setStatus('IN_PREPARATION')</text>
+  </g>
+
+  <!-- ============ states ============ -->
+  <!-- created -->
+  <g data-state="st-created">
+    <title>מקליטת המשלחת מהמערכת הבינלאומית ועד ההגשה הראשונה לאישור, לחץ להסבר</title>
+    <rect x="930" y="170" width="220" height="80" rx="18" ry="18" fill="#ffffff" stroke="none"/>
+    <path d="M 930 196 v -8 a18 18 0 0 1 18 -18 h 184 a18 18 0 0 1 18 18 v 8 z" fill="#eef4ff"/>
+    <line x1="930" y1="196" x2="1150" y2="196" stroke="#3b82f6" stroke-width="1"/>
+    <rect x="930" y="170" width="220" height="80" rx="18" ry="18" fill="none" stroke="#3b82f6" stroke-width="2"/>
+    <text x="1040" y="188" font-size="12" font-weight="700" fill="#1e293b" text-anchor="middle" font-family="'Noto Sans Hebrew',sans-serif">נוצרה</text>
+    <text x="940" y="216" font-size="10" fill="#334155" font-family="'IBM Plex Mono',monospace">entry / setStatus('CREATED');</text>
+    <text x="985" y="232" font-size="10" fill="#334155" font-family="'IBM Plex Mono','Noto Sans Hebrew',monospace">פתיחת חשבון לראש המשלחת</text>
+  </g>
+  <!-- submitted -->
+  <g data-state="st-submitted">
+    <title>ממתינה בתור לבדיקת רכז המכביה, לחץ להסבר</title>
+    <rect x="610" y="170" width="220" height="80" rx="18" ry="18" fill="#ffffff" stroke="none"/>
+    <path d="M 610 196 v -8 a18 18 0 0 1 18 -18 h 184 a18 18 0 0 1 18 18 v 8 z" fill="#eef4ff"/>
+    <line x1="610" y1="196" x2="830" y2="196" stroke="#3b82f6" stroke-width="1"/>
+    <rect x="610" y="170" width="220" height="80" rx="18" ry="18" fill="none" stroke="#3b82f6" stroke-width="2"/>
+    <text x="720" y="188" font-size="12" font-weight="700" fill="#1e293b" text-anchor="middle" font-family="'Noto Sans Hebrew',sans-serif">הוגשה לאישור</text>
+    <text x="620" y="216" font-size="10" fill="#334155" font-family="'IBM Plex Mono',monospace">entry / setStatus('SUBMITTED')</text>
+  </g>
+  <!-- under review -->
+  <g data-state="st-review">
+    <title>הרכז בודק בפועל את הפרטים והמסמכים, לחץ להסבר</title>
+    <rect x="300" y="170" width="220" height="80" rx="18" ry="18" fill="#ffffff" stroke="none"/>
+    <path d="M 300 196 v -8 a18 18 0 0 1 18 -18 h 184 a18 18 0 0 1 18 18 v 8 z" fill="#eef4ff"/>
+    <line x1="300" y1="196" x2="520" y2="196" stroke="#3b82f6" stroke-width="1"/>
+    <rect x="300" y="170" width="220" height="80" rx="18" ry="18" fill="none" stroke="#3b82f6" stroke-width="2"/>
+    <text x="410" y="188" font-size="12" font-weight="700" fill="#1e293b" text-anchor="middle" font-family="'Noto Sans Hebrew',sans-serif">בבדיקה</text>
+    <text x="310" y="216" font-size="10" fill="#334155" font-family="'IBM Plex Mono',monospace">entry / setStatus('UNDER_REVIEW')</text>
+    <text x="310" y="232" font-size="10" fill="#334155" font-family="'IBM Plex Mono','Noto Sans Hebrew',monospace">do / בדיקת פרטים ומסמכים</text>
+  </g>
+  <!-- returned for fix -->
+  <g data-state="st-returned">
+    <title>חזרה אצל ראש המשלחת לתיקון ליקויים, לחץ להסבר</title>
+    <rect x="610" y="360" width="220" height="80" rx="18" ry="18" fill="#ffffff" stroke="none"/>
+    <path d="M 610 386 v -8 a18 18 0 0 1 18 -18 h 184 a18 18 0 0 1 18 18 v 8 z" fill="#eef4ff"/>
+    <line x1="610" y1="386" x2="830" y2="386" stroke="#3b82f6" stroke-width="1"/>
+    <rect x="610" y="360" width="220" height="80" rx="18" ry="18" fill="none" stroke="#3b82f6" stroke-width="2"/>
+    <text x="720" y="378" font-size="12" font-weight="700" fill="#1e293b" text-anchor="middle" font-family="'Noto Sans Hebrew',sans-serif">הוחזרה לתיקון</text>
+    <text x="620" y="406" font-size="10" fill="#334155" font-family="'IBM Plex Mono',monospace">entry / setStatus('RETURNED')</text>
+  </g>
+  <!-- approved -->
+  <g data-state="st-approved">
+    <title>המשלחת אושרה להשתתפות במכביה, לחץ להסבר</title>
+    <rect x="300" y="580" width="220" height="80" rx="18" ry="18" fill="#ffffff" stroke="none"/>
+    <path d="M 300 606 v -8 a18 18 0 0 1 18 -18 h 184 a18 18 0 0 1 18 18 v 8 z" fill="#eef4ff"/>
+    <line x1="300" y1="606" x2="520" y2="606" stroke="#3b82f6" stroke-width="1"/>
+    <rect x="300" y="580" width="220" height="80" rx="18" ry="18" fill="none" stroke="#3b82f6" stroke-width="2"/>
+    <text x="410" y="598" font-size="12" font-weight="700" fill="#1e293b" text-anchor="middle" font-family="'Noto Sans Hebrew',sans-serif">אושרה</text>
+    <text x="310" y="626" font-size="10" fill="#334155" font-family="'IBM Plex Mono',monospace">entry / setStatus('APPROVED')</text>
+  </g>
+  <!-- late -->
+  <g data-state="st-late">
+    <title>הגיע מועד סגירת ההרשמה והמשלחת טרם אושרה, לחץ להסבר</title>
+    <rect x="880" y="580" width="220" height="80" rx="18" ry="18" fill="#ffffff" stroke="none"/>
+    <path d="M 880 606 v -8 a18 18 0 0 1 18 -18 h 184 a18 18 0 0 1 18 18 v 8 z" fill="#eef4ff"/>
+    <line x1="880" y1="606" x2="1100" y2="606" stroke="#3b82f6" stroke-width="1"/>
+    <rect x="880" y="580" width="220" height="80" rx="18" ry="18" fill="none" stroke="#3b82f6" stroke-width="2"/>
+    <text x="990" y="598" font-size="12" font-weight="700" fill="#1e293b" text-anchor="middle" font-family="'Noto Sans Hebrew',sans-serif">באיחור</text>
+    <text x="890" y="626" font-size="10" fill="#334155" font-family="'IBM Plex Mono',monospace">entry / setStatus('LATE')</text>
+  </g>
+  <!-- archived -->
+  <g data-state="st-archived">
+    <title>המכביה הסתיימה, הרשומה נשמרת לקריאה בלבד, לחץ להסבר</title>
+    <rect x="300" y="780" width="220" height="80" rx="18" ry="18" fill="#ffffff" stroke="none"/>
+    <path d="M 300 806 v -8 a18 18 0 0 1 18 -18 h 184 a18 18 0 0 1 18 18 v 8 z" fill="#eef4ff"/>
+    <line x1="300" y1="806" x2="520" y2="806" stroke="#3b82f6" stroke-width="1"/>
+    <rect x="300" y="780" width="220" height="80" rx="18" ry="18" fill="none" stroke="#3b82f6" stroke-width="2"/>
+    <text x="410" y="798" font-size="12" font-weight="700" fill="#1e293b" text-anchor="middle" font-family="'Noto Sans Hebrew',sans-serif">ארכיון</text>
+    <text x="310" y="826" font-size="10" fill="#334155" font-family="'IBM Plex Mono',monospace">entry / setStatus('ARCHIVED')</text>
+    <text x="310" y="842" font-size="10" fill="#334155" font-family="'IBM Plex Mono',monospace">do / after(180 days) &#8594; Final</text>
+  </g>
+
+  <!-- ============ pseudostates ============ -->
+  <g data-state="ps-initial">
+    <title>מצב התחלתי, נקודת הכניסה למחזור החיים, לחץ להסבר</title>
+    <circle cx="1040" cy="25" r="8" fill="#1e293b"/>
+  </g>
+  <g data-state="ps-initial-prep">
+    <title>מצב התחלתי פנימי של מצב-העל, לחץ להסבר</title>
+    <circle cx="1040" cy="145" r="8" fill="#1e293b"/>
+  </g>
+  <g data-state="ps-final">
+    <title>מצב סיום, סוף מחזור החיים של האובייקט, לחץ להסבר</title>
+    <circle cx="410" cy="930" r="12" fill="none" stroke="#1e293b" stroke-width="2"/>
+    <circle cx="410" cy="930" r="7" fill="#1e293b"/>
+  </g>
+
+  <!-- ============ transitions ============ -->
+  <path d="M 1040 33 L 1040 80" fill="none" stroke="#334155" stroke-width="1.8" marker-end="url(#arrow)"/>
+  <path d="M 1040 153 L 1040 170" fill="none" stroke="#334155" stroke-width="1.8" marker-end="url(#arrow)"/>
+  <path d="M 930 210 L 830 210" fill="none" stroke="#334155" stroke-width="1.8" marker-end="url(#arrow)"/>
+  <path d="M 610 210 L 520 210" fill="none" stroke="#334155" stroke-width="1.8" marker-end="url(#arrow)"/>
+  <path d="M 410 250 L 410 400 L 610 400" fill="none" stroke="#334155" stroke-width="1.8" marker-end="url(#arrow)"/>
+  <path d="M 720 360 L 720 250" fill="none" stroke="#334155" stroke-width="1.8" marker-end="url(#arrow)"/>
+  <path d="M 985 250 C 985 315, 1095 315, 1095 250" fill="none" stroke="#334155" stroke-width="1.8" marker-end="url(#arrow)"/>
+  <path d="M 830 385 C 900 385, 900 425, 830 425" fill="none" stroke="#334155" stroke-width="1.8" marker-end="url(#arrow)"/>
+  <path d="M 335 250 L 335 580" fill="none" stroke="#334155" stroke-width="1.8" marker-end="url(#arrow)"/>
+  <path d="M 990 480 L 990 580" fill="none" stroke="#334155" stroke-width="1.8" marker-end="url(#arrow)"/>
+  <path d="M 880 620 L 520 620" fill="none" stroke="#334155" stroke-width="1.8" marker-end="url(#arrow)"/>
+  <path d="M 945 660 C 945 725, 1035 725, 1035 660" fill="none" stroke="#334155" stroke-width="1.8" marker-end="url(#arrow)"/>
+  <path d="M 410 660 L 410 780" fill="none" stroke="#334155" stroke-width="1.8" marker-end="url(#arrow)"/>
+  <path d="M 410 860 L 410 918" fill="none" stroke="#334155" stroke-width="1.8" marker-end="url(#arrow)"/>
+
+  <!-- ============ transition labels ============ -->
+  <g font-size="10" font-family="'Noto Sans Hebrew','IBM Plex Mono',monospace">
+    <!-- created -> submitted -->
+    <text class="tl" x="880" y="188" text-anchor="middle" fill="#334155">הגשה לאישור</text>
+    <text class="tl" x="880" y="201" text-anchor="middle" fill="#0891b2">[ראש המשלחת]</text>
+    <!-- submitted -> review -->
+    <text class="tl" x="565" y="188" text-anchor="middle" fill="#334155">התחלת בדיקה</text>
+    <text class="tl" x="565" y="201" text-anchor="middle" fill="#0891b2">[רכז המכביה]</text>
+    <!-- review -> returned -->
+    <text class="tl" x="510" y="375" text-anchor="middle" fill="#334155">נמצאו ליקויים <tspan fill="#0891b2">[רכז המכביה]</tspan></text>
+    <text class="tl" x="510" y="388" text-anchor="middle" fill="#15803d">/ שליחת הערות בדוא"ל</text>
+    <!-- returned -> submitted (back) -->
+    <text class="tl" x="730" y="298" text-anchor="start" fill="#334155">הגשה מחדש</text>
+    <text class="tl" x="730" y="311" text-anchor="start" fill="#0891b2">[לאחר ביצוע התיקונים]</text>
+    <!-- self loop: created -->
+    <text class="tl" x="1040" y="330" text-anchor="middle" fill="#334155">עדכון פרטים ומשתתפים</text>
+    <text class="tl" x="1040" y="343" text-anchor="middle" fill="#0891b2">[ראש המשלחת]</text>
+    <!-- self loop: returned -->
+    <text class="tl" x="910" y="445" text-anchor="start" fill="#334155">תיקון פרטים <tspan fill="#0891b2">[ראש המשלחת]</tspan></text>
+    <!-- review -> approved -->
+    <text class="tl" x="345" y="515" text-anchor="start" fill="#334155">אישור המשלחת <tspan fill="#0891b2">[רכז המכביה]</tspan></text>
+    <text class="tl" x="345" y="528" text-anchor="start" fill="#0891b2">[כל מסמכי החובה הועלו]</text>
+    <!-- composite -> late -->
+    <text class="tl" x="1002" y="515" text-anchor="start" fill="#334155">הגיע מועד סגירת ההרשמה</text>
+    <text class="tl" x="1002" y="528" text-anchor="start" fill="#15803d">/ סימון כבאיחור</text>
+    <!-- late -> approved -->
+    <text class="tl" x="700" y="596" text-anchor="middle" fill="#334155">אישור המשלחת <tspan fill="#0891b2">[רכז המכביה]</tspan></text>
+    <text class="tl" x="700" y="609" text-anchor="middle" fill="#0891b2">[כל הדרישות הושלמו]</text>
+    <!-- self loop: late -->
+    <text class="tl" x="990" y="745" text-anchor="middle" fill="#334155">השלמת מסמכים ותיקונים</text>
+    <text class="tl" x="990" y="758" text-anchor="middle" fill="#0891b2">[ראש המשלחת]</text>
+    <!-- approved -> archived -->
+    <text class="tl" x="420" y="712" text-anchor="start" fill="#334155">סיום המכביה</text>
+    <text class="tl" x="420" y="725" text-anchor="start" fill="#15803d">/ העברה לארכיון</text>
+    <!-- archived -> final -->
+    <text class="tl" x="422" y="893" text-anchor="start" fill="#334155">after(180 days)</text>
+  </g>
+
+  <!-- ============ legend ============ -->
+  <g font-size="10" font-family="'Noto Sans Hebrew','IBM Plex Mono',monospace" fill="#64748b">
+    <circle cx="80" cy="1006" r="6" fill="#1e293b"/>
+    <text x="94" y="1010">מצב התחלתי</text>
+    <circle cx="185" cy="1006" r="8" fill="none" stroke="#1e293b" stroke-width="1.5"/>
+    <circle cx="185" cy="1006" r="4" fill="#1e293b"/>
+    <text x="200" y="1010">מצב סיום</text>
+    <rect x="280" y="998" width="34" height="16" rx="6" fill="#fff" stroke="#3b82f6" stroke-width="1.5"/>
+    <text x="322" y="1010">מצב</text>
+    <rect x="370" y="998" width="34" height="16" rx="6" fill="#f0f7ff" stroke="#2563eb" stroke-width="1.5" stroke-dasharray="5 3"/>
+    <text x="412" y="1010">מצב-על (composite)</text>
+    <line x1="540" y1="1006" x2="580" y2="1006" stroke="#334155" stroke-width="1.8" marker-end="url(#arrow)"/>
+    <text x="590" y="1010">מעבר: אירוע <tspan fill="#0891b2">[תנאי]</tspan> <tspan fill="#15803d">/ פעולה</tspan></text>
+  </g>
+</svg>
+</div>
+</div>
+
+<div id="modal-overlay" hidden>
+  <div id="modal" dir="rtl" role="dialog" aria-modal="true">
+    <button class="modal-close" onclick="closeStateModal()">&#10005;</button>
+    <h2 id="modal-title"></h2>
+    <span id="modal-status" class="status-const"></span>
+    <div id="modal-body"></div>
+  </div>
+</div>
+
+<button class="vp-export-btn" onclick="exportXMI()">Download .xmi (Visual Paradigm)</button>
+
+<script>
+const diagramModel = {
+  kind: 'state',
+  title: 'Delegation Lifecycle, Maccabiah',
+  parts: [{
+    id: 'part-1',
+    label: 'Delegation',
+    splitRationale: '',
+    elements: [
+      { kind: 'pseudostate', id: 'ps-initial', subKind: 'initial', x: 1040, y: 25 },
+      { kind: 'state', id: 'st-prep', name: 'בהכנה', isComposite: true,
+        statusConstant: 'IN_PREPARATION',
+        activities: { entry: ["setStatus('IN_PREPARATION')"], exit: [], do: [] },
+        x: 270, y: 80, w: 910, h: 400,
+        subElements: [
+          { kind: 'pseudostate', id: 'ps-initial-prep', subKind: 'initial', x: 1040, y: 145 },
+          { kind: 'state', id: 'st-created', name: 'נוצרה', isComposite: false,
+            statusConstant: 'CREATED',
+            activities: { entry: ["setStatus('CREATED')", 'פתיחת חשבון לראש המשלחת'], exit: [], do: [] },
+            x: 930, y: 170, w: 220, h: 80, subElements: [] },
+          { kind: 'state', id: 'st-submitted', name: 'הוגשה לאישור', isComposite: false,
+            statusConstant: 'SUBMITTED',
+            activities: { entry: ["setStatus('SUBMITTED')"], exit: [], do: [] },
+            x: 610, y: 170, w: 220, h: 80, subElements: [] },
+          { kind: 'state', id: 'st-review', name: 'בבדיקה', isComposite: false,
+            statusConstant: 'UNDER_REVIEW',
+            activities: { entry: ["setStatus('UNDER_REVIEW')"], exit: [], do: ['בדיקת פרטים ומסמכים'] },
+            x: 300, y: 170, w: 220, h: 80, subElements: [] },
+          { kind: 'state', id: 'st-returned', name: 'הוחזרה לתיקון', isComposite: false,
+            statusConstant: 'RETURNED',
+            activities: { entry: ["setStatus('RETURNED')"], exit: [], do: [] },
+            x: 610, y: 360, w: 220, h: 80, subElements: [] }
+        ] },
+      { kind: 'state', id: 'st-approved', name: 'אושרה', isComposite: false,
+        statusConstant: 'APPROVED',
+        activities: { entry: ["setStatus('APPROVED')"], exit: [], do: [] },
+        x: 300, y: 580, w: 220, h: 80, subElements: [] },
+      { kind: 'state', id: 'st-late', name: 'באיחור', isComposite: false,
+        statusConstant: 'LATE',
+        activities: { entry: ["setStatus('LATE')"], exit: [], do: [] },
+        x: 880, y: 580, w: 220, h: 80, subElements: [] },
+      { kind: 'state', id: 'st-archived', name: 'ארכיון', isComposite: false,
+        statusConstant: 'ARCHIVED',
+        activities: { entry: ["setStatus('ARCHIVED')"], exit: [], do: ['after(180 days) → Final'] },
+        x: 300, y: 780, w: 220, h: 80, subElements: [] },
+      { kind: 'pseudostate', id: 'ps-final', subKind: 'final', x: 410, y: 930 }
+    ],
+    relationships: [
+      { kind: 'transition', id: 't1', from: 'ps-initial', to: 'st-prep', event: '', guard: '', action: '', isSelf: false },
+      { kind: 'transition', id: 't2', from: 'ps-initial-prep', to: 'st-created', event: '', guard: '', action: '', isSelf: false },
+      { kind: 'transition', id: 't3', from: 'st-created', to: 'st-submitted', event: 'הגשה לאישור', guard: 'ראש המשלחת', action: '', isSelf: false },
+      { kind: 'transition', id: 't4', from: 'st-submitted', to: 'st-review', event: 'התחלת בדיקה', guard: 'רכז המכביה', action: '', isSelf: false },
+      { kind: 'transition', id: 't5', from: 'st-review', to: 'st-returned', event: 'נמצאו ליקויים', guard: 'רכז המכביה', action: 'שליחת הערות בדוא"ל', isSelf: false },
+      { kind: 'transition', id: 't6', from: 'st-returned', to: 'st-submitted', event: 'הגשה מחדש', guard: 'לאחר ביצוע התיקונים', action: '', isSelf: false },
+      { kind: 'transition', id: 't7', from: 'st-created', to: 'st-created', event: 'עדכון פרטים ומשתתפים', guard: 'ראש המשלחת', action: '', isSelf: true },
+      { kind: 'transition', id: 't8', from: 'st-returned', to: 'st-returned', event: 'תיקון פרטים', guard: 'ראש המשלחת', action: '', isSelf: true },
+      { kind: 'transition', id: 't9', from: 'st-review', to: 'st-approved', event: 'אישור המשלחת', guard: 'רכז המכביה, כל מסמכי החובה הועלו', action: '', isSelf: false },
+      { kind: 'transition', id: 't10', from: 'st-prep', to: 'st-late', event: 'הגיע מועד סגירת ההרשמה', guard: '', action: 'סימון כבאיחור', isSelf: false },
+      { kind: 'transition', id: 't11', from: 'st-late', to: 'st-approved', event: 'אישור המשלחת', guard: 'רכז המכביה, כל הדרישות הושלמו', action: '', isSelf: false },
+      { kind: 'transition', id: 't12', from: 'st-late', to: 'st-late', event: 'השלמת מסמכים ותיקונים', guard: 'ראש המשלחת', action: '', isSelf: true },
+      { kind: 'transition', id: 't13', from: 'st-approved', to: 'st-archived', event: 'סיום המכביה', guard: '', action: 'העברה לארכיון', isSelf: false },
+      { kind: 'transition', id: 't14', from: 'st-archived', to: 'ps-final', event: 'after(180 days)', guard: '', action: '', isSelf: false }
+    ]
+  }]
+};
+
+function xmlEscape(s) {
+  return String(s ?? '')
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;').replace(/'/g, '&apos;');
+}
+
+function downloadFile(filename, mimeType, content) {
+  const blob = new Blob([content], { type: mimeType });
+  const url = URL.createObjectURL(blob);
+  const a = Object.assign(document.createElement('a'), { href: url, download: filename });
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(() => { URL.revokeObjectURL(url); a.remove(); }, 1000);
+}
+
+function xmiBody(elements, rels) {
+  const lines = [];
+  lines.push(`    <packagedElement xmi:type="uml:StateMachine" xmi:id="sm_1" name="${xmlEscape(diagramModel.title)}">`);
+  lines.push(`      <region xmi:type="uml:Region" xmi:id="region_1">`);
+  const walk = els => {
+    for (const el of els) {
+      if (el.kind === 'pseudostate')
+        lines.push(`        <subvertex xmi:type="uml:Pseudostate" xmi:id="${el.id}" kind="${el.subKind}"/>`);
+      if (el.kind === 'state') {
+        lines.push(`        <subvertex xmi:type="uml:State" xmi:id="${el.id}" name="${xmlEscape(el.name)}"/>`);
+        if (el.subElements && el.subElements.length) walk(el.subElements);
+      }
+    }
+  };
+  walk(elements);
+  for (const r of rels) {
+    if (r.kind === 'transition')
+      lines.push(`        <transition xmi:type="uml:Transition" xmi:id="${r.id}" source="${r.from}" target="${r.to}"${r.event ? ` name="${xmlEscape(r.event)}"` : ''}/>`);
+  }
+  lines.push(`      </region>`);
+  lines.push(`    </packagedElement>`);
+  return lines.join('\n');
+}
+
+function exportXMI() {
+  const m = diagramModel;
+  const title = xmlEscape(m.title || 'diagram');
+  const allElements = m.parts.flatMap(p => p.elements);
+  const allRelationships = m.parts.flatMap(p => p.relationships);
+  const body = xmiBody(allElements, allRelationships);
+  const xmi = `<?xml version="1.0" encoding="UTF-8"?>
+<xmi:XMI xmi:version="2.1"
+  xmlns:xmi="http://www.omg.org/XMI"
+  xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML">
+  <uml:Model xmi:id="model_1" name="${title}">
+${body}
+  </uml:Model>
+</xmi:XMI>`;
+  downloadFile(title.replace(/\s+/g, '_') + '.xmi', 'application/xml', xmi);
+}
+
+// ============ educational state explanations ============
+const STATE_INFO = {
+  'ps-initial': {
+    title: 'מצב התחלתי (Initial)',
+    status: '',
+    covers: 'לא מצב אמיתי אלא פסאודו-מצב: נקודת הכניסה היחידה למחזור החיים של האובייקט. הוא מסמן היכן "נולד" אובייקט המשלחת.',
+    logic: 'החץ היוצא ממנו הוא היחיד בתרשים שמותר לו להיות ללא תווית אירוע. בסיפור שלנו, מה שמפעיל את הלידה הוא הודעה ממערכת הרישום הבינלאומית, שחקן חיצוני יוזם, ולכן הכניסה מובילה ישירות אל מצב-העל "בהכנה".',
+    teach: 'בכל תרשים יש בדיוק מצב התחלתי אחד, ללא חצים נכנסים. אם אתם מסמנים אירוע על החץ הזה, זו שגיאה.'
+  },
+  'ps-initial-prep': {
+    title: 'מצב התחלתי פנימי של מצב-העל',
+    status: '',
+    covers: 'פסאודו-מצב התחלתי בתוך מצב-העל "בהכנה". הוא קובע לאיזה תת-מצב נכנסים כאשר חץ מגיע אל גבול מצב-העל.',
+    logic: 'חץ שנכנס אל מסגרת מצב-העל אינו אומר באיזה תת-מצב מתחילים, המצב ההתחלתי הפנימי עונה על כך: כל כניסה למצב-העל מתחילה במצב "נוצרה".',
+    teach: 'זהו המנגנון הסטנדרטי ב-UML לכניסה למצב מורכב: חץ אל הגבול ⟵ המצב ההתחלתי הפנימי ⟵ תת-המצב הראשון.'
+  },
+  'st-prep': {
+    title: 'בהכנה, מצב-על (composite)',
+    status: "IN_PREPARATION",
+    covers: 'כל התקופה שבה המשלחת קיימת במערכת אך טרם אושרה: מרגע קליטתה ועד לאישור (או לסימונה כבאיחור). בכל רגע נתון המשלחת נמצאת בדיוק באחד מארבעת תתי-המצבים שבפנים.',
+    logic: 'ארבעת תתי-המצבים (נוצרה, הוגשה לאישור, בבדיקה, הוחזרה לתיקון) חולקים מעבר יוצא משותף: כאשר מגיע מועד סגירת ההרשמה (שחקן הזמן), משלחת שטרם אושרה, לא משנה באיזה שלב הכנה היא, עוברת ל"באיחור". במקום לצייר ארבעה חצים זהים, מציירים חץ אחד מגבול מצב-העל.',
+    teach: 'זו בדיוק המטרה הפדגוגית של מצבי-על: קיבוץ תתי-מצבים שיש להם מעבר יוצא משותף, וכך צמצום כפילויות ותנאים. חץ היוצא מהגבול "יורה" מכל תת-מצב פעיל.'
+  },
+  'st-created': {
+    title: 'נוצרה',
+    status: 'CREATED',
+    covers: 'מרגע שהמערכת הבינלאומית שלחה את פרטי המשלחת ונוצר כרטיס משלחת, ועד שראש המשלחת מגיש אותה לאישור בפעם הראשונה. זהו שלב "בניית" המשלחת.',
+    logic: 'פעולות הכניסה (entry) מתבצעות פעם אחת בכניסה למצב: עדכון הסטטוס ופתיחת חשבון לראש המשלחת. שימו לב ש-entry אחד מכיל את שתי הפעולות (מופרדות ב-;), למצב מותר entry אחד בלבד. הלולאה העצמית "עדכון פרטים ומשתתפים" מבטאת אירועים שמשנים נתונים (הוספת משתתף, העלאת מסמך) אך לא משנים את מצב המשלחת, לכן חץ שחוזר לאותו מצב, ולא מצב חדש.',
+    teach: 'אירוע שמעדכן מידע פנימי בלי לשנות התנהגות = מעבר-עצמי (self-transition). טעות נפוצה היא להמציא מצב חדש ("מתעדכנת") עבור כל פעולה, מצב מצדיק את קיומו רק אם ההתנהגות או החוקים שונים.'
+  },
+  'st-submitted': {
+    title: 'הוגשה לאישור',
+    status: 'SUBMITTED',
+    covers: 'המשלחת הוגשה על ידי ראש המשלחת וממתינה בתור עד שרכז המכביה יתחיל לבדוק אותה. שלב המתנה "פסיבי", אף אחד לא עובד על המשלחת כרגע.',
+    logic: 'ההפרדה בין "הוגשה לאישור" ל"בבדיקה" מבטאת החלפת אחריות: ראש המשלחת סיים את חלקו, והכדור עובר לרכז. תקופת ההמתנה היא מצב אמיתי כי חוקי ההתנהגות שונים, המשלחת נעולה לעריכה וממתינה. המצב נכנס גם מהגשה ראשונה (מ"נוצרה") וגם מהגשה מחדש (מ"הוחזרה לתיקון"), למצב לא אכפת איך הגיעו אליו.',
+    teach: 'תור המתנה הוא מצב לגיטימי וחשוב. אם תאחדו "הוגשה" ו"בבדיקה" למצב אחד, תאבדו את היכולת להבחין בין משלחות שממתינות לרכז לבין כאלה שכבר בטיפול (למשל בדוח "משלחות שממתינות לבדיקה").'
+  },
+  'st-review': {
+    title: 'בבדיקה',
+    status: 'UNDER_REVIEW',
+    covers: 'רכז המכביה בודק בפועל את פרטי המשלחת ואת מסמכי כלל המשתתפים. שורת ה-do מציינת פעילות מתמשכת שמתבצעת כל עוד נמצאים במצב (להבדיל מ-entry שקורה פעם אחת).',
+    logic: 'זהו מצב ההסתעפות המרכזי בתרשים, שתי יציאות שמוכרעות על ידי תנאים (guards): אם כל מסמכי החובה הועלו ⟵ "אושרה"; אם נמצאו ליקויים ⟵ "הוחזרה לתיקון", עם פעולה (action) של שליחת ההערות בדוא"ל. אותו מצב, שני עתידים אפשריים, התנאי בסוגריים מכריע.',
+    teach: 'הסתעפות לפי תנאים היא מה שמבדיל תרשים מצבים מתרשים זרימה: אין כאן "כן/לא" על מעוינים, אלא אירועים ותנאים על מעברים. שימו לב גם ל-do, פעילות מתמשכת, לא פעולה חד-פעמית.'
+  },
+  'st-returned': {
+    title: 'הוחזרה לתיקון',
+    status: 'RETURNED',
+    covers: 'הרכז מצא ליקויים והחזיר את המשלחת לראש המשלחת. המשלחת "אצל" ראש המשלחת עד שיתקן ויגיש מחדש.',
+    logic: 'שימו לב: שליחת ההערות בדוא"ל היא פעולה (action) על המעבר הנכנס, לא נתון שנשמר במצב. זה משקף במדויק את הדרישה בסיפור (ההערות נשלחות בדוא"ל בלבד ולא נשמרות במערכת), דרישה בעייתית, כי התיעוד אובד. הלולאה העצמית "תיקון פרטים" מבטאת את עבודת התיקון, והמעבר "הגשה מחדש" חוזר ל"הוגשה לאישור" ויוצר את מעגל התיקונים: הוגשה ⟵ בבדיקה ⟵ הוחזרה ⟵ הוגשה.',
+    teach: 'המעגל הזה (מעבר אחורה!) הוא סימן היכר של תרשים מצבים טוב. תהליך אמיתי הוא איטרטיבי, משלחת יכולה להיבדק ולהיות מוחזרת כמה פעמים. תרשים בלי חצים אחורה הוא כנראה תרשים זרימה מחופש.'
+  },
+  'st-late': {
+    title: 'באיחור',
+    status: 'LATE',
+    covers: 'הגיע מועד סגירת ההרשמה והמשלחת עדיין לא אושרה. המשלחת מסומנת כחריגה: לא ניתן להוסיף משתתפים חדשים, והיא נשארת כך עד השלמת כל הדרישות.',
+    logic: 'המעבר לכאן מופעל על ידי שחקן הזמן (Time), אירוע שאינו יזום על ידי משתמש אלא על ידי לוח הזמנים. החץ יוצא מגבול מצב-העל "בהכנה", ולכן הוא תופס את המשלחת בכל שלב הכנה שהוא: נוצרה, הוגשה, בבדיקה או הוחזרה. הלולאה העצמית מאפשרת להמשיך להשלים מסמכים, והיציאה היחידה היא אישור הרכז לאחר שהכול הושלם.',
+    teach: 'שני לקחים: (1) אירועי זמן הם טריגרים לגיטימיים למעברים, לא כל אירוע מגיע ממשתמש; (2) חץ אחד מגבול מצב-העל חוסך ארבעה חצים כפולים, זו התועלת המעשית של composite.'
+  },
+  'st-approved': {
+    title: 'אושרה',
+    status: 'APPROVED',
+    covers: 'המשלחת עמדה בכל הדרישות ואושרה להשתתפות במכביה. מרגע זה ועד סיום המשחקים, זהו "מצב המטרה" של כל התהליך העסקי.',
+    logic: 'למצב שני מסלולי כניסה: המסלול הרגיל (מ"בבדיקה", כשהכול תקין לפני המועד) והמסלול המאוחר (מ"באיחור", לאחר השלמת דרישות). המצב עצמו זהה בשני המקרים, מצב אינו "זוכר" איך הגיעו אליו; אם היסטוריית ההגעה חשובה, היא שייכת לנתונים (attributes), לא למצבים.',
+    teach: 'ריבוי חצים נכנסים למצב אחד הוא תקין ונפוץ. אל תשכפלו מצב ("אושרה בזמן" / "אושרה באיחור") אם ההתנהגות בשניהם זהה, ההבדל הוא נתון, לא מצב.'
+  },
+  'st-archived': {
+    title: 'ארכיון',
+    status: 'ARCHIVED',
+    covers: 'המכביה הסתיימה. רשומת המשלחת אינה נמחקת אלא נשמרת לקריאה בלבד, לדוחות, להיסטוריה ולמכביה הבאה.',
+    logic: 'זו תבנית ה"ארכיון" (soft deletion): במקום למחוק אובייקט עסקי, מעבירים אותו למצב רדום. שורת ה-do מגדירה מעבר מבוסס-זמן: אחרי 180 יום האובייקט עובר למצב הסיום. after(...) הוא אירוע זמן יחסי, נמדד מרגע הכניסה למצב.',
+    teach: 'ברוב מערכות המידע העסקיות לא מוחקים נתונים מיד, שיקולי ביקורת, רגולציה ודוחות. מצב ארכיון בין המצבים הפעילים למצב הסיום הוא תבנית מומלצת שכדאי לחפש בכל תרגיל.'
+  },
+  'ps-final': {
+    title: 'מצב סיום (Final)',
+    status: '',
+    covers: 'פסאודו-מצב שמסמן את סוף מחזור החיים: האובייקט סיים את תפקידו ואינו מגיב עוד לאירועים.',
+    logic: 'מגיעים אליו רק מ"ארכיון", לאחר תקופת השמירה. ההגעה למצב סיום מייצגת גריעה סופית של הרשומה מהמערכת הפעילה.',
+    teach: 'לכל תרשים חייב להיות לפחות מצב סיום אחד. היעדר מצב סיום = מחזור חיים שלא נגמר לעולם, בדקו תמיד שיש דרך "לצאת".'
+  }
+};
+
+function openStateModal(key) {
+  const info = STATE_INFO[key];
+  if (!info) return;
+  document.getElementById('modal-title').textContent = info.title;
+  const st = document.getElementById('modal-status');
+  st.textContent = info.status ? "entry / setStatus('" + info.status + "')" : '';
+  st.style.display = info.status ? 'inline-block' : 'none';
+  document.getElementById('modal-body').innerHTML =
+    '<h3>מה המצב מכסה</h3><p>' + info.covers + '</p>' +
+    '<h3>הלוגיקה</h3><p>' + info.logic + '</p>' +
+    '<div class="teach"><h3>🎓 נקודת לימוד</h3><p>' + info.teach + '</p></div>';
+  document.getElementById('modal-overlay').hidden = false;
+}
+
+function closeStateModal() {
+  document.getElementById('modal-overlay').hidden = true;
+}
+
+addEventListener('load', () => {
+  document.querySelectorAll('[data-state]').forEach(g => {
+    g.addEventListener('click', e => { e.stopPropagation(); openStateModal(g.dataset.state); });
+  });
+  document.getElementById('modal-overlay').addEventListener('click', e => {
+    if (e.target.id === 'modal-overlay') closeStateModal();
+  });
+  addEventListener('keydown', e => { if (e.key === 'Escape') closeStateModal(); });
+  const hashKey = location.hash.slice(1);
+  if (STATE_INFO[hashKey]) openStateModal(hashKey);
+});
+
+// white background rects behind every transition label
+addEventListener('load', () => {
+  document.querySelectorAll('text.tl').forEach(t => {
+    const b = t.getBBox();
+    const r = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+    r.setAttribute('x', b.x - 3); r.setAttribute('y', b.y - 1);
+    r.setAttribute('width', b.width + 6); r.setAttribute('height', b.height + 2);
+    r.setAttribute('rx', 3); r.setAttribute('fill', '#ffffff'); r.setAttribute('fill-opacity', '0.92');
+    t.parentNode.insertBefore(r, t.parentNode.firstChild);
+  });
+});
+</script>
+</body>
+</html>
