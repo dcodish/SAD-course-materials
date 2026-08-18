@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>גריעת עותקים בלויים ומכירתם ביריד ספרים משומשים, BPMN 1.0</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Hebrew:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; padding: 0; background: #eef2f6;
+      font-family: 'Noto Sans Hebrew', -apple-system, BlinkMacSystemFont, sans-serif;
+      direction: rtl; }
+    .header-bar { padding: 14px 20px; background: linear-gradient(135deg, #37474f, #546e7a);
+      color: #fff; display: flex; align-items: baseline; gap: 16px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
+    .header-bar h1 { margin: 0; font-size: 18px; font-weight: 600; }
+    .header-bar .en { font-size: 13px; opacity: 0.8; font-weight: 400; }
+    .header-bar .badge { margin-inline-start: auto; background: rgba(255,255,255,0.15);
+      padding: 3px 10px; border-radius: 10px; font-size: 11px; letter-spacing: 0.5px; }
+    .stats-bar { padding: 8px 20px; background: #ffffff; font-size: 12px; color: #546e7a;
+      border-bottom: 1px solid #cfd8dc; }
+    .stats-bar span { margin-inline-end: 16px; }
+    .svg-wrapper { overflow: auto; background: #f8fafc; padding: 20px; min-height: calc(100vh - 120px); }
+    svg { display: block; background: #f8fafc; }
+    .bpmn-element { cursor: pointer; }
+    .bpmn-tooltip { display: none; position: fixed; background: #1a1a2e; color: #fff;
+      padding: 9px 13px; border-radius: 6px; font-size: 12px; max-width: 280px;
+      z-index: 500; direction: rtl; pointer-events: none; line-height: 1.5;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+    .bpmn-tooltip strong { color: #ffd54f; }
+    .vp-export-btn { position: fixed; bottom: 20px; left: 20px; z-index: 1000;
+      background: #1e40af; color: #fff; border: none; border-radius: 6px;
+      padding: 9px 16px; font-size: 13px; cursor: pointer;
+      font-family: 'Noto Sans Hebrew', sans-serif; box-shadow: 0 2px 6px rgba(0,0,0,0.15); }
+    .vp-export-btn:hover { background: #1e3a8a; }
+    .assumptions-btn { position: fixed; top: 12px; left: 12px; z-index: 1000;
+      background: #37474f; color: #fff; border: none; border-radius: 6px;
+      padding: 7px 13px; font-size: 12px; cursor: pointer;
+      font-family: 'Noto Sans Hebrew', sans-serif; }
+    .assumptions-panel { position: fixed; top: 54px; left: 12px; z-index: 1000;
+      background: #ffffff; border: 1px solid #b0bec5; border-radius: 8px; padding: 14px;
+      max-width: 340px; max-height: 70vh; overflow-y: auto; direction: rtl;
+      font-family: 'Noto Sans Hebrew', sans-serif; font-size: 13px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.18); display: none; }
+    .assumptions-panel h4 { margin: 0 0 10px; color: #37474f; }
+    .assumptions-panel ul { margin: 4px 0 10px; padding-inline-start: 18px; }
+  </style>
+</head>
+<body>
+  <div class="header-bar">
+    <h1>גריעת עותקים בלויים ומכירתם ביריד ספרים משומשים</h1>
+    <span class="en">Weeding &amp; Sale of Worn Copies</span>
+    <span class="badge">BPMN 1.0</span>
+  </div>
+  <div class="stats-bar">
+    <span>3 מאגרים</span>
+    <span>2 נתיבים</span>
+    <span>12 משימות</span>
+    <span>4 שערים</span>
+    <span>8 אירועים</span>
+    <span>2 פריטי נתונים</span>
+    <span>27 זרימות</span>
+  </div>
+  <div class="svg-wrapper">
+    <svg width="1602" height="824"
+         viewBox="0 0 1602 824"
+         xmlns="http://www.w3.org/2000/svg">
+      
+    <defs>
+      <pattern id="dot-grid" x="0" y="0" width="24" height="24" patternUnits="userSpaceOnUse">
+        <circle cx="1" cy="1" r="0.8" fill="#cbd5e1"/>
+      </pattern>
+      <marker id="arrow-seq" viewBox="0 0 10 10" refX="10" refY="5"
+              markerWidth="10" markerHeight="10" orient="auto-start-reverse">
+        <path d="M 0 0 L 10 5 L 0 10 Z" fill="#455a64"/>
+      </marker>
+      <marker id="msg-start" viewBox="-10 -10 20 20" refX="0" refY="0"
+              markerWidth="10" markerHeight="10" orient="auto">
+        <circle cx="0" cy="0" r="4" fill="#ffffff" stroke="#37474f" stroke-width="1.2"/>
+      </marker>
+      <marker id="msg-end" viewBox="0 0 10 10" refX="9" refY="5"
+              markerWidth="10" markerHeight="10" orient="auto-start-reverse">
+        <path d="M 0 0 L 10 5 L 0 10 Z" fill="#37474f"/>
+      </marker>
+      <marker id="arrow-data" viewBox="0 0 10 10" refX="9" refY="5"
+              markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+        <path d="M 0 0 L 10 5 L 0 10 Z" fill="#7986cb"/>
+      </marker>
+    </defs>
+      <rect x="0" y="0" width="1602" height="824" fill="#f8fafc"/>
+    <rect x="0" y="0" width="1602" height="824" fill="url(#dot-grid)"/>
+      
+    <!-- pool: pool-committee -->
+    <g class="bpmn-pool" data-pool="pool-committee">
+      <rect x="20" y="72" width="1542" height="140"
+            fill="#fff8f2" stroke="#8d6e63" stroke-width="1.5"/>
+      <rect x="20" y="72" width="30" height="140"
+            fill="#5d4037" stroke="#8d6e63" stroke-width="1.5"/>
+      <text x="35" y="142" text-anchor="middle"
+            dominant-baseline="middle"
+            transform="rotate(-90, 35, 142)"
+            fill="#ffffff" font-size="12" font-weight="600"
+            direction="rtl">ועדת הגריעה</text>
+      <line x1="50" y1="72" x2="50" y2="212"
+            stroke="#8d6e63" stroke-width="1"/>
+    </g>
+
+    <!-- pool: pool-lib -->
+    <g class="bpmn-pool" data-pool="pool-lib">
+      <rect x="20" y="228" width="1542" height="448"
+            fill="#ffffff" stroke="#455a64" stroke-width="1.5"/>
+      <rect x="20" y="228" width="30" height="448"
+            fill="#37474f" stroke="#455a64" stroke-width="1.5"/>
+      <text x="35" y="452" text-anchor="middle"
+            dominant-baseline="middle"
+            transform="rotate(-90, 35, 452)"
+            fill="#ffffff" font-size="12" font-weight="600"
+            direction="rtl">סניף הספרייה</text>
+      <line x1="50" y1="228" x2="50" y2="676"
+            stroke="#455a64" stroke-width="1"/>
+    </g>
+
+    <!-- pool: pool-charity -->
+    <g class="bpmn-pool" data-pool="pool-charity">
+      <rect x="20" y="692" width="1542" height="96"
+            fill="#faf7f2" stroke="#8d6e63" stroke-width="1.5"/>
+      <rect x="20" y="692" width="30" height="96"
+            fill="#6d4c41" stroke="#8d6e63" stroke-width="1.5"/>
+      <text x="35" y="740" text-anchor="middle"
+            dominant-baseline="middle"
+            transform="rotate(-90, 35, 740)"
+            fill="#ffffff" font-size="12" font-weight="600"
+            direction="rtl">עמותת הצדקה</text>
+      <line x1="50" y1="692" x2="50" y2="788"
+            stroke="#8d6e63" stroke-width="1"/>
+    </g>
+      
+    <g class="bpmn-lane" data-lane="lane-librarian">
+      <rect x="74" y="228" width="1488" height="308"
+            fill="#fafafa" fill-opacity="0.6" stroke="none"/>
+      <rect x="50" y="228" width="24" height="308"
+            fill="#546e7a" stroke="#455a64" stroke-width="1"/>
+      <text x="62" y="382" text-anchor="middle"
+            dominant-baseline="middle"
+            transform="rotate(-90, 62, 382)"
+            fill="#ffffff" font-size="11" font-weight="500"
+            direction="rtl">ספרן</text>
+      
+    </g>
+
+    <g class="bpmn-lane" data-lane="lane-system">
+      <rect x="74" y="536" width="1488" height="140"
+            fill="#fafafa" fill-opacity="0.6" stroke="none"/>
+      <rect x="50" y="536" width="24" height="140"
+            fill="#546e7a" stroke="#455a64" stroke-width="1"/>
+      <text x="62" y="606" text-anchor="middle"
+            dominant-baseline="middle"
+            transform="rotate(-90, 62, 606)"
+            fill="#ffffff" font-size="11" font-weight="500"
+            direction="rtl">מערכת הספרייה</text>
+      <line x1="50" y1="536" x2="1562" y2="536"
+              stroke="#90a4ae" stroke-width="1" stroke-dasharray="4 3"/>
+    </g>
+      
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf-1">
+      <path d="M 144.0 372.0 L 144.0 546.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf-2">
+      <path d="M 214.0 578.0 L 306.0 578.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf-3">
+      <path d="M 330.0 554.0 L 330.0 344.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    <g class="bpmn-flow-label">
+      <rect x="312.6" y="438" width="34.8" height="14"
+            rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"/>
+      <text x="330" y="445" text-anchor="middle" dominant-baseline="middle"
+            font-size="10" fill="#263238" direction="rtl">מוגן</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf-5">
+      <path d="M 330.0 554.0 L 330.0 428.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    <g class="bpmn-flow-label">
+      <rect x="303.3" y="480" width="53.4" height="14"
+            rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"/>
+      <text x="330" y="487" text-anchor="middle" dominant-baseline="middle"
+            font-size="10" fill="#263238" direction="rtl">לא מוגן</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf-4">
+      <path d="M 400.0 312.0 L 498.0 312.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf-6">
+      <path d="M 400.0 396.0 L 498.0 396.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf-7">
+      <path d="M 534.0 396.0 L 606.0 396.0 L 606.0 312.0 L 678.0 312.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf-8">
+      <path d="M 726.0 308.0 L 772.0 308.0 L 772.0 312.0 L 818.0 312.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    <g class="bpmn-flow-label">
+      <rect x="719.2" y="297" width="59.6" height="14"
+            rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"/>
+      <text x="749" y="304" text-anchor="middle" dominant-baseline="middle"
+            font-size="10" fill="#263238" direction="rtl">לא אושרה</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf-10">
+      <path d="M 702.0 336.0 L 702.0 546.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    <g class="bpmn-flow-label">
+      <rect x="681.5" y="430" width="41" height="14"
+            rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"/>
+      <text x="702" y="437" text-anchor="middle" dominant-baseline="middle"
+            font-size="10" fill="#263238" direction="rtl">אושרה</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf-9">
+      <path d="M 958.0 312.0 L 976.0 312.0 L 976.0 438.0 L 800.0 438.0 L 800.0 396.0 L 498.0 396.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf-11">
+      <path d="M 702.0 546.0 L 702.0 428.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf-12">
+      <path d="M 772.0 396.0 L 864.0 396.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf-13">
+      <path d="M 912.0 392.0 L 958.0 392.0 L 958.0 312.0 L 1004.0 312.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    <g class="bpmn-flow-label">
+      <rect x="946" y="341" width="24" height="14"
+            rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"/>
+      <text x="958" y="348" text-anchor="middle" dominant-baseline="middle"
+            font-size="10" fill="#263238" direction="rtl">כן</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf-15">
+      <path d="M 912.0 400.0 L 958.0 400.0 L 958.0 396.0 L 1004.0 396.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    <g class="bpmn-flow-label">
+      <rect x="923" y="389" width="24" height="14"
+            rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"/>
+      <text x="935" y="396" text-anchor="middle" dominant-baseline="middle"
+            font-size="10" fill="#263238" direction="rtl">לא</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf-14">
+      <path d="M 1144.0 312.0 L 1193.0 312.0 L 1193.0 270.0 L 1242.0 270.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf-16">
+      <path d="M 1144.0 396.0 L 1190.0 396.0 L 1190.0 354.0 L 1236.0 354.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf-19">
+      <path d="M 1284.0 350.0 L 1330.0 350.0 L 1330.0 312.0 L 1376.0 312.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    <g class="bpmn-flow-label">
+      <rect x="1280.3" y="339" width="53.4" height="14"
+            rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"/>
+      <text x="1307" y="346" text-anchor="middle" dominant-baseline="middle"
+            font-size="10" fill="#263238" direction="rtl">לא נמכר</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf-17">
+      <path d="M 1260.0 378.0 L 1260.0 546.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    <g class="bpmn-flow-label">
+      <rect x="1242.6" y="451" width="34.8" height="14"
+            rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"/>
+      <text x="1260" y="458" text-anchor="middle" dominant-baseline="middle"
+            font-size="10" fill="#263238" direction="rtl">נמכר</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf-18">
+      <path d="M 1260.0 546.0 L 1260.0 456.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf-20">
+      <path d="M 1446.0 344.0 L 1446.0 546.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf-21">
+      <path d="M 1446.0 546.0 L 1446.0 414.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf-22">
+      <path d="M 138.0 114.0 L 236.0 114.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf-23">
+      <path d="M 376.0 114.0 L 474.0 114.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    </g>
+      
+    <g class="bpmn-flow bpmn-message" data-flow="mf-form">
+      <path d="M 282.0 364.0 L 242.0 364.0 L 242.0 220.0 L 106.0 220.0 L 106.0 132.0" fill="none" stroke="#37474f" stroke-width="1.3"
+            stroke-dasharray="10 5"
+            marker-start="url(#msg-start)" marker-end="url(#msg-end)"/>
+      
+    <g class="bpmn-flow-label">
+      <rect x="171.89999999999998" y="271" width="140.20000000000002" height="14"
+            rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"/>
+      <text x="242" y="278" text-anchor="middle" dominant-baseline="middle"
+            font-size="10" fill="#263238" direction="rtl">שליחת טופס בקשת גריעה</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-message" data-flow="mf-resubmit">
+      <path d="M 888.0 280.0 L 888.0 220.0 L 120.0 220.0 L 120.0 132.0" fill="none" stroke="#37474f" stroke-width="1.3"
+            stroke-dasharray="10 5"
+            marker-start="url(#msg-start)" marker-end="url(#msg-end)"/>
+      
+    <g class="bpmn-flow-label">
+      <rect x="471.1" y="209" width="65.80000000000001" height="14"
+            rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"/>
+      <text x="504" y="216" text-anchor="middle" dominant-baseline="middle"
+            font-size="10" fill="#263238" direction="rtl">הגשה מחדש</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-message" data-flow="mf-verdict">
+      <path d="M 354.0 146.0 L 354.0 220.0 L 550.0 220.0 L 550.0 378.0 L 530.0 378.0" fill="none" stroke="#37474f" stroke-width="1.3"
+            stroke-dasharray="10 5"
+            marker-start="url(#msg-start)" marker-end="url(#msg-end)"/>
+      
+    <g class="bpmn-flow-label">
+      <rect x="409.8" y="219" width="84.4" height="14"
+            rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"/>
+      <text x="452" y="226" text-anchor="middle" dominant-baseline="middle"
+            font-size="10" fill="#263238" direction="rtl">החלטת הוועדה</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-message" data-flow="mf-donate">
+      <path d="M 1446.0 344.0 L 1526.0 344.0 L 1526.0 684.0 L 1446.0 684.0 L 1446.0 692.0" fill="none" stroke="#37474f" stroke-width="1.3"
+            stroke-dasharray="10 5"
+            marker-start="url(#msg-start)" marker-end="url(#msg-end)"/>
+      
+    <g class="bpmn-flow-label">
+      <rect x="1468.3" y="503" width="115.4" height="14"
+            rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"/>
+      <text x="1526" y="510" text-anchor="middle" dominant-baseline="middle"
+            font-size="10" fill="#263238" direction="rtl">מסירת העותק שנתרם</text>
+    </g>
+    </g>
+      
+    <g class="bpmn-flow bpmn-data-assoc" data-flow="da-read" data-dir="read">
+      <path d="M 888.0 626.0 L 888.0 610.0 L 144.0 610.0" fill="none" stroke="#7986cb" stroke-width="1.1"
+            stroke-dasharray="4 3" marker-end="url(#arrow-data)"/>
+    </g>
+
+    <g class="bpmn-flow bpmn-data-assoc" data-flow="da-weeded" data-dir="write">
+      <path d="M 702.0 610.0 L 702.0 626.0 L 888.0 626.0" fill="none" stroke="#7986cb" stroke-width="1.1"
+            stroke-dasharray="4 3" marker-end="url(#arrow-data)"/>
+    </g>
+
+    <g class="bpmn-flow bpmn-data-assoc" data-flow="da-sale" data-dir="write">
+      <path d="M 1260.0 610.0 L 1260.0 626.0 L 888.0 626.0" fill="none" stroke="#7986cb" stroke-width="1.1"
+            stroke-dasharray="4 3" marker-end="url(#arrow-data)"/>
+    </g>
+
+    <g class="bpmn-flow bpmn-data-assoc" data-flow="da-donated" data-dir="write">
+      <path d="M 1446.0 610.0 L 1446.0 626.0 L 888.0 626.0" fill="none" stroke="#7986cb" stroke-width="1.1"
+            stroke-dasharray="4 3" marker-end="url(#arrow-data)"/>
+    </g>
+
+    <g class="bpmn-flow bpmn-data-assoc" data-flow="da-form" data-dir="write">
+      <path d="M 330.0 428.0 L 330.0 486.0 L 609.0 486.0" fill="none" stroke="#7986cb" stroke-width="1.1"
+            stroke-dasharray="4 3" marker-end="url(#arrow-data)"/>
+    </g>
+
+    <g class="bpmn-flow bpmn-data-assoc" data-flow="da-form-resubmit" data-dir="write">
+      <path d="M 888.0 344.0 L 888.0 486.0 L 609.0 486.0" fill="none" stroke="#7986cb" stroke-width="1.1"
+            stroke-dasharray="4 3" marker-end="url(#arrow-data)"/>
+    </g>
+      
+    <g class="bpmn-element bpmn-event" id="start-committee" data-kind="event" data-event="start">
+      <circle cx="120" cy="114" r="18" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2"/>
+      <text text-anchor="middle" font-size="10.5" fill="#37474f" direction="rtl"
+             font-weight="500"><tspan x="120" y="146">בקשת גריעה התקבלה</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-task" id="t-examine" data-kind="task">
+      <rect x="236" y="82" width="140" height="64"
+            rx="8" ry="8" fill="#ffffff" stroke="#546e7a" stroke-width="1.5"/>
+      <text text-anchor="middle" dominant-baseline="middle"
+            font-size="11.5" font-weight="500"
+            fill="#1a1a2e" direction="rtl"><tspan x="306" y="107">בחון בקשת גריעה</tspan><tspan x="306" y="121">והשב החלטה</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-event" id="end-committee" data-kind="event" data-event="end">
+      <circle cx="492" cy="114" r="18" fill="#ffebee" stroke="#c62828" stroke-width="3.5"/>
+      <text text-anchor="middle" font-size="10.5" fill="#37474f" direction="rtl"
+             font-weight="500"><tspan x="492" y="146">החלטה נשלחה</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-event" id="start-a" data-kind="event" data-event="start">
+      <circle cx="144" cy="354" r="18" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2"/>
+      <text text-anchor="middle" font-size="10.5" fill="#37474f" direction="rtl"
+             font-weight="500"><tspan x="144" y="386">ספרן זיהה עותק</tspan><tspan x="144" y="398">בלוי בסבב בדיקת...</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-task" id="t-return-shelf" data-kind="task">
+      <rect x="260" y="280" width="140" height="64"
+            rx="8" ry="8" fill="#ffffff" stroke="#546e7a" stroke-width="1.5"/>
+      <text text-anchor="middle" dominant-baseline="middle"
+            font-size="11.5" font-weight="500"
+            fill="#1a1a2e" direction="rtl"><tspan x="330" y="312">החזר עותק למדף</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-task" id="t-fill-form" data-kind="task">
+      <rect x="260" y="364" width="140" height="64"
+            rx="8" ry="8" fill="#ffffff" stroke="#546e7a" stroke-width="1.5"/>
+      <text text-anchor="middle" dominant-baseline="middle"
+            font-size="11.5" font-weight="500"
+            fill="#1a1a2e" direction="rtl"><tspan x="330" y="382">מלא טופס בקשת</tspan><tspan x="330" y="396">גריעה ושלח</tspan><tspan x="330" y="410">לוועדה</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-event" id="end-notweeded" data-kind="event" data-event="end">
+      <circle cx="516" cy="312" r="18" fill="#ffebee" stroke="#c62828" stroke-width="3.5"/>
+      <text text-anchor="middle" font-size="10.5" fill="#37474f" direction="rtl"
+             font-weight="500"><tspan x="516" y="344">העותק לא נגרע</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-event" id="wait-verdict" data-kind="event" data-event="intermediate">
+      
+      <circle cx="516" cy="396" r="18" fill="#ffffff" stroke="#1565c0" stroke-width="2"/>
+      <circle cx="516" cy="396" r="13.5" fill="none" stroke="#1565c0" stroke-width="1.2"/>
+      <text text-anchor="middle" font-size="10.5" fill="#37474f" direction="rtl"
+             font-weight="500"><tspan x="516" y="428">החלטת הוועדה</tspan><tspan x="516" y="440">התקבלה</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-gateway" id="g-approved" data-kind="gateway" data-gw="XOR">
+      <text text-anchor="middle" font-size="10.5" fill="#37474f" direction="rtl"
+             font-weight="500"><tspan x="702" y="278">האם הוועדה אישרה?</tspan></text>
+      <rect x="685" y="295" width="34" height="34"
+            fill="#fff8e1" stroke="#f9a825" stroke-width="2"
+            transform="rotate(45, 702, 312)"/>
+      
+      <line x1="694" y1="304" x2="710" y2="320"
+            stroke="#e65100" stroke-width="3" stroke-linecap="round"/>
+      <line x1="710" y1="304" x2="694" y2="320"
+            stroke="#e65100" stroke-width="3" stroke-linecap="round"/>
+    </g>
+
+    <g class="bpmn-element bpmn-task" id="t-assess" data-kind="task">
+      <rect x="632" y="364" width="140" height="64"
+            rx="8" ry="8" fill="#ffffff" stroke="#546e7a" stroke-width="1.5"/>
+      <text text-anchor="middle" dominant-baseline="middle"
+            font-size="11.5" font-weight="500"
+            fill="#1a1a2e" direction="rtl"><tspan x="702" y="389">הערך את מצבו</tspan><tspan x="702" y="403">הפיזי של העותק</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-task" id="t-resubmit" data-kind="task">
+      <rect x="818" y="280" width="140" height="64"
+            rx="8" ry="8" fill="#ffffff" stroke="#546e7a" stroke-width="1.5"/>
+      <text text-anchor="middle" dominant-baseline="middle"
+            font-size="11.5" font-weight="500"
+            fill="#1a1a2e" direction="rtl"><tspan x="888" y="305">השלם נתונים</tspan><tspan x="888" y="319">חסרים והגש מחדש</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-gateway" id="g-worn" data-kind="gateway" data-gw="XOR">
+      <text text-anchor="middle" font-size="10.5" fill="#37474f" direction="rtl"
+             font-weight="500"><tspan x="888" y="362">האם העותק בלוי מדי?</tspan></text>
+      <rect x="871" y="379" width="34" height="34"
+            fill="#fff8e1" stroke="#f9a825" stroke-width="2"
+            transform="rotate(45, 888, 396)"/>
+      
+      <line x1="880" y1="388" x2="896" y2="404"
+            stroke="#e65100" stroke-width="3" stroke-linecap="round"/>
+      <line x1="896" y1="388" x2="880" y2="404"
+            stroke="#e65100" stroke-width="3" stroke-linecap="round"/>
+    </g>
+
+    <g class="bpmn-element bpmn-task" id="t-destroy" data-kind="task">
+      <rect x="1004" y="280" width="140" height="64"
+            rx="8" ry="8" fill="#ffffff" stroke="#546e7a" stroke-width="1.5"/>
+      <text text-anchor="middle" dominant-baseline="middle"
+            font-size="11.5" font-weight="500"
+            fill="#1a1a2e" direction="rtl"><tspan x="1074" y="312">השמד עותק למחזור</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-task" id="t-price" data-kind="task">
+      <rect x="1004" y="364" width="140" height="64"
+            rx="8" ry="8" fill="#ffffff" stroke="#546e7a" stroke-width="1.5"/>
+      <text text-anchor="middle" dominant-baseline="middle"
+            font-size="11.5" font-weight="500"
+            fill="#1a1a2e" direction="rtl"><tspan x="1074" y="389">קבע מחיר והצב</tspan><tspan x="1074" y="403">עותק ביריד</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-event" id="end-destroyed" data-kind="event" data-event="end">
+      <circle cx="1260" cy="270" r="18" fill="#ffebee" stroke="#c62828" stroke-width="3.5"/>
+      <text text-anchor="middle" font-size="10.5" fill="#37474f" direction="rtl"
+             font-weight="500"><tspan x="1260" y="302">העותק הושמד למחזור</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-gateway" id="g-sold" data-kind="gateway" data-gw="XOR">
+      <text text-anchor="middle" font-size="10.5" fill="#37474f" direction="rtl"
+             font-weight="500"><tspan x="1260" y="320">האם העותק נמכר ביריד?</tspan></text>
+      <rect x="1243" y="337" width="34" height="34"
+            fill="#fff8e1" stroke="#f9a825" stroke-width="2"
+            transform="rotate(45, 1260, 354)"/>
+      
+      <line x1="1252" y1="346" x2="1268" y2="362"
+            stroke="#e65100" stroke-width="3" stroke-linecap="round"/>
+      <line x1="1268" y1="346" x2="1252" y2="362"
+            stroke="#e65100" stroke-width="3" stroke-linecap="round"/>
+    </g>
+
+    <g class="bpmn-element bpmn-event" id="end-sold" data-kind="event" data-event="end">
+      <circle cx="1260" cy="438" r="18" fill="#ffebee" stroke="#c62828" stroke-width="3.5"/>
+      <text text-anchor="middle" font-size="10.5" fill="#37474f" direction="rtl"
+             font-weight="500"><tspan x="1260" y="470">העותק נמכר ביריד</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-task" id="t-deliver" data-kind="task">
+      <rect x="1376" y="280" width="140" height="64"
+            rx="8" ry="8" fill="#ffffff" stroke="#546e7a" stroke-width="1.5"/>
+      <text text-anchor="middle" dominant-baseline="middle"
+            font-size="11.5" font-weight="500"
+            fill="#1a1a2e" direction="rtl"><tspan x="1446" y="305">מסור עותק לעמותת</tspan><tspan x="1446" y="319">הצדקה</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-event" id="end-donated" data-kind="event" data-event="end">
+      <circle cx="1446" cy="396" r="18" fill="#ffebee" stroke="#c62828" stroke-width="3.5"/>
+      <text text-anchor="middle" font-size="10.5" fill="#37474f" direction="rtl"
+             font-weight="500"><tspan x="1446" y="428">העותק נתרם לעמותה</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-task" id="t-fetch" data-kind="task">
+      <rect x="74" y="546" width="140" height="64"
+            rx="8" ry="8" fill="#ffffff" stroke="#546e7a" stroke-width="1.5"/>
+      <text text-anchor="middle" dominant-baseline="middle"
+            font-size="11.5" font-weight="500"
+            fill="#1a1a2e" direction="rtl"><tspan x="144" y="564">שלוף פרטי כותר</tspan><tspan x="144" y="578">ובדוק סטטוס</tspan><tspan x="144" y="592">&apos;מוגן&apos;</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-gateway" id="g-protected" data-kind="gateway" data-gw="XOR">
+      <text text-anchor="middle" font-size="10.5" fill="#37474f" direction="rtl"
+             font-weight="500"><tspan x="330" y="544">האם הכותר מוגן?</tspan></text>
+      <rect x="313" y="561" width="34" height="34"
+            fill="#fff8e1" stroke="#f9a825" stroke-width="2"
+            transform="rotate(45, 330, 578)"/>
+      
+      <line x1="322" y1="570" x2="338" y2="586"
+            stroke="#e65100" stroke-width="3" stroke-linecap="round"/>
+      <line x1="338" y1="570" x2="322" y2="586"
+            stroke="#e65100" stroke-width="3" stroke-linecap="round"/>
+    </g>
+
+    <g class="bpmn-element bpmn-task" id="t-mark-weeded" data-kind="task">
+      <rect x="632" y="546" width="140" height="64"
+            rx="8" ry="8" fill="#ffffff" stroke="#546e7a" stroke-width="1.5"/>
+      <text text-anchor="middle" dominant-baseline="middle"
+            font-size="11.5" font-weight="500"
+            fill="#1a1a2e" direction="rtl"><tspan x="702" y="571">עדכן סטטוס העותק</tspan><tspan x="702" y="585">ל&apos;גרוע&apos;</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-task" id="t-record-sale" data-kind="task">
+      <rect x="1190" y="546" width="140" height="64"
+            rx="8" ry="8" fill="#ffffff" stroke="#546e7a" stroke-width="1.5"/>
+      <text text-anchor="middle" dominant-baseline="middle"
+            font-size="11.5" font-weight="500"
+            fill="#1a1a2e" direction="rtl"><tspan x="1260" y="578">רשום מכירה במאגר</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-task" id="t-mark-donated" data-kind="task">
+      <rect x="1376" y="546" width="140" height="64"
+            rx="8" ry="8" fill="#ffffff" stroke="#546e7a" stroke-width="1.5"/>
+      <text text-anchor="middle" dominant-baseline="middle"
+            font-size="11.5" font-weight="500"
+            fill="#1a1a2e" direction="rtl"><tspan x="1446" y="571">עדכן סטטוס העותק</tspan><tspan x="1446" y="585">ל&apos;נתרם&apos;</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-data-store" id="ds-catalog" data-kind="dataStore">
+      <path d="M 860 632 L 860 664
+               A 28 6 0 0 0 916 664
+               L 916 632
+               A 28 6 0 0 0 860 632 Z"
+            fill="#ffffff" stroke="#2e7d32" stroke-width="1.4"/>
+      <path d="M 860 632
+               A 28 6 0 0 0 916 632"
+            fill="none" stroke="#2e7d32" stroke-width="1.4"/>
+      <text x="888" y="684" text-anchor="middle"
+            font-size="10" fill="#263238"
+            direction="rtl">מאגר הקטלוג</text>
+    </g>
+
+    <g class="bpmn-element bpmn-data-object" id="form-weeding" data-kind="dataObject">
+      <path d="M 591 486 L 619 486 L 627 494 L 627 530 L 591 530 Z" fill="#ffffff" stroke="#1565c0" stroke-width="1.3"/>
+      <path d="M 619 486 L 619 494 L 627 494" fill="none" stroke="#1565c0" stroke-width="1.3"/>
+      <text text-anchor="middle" font-size="10" fill="#263238"
+            direction="rtl"><tspan x="609" y="542">טופס בקשת</tspan><tspan x="609" y="554">גריעה</tspan></text>
+    </g>
+    </svg>
+  </div>
+  <div id="bpmn-tooltip" class="bpmn-tooltip"></div>
+  
+    <button class="assumptions-btn" onclick="toggleAssumptions()">הנחות ושאלות</button>
+    <div id="assumptions-panel" class="assumptions-panel">
+      <h4>הנחות ושאלות פתוחות</h4>
+      <strong>הנחות:</strong><ul><li>ועדת הגריעה מדומה כ-Pool חיצוני מפורש: הבחינה וההחלטה שלה מוצגות, אך היא מתקשרת עם הסניף רק דרך Message flows.</li><li>עמותת הצדקה מדומה כ-Pool ללא פירוט פנימי ללא פעילות פנימית, הסניף אינו שולט בתהליך הפנימי שלה.</li><li>כל הגשה/הגשה-מחדש של הבקשה מפעילה בחינה חוזרת בוועדה; לולאת ה-reject-and-resubmit נסגרת ב-Pool הספרייה סביב אירוע ההמתנה &apos;החלטת הוועדה&apos;.</li></ul>
+      
+    </div>
+  <button class="vp-export-btn" onclick="exportBPMN()">Download .bpmn (Visual Paradigm)</button>
+  <script>
+  (function() {
+    const TOOLTIPS = {"start-a":"<strong>אירוע התחלה</strong><div>ספרן זיהה עותק בלוי בסבב בדיקת מדפים</div>","t-fetch":"<strong>שלוף פרטי כותר ובדוק סטטוס &apos;מוגן&apos;</strong><div>מאגר: סניף הספרייה, נתיב: מערכת הספרייה</div><div>קורא: מאגר הקטלוג</div>","g-protected":"<strong>XOR (בלעדי), פיצול</strong><div>שאלה: האם הכותר מוגן?</div><div>ענפים:</div><ul style=\"margin:4px 0 0;padding-right:18px\"><li>מוגן → החזר עותק למדף</li><li>לא מוגן → מלא טופס בקשת גריעה ושלח לוועדה</li></ul>","t-return-shelf":"<strong>החזר עותק למדף</strong><div>מאגר: סניף הספרייה, נתיב: ספרן</div>","end-notweeded":"<strong>אירוע סיום</strong><div>העותק לא נגרע</div>","t-fill-form":"<strong>מלא טופס בקשת גריעה ושלח לוועדה</strong><div>מאגר: סניף הספרייה, נתיב: ספרן</div><div>כותב: טופס בקשת גריעה</div>","wait-verdict":"<strong>אירוע ביניים</strong><div>החלטת הוועדה התקבלה</div>","g-approved":"<strong>XOR (בלעדי), פיצול</strong><div>שאלה: האם הוועדה אישרה?</div><div>ענפים:</div><ul style=\"margin:4px 0 0;padding-right:18px\"><li>לא אושרה → השלם נתונים חסרים והגש מחדש</li><li>אושרה → עדכן סטטוס העותק ל&apos;גרוע&apos;</li></ul>","t-resubmit":"<strong>השלם נתונים חסרים והגש מחדש</strong><div>מאגר: סניף הספרייה, נתיב: ספרן</div><div>כותב: טופס בקשת גריעה</div>","t-mark-weeded":"<strong>עדכן סטטוס העותק ל&apos;גרוע&apos;</strong><div>מאגר: סניף הספרייה, נתיב: מערכת הספרייה</div><div>כותב: מאגר הקטלוג</div>","t-assess":"<strong>הערך את מצבו הפיזי של העותק</strong><div>מאגר: סניף הספרייה, נתיב: ספרן</div>","g-worn":"<strong>XOR (בלעדי), פיצול</strong><div>שאלה: האם העותק בלוי מדי?</div><div>ענפים:</div><ul style=\"margin:4px 0 0;padding-right:18px\"><li>כן → השמד עותק למחזור</li><li>לא → קבע מחיר והצב עותק ביריד</li></ul>","t-destroy":"<strong>השמד עותק למחזור</strong><div>מאגר: סניף הספרייה, נתיב: ספרן</div>","end-destroyed":"<strong>אירוע סיום</strong><div>העותק הושמד למחזור</div>","t-price":"<strong>קבע מחיר והצב עותק ביריד</strong><div>מאגר: סניף הספרייה, נתיב: ספרן</div>","g-sold":"<strong>XOR (בלעדי), פיצול</strong><div>שאלה: האם העותק נמכר ביריד?</div><div>ענפים:</div><ul style=\"margin:4px 0 0;padding-right:18px\"><li>נמכר → רשום מכירה במאגר</li><li>לא נמכר → מסור עותק לעמותת הצדקה</li></ul>","t-record-sale":"<strong>רשום מכירה במאגר</strong><div>מאגר: סניף הספרייה, נתיב: מערכת הספרייה</div><div>כותב: מאגר הקטלוג</div>","end-sold":"<strong>אירוע סיום</strong><div>העותק נמכר ביריד</div>","t-deliver":"<strong>מסור עותק לעמותת הצדקה</strong><div>מאגר: סניף הספרייה, נתיב: ספרן</div>","t-mark-donated":"<strong>עדכן סטטוס העותק ל&apos;נתרם&apos;</strong><div>מאגר: סניף הספרייה, נתיב: מערכת הספרייה</div><div>כותב: מאגר הקטלוג</div>","end-donated":"<strong>אירוע סיום</strong><div>העותק נתרם לעמותה</div>","start-committee":"<strong>אירוע התחלה</strong><div>בקשת גריעה התקבלה</div>","t-examine":"<strong>בחון בקשת גריעה והשב החלטה</strong><div>מאגר: ועדת הגריעה</div>","end-committee":"<strong>אירוע סיום</strong><div>החלטה נשלחה</div>","ds-catalog":"<strong>מאגר נתונים: מאגר הקטלוג</strong><div>נקרא ע״י: שלוף פרטי כותר ובדוק סטטוס &apos;מוגן&apos;</div><div>נכתב ע״י: עדכן סטטוס העותק ל&apos;גרוע&apos;, רשום מכירה במאגר, עדכן סטטוס העותק ל&apos;נתרם&apos;</div>","form-weeding":"<strong>אובייקט נתונים: טופס בקשת גריעה</strong><div>נכתב ע״י: מלא טופס בקשת גריעה ושלח לוועדה, השלם נתונים חסרים והגש מחדש</div>"};
+    const tip = document.getElementById('bpmn-tooltip');
+    document.querySelectorAll('.bpmn-element').forEach(function(g) {
+      g.addEventListener('mouseenter', function() {
+        const id = g.getAttribute('id');
+        const content = TOOLTIPS[id];
+        if (!content) return;
+        tip.innerHTML = content;
+        tip.style.display = 'block';
+      });
+      g.addEventListener('mousemove', function(e) {
+        tip.style.top = (e.clientY + 14) + 'px';
+        tip.style.left = (e.clientX + 14) + 'px';
+      });
+      g.addEventListener('mouseleave', function() { tip.style.display = 'none'; });
+    });
+  })();
+
+  
+  function toggleAssumptions() {
+    const p = document.getElementById('assumptions-panel');
+    p.style.display = p.style.display === 'block' ? 'none' : 'block';
+  }
+
+  // Precomputed BPMN 2.0 XML, server generated from the layout
+  const BPMN_XML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<bpmn:definitions xmlns:bpmn=\"http://www.omg.org/spec/BPMN/20100524/MODEL\"\n  xmlns:bpmndi=\"http://www.omg.org/spec/BPMN/20100524/DI\"\n  xmlns:dc=\"http://www.omg.org/spec/DD/20100524/DC\"\n  xmlns:di=\"http://www.omg.org/spec/DD/20100524/DI\"\n  xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n  id=\"Definitions_1\" targetNamespace=\"http://bpmn.io/schema/bpmn\">\n  <bpmn:process id=\"process_1\" name=\"ועדת הגריעה\" isExecutable=\"false\">\n\n      <bpmn:startEvent id=\"start-committee\" name=\"בקשת גריעה התקבלה\"/>\n      <bpmn:task id=\"t-examine\" name=\"בחון בקשת גריעה והשב החלטה\"/>\n      <bpmn:endEvent id=\"end-committee\" name=\"החלטה נשלחה\"/>\n      <bpmn:dataStoreReference id=\"ds-catalog\" name=\"מאגר הקטלוג\"/>\n      <bpmn:dataObjectReference id=\"form-weeding\" name=\"טופס בקשת גריעה\"/>\n      <bpmn:sequenceFlow id=\"sf-22\" sourceRef=\"start-committee\" targetRef=\"t-examine\"/>\n      <bpmn:sequenceFlow id=\"sf-23\" sourceRef=\"t-examine\" targetRef=\"end-committee\"/>\n  </bpmn:process>\n  <bpmn:process id=\"process_2\" name=\"סניף הספרייה\" isExecutable=\"false\">\n      <bpmn:laneSet id=\"process_2_laneset\">\n        <bpmn:lane id=\"lane-librarian\" name=\"ספרן\">\n          <bpmn:flowNodeRef>start-a</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>t-return-shelf</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>end-notweeded</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>t-fill-form</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>wait-verdict</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>g-approved</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>t-resubmit</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>t-assess</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>g-worn</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>t-destroy</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>end-destroyed</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>t-price</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>g-sold</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>end-sold</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>t-deliver</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>end-donated</bpmn:flowNodeRef>\n        </bpmn:lane>\n        <bpmn:lane id=\"lane-system\" name=\"מערכת הספרייה\">\n          <bpmn:flowNodeRef>t-fetch</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>g-protected</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>t-mark-weeded</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>t-record-sale</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>t-mark-donated</bpmn:flowNodeRef>\n        </bpmn:lane>\n      </bpmn:laneSet>\n      <bpmn:startEvent id=\"start-a\" name=\"ספרן זיהה עותק בלוי בסבב בדיקת מדפים\"/>\n      <bpmn:task id=\"t-fetch\" name=\"שלוף פרטי כותר ובדוק סטטוס &apos;מוגן&apos;\"/>\n      <bpmn:exclusiveGateway id=\"g-protected\" name=\"\"/>\n      <bpmn:task id=\"t-return-shelf\" name=\"החזר עותק למדף\"/>\n      <bpmn:endEvent id=\"end-notweeded\" name=\"העותק לא נגרע\"/>\n      <bpmn:task id=\"t-fill-form\" name=\"מלא טופס בקשת גריעה ושלח לוועדה\"/>\n      <bpmn:intermediateCatchEvent id=\"wait-verdict\" name=\"החלטת הוועדה התקבלה\"/>\n      <bpmn:exclusiveGateway id=\"g-approved\" name=\"\"/>\n      <bpmn:task id=\"t-resubmit\" name=\"השלם נתונים חסרים והגש מחדש\"/>\n      <bpmn:task id=\"t-mark-weeded\" name=\"עדכן סטטוס העותק ל&apos;גרוע&apos;\"/>\n      <bpmn:task id=\"t-assess\" name=\"הערך את מצבו הפיזי של העותק\"/>\n      <bpmn:exclusiveGateway id=\"g-worn\" name=\"\"/>\n      <bpmn:task id=\"t-destroy\" name=\"השמד עותק למחזור\"/>\n      <bpmn:endEvent id=\"end-destroyed\" name=\"העותק הושמד למחזור\"/>\n      <bpmn:task id=\"t-price\" name=\"קבע מחיר והצב עותק ביריד\"/>\n      <bpmn:exclusiveGateway id=\"g-sold\" name=\"\"/>\n      <bpmn:task id=\"t-record-sale\" name=\"רשום מכירה במאגר\"/>\n      <bpmn:endEvent id=\"end-sold\" name=\"העותק נמכר ביריד\"/>\n      <bpmn:task id=\"t-deliver\" name=\"מסור עותק לעמותת הצדקה\"/>\n      <bpmn:task id=\"t-mark-donated\" name=\"עדכן סטטוס העותק ל&apos;נתרם&apos;\"/>\n      <bpmn:endEvent id=\"end-donated\" name=\"העותק נתרם לעמותה\"/>\n      <bpmn:dataStoreReference id=\"ds-catalog\" name=\"מאגר הקטלוג\"/>\n      <bpmn:dataObjectReference id=\"form-weeding\" name=\"טופס בקשת גריעה\"/>\n      <bpmn:sequenceFlow id=\"sf-1\" sourceRef=\"start-a\" targetRef=\"t-fetch\"/>\n      <bpmn:sequenceFlow id=\"sf-2\" sourceRef=\"t-fetch\" targetRef=\"g-protected\"/>\n      <bpmn:sequenceFlow id=\"sf-3\" sourceRef=\"g-protected\" targetRef=\"t-return-shelf\" name=\"מוגן\"/>\n      <bpmn:sequenceFlow id=\"sf-4\" sourceRef=\"t-return-shelf\" targetRef=\"end-notweeded\"/>\n      <bpmn:sequenceFlow id=\"sf-5\" sourceRef=\"g-protected\" targetRef=\"t-fill-form\" name=\"לא מוגן\"/>\n      <bpmn:sequenceFlow id=\"sf-6\" sourceRef=\"t-fill-form\" targetRef=\"wait-verdict\"/>\n      <bpmn:sequenceFlow id=\"sf-7\" sourceRef=\"wait-verdict\" targetRef=\"g-approved\"/>\n      <bpmn:sequenceFlow id=\"sf-8\" sourceRef=\"g-approved\" targetRef=\"t-resubmit\" name=\"לא אושרה\"/>\n      <bpmn:sequenceFlow id=\"sf-9\" sourceRef=\"t-resubmit\" targetRef=\"wait-verdict\"/>\n      <bpmn:sequenceFlow id=\"sf-10\" sourceRef=\"g-approved\" targetRef=\"t-mark-weeded\" name=\"אושרה\"/>\n      <bpmn:sequenceFlow id=\"sf-11\" sourceRef=\"t-mark-weeded\" targetRef=\"t-assess\"/>\n      <bpmn:sequenceFlow id=\"sf-12\" sourceRef=\"t-assess\" targetRef=\"g-worn\"/>\n      <bpmn:sequenceFlow id=\"sf-13\" sourceRef=\"g-worn\" targetRef=\"t-destroy\" name=\"כן\"/>\n      <bpmn:sequenceFlow id=\"sf-14\" sourceRef=\"t-destroy\" targetRef=\"end-destroyed\"/>\n      <bpmn:sequenceFlow id=\"sf-15\" sourceRef=\"g-worn\" targetRef=\"t-price\" name=\"לא\"/>\n      <bpmn:sequenceFlow id=\"sf-16\" sourceRef=\"t-price\" targetRef=\"g-sold\"/>\n      <bpmn:sequenceFlow id=\"sf-17\" sourceRef=\"g-sold\" targetRef=\"t-record-sale\" name=\"נמכר\"/>\n      <bpmn:sequenceFlow id=\"sf-18\" sourceRef=\"t-record-sale\" targetRef=\"end-sold\"/>\n      <bpmn:sequenceFlow id=\"sf-19\" sourceRef=\"g-sold\" targetRef=\"t-deliver\" name=\"לא נמכר\"/>\n      <bpmn:sequenceFlow id=\"sf-20\" sourceRef=\"t-deliver\" targetRef=\"t-mark-donated\"/>\n      <bpmn:sequenceFlow id=\"sf-21\" sourceRef=\"t-mark-donated\" targetRef=\"end-donated\"/>\n  </bpmn:process>\n  <bpmn:process id=\"process_3\" name=\"עמותת הצדקה\" isExecutable=\"false\">\n\n      <bpmn:dataStoreReference id=\"ds-catalog\" name=\"מאגר הקטלוג\"/>\n      <bpmn:dataObjectReference id=\"form-weeding\" name=\"טופס בקשת גריעה\"/>\n  </bpmn:process>\n  <bpmn:collaboration id=\"collab_1\">\n    <bpmn:participant id=\"pool-committee\" name=\"ועדת הגריעה\" processRef=\"process_1\"/>\n    <bpmn:participant id=\"pool-lib\" name=\"סניף הספרייה\" processRef=\"process_2\"/>\n    <bpmn:participant id=\"pool-charity\" name=\"עמותת הצדקה\" processRef=\"process_3\"/>\n    <bpmn:messageFlow id=\"mf-form\" sourceRef=\"t-fill-form\" targetRef=\"start-committee\" name=\"שליחת טופס בקשת גריעה\"/>\n    <bpmn:messageFlow id=\"mf-resubmit\" sourceRef=\"t-resubmit\" targetRef=\"start-committee\" name=\"הגשה מחדש\"/>\n    <bpmn:messageFlow id=\"mf-verdict\" sourceRef=\"t-examine\" targetRef=\"wait-verdict\" name=\"החלטת הוועדה\"/>\n    <bpmn:messageFlow id=\"mf-donate\" sourceRef=\"t-deliver\" targetRef=\"pool-charity\" name=\"מסירת העותק שנתרם\"/>\n  </bpmn:collaboration>\n  <bpmndi:BPMNDiagram id=\"BPMNDiagram_1\">\n    <bpmndi:BPMNPlane id=\"BPMNPlane_1\" bpmnElement=\"collab_1\">\n      <bpmndi:BPMNShape id=\"pool-committee_di\" bpmnElement=\"pool-committee\" isHorizontal=\"true\">\n        <dc:Bounds x=\"20\" y=\"72\" width=\"1542\" height=\"140\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"pool-lib_di\" bpmnElement=\"pool-lib\" isHorizontal=\"true\">\n        <dc:Bounds x=\"20\" y=\"228\" width=\"1542\" height=\"448\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"lane-librarian_di\" bpmnElement=\"lane-librarian\" isHorizontal=\"true\">\n        <dc:Bounds x=\"50\" y=\"228\" width=\"1512\" height=\"308\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"lane-system_di\" bpmnElement=\"lane-system\" isHorizontal=\"true\">\n        <dc:Bounds x=\"50\" y=\"536\" width=\"1512\" height=\"140\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"pool-charity_di\" bpmnElement=\"pool-charity\" isHorizontal=\"true\">\n        <dc:Bounds x=\"20\" y=\"692\" width=\"1542\" height=\"96\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"start-committee_di\" bpmnElement=\"start-committee\">\n        <dc:Bounds x=\"102\" y=\"96\" width=\"36\" height=\"36\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"t-examine_di\" bpmnElement=\"t-examine\">\n        <dc:Bounds x=\"236\" y=\"82\" width=\"140\" height=\"64\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"end-committee_di\" bpmnElement=\"end-committee\">\n        <dc:Bounds x=\"474\" y=\"96\" width=\"36\" height=\"36\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"start-a_di\" bpmnElement=\"start-a\">\n        <dc:Bounds x=\"126\" y=\"336\" width=\"36\" height=\"36\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"t-return-shelf_di\" bpmnElement=\"t-return-shelf\">\n        <dc:Bounds x=\"260\" y=\"280\" width=\"140\" height=\"64\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"t-fill-form_di\" bpmnElement=\"t-fill-form\">\n        <dc:Bounds x=\"260\" y=\"364\" width=\"140\" height=\"64\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"end-notweeded_di\" bpmnElement=\"end-notweeded\">\n        <dc:Bounds x=\"498\" y=\"294\" width=\"36\" height=\"36\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"wait-verdict_di\" bpmnElement=\"wait-verdict\">\n        <dc:Bounds x=\"498\" y=\"378\" width=\"36\" height=\"36\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"g-approved_di\" bpmnElement=\"g-approved\">\n        <dc:Bounds x=\"678\" y=\"288\" width=\"48\" height=\"48\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"t-assess_di\" bpmnElement=\"t-assess\">\n        <dc:Bounds x=\"632\" y=\"364\" width=\"140\" height=\"64\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"t-resubmit_di\" bpmnElement=\"t-resubmit\">\n        <dc:Bounds x=\"818\" y=\"280\" width=\"140\" height=\"64\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"g-worn_di\" bpmnElement=\"g-worn\">\n        <dc:Bounds x=\"864\" y=\"372\" width=\"48\" height=\"48\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"t-destroy_di\" bpmnElement=\"t-destroy\">\n        <dc:Bounds x=\"1004\" y=\"280\" width=\"140\" height=\"64\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"t-price_di\" bpmnElement=\"t-price\">\n        <dc:Bounds x=\"1004\" y=\"364\" width=\"140\" height=\"64\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"end-destroyed_di\" bpmnElement=\"end-destroyed\">\n        <dc:Bounds x=\"1242\" y=\"252\" width=\"36\" height=\"36\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"g-sold_di\" bpmnElement=\"g-sold\">\n        <dc:Bounds x=\"1236\" y=\"330\" width=\"48\" height=\"48\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"end-sold_di\" bpmnElement=\"end-sold\">\n        <dc:Bounds x=\"1242\" y=\"420\" width=\"36\" height=\"36\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"t-deliver_di\" bpmnElement=\"t-deliver\">\n        <dc:Bounds x=\"1376\" y=\"280\" width=\"140\" height=\"64\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"end-donated_di\" bpmnElement=\"end-donated\">\n        <dc:Bounds x=\"1428\" y=\"378\" width=\"36\" height=\"36\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"t-fetch_di\" bpmnElement=\"t-fetch\">\n        <dc:Bounds x=\"74\" y=\"546\" width=\"140\" height=\"64\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"g-protected_di\" bpmnElement=\"g-protected\">\n        <dc:Bounds x=\"306\" y=\"554\" width=\"48\" height=\"48\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"t-mark-weeded_di\" bpmnElement=\"t-mark-weeded\">\n        <dc:Bounds x=\"632\" y=\"546\" width=\"140\" height=\"64\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"t-record-sale_di\" bpmnElement=\"t-record-sale\">\n        <dc:Bounds x=\"1190\" y=\"546\" width=\"140\" height=\"64\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"t-mark-donated_di\" bpmnElement=\"t-mark-donated\">\n        <dc:Bounds x=\"1376\" y=\"546\" width=\"140\" height=\"64\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"ds-catalog_di\" bpmnElement=\"ds-catalog\">\n        <dc:Bounds x=\"860\" y=\"626\" width=\"56\" height=\"44\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"form-weeding_di\" bpmnElement=\"form-weeding\">\n        <dc:Bounds x=\"591\" y=\"486\" width=\"36\" height=\"44\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNEdge id=\"sf-1_di\" bpmnElement=\"sf-1\">\n        <di:waypoint x=\"144\" y=\"372\"/>\n        <di:waypoint x=\"144\" y=\"546\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf-2_di\" bpmnElement=\"sf-2\">\n        <di:waypoint x=\"214\" y=\"578\"/>\n        <di:waypoint x=\"306\" y=\"578\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf-3_di\" bpmnElement=\"sf-3\">\n        <di:waypoint x=\"330\" y=\"554\"/>\n        <di:waypoint x=\"330\" y=\"344\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf-5_di\" bpmnElement=\"sf-5\">\n        <di:waypoint x=\"330\" y=\"554\"/>\n        <di:waypoint x=\"330\" y=\"428\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf-4_di\" bpmnElement=\"sf-4\">\n        <di:waypoint x=\"400\" y=\"312\"/>\n        <di:waypoint x=\"498\" y=\"312\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf-6_di\" bpmnElement=\"sf-6\">\n        <di:waypoint x=\"400\" y=\"396\"/>\n        <di:waypoint x=\"498\" y=\"396\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf-7_di\" bpmnElement=\"sf-7\">\n        <di:waypoint x=\"534\" y=\"396\"/>\n        <di:waypoint x=\"606\" y=\"396\"/>\n        <di:waypoint x=\"606\" y=\"312\"/>\n        <di:waypoint x=\"678\" y=\"312\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf-8_di\" bpmnElement=\"sf-8\">\n        <di:waypoint x=\"726\" y=\"308\"/>\n        <di:waypoint x=\"772\" y=\"308\"/>\n        <di:waypoint x=\"772\" y=\"312\"/>\n        <di:waypoint x=\"818\" y=\"312\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf-10_di\" bpmnElement=\"sf-10\">\n        <di:waypoint x=\"702\" y=\"336\"/>\n        <di:waypoint x=\"702\" y=\"546\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf-9_di\" bpmnElement=\"sf-9\">\n        <di:waypoint x=\"958\" y=\"312\"/>\n        <di:waypoint x=\"976\" y=\"312\"/>\n        <di:waypoint x=\"976\" y=\"438\"/>\n        <di:waypoint x=\"800\" y=\"438\"/>\n        <di:waypoint x=\"800\" y=\"396\"/>\n        <di:waypoint x=\"498\" y=\"396\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf-11_di\" bpmnElement=\"sf-11\">\n        <di:waypoint x=\"702\" y=\"546\"/>\n        <di:waypoint x=\"702\" y=\"428\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf-12_di\" bpmnElement=\"sf-12\">\n        <di:waypoint x=\"772\" y=\"396\"/>\n        <di:waypoint x=\"864\" y=\"396\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf-13_di\" bpmnElement=\"sf-13\">\n        <di:waypoint x=\"912\" y=\"392\"/>\n        <di:waypoint x=\"958\" y=\"392\"/>\n        <di:waypoint x=\"958\" y=\"312\"/>\n        <di:waypoint x=\"1004\" y=\"312\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf-15_di\" bpmnElement=\"sf-15\">\n        <di:waypoint x=\"912\" y=\"400\"/>\n        <di:waypoint x=\"958\" y=\"400\"/>\n        <di:waypoint x=\"958\" y=\"396\"/>\n        <di:waypoint x=\"1004\" y=\"396\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf-14_di\" bpmnElement=\"sf-14\">\n        <di:waypoint x=\"1144\" y=\"312\"/>\n        <di:waypoint x=\"1193\" y=\"312\"/>\n        <di:waypoint x=\"1193\" y=\"270\"/>\n        <di:waypoint x=\"1242\" y=\"270\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf-16_di\" bpmnElement=\"sf-16\">\n        <di:waypoint x=\"1144\" y=\"396\"/>\n        <di:waypoint x=\"1190\" y=\"396\"/>\n        <di:waypoint x=\"1190\" y=\"354\"/>\n        <di:waypoint x=\"1236\" y=\"354\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf-19_di\" bpmnElement=\"sf-19\">\n        <di:waypoint x=\"1284\" y=\"350\"/>\n        <di:waypoint x=\"1330\" y=\"350\"/>\n        <di:waypoint x=\"1330\" y=\"312\"/>\n        <di:waypoint x=\"1376\" y=\"312\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf-17_di\" bpmnElement=\"sf-17\">\n        <di:waypoint x=\"1260\" y=\"378\"/>\n        <di:waypoint x=\"1260\" y=\"546\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf-18_di\" bpmnElement=\"sf-18\">\n        <di:waypoint x=\"1260\" y=\"546\"/>\n        <di:waypoint x=\"1260\" y=\"456\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf-20_di\" bpmnElement=\"sf-20\">\n        <di:waypoint x=\"1446\" y=\"344\"/>\n        <di:waypoint x=\"1446\" y=\"546\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf-21_di\" bpmnElement=\"sf-21\">\n        <di:waypoint x=\"1446\" y=\"546\"/>\n        <di:waypoint x=\"1446\" y=\"414\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf-22_di\" bpmnElement=\"sf-22\">\n        <di:waypoint x=\"138\" y=\"114\"/>\n        <di:waypoint x=\"236\" y=\"114\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf-23_di\" bpmnElement=\"sf-23\">\n        <di:waypoint x=\"376\" y=\"114\"/>\n        <di:waypoint x=\"474\" y=\"114\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"mf-form_di\" bpmnElement=\"mf-form\">\n        <di:waypoint x=\"282\" y=\"364\"/>\n        <di:waypoint x=\"242\" y=\"364\"/>\n        <di:waypoint x=\"242\" y=\"220\"/>\n        <di:waypoint x=\"106\" y=\"220\"/>\n        <di:waypoint x=\"106\" y=\"132\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"mf-resubmit_di\" bpmnElement=\"mf-resubmit\">\n        <di:waypoint x=\"888\" y=\"280\"/>\n        <di:waypoint x=\"888\" y=\"220\"/>\n        <di:waypoint x=\"120\" y=\"220\"/>\n        <di:waypoint x=\"120\" y=\"132\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"mf-verdict_di\" bpmnElement=\"mf-verdict\">\n        <di:waypoint x=\"354\" y=\"146\"/>\n        <di:waypoint x=\"354\" y=\"220\"/>\n        <di:waypoint x=\"550\" y=\"220\"/>\n        <di:waypoint x=\"550\" y=\"378\"/>\n        <di:waypoint x=\"530\" y=\"378\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"mf-donate_di\" bpmnElement=\"mf-donate\">\n        <di:waypoint x=\"1446\" y=\"344\"/>\n        <di:waypoint x=\"1526\" y=\"344\"/>\n        <di:waypoint x=\"1526\" y=\"684\"/>\n        <di:waypoint x=\"1446\" y=\"684\"/>\n        <di:waypoint x=\"1446\" y=\"692\"/>\n      </bpmndi:BPMNEdge>\n    </bpmndi:BPMNPlane>\n  </bpmndi:BPMNDiagram>\n</bpmn:definitions>";
+  const BPMN_FILENAME = "Weeding_Sale_of_Worn_Copies.bpmn";
+  function exportBPMN() {
+    const blob = new Blob([BPMN_XML], { type: 'application/xml' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = BPMN_FILENAME;
+    document.body.appendChild(a); a.click();
+    setTimeout(function() { URL.revokeObjectURL(url); a.remove(); }, 1000);
+  }
+  </script>
+</body>
+</html>

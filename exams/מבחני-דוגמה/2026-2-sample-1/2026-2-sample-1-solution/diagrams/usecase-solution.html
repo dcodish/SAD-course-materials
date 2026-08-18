@@ -1,0 +1,1307 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>קמפוס בית, Use Case Diagram (פתרון שאלה 6)</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Hebrew:wght@400;600&family=IBM+Plex+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+/* inlined uc-diagram-common.css */
+/* uc-diagram-common.css, SAD MCP shared styles for use case diagrams */
+
+/* ── Base layout ─────────────────────────────────────────────────────────── */
+body { margin: 0; padding: 20px 0; background: #f8fafc;
+  font-family: 'Noto Sans Hebrew', sans-serif; color: #1e293b; }
+h1.page-title { text-align: center; font-size: 18px; color: #1e40af;
+  margin: 0 0 10px; font-weight: 700; }
+.diagram-part { display: flex; justify-content: center; }
+
+/* ── Tab bar ─────────────────────────────────────────────────────────────── */
+.tab-bar { display: flex; justify-content: center; gap: 8px; margin: 12px 0 4px; }
+.tab { padding: 7px 20px; border: 1px solid #cbd5e1; background: #f8fafc;
+  color: #475569; font-size: 13px; font-weight: 600; cursor: pointer;
+  border-radius: 6px; font-family: 'Noto Sans Hebrew', sans-serif; }
+.tab.active { background: #1e40af; color: #fff; border-color: #1e40af; }
+.split-rationale { text-align: center; font-size: 11px; color: #64748b;
+  margin: 0 0 8px; font-style: italic; }
+
+/* ── Buttons ─────────────────────────────────────────────────────────────── */
+.fix-btn { padding: 8px 20px; border: 1px solid #3b82f6; background: #eff6ff;
+  color: #1e40af; font-size: 12px; font-weight: 600; cursor: pointer;
+  border-radius: 6px; font-family: 'Noto Sans Hebrew', sans-serif; }
+.fix-btn:hover { background: #dbeafe; }
+.vp-export-btn { position: fixed; bottom: 20px; right: 20px; z-index: 1000;
+  background: #1e40af; color: #fff; border: none; border-radius: 6px;
+  padding: 8px 16px; font-size: 13px; cursor: pointer;
+  font-family: 'IBM Plex Mono', monospace; }
+.vp-export-btn:hover { background: #1e3a8a; }
+
+/* ── Assumptions panel ───────────────────────────────────────────────────── */
+.assumptions-panel { display: flex; gap: 24px; max-width: 1000px;
+  margin: 20px auto; padding: 16px 20px; background: #fff;
+  border: 1px solid #cbd5e1; border-radius: 8px; direction: rtl; }
+.assumptions-col { flex: 1; min-width: 0; }
+.assumptions-col h3 { margin: 0 0 6px; font-size: 13px; font-weight: 600; color: #1e40af; }
+.assumptions-col ul { margin: 0; padding-right: 18px; }
+.assumptions-col li { color: #334155; font-size: 12px; line-height: 1.6; }
+
+/* ── User stories summary panel ──────────────────────────────────────────── */
+.user-stories-panel { max-width: 1000px; margin: 12px auto 20px; padding: 16px 20px;
+  background: #fff; border: 1px solid #cbd5e1; border-radius: 8px; direction: rtl; }
+.user-stories-panel h3 { margin: 0 0 8px; font-size: 13px; font-weight: 600; color: #1e40af; }
+.user-stories-panel ul { margin: 0; padding-right: 18px; }
+.user-stories-panel li { color: #334155; font-size: 12px; line-height: 1.7; }
+
+/* ── UC modal ────────────────────────────────────────────────────────────── */
+body.uc-modal-open { overflow: hidden; }
+.uc-modal[hidden] { display: none !important; }
+.uc-modal { position: fixed; inset: 0; z-index: 2000; display: flex;
+  align-items: flex-start; justify-content: center; padding: 40px 20px;
+  overflow-y: auto; direction: rtl; font-family: 'Noto Sans Hebrew', sans-serif; }
+.uc-modal-backdrop { position: absolute; inset: 0; background: rgba(15,23,42,0.55); }
+.uc-modal-body { position: relative; z-index: 1; width: 100%; max-width: 960px;
+  background: #fff; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,.25);
+  padding: 28px 32px 32px; color: #1e293b; }
+.uc-modal-close { position: absolute; top: 10px; left: 14px; background: none;
+  border: none; font-size: 24px; color: #64748b; cursor: pointer; }
+.uc-modal-body header { border-bottom: 1px solid #e2e8f0; padding-bottom: 12px;
+  margin-bottom: 18px; }
+.uc-modal-body .uc-id { display: inline-block; font-family: 'IBM Plex Mono',monospace;
+  font-size: 11px; color: #64748b; background: #f1f5f9; padding: 2px 8px;
+  border-radius: 4px; margin-bottom: 6px; }
+.uc-modal-body .uc-name { margin: 0 0 4px; font-size: 20px; color: #1e40af; font-weight: 700; }
+.uc-modal-body .uc-primary { font-size: 13px; color: #334155; }
+.uc-modal-body .uc-primary-label { color: #64748b; margin-left: 6px; }
+.uc-modal-body .uc-primary-link { color: #1e40af; cursor: pointer; font-weight: 600;
+  text-decoration: underline dotted; }
+.uc-description { margin-bottom: 20px; font-size: 14px; line-height: 1.7; color: #334155; }
+.uc-scenarios h3 { font-size: 14px; color: #1e40af; margin: 18px 0 6px;
+  border-right: 3px solid #3b82f6; padding-right: 10px; }
+.uc-scenarios ol { margin: 0 0 14px; padding-right: 22px; }
+.uc-scenarios ol li { color: #1e293b; font-size: 13px; line-height: 1.9; }
+.step-actor { color: #1e40af; font-weight: 600; cursor: pointer; text-decoration: underline dotted; }
+.step-system { color: #475569; font-style: italic; }
+.step-include { color: #7c3aed; font-family: 'IBM Plex Mono', monospace; font-size: 11px; }
+.step-uc-ref { color: #7c3aed; cursor: pointer; text-decoration: underline; }
+.ext-inline, .ext-sub { list-style: none; color: #64748b; font-size: 12px;
+  padding-right: 24px; line-height: 1.7; }
+.uc-prepostuser { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 18px;
+  margin: 18px 0 20px; }
+.uc-prepostuser > div { background: #f8fafc; border: 1px solid #e2e8f0;
+  border-radius: 8px; padding: 12px 14px; }
+.uc-prepostuser h4 { margin: 0 0 6px; font-size: 12px; color: #1e40af; font-weight: 600; }
+.uc-prepostuser ul { margin: 0; padding-right: 18px; font-size: 12px;
+  color: #334155; line-height: 1.7; }
+.uc-wireframe { border-top: 1px dashed #cbd5e1; padding-top: 16px; margin-top: 6px; }
+.uc-wireframe:empty, .uc-wireframe[hidden] { display: none; }
+
+/* ── Actor pulse ─────────────────────────────────────────────────────────── */
+.actor-pulse { animation: actor-pulse 0.6s ease-in-out 3; }
+@keyframes actor-pulse {
+  0%, 100% { filter: none; }
+  50%      { filter: drop-shadow(0 0 8px #3b82f6); }
+}
+
+/* ── Wireframe scoped theme (wf-*) ───────────────────────────────────────── */
+.wf-screen { background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px;
+  padding: 18px 20px; font-family: 'Noto Sans Hebrew', sans-serif;
+  color: #1e293b; direction: rtl; max-width: 760px; margin: 0 auto; }
+.wf-heading { margin: 0 0 14px; font-size: 15px; color: #1e40af; font-weight: 700;
+  border-bottom: 1px solid #e2e8f0; padding-bottom: 6px; }
+.wf-section { margin: 14px 0; }
+.wf-row { display: flex; gap: 10px; align-items: center; margin: 6px 0; }
+.wf-label { font-size: 12px; color: #475569; min-width: 120px; }
+.wf-input, .wf-textarea, .wf-select { flex: 1; background: #fff;
+  border: 1px solid #cbd5e1; border-radius: 4px; padding: 6px 8px;
+  font-size: 12px; color: #334155; }
+.wf-textarea { min-height: 60px; }
+.wf-table { width: 100%; border-collapse: collapse; margin: 10px 0; font-size: 12px; }
+.wf-table th, .wf-table td { border: 1px solid #cbd5e1; padding: 6px 8px; text-align: right; }
+.wf-table th { background: #e2e8f0; color: #1e40af; font-weight: 600; }
+.wf-actions { display: flex; gap: 8px; margin-top: 12px; justify-content: flex-start; }
+.wf-button { background: #fff; border: 1px solid #64748b; border-radius: 4px;
+  padding: 6px 14px; font-size: 12px; color: #334155; cursor: default; }
+.wf-primary { background: #1e40af; color: #fff; border-color: #1e40af; }
+.wf-image-box { border: 1px dashed #94a3b8; background: #f1f5f9; color: #64748b;
+  text-align: center; padding: 24px; border-radius: 4px; font-size: 12px; margin: 10px 0; }
+.wf-hint { font-size: 11px; color: #64748b; font-style: italic; margin: 6px 0; }
+.wf-badge { display: inline-block; background: #e0f2fe; color: #0369a1;
+  padding: 2px 8px; border-radius: 999px; font-size: 10px; font-weight: 600; }
+
+</style>
+  <!-- uc-diagram-common.css sets display:flex on .diagram-part which overrides [hidden]. Restore it. -->
+  <style>
+    [hidden] { display: none !important; }
+    .solution-head { background:#1e40af; color:#fff; border-radius:12px; padding:14px 20px; margin:14px 16px 6px; font-family:'Noto Sans Hebrew',sans-serif; }
+    .solution-head h1 { margin:0 0 4px; font-size:19px; }
+    .solution-head p { margin:0; font-size:12.5px; color:#dbe6ff; line-height:1.6; }
+  </style>
+</head>
+<body>
+  <div class="solution-head">
+    <h1>פתרון שאלה 6, תרשים Use Case, מערכת "קמפוס בית"</h1>
+    <p>מודל פתרון להוראה, ניתוח ועיצוב מערכות מידע (364-1-1411), מבחן לדוגמה סמסטר ב' 2026. לחיצה על Use Case פותחת את התיעוד המלא; לחיצה על שחקן/קו אסוציאציה מציגה תיאור.</p>
+  </div>
+
+  <!-- Tab bar -->
+  <div class="tab-bar">
+    <button class="tab active" onclick="showDiagram(0)">חוזים, תשלומים והזמנת מתקנים</button>
+    <button class="tab" onclick="showDiagram(1)">תחזוקה, דוחות וניהול</button>
+  </div>
+
+  <!-- Split rationale -->
+  <div class="split-rationale">Split by UC count: 17 UCs &gt; 8 threshold, פוצל לשני אזורי אחריות של אותה מערכת.</div>
+
+  <!-- Fix Layout button -->
+  <div style="text-align:center;margin:8px 0;">
+    <button onclick="fixLayout(currentLayout())" class="fix-btn">Fix Layout</button>
+  </div>
+
+  <!-- ===================== TAB 0 ===================== -->
+  <div class="diagram-part" id="diagram-0">
+    <svg id="diagram-svg-0" viewBox="0 0 1520 760" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <pattern id="dots0" width="24" height="24" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="0.8" fill="#cbd5e1"/></pattern>
+        <marker id="arrow-include0" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polyline points="0 0, 9 3.5, 0 7" fill="none" stroke="#7c3aed" stroke-width="1.2"/></marker>
+      </defs>
+      <rect x="0" y="0" width="1520" height="760" fill="#f8fafc"/>
+      <rect x="0" y="0" width="1520" height="760" fill="url(#dots0)"/>
+
+      <!-- boundary -->
+      <rect class="system-boundary" x="360" y="70" width="860" height="560" rx="12" fill="#ffffff" stroke="#3b82f6" stroke-width="2.5"/>
+      <rect x="360" y="70" width="860" height="44" rx="12" fill="#1e40af"/>
+      <rect x="360" y="96" width="860" height="18" fill="#1e40af"/>
+      <text x="790" y="99" text-anchor="middle" fill="#ffffff" font-size="14" font-weight="700" font-family="'Noto Sans Hebrew',sans-serif">מערכת "קמפוס בית", חוזים, תשלומים ומתקנים</text>
+
+      <!-- association lines -->
+      <g id="assocLayer0">
+        <line class="assoc-line" data-conn-from="rakaz" data-conn-to="uc-create-agreement" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+        <line class="assoc-line" data-conn-from="dayar" data-conn-to="uc-sign-agreement" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+        <line class="assoc-line" data-conn-from="dayar" data-conn-to="uc-cancel-agreement" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+        <line class="assoc-line" data-conn-from="dayar" data-conn-to="uc-book-facility" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+        <line class="assoc-line" data-conn-from="dayar" data-conn-to="uc-view-own" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+        <line class="assoc-line" data-conn-from="manager" data-conn-to="uc-review-agreement" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+        <line class="assoc-line" data-conn-from="manager" data-conn-to="uc-reports" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+        <line class="assoc-line" data-conn-from="time" data-conn-to="uc-monthly-charge" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+        <line class="assoc-line" data-conn-from="time" data-conn-to="uc-mark-arrears" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+        <line class="assoc-line" data-conn-from="clearing" data-conn-to="uc-import-payments" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+        <!-- clickable hitbox for the pedagogically-key clearing association -->
+        <line class="conn-hitbox" data-conn-id="a-clearing" data-hitbox-from="clearing" data-hitbox-to="uc-import-payments" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('a-clearing','assoc',event)"/>
+      </g>
+
+      <!-- include arrows -->
+      <g id="includeLayer0">
+        <line class="include-line" data-conn-from="uc-create-agreement" data-conn-to="uc-check-debt" x1="0" y1="0" x2="0" y2="0" stroke="#7c3aed" stroke-width="1.6" stroke-dasharray="6 4" marker-end="url(#arrow-include0)"/>
+        <text data-label-for="uc-create-agreement uc-check-debt" x="0" y="0" text-anchor="middle" font-size="9.5" fill="#7c3aed" font-family="'IBM Plex Mono',monospace">«include»</text>
+        <line class="include-line" data-conn-from="uc-book-facility" data-conn-to="uc-check-debt" x1="0" y1="0" x2="0" y2="0" stroke="#7c3aed" stroke-width="1.6" stroke-dasharray="6 4" marker-end="url(#arrow-include0)"/>
+        <text data-label-for="uc-book-facility uc-check-debt" x="0" y="0" text-anchor="middle" font-size="9.5" fill="#7c3aed" font-family="'IBM Plex Mono',monospace">«include»</text>
+      </g>
+
+      <!-- use cases -->
+      <g id="ucLayer0">
+        <g class="uc-group" id="uc-group-uc-create-agreement" data-uc-id="uc-create-agreement" onclick="showDesc('uc-create-agreement','uc',event)" style="cursor:pointer"><ellipse cx="470" cy="170" rx="97" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/><text x="470" y="174" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">הכנת טיוטת חוזה שכירות</text></g>
+        <g class="uc-group" id="uc-group-uc-sign-agreement" data-uc-id="uc-sign-agreement" onclick="showDesc('uc-sign-agreement','uc',event)" style="cursor:pointer"><ellipse cx="470" cy="250" rx="90" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/><text x="470" y="254" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">חתימה על חוזה שכירות</text></g>
+        <g class="uc-group" id="uc-group-uc-book-facility" data-uc-id="uc-book-facility" onclick="showDesc('uc-book-facility','uc',event)" style="cursor:pointer"><ellipse cx="470" cy="330" rx="80" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/><text x="470" y="334" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">הזמנת מתקן משותף</text></g>
+        <g class="uc-group" id="uc-group-uc-view-own" data-uc-id="uc-view-own" onclick="showDesc('uc-view-own','uc',event)" style="cursor:pointer"><ellipse cx="470" cy="410" rx="92" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/><text x="470" y="414" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">צפייה בחוזה ובחיובים</text></g>
+
+        <g class="uc-group" id="uc-group-uc-reports" data-uc-id="uc-reports" onclick="showDesc('uc-reports','uc',event)" style="cursor:pointer"><ellipse cx="790" cy="200" rx="72" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/><text x="790" y="204" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">הפקת דוחות</text></g>
+        <g class="uc-group" id="uc-group-uc-check-debt" data-uc-id="uc-check-debt" onclick="showDesc('uc-check-debt','uc',event)" style="cursor:pointer"><ellipse cx="790" cy="330" rx="96" ry="28" fill="#ece3fb" stroke="#7c3aed" stroke-width="2"/><text x="790" y="334" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">בדיקת מצב חוב של דייר</text></g>
+        <g class="uc-group" id="uc-group-uc-cancel-agreement" data-uc-id="uc-cancel-agreement" onclick="showDesc('uc-cancel-agreement','uc',event)" style="cursor:pointer"><ellipse cx="790" cy="460" rx="70" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/><text x="790" y="464" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">ביטול חוזה</text></g>
+
+        <g class="uc-group" id="uc-group-uc-review-agreement" data-uc-id="uc-review-agreement" onclick="showDesc('uc-review-agreement','uc',event)" style="cursor:pointer"><ellipse cx="1110" cy="170" rx="84" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/><text x="1110" y="174" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">בדיקת חוזה ואישורו</text></g>
+        <g class="uc-group" id="uc-group-uc-monthly-charge" data-uc-id="uc-monthly-charge" onclick="showDesc('uc-monthly-charge','uc',event)" style="cursor:pointer"><ellipse cx="1110" cy="250" rx="74" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/><text x="1110" y="254" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">הפקת חיוב חודשי</text></g>
+        <g class="uc-group" id="uc-group-uc-import-payments" data-uc-id="uc-import-payments" onclick="showDesc('uc-import-payments','uc',event)" style="cursor:pointer"><ellipse cx="1110" cy="330" rx="90" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/><text x="1110" y="334" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">קליטת דיווח תשלומים</text></g>
+        <g class="uc-group" id="uc-group-uc-mark-arrears" data-uc-id="uc-mark-arrears" onclick="showDesc('uc-mark-arrears','uc',event)" style="cursor:pointer"><ellipse cx="1110" cy="410" rx="84" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/><text x="1110" y="414" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">סימון חוזה כבפיגור</text></g>
+      </g>
+
+      <!-- actors -->
+      <g id="actorLayer0">
+        <g id="actor-group-rakaz" data-actor-id="rakaz" onclick="showDesc('rakaz','actor',event)" style="cursor:pointer" transform="translate(280,220)">
+          <circle cx="0" cy="-60" r="14" fill="#e0f0ff" stroke="#334155" stroke-width="2"/><line x1="0" y1="-46" x2="0" y2="-10" stroke="#334155" stroke-width="2"/><line x1="-18" y1="-36" x2="18" y2="-36" stroke="#334155" stroke-width="2"/><line x1="0" y1="-10" x2="-14" y2="14" stroke="#334155" stroke-width="2"/><line x1="0" y1="-10" x2="14" y2="14" stroke="#334155" stroke-width="2"/>
+          <text x="0" y="30" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b" font-family="'Noto Sans Hebrew',sans-serif">רכז שיבוץ</text>
+        </g>
+        <g id="actor-group-dayar" data-actor-id="dayar" onclick="showDesc('dayar','actor',event)" style="cursor:pointer" transform="translate(280,420)">
+          <circle cx="0" cy="-60" r="14" fill="#e0f0ff" stroke="#334155" stroke-width="2"/><line x1="0" y1="-46" x2="0" y2="-10" stroke="#334155" stroke-width="2"/><line x1="-18" y1="-36" x2="18" y2="-36" stroke="#334155" stroke-width="2"/><line x1="0" y1="-10" x2="-14" y2="14" stroke="#334155" stroke-width="2"/><line x1="0" y1="-10" x2="14" y2="14" stroke="#334155" stroke-width="2"/>
+          <text x="0" y="30" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b" font-family="'Noto Sans Hebrew',sans-serif">דייר/סטודנט</text>
+        </g>
+        <g id="actor-group-manager" data-actor-id="manager" onclick="showDesc('manager','actor',event)" style="cursor:pointer" transform="translate(1300,180)">
+          <circle cx="0" cy="-60" r="14" fill="#e0f0ff" stroke="#334155" stroke-width="2"/><line x1="0" y1="-46" x2="0" y2="-10" stroke="#334155" stroke-width="2"/><line x1="-18" y1="-36" x2="18" y2="-36" stroke="#334155" stroke-width="2"/><line x1="0" y1="-10" x2="-14" y2="14" stroke="#334155" stroke-width="2"/><line x1="0" y1="-10" x2="14" y2="14" stroke="#334155" stroke-width="2"/>
+          <text x="0" y="30" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b" font-family="'Noto Sans Hebrew',sans-serif">מנהל אזור</text>
+        </g>
+        <g id="actor-group-time" data-actor-id="time" onclick="showDesc('time','actor',event)" style="cursor:pointer" transform="translate(1300,330)">
+          <circle cx="0" cy="-60" r="14" fill="#fef3c7" stroke="#334155" stroke-width="2"/>
+          <line x1="0" y1="-46" x2="0" y2="-10" stroke="#334155" stroke-width="2"/>
+          <line x1="-18" y1="-36" x2="18" y2="-36" stroke="#334155" stroke-width="2"/>
+          <line x1="0" y1="-10" x2="-14" y2="14" stroke="#334155" stroke-width="2"/>
+          <line x1="0" y1="-10" x2="14" y2="14" stroke="#334155" stroke-width="2"/>
+          <text x="0" y="30" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b" font-family="'Noto Sans Hebrew',sans-serif">שחקן זמן</text>
+          <text x="0" y="44" text-anchor="middle" font-size="9" fill="#64748b" font-family="'IBM Plex Mono',monospace">«system»</text>
+          <text x="0" y="58" text-anchor="middle" font-size="9.5" fill="#64748b" font-family="'Noto Sans Hebrew',sans-serif">(טריגר מתוזמן)</text>
+        </g>
+        <g id="actor-group-clearing" data-actor-id="clearing" onclick="showDesc('clearing','actor',event)" style="cursor:pointer" transform="translate(1300,480)">
+          <circle cx="0" cy="-60" r="14" fill="#fef3c7" stroke="#334155" stroke-width="2"/>
+          <line x1="0" y1="-46" x2="0" y2="-10" stroke="#334155" stroke-width="2"/>
+          <line x1="-18" y1="-36" x2="18" y2="-36" stroke="#334155" stroke-width="2"/>
+          <line x1="0" y1="-10" x2="-14" y2="14" stroke="#334155" stroke-width="2"/>
+          <line x1="0" y1="-10" x2="14" y2="14" stroke="#334155" stroke-width="2"/>
+          <text x="0" y="30" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b" font-family="'Noto Sans Hebrew',sans-serif">מערכת הסליקה</text>
+          <text x="0" y="44" text-anchor="middle" font-size="9" fill="#64748b" font-family="'IBM Plex Mono',monospace">«system»</text>
+          <text x="0" y="58" text-anchor="middle" font-size="9.5" fill="#64748b" font-family="'Noto Sans Hebrew',sans-serif">(חיצונית, יוזמת)</text>
+        </g>
+      </g>
+    </svg>
+  </div>
+
+  <!-- ===================== TAB 1 ===================== -->
+  <div class="diagram-part" id="diagram-1" hidden>
+    <svg id="diagram-svg-1" viewBox="0 0 1520 640" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <pattern id="dots1" width="24" height="24" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="0.8" fill="#cbd5e1"/></pattern>
+      </defs>
+      <rect x="0" y="0" width="1520" height="640" fill="#f8fafc"/>
+      <rect x="0" y="0" width="1520" height="640" fill="url(#dots1)"/>
+
+      <rect class="system-boundary" x="360" y="70" width="860" height="480" rx="12" fill="#ffffff" stroke="#3b82f6" stroke-width="2.5"/>
+      <rect x="360" y="70" width="860" height="44" rx="12" fill="#1e40af"/>
+      <rect x="360" y="96" width="860" height="18" fill="#1e40af"/>
+      <text x="790" y="99" text-anchor="middle" fill="#ffffff" font-size="14" font-weight="700" font-family="'Noto Sans Hebrew',sans-serif">מערכת "קמפוס בית", תחזוקה, דוחות וניהול נתוני-אב</text>
+
+      <g id="assocLayer1">
+        <line class="assoc-line" data-conn-from="dayar" data-conn-to="uc-open-maintenance" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+        <line class="assoc-line" data-conn-from="dayar" data-conn-to="uc-confirm-fixed" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+        <line class="assoc-line" data-conn-from="avbait" data-conn-to="uc-assign-contractor" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+        <line class="assoc-line" data-conn-from="kablan" data-conn-to="uc-report-work" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+        <line class="assoc-line" data-conn-from="manager" data-conn-to="uc-approve-excess" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+        <line class="assoc-line" data-conn-from="sysadmin" data-conn-to="uc-manage-master-data" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+      </g>
+
+      <g id="ucLayer1">
+        <g class="uc-group" id="uc-group-uc-open-maintenance" data-uc-id="uc-open-maintenance" onclick="showDesc('uc-open-maintenance','uc',event)" style="cursor:pointer"><ellipse cx="480" cy="170" rx="84" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/><text x="480" y="174" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">פתיחת קריאת תחזוקה</text></g>
+        <g class="uc-group" id="uc-group-uc-assign-contractor" data-uc-id="uc-assign-contractor" onclick="showDesc('uc-assign-contractor','uc',event)" style="cursor:pointer"><ellipse cx="480" cy="260" rx="80" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/><text x="480" y="264" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">שיבוץ קבלן לקריאה</text></g>
+        <g class="uc-group" id="uc-group-uc-report-work" data-uc-id="uc-report-work" onclick="showDesc('uc-report-work','uc',event)" style="cursor:pointer"><ellipse cx="480" cy="350" rx="97" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/><text x="480" y="354" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">דיווח סיום עבודה ועלות</text></g>
+        <g class="uc-group" id="uc-group-uc-confirm-fixed" data-uc-id="uc-confirm-fixed" onclick="showDesc('uc-confirm-fixed','uc',event)" style="cursor:pointer"><ellipse cx="480" cy="440" rx="84" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/><text x="480" y="444" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">אישור שהתקלה תוקנה</text></g>
+
+        <g class="uc-group" id="uc-group-uc-approve-excess" data-uc-id="uc-approve-excess" onclick="showDesc('uc-approve-excess','uc',event)" style="cursor:pointer"><ellipse cx="1100" cy="200" rx="77" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/><text x="1100" y="204" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">אישור עלות חריגה</text></g>
+        <g class="uc-group" id="uc-group-uc-manage-master-data" data-uc-id="uc-manage-master-data" onclick="showDesc('uc-manage-master-data','uc',event)" style="cursor:pointer"><ellipse cx="1100" cy="330" rx="72" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/><text x="1100" y="334" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">ניהול נתוני-אב</text></g>
+      </g>
+
+      <g id="actorLayer1">
+        <g id="actor-group-dayar" data-actor-id="dayar" onclick="showDesc('dayar','actor',event)" style="cursor:pointer" transform="translate(280,200)">
+          <circle cx="0" cy="-60" r="14" fill="#e0f0ff" stroke="#334155" stroke-width="2"/><line x1="0" y1="-46" x2="0" y2="-10" stroke="#334155" stroke-width="2"/><line x1="-18" y1="-36" x2="18" y2="-36" stroke="#334155" stroke-width="2"/><line x1="0" y1="-10" x2="-14" y2="14" stroke="#334155" stroke-width="2"/><line x1="0" y1="-10" x2="14" y2="14" stroke="#334155" stroke-width="2"/>
+          <text x="0" y="30" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b" font-family="'Noto Sans Hebrew',sans-serif">דייר/סטודנט</text>
+        </g>
+        <g id="actor-group-avbait" data-actor-id="avbait" onclick="showDesc('avbait','actor',event)" style="cursor:pointer" transform="translate(280,320)">
+          <circle cx="0" cy="-60" r="14" fill="#e0f0ff" stroke="#334155" stroke-width="2"/><line x1="0" y1="-46" x2="0" y2="-10" stroke="#334155" stroke-width="2"/><line x1="-18" y1="-36" x2="18" y2="-36" stroke="#334155" stroke-width="2"/><line x1="0" y1="-10" x2="-14" y2="14" stroke="#334155" stroke-width="2"/><line x1="0" y1="-10" x2="14" y2="14" stroke="#334155" stroke-width="2"/>
+          <text x="0" y="30" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b" font-family="'Noto Sans Hebrew',sans-serif">אב בית</text>
+        </g>
+        <g id="actor-group-kablan" data-actor-id="kablan" onclick="showDesc('kablan','actor',event)" style="cursor:pointer" transform="translate(280,440)">
+          <circle cx="0" cy="-60" r="14" fill="#e0f0ff" stroke="#334155" stroke-width="2"/><line x1="0" y1="-46" x2="0" y2="-10" stroke="#334155" stroke-width="2"/><line x1="-18" y1="-36" x2="18" y2="-36" stroke="#334155" stroke-width="2"/><line x1="0" y1="-10" x2="-14" y2="14" stroke="#334155" stroke-width="2"/><line x1="0" y1="-10" x2="14" y2="14" stroke="#334155" stroke-width="2"/>
+          <text x="0" y="30" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b" font-family="'Noto Sans Hebrew',sans-serif">קבלן</text>
+        </g>
+        <g id="actor-group-manager" data-actor-id="manager" onclick="showDesc('manager','actor',event)" style="cursor:pointer" transform="translate(1300,200)">
+          <circle cx="0" cy="-60" r="14" fill="#e0f0ff" stroke="#334155" stroke-width="2"/><line x1="0" y1="-46" x2="0" y2="-10" stroke="#334155" stroke-width="2"/><line x1="-18" y1="-36" x2="18" y2="-36" stroke="#334155" stroke-width="2"/><line x1="0" y1="-10" x2="-14" y2="14" stroke="#334155" stroke-width="2"/><line x1="0" y1="-10" x2="14" y2="14" stroke="#334155" stroke-width="2"/>
+          <text x="0" y="30" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b" font-family="'Noto Sans Hebrew',sans-serif">מנהל אזור</text>
+        </g>
+        <g id="actor-group-sysadmin" data-actor-id="sysadmin" onclick="showDesc('sysadmin','actor',event)" style="cursor:pointer" transform="translate(1300,340)">
+          <circle cx="0" cy="-60" r="14" fill="#e0f0ff" stroke="#334155" stroke-width="2"/><line x1="0" y1="-46" x2="0" y2="-10" stroke="#334155" stroke-width="2"/><line x1="-18" y1="-36" x2="18" y2="-36" stroke="#334155" stroke-width="2"/><line x1="0" y1="-10" x2="-14" y2="14" stroke="#334155" stroke-width="2"/><line x1="0" y1="-10" x2="14" y2="14" stroke="#334155" stroke-width="2"/>
+          <text x="0" y="30" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b" font-family="'Noto Sans Hebrew',sans-serif">מנהל מערכת</text>
+        </g>
+      </g>
+    </svg>
+  </div>
+
+  <!-- Assumptions / open-questions panel -->
+  <div id="assumptions-panel" class="assumptions-panel" hidden>
+    <div class="assumptions-col" id="assumptions-col"><h3>הנחות</h3><ul id="assumptions-list"></ul></div>
+    <div class="assumptions-col" id="open-questions-col"><h3>שאלות פתוחות</h3><ul id="open-questions-list"></ul></div>
+  </div>
+
+  <!-- User stories summary -->
+  <div id="user-stories-panel" class="user-stories-panel" hidden>
+    <h3>סיפורי משתמש</h3>
+    <ul id="user-stories-list"></ul>
+  </div>
+
+  <!-- UC modal -->
+  <div id="uc-modal" class="uc-modal" hidden role="dialog" aria-modal="true">
+    <div class="uc-modal-backdrop" onclick="closeUcModal()"></div>
+    <div class="uc-modal-body"></div>
+  </div>
+
+  <!-- VP export -->
+  <button class="vp-export-btn" onclick="exportXMI()">Download .xmi (Visual Paradigm)</button>
+
+  <script>
+  var actorDescriptions = {
+    dayar:    { name:'דייר/סטודנט', desc:'סטודנט השוכר חדר בחוזה נפרד. יוזם רישום, חתימה, הזמנת מתקן, פתיחת קריאת תחזוקה וצפייה בנתוניו.' },
+    rakaz:    { name:'רכז שיבוץ', desc:'מאתר חדר פנוי, מכין טיוטת חוזה, מגיש לאישור ומתקן חוזה שהוחזר. מפיק דוחות.' },
+    manager:  { name:'מנהל אזור', desc:'מאשר או מחזיר חוזים לתיקון, מבטל חוזה לפני כניסתו לתוקף, מאשר עלות חריגה ומפיק דוחות.' },
+    avbait:   { name:'אב בית', desc:'משבץ לקריאת תחזוקה קבלן מאושר לפי תחום התמחותו ומנהל את זרימת הטיפול.' },
+    kablan:   { name:'קבלן', desc:'משתמש חיצוני בעל הרשאה לעדכן אך ורק את הקריאה ששובצה לו, מדווח על סיום העבודה ועל עלותה.' },
+    sysadmin: { name:'מנהל מערכת', desc:'מנהל את נתוני-האב: בניינים, חדרים, סוגי מתקנים והקבלנים המאושרים.' },
+    time:     { name:'שחקן זמן «system»', desc:'טריגר מתוזמן: מפיק חיוב ב-1 לכל חודש ומסמן חוזה כבפיגור בחלוף 10 ימים ללא פירעון.' },
+    clearing: { name:'מערכת הסליקה «system»', desc:'מערכת חיצונית של חברת האשראי. בתום כל יום היא היוזמת ומעבירה אלינו את פירוט התשלומים שנקלטו ונדחו; אנו לעולם איננו פונים אליה.' }
+  };
+
+  var assocDescriptions = {
+    'a-clearing': { name:'מערכת הסליקה - קליטת דיווח תשלומים', desc:'מערכת חיצונית יוזמת: היא הפונה אלינו בתום כל יום, ולכן מיוצגת כשחקן «system» מחוץ לגבול המערכת המחובר באסוציאציה ל-Use Case זה (עוגן שאלה 6.3).' }
+  };
+
+  var useCaseDocs = {
+    'uc-create-agreement': {
+      id:'uc-create-agreement', name:'הכנת טיוטת חוזה שכירות', primaryActor:'rakaz', secondaryActors:['dayar'],
+      description:'רכז השיבוץ מאתר חדר פנוי לסטודנט ומכין טיוטת חוזה שכירות עם תנאיה.',
+      preconditions:['הסטודנט רשום במערכת ומסר פרטים אישיים ומוסד לימודים.', 'קיים לפחות חדר אחד פנוי.'],
+      postconditions:['נוצר חוזה במצב "טיוטה" המשייך את הסטודנט לחדר.'],
+      scenarios:[{ id:'sc-happy', name:'מסלול מרכזי', flow:[
+        { kind:'actor', actor:'rakaz', text:'בוחר סטודנט רשום וחדר פנוי מתאים' },
+        { kind:'actor', actor:'rakaz', text:'מזין תאריך תחילה, תאריך סיום, דמי שכירות חודשיים וגובה פיקדון' },
+        { kind:'include', uc:'uc-check-debt', text:'בדיקה שאין לדייר חוב פתוח לפני יצירת חוזה חדש' },
+        { kind:'system', text:'מוודא שהחדר עדיין פנוי ושומר את החוזה במצב "טיוטה"' }
+      ], extensions:[{ at:4, text:'אם החדר כבר שובץ בינתיים, המערכת מציגה הודעה ומחזירה לבחירת חדר.' }] }],
+      userStories:[
+        { role:'רכז שיבוץ', want:'ליצור טיוטת חוזה המשייכת סטודנט לחדר פנוי', so:'אוכל לשבץ סטודנט חדש במהירות' },
+        { role:'מנהל אזור', want:'שכל חוזה חדש ייווצר במצב טיוטה מסודר', so:'אוכל לאשר אותו על בסיס נתונים מלאים' }
+      ],
+      wireframe:`<div class="wf-screen"><h3 class="wf-heading">הכנת טיוטת חוזה שכירות</h3>
+        <div class="wf-row"><label class="wf-label">סטודנט</label><input class="wf-input" disabled placeholder="בחר סטודנט רשום"/></div>
+        <div class="wf-row"><label class="wf-label">חדר פנוי</label><select class="wf-select" disabled><option>בחר חדר פנוי</option></select></div>
+        <div class="wf-row"><label class="wf-label">תאריך תחילה</label><input class="wf-input" disabled/></div>
+        <div class="wf-row"><label class="wf-label">תאריך סיום</label><input class="wf-input" disabled/></div>
+        <div class="wf-row"><label class="wf-label">שכר דירה חודשי</label><input class="wf-input" disabled/></div>
+        <div class="wf-row"><label class="wf-label">פיקדון</label><input class="wf-input" disabled/></div>
+        <div class="wf-actions"><button class="wf-button wf-primary">שמור טיוטה</button><button class="wf-button">ביטול</button></div>
+        <p class="wf-hint">שמירת הטיוטה יוצרת חוזה במצב "טיוטה" ומאפשרת לשלוח אותו לחתימת הסטודנט.</p></div>`
+    },
+    'uc-sign-agreement': {
+      id:'uc-sign-agreement', name:'חתימה על חוזה שכירות', primaryActor:'dayar', secondaryActors:[],
+      description:'הסטודנט חותם דיגיטלית על טיוטת החוזה שנשלחה אליו, והחוזה מועבר לאישור מנהל האזור.',
+      preconditions:['קיים חוזה במצב "ממתין לחתימת הסטודנט".'],
+      postconditions:['החוזה עובר למצב "ממתין לאישור מנהל האזור".'],
+      scenarios:[{ id:'sc-happy', name:'מסלול מרכזי', flow:[
+        { kind:'actor', actor:'dayar', text:'פותח את החוזה שנשלח אליו וקורא את תנאיו' },
+        { kind:'actor', actor:'dayar', text:'מסמן הסכמה וחותם דיגיטלית' },
+        { kind:'system', text:'שומר את החתימה ומעביר את החוזה ל"ממתין לאישור מנהל האזור"' }
+      ], extensions:[{ at:2, text:'אם הסטודנט מסרב לחתום, החוזה נשאר ב"ממתין לחתימה" עד לחתימה או לביטול.' }] }],
+      userStories:[
+        { role:'דייר', want:'לחתום על החוזה שלי באופן דיגיטלי', so:'אוכל להשלים את השכירות בלי טפסי נייר' },
+        { role:'רכז שיבוץ', want:'שהחתימה תעביר את החוזה אוטומטית לאישור', so:'לא אצטרך לעקוב ידנית אחר כל חוזה' }
+      ],
+      wireframe:`<div class="wf-screen"><h3 class="wf-heading">חתימה על חוזה שכירות</h3>
+        <div class="wf-section">תצוגת תנאי החוזה: חדר, תאריכים, שכר דירה ופיקדון (לקריאה בלבד).</div>
+        <div class="wf-row"><label class="wf-label">מאשר שקראתי את תנאי החוזה</label><input class="wf-input" disabled placeholder=""/></div>
+        <div class="wf-actions"><button class="wf-button wf-primary">חתום דיגיטלית</button><button class="wf-button">חזרה</button></div>
+        <p class="wf-hint">החתימה מעבירה את החוזה למצב "ממתין לאישור מנהל האזור".</p></div>`
+    },
+    'uc-review-agreement': {
+      id:'uc-review-agreement', name:'בדיקת חוזה ואישורו', primaryActor:'manager', secondaryActors:['rakaz'],
+      description:'מנהל האזור בודק חוזה חתום ומאשר אותו, או מחזיר אותו לרכז השיבוץ לתיקון.',
+      preconditions:['קיים חוזה במצב "ממתין לאישור מנהל האזור".'],
+      postconditions:['החוזה אושר (ממתין להפעלה במועד תחילת השכירות), או הוחזר לתיקון.'],
+      scenarios:[{ id:'sc-happy', name:'מסלול מרכזי', flow:[
+        { kind:'actor', actor:'manager', text:'פותח את החוזה החתום ובודק את תנאיו' },
+        { kind:'actor', actor:'manager', text:'מאשר את החוזה' },
+        { kind:'system', text:'מסמן את החוזה כמאושר וממתין להפעלתו במועד תחילת השכירות' }
+      ], extensions:[{ at:2, text:'אם נמצא ליקוי, מנהל האזור מחזיר את החוזה לרכז השיבוץ לתיקון, והוא יוגש שוב לאישור.' }] }],
+      userStories:[
+        { role:'מנהל אזור', want:'לאשר או להחזיר לתיקון כל חוזה חתום', so:'רק חוזים תקינים ייכנסו לתוקף' },
+        { role:'רכז שיבוץ', want:'לקבל חזרה חוזה עם סיבת ההחזרה', so:'אוכל לתקן ולהגיש מחדש' }
+      ],
+      wireframe:`<div class="wf-screen"><h3 class="wf-heading">בדיקת חוזה ואישורו</h3>
+        <div class="wf-section">פרטי החוזה החתום: סטודנט, חדר, תאריכים, שכר דירה, פיקדון.</div>
+        <div class="wf-row"><label class="wf-label">הערת החזרה לתיקון</label><textarea class="wf-textarea" disabled placeholder="במקרה של ליקוי"></textarea></div>
+        <div class="wf-actions"><button class="wf-button wf-primary">אשר חוזה</button><button class="wf-button">החזר לתיקון</button></div>
+        <p class="wf-hint">"אשר" מעביר את החוזה להמתנה להפעלה; "החזר לתיקון" מחזיר אותו לרכז השיבוץ.</p></div>`
+    },
+    'uc-cancel-agreement': {
+      id:'uc-cancel-agreement', name:'ביטול חוזה', primaryActor:'dayar', secondaryActors:['manager'],
+      description:'הסטודנט או מנהל האזור מבטלים חוזה כל עוד הוא טרם נכנס לתוקף.',
+      preconditions:['החוזה נמצא במצב טרום-תוקף (טיוטה / ממתין לחתימה / ממתין לאישור).'],
+      postconditions:['החוזה עובר למצב "בוטל" ואינו ניתן להפעלה.'],
+      scenarios:[{ id:'sc-happy', name:'מסלול מרכזי', flow:[
+        { kind:'actor', actor:'dayar', text:'בוחר חוזה טרום-תוקף ומבקש לבטלו' },
+        { kind:'system', text:'מוודא שהחוזה עדיין לא נכנס לתוקף ומעביר אותו למצב "בוטל"' }
+      ], extensions:[{ at:2, text:'אם החוזה כבר פעיל, המערכת דוחה את הבקשה ומציגה שאי-אפשר לבטל חוזה בתוקף.' }] }],
+      userStories:[
+        { role:'דייר', want:'לבטל חוזה כל עוד לא נכנס לתוקף', so:'לא אתחייב לשכירות שאינה רלוונטית עוד' },
+        { role:'מנהל אזור', want:'לבטל חוזה טרום-תוקף בעייתי', so:'החדר ישוחרר לשיבוץ אחר' }
+      ],
+      wireframe:`<div class="wf-screen"><h3 class="wf-heading">ביטול חוזה</h3>
+        <div class="wf-section">מזהה חוזה, סטטוס נוכחי (טרום-תוקף), חדר וסטודנט.</div>
+        <div class="wf-row"><label class="wf-label">סיבת הביטול</label><input class="wf-input" disabled/></div>
+        <div class="wf-actions"><button class="wf-button wf-primary">בטל חוזה</button><button class="wf-button">חזרה</button></div>
+        <p class="wf-hint">הביטול אפשרי אך ורק כל עוד החוזה לא נכנס לתוקף.</p></div>`
+    },
+    'uc-book-facility': {
+      id:'uc-book-facility', name:'הזמנת מתקן משותף', primaryActor:'dayar', secondaryActors:[],
+      description:'הדייר מזמין מתקן משותף (חדר כביסה/לימוד/כושר) לשעה ותאריך מסוימים.',
+      preconditions:['לדייר יש חוזה פעיל.'],
+      postconditions:['נוצרה הזמנה למתקן בשעה ובתאריך שנבחרו.'],
+      scenarios:[{ id:'sc-happy', name:'מסלול מרכזי', flow:[
+        { kind:'actor', actor:'dayar', text:'בוחר סוג מתקן, תאריך וחלון שעה פנוי' },
+        { kind:'include', uc:'uc-check-debt', text:'בדיקה שאין לדייר חוב פתוח לפני אישור ההזמנה' },
+        { kind:'system', text:'מוודא שהחלון פנוי ושומר את ההזמנה' }
+      ], extensions:[{ at:3, text:'אם החלון נתפס בינתיים, המערכת מציגה הודעה ומחזירה לבחירת שעה.' }] }],
+      userStories:[
+        { role:'דייר', want:'להזמין את חדר הכביסה לשעה מסוימת', so:'אבטיח לעצמי מכונה פנויה' },
+        { role:'דייר', want:'שהמערכת תמנע ממני הזמנה כשיש לי חוב', so:'אדע להסדיר את החוב תחילה' }
+      ],
+      wireframe:`<div class="wf-screen"><h3 class="wf-heading">הזמנת מתקן משותף</h3>
+        <div class="wf-row"><label class="wf-label">סוג מתקן</label><select class="wf-select" disabled><option>חדר כביסה / לימוד / כושר</option></select></div>
+        <div class="wf-row"><label class="wf-label">תאריך</label><input class="wf-input" disabled/></div>
+        <div class="wf-row"><label class="wf-label">חלון שעה</label><select class="wf-select" disabled><option>בחר שעה פנויה</option></select></div>
+        <div class="wf-actions"><button class="wf-button wf-primary">הזמן</button><button class="wf-button">ביטול</button></div>
+        <p class="wf-hint">אם קיים חוב פתוח, ההזמנה תיחסם עד להסדרתו.</p></div>`
+    },
+    'uc-check-debt': {
+      id:'uc-check-debt', name:'בדיקת מצב חוב של דייר',
+      description:'תת-התנהגות משותפת: בדיקת קיומו של חוב שכר דירה פתוח לדייר. מבוצעת תמיד כחלק מיצירת חוזה חדש ומהזמנת מתקן משותף, ולכן חולצה ל-Use Case נכלל (include) יחיד במקום שכפול.',
+      preconditions:[], postconditions:[],
+      scenarios:[{ id:'sc-check', name:'מסלול הבדיקה', flow:[
+        { kind:'system', text:'מאתר את חיובי שכר הדירה הפתוחים של הדייר' },
+        { kind:'system', text:'מחזיר האם קיים חיוב בפיגור המונע את הפעולה' }
+      ] }],
+      userStories:[]
+    },
+    'uc-monthly-charge': {
+      id:'uc-monthly-charge', name:'הפקת חיוב חודשי', primaryActor:'time', secondaryActors:[],
+      description:'בראשון לכל חודש המערכת מפיקה חיוב שכר דירה לכל חוזה פעיל.',
+      preconditions:['קיימים חוזים פעילים.'],
+      postconditions:['נוצר חיוב "ממתין לתשלום" לכל חוזה פעיל.'],
+      scenarios:[{ id:'sc-happy', name:'מסלול מרכזי', flow:[
+        { kind:'system', text:'מזהה את כל החוזים הפעילים' },
+        { kind:'system', text:'מפיק לכל חוזה פעיל חיוב שכר דירה במצב "ממתין לתשלום"' }
+      ] }],
+      userStories:[
+        { role:'מנהל אזור', want:'שחיוב חודשי יופק אוטומטית לכל חוזה פעיל', so:'הגבייה תתבצע בלי עבודה ידנית' }
+      ]
+    },
+    'uc-import-payments': {
+      id:'uc-import-payments', name:'קליטת דיווח תשלומים', primaryActor:'clearing', secondaryActors:[],
+      description:'בתום כל יום מערכת הסליקה החיצונית מעבירה למערכת את פירוט התשלומים שנקלטו ואלה שנדחו, והמערכת מעדכנת את סטטוס החיובים.',
+      preconditions:['התקבל קובץ דיווח יומי ממערכת הסליקה.'],
+      postconditions:['סטטוס החיובים עודכן ל"שולם" או "נדחה" בהתאם לדיווח.'],
+      scenarios:[{ id:'sc-happy', name:'מסלול מרכזי', flow:[
+        { kind:'actor', actor:'clearing', text:'מעבירה בתום היום את פירוט התשלומים שנקלטו ושנדחו' },
+        { kind:'system', text:'מתאים כל שורת דיווח לחיוב ומעדכן את סטטוסו' },
+        { kind:'system', text:'חוזה שחובו נפרע ושהיה בפיגור, מוחזר למצב "פעיל"' }
+      ], extensions:[{ at:2, text:'אם שורת דיווח אינה תואמת לחיוב מוכר, היא נרשמת ליומן חריגות לבירור.' }] }],
+      userStories:[
+        { role:'מנהל גבייה', want:'שסטטוס החיובים יתעדכן אוטומטית מדיווח הסליקה', so:'תמונת החובות תהיה מעודכנת מדי יום' }
+      ]
+    },
+    'uc-mark-arrears': {
+      id:'uc-mark-arrears', name:'סימון חוזה כבפיגור', primaryActor:'time', secondaryActors:[],
+      description:'חוזה שחיובו לא נפרע בתוך עשרה ימים מסומן אוטומטית כחוזה בפיגור.',
+      preconditions:['קיים חיוב שלא נפרע במשך עשרה ימים ממועד החיוב.'],
+      postconditions:['החוזה עובר למצב "בפיגור".'],
+      scenarios:[{ id:'sc-happy', name:'מסלול מרכזי', flow:[
+        { kind:'system', text:'מאתר חיובים שחלפו עליהם עשרה ימים ללא פירעון' },
+        { kind:'system', text:'מסמן את החוזה המתאים כ"בפיגור"' }
+      ] }],
+      userStories:[
+        { role:'מנהל אזור', want:'שחוזה בפיגור יסומן אוטומטית לאחר 10 ימים', so:'אוכל לפעול לגבייה בזמן' }
+      ]
+    },
+    'uc-view-own': {
+      id:'uc-view-own', name:'צפייה בחוזה ובחיובים', primaryActor:'dayar', secondaryActors:[],
+      description:'הדייר צופה בכל עת בחוזהו, בחיוביו ובקריאות התחזוקה שפתח.',
+      preconditions:['הדייר מחובר וקשור לחוזה קיים.'],
+      postconditions:['הנתונים מוצגים לדייר לקריאה בלבד.'],
+      scenarios:[{ id:'sc-happy', name:'מסלול מרכזי', flow:[
+        { kind:'actor', actor:'dayar', text:'בוחר את מסך "החוזה שלי"' },
+        { kind:'system', text:'מציג את פרטי החוזה, רשימת החיובים וסטטוסם, והקריאות שנפתחו' }
+      ] }],
+      userStories:[
+        { role:'דייר', want:'לצפות בכל עת בחיובי שכר הדירה שלי ובסטטוסם', so:'אוודא שאיני נכנס לפיגור' },
+        { role:'דייר', want:'לראות את קריאות התחזוקה שפתחתי', so:'אדע מה סטטוס הטיפול' }
+      ],
+      wireframe:`<div class="wf-screen"><h3 class="wf-heading">החוזה שלי</h3>
+        <div class="wf-section">פרטי חוזה: חדר, תאריכים, שכר דירה, סטטוס.</div>
+        <table class="wf-table"><thead><tr><th>חודש</th><th>סכום</th><th>סטטוס</th></tr></thead>
+        <tbody><tr><td>-</td><td>-</td><td>שולם / ממתין</td></tr></tbody></table>
+        <p class="wf-hint">מסך לקריאה בלבד, מרכז חוזה, חיובים וקריאות תחזוקה של הדייר.</p></div>`
+    },
+    'uc-reports': {
+      id:'uc-reports', name:'הפקת דוחות', primaryActor:'manager', secondaryActors:['rakaz'],
+      description:'מנהל האזור ורכז השיבוץ מפיקים דוחות ניהוליים: חדרים פנויים, דיירים בפיגור וקריאות תחזוקה פתוחות מעל שבוע.',
+      preconditions:['קיימים נתונים במערכת עבור הדוח המבוקש.'],
+      postconditions:['הדוח מוצג למשתמש.'],
+      scenarios:[{ id:'sc-happy', name:'מסלול מרכזי', flow:[
+        { kind:'actor', actor:'manager', text:'בוחר סוג דוח ומסננים' },
+        { kind:'system', text:'אוסף את הנתונים ומציג את הדוח' }
+      ] }],
+      userStories:[
+        { role:'מנהל אזור', want:'להפיק דוח דיירים בפיגור', so:'אוכל לתעדף את פעולות הגבייה' },
+        { role:'רכז שיבוץ', want:'לראות את רשימת החדרים הפנויים', so:'אשבץ סטודנט חדש במהירות' }
+      ],
+      wireframe:`<div class="wf-screen"><h3 class="wf-heading">הפקת דוחות</h3>
+        <div class="wf-row"><label class="wf-label">סוג דוח</label><select class="wf-select" disabled><option>חדרים פנויים</option><option>דיירים בפיגור</option><option>קריאות פתוחות מעל שבוע</option></select></div>
+        <div class="wf-actions"><button class="wf-button wf-primary">הפק דוח</button></div>
+        <table class="wf-table"><thead><tr><th>ערך</th><th>פירוט</th></tr></thead><tbody><tr><td>-</td><td>-</td></tr></tbody></table>
+        <p class="wf-hint">הדוח מופק לפי הסוג והמסננים שנבחרו.</p></div>`
+    },
+    'uc-open-maintenance': {
+      id:'uc-open-maintenance', name:'פתיחת קריאת תחזוקה', primaryActor:'dayar', secondaryActors:[],
+      description:'הדייר פותח קריאת תחזוקה עבור חדרו או עבור שטח משותף, עם תיאור ורמת דחיפות.',
+      preconditions:['לדייר יש חוזה פעיל בבניין.'],
+      postconditions:['נוצרה קריאת תחזוקה במצב "פתוחה".'],
+      scenarios:[{ id:'sc-happy', name:'מסלול מרכזי', flow:[
+        { kind:'actor', actor:'dayar', text:'בוחר מיקום (חדרו או שטח משותף) ומזין תיאור התקלה' },
+        { kind:'actor', actor:'dayar', text:'בוחר רמת דחיפות: רגילה, דחופה או חירום' },
+        { kind:'system', text:'שומר את הקריאה במצב "פתוחה" ומעביר אותה לאב הבית' }
+      ], extensions:[{ at:1, text:'אם התיאור ריק, המערכת מונעת שמירה ומבקשת למלא תיאור.' }] }],
+      userStories:[
+        { role:'דייר', want:'לפתוח קריאת תחזוקה עם תיאור ורמת דחיפות', so:'התקלה תטופל לפי חשיבותה' }
+      ],
+      wireframe:`<div class="wf-screen"><h3 class="wf-heading">פתיחת קריאת תחזוקה</h3>
+        <div class="wf-row"><label class="wf-label">מיקום</label><select class="wf-select" disabled><option>החדר שלי / שטח משותף</option></select></div>
+        <div class="wf-row"><label class="wf-label">תיאור התקלה</label><textarea class="wf-textarea" disabled></textarea></div>
+        <div class="wf-row"><label class="wf-label">רמת דחיפות</label><select class="wf-select" disabled><option>רגילה</option><option>דחופה</option><option>חירום</option></select></div>
+        <div class="wf-actions"><button class="wf-button wf-primary">פתח קריאה</button></div>
+        <p class="wf-hint">הקריאה נשמרת במצב "פתוחה" ומועברת לאב הבית לשיבוץ קבלן.</p></div>`
+    },
+    'uc-assign-contractor': {
+      id:'uc-assign-contractor', name:'שיבוץ קבלן לקריאה', primaryActor:'avbait', secondaryActors:[],
+      description:'אב הבית משבץ לקריאת התחזוקה קבלן מתוך רשימת הקבלנים המאושרים לפי תחום התמחותו.',
+      preconditions:['קיימת קריאת תחזוקה פתוחה.'],
+      postconditions:['הקריאה שובצה לקבלן והועברה לטיפולו.'],
+      scenarios:[{ id:'sc-happy', name:'מסלול מרכזי', flow:[
+        { kind:'actor', actor:'avbait', text:'פותח קריאה פתוחה ובוחר קבלן מאושר לפי תחום התמחותו' },
+        { kind:'system', text:'משייך את הקבלן לקריאה ומעביר אותה למצב "בטיפול"' }
+      ], extensions:[{ at:1, text:'אם אין קבלן מאושר בתחום הנדרש, הקריאה נשארת פתוחה עד להוספת קבלן.' }] }],
+      userStories:[
+        { role:'אב בית', want:'לשבץ לקריאה קבלן לפי תחום התמחותו', so:'התקלה תטופל בידי בעל המקצוע הנכון' }
+      ],
+      wireframe:`<div class="wf-screen"><h3 class="wf-heading">שיבוץ קבלן לקריאה</h3>
+        <div class="wf-section">פרטי הקריאה: מיקום, תיאור, רמת דחיפות.</div>
+        <div class="wf-row"><label class="wf-label">קבלן מאושר</label><select class="wf-select" disabled><option>סינון לפי תחום התמחות</option></select></div>
+        <div class="wf-actions"><button class="wf-button wf-primary">שבץ קבלן</button></div>
+        <p class="wf-hint">השיבוץ מעביר את הקריאה למצב "בטיפול" של הקבלן שנבחר.</p></div>`
+    },
+    'uc-report-work': {
+      id:'uc-report-work', name:'דיווח סיום עבודה ועלות', primaryActor:'kablan', secondaryActors:[],
+      description:'הקבלן מדווח במערכת על סיום העבודה ועל עלותה; עלות החורגת מסכום סף טעונה אישור מנהל האזור.',
+      preconditions:['קיימת קריאה ששובצה לקבלן זה במצב "בטיפול".'],
+      postconditions:['הקריאה עברה למצב "ממתין לאישור דייר" (או "ממתין לאישור עלות" אם חרגה מהסף).'],
+      scenarios:[{ id:'sc-happy', name:'מסלול מרכזי', flow:[
+        { kind:'actor', actor:'kablan', text:'מסמן שהעבודה הושלמה ומזין את עלותה' },
+        { kind:'system', text:'בודק אם העלות חורגת מסכום הסף ומעדכן את מצב הקריאה בהתאם' }
+      ], extensions:[{ at:2, text:'אם העלות חורגת מהסף, הקריאה מועברת לאישור מנהל האזור לפני חזרתה לדייר.' }] }],
+      userStories:[
+        { role:'קבלן', want:'לדווח על סיום העבודה ועל עלותה', so:'הקריאה תתקדם לאישור הדייר' }
+      ],
+      wireframe:`<div class="wf-screen"><h3 class="wf-heading">דיווח סיום עבודה ועלות</h3>
+        <div class="wf-section">קריאה ששובצה לי בלבד: מיקום, תיאור.</div>
+        <div class="wf-row"><label class="wf-label">עלות בפועל</label><input class="wf-input" disabled/></div>
+        <div class="wf-actions"><button class="wf-button wf-primary">דווח סיום</button></div>
+        <p class="wf-hint">עלות מעל סכום הסף תועבר לאישור מנהל האזור.</p></div>`
+    },
+    'uc-approve-excess': {
+      id:'uc-approve-excess', name:'אישור עלות חריגה', primaryActor:'manager', secondaryActors:[],
+      description:'מנהל האזור מאשר עלות תיקון החורגת מסכום הסף שדווח על ידי הקבלן.',
+      preconditions:['קיימת קריאה שעלותה חורגת מהסף וממתינה לאישור.'],
+      postconditions:['העלות אושרה והקריאה מועברת לאישור הדייר.'],
+      scenarios:[{ id:'sc-happy', name:'מסלול מרכזי', flow:[
+        { kind:'actor', actor:'manager', text:'בוחן את פרטי הקריאה ואת העלות החורגת' },
+        { kind:'actor', actor:'manager', text:'מאשר את העלות' },
+        { kind:'system', text:'מעביר את הקריאה לאישור הדייר' }
+      ], extensions:[{ at:2, text:'אם מנהל האזור דוחה את העלות, הקריאה חוזרת לאב הבית לבירור מול הקבלן.' }] }],
+      userStories:[
+        { role:'מנהל אזור', want:'לאשר עלות תיקון חריגה', so:'הוצאות גדולות ייבחנו לפני חיובן' }
+      ],
+      wireframe:`<div class="wf-screen"><h3 class="wf-heading">אישור עלות חריגה</h3>
+        <div class="wf-section">קריאה: מיקום, תיאור, קבלן, עלות מדווחת מול הסף.</div>
+        <div class="wf-actions"><button class="wf-button wf-primary">אשר עלות</button><button class="wf-button">דחה</button></div>
+        <p class="wf-hint">אישור מעביר את הקריאה לאישור הדייר; דחייה מחזירה אותה לאב הבית.</p></div>`
+    },
+    'uc-confirm-fixed': {
+      id:'uc-confirm-fixed', name:'אישור שהתקלה תוקנה', primaryActor:'dayar', secondaryActors:[],
+      description:'הדייר מאשר שהתקלה תוקנה וסוגר את הקריאה, או מחזיר אותה לאב הבית אם לא תוקנה.',
+      preconditions:['קיימת קריאה במצב "ממתין לאישור דייר".'],
+      postconditions:['הקריאה נסגרה, או הוחזרה לאב הבית.'],
+      scenarios:[{ id:'sc-happy', name:'מסלול מרכזי', flow:[
+        { kind:'actor', actor:'dayar', text:'בודק שהתקלה אכן תוקנה' },
+        { kind:'actor', actor:'dayar', text:'מאשר את התיקון' },
+        { kind:'system', text:'סוגר את הקריאה' }
+      ], extensions:[{ at:2, text:'אם התקלה לא תוקנה, הדייר מחזיר את הקריאה לאב הבית לשיבוץ חוזר.' }] }],
+      userStories:[
+        { role:'דייר', want:'לאשר שהתקלה תוקנה או להחזיר את הקריאה', so:'הקריאה תיסגר רק כשהבעיה נפתרה' }
+      ],
+      wireframe:`<div class="wf-screen"><h3 class="wf-heading">אישור שהתקלה תוקנה</h3>
+        <div class="wf-section">קריאה: מיקום, תיאור, קבלן ותאריך סיום.</div>
+        <div class="wf-actions"><button class="wf-button wf-primary">אשר שתוקן</button><button class="wf-button">לא תוקן, החזר</button></div>
+        <p class="wf-hint">"אשר" סוגר את הקריאה; "החזר" מחזיר אותה לאב הבית.</p></div>`
+    },
+    'uc-manage-master-data': {
+      id:'uc-manage-master-data', name:'ניהול נתוני-אב', primaryActor:'sysadmin', secondaryActors:[],
+      description:'מנהל המערכת מגדיר ומתחזק את נתוני-האב: בניינים, חדרים, סוגי מתקנים משותפים והקבלנים המאושרים.',
+      preconditions:['למנהל המערכת יש הרשאת ניהול נתוני-אב.'],
+      postconditions:['נתוני-האב עודכנו ומשמשים את שאר תהליכי המערכת.'],
+      scenarios:[{ id:'sc-happy', name:'מסלול מרכזי', flow:[
+        { kind:'actor', actor:'sysadmin', text:'בוחר ישות לניהול (בניין / חדר / סוג מתקן / קבלן מאושר)' },
+        { kind:'actor', actor:'sysadmin', text:'יוצר, מעדכן או מוציא רשומה מניהול' },
+        { kind:'system', text:'שומר את השינוי ומחיל אותו על שאר התהליכים' }
+      ], extensions:[{ at:2, text:'אם מוצא בניין מניהול, המערכת גוררת את דירותיו וחדריו בהתאם (קומפוזיציה).' }] }],
+      userStories:[
+        { role:'מנהל מערכת', want:'להגדיר בניינים, חדרים, מתקנים וקבלנים מאושרים', so:'שאר התהליכים יעבדו על נתונים תקינים' }
+      ],
+      wireframe:`<div class="wf-screen"><h3 class="wf-heading">ניהול נתוני-אב</h3>
+        <div class="wf-row"><label class="wf-label">ישות</label><select class="wf-select" disabled><option>בניין / חדר / סוג מתקן / קבלן</option></select></div>
+        <table class="wf-table"><thead><tr><th>שם</th><th>פרטים</th><th>סטטוס</th></tr></thead><tbody><tr><td>-</td><td>-</td><td>פעיל</td></tr></tbody></table>
+        <div class="wf-actions"><button class="wf-button wf-primary">שמור</button><button class="wf-button">הוצא מניהול</button></div>
+        <p class="wf-hint">הוצאת בניין מניהול גוררת את דירותיו וחדריו.</p></div>`
+    }
+  };
+
+  var diagramLayouts = [
+    {
+      svgId:'diagram-svg-0',
+      boundary:{ x:360, y:70, width:860, height:560 },
+      actors:[
+        { id:'rakaz',   label:'רכז שיבוץ',   side:'left',  x:280,  y:220, ucIds:['uc-create-agreement'] },
+        { id:'dayar',   label:'דייר/סטודנט', side:'left',  x:280,  y:420, ucIds:['uc-sign-agreement','uc-cancel-agreement','uc-book-facility','uc-view-own'] },
+        { id:'manager', label:'מנהל אזור',   side:'right', x:1300, y:180, ucIds:['uc-review-agreement','uc-reports'] },
+        { id:'time',    label:'שחקן זמן',    side:'right', x:1300, y:330, ucIds:['uc-monthly-charge','uc-mark-arrears'] },
+        { id:'clearing',label:'מערכת הסליקה',side:'right', x:1300, y:480, ucIds:['uc-import-payments'] }
+      ],
+      useCases:[
+        { id:'uc-create-agreement', cx:470,  cy:170, rx:97, ry:28 },
+        { id:'uc-sign-agreement',   cx:470,  cy:250, rx:90, ry:28 },
+        { id:'uc-book-facility',    cx:470,  cy:330, rx:80, ry:28 },
+        { id:'uc-view-own',         cx:470,  cy:410, rx:92, ry:28 },
+        { id:'uc-reports',          cx:790,  cy:200, rx:72, ry:28 },
+        { id:'uc-check-debt',       cx:790,  cy:330, rx:96, ry:28 },
+        { id:'uc-cancel-agreement', cx:790,  cy:460, rx:70, ry:28 },
+        { id:'uc-review-agreement', cx:1110, cy:170, rx:84, ry:28 },
+        { id:'uc-monthly-charge',   cx:1110, cy:250, rx:74, ry:28 },
+        { id:'uc-import-payments',  cx:1110, cy:330, rx:90, ry:28 },
+        { id:'uc-mark-arrears',     cx:1110, cy:410, rx:84, ry:28 }
+      ],
+      connections:[
+        { from:'time',     to:'uc-monthly-charge',  type:'association', timing:'ב-1 לכל חודש' },
+        { from:'time',     to:'uc-mark-arrears',    type:'association', timing:'לאחר 10 ימים' },
+        { from:'clearing', to:'uc-import-payments', type:'association', timing:'בתום כל יום' }
+      ]
+    },
+    {
+      svgId:'diagram-svg-1',
+      boundary:{ x:360, y:70, width:860, height:480 },
+      actors:[
+        { id:'dayar',    label:'דייר/סטודנט', side:'left',  x:280,  y:200, ucIds:['uc-open-maintenance','uc-confirm-fixed'] },
+        { id:'avbait',   label:'אב בית',      side:'left',  x:280,  y:320, ucIds:['uc-assign-contractor'] },
+        { id:'kablan',   label:'קבלן',        side:'left',  x:280,  y:440, ucIds:['uc-report-work'] },
+        { id:'manager',  label:'מנהל אזור',   side:'right', x:1300, y:200, ucIds:['uc-approve-excess'] },
+        { id:'sysadmin', label:'מנהל מערכת',  side:'right', x:1300, y:340, ucIds:['uc-manage-master-data'] }
+      ],
+      useCases:[
+        { id:'uc-open-maintenance',  cx:480,  cy:170, rx:84, ry:28 },
+        { id:'uc-assign-contractor', cx:480,  cy:260, rx:80, ry:28 },
+        { id:'uc-report-work',       cx:480,  cy:350, rx:97, ry:28 },
+        { id:'uc-confirm-fixed',     cx:480,  cy:440, rx:84, ry:28 },
+        { id:'uc-approve-excess',    cx:1100, cy:200, rx:77, ry:28 },
+        { id:'uc-manage-master-data',cx:1100, cy:330, rx:72, ry:28 }
+      ],
+      connections:[]
+    }
+  ];
+
+  var diagramModel = (function () {
+    var ACTORS = [
+      { kind:'actor', id:'dayar',    name:'דייר/סטודנט', actorType:'human',  side:'left'  },
+      { kind:'actor', id:'rakaz',    name:'רכז שיבוץ',   actorType:'human',  side:'left'  },
+      { kind:'actor', id:'manager',  name:'מנהל אזור',   actorType:'human',  side:'right' },
+      { kind:'actor', id:'avbait',   name:'אב בית',      actorType:'human',  side:'left'  },
+      { kind:'actor', id:'kablan',   name:'קבלן',        actorType:'human',  side:'left'  },
+      { kind:'actor', id:'sysadmin', name:'מנהל מערכת',  actorType:'human',  side:'right' },
+      { kind:'actor', id:'time',     name:'שחקן זמן',    actorType:'system', side:'right' },
+      { kind:'actor', id:'clearing', name:'מערכת הסליקה',actorType:'system', side:'right' }
+    ];
+    function ucEl(id) {
+      var d = useCaseDocs[id];
+      return { kind:'useCase', id:id, name:d.name, description:d.description,
+        primaryActor:d.primaryActor, secondaryActors:d.secondaryActors || [],
+        preconditions:d.preconditions || [], postconditions:d.postconditions || [],
+        scenarios:d.scenarios || [], userStories:d.userStories || [], wireframe:d.wireframe || '' };
+    }
+    function assoc(actorId, ucId, role) {
+      return { kind:'actorAssoc', id:'as-' + actorId + '-' + ucId, actorId:actorId, ucId:ucId, role:role };
+    }
+    var partA = {
+      id:'part-a', label:'חוזים, תשלומים והזמנת מתקנים',
+      splitRationale:'Split by UC count: 17 UCs > 8 threshold',
+      elements:
+        ['dayar','rakaz','manager','time','clearing'].map(function (aid){ return ACTORS.find(function(a){return a.id===aid;}); })
+        .concat(['uc-create-agreement','uc-sign-agreement','uc-review-agreement','uc-cancel-agreement',
+          'uc-book-facility','uc-check-debt','uc-monthly-charge','uc-import-payments','uc-mark-arrears',
+          'uc-view-own','uc-reports'].map(ucEl)),
+      relationships:[
+        assoc('rakaz','uc-create-agreement','initiator'),
+        assoc('rakaz','uc-reports','initiator'),
+        assoc('dayar','uc-sign-agreement','initiator'),
+        assoc('dayar','uc-cancel-agreement','initiator'),
+        assoc('dayar','uc-book-facility','initiator'),
+        assoc('dayar','uc-view-own','initiator'),
+        assoc('manager','uc-review-agreement','initiator'),
+        assoc('manager','uc-reports','initiator'),
+        assoc('time','uc-monthly-charge','initiator'),
+        assoc('time','uc-mark-arrears','initiator'),
+        assoc('clearing','uc-import-payments','initiator'),
+        { kind:'include', id:'inc-create-debt', from:'uc-create-agreement', to:'uc-check-debt' },
+        { kind:'include', id:'inc-book-debt',   from:'uc-book-facility',    to:'uc-check-debt' }
+      ]
+    };
+    var partB = {
+      id:'part-b', label:'תחזוקה, דוחות וניהול',
+      splitRationale:'Split by UC count: 17 UCs > 8 threshold',
+      elements:
+        ['dayar','avbait','kablan','manager','sysadmin'].map(function (aid){ return ACTORS.find(function(a){return a.id===aid;}); })
+        .concat(['uc-open-maintenance','uc-assign-contractor','uc-report-work','uc-approve-excess',
+          'uc-confirm-fixed','uc-manage-master-data'].map(ucEl)),
+      relationships:[
+        assoc('dayar','uc-open-maintenance','initiator'),
+        assoc('dayar','uc-confirm-fixed','initiator'),
+        assoc('avbait','uc-assign-contractor','initiator'),
+        assoc('kablan','uc-report-work','initiator'),
+        assoc('manager','uc-approve-excess','initiator'),
+        assoc('sysadmin','uc-manage-master-data','initiator')
+      ]
+    };
+    return {
+      kind:'use-case',
+      title:'קמפוס בית, Use Case',
+      parts:[partA, partB],
+      assumptions:[
+        'כל שחקן אנושי מזוהה באמצעות חשבון משתמש ייחודי; ההתחברות היא תנאי מוקדם ואינה מקרה שימוש.',
+        'מערכת הסליקה של חברת האשראי מעבירה קובץ דיווח יומי דרך ממשק חיצוני, ואנו לעולם איננו יוזמים פנייה אליה.'
+      ],
+      openQuestions:[
+        'האם נדרשת התראה יזומה למנהל האזור על חוזה שנכנס לפיגור, מעבר לסימון האוטומטי של החוזה כבפיגור?'
+      ]
+    };
+  })();
+  </script>
+  <script>
+/* inlined uc-diagram-common.js */
+/* uc-diagram-common.js, SAD MCP shared runtime for use case diagrams
+   Depends on globals defined in the inline <script> of each diagram:
+   diagramLayouts, actorDescriptions, assocDescriptions, useCaseDocs, diagramModel
+
+   This file is deployed by hand to themathbible.com (see CLAUDE.md, Static Assets).
+   Keep UC_RUNTIME_VERSION in sync with package.json on every deploy, it prints to the
+   browser console so you can confirm which runtime is actually live vs. the repo.
+*/
+const UC_RUNTIME_VERSION = '2.3.2';
+if (typeof console !== 'undefined') console.info('[sad-mcp] uc-diagram runtime v' + UC_RUNTIME_VERSION);
+
+// ── fixLayout constants ───────────────────────────────────────────────────
+const HEADER_H  = 44;
+const UC_PAD    = 30;
+const UC_GAP    = 14;
+const ACTOR_PAD = 80;
+
+// ── fixLayout ─────────────────────────────────────────────────────────────
+function fixLayout(layout) {
+  const svg = document.getElementById(layout.svgId);
+  if (!svg) return;
+  const b = layout.boundary;
+
+  // Step 1, Group UCs by the side of their owning actor.
+  const ucSide = {};
+  layout.actors.forEach(a =>
+    a.ucIds.forEach(uid => {
+      ucSide[uid] = ucSide[uid] && ucSide[uid] !== a.side ? 'center' : a.side;
+    })
+  );
+  const cols = { left: [], right: [], center: [] };
+  layout.useCases.forEach(uc => cols[ucSide[uc.id] || 'center'].push(uc));
+
+  // Step 2, Sort each column by actor order (top-to-bottom on that side).
+  function sortCol(ucs, side) {
+    const ordered = layout.actors.filter(a => a.side === side).sort((a, bb) => a.y - bb.y);
+    ucs.sort((a, bb) => {
+      const ai = ordered.findIndex(act => act.ucIds.includes(a.id));
+      const bi = ordered.findIndex(act => act.ucIds.includes(bb.id));
+      return (ai < 0 ? 999 : ai) - (bi < 0 ? 999 : bi);
+    });
+  }
+  sortCol(cols.left,  'left');
+  sortCol(cols.right, 'right');
+
+  // Step 3, Adaptive column X positions. Widen boundary if needed.
+  const COL_GAP = 30;
+  const maxRx = ucs => (ucs.length ? Math.max(...ucs.map(u => u.rx)) : 0);
+  const lRx = maxRx(cols.left), cRx = maxRx(cols.center), rRx = maxRx(cols.right);
+  const gaps = (cRx ? 2 * COL_GAP : (lRx && rRx ? 2 * COL_GAP : 0));
+  const needed = 2 * UC_PAD + 2 * lRx + 2 * cRx + 2 * rRx + gaps;
+  if (b.width < needed) b.width = needed;
+
+  const leftX   = b.x + UC_PAD + lRx;
+  const rightX  = b.x + b.width - UC_PAD - rRx;
+  const centerX = (leftX + rightX) / 2;
+
+  function place(ucs, colX, colName) {
+    ucs.forEach((uc, i) => {
+      uc.cy = b.y + HEADER_H + UC_PAD + uc.ry + i * (uc.ry * 2 + UC_GAP);
+      uc.cx = colX;
+      uc.col = colName;
+    });
+  }
+  place(cols.left,   leftX,   'left');
+  place(cols.right,  rightX,  'right');
+  place(cols.center, centerX, 'center');
+
+  // Step 4, Clamp and resolve overlaps. Idempotent fixed-point loop.
+  const minX = b.x + UC_PAD;
+  const maxX = b.x + b.width - UC_PAD;
+  const minY = b.y + HEADER_H + UC_PAD;
+  let changed = true, iter = 0;
+  while (changed && iter++ < 40) {
+    changed = false;
+    for (const uc of layout.useCases) {
+      const nx = Math.max(minX + uc.rx, Math.min(maxX - uc.rx, uc.cx));
+      if (nx !== uc.cx) { uc.cx = nx; changed = true; }
+      const ny = Math.max(minY + uc.ry, uc.cy);
+      if (ny !== uc.cy) { uc.cy = ny; changed = true; }
+    }
+    for (const col of Object.values(cols)) {
+      col.sort((a, bb) => a.cy - bb.cy);
+      for (let i = 1; i < col.length; i++) {
+        const prev = col[i - 1], cur = col[i];
+        const nd = prev.cy + prev.ry + UC_GAP + cur.ry;
+        if (cur.cy < nd) { cur.cy = nd; changed = true; }
+      }
+    }
+  }
+
+  // Step 5, Expand boundary height to fit all UCs.
+  const maxBottom = Math.max(...layout.useCases.map(uc => uc.cy + uc.ry));
+  b.height = Math.max(b.height, maxBottom - b.y + UC_PAD);
+
+  // Step 6, Re-center actors on their UC group; push bottom actors below boundary.
+  layout.actors.forEach(actor => {
+    const myUCs = layout.useCases.filter(u => actor.ucIds.includes(u.id));
+    if (actor.side === 'left' || actor.side === 'right') {
+      if (myUCs.length) actor.y = myUCs.reduce((s, u) => s + u.cy, 0) / myUCs.length;
+      actor.x = actor.side === 'left' ? b.x - ACTOR_PAD : b.x + b.width + ACTOR_PAD;
+    } else if (actor.side === 'bottom') {
+      actor.y = b.y + b.height + ACTOR_PAD;
+    }
+  });
+
+  // Step 6b, Enforce a minimum vertical gap between actors on the same side.
+  // Step 6 centers each actor on its UCs' mean cy, which can place two single-UC
+  // actors barely one row apart (~UC_GAP) so their stick figures + labels overlap.
+  // Push later actors down to keep centers at least ACTOR_MIN_GAP apart (CR #6).
+  const ACTOR_MIN_GAP = 150;
+  ['left', 'right'].forEach(side => {
+    const col = layout.actors.filter(a => a.side === side).sort((a, bb) => a.y - bb.y);
+    for (let i = 1; i < col.length; i++) {
+      const need = col[i - 1].y + ACTOR_MIN_GAP;
+      if (col[i].y < need) col[i].y = need;
+    }
+  });
+
+  // Step 7, Write UC positions to the SVG (absolute attributes).
+  layout.useCases.forEach(uc => {
+    const g = svg.querySelector('[id="uc-group-' + uc.id + '"]');
+    if (!g) return;
+    const el = g.querySelector('ellipse');
+    if (!el) return;
+    const dx = uc.cx - parseFloat(el.getAttribute('cx'));
+    const dy = uc.cy - parseFloat(el.getAttribute('cy'));
+    el.setAttribute('cx', uc.cx);
+    el.setAttribute('cy', uc.cy);
+    g.querySelectorAll('text').forEach(t => {
+      t.setAttribute('x', parseFloat(t.getAttribute('x') || 0) + dx);
+      t.setAttribute('y', parseFloat(t.getAttribute('y') || 0) + dy);
+    });
+    g.removeAttribute('transform');
+  });
+  layout.actors.forEach(actor => {
+    // Scope to THIS svg: a shared actor id (e.g. 'head') repeats across tabs, so
+    // document.getElementById returns the first tab's figure and moves the wrong
+    // one, leaving this tab's figure detached from its (correctly placed) line.
+    const g = svg.querySelector('[id="actor-group-' + actor.id + '"]');
+    if (g) g.setAttribute('transform', `translate(${actor.x},${actor.y})`);
+  });
+
+  // Step 8, Recalculate every connection line endpoint.
+  svg.querySelectorAll('[data-conn-from][data-conn-to]').forEach(line => {
+    const fId = line.getAttribute('data-conn-from');
+    const tId = line.getAttribute('data-conn-to');
+    const fUC = layout.useCases.find(u => u.id === fId);
+    const fAc = layout.actors.find(a => a.id === fId);
+    const tUC = layout.useCases.find(u => u.id === tId);
+    const tAc = layout.actors.find(a => a.id === tId);
+    const from = fAc ? { x: fAc.x, y: fAc.y } : fUC ? { x: fUC.cx, y: fUC.cy } : null;
+    const to   = tAc ? { x: tAc.x, y: tAc.y } : tUC ? { x: tUC.cx, y: tUC.cy } : null;
+    if (!from || !to) return;
+    let x1 = from.x, y1 = from.y, x2 = to.x, y2 = to.y;
+    if (fUC) { const a = Math.atan2(to.y - fUC.cy, to.x - fUC.cx);     x1 = fUC.cx + fUC.rx * Math.cos(a); y1 = fUC.cy + fUC.ry * Math.sin(a); }
+    if (tUC) { const a = Math.atan2(from.y - tUC.cy, from.x - tUC.cx); x2 = tUC.cx + tUC.rx * Math.cos(a); y2 = tUC.cy + tUC.ry * Math.sin(a); }
+    line.setAttribute('x1', x1); line.setAttribute('y1', y1);
+    line.setAttribute('x2', x2); line.setAttribute('y2', y2);
+
+    const hitbox = svg.querySelector(
+      `.conn-hitbox[data-hitbox-from="${fId}"][data-hitbox-to="${tId}"]`);
+    if (hitbox) {
+      hitbox.setAttribute('x1', x1); hitbox.setAttribute('y1', y1);
+      hitbox.setAttribute('x2', x2); hitbox.setAttribute('y2', y2);
+    }
+
+    // Reposition «include»/«extend» text label associated with this line.
+    const lbl = svg.querySelector(`[data-label-for="${fId} ${tId}"]`);
+    if (lbl) {
+      lbl.setAttribute('x', (x1 + x2) / 2);
+      lbl.setAttribute('y', (y1 + y2) / 2 - 8);
+    }
+  });
+
+  // Step 9, Resize boundary rect and SVG viewBox (both width and height).
+  const br = svg.querySelector('.system-boundary, rect[rx="12"]');
+  if (br) { br.setAttribute('width', b.width); br.setAttribute('height', b.height); }
+  const vb = svg.getAttribute('viewBox');
+  if (vb) {
+    const p = vb.split(/\s+/);
+    p[3] = Math.max(parseFloat(p[3]), b.y + b.height + 120);
+    const ACTOR_LABEL_MARGIN = 120;
+    const maxActorX = layout.actors.length
+      ? Math.max(...layout.actors.map(a => a.x))
+      : b.x + b.width;
+    p[2] = Math.max(parseFloat(p[2]), maxActorX + ACTOR_LABEL_MARGIN);
+    svg.setAttribute('viewBox', p.join(' '));
+  }
+
+  // Step 10, Timing labels.
+  renderTimingLabels(layout);
+}
+
+// ── renderTimingLabels ────────────────────────────────────────────────────
+function renderTimingLabels(layout) {
+  const svg = document.getElementById(layout.svgId);
+  if (!svg) return;
+  svg.querySelectorAll('.timing-label').forEach(el => el.remove());
+  const NS = 'http://www.w3.org/2000/svg';
+  (layout.connections || []).forEach(conn => {
+    if (!conn.timing) return;
+    const line = svg.querySelector(
+      `[data-conn-from="${conn.from}"][data-conn-to="${conn.to}"]`);
+    if (!line) return;
+    const x1 = +line.getAttribute('x1'), y1 = +line.getAttribute('y1');
+    const x2 = +line.getAttribute('x2'), y2 = +line.getAttribute('y2');
+    const mx = (x1 + x2) / 2, my = (y1 + y2) / 2;
+    const w = 10 + conn.timing.length * 7, h = 16;
+    const g = document.createElementNS(NS, 'g');
+    g.setAttribute('class', 'timing-label');
+    const rect = document.createElementNS(NS, 'rect');
+    rect.setAttribute('x', mx - w / 2); rect.setAttribute('y', my - h / 2);
+    rect.setAttribute('width', w);      rect.setAttribute('height', h);
+    rect.setAttribute('fill', 'white'); rect.setAttribute('stroke', '#334155');
+    rect.setAttribute('stroke-width', '0.8'); rect.setAttribute('rx', '3');
+    const text = document.createElementNS(NS, 'text');
+    text.setAttribute('x', mx); text.setAttribute('y', my + 4);
+    text.setAttribute('font-size', '10'); text.setAttribute('text-anchor', 'middle');
+    text.setAttribute('fill', '#334155');
+    text.setAttribute('font-family', "'Noto Sans Hebrew', sans-serif");
+    text.setAttribute('direction', 'rtl');
+    text.textContent = conn.timing;
+    g.appendChild(rect); g.appendChild(text);
+    svg.appendChild(g);
+  });
+}
+
+// ── Tabs ──────────────────────────────────────────────────────────────────
+let activeTab = 0;
+function currentLayout() { return diagramLayouts[activeTab]; }
+function showDiagram(index) {
+  activeTab = index;
+  document.querySelectorAll('.diagram-part').forEach((p, i) => p.hidden = i !== index);
+  document.querySelectorAll('.tab').forEach((t, i) => t.classList.toggle('active', i === index));
+  fixLayout(diagramLayouts[index]);
+}
+
+// ── Small popup (actors & associations) ───────────────────────────────────
+function showDesc(id, type, event) {
+  if (type === 'uc') { openUcModal(id); event.stopPropagation(); return; }
+  showPopup(id, type, event);
+}
+
+function showPopup(id, type, event) {
+  hideDesc();
+  const data = type === 'actor' ? actorDescriptions[id]
+             : type === 'assoc' ? assocDescriptions[id]
+             : null;
+  if (!data) return;
+  const panel = document.createElement('div');
+  panel.id = 'desc-panel';
+  panel.innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+      <strong style="font-size:12px;color:#1e40af;direction:rtl;">${data.name}</strong>
+      <span onclick="hideDesc()" style="cursor:pointer;color:#94a3b8;font-size:18px;line-height:1;margin-right:6px;">×</span>
+    </div>
+    <div style="font-size:11px;color:#334155;line-height:1.6;direction:rtl;">${data.desc}</div>`;
+  Object.assign(panel.style, {
+    position:'fixed', background:'#fff', border:'1.5px solid #2980b9',
+    borderRadius:'8px', padding:'12px 16px', maxWidth:'300px',
+    boxShadow:'0 4px 14px rgba(0,0,0,.15)', zIndex:'1000',
+    left: event.clientX + 'px', top: event.clientY + 'px'
+  });
+  document.body.appendChild(panel);
+  const r = panel.getBoundingClientRect();
+  if (r.right  > window.innerWidth)  panel.style.left = (window.innerWidth  - r.width  - 10) + 'px';
+  if (r.bottom > window.innerHeight) panel.style.top  = (event.clientY - r.height - 10) + 'px';
+  event.stopPropagation();
+}
+
+function hideDesc() { document.getElementById('desc-panel')?.remove(); }
+
+document.addEventListener('click', e => {
+  if (!e.target.closest('[data-uc-id]') &&
+      !e.target.closest('[data-actor-id]') &&
+      !e.target.closest('[data-conn-id]')) hideDesc();
+});
+
+// ── UC modal ──────────────────────────────────────────────────────────────
+function wireframeSafe(html) {
+  const forbidden = [/<script\b/i, /\son\w+\s*=/i, /<iframe\b/i,
+    /src\s*=\s*["']https?:/i, /href\s*=\s*["']https?:/i, /@import\b/i, /<style\b/i];
+  return !forbidden.some(rx => rx.test(html));
+}
+
+function openUcModal(id) {
+  const doc = useCaseDocs[id];
+  if (!doc) return;
+  const actorName = aid => (actorDescriptions[aid]?.name) || aid;
+  const ucName    = uid => (useCaseDocs[uid]?.name) || uid;
+  const esc = s => String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+
+  let scenariosHtml = '';
+  (doc.scenarios || []).forEach(sce => {
+    scenariosHtml += `<h3>${esc(sce.name || sce.id)}</h3><ol>`;
+    (sce.flow || []).forEach((step, i) => {
+      if (step.kind === 'actor') {
+        scenariosHtml += `<li><strong class="step-actor" data-actor-id="${esc(step.actor)}">${esc(actorName(step.actor))}</strong>: ${esc(step.text || '')}</li>`;
+      } else if (step.kind === 'system') {
+        scenariosHtml += `<li><em class="step-system">המערכת</em>: ${esc(step.text || '')}</li>`;
+      } else if (step.kind === 'include') {
+        scenariosHtml += `<li><span class="step-include">«include» </span><a class="step-uc-ref" data-uc-ref="${esc(step.uc)}">${esc(ucName(step.uc))}</a>${step.text ? ', ' + esc(step.text) : ''}</li>`;
+      } else if (step.kind === 'extension') {
+        scenariosHtml += `<li class="ext-inline">${step.at ? esc(String(step.at)) + 'a. ' : ''}${esc(step.text || '')}</li>`;
+      }
+      (sce.extensions || []).filter(e => e.at === i + 1).forEach((ext, j) => {
+        scenariosHtml += `<li class="ext-sub">${i + 1}${String.fromCharCode(97 + j)}. ${esc(ext.text)}</li>`;
+      });
+    });
+    scenariosHtml += '</ol>';
+  });
+
+  const listItems = items => (items || []).map(s => `<li>${esc(s)}</li>`).join('');
+  const usItems   = (doc.userStories || []).map(us =>
+    `<li>${esc('בתור ' + us.role + ', אני רוצה ' + us.want + ', כדי ש' + us.so)}</li>`).join('');
+
+  const wfHtml = (doc.wireframe && wireframeSafe(doc.wireframe))
+    ? `<section class="uc-wireframe">${doc.wireframe}</section>` : '';
+  if (doc.wireframe && !wireframeSafe(doc.wireframe))
+    console.warn(`Wireframe for ${id} failed safety check.`);
+
+  // Single innerHTML write, avoids silent failures in sandboxed iframe environments.
+  const body = document.querySelector('#uc-modal .uc-modal-body');
+  body.innerHTML = `
+    <button class="uc-modal-close" onclick="closeUcModal()" aria-label="Close">×</button>
+    <header>
+      <span class="uc-id">${esc(doc.id)}</span>
+      <h2 class="uc-name">${esc(doc.name)}</h2>
+      <div class="uc-primary">
+        <span class="uc-primary-label">שחקן ראשי:</span>
+        <a class="uc-primary-link" data-actor-pulse="${esc(doc.primaryActor)}">${esc(actorName(doc.primaryActor))}</a>
+      </div>
+    </header>
+    <section class="uc-description">${esc(doc.description || '')}</section>
+    <section class="uc-scenarios">${scenariosHtml}</section>
+    <section class="uc-prepostuser">
+      <div class="uc-pre"><h4>תנאים מוקדמים</h4><ul>${listItems(doc.preconditions)}</ul></div>
+      <div class="uc-post"><h4>תנאים סופיים</h4><ul>${listItems(doc.postconditions)}</ul></div>
+      <div class="uc-stories"><h4>סיפורי משתמש</h4><ul>${usItems}</ul></div>
+    </section>
+    ${wfHtml}`;
+
+  body.querySelector('.uc-primary-link').onclick = () => { closeUcModal(); pulseActor(doc.primaryActor); };
+  body.querySelectorAll('.step-actor').forEach(el => {
+    el.onclick = () => { closeUcModal(); pulseActor(el.dataset.actorId); };
+  });
+  body.querySelectorAll('.step-uc-ref').forEach(el => {
+    el.onclick = () => openUcModal(el.dataset.ucRef);
+  });
+
+  const modal = document.getElementById('uc-modal');
+  modal.hidden = false;
+  document.body.classList.add('uc-modal-open');
+}
+
+function closeUcModal() {
+  const modal = document.getElementById('uc-modal');
+  if (modal) modal.hidden = true;
+  document.body.classList.remove('uc-modal-open');
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeUcModal(); });
+
+function pulseActor(actorId) {
+  const g = document.getElementById('actor-group-' + actorId);
+  if (!g) return;
+  g.classList.add('actor-pulse');
+  setTimeout(() => g.classList.remove('actor-pulse'), 2000);
+}
+
+// ── Assumptions panel ─────────────────────────────────────────────────────
+function renderAssumptions() {
+  const a = (diagramModel && diagramModel.assumptions)   || [];
+  const q = (diagramModel && diagramModel.openQuestions) || [];
+  const panel = document.getElementById('assumptions-panel');
+  if (!panel) return;
+  if (!a.length && !q.length) { panel.hidden = true; return; }
+  panel.hidden = false;
+  const fillList = (listEl, items) => {
+    listEl.innerHTML = '';
+    items.forEach(s => { const li = document.createElement('li'); li.textContent = s; listEl.appendChild(li); });
+  };
+  fillList(document.getElementById('assumptions-list'),    a);
+  fillList(document.getElementById('open-questions-list'), q);
+  document.getElementById('assumptions-col').hidden    = !a.length;
+  document.getElementById('open-questions-col').hidden = !q.length;
+}
+
+// ── XMI export ────────────────────────────────────────────────────────────
+function xmlEscape(s) {
+  return String(s == null ? '' : s)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;').replace(/'/g,'&apos;');
+}
+
+function downloadFile(filename, mimeType, content) {
+  const blob = new Blob([content], { type: mimeType });
+  const url  = URL.createObjectURL(blob);
+  const a = Object.assign(document.createElement('a'), { href: url, download: filename });
+  document.body.appendChild(a); a.click();
+  setTimeout(() => { URL.revokeObjectURL(url); a.remove(); }, 1000);
+}
+
+function xmiBody(elements, rels) {
+  const lines = [];
+  function flowText(uc) {
+    const actorName = id => (elements.find(e => e.kind === 'actor'   && e.id === id) || {}).name || id;
+    const ucName    = id => (elements.find(e => e.kind === 'useCase' && e.id === id) || {}).name || id;
+    const out = [];
+    (uc.scenarios || []).forEach(sc => {
+      out.push((sc.name || sc.id) + ':');
+      (sc.flow || []).forEach((step, i) => {
+        const n = i + 1;
+        if      (step.kind === 'actor')     out.push('  ' + n + '. ' + actorName(step.actor) + ': ' + step.text);
+        else if (step.kind === 'system')    out.push('  ' + n + '. System: ' + step.text);
+        else if (step.kind === 'include')   out.push('  ' + n + '. «include» ' + ucName(step.uc) + (step.text ? ', ' + step.text : ''));
+        else if (step.kind === 'extension') out.push('  ' + n + 'a. ' + step.text);
+        (sc.extensions || []).filter(e => e.at === n).forEach((e, j) => {
+          out.push('  ' + n + String.fromCharCode(97 + j) + '. ' + e.text);
+        });
+      });
+    });
+    return out.join('\n');
+  }
+
+  for (const el of elements) {
+    if (el.kind === 'useCase') {
+      const hasDocs = (el.preconditions  && el.preconditions.length)
+                   || (el.postconditions && el.postconditions.length)
+                   || (el.scenarios      && el.scenarios.length);
+      if (!hasDocs) {
+        lines.push('    <packagedElement xmi:type="uml:UseCase" xmi:id="' + el.id + '" name="' + xmlEscape(el.name) + '"/>');
+      } else {
+        lines.push('    <packagedElement xmi:type="uml:UseCase" xmi:id="' + el.id + '" name="' + xmlEscape(el.name) + '">');
+        (el.preconditions || []).forEach((p, i) => {
+          lines.push('      <precondition xmi:type="uml:Constraint" xmi:id="' + el.id + '-pre-' + (i+1) + '" name="pre-' + (i+1) + '">');
+          lines.push('        <specification xmi:type="uml:OpaqueExpression" xmi:id="' + el.id + '-pre-' + (i+1) + '-s"><body>' + xmlEscape(p) + '</body></specification>');
+          lines.push('      </precondition>');
+        });
+        (el.postconditions || []).forEach((p, i) => {
+          lines.push('      <postcondition xmi:type="uml:Constraint" xmi:id="' + el.id + '-post-' + (i+1) + '" name="post-' + (i+1) + '">');
+          lines.push('        <specification xmi:type="uml:OpaqueExpression" xmi:id="' + el.id + '-post-' + (i+1) + '-s"><body>' + xmlEscape(p) + '</body></specification>');
+          lines.push('      </postcondition>');
+        });
+        if (el.scenarios && el.scenarios.length) {
+          lines.push('      <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="' + el.id + '-flow" name="Flow of Events">');
+          lines.push('        <body>' + xmlEscape(flowText(el)) + '</body>');
+          lines.push('      </ownedBehavior>');
+        }
+        lines.push('    </packagedElement>');
+      }
+    }
+    if (el.kind === 'actor')
+      lines.push('    <packagedElement xmi:type="uml:Actor" xmi:id="' + el.id + '" name="' + xmlEscape(el.name) + '"/>');
+  }
+  for (const r of rels) {
+    if (r.kind === 'actorAssoc') {
+      lines.push('    <packagedElement xmi:type="uml:Association" xmi:id="' + r.id + '">');
+      lines.push('      <ownedEnd xmi:type="uml:Property" xmi:id="' + r.id + '-e1" association="' + r.id + '" type="' + r.actorId + '"/>');
+      lines.push('      <ownedEnd xmi:type="uml:Property" xmi:id="' + r.id + '-e2" association="' + r.id + '" type="' + r.ucId   + '"/>');
+      lines.push('    </packagedElement>');
+    }
+    if (r.kind === 'include')
+      lines.push('    <packagedElement xmi:type="uml:Include" xmi:id="' + r.id + '" includingCase="' + r.from + '" addition="' + r.to + '"/>');
+    if (r.kind === 'extend')
+      lines.push('    <packagedElement xmi:type="uml:Extend"  xmi:id="' + r.id + '" extendedCase="'  + r.to   + '" extension="' + r.from + '"/>');
+    if (r.kind === 'generalization')
+      lines.push('    <packagedElement xmi:type="uml:Generalization" xmi:id="' + r.id + '" specific="' + r.from + '" general="' + r.to + '"/>');
+  }
+  return lines.join('\n');
+}
+
+function exportXMI() {
+  const m     = diagramModel;
+  const title = xmlEscape(m.title || 'diagram');
+  const body  = xmiBody(m.parts.flatMap(p => p.elements), m.parts.flatMap(p => p.relationships));
+  const xmi   =
+    '<?xml version="1.0" encoding="UTF-8"?>\n' +
+    '<xmi:XMI xmi:version="2.1"\n' +
+    '  xmlns:xmi="http://www.omg.org/XMI"\n' +
+    '  xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML">\n' +
+    '  <uml:Model xmi:id="model_1" name="' + title + '">\n' +
+    body + '\n' +
+    '  </uml:Model>\n' +
+    '</xmi:XMI>';
+  downloadFile(title.replace(/\s+/g, '_') + '.xmi', 'application/xml', xmi);
+}
+
+// ── User stories summary panel ────────────────────────────────────────────
+function renderUserStoriesSummary() {
+  const panel = document.getElementById('user-stories-panel');
+  if (!panel) return;
+  const seen = new Set();
+  const stories = [];
+  Object.values(useCaseDocs).forEach(doc => {
+    (doc.userStories || []).forEach(us => {
+      const key = us.role + '|' + us.want + '|' + us.so;
+      if (!seen.has(key)) { seen.add(key); stories.push(us); }
+    });
+  });
+  if (!stories.length) { panel.hidden = true; return; }
+  panel.hidden = false;
+  const list = document.getElementById('user-stories-list');
+  if (!list) return;
+  list.innerHTML = '';
+  stories.forEach(us => {
+    const li = document.createElement('li');
+    li.textContent = 'בתור ' + us.role + ', אני רוצה ' + us.want + ', כדי ש' + us.so;
+    list.appendChild(li);
+  });
+}
+
+// ── Init ──────────────────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  diagramLayouts.forEach(l => fixLayout(l));
+  renderAssumptions();
+  renderUserStoriesSummary();
+});
+
+</script>
+</body>
+</html>

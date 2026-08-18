@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>טיפול בתלונת לקוח והנפקת שובר פיצוי, BPMN 1.0</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Hebrew:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; padding: 0; background: #eef2f6;
+      font-family: 'Noto Sans Hebrew', -apple-system, BlinkMacSystemFont, sans-serif;
+      direction: rtl; }
+    .header-bar { padding: 14px 20px; background: linear-gradient(135deg, #37474f, #546e7a);
+      color: #fff; display: flex; align-items: baseline; gap: 16px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
+    .header-bar h1 { margin: 0; font-size: 18px; font-weight: 600; }
+    .header-bar .en { font-size: 13px; opacity: 0.8; font-weight: 400; }
+    .header-bar .badge { margin-inline-start: auto; background: rgba(255,255,255,0.15);
+      padding: 3px 10px; border-radius: 10px; font-size: 11px; letter-spacing: 0.5px; }
+    .stats-bar { padding: 8px 20px; background: #ffffff; font-size: 12px; color: #546e7a;
+      border-bottom: 1px solid #cfd8dc; }
+    .stats-bar span { margin-inline-end: 16px; }
+    .svg-wrapper { overflow: auto; background: #f8fafc; padding: 20px; min-height: calc(100vh - 120px); }
+    svg { display: block; background: #f8fafc; }
+    .bpmn-element { cursor: pointer; }
+    .bpmn-tooltip { display: none; position: fixed; background: #1a1a2e; color: #fff;
+      padding: 9px 13px; border-radius: 6px; font-size: 12px; max-width: 280px;
+      z-index: 500; direction: rtl; pointer-events: none; line-height: 1.5;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+    .bpmn-tooltip strong { color: #ffd54f; }
+    .vp-export-btn { position: fixed; bottom: 20px; left: 20px; z-index: 1000;
+      background: #1e40af; color: #fff; border: none; border-radius: 6px;
+      padding: 9px 16px; font-size: 13px; cursor: pointer;
+      font-family: 'Noto Sans Hebrew', sans-serif; box-shadow: 0 2px 6px rgba(0,0,0,0.15); }
+    .vp-export-btn:hover { background: #1e3a8a; }
+    .assumptions-btn { position: fixed; top: 12px; left: 12px; z-index: 1000;
+      background: #37474f; color: #fff; border: none; border-radius: 6px;
+      padding: 7px 13px; font-size: 12px; cursor: pointer;
+      font-family: 'Noto Sans Hebrew', sans-serif; }
+    .assumptions-panel { position: fixed; top: 54px; left: 12px; z-index: 1000;
+      background: #ffffff; border: 1px solid #b0bec5; border-radius: 8px; padding: 14px;
+      max-width: 340px; max-height: 70vh; overflow-y: auto; direction: rtl;
+      font-family: 'Noto Sans Hebrew', sans-serif; font-size: 13px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.18); display: none; }
+    .assumptions-panel h4 { margin: 0 0 10px; color: #37474f; }
+    .assumptions-panel ul { margin: 4px 0 10px; padding-inline-start: 18px; }
+  </style>
+</head>
+<body>
+  <div class="header-bar">
+    <h1>טיפול בתלונת לקוח והנפקת שובר פיצוי</h1>
+    <span class="en">Customer Complaint Handling &amp; Compensation Voucher</span>
+    <span class="badge">BPMN 1.0</span>
+  </div>
+  <div class="stats-bar">
+    <span>3 מאגרים</span>
+    <span>2 נתיבים</span>
+    <span>12 משימות</span>
+    <span>4 שערים</span>
+    <span>6 אירועים</span>
+    <span>1 פריטי נתונים</span>
+    <span>30 זרימות</span>
+  </div>
+  <div class="svg-wrapper">
+    <svg width="2532" height="696"
+         viewBox="0 0 2532 696"
+         xmlns="http://www.w3.org/2000/svg">
+      
+    <defs>
+      <pattern id="dot-grid" x="0" y="0" width="24" height="24" patternUnits="userSpaceOnUse">
+        <circle cx="1" cy="1" r="0.8" fill="#cbd5e1"/>
+      </pattern>
+      <marker id="arrow-seq" viewBox="0 0 10 10" refX="10" refY="5"
+              markerWidth="10" markerHeight="10" orient="auto-start-reverse">
+        <path d="M 0 0 L 10 5 L 0 10 Z" fill="#455a64"/>
+      </marker>
+      <marker id="msg-start" viewBox="-10 -10 20 20" refX="0" refY="0"
+              markerWidth="10" markerHeight="10" orient="auto">
+        <circle cx="0" cy="0" r="4" fill="#ffffff" stroke="#37474f" stroke-width="1.2"/>
+      </marker>
+      <marker id="msg-end" viewBox="0 0 10 10" refX="9" refY="5"
+              markerWidth="10" markerHeight="10" orient="auto-start-reverse">
+        <path d="M 0 0 L 10 5 L 0 10 Z" fill="#37474f"/>
+      </marker>
+      <marker id="arrow-data" viewBox="0 0 10 10" refX="9" refY="5"
+              markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+        <path d="M 0 0 L 10 5 L 0 10 Z" fill="#7986cb"/>
+      </marker>
+    </defs>
+      <rect x="0" y="0" width="2532" height="696" fill="#f8fafc"/>
+    <rect x="0" y="0" width="2532" height="696" fill="url(#dot-grid)"/>
+      
+    <!-- pool: pool-customer -->
+    <g class="bpmn-pool" data-pool="pool-customer">
+      <rect x="20" y="72" width="2472" height="96"
+            fill="#faf7f2" stroke="#8d6e63" stroke-width="1.5"/>
+      <rect x="20" y="72" width="30" height="96"
+            fill="#6d4c41" stroke="#8d6e63" stroke-width="1.5"/>
+      <text x="35" y="120" text-anchor="middle"
+            dominant-baseline="middle"
+            transform="rotate(-90, 35, 120)"
+            fill="#ffffff" font-size="12" font-weight="600"
+            direction="rtl">לקוח</text>
+      <line x1="50" y1="72" x2="50" y2="168"
+            stroke="#8d6e63" stroke-width="1"/>
+    </g>
+
+    <!-- pool: pool-branch -->
+    <g class="bpmn-pool" data-pool="pool-branch">
+      <rect x="20" y="184" width="2472" height="364"
+            fill="#ffffff" stroke="#455a64" stroke-width="1.5"/>
+      <rect x="20" y="184" width="30" height="364"
+            fill="#37474f" stroke="#455a64" stroke-width="1.5"/>
+      <text x="35" y="366" text-anchor="middle"
+            dominant-baseline="middle"
+            transform="rotate(-90, 35, 366)"
+            fill="#ffffff" font-size="12" font-weight="600"
+            direction="rtl">הסניף</text>
+      <line x1="50" y1="184" x2="50" y2="548"
+            stroke="#455a64" stroke-width="1"/>
+    </g>
+
+    <!-- pool: pool-center -->
+    <g class="bpmn-pool" data-pool="pool-center">
+      <rect x="20" y="564" width="2472" height="96"
+            fill="#faf7f2" stroke="#8d6e63" stroke-width="1.5"/>
+      <rect x="20" y="564" width="30" height="96"
+            fill="#6d4c41" stroke="#8d6e63" stroke-width="1.5"/>
+      <text x="29" y="612" text-anchor="middle"
+            dominant-baseline="middle"
+            transform="rotate(-90, 29, 612)"
+            fill="#ffffff" font-size="11" font-weight="600"
+            direction="rtl">מוקד השירות</text>
+      <text x="41" y="612" text-anchor="middle"
+            dominant-baseline="middle"
+            transform="rotate(-90, 41, 612)"
+            fill="#ffffff" font-size="11" font-weight="600"
+            direction="rtl">הארצי</text>
+      <line x1="50" y1="564" x2="50" y2="660"
+            stroke="#8d6e63" stroke-width="1"/>
+    </g>
+      
+    <g class="bpmn-lane" data-lane="lane-system">
+      <rect x="74" y="184" width="2418" height="224"
+            fill="#fafafa" fill-opacity="0.6" stroke="none"/>
+      <rect x="50" y="184" width="24" height="224"
+            fill="#546e7a" stroke="#455a64" stroke-width="1"/>
+      <text x="62" y="296" text-anchor="middle"
+            dominant-baseline="middle"
+            transform="rotate(-90, 62, 296)"
+            fill="#ffffff" font-size="11" font-weight="500"
+            direction="rtl">מערכת השירות</text>
+      
+    </g>
+
+    <g class="bpmn-lane" data-lane="lane-rep">
+      <rect x="74" y="408" width="2418" height="140"
+            fill="#fafafa" fill-opacity="0.6" stroke="none"/>
+      <rect x="50" y="408" width="24" height="140"
+            fill="#546e7a" stroke="#455a64" stroke-width="1"/>
+      <text x="62" y="478" text-anchor="middle"
+            dominant-baseline="middle"
+            transform="rotate(-90, 62, 478)"
+            fill="#ffffff" font-size="11" font-weight="500"
+            direction="rtl">נציג השירות</text>
+      <line x1="50" y1="408" x2="2492" y2="408"
+              stroke="#90a4ae" stroke-width="1" stroke-dasharray="4 3"/>
+    </g>
+      
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf1">
+      <path d="M 162.0 268.0 L 260.0 268.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf2">
+      <path d="M 400.0 268.0 L 492.0 268.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf3">
+      <path d="M 540.0 264.0 L 586.0 264.0 L 586.0 226.0 L 632.0 226.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    <g class="bpmn-flow-label">
+      <rect x="514.6" y="253" width="96.8" height="14"
+            rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"/>
+      <text x="563" y="260" text-anchor="middle" dominant-baseline="middle"
+            font-size="10" fill="#263238" direction="rtl">לא, חלף המועד</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf5">
+      <path d="M 540.0 272.0 L 586.0 272.0 L 586.0 310.0 L 632.0 310.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    <g class="bpmn-flow-label">
+      <rect x="551" y="261" width="24" height="14"
+            rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"/>
+      <text x="563" y="268" text-anchor="middle" dominant-baseline="middle"
+            font-size="10" fill="#263238" direction="rtl">כן</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf4">
+      <path d="M 772.0 226.0 L 870.0 226.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf6">
+      <path d="M 702.0 342.0 L 702.0 418.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf7">
+      <path d="M 772.0 450.0 L 864.0 450.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf8">
+      <path d="M 888.0 426.0 L 888.0 342.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    <g class="bpmn-flow-label">
+      <rect x="855.1" y="373" width="65.80000000000001" height="14"
+            rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"/>
+      <text x="888" y="380" text-anchor="middle" dominant-baseline="middle"
+            font-size="10" fill="#263238" direction="rtl">לא מוצדקת</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf10">
+      <path d="M 912.0 454.0 L 958.0 454.0 L 958.0 450.0 L 1004.0 450.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    <g class="bpmn-flow-label">
+      <rect x="911.4" y="443" width="47.2" height="14"
+            rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"/>
+      <text x="935" y="450" text-anchor="middle" dominant-baseline="middle"
+            font-size="10" fill="#263238" direction="rtl">מוצדקת</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf9">
+      <path d="M 958.0 310.0 L 1007.0 310.0 L 1007.0 268.0 L 1056.0 268.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf11">
+      <path d="M 1144.0 450.0 L 1236.0 450.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf12">
+      <path d="M 1260.0 426.0 L 1260.0 384.0 L 1818.0 384.0 L 1818.0 342.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    <g class="bpmn-flow-label">
+      <rect x="1509.2" y="373" width="59.6" height="14"
+            rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"/>
+      <text x="1539" y="380" text-anchor="middle" dominant-baseline="middle"
+            font-size="10" fill="#263238" direction="rtl">עד 200 ₪</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf13">
+      <path d="M 1284.0 454.0 L 1330.0 454.0 L 1330.0 450.0 L 1376.0 450.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    <g class="bpmn-flow-label">
+      <rect x="1274.1" y="443" width="65.80000000000001" height="14"
+            rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"/>
+      <text x="1307" y="450" text-anchor="middle" dominant-baseline="middle"
+            font-size="10" fill="#263238" direction="rtl">מעל 200 ₪</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf14">
+      <path d="M 1446.0 418.0 L 1446.0 286.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf15">
+      <path d="M 1464.0 268.0 L 1608.0 268.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf19">
+      <path d="M 1656.0 260.0 L 1702.0 260.0 L 1702.0 226.0 L 1748.0 226.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    <g class="bpmn-flow-label">
+      <rect x="1658.5" y="249" width="41" height="14"
+            rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"/>
+      <text x="1679" y="256" text-anchor="middle" dominant-baseline="middle"
+            font-size="10" fill="#263238" direction="rtl">דחייה</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf16">
+      <path d="M 1656.0 268.0 L 1702.0 268.0 L 1702.0 310.0 L 1748.0 310.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    <g class="bpmn-flow-label">
+      <rect x="1658.5" y="257" width="41" height="14"
+            rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"/>
+      <text x="1679" y="264" text-anchor="middle" dominant-baseline="middle"
+            font-size="10" fill="#263238" direction="rtl">אישור</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf17">
+      <path d="M 1632.0 292.0 L 1632.0 418.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    <g class="bpmn-flow-label">
+      <rect x="1589.8" y="344" width="84.4" height="14"
+            rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"/>
+      <text x="1632" y="351" text-anchor="middle" dominant-baseline="middle"
+            font-size="10" fill="#263238" direction="rtl">החזרה לתיקון</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf18">
+      <path d="M 1702.0 450.0 L 1720.0 450.0 L 1720.0 506.0 L 1544.0 506.0 L 1544.0 450.0 L 1376.0 450.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf20">
+      <path d="M 1888.0 226.0 L 1986.0 226.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf21">
+      <path d="M 1888.0 310.0 L 1934.0 310.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf22">
+      <path d="M 2074.0 310.0 L 2097.0 310.0 L 2097.0 268.0 L 2120.0 268.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf23">
+      <path d="M 2260.0 268.0 L 2358.0 268.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    </g>
+      
+    <g class="bpmn-flow bpmn-message" data-flow="mf1">
+      <path d="M -48.0 168.0 L -48.0 176.0 L 130.0 176.0 L 130.0 250.0" fill="none" stroke="#37474f" stroke-width="1.3"
+            stroke-dasharray="10 5"
+            marker-start="url(#msg-start)" marker-end="url(#msg-end)"/>
+      
+    <g class="bpmn-flow-label">
+      <rect x="5" y="155" width="72" height="14"
+            rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"/>
+      <text x="41" y="162" text-anchor="middle" dominant-baseline="middle"
+            font-size="10" fill="#263238" direction="rtl">טופס תלונה</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-message" data-flow="mf2">
+      <path d="M 654.0 194.0 L 654.0 176.0 L 606.0 176.0 L 606.0 168.0" fill="none" stroke="#37474f" stroke-width="1.3"
+            stroke-dasharray="10 5"
+            marker-start="url(#msg-start)" marker-end="url(#msg-end)"/>
+      
+    <g class="bpmn-flow-label">
+      <rect x="559.9" y="155" width="140.20000000000002" height="14"
+            rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"/>
+      <text x="630" y="162" text-anchor="middle" dominant-baseline="middle"
+            font-size="10" fill="#263238" direction="rtl">דחייה, מחוץ למדיניות</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-message" data-flow="mf3">
+      <path d="M 888.0 278.0 L 928.0 278.0 L 928.0 176.0 L 888.0 176.0 L 888.0 168.0" fill="none" stroke="#37474f" stroke-width="1.3"
+            stroke-dasharray="10 5"
+            marker-start="url(#msg-start)" marker-end="url(#msg-end)"/>
+      
+    <g class="bpmn-flow-label">
+      <rect x="870.3" y="216" width="115.4" height="14"
+            rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"/>
+      <text x="928" y="223" text-anchor="middle" dominant-baseline="middle"
+            font-size="10" fill="#263238" direction="rtl">תשובה, לא מוצדקת</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-message" data-flow="mf4">
+      <path d="M 1866.0 194.0 L 1866.0 176.0 L 1914.0 176.0 L 1914.0 168.0" fill="none" stroke="#37474f" stroke-width="1.3"
+            stroke-dasharray="10 5"
+            marker-start="url(#msg-start)" marker-end="url(#msg-end)"/>
+      
+    <g class="bpmn-flow-label">
+      <rect x="1823" y="175" width="134" height="14"
+            rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"/>
+      <text x="1890" y="182" text-anchor="middle" dominant-baseline="middle"
+            font-size="10" fill="#263238" direction="rtl">הודעה על דחיית המוקד</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-message" data-flow="mf5">
+      <path d="M 2256.0 236.0 L 2256.0 176.0 L 2382.0 176.0 L 2382.0 168.0" fill="none" stroke="#37474f" stroke-width="1.3"
+            stroke-dasharray="10 5"
+            marker-start="url(#msg-start)" marker-end="url(#msg-end)"/>
+      
+    <g class="bpmn-flow-label">
+      <rect x="2283" y="175" width="72" height="14"
+            rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"/>
+      <text x="2319" y="182" text-anchor="middle" dominant-baseline="middle"
+            font-size="10" fill="#263238" direction="rtl">שובר פיצוי</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-message" data-flow="mf6">
+      <path d="M 1422.0 482.0 L 1422.0 556.0 L 1398.0 556.0 L 1398.0 564.0" fill="none" stroke="#37474f" stroke-width="1.3"
+            stroke-dasharray="10 5"
+            marker-start="url(#msg-start)" marker-end="url(#msg-end)"/>
+      
+    <g class="bpmn-flow-label">
+      <rect x="1386" y="498" width="72" height="14"
+            rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"/>
+      <text x="1422" y="505" text-anchor="middle" dominant-baseline="middle"
+            font-size="10" fill="#263238" direction="rtl">בקשת אישור</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-message" data-flow="mf7">
+      <path d="M 1494.0 564.0 L 1494.0 556.0 L 1520.0 556.0 L 1520.0 286.0 L 1460.0 286.0" fill="none" stroke="#37474f" stroke-width="1.3"
+            stroke-dasharray="10 5"
+            marker-start="url(#msg-start)" marker-end="url(#msg-end)"/>
+      
+    <g class="bpmn-flow-label">
+      <rect x="1480.9" y="420" width="78.2" height="14"
+            rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"/>
+      <text x="1520" y="427" text-anchor="middle" dominant-baseline="middle"
+            font-size="10" fill="#263238" direction="rtl">החלטת המוקד</text>
+    </g>
+    </g>
+      
+    <g class="bpmn-flow bpmn-data-assoc" data-flow="da1" data-dir="read">
+      <path d="M 1353.0 358.0 L 1353.0 342.0 L 702.0 342.0" fill="none" stroke="#7986cb" stroke-width="1.1"
+            stroke-dasharray="4 3" marker-end="url(#arrow-data)"/>
+    </g>
+
+    <g class="bpmn-flow bpmn-data-assoc" data-flow="da2" data-dir="write">
+      <path d="M 2004.0 342.0 L 2004.0 358.0 L 1353.0 358.0" fill="none" stroke="#7986cb" stroke-width="1.1"
+            stroke-dasharray="4 3" marker-end="url(#arrow-data)"/>
+    </g>
+      
+    <g class="bpmn-element bpmn-event" id="start" data-kind="event" data-event="start">
+      <circle cx="144" cy="268" r="18" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2"/>
+      <text text-anchor="middle" font-size="10.5" fill="#37474f" direction="rtl"
+             font-weight="500"><tspan x="144" y="300">טופס תלונה התקבל</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-task" id="t-policy" data-kind="task">
+      <rect x="260" y="236" width="140" height="64"
+            rx="8" ry="8" fill="#ffffff" stroke="#546e7a" stroke-width="1.5"/>
+      <text text-anchor="middle" dominant-baseline="middle"
+            font-size="11.5" font-weight="500"
+            fill="#1a1a2e" direction="rtl"><tspan x="330" y="261">בדוק עמידה בחלון</tspan><tspan x="330" y="275">14 יום</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-gateway" id="g1" data-kind="gateway" data-gw="XOR">
+      <text text-anchor="middle" font-size="10.5" fill="#37474f" direction="rtl"
+             font-weight="500"><tspan x="516" y="221">האם התלונה הוגשה בתוך</tspan><tspan x="516" y="234">14 יום?</tspan></text>
+      <rect x="499" y="251" width="34" height="34"
+            fill="#fff8e1" stroke="#f9a825" stroke-width="2"
+            transform="rotate(45, 516, 268)"/>
+      
+      <line x1="508" y1="260" x2="524" y2="276"
+            stroke="#e65100" stroke-width="3" stroke-linecap="round"/>
+      <line x1="524" y1="260" x2="508" y2="276"
+            stroke="#e65100" stroke-width="3" stroke-linecap="round"/>
+    </g>
+
+    <g class="bpmn-element bpmn-task" id="t-reject-policy" data-kind="task">
+      <rect x="632" y="194" width="140" height="64"
+            rx="8" ry="8" fill="#ffffff" stroke="#546e7a" stroke-width="1.5"/>
+      <text text-anchor="middle" dominant-baseline="middle"
+            font-size="11.5" font-weight="500"
+            fill="#1a1a2e" direction="rtl"><tspan x="702" y="219">שלח הודעת דחייה</tspan><tspan x="702" y="233">מחוץ למדיניות</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-task" id="t-fetch-history" data-kind="task">
+      <rect x="632" y="278" width="140" height="64"
+            rx="8" ry="8" fill="#ffffff" stroke="#546e7a" stroke-width="1.5"/>
+      <text text-anchor="middle" dominant-baseline="middle"
+            font-size="11.5" font-weight="500"
+            fill="#1a1a2e" direction="rtl"><tspan x="702" y="303">שלוף היסטוריית</tspan><tspan x="702" y="317">תלונות</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-event" id="end-policy" data-kind="event" data-event="end">
+      <circle cx="888" cy="226" r="18" fill="#ffebee" stroke="#c62828" stroke-width="3.5"/>
+      <text text-anchor="middle" font-size="10.5" fill="#37474f" direction="rtl"
+             font-weight="500"><tspan x="888" y="258">נדחתה, מחוץ</tspan><tspan x="888" y="270">למדיניות</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-task" id="t-reject-reason" data-kind="task">
+      <rect x="818" y="278" width="140" height="64"
+            rx="8" ry="8" fill="#ffffff" stroke="#546e7a" stroke-width="1.5"/>
+      <text text-anchor="middle" dominant-baseline="middle"
+            font-size="11.5" font-weight="500"
+            fill="#1a1a2e" direction="rtl"><tspan x="888" y="303">שלח תשובה מנומקת</tspan><tspan x="888" y="317">ללא פיצוי</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-event" id="end-reason" data-kind="event" data-event="end">
+      <circle cx="1074" cy="268" r="18" fill="#ffebee" stroke="#c62828" stroke-width="3.5"/>
+      <text text-anchor="middle" font-size="10.5" fill="#37474f" direction="rtl"
+             font-weight="500"><tspan x="1074" y="300">נדחתה, לא מוצדקת</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-event" id="wait" data-kind="event" data-event="intermediate">
+      
+      <circle cx="1446" cy="268" r="18" fill="#ffffff" stroke="#1565c0" stroke-width="2"/>
+      <circle cx="1446" cy="268" r="13.5" fill="none" stroke="#1565c0" stroke-width="1.2"/>
+      <text text-anchor="middle" font-size="10.5" fill="#37474f" direction="rtl"
+             font-weight="500"><tspan x="1446" y="300">החלטת המוקד התקבלה</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-gateway" id="g4" data-kind="gateway" data-gw="XOR">
+      <text text-anchor="middle" font-size="10.5" fill="#37474f" direction="rtl"
+             font-weight="500"><tspan x="1632" y="234">מהי החלטת המוקד?</tspan></text>
+      <rect x="1615" y="251" width="34" height="34"
+            fill="#fff8e1" stroke="#f9a825" stroke-width="2"
+            transform="rotate(45, 1632, 268)"/>
+      
+      <line x1="1624" y1="260" x2="1640" y2="276"
+            stroke="#e65100" stroke-width="3" stroke-linecap="round"/>
+      <line x1="1640" y1="260" x2="1624" y2="276"
+            stroke="#e65100" stroke-width="3" stroke-linecap="round"/>
+    </g>
+
+    <g class="bpmn-element bpmn-task" id="t-reject-center" data-kind="task">
+      <rect x="1748" y="194" width="140" height="64"
+            rx="8" ry="8" fill="#ffffff" stroke="#546e7a" stroke-width="1.5"/>
+      <text text-anchor="middle" dominant-baseline="middle"
+            font-size="11.5" font-weight="500"
+            fill="#1a1a2e" direction="rtl"><tspan x="1818" y="219">שלח הודעה על</tspan><tspan x="1818" y="233">דחיית המוקד</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-task" id="t-issue" data-kind="task">
+      <rect x="1748" y="278" width="140" height="64"
+            rx="8" ry="8" fill="#ffffff" stroke="#546e7a" stroke-width="1.5"/>
+      <text text-anchor="middle" dominant-baseline="middle"
+            font-size="11.5" font-weight="500"
+            fill="#1a1a2e" direction="rtl"><tspan x="1818" y="310">הנפק שובר פיצוי</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-event" id="end-center" data-kind="event" data-event="end">
+      <circle cx="2004" cy="226" r="18" fill="#ffebee" stroke="#c62828" stroke-width="3.5"/>
+      <text text-anchor="middle" font-size="10.5" fill="#37474f" direction="rtl"
+             font-weight="500"><tspan x="2004" y="258">נדחתה ע&quot;י המוקד</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-task" id="t-update-db" data-kind="task">
+      <rect x="1934" y="278" width="140" height="64"
+            rx="8" ry="8" fill="#ffffff" stroke="#546e7a" stroke-width="1.5"/>
+      <text text-anchor="middle" dominant-baseline="middle"
+            font-size="11.5" font-weight="500"
+            fill="#1a1a2e" direction="rtl"><tspan x="2004" y="303">עדכן מאגר תלונות</tspan><tspan x="2004" y="317">בפרטי הפיצוי</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-task" id="t-send-voucher" data-kind="task">
+      <rect x="2120" y="236" width="140" height="64"
+            rx="8" ry="8" fill="#ffffff" stroke="#546e7a" stroke-width="1.5"/>
+      <text text-anchor="middle" dominant-baseline="middle"
+            font-size="11.5" font-weight="500"
+            fill="#1a1a2e" direction="rtl"><tspan x="2190" y="268">שלח שובר ללקוח</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-event" id="end-success" data-kind="event" data-event="end">
+      <circle cx="2376" cy="268" r="18" fill="#ffebee" stroke="#c62828" stroke-width="3.5"/>
+      <text text-anchor="middle" font-size="10.5" fill="#37474f" direction="rtl"
+             font-weight="500"><tspan x="2376" y="300">שובר פיצוי הונפק</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-task" id="t-examine" data-kind="task">
+      <rect x="632" y="418" width="140" height="64"
+            rx="8" ry="8" fill="#ffffff" stroke="#546e7a" stroke-width="1.5"/>
+      <text text-anchor="middle" dominant-baseline="middle"
+            font-size="11.5" font-weight="500"
+            fill="#1a1a2e" direction="rtl"><tspan x="702" y="443">בחן את התלונה</tspan><tspan x="702" y="457">וקבע אם מוצדקת</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-gateway" id="g2" data-kind="gateway" data-gw="XOR">
+      <text text-anchor="middle" font-size="10.5" fill="#37474f" direction="rtl"
+             font-weight="500"><tspan x="888" y="416">האם התלונה מוצדקת?</tspan></text>
+      <rect x="871" y="433" width="34" height="34"
+            fill="#fff8e1" stroke="#f9a825" stroke-width="2"
+            transform="rotate(45, 888, 450)"/>
+      
+      <line x1="880" y1="442" x2="896" y2="458"
+            stroke="#e65100" stroke-width="3" stroke-linecap="round"/>
+      <line x1="896" y1="442" x2="880" y2="458"
+            stroke="#e65100" stroke-width="3" stroke-linecap="round"/>
+    </g>
+
+    <g class="bpmn-element bpmn-task" id="t-fill-form" data-kind="task">
+      <rect x="1004" y="418" width="140" height="64"
+            rx="8" ry="8" fill="#ffffff" stroke="#546e7a" stroke-width="1.5"/>
+      <text text-anchor="middle" dominant-baseline="middle"
+            font-size="11.5" font-weight="500"
+            fill="#1a1a2e" direction="rtl"><tspan x="1074" y="443">מלא טופס בקשת</tspan><tspan x="1074" y="457">פיצוי וקבע סכום</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-gateway" id="g3" data-kind="gateway" data-gw="XOR">
+      <text text-anchor="middle" font-size="10.5" fill="#37474f" direction="rtl"
+             font-weight="500"><tspan x="1260" y="416">סכום מעל 200 ₪?</tspan></text>
+      <rect x="1243" y="433" width="34" height="34"
+            fill="#fff8e1" stroke="#f9a825" stroke-width="2"
+            transform="rotate(45, 1260, 450)"/>
+      
+      <line x1="1252" y1="442" x2="1268" y2="458"
+            stroke="#e65100" stroke-width="3" stroke-linecap="round"/>
+      <line x1="1268" y1="442" x2="1252" y2="458"
+            stroke="#e65100" stroke-width="3" stroke-linecap="round"/>
+    </g>
+
+    <g class="bpmn-element bpmn-task" id="t-send-approval" data-kind="task">
+      <rect x="1376" y="418" width="140" height="64"
+            rx="8" ry="8" fill="#ffffff" stroke="#546e7a" stroke-width="1.5"/>
+      <text text-anchor="middle" dominant-baseline="middle"
+            font-size="11.5" font-weight="500"
+            fill="#1a1a2e" direction="rtl"><tspan x="1446" y="443">שלח בקשת אישור</tspan><tspan x="1446" y="457">למוקד</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-task" id="t-update-amount" data-kind="task">
+      <rect x="1562" y="418" width="140" height="64"
+            rx="8" ry="8" fill="#ffffff" stroke="#546e7a" stroke-width="1.5"/>
+      <text text-anchor="middle" dominant-baseline="middle"
+            font-size="11.5" font-weight="500"
+            fill="#1a1a2e" direction="rtl"><tspan x="1632" y="450">עדכן סכום ונימוק</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-data-store" id="ds-complaints" data-kind="dataStore">
+      <path d="M 1325 364 L 1325 396
+               A 28 6 0 0 0 1381 396
+               L 1381 364
+               A 28 6 0 0 0 1325 364 Z"
+            fill="#ffffff" stroke="#2e7d32" stroke-width="1.4"/>
+      <path d="M 1325 364
+               A 28 6 0 0 0 1381 364"
+            fill="none" stroke="#2e7d32" stroke-width="1.4"/>
+      <text x="1353" y="416" text-anchor="middle"
+            font-size="10" fill="#263238"
+            direction="rtl">מאגר התלונות</text>
+    </g>
+    </svg>
+  </div>
+  <div id="bpmn-tooltip" class="bpmn-tooltip"></div>
+  
+  <button class="vp-export-btn" onclick="exportBPMN()">Download .bpmn (Visual Paradigm)</button>
+  <script>
+  (function() {
+    const TOOLTIPS = {"start":"<strong>אירוע התחלה</strong><div>טופס תלונה התקבל</div>","t-policy":"<strong>בדוק עמידה בחלון 14 יום</strong><div>מאגר: הסניף, נתיב: מערכת השירות</div>","g1":"<strong>XOR (בלעדי), פיצול</strong><div>שאלה: האם התלונה הוגשה בתוך 14 יום?</div><div>ענפים:</div><ul style=\"margin:4px 0 0;padding-right:18px\"><li>לא, חלף המועד → שלח הודעת דחייה מחוץ למדיניות</li><li>כן → שלוף היסטוריית תלונות</li></ul>","t-reject-policy":"<strong>שלח הודעת דחייה מחוץ למדיניות</strong><div>מאגר: הסניף, נתיב: מערכת השירות</div>","t-fetch-history":"<strong>שלוף היסטוריית תלונות</strong><div>מאגר: הסניף, נתיב: מערכת השירות</div><div>קורא: מאגר התלונות</div>","end-policy":"<strong>אירוע סיום</strong><div>נדחתה, מחוץ למדיניות</div>","t-reject-reason":"<strong>שלח תשובה מנומקת ללא פיצוי</strong><div>מאגר: הסניף, נתיב: מערכת השירות</div>","end-reason":"<strong>אירוע סיום</strong><div>נדחתה, לא מוצדקת</div>","t-send-approval":"<strong>שלח בקשת אישור למוקד</strong><div>מאגר: הסניף, נתיב: נציג השירות</div>","wait":"<strong>אירוע ביניים</strong><div>החלטת המוקד התקבלה</div>","g4":"<strong>XOR (בלעדי), פיצול</strong><div>שאלה: מהי החלטת המוקד?</div><div>ענפים:</div><ul style=\"margin:4px 0 0;padding-right:18px\"><li>אישור → הנפק שובר פיצוי</li><li>החזרה לתיקון → עדכן סכום ונימוק</li><li>דחייה → שלח הודעה על דחיית המוקד</li></ul>","t-reject-center":"<strong>שלח הודעה על דחיית המוקד</strong><div>מאגר: הסניף, נתיב: מערכת השירות</div>","end-center":"<strong>אירוע סיום</strong><div>נדחתה ע&quot;י המוקד</div>","t-issue":"<strong>הנפק שובר פיצוי</strong><div>מאגר: הסניף, נתיב: מערכת השירות</div>","t-update-db":"<strong>עדכן מאגר תלונות בפרטי הפיצוי</strong><div>מאגר: הסניף, נתיב: מערכת השירות</div><div>כותב: מאגר התלונות</div>","t-send-voucher":"<strong>שלח שובר ללקוח</strong><div>מאגר: הסניף, נתיב: מערכת השירות</div>","end-success":"<strong>אירוע סיום</strong><div>שובר פיצוי הונפק</div>","t-examine":"<strong>בחן את התלונה וקבע אם מוצדקת</strong><div>מאגר: הסניף, נתיב: נציג השירות</div>","g2":"<strong>XOR (בלעדי), פיצול</strong><div>שאלה: האם התלונה מוצדקת?</div><div>ענפים:</div><ul style=\"margin:4px 0 0;padding-right:18px\"><li>לא מוצדקת → שלח תשובה מנומקת ללא פיצוי</li><li>מוצדקת → מלא טופס בקשת פיצוי וקבע סכום</li></ul>","t-fill-form":"<strong>מלא טופס בקשת פיצוי וקבע סכום</strong><div>מאגר: הסניף, נתיב: נציג השירות</div>","g3":"<strong>XOR (בלעדי), פיצול</strong><div>שאלה: סכום מעל 200 ₪?</div><div>ענפים:</div><ul style=\"margin:4px 0 0;padding-right:18px\"><li>עד 200 ₪ → הנפק שובר פיצוי</li><li>מעל 200 ₪ → שלח בקשת אישור למוקד</li></ul>","t-update-amount":"<strong>עדכן סכום ונימוק</strong><div>מאגר: הסניף, נתיב: נציג השירות</div>","ds-complaints":"<strong>מאגר נתונים: מאגר התלונות</strong><div>נקרא ע״י: שלוף היסטוריית תלונות</div><div>נכתב ע״י: עדכן מאגר תלונות בפרטי הפיצוי</div>"};
+    const tip = document.getElementById('bpmn-tooltip');
+    document.querySelectorAll('.bpmn-element').forEach(function(g) {
+      g.addEventListener('mouseenter', function() {
+        const id = g.getAttribute('id');
+        const content = TOOLTIPS[id];
+        if (!content) return;
+        tip.innerHTML = content;
+        tip.style.display = 'block';
+      });
+      g.addEventListener('mousemove', function(e) {
+        tip.style.top = (e.clientY + 14) + 'px';
+        tip.style.left = (e.clientX + 14) + 'px';
+      });
+      g.addEventListener('mouseleave', function() { tip.style.display = 'none'; });
+    });
+  })();
+
+  
+
+  // Precomputed BPMN 2.0 XML, server generated from the layout
+  const BPMN_XML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<bpmn:definitions xmlns:bpmn=\"http://www.omg.org/spec/BPMN/20100524/MODEL\"\n  xmlns:bpmndi=\"http://www.omg.org/spec/BPMN/20100524/DI\"\n  xmlns:dc=\"http://www.omg.org/spec/DD/20100524/DC\"\n  xmlns:di=\"http://www.omg.org/spec/DD/20100524/DI\"\n  xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n  id=\"Definitions_1\" targetNamespace=\"http://bpmn.io/schema/bpmn\">\n  <bpmn:process id=\"process_1\" name=\"לקוח\" isExecutable=\"false\">\n\n      <bpmn:dataStoreReference id=\"ds-complaints\" name=\"מאגר התלונות\"/>\n  </bpmn:process>\n  <bpmn:process id=\"process_2\" name=\"הסניף\" isExecutable=\"false\">\n      <bpmn:laneSet id=\"process_2_laneset\">\n        <bpmn:lane id=\"lane-system\" name=\"מערכת השירות\">\n          <bpmn:flowNodeRef>start</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>t-policy</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>g1</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>t-reject-policy</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>t-fetch-history</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>end-policy</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>t-reject-reason</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>end-reason</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>wait</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>g4</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>t-reject-center</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>end-center</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>t-issue</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>t-update-db</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>t-send-voucher</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>end-success</bpmn:flowNodeRef>\n        </bpmn:lane>\n        <bpmn:lane id=\"lane-rep\" name=\"נציג השירות\">\n          <bpmn:flowNodeRef>t-send-approval</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>t-examine</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>g2</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>t-fill-form</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>g3</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>t-update-amount</bpmn:flowNodeRef>\n        </bpmn:lane>\n      </bpmn:laneSet>\n      <bpmn:startEvent id=\"start\" name=\"טופס תלונה התקבל\"/>\n      <bpmn:task id=\"t-policy\" name=\"בדוק עמידה בחלון 14 יום\"/>\n      <bpmn:exclusiveGateway id=\"g1\" name=\"\"/>\n      <bpmn:task id=\"t-reject-policy\" name=\"שלח הודעת דחייה מחוץ למדיניות\"/>\n      <bpmn:task id=\"t-fetch-history\" name=\"שלוף היסטוריית תלונות\"/>\n      <bpmn:endEvent id=\"end-policy\" name=\"נדחתה, מחוץ למדיניות\"/>\n      <bpmn:task id=\"t-reject-reason\" name=\"שלח תשובה מנומקת ללא פיצוי\"/>\n      <bpmn:endEvent id=\"end-reason\" name=\"נדחתה, לא מוצדקת\"/>\n      <bpmn:task id=\"t-send-approval\" name=\"שלח בקשת אישור למוקד\"/>\n      <bpmn:intermediateCatchEvent id=\"wait\" name=\"החלטת המוקד התקבלה\"/>\n      <bpmn:exclusiveGateway id=\"g4\" name=\"\"/>\n      <bpmn:task id=\"t-reject-center\" name=\"שלח הודעה על דחיית המוקד\"/>\n      <bpmn:endEvent id=\"end-center\" name=\"נדחתה ע&quot;י המוקד\"/>\n      <bpmn:task id=\"t-issue\" name=\"הנפק שובר פיצוי\"/>\n      <bpmn:task id=\"t-update-db\" name=\"עדכן מאגר תלונות בפרטי הפיצוי\"/>\n      <bpmn:task id=\"t-send-voucher\" name=\"שלח שובר ללקוח\"/>\n      <bpmn:endEvent id=\"end-success\" name=\"שובר פיצוי הונפק\"/>\n      <bpmn:task id=\"t-examine\" name=\"בחן את התלונה וקבע אם מוצדקת\"/>\n      <bpmn:exclusiveGateway id=\"g2\" name=\"\"/>\n      <bpmn:task id=\"t-fill-form\" name=\"מלא טופס בקשת פיצוי וקבע סכום\"/>\n      <bpmn:exclusiveGateway id=\"g3\" name=\"\"/>\n      <bpmn:task id=\"t-update-amount\" name=\"עדכן סכום ונימוק\"/>\n      <bpmn:dataStoreReference id=\"ds-complaints\" name=\"מאגר התלונות\"/>\n      <bpmn:sequenceFlow id=\"sf1\" sourceRef=\"start\" targetRef=\"t-policy\"/>\n      <bpmn:sequenceFlow id=\"sf2\" sourceRef=\"t-policy\" targetRef=\"g1\"/>\n      <bpmn:sequenceFlow id=\"sf3\" sourceRef=\"g1\" targetRef=\"t-reject-policy\" name=\"לא, חלף המועד\"/>\n      <bpmn:sequenceFlow id=\"sf4\" sourceRef=\"t-reject-policy\" targetRef=\"end-policy\"/>\n      <bpmn:sequenceFlow id=\"sf5\" sourceRef=\"g1\" targetRef=\"t-fetch-history\" name=\"כן\"/>\n      <bpmn:sequenceFlow id=\"sf6\" sourceRef=\"t-fetch-history\" targetRef=\"t-examine\"/>\n      <bpmn:sequenceFlow id=\"sf7\" sourceRef=\"t-examine\" targetRef=\"g2\"/>\n      <bpmn:sequenceFlow id=\"sf8\" sourceRef=\"g2\" targetRef=\"t-reject-reason\" name=\"לא מוצדקת\"/>\n      <bpmn:sequenceFlow id=\"sf9\" sourceRef=\"t-reject-reason\" targetRef=\"end-reason\"/>\n      <bpmn:sequenceFlow id=\"sf10\" sourceRef=\"g2\" targetRef=\"t-fill-form\" name=\"מוצדקת\"/>\n      <bpmn:sequenceFlow id=\"sf11\" sourceRef=\"t-fill-form\" targetRef=\"g3\"/>\n      <bpmn:sequenceFlow id=\"sf12\" sourceRef=\"g3\" targetRef=\"t-issue\" name=\"עד 200 ₪\"/>\n      <bpmn:sequenceFlow id=\"sf13\" sourceRef=\"g3\" targetRef=\"t-send-approval\" name=\"מעל 200 ₪\"/>\n      <bpmn:sequenceFlow id=\"sf14\" sourceRef=\"t-send-approval\" targetRef=\"wait\"/>\n      <bpmn:sequenceFlow id=\"sf15\" sourceRef=\"wait\" targetRef=\"g4\"/>\n      <bpmn:sequenceFlow id=\"sf16\" sourceRef=\"g4\" targetRef=\"t-issue\" name=\"אישור\"/>\n      <bpmn:sequenceFlow id=\"sf17\" sourceRef=\"g4\" targetRef=\"t-update-amount\" name=\"החזרה לתיקון\"/>\n      <bpmn:sequenceFlow id=\"sf18\" sourceRef=\"t-update-amount\" targetRef=\"t-send-approval\"/>\n      <bpmn:sequenceFlow id=\"sf19\" sourceRef=\"g4\" targetRef=\"t-reject-center\" name=\"דחייה\"/>\n      <bpmn:sequenceFlow id=\"sf20\" sourceRef=\"t-reject-center\" targetRef=\"end-center\"/>\n      <bpmn:sequenceFlow id=\"sf21\" sourceRef=\"t-issue\" targetRef=\"t-update-db\"/>\n      <bpmn:sequenceFlow id=\"sf22\" sourceRef=\"t-update-db\" targetRef=\"t-send-voucher\"/>\n      <bpmn:sequenceFlow id=\"sf23\" sourceRef=\"t-send-voucher\" targetRef=\"end-success\"/>\n  </bpmn:process>\n  <bpmn:process id=\"process_3\" name=\"מוקד השירות הארצי\" isExecutable=\"false\">\n\n      <bpmn:dataStoreReference id=\"ds-complaints\" name=\"מאגר התלונות\"/>\n  </bpmn:process>\n  <bpmn:collaboration id=\"collab_1\">\n    <bpmn:participant id=\"pool-customer\" name=\"לקוח\" processRef=\"process_1\"/>\n    <bpmn:participant id=\"pool-branch\" name=\"הסניף\" processRef=\"process_2\"/>\n    <bpmn:participant id=\"pool-center\" name=\"מוקד השירות הארצי\" processRef=\"process_3\"/>\n    <bpmn:messageFlow id=\"mf1\" sourceRef=\"pool-customer\" targetRef=\"start\" name=\"טופס תלונה\"/>\n    <bpmn:messageFlow id=\"mf2\" sourceRef=\"t-reject-policy\" targetRef=\"pool-customer\" name=\"דחייה, מחוץ למדיניות\"/>\n    <bpmn:messageFlow id=\"mf3\" sourceRef=\"t-reject-reason\" targetRef=\"pool-customer\" name=\"תשובה, לא מוצדקת\"/>\n    <bpmn:messageFlow id=\"mf4\" sourceRef=\"t-reject-center\" targetRef=\"pool-customer\" name=\"הודעה על דחיית המוקד\"/>\n    <bpmn:messageFlow id=\"mf5\" sourceRef=\"t-send-voucher\" targetRef=\"pool-customer\" name=\"שובר פיצוי\"/>\n    <bpmn:messageFlow id=\"mf6\" sourceRef=\"t-send-approval\" targetRef=\"pool-center\" name=\"בקשת אישור\"/>\n    <bpmn:messageFlow id=\"mf7\" sourceRef=\"pool-center\" targetRef=\"wait\" name=\"החלטת המוקד\"/>\n  </bpmn:collaboration>\n  <bpmndi:BPMNDiagram id=\"BPMNDiagram_1\">\n    <bpmndi:BPMNPlane id=\"BPMNPlane_1\" bpmnElement=\"collab_1\">\n      <bpmndi:BPMNShape id=\"pool-customer_di\" bpmnElement=\"pool-customer\" isHorizontal=\"true\">\n        <dc:Bounds x=\"20\" y=\"72\" width=\"2472\" height=\"96\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"pool-branch_di\" bpmnElement=\"pool-branch\" isHorizontal=\"true\">\n        <dc:Bounds x=\"20\" y=\"184\" width=\"2472\" height=\"364\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"lane-system_di\" bpmnElement=\"lane-system\" isHorizontal=\"true\">\n        <dc:Bounds x=\"50\" y=\"184\" width=\"2442\" height=\"224\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"lane-rep_di\" bpmnElement=\"lane-rep\" isHorizontal=\"true\">\n        <dc:Bounds x=\"50\" y=\"408\" width=\"2442\" height=\"140\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"pool-center_di\" bpmnElement=\"pool-center\" isHorizontal=\"true\">\n        <dc:Bounds x=\"20\" y=\"564\" width=\"2472\" height=\"96\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"start_di\" bpmnElement=\"start\">\n        <dc:Bounds x=\"126\" y=\"250\" width=\"36\" height=\"36\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"t-policy_di\" bpmnElement=\"t-policy\">\n        <dc:Bounds x=\"260\" y=\"236\" width=\"140\" height=\"64\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"g1_di\" bpmnElement=\"g1\">\n        <dc:Bounds x=\"492\" y=\"244\" width=\"48\" height=\"48\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"t-reject-policy_di\" bpmnElement=\"t-reject-policy\">\n        <dc:Bounds x=\"632\" y=\"194\" width=\"140\" height=\"64\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"t-fetch-history_di\" bpmnElement=\"t-fetch-history\">\n        <dc:Bounds x=\"632\" y=\"278\" width=\"140\" height=\"64\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"end-policy_di\" bpmnElement=\"end-policy\">\n        <dc:Bounds x=\"870\" y=\"208\" width=\"36\" height=\"36\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"t-reject-reason_di\" bpmnElement=\"t-reject-reason\">\n        <dc:Bounds x=\"818\" y=\"278\" width=\"140\" height=\"64\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"end-reason_di\" bpmnElement=\"end-reason\">\n        <dc:Bounds x=\"1056\" y=\"250\" width=\"36\" height=\"36\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"wait_di\" bpmnElement=\"wait\">\n        <dc:Bounds x=\"1428\" y=\"250\" width=\"36\" height=\"36\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"g4_di\" bpmnElement=\"g4\">\n        <dc:Bounds x=\"1608\" y=\"244\" width=\"48\" height=\"48\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"t-reject-center_di\" bpmnElement=\"t-reject-center\">\n        <dc:Bounds x=\"1748\" y=\"194\" width=\"140\" height=\"64\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"t-issue_di\" bpmnElement=\"t-issue\">\n        <dc:Bounds x=\"1748\" y=\"278\" width=\"140\" height=\"64\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"end-center_di\" bpmnElement=\"end-center\">\n        <dc:Bounds x=\"1986\" y=\"208\" width=\"36\" height=\"36\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"t-update-db_di\" bpmnElement=\"t-update-db\">\n        <dc:Bounds x=\"1934\" y=\"278\" width=\"140\" height=\"64\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"t-send-voucher_di\" bpmnElement=\"t-send-voucher\">\n        <dc:Bounds x=\"2120\" y=\"236\" width=\"140\" height=\"64\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"end-success_di\" bpmnElement=\"end-success\">\n        <dc:Bounds x=\"2358\" y=\"250\" width=\"36\" height=\"36\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"t-examine_di\" bpmnElement=\"t-examine\">\n        <dc:Bounds x=\"632\" y=\"418\" width=\"140\" height=\"64\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"g2_di\" bpmnElement=\"g2\">\n        <dc:Bounds x=\"864\" y=\"426\" width=\"48\" height=\"48\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"t-fill-form_di\" bpmnElement=\"t-fill-form\">\n        <dc:Bounds x=\"1004\" y=\"418\" width=\"140\" height=\"64\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"g3_di\" bpmnElement=\"g3\">\n        <dc:Bounds x=\"1236\" y=\"426\" width=\"48\" height=\"48\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"t-send-approval_di\" bpmnElement=\"t-send-approval\">\n        <dc:Bounds x=\"1376\" y=\"418\" width=\"140\" height=\"64\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"t-update-amount_di\" bpmnElement=\"t-update-amount\">\n        <dc:Bounds x=\"1562\" y=\"418\" width=\"140\" height=\"64\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"ds-complaints_di\" bpmnElement=\"ds-complaints\">\n        <dc:Bounds x=\"1325\" y=\"358\" width=\"56\" height=\"44\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNEdge id=\"sf1_di\" bpmnElement=\"sf1\">\n        <di:waypoint x=\"162\" y=\"268\"/>\n        <di:waypoint x=\"260\" y=\"268\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf2_di\" bpmnElement=\"sf2\">\n        <di:waypoint x=\"400\" y=\"268\"/>\n        <di:waypoint x=\"492\" y=\"268\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf3_di\" bpmnElement=\"sf3\">\n        <di:waypoint x=\"540\" y=\"264\"/>\n        <di:waypoint x=\"586\" y=\"264\"/>\n        <di:waypoint x=\"586\" y=\"226\"/>\n        <di:waypoint x=\"632\" y=\"226\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf5_di\" bpmnElement=\"sf5\">\n        <di:waypoint x=\"540\" y=\"272\"/>\n        <di:waypoint x=\"586\" y=\"272\"/>\n        <di:waypoint x=\"586\" y=\"310\"/>\n        <di:waypoint x=\"632\" y=\"310\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf4_di\" bpmnElement=\"sf4\">\n        <di:waypoint x=\"772\" y=\"226\"/>\n        <di:waypoint x=\"870\" y=\"226\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf6_di\" bpmnElement=\"sf6\">\n        <di:waypoint x=\"702\" y=\"342\"/>\n        <di:waypoint x=\"702\" y=\"418\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf7_di\" bpmnElement=\"sf7\">\n        <di:waypoint x=\"772\" y=\"450\"/>\n        <di:waypoint x=\"864\" y=\"450\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf8_di\" bpmnElement=\"sf8\">\n        <di:waypoint x=\"888\" y=\"426\"/>\n        <di:waypoint x=\"888\" y=\"342\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf10_di\" bpmnElement=\"sf10\">\n        <di:waypoint x=\"912\" y=\"454\"/>\n        <di:waypoint x=\"958\" y=\"454\"/>\n        <di:waypoint x=\"958\" y=\"450\"/>\n        <di:waypoint x=\"1004\" y=\"450\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf9_di\" bpmnElement=\"sf9\">\n        <di:waypoint x=\"958\" y=\"310\"/>\n        <di:waypoint x=\"1007\" y=\"310\"/>\n        <di:waypoint x=\"1007\" y=\"268\"/>\n        <di:waypoint x=\"1056\" y=\"268\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf11_di\" bpmnElement=\"sf11\">\n        <di:waypoint x=\"1144\" y=\"450\"/>\n        <di:waypoint x=\"1236\" y=\"450\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf12_di\" bpmnElement=\"sf12\">\n        <di:waypoint x=\"1260\" y=\"426\"/>\n        <di:waypoint x=\"1260\" y=\"384\"/>\n        <di:waypoint x=\"1818\" y=\"384\"/>\n        <di:waypoint x=\"1818\" y=\"342\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf13_di\" bpmnElement=\"sf13\">\n        <di:waypoint x=\"1284\" y=\"454\"/>\n        <di:waypoint x=\"1330\" y=\"454\"/>\n        <di:waypoint x=\"1330\" y=\"450\"/>\n        <di:waypoint x=\"1376\" y=\"450\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf14_di\" bpmnElement=\"sf14\">\n        <di:waypoint x=\"1446\" y=\"418\"/>\n        <di:waypoint x=\"1446\" y=\"286\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf15_di\" bpmnElement=\"sf15\">\n        <di:waypoint x=\"1464\" y=\"268\"/>\n        <di:waypoint x=\"1608\" y=\"268\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf19_di\" bpmnElement=\"sf19\">\n        <di:waypoint x=\"1656\" y=\"260\"/>\n        <di:waypoint x=\"1702\" y=\"260\"/>\n        <di:waypoint x=\"1702\" y=\"226\"/>\n        <di:waypoint x=\"1748\" y=\"226\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf16_di\" bpmnElement=\"sf16\">\n        <di:waypoint x=\"1656\" y=\"268\"/>\n        <di:waypoint x=\"1702\" y=\"268\"/>\n        <di:waypoint x=\"1702\" y=\"310\"/>\n        <di:waypoint x=\"1748\" y=\"310\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf17_di\" bpmnElement=\"sf17\">\n        <di:waypoint x=\"1632\" y=\"292\"/>\n        <di:waypoint x=\"1632\" y=\"418\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf18_di\" bpmnElement=\"sf18\">\n        <di:waypoint x=\"1702\" y=\"450\"/>\n        <di:waypoint x=\"1720\" y=\"450\"/>\n        <di:waypoint x=\"1720\" y=\"506\"/>\n        <di:waypoint x=\"1544\" y=\"506\"/>\n        <di:waypoint x=\"1544\" y=\"450\"/>\n        <di:waypoint x=\"1376\" y=\"450\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf20_di\" bpmnElement=\"sf20\">\n        <di:waypoint x=\"1888\" y=\"226\"/>\n        <di:waypoint x=\"1986\" y=\"226\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf21_di\" bpmnElement=\"sf21\">\n        <di:waypoint x=\"1888\" y=\"310\"/>\n        <di:waypoint x=\"1934\" y=\"310\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf22_di\" bpmnElement=\"sf22\">\n        <di:waypoint x=\"2074\" y=\"310\"/>\n        <di:waypoint x=\"2097\" y=\"310\"/>\n        <di:waypoint x=\"2097\" y=\"268\"/>\n        <di:waypoint x=\"2120\" y=\"268\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf23_di\" bpmnElement=\"sf23\">\n        <di:waypoint x=\"2260\" y=\"268\"/>\n        <di:waypoint x=\"2358\" y=\"268\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"mf1_di\" bpmnElement=\"mf1\">\n        <di:waypoint x=\"-48\" y=\"168\"/>\n        <di:waypoint x=\"-48\" y=\"176\"/>\n        <di:waypoint x=\"130\" y=\"176\"/>\n        <di:waypoint x=\"130\" y=\"250\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"mf2_di\" bpmnElement=\"mf2\">\n        <di:waypoint x=\"654\" y=\"194\"/>\n        <di:waypoint x=\"654\" y=\"176\"/>\n        <di:waypoint x=\"606\" y=\"176\"/>\n        <di:waypoint x=\"606\" y=\"168\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"mf3_di\" bpmnElement=\"mf3\">\n        <di:waypoint x=\"888\" y=\"278\"/>\n        <di:waypoint x=\"928\" y=\"278\"/>\n        <di:waypoint x=\"928\" y=\"176\"/>\n        <di:waypoint x=\"888\" y=\"176\"/>\n        <di:waypoint x=\"888\" y=\"168\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"mf4_di\" bpmnElement=\"mf4\">\n        <di:waypoint x=\"1866\" y=\"194\"/>\n        <di:waypoint x=\"1866\" y=\"176\"/>\n        <di:waypoint x=\"1914\" y=\"176\"/>\n        <di:waypoint x=\"1914\" y=\"168\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"mf5_di\" bpmnElement=\"mf5\">\n        <di:waypoint x=\"2256\" y=\"236\"/>\n        <di:waypoint x=\"2256\" y=\"176\"/>\n        <di:waypoint x=\"2382\" y=\"176\"/>\n        <di:waypoint x=\"2382\" y=\"168\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"mf6_di\" bpmnElement=\"mf6\">\n        <di:waypoint x=\"1422\" y=\"482\"/>\n        <di:waypoint x=\"1422\" y=\"556\"/>\n        <di:waypoint x=\"1398\" y=\"556\"/>\n        <di:waypoint x=\"1398\" y=\"564\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"mf7_di\" bpmnElement=\"mf7\">\n        <di:waypoint x=\"1494\" y=\"564\"/>\n        <di:waypoint x=\"1494\" y=\"556\"/>\n        <di:waypoint x=\"1520\" y=\"556\"/>\n        <di:waypoint x=\"1520\" y=\"286\"/>\n        <di:waypoint x=\"1460\" y=\"286\"/>\n      </bpmndi:BPMNEdge>\n    </bpmndi:BPMNPlane>\n  </bpmndi:BPMNDiagram>\n</bpmn:definitions>";
+  const BPMN_FILENAME = "Customer_Complaint_Handling_Compensation_Voucher.bpmn";
+  function exportBPMN() {
+    const blob = new Blob([BPMN_XML], { type: 'application/xml' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = BPMN_FILENAME;
+    document.body.appendChild(a); a.click();
+    setTimeout(function() { URL.revokeObjectURL(url); a.remove(); }, 1000);
+  }
+  </script>
+</body>
+</html>

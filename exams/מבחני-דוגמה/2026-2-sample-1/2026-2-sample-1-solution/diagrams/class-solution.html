@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="he">
+<head>
+<meta charset="UTF-8">
+<title>פתרון שאלה 7, תרשים מחלקות, קמפוס בית</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,700;1,400&family=Rubik:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; padding: 24px; background: #eef2f7; font-family: 'Rubik', sans-serif; color: #1e293b; }
+  .page { max-width: 1360px; margin: 0 auto; }
+  header.top {
+    background: #1e40af; color: #fff; border-radius: 10px 10px 0 0;
+    padding: 18px 26px; direction: rtl; text-align: right;
+  }
+  header.top h1 { margin: 0 0 4px 0; font-size: 20px; font-weight: 700; }
+  header.top p { margin: 0; font-size: 13px; color: #dbeafe; }
+  .diagram-wrap {
+    background: #fff; border: 1px solid #cbd5e1; border-top: none;
+    border-radius: 0 0 10px 10px; padding: 10px; overflow-x: auto; direction: ltr;
+  }
+  svg { display: block; }
+  .vp-export-btn {
+    position: fixed; bottom: 20px; right: 20px; z-index: 1000;
+    background: #1e40af; color: #fff; border: none; border-radius: 6px;
+    padding: 8px 16px; font-size: 13px; cursor: pointer;
+    font-family: 'IBM Plex Mono', monospace;
+  }
+  .vp-export-btn:hover { background: #1e3a8a; }
+</style>
+</head>
+<body>
+<div class="page">
+  <header class="top">
+    <h1>פתרון שאלה 7, תרשים מחלקות, קמפוס בית</h1>
+    <p>ניתוח ועיצוב מערכות מידע (364-1-1411), מבחן לדוגמה, סמסטר ב' 2026, תרשים מודל-פתרון להוראה</p>
+  </header>
+  <div class="diagram-wrap">
+    <svg id="diagram-svg" xmlns="http://www.w3.org/2000/svg"></svg>
+  </div>
+</div>
+
+<button class="vp-export-btn" onclick="exportXMI()">Download .xmi (Visual Paradigm)</button>
+
+<script>
+/* ── 1. DATA ─────────────────────────────────────────────────────────────── */
+
+const CLASSES = [
+  { id: 'Building', name: 'Building', stereotype: null, isEnum: false, isAbstract: false,
+    attrs: ['+ address : String', '+ city : String', '+ floors : Integer'], ops: [],
+    x: 40, y: 60 },
+
+  { id: 'Apartment', name: 'Apartment', stereotype: null, isEnum: false, isAbstract: false,
+    attrs: ['+ apartmentNumber : String', '+ floor : Integer'], ops: [],
+    x: 40, y: 260 },
+
+  { id: 'Room', name: 'Room', stereotype: null, isEnum: false, isAbstract: false,
+    attrs: ['+ roomNumber : String', '+ size : Number', '+ isAvailable : Boolean'], ops: [],
+    x: 40, y: 440 },
+
+  { id: 'Student', name: 'Student', stereotype: null, isEnum: false, isAbstract: false,
+    attrs: ['+ name : String', '+ contactInfo : String', '+ institution : String'], ops: [],
+    x: 400, y: 440 },
+
+  { id: 'SharedFacility', name: 'SharedFacility', stereotype: null, isEnum: false, isAbstract: false,
+    attrs: ['+ name : String', '+ type : FacilityType'], ops: [],
+    x: 740, y: 445 },
+
+  { id: 'RentalAgreement', name: 'RentalAgreement', stereotype: '«association class»', isEnum: false, isAbstract: false,
+    attrs: ['+ startDate : Date', '+ endDate : Date', '+ monthlyRent : Number',
+            '+ deposit : Number', '+ status : AgreementStatus',
+            '+ closureReason : AgreementStatus'],
+    ops: ['+ approve()', '+ returnForCorrection()', '+ cancel()', '+ activate()'],
+    x: 210, y: 610 },
+
+  { id: 'Booking', name: 'Booking', stereotype: '«association class»', isEnum: false, isAbstract: false,
+    attrs: ['+ date : Date', '+ timeSlot : String', '+ status : BookingStatus'], ops: [],
+    x: 563, y: 610 },
+
+  { id: 'Payment', name: 'Payment', stereotype: null, isEnum: false, isAbstract: false,
+    attrs: ['+ amount : Number', '+ dueDate : Date', '+ paidDate : Date', '+ status : PaymentStatus'], ops: [],
+    x: 210, y: 880 },
+
+  { id: 'MaintenanceRequest', name: 'MaintenanceRequest', stereotype: null, isEnum: false, isAbstract: false,
+    attrs: ['+ description : String', '+ urgency : UrgencyLevel', '+ cost : Number', '+ status : RequestStatus'],
+    ops: ['+ assignContractor()', '+ reportDone(cost)', '+ confirmFixed()'],
+    x: 430, y: 870 },
+
+  { id: 'Contractor', name: 'Contractor', stereotype: null, isEnum: false, isAbstract: false,
+    attrs: ['+ name : String', '+ trade : ContractorTrade', '+ phone : String'], ops: [],
+    x: 430, y: 1090 },
+
+  /* ── enumerations (unconnected boxes, right column) ── */
+  { id: 'AgreementStatus', name: 'AgreementStatus', stereotype: '«enumeration»', isEnum: true, isAbstract: false,
+    attrs: ['Draft', 'AwaitingSignature', 'AwaitingApproval', 'ReturnedForCorrection',
+            'Active', 'InArrears', 'Ended', 'Cancelled', 'Archived'], ops: [],
+    x: 1060, y: 60 },
+
+  { id: 'PaymentStatus', name: 'PaymentStatus', stereotype: '«enumeration»', isEnum: true, isAbstract: false,
+    attrs: ['Pending', 'Paid', 'Rejected'], ops: [],
+    x: 1060, y: 250 },
+
+  { id: 'UrgencyLevel', name: 'UrgencyLevel', stereotype: '«enumeration»', isEnum: true, isAbstract: false,
+    attrs: ['Normal', 'Urgent', 'Emergency'], ops: [],
+    x: 1060, y: 375 },
+
+  { id: 'FacilityType', name: 'FacilityType', stereotype: '«enumeration»', isEnum: true, isAbstract: false,
+    attrs: ['Laundry', 'StudyRoom', 'Gym'], ops: [],
+    x: 1060, y: 500 },
+
+  { id: 'ContractorTrade', name: 'ContractorTrade', stereotype: '«enumeration»', isEnum: true, isAbstract: false,
+    attrs: ['Plumbing', 'Electricity', 'HVAC'], ops: [],
+    x: 1060, y: 625 },
+  { id: 'BookingStatus', name: 'BookingStatus', stereotype: '«enumeration»', isEnum: true, isAbstract: false,
+    attrs: ['Requested', 'Confirmed', 'Cancelled'], ops: [],
+    x: 1060, y: 750 },
+  { id: 'RequestStatus', name: 'RequestStatus', stereotype: '«enumeration»', isEnum: true, isAbstract: false,
+    attrs: ['Open', 'Assigned', 'Closed'], ops: [],
+    x: 1060, y: 875 }
+];
+
+const RELS = [
+  { type: 'comp', from: 'Building', to: 'Apartment', fromMult: '1', toMult: '1..*',
+    fromRole: null, toRole: null, label: null,
+    points: [[100, 142], [100, 260]] },
+
+  { type: 'comp', from: 'Apartment', to: 'Room', fromMult: '1', toMult: '1..*',
+    fromRole: null, toRole: null, label: null,
+    points: [[100, 328], [100, 440]] },
+
+  { id: 'ac_base_RA', type: 'assoc', from: 'Room', to: 'Student', fromMult: '0..*', toMult: '0..*',
+    fromRole: null, toRole: null, label: 'rents',
+    points: [[206, 481], [303, 481], [400, 481]] },
+
+  { id: 'ac_base_Booking', type: 'assoc', from: 'Student', to: 'SharedFacility', fromMult: '0..*', toMult: '0..*',
+    fromRole: null, toRole: null, label: 'books',
+    points: [[559, 480], [649.5, 480], [740, 480]] },
+
+  { type: 'assoc', from: 'Building', to: 'SharedFacility', fromMult: '1', toMult: '0..*',
+    fromRole: null, toRole: null, label: 'offers',
+    points: [[106.5, 60], [106.5, 30], [816.5, 30], [816.5, 445]] },
+
+  { type: 'assoc', from: 'RentalAgreement', to: 'Payment', fromMult: '1', toMult: '1..*',
+    fromRole: null, toRole: null, label: 'generates',
+    points: [[302.5, 787], [302.5, 833], [296, 833], [296, 880]] },
+
+  { type: 'assoc', from: 'Student', to: 'MaintenanceRequest', fromMult: '1', toMult: '0..*',
+    fromRole: null, toRole: null, label: 'opens',
+    points: [[479.5, 522], [479.5, 845], [516, 845], [516, 870]] },
+
+  { type: 'assoc', from: 'MaintenanceRequest', to: 'Contractor', fromMult: '0..*', toMult: '0..1',
+    fromRole: null, toRole: null, label: null,
+    points: [[516, 1009], [516, 1090]] }
+];
+
+/* ── 2. ENGINE (§9d, verbatim) ───────────────────────────────────────────── */
+
+const HDR_H = 28, PAD = 6, LINE_H = 14, DIV_H = 1;
+const FM = 'font-family="IBM Plex Mono, monospace"';
+
+function escXml(s) {
+  return String(s)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+function boxH(cls) {
+  const hdrH = cls.stereotype ? 38 : HDR_H;
+  return hdrH + PAD + cls.attrs.length * LINE_H +
+    (cls.ops.length > 0 ? DIV_H + cls.ops.length * LINE_H : 0) + PAD;
+}
+
+function boxW(cls) {
+  const longest = [...cls.attrs, ...cls.ops, cls.name]
+    .reduce((m, s) => Math.max(m, s.length), 0);
+  return Math.max(120, Math.ceil(longest * 6.5) + 16);
+}
+
+function svgBox(cls) {
+  const w = boxW(cls), h = boxH(cls), { x, y } = cls;
+  const hdrH = cls.stereotype ? 38 : HDR_H;
+  const border   = cls.isEnum ? '#94a3b8' : '#3b82f6';
+  const hdrFill  = cls.isEnum ? '#475569' : '#1e40af';
+  const bodyFill = cls.isEnum ? '#f8fafc' : 'white';
+  const dash     = cls.isEnum ? 'stroke-dasharray="5 3"' : '';
+
+  let s = `<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="${bodyFill}" stroke="${border}" stroke-width="2" ${dash} rx="2"/>`;
+  s += `<rect x="${x}" y="${y}" width="${w}" height="${hdrH}" fill="${hdrFill}" rx="2"/>`;
+
+  if (cls.stereotype) {
+    s += `<text x="${x + w/2}" y="${y + 13}" text-anchor="middle" fill="white" font-size="9" ${FM}>${escXml(cls.stereotype)}</text>`;
+  }
+  const nameStyle = cls.isAbstract ? 'font-style:italic' : '';
+  const nameY = cls.stereotype ? y + hdrH - 8 : y + hdrH / 2 + 4;
+  s += `<text x="${x + w/2}" y="${nameY}" text-anchor="middle" fill="white" font-size="11" font-weight="700" ${FM} style="${nameStyle}">${escXml(cls.name)}</text>`;
+
+  const divY = y + hdrH;
+  s += `<line x1="${x}" y1="${divY}" x2="${x + w}" y2="${divY}" stroke="${border}" stroke-width="1"/>`;
+
+  let curY = divY + PAD + 10;
+  for (const a of cls.attrs) {
+    s += `<text x="${x + 6}" y="${curY}" text-anchor="start" fill="#1e293b" font-size="10.5" ${FM}>${escXml(a)}</text>`;
+    curY += LINE_H;
+  }
+  if (cls.ops.length > 0) {
+    const opDivY = divY + PAD + cls.attrs.length * LINE_H;
+    s += `<line x1="${x}" y1="${opDivY}" x2="${x + w}" y2="${opDivY}" stroke="${border}" stroke-width="1"/>`;
+    curY = opDivY + PAD + 10;
+    for (const o of cls.ops) {
+      s += `<text x="${x + 6}" y="${curY}" text-anchor="start" fill="#2563eb" font-size="10.5" font-style="italic" ${FM}>${escXml(o)}</text>`;
+      curY += LINE_H;
+    }
+  }
+  return s;
+}
+
+function svgRel(rel) {
+  const pts = rel.points.map(([px, py]) => `${px},${py}`).join(' ');
+  let mS = '', mE = '', dash = '';
+  if (rel.type === 'comp') mS = 'marker-start="url(#compFill)"';
+  if (rel.type === 'agg')  mS = 'marker-start="url(#aggHollow)"';
+  if (rel.type === 'gen')  mE = 'marker-end="url(#genHollow)"';
+  if (rel.type === 'dep')  { mE = 'marker-end="url(#arrOpen)"'; dash = 'stroke-dasharray="6 3"'; }
+  // 'assoc': no markers, plain line
+
+  let s = `<polyline points="${pts}" fill="none" stroke="#334155" stroke-width="1.8" ${dash} ${mS} ${mE}/>`;
+  const multLabel = (end, adj, txt) => {
+    const dx = adj[0] - end[0], dy = adj[1] - end[1];
+    const L = Math.hypot(dx, dy) || 1, ux = dx / L, uy = dy / L;
+    const x = end[0] + ux * 16 - uy * 9, y = end[1] + uy * 16 + ux * 9 + 3;
+    return `<text x="${x}" y="${y}" text-anchor="middle" fill="#64748b" font-size="9.5" ${FM}>${escXml(txt)}</text>`;
+  };
+  if (rel.fromMult) s += multLabel(rel.points[0], rel.points[1], rel.fromMult);
+  if (rel.toMult) {
+    const n = rel.points.length;
+    s += multLabel(rel.points[n - 1], rel.points[n - 2], rel.toMult);
+  }
+  if (rel.label) {
+    const mid = rel.points[Math.floor(rel.points.length / 2)];
+    s += `<text x="${mid[0]}" y="${mid[1] - 6}" text-anchor="middle" fill="#64748b" font-size="9.5" ${FM}>${escXml(rel.label)}</text>`;
+  }
+  return s;
+}
+
+function render() {
+  let maxX = 600, maxY = 400;
+  for (const cls of CLASSES) {
+    maxX = Math.max(maxX, cls.x + boxW(cls) + 60);
+    maxY = Math.max(maxY, cls.y + boxH(cls) + 80);
+  }
+
+  const defs = `<defs>
+    <pattern id="dotgrid" width="24" height="24" patternUnits="userSpaceOnUse">
+      <circle cx="12" cy="12" r="0.8" fill="#cbd5e1"/>
+    </pattern>
+    <marker id="genHollow" markerWidth="12" markerHeight="10" refX="10" refY="5" orient="auto">
+      <polygon points="0,0 10,5 0,10" fill="white" stroke="#334155" stroke-width="1.5"/>
+    </marker>
+    <marker id="arrOpen" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <polyline points="0,0 9,4 0,8" fill="none" stroke="#334155" stroke-width="1.5"/>
+    </marker>
+    <marker id="compFill" markerWidth="14" markerHeight="10" refX="1" refY="5" orient="auto">
+      <polygon points="0,5 7,0 14,5 7,10" fill="#1e40af" stroke="#1e40af"/>
+    </marker>
+    <marker id="aggHollow" markerWidth="14" markerHeight="10" refX="1" refY="5" orient="auto">
+      <polygon points="0,5 7,0 14,5 7,10" fill="white" stroke="#334155"/>
+    </marker>
+  </defs>`;
+
+  const totalWidth  = maxX;
+  const totalHeight = maxY;
+
+  const bg    = `<rect width="${totalWidth}" height="${totalHeight}" fill="url(#dotgrid)"/>`;
+  const rels  = RELS.map(svgRel).join('');
+  const boxes = CLASSES.map(svgBox).join('');
+  const legend = `<text x="16" y="${totalHeight - 60}" fill="#64748b" font-size="9" ${FM}>── Association  ◇── Aggregation  ◆── Composition  ──▷ Generalization  |  קרדינליות בשני קצות הקשר  |  --- association-class tether</text>`;
+
+  const svg = document.getElementById('diagram-svg');
+  svg.setAttribute('width',   totalWidth);
+  svg.setAttribute('height',  totalHeight);
+  svg.setAttribute('viewBox', `0 0 ${totalWidth} ${totalHeight}`);
+  svg.innerHTML = defs + bg + rels + boxes + legend;
+}
+
+/* ── Association-class tethers (course rule: dashed line from association
+      midpoint to the association-class box; the association line remains) ── */
+function addTethers() {
+  const svg = document.getElementById('diagram-svg');
+  const tether = (baseId, clsId) => {
+    const base = RELS.find(r => r.id === baseId);
+    const cls  = CLASSES.find(c => c.id === clsId);
+    const p = base.points, a = p[0], b = p[p.length - 1];
+    const mx = (a[0] + b[0]) / 2, my = (a[1] + b[1]) / 2;
+    const tx = cls.x + boxW(cls) / 2, ty = cls.y;
+    return `<line x1="${mx}" y1="${my}" x2="${tx}" y2="${ty}" stroke="#334155" stroke-width="1.3" stroke-dasharray="4 3" fill="none"/>`;
+  };
+  svg.insertAdjacentHTML('beforeend',
+    tether('ac_base_RA', 'RentalAgreement') + tether('ac_base_Booking', 'Booking'));
+}
+
+/* ── 3. diagramModel (model-shape.md, kind:'class') ──────────────────────── */
+
+function buildModel() {
+  const parseMember = (s) => {
+    const m = s.match(/^([+\-#])?\s*([^:()]+?)\s*(\([^)]*\))?\s*(?::\s*(.+))?\s*$/);
+    return {
+      visibility: m && m[1] ? m[1] : '+',
+      name: m ? m[2].trim() : s,
+      type: m && m[4] ? m[4].trim() : null,
+      isOp: !!(m && m[3])
+    };
+  };
+  const elements = CLASSES.map(c => {
+    if (c.isEnum) {
+      return { kind: 'class', id: c.id, name: c.name, isAbstract: false,
+        stereotype: 'enumeration',
+        attributes: c.attrs.map(v => ({ visibility: '', name: v, type: null, defaultValue: null, constraint: null })),
+        operations: [], x: c.x, y: c.y, w: boxW(c), h: boxH(c) };
+    }
+    return { kind: 'class', id: c.id, name: c.name, isAbstract: c.isAbstract,
+      stereotype: c.stereotype ? c.stereotype.replace(/[«»]/g, '').trim() : null,
+      attributes: c.attrs.map(a => { const p = parseMember(a);
+        return { visibility: p.visibility, name: p.name, type: p.type, defaultValue: null, constraint: null }; }),
+      operations: c.ops.map(o => { const p = parseMember(o);
+        return { visibility: p.visibility, name: p.name, params: [], returnType: p.type }; }),
+      x: c.x, y: c.y, w: boxW(c), h: boxH(c) };
+  });
+
+  const relationships = [];
+  RELS.forEach((r, i) => {
+    relationships.push({ kind: 'association', id: r.id || ('assoc_' + i),
+      from: r.from, to: r.to, multFrom: r.fromMult, multTo: r.toMult,
+      roleFrom: r.fromRole, roleTo: r.toRole, directed: false,
+      aggregation: r.type === 'agg', composition: r.type === 'comp' });
+  });
+  relationships.push({ kind: 'associationClass', id: 'ac_RentalAgreement', classId: 'RentalAgreement', assocId: 'ac_base_RA' });
+  relationships.push({ kind: 'associationClass', id: 'ac_Booking', classId: 'Booking', assocId: 'ac_base_Booking' });
+
+  return {
+    kind: 'class',
+    title: 'קמפוס בית, Class Diagram',
+    parts: [ { id: 'part-1', label: 'Campus Housing', splitRationale: '', elements, relationships } ]
+  };
+}
+
+const diagramModel = buildModel();
+
+/* ── 4. VP export (export-buttons.md) ────────────────────────────────────── */
+
+function xmlEscape(s) {
+  return String(s ?? '')
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;').replace(/'/g, '&apos;');
+}
+
+function downloadFile(filename, mimeType, content) {
+  const blob = new Blob([content], { type: mimeType });
+  const url  = URL.createObjectURL(blob);
+  const a    = Object.assign(document.createElement('a'), { href: url, download: filename });
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(() => { URL.revokeObjectURL(url); a.remove(); }, 1000);
+}
+
+function xmiBody(elements, rels) {
+  const lines = [];
+  for (const el of elements) {
+    if (el.kind === 'class') {
+      const isEnum = el.stereotype === 'enumeration';
+      const tag = isEnum ? 'uml:Enumeration' : 'uml:Class';
+      lines.push(`    <packagedElement xmi:type="${tag}" xmi:id="${el.id}" name="${xmlEscape(el.name)}"${el.isAbstract ? ' isAbstract="true"' : ''}>`);
+      if (isEnum) {
+        for (const a of el.attributes)
+          lines.push(`      <ownedLiteral xmi:id="${el.id}_${a.name}" name="${xmlEscape(a.name)}"/>`);
+      } else {
+        for (const a of el.attributes)
+          lines.push(`      <ownedAttribute xmi:id="${el.id}_${a.name}" name="${xmlEscape(a.name)}" visibility="${a.visibility === '+' ? 'public' : a.visibility === '-' ? 'private' : 'protected'}"/>`);
+        for (const op of el.operations)
+          lines.push(`      <ownedOperation xmi:id="${el.id}_${op.name}" name="${xmlEscape(op.name)}"/>`);
+      }
+      lines.push(`    </packagedElement>`);
+    }
+  }
+  for (const r of rels) {
+    if (r.kind === 'generalization')
+      lines.push(`    <packagedElement xmi:type="uml:Generalization" xmi:id="${r.id}" specific="${r.from}" general="${r.to}"/>`);
+    if (r.kind === 'association')
+      lines.push(`    <packagedElement xmi:type="uml:Association" xmi:id="${r.id}" memberEnd="${r.from}_end ${r.to}_end"/>`);
+    if (r.kind === 'associationClass')
+      lines.push(`    <packagedElement xmi:type="uml:AssociationClass" xmi:id="${r.id}" name="${xmlEscape(r.classId)}"/>`);
+  }
+  return lines.join('\n');
+}
+
+function exportXMI() {
+  const m = diagramModel;
+  const title = xmlEscape(m.title || 'diagram');
+  const allElements = m.parts.flatMap(p => p.elements);
+  const allRelationships = m.parts.flatMap(p => p.relationships);
+  const body = xmiBody(allElements, allRelationships);
+
+  const xmi = `<?xml version="1.0" encoding="UTF-8"?>
+<xmi:XMI xmi:version="2.1"
+  xmlns:xmi="http://www.omg.org/XMI"
+  xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML">
+  <uml:Model xmi:id="model_1" name="${title}">
+${body}
+  </uml:Model>
+</xmi:XMI>`;
+
+  downloadFile(title.replace(/\s+/g, '_') + '.xmi', 'application/xml', xmi);
+}
+
+/* ── boot ── */
+document.addEventListener('DOMContentLoaded', () => { render(); addTethers(); });
+</script>
+</body>
+</html>

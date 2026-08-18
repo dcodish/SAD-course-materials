@@ -1,0 +1,1162 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>פתרון לדוגמה: קמפוס בית</title>
+<style>
+:root{
+  --ink:#1a2332; --muted:#5b6b7f; --line:#dfe5ec; --bg:#f7f9fb; --card:#fff;
+  --accent:#1d4ed8; --accent-soft:#eff4ff;
+  --ans:#065f46; --ans-bg:#ecfdf5; --ans-line:#6ee7b7;
+  --warn:#8a3d12; --warn-bg:#fff5ed; --warn-line:#f7b98a;
+}
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--bg); color:var(--ink); direction:rtl;
+  font-family:"Segoe UI","Noto Sans Hebrew",Arial,sans-serif;
+  font-size:16px; line-height:1.75;
+}
+.wrap{max-width:1180px; margin:0 auto; padding:32px 20px 80px}
+header.page{
+  background:linear-gradient(135deg,#1e3a8a,#1d4ed8); color:#fff;
+  border-radius:14px; padding:28px 30px; margin-bottom:28px;
+}
+header.page h1{margin:0 0 6px; font-size:1.75rem; letter-spacing:-.01em}
+header.page p{margin:0; opacity:.92; font-size:.95rem}
+.meta{margin-top:16px; display:flex; flex-wrap:wrap; gap:8px}
+.chip{background:rgba(255,255,255,.16); border:1px solid rgba(255,255,255,.28);
+  padding:4px 12px; border-radius:999px; font-size:.82rem}
+
+section.q{background:var(--card); border:1px solid var(--line); border-radius:12px;
+  padding:24px 26px; margin-bottom:22px; scroll-margin-top:16px}
+section.q > h2{
+  margin:0 0 4px; font-size:1.28rem; color:var(--accent);
+  border-bottom:2px solid var(--accent-soft); padding-bottom:10px;
+}
+.pts{float:left; font-size:.85rem; font-weight:600; color:var(--muted);
+  background:var(--bg); border:1px solid var(--line); border-radius:999px; padding:2px 11px}
+
+.qtext{color:var(--muted); font-size:.95rem; margin:14px 0}
+.box{background:var(--bg); border:1px solid var(--line); border-right:4px solid var(--accent);
+  border-radius:8px; padding:14px 18px; margin:14px 0; font-size:.93rem; color:#374a5e}
+.box p{margin:.5em 0}
+
+h3.sub{margin:26px 0 8px; font-size:1.02rem; color:var(--ink);
+  background:var(--accent-soft); border-radius:6px; padding:8px 12px}
+
+.answer{background:var(--ans-bg); border:1px solid var(--ans-line); border-radius:8px;
+  padding:14px 18px; margin:10px 0}
+.answer::before{content:"תשובה"; display:block; font-weight:700; font-size:.78rem;
+  letter-spacing:.06em; color:var(--ans); margin-bottom:6px}
+.answer p:last-child, .answer ul:last-child{margin-bottom:0}
+.answer p:first-of-type{margin-top:0}
+
+.mistake{background:var(--warn-bg); border:1px solid var(--warn-line); border-radius:8px;
+  padding:12px 18px; margin:10px 0; font-size:.92rem; color:#5c2c0d}
+.mistake::before{content:"טעות נפוצה"; display:block; font-weight:700; font-size:.78rem;
+  letter-spacing:.06em; color:var(--warn); margin-bottom:5px}
+.alt{font-size:.9rem; color:var(--muted); margin:8px 0 0; padding-right:2px}
+.alt b{color:var(--ink)}
+
+/* direction:ltr on the FIGURE too, an RTL scroll container starts pinned to the
+   right, which hides the left edge of any diagram wider than the page. */
+figure.diagram{margin:18px 0 6px; border:1px solid var(--line); border-radius:10px;
+  background:#fff; padding:12px; overflow-x:auto; direction:ltr}
+/* Never shrink a diagram below legibility: scroll sideways instead. */
+/* direction:ltr is REQUIRED, the page is RTL, and inheriting that into the SVG
+   flips how text-anchor:start resolves, throwing every label out of its box. */
+figure.diagram svg{display:block; width:100%; height:auto; min-width:1040px; direction:ltr}
+/* The BPMN is 1788px wide. Do NOT full-bleed it with 100vw + translateX: inside the
+   RTL wrap that shifts the whole document and adds body-level horizontal scroll.
+   Let it scroll inside its own frame instead. */
+figure.diagram.wide svg{min-width:1500px}
+.scrollhint{font-size:.78rem; color:var(--muted); margin:0 0 6px; display:none}
+figure.diagram.wide + .scrollhint{display:block}
+figcaption{margin-top:8px; font-size:.85rem; color:var(--muted); text-align:center; direction:rtl}
+.difflink{margin:8px 0 0; font-size:.88rem}
+.difflink a{display:inline-flex; align-items:center; gap:6px; text-decoration:none;
+  color:var(--accent); background:var(--accent-soft); border:1px solid #c7d7fe;
+  border-radius:999px; padding:5px 14px; font-weight:600}
+.difflink a:hover{background:#dbe6ff}
+.difflink small{color:var(--muted); font-weight:400; margin-inline-start:8px}
+
+ul{margin:.4em 0; padding-right:1.2em}
+li{margin:.3em 0}
+code{background:#eef2f7; border:1px solid var(--line); border-radius:4px;
+  padding:1px 5px; font-family:"Consolas","IBM Plex Mono",monospace;
+  font-size:.88em; direction:ltr; display:inline-block}
+.en{direction:ltr; unicode-bidi:embed; display:inline-block}
+
+footer{color:var(--muted); font-size:.85rem; text-align:center; margin-top:34px}
+
+@media print{
+  body{background:#fff}
+  section.q{break-inside:avoid; border:none; padding:0; margin-bottom:26px}
+  header.page{background:#1e3a8a !important; -webkit-print-color-adjust:exact; print-color-adjust:exact}
+  figure.diagram{overflow:visible}
+  figure.diagram svg, figure.diagram.wide svg{min-width:0}
+  .scrollhint{display:none !important}
+}
+@media (max-width:640px){ .wrap{padding:16px 10px 50px} section.q{padding:16px 14px} }
+
+  .updnote{background:#fff7ed;border:1px solid #fdba74;border-right:5px solid #ea580c;
+           border-radius:8px;padding:12px 16px;margin:0 0 22px 0;}
+  .updnote b{color:#9a3412;}
+  .updnote p{margin:6px 0 0 0;font-size:14px;line-height:1.7;color:#42302a;}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="page"><h1>פתרון לדוגמה: קמפוס בית</h1><p>ניתוח ועיצוב מערכות מידע (364-1-1411), מבחן לדוגמה 1</p><div class="meta"><span class="chip">100 נקודות</span><span class="chip">8 שאלות</span><span class="chip">4 תרשימים</span></div></header>
+<div class="updnote" dir="rtl"><b>עודכן ב-25.7.2026 — שאלה 8.2 (תווית החץ החוזר מ"הוחזר לתיקון" ל"טיוטה")</b><p>בעקבות שאלה של סטודנט, תוקנה שגיאה בתווית: קודם נכתב עליה "רכז השיבוץ תיקן והגיש מחדש", אך החץ מוביל למצב <b>"טיוטה"</b>, ולכן התווית תיארה אירוע (הגשה מחדש לאישור) שסותר את המצב שאליו מגיעים. האירוע הנכון על החץ הזה הוא <b>תחילת התיקון</b> בלבד, "רכז השיבוץ החל בתיקון", וההגשה מחדש מיוצגת בחצים שכבר קיימים אחריו: "טיוטה" → "ממתין לחתימת הסטודנט" → "ממתין לאישור מנהל האזור". <b>מבנה התרשים לא השתנה</b>, רק התווית ונוסח התשובה ל-8.2.</p></div>
+<div class="updnote" dir="rtl"><b>עודכן ב-24.7.2026 — שאלה 8 (תרשים המצבים)</b><p>הגדרת <b>מצב הסיום</b> שונתה: מצב סיום פירושו שהאובייקט <b>נגרע מהמערכת ואינו קיים עוד</b>, ולא שהתהליך העסקי הסתיים. לכן חוזה שהסתיים או בוטל הוא <b>מצב תוצאה</b>, הרשומה ממשיכה למצב <b>ארכיון</b>, ורק בתום תקופת השמירה (7 שנים) היא נגרעת ומגיעים למצב הסיום. בעקבות זאת עודכנו גם תרשים המחלקות (שאלה 7) וניסוח שאלה 8.3 בגיליון המבחן.</p><p>תגובות ושאלות שנכתבו כאן <b>לפני</b> התאריך הזה עשויות להתייחס לנוסח הקודם של הפתרון.</p></div>
+<section class="q" id="q1"><h2>שאלה 1, נימוקי ה-BPMN (בדיקת יציאה והחזר פיקדון)</h2>
+<figure class="diagram wide"><svg width="3090" height="696" viewBox="0 0 3090 696" xmlns="http://www.w3.org/2000/svg">
+      
+    <defs>
+      <pattern id="dot-grid" x="0" y="0" width="24" height="24" patternUnits="userSpaceOnUse">
+        <circle cx="1" cy="1" r="0.8" fill="#cbd5e1"></circle>
+      </pattern>
+      <marker id="arrow-seq" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="10" markerHeight="10" orient="auto-start-reverse">
+        <path d="M 0 0 L 10 5 L 0 10 Z" fill="#455a64"></path>
+      </marker>
+      <marker id="msg-start" viewBox="-10 -10 20 20" refX="0" refY="0" markerWidth="10" markerHeight="10" orient="auto">
+        <circle cx="0" cy="0" r="4" fill="#ffffff" stroke="#37474f" stroke-width="1.2"></circle>
+      </marker>
+      <marker id="msg-end" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="10" markerHeight="10" orient="auto-start-reverse">
+        <path d="M 0 0 L 10 5 L 0 10 Z" fill="#37474f"></path>
+      </marker>
+      <marker id="arrow-data" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+        <path d="M 0 0 L 10 5 L 0 10 Z" fill="#7986cb"></path>
+      </marker>
+    </defs>
+      <rect x="0" y="0" width="3090" height="696" fill="#f8fafc"></rect>
+    <rect x="0" y="0" width="3090" height="696" fill="url(#dot-grid)"></rect>
+      
+    <!-- pool: pool-tenant -->
+    <g class="bpmn-pool" data-pool="pool-tenant">
+      <rect x="20" y="72" width="3030" height="96" fill="#faf7f2" stroke="#8d6e63" stroke-width="1.5"></rect>
+      <rect x="20" y="72" width="30" height="96" fill="#6d4c41" stroke="#8d6e63" stroke-width="1.5"></rect>
+      <text x="35" y="120" text-anchor="middle" dominant-baseline="middle" transform="rotate(-90, 35, 120)" fill="#ffffff" font-size="12" font-weight="600" direction="rtl">הדייר היוצא</text>
+      <line x1="50" y1="72" x2="50" y2="168" stroke="#8d6e63" stroke-width="1"></line>
+    </g>
+
+    <!-- pool: pool-org -->
+    <g class="bpmn-pool" data-pool="pool-org">
+      <rect x="20" y="184" width="3030" height="364" fill="#ffffff" stroke="#455a64" stroke-width="1.5"></rect>
+      <rect x="20" y="184" width="30" height="364" fill="#37474f" stroke="#455a64" stroke-width="1.5"></rect>
+      <text x="35" y="366" text-anchor="middle" dominant-baseline="middle" transform="rotate(-90, 35, 366)" fill="#ffffff" font-size="12" font-weight="600" direction="rtl">חברת הניהול</text>
+      <line x1="50" y1="184" x2="50" y2="548" stroke="#455a64" stroke-width="1"></line>
+    </g>
+
+    <!-- pool: pool-bank -->
+    <g class="bpmn-pool" data-pool="pool-bank">
+      <rect x="20" y="564" width="3030" height="96" fill="#faf7f2" stroke="#8d6e63" stroke-width="1.5"></rect>
+      <rect x="20" y="564" width="30" height="96" fill="#6d4c41" stroke="#8d6e63" stroke-width="1.5"></rect>
+      <text x="35" y="612" text-anchor="middle" dominant-baseline="middle" transform="rotate(-90, 35, 612)" fill="#ffffff" font-size="12" font-weight="600" direction="rtl">הבנק</text>
+      <line x1="50" y1="564" x2="50" y2="660" stroke="#8d6e63" stroke-width="1"></line>
+    </g>
+      
+    <g class="bpmn-lane" data-lane="lane-sys">
+      <rect x="74" y="184" width="2976" height="224" fill="#fafafa" fill-opacity="0.6" stroke="none"></rect>
+      <rect x="50" y="184" width="24" height="224" fill="#546e7a" stroke="#455a64" stroke-width="1"></rect>
+      <text x="62" y="296" text-anchor="middle" dominant-baseline="middle" transform="rotate(-90, 62, 296)" fill="#ffffff" font-size="11" font-weight="500" direction="rtl">מערכת הפיקדונות</text>
+      
+    </g>
+
+    <g class="bpmn-lane" data-lane="lane-insp">
+      <rect x="74" y="408" width="2976" height="140" fill="#fafafa" fill-opacity="0.6" stroke="none"></rect>
+      <rect x="50" y="408" width="24" height="140" fill="#546e7a" stroke="#455a64" stroke-width="1"></rect>
+      <text x="62" y="478" text-anchor="middle" dominant-baseline="middle" transform="rotate(-90, 62, 478)" fill="#ffffff" font-size="11" font-weight="500" direction="rtl">מפקח היציאה</text>
+      <line x1="50" y1="408" x2="3050" y2="408" stroke="#90a4ae" stroke-width="1" stroke-dasharray="4 3"></line>
+    </g>
+      
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf1">
+      <path d="M 162.0 268.0 L 260.0 268.0" fill="none" stroke="#455a64" stroke-width="1.6" marker-end="url(#arrow-seq)"></path>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf2">
+      <path d="M 400.0 268.0 L 492.0 268.0" fill="none" stroke="#455a64" stroke-width="1.6" marker-end="url(#arrow-seq)"></path>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf3">
+      <path d="M 540.0 264.0 L 586.0 264.0 L 586.0 268.0 L 632.0 268.0" fill="none" stroke="#455a64" stroke-width="1.6" marker-end="url(#arrow-seq)"></path>
+      
+      
+    <g class="bpmn-flow-label">
+      <rect x="517.7" y="253" width="90.60000000000001" height="14" rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"></rect>
+      <text x="563" y="260" text-anchor="middle" dominant-baseline="middle" font-size="10" fill="#263238" direction="rtl">פחות מ-30 יום</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf5">
+      <path d="M 540.0 272.0 L 702.0 272.0 L 702.0 268.0 L 864.0 268.0" fill="none" stroke="#455a64" stroke-width="1.6" marker-end="url(#arrow-seq)"></path>
+      <line x1="554" y1="266" x2="554" y2="278" stroke="#455a64" stroke-width="1.5" stroke-linecap="round"></line>
+      
+    <g class="bpmn-flow-label">
+      <rect x="578.8" y="261" width="84.4" height="14" rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"></rect>
+      <text x="621" y="268" text-anchor="middle" dominant-baseline="middle" font-size="10" fill="#263238" direction="rtl">30 יום ומעלה</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf4">
+      <path d="M 772.0 268.0 L 864.0 268.0" fill="none" stroke="#455a64" stroke-width="1.6" marker-end="url(#arrow-seq)"></path>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf6">
+      <path d="M 888.0 292.0 L 888.0 418.0" fill="none" stroke="#455a64" stroke-width="1.6" marker-end="url(#arrow-seq)"></path>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf7">
+      <path d="M 958.0 450.0 L 1004.0 450.0" fill="none" stroke="#455a64" stroke-width="1.6" marker-end="url(#arrow-seq)"></path>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf8">
+      <path d="M 1144.0 450.0 L 1236.0 450.0" fill="none" stroke="#455a64" stroke-width="1.6" marker-end="url(#arrow-seq)"></path>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf11">
+      <path d="M 1260.0 426.0 L 1260.0 363.0 L 2190.0 363.0 L 2190.0 300.0" fill="none" stroke="#455a64" stroke-width="1.6" marker-end="url(#arrow-seq)"></path>
+      
+      
+    <g class="bpmn-flow-label">
+      <rect x="1692.1" y="352" width="65.80000000000001" height="14" rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"></rect>
+      <text x="1725" y="359" text-anchor="middle" dominant-baseline="middle" font-size="10" fill="#263238" direction="rtl">אין נזקים</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf9">
+      <path d="M 1284.0 454.0 L 1330.0 454.0 L 1330.0 450.0 L 1376.0 450.0" fill="none" stroke="#455a64" stroke-width="1.6" marker-end="url(#arrow-seq)"></path>
+      
+      
+    <g class="bpmn-flow-label">
+      <rect x="1267.9" y="443" width="78.2" height="14" rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"></rect>
+      <text x="1307" y="450" text-anchor="middle" dominant-baseline="middle" font-size="10" fill="#263238" direction="rtl">נמצאו נזקים</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf10">
+      <path d="M 1446.0 418.0 L 1446.0 292.0" fill="none" stroke="#455a64" stroke-width="1.6" marker-end="url(#arrow-seq)"></path>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf12">
+      <path d="M 1470.0 264.0 L 1516.0 264.0 L 1516.0 226.0 L 1562.0 226.0" fill="none" stroke="#455a64" stroke-width="1.6" marker-end="url(#arrow-seq)"></path>
+      
+      
+    <g class="bpmn-flow-label">
+      <rect x="1444.6" y="253" width="96.8" height="14" rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"></rect>
+      <text x="1493" y="260" text-anchor="middle" dominant-baseline="middle" font-size="10" fill="#263238" direction="rtl">אומדן ≥ פיקדון</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf14">
+      <path d="M 1470.0 272.0 L 1516.0 272.0 L 1516.0 310.0 L 1562.0 310.0" fill="none" stroke="#455a64" stroke-width="1.6" marker-end="url(#arrow-seq)"></path>
+      <line x1="1484" y1="266" x2="1484" y2="278" stroke="#455a64" stroke-width="1.5" stroke-linecap="round"></line>
+      
+    <g class="bpmn-flow-label">
+      <rect x="1444.6" y="261" width="96.8" height="14" rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"></rect>
+      <text x="1493" y="268" text-anchor="middle" dominant-baseline="middle" font-size="10" fill="#263238" direction="rtl">אומדן &lt; פיקדון</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf13">
+      <path d="M 1702.0 226.0 L 1800.0 226.0" fill="none" stroke="#455a64" stroke-width="1.6" marker-end="url(#arrow-seq)"></path>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf15">
+      <path d="M 1702.0 310.0 L 1800.0 310.0" fill="none" stroke="#455a64" stroke-width="1.6" marker-end="url(#arrow-seq)"></path>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf16">
+      <path d="M 1836.0 310.0 L 1908.0 310.0 L 1908.0 268.0 L 1980.0 268.0" fill="none" stroke="#455a64" stroke-width="1.6" marker-end="url(#arrow-seq)"></path>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf19">
+      <path d="M 2028.0 264.0 L 2074.0 264.0 L 2074.0 268.0 L 2120.0 268.0" fill="none" stroke="#455a64" stroke-width="1.6" marker-end="url(#arrow-seq)"></path>
+      <line x1="2042" y1="258" x2="2042" y2="270" stroke="#455a64" stroke-width="1.5" stroke-linecap="round"></line>
+      
+    <g class="bpmn-flow-label">
+      <rect x="2005.7" y="253" width="90.60000000000001" height="14" rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"></rect>
+      <text x="2051" y="260" text-anchor="middle" dominant-baseline="middle" font-size="10" fill="#263238" direction="rtl">לא הוגש ערעור</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf17">
+      <path d="M 2004.0 292.0 L 2004.0 418.0" fill="none" stroke="#455a64" stroke-width="1.6" marker-end="url(#arrow-seq)"></path>
+      
+      
+    <g class="bpmn-flow-label">
+      <rect x="1968" y="344" width="72" height="14" rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"></rect>
+      <text x="2004" y="351" text-anchor="middle" dominant-baseline="middle" font-size="10" fill="#263238" direction="rtl">הוגש ערעור</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf18">
+      <path d="M 2004.0 418.0 L 2004.0 355.0 L 1446.0 355.0 L 1446.0 292.0" fill="none" stroke="#455a64" stroke-width="1.6" marker-end="url(#arrow-seq)"></path>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf20">
+      <path d="M 2260.0 268.0 L 2306.0 268.0" fill="none" stroke="#455a64" stroke-width="1.6" marker-end="url(#arrow-seq)"></path>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf21">
+      <path d="M 2446.0 268.0 L 2544.0 268.0" fill="none" stroke="#455a64" stroke-width="1.6" marker-end="url(#arrow-seq)"></path>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf22">
+      <path d="M 2580.0 268.0 L 2678.0 268.0" fill="none" stroke="#455a64" stroke-width="1.6" marker-end="url(#arrow-seq)"></path>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf23">
+      <path d="M 2818.0 268.0 L 2916.0 268.0" fill="none" stroke="#455a64" stroke-width="1.6" marker-end="url(#arrow-seq)"></path>
+      
+      
+    </g>
+      
+    <g class="bpmn-flow bpmn-message" data-flow="mf1">
+      <path d="M -96.0 168.0 L -96.0 176.0 L 130.0 176.0 L 130.0 250.0" fill="none" stroke="#37474f" stroke-width="1.3" stroke-dasharray="10 5" marker-start="url(#msg-start)" marker-end="url(#msg-end)"></path>
+      
+    <g class="bpmn-flow-label">
+      <rect x="-22.1" y="155" width="78.2" height="14" rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"></rect>
+      <text x="17" y="162" text-anchor="middle" dominant-baseline="middle" font-size="10" fill="#263238" direction="rtl">הודעת עזיבה</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-message" data-flow="mf2">
+      <path d="M 822.0 418.0 L 822.0 176.0 L 744.0 176.0 L 744.0 168.0" fill="none" stroke="#37474f" stroke-width="1.3" stroke-dasharray="10 5" marker-start="url(#msg-start)" marker-end="url(#msg-end)"></path>
+      
+    <g class="bpmn-flow-label">
+      <rect x="779.8" y="276" width="84.4" height="14" rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"></rect>
+      <text x="822" y="283" text-anchor="middle" dominant-baseline="middle" font-size="10" fill="#263238" direction="rtl">זימון לבדיקה</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-message" data-flow="mf3">
+      <path d="M 1608.0 278.0 L 1548.0 278.0 L 1548.0 176.0 L 1584.0 176.0 L 1584.0 168.0" fill="none" stroke="#37474f" stroke-width="1.3" stroke-dasharray="10 5" marker-start="url(#msg-start)" marker-end="url(#msg-end)"></path>
+      
+    <g class="bpmn-flow-label">
+      <rect x="1502.7" y="206" width="90.60000000000001" height="14" rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"></rect>
+      <text x="1548" y="213" text-anchor="middle" dominant-baseline="middle" font-size="10" fill="#263238" direction="rtl">פירוט ניכויים</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-message" data-flow="mf4">
+      <path d="M 1866.0 168.0 L 1866.0 176.0 L 1852.0 176.0 L 1852.0 292.0 L 1832.0 292.0" fill="none" stroke="#37474f" stroke-width="1.3" stroke-dasharray="10 5" marker-start="url(#msg-start)" marker-end="url(#msg-end)"></path>
+      
+    <g class="bpmn-flow-label">
+      <rect x="1831.5" y="233" width="41" height="14" rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"></rect>
+      <text x="1852" y="240" text-anchor="middle" dominant-baseline="middle" font-size="10" fill="#263238" direction="rtl">ערעור</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-message" data-flow="mf5">
+      <path d="M 1698.0 194.0 L 1698.0 176.0 L 1776.0 176.0 L 1776.0 168.0" fill="none" stroke="#37474f" stroke-width="1.3" stroke-dasharray="10 5" marker-start="url(#msg-start)" marker-end="url(#msg-end)"></path>
+      
+    <g class="bpmn-flow-label">
+      <rect x="1676.2" y="175" width="121.60000000000001" height="14" rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"></rect>
+      <text x="1737" y="182" text-anchor="middle" dominant-baseline="middle" font-size="10" fill="#263238" direction="rtl">הודעת מימוש פיקדון</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-message" data-flow="mf8">
+      <path d="M 2814.0 236.0 L 2814.0 176.0 L 2988.0 176.0 L 2988.0 168.0" fill="none" stroke="#37474f" stroke-width="1.3" stroke-dasharray="10 5" marker-start="url(#msg-start)" marker-end="url(#msg-end)"></path>
+      
+    <g class="bpmn-flow-label">
+      <rect x="2865" y="175" width="72" height="14" rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"></rect>
+      <text x="2901" y="182" text-anchor="middle" dominant-baseline="middle" font-size="10" fill="#263238" direction="rtl">אישור החזר</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-message" data-flow="mf6">
+      <path d="M 2352.0 300.0 L 2352.0 556.0 L 2328.0 556.0 L 2328.0 564.0" fill="none" stroke="#37474f" stroke-width="1.3" stroke-dasharray="10 5" marker-start="url(#msg-start)" marker-end="url(#msg-end)"></path>
+      
+    <g class="bpmn-flow-label">
+      <rect x="2312.9" y="407" width="78.2" height="14" rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"></rect>
+      <text x="2352" y="414" text-anchor="middle" dominant-baseline="middle" font-size="10" fill="#263238" direction="rtl">הוראת תשלום</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-message" data-flow="mf7">
+      <path d="M 2610.0 564.0 L 2610.0 556.0 L 2576.0 556.0 L 2576.0 286.0" fill="none" stroke="#37474f" stroke-width="1.3" stroke-dasharray="10 5" marker-start="url(#msg-start)" marker-end="url(#msg-end)"></path>
+      
+    <g class="bpmn-flow-label">
+      <rect x="2518.3" y="420" width="115.4" height="14" rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"></rect>
+      <text x="2576" y="427" text-anchor="middle" dominant-baseline="middle" font-size="10" fill="#263238" direction="rtl">אישור ביצוע העברה</text>
+    </g>
+    </g>
+      
+    <g class="bpmn-flow bpmn-data-assoc" data-flow="da1" data-dir="read">
+      <path d="M 1570.0 358.0 L 1570.0 300.0 L 330.0 300.0" fill="none" stroke="#7986cb" stroke-width="1.1" stroke-dasharray="4 3" marker-end="url(#arrow-data)"></path>
+    </g>
+
+    <g class="bpmn-flow bpmn-data-assoc" data-flow="da2" data-dir="write">
+      <path d="M 1632.0 258.0 L 1632.0 358.0 L 1570.0 358.0" fill="none" stroke="#7986cb" stroke-width="1.1" stroke-dasharray="4 3" marker-end="url(#arrow-data)"></path>
+    </g>
+
+    <g class="bpmn-flow bpmn-data-assoc" data-flow="da3" data-dir="write">
+      <path d="M 2748.0 300.0 L 2748.0 358.0 L 1570.0 358.0" fill="none" stroke="#7986cb" stroke-width="1.1" stroke-dasharray="4 3" marker-end="url(#arrow-data)"></path>
+    </g>
+      
+    <g class="bpmn-element bpmn-event" id="start-1" data-kind="event" data-event="start">
+      <circle cx="144" cy="268" r="18" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2"></circle>
+      <text text-anchor="middle" font-size="10.5" fill="#37474f" direction="rtl" font-weight="500"><tspan x="144" y="300">הודעת עזיבה התקבלה</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-task" id="t1" data-kind="task">
+      <rect x="260" y="236" width="140" height="64" rx="8" ry="8" fill="#ffffff" stroke="#546e7a" stroke-width="1.5"></rect>
+      <text text-anchor="middle" dominant-baseline="middle" font-size="11.5" font-weight="500" fill="#1a1a2e" direction="rtl"><tspan x="330" y="261">שלוף פרטי חוזה</tspan><tspan x="330" y="275">ופיקדון</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-gateway" id="g1" data-kind="gateway" data-gw="XOR">
+      <text text-anchor="middle" font-size="10.5" fill="#37474f" direction="rtl" font-weight="500"><tspan x="516" y="234">הודעה 30 יום מראש?</tspan></text>
+      <rect x="499" y="251" width="34" height="34" fill="#fff8e1" stroke="#f9a825" stroke-width="2" transform="rotate(45, 516, 268)"></rect>
+      
+      <line x1="508" y1="260" x2="524" y2="276" stroke="#e65100" stroke-width="3" stroke-linecap="round"></line>
+      <line x1="524" y1="260" x2="508" y2="276" stroke="#e65100" stroke-width="3" stroke-linecap="round"></line>
+    </g>
+
+    <g class="bpmn-element bpmn-task" id="t2" data-kind="task">
+      <rect x="632" y="236" width="140" height="64" rx="8" ry="8" fill="#ffffff" stroke="#546e7a" stroke-width="1.5"></rect>
+      <text text-anchor="middle" dominant-baseline="middle" font-size="11.5" font-weight="500" fill="#1a1a2e" direction="rtl"><tspan x="702" y="261">הוסף חיוב דמי</tspan><tspan x="702" y="275">הודעה מוקדמת</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-gateway" id="g1m" data-kind="gateway" data-gw="XOR">
+      
+      <rect x="871" y="251" width="34" height="34" fill="#fff8e1" stroke="#f9a825" stroke-width="2" transform="rotate(45, 888, 268)"></rect>
+      
+      <line x1="880" y1="260" x2="896" y2="276" stroke="#e65100" stroke-width="3" stroke-linecap="round"></line>
+      <line x1="896" y1="260" x2="880" y2="276" stroke="#e65100" stroke-width="3" stroke-linecap="round"></line>
+    </g>
+
+    <g class="bpmn-element bpmn-gateway" id="g3" data-kind="gateway" data-gw="XOR">
+      <text text-anchor="middle" font-size="10.5" fill="#37474f" direction="rtl" font-weight="500"><tspan x="1446" y="234">האומדן מגיע לפיקדון?</tspan></text>
+      <rect x="1429" y="251" width="34" height="34" fill="#fff8e1" stroke="#f9a825" stroke-width="2" transform="rotate(45, 1446, 268)"></rect>
+      
+      <line x1="1438" y1="260" x2="1454" y2="276" stroke="#e65100" stroke-width="3" stroke-linecap="round"></line>
+      <line x1="1454" y1="260" x2="1438" y2="276" stroke="#e65100" stroke-width="3" stroke-linecap="round"></line>
+    </g>
+
+    <g class="bpmn-element bpmn-task" id="t7" data-kind="task">
+      <rect x="1562" y="194" width="140" height="64" rx="8" ry="8" fill="#ffffff" stroke="#546e7a" stroke-width="1.5"></rect>
+      <text text-anchor="middle" dominant-baseline="middle" font-size="11.5" font-weight="500" fill="#1a1a2e" direction="rtl"><tspan x="1632" y="219">סמן מימוש פיקדון</tspan><tspan x="1632" y="233">ושלח הודעה</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-task" id="t8" data-kind="task">
+      <rect x="1562" y="278" width="140" height="64" rx="8" ry="8" fill="#ffffff" stroke="#546e7a" stroke-width="1.5"></rect>
+      <text text-anchor="middle" dominant-baseline="middle" font-size="11.5" font-weight="500" fill="#1a1a2e" direction="rtl"><tspan x="1632" y="303">שלח פירוט</tspan><tspan x="1632" y="317">ניכויים</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-event" id="end-2" data-kind="event" data-event="end">
+      <circle cx="1818" cy="226" r="18" fill="#ffebee" stroke="#c62828" stroke-width="3.5"></circle>
+      <text text-anchor="middle" font-size="10.5" fill="#37474f" direction="rtl" font-weight="500"><tspan x="1818" y="258">הפיקדון מומש</tspan><tspan x="1818" y="270">במלואו</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-event" id="wait-1" data-kind="event" data-event="intermediate">
+      
+      <circle cx="1818" cy="310" r="18" fill="#ffffff" stroke="#1565c0" stroke-width="2"></circle>
+      <circle cx="1818" cy="310" r="13.5" fill="none" stroke="#1565c0" stroke-width="1.2"></circle>
+      <text text-anchor="middle" font-size="10.5" fill="#37474f" direction="rtl" font-weight="500"><tspan x="1818" y="342">תגובת הדייר התקבלה</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-gateway" id="g4" data-kind="gateway" data-gw="XOR">
+      <text text-anchor="middle" font-size="10.5" fill="#37474f" direction="rtl" font-weight="500"><tspan x="2004" y="234">הוגש ערעור?</tspan></text>
+      <rect x="1987" y="251" width="34" height="34" fill="#fff8e1" stroke="#f9a825" stroke-width="2" transform="rotate(45, 2004, 268)"></rect>
+      
+      <line x1="1996" y1="260" x2="2012" y2="276" stroke="#e65100" stroke-width="3" stroke-linecap="round"></line>
+      <line x1="2012" y1="260" x2="1996" y2="276" stroke="#e65100" stroke-width="3" stroke-linecap="round"></line>
+    </g>
+
+    <g class="bpmn-element bpmn-task" id="t9" data-kind="task">
+      <rect x="2120" y="236" width="140" height="64" rx="8" ry="8" fill="#ffffff" stroke="#546e7a" stroke-width="1.5"></rect>
+      <text text-anchor="middle" dominant-baseline="middle" font-size="11.5" font-weight="500" fill="#1a1a2e" direction="rtl"><tspan x="2190" y="268">חשב החזר נטו</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-task" id="t10" data-kind="task">
+      <rect x="2306" y="236" width="140" height="64" rx="8" ry="8" fill="#ffffff" stroke="#546e7a" stroke-width="1.5"></rect>
+      <text text-anchor="middle" dominant-baseline="middle" font-size="11.5" font-weight="500" fill="#1a1a2e" direction="rtl"><tspan x="2376" y="261">שלח הוראת תשלום</tspan><tspan x="2376" y="275">לבנק</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-event" id="wait-2" data-kind="event" data-event="intermediate">
+      
+      <circle cx="2562" cy="268" r="18" fill="#ffffff" stroke="#1565c0" stroke-width="2"></circle>
+      <circle cx="2562" cy="268" r="13.5" fill="none" stroke="#1565c0" stroke-width="1.2"></circle>
+      <text text-anchor="middle" font-size="10.5" fill="#37474f" direction="rtl" font-weight="500"><tspan x="2562" y="300">אישור הבנק התקבל</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-task" id="t11" data-kind="task">
+      <rect x="2678" y="236" width="140" height="64" rx="8" ry="8" fill="#ffffff" stroke="#546e7a" stroke-width="1.5"></rect>
+      <text text-anchor="middle" dominant-baseline="middle" font-size="11.5" font-weight="500" fill="#1a1a2e" direction="rtl"><tspan x="2748" y="261">עדכן סטטוס ושלח</tspan><tspan x="2748" y="275">אישור</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-event" id="end-1" data-kind="event" data-event="end">
+      <circle cx="2934" cy="268" r="18" fill="#ffebee" stroke="#c62828" stroke-width="3.5"></circle>
+      <text text-anchor="middle" font-size="10.5" fill="#37474f" direction="rtl" font-weight="500"><tspan x="2934" y="300">הפיקדון הוחזר</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-task" id="t3" data-kind="task">
+      <rect x="818" y="418" width="140" height="64" rx="8" ry="8" fill="#ffffff" stroke="#546e7a" stroke-width="1.5"></rect>
+      <text text-anchor="middle" dominant-baseline="middle" font-size="11.5" font-weight="500" fill="#1a1a2e" direction="rtl"><tspan x="888" y="443">קבע מועד ושלח</tspan><tspan x="888" y="457">זימון</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-task" id="t4" data-kind="task">
+      <rect x="1004" y="418" width="140" height="64" rx="8" ry="8" fill="#ffffff" stroke="#546e7a" stroke-width="1.5"></rect>
+      <text text-anchor="middle" dominant-baseline="middle" font-size="11.5" font-weight="500" fill="#1a1a2e" direction="rtl"><tspan x="1074" y="443">בצע בדיקת יציאה</tspan><tspan x="1074" y="457">ומלא טופס ממצאים</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-gateway" id="g2" data-kind="gateway" data-gw="XOR">
+      <text text-anchor="middle" font-size="10.5" fill="#37474f" direction="rtl" font-weight="500"><tspan x="1260" y="416">נמצאו נזקים?</tspan></text>
+      <rect x="1243" y="433" width="34" height="34" fill="#fff8e1" stroke="#f9a825" stroke-width="2" transform="rotate(45, 1260, 450)"></rect>
+      
+      <line x1="1252" y1="442" x2="1268" y2="458" stroke="#e65100" stroke-width="3" stroke-linecap="round"></line>
+      <line x1="1268" y1="442" x2="1252" y2="458" stroke="#e65100" stroke-width="3" stroke-linecap="round"></line>
+    </g>
+
+    <g class="bpmn-element bpmn-task" id="t5" data-kind="task">
+      <rect x="1376" y="418" width="140" height="64" rx="8" ry="8" fill="#ffffff" stroke="#546e7a" stroke-width="1.5"></rect>
+      <text text-anchor="middle" dominant-baseline="middle" font-size="11.5" font-weight="500" fill="#1a1a2e" direction="rtl"><tspan x="1446" y="443">הזן אומדן עלות</tspan><tspan x="1446" y="457">תיקון</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-task" id="t6" data-kind="task">
+      <rect x="1934" y="418" width="140" height="64" rx="8" ry="8" fill="#ffffff" stroke="#546e7a" stroke-width="1.5"></rect>
+      <text text-anchor="middle" dominant-baseline="middle" font-size="11.5" font-weight="500" fill="#1a1a2e" direction="rtl"><tspan x="2004" y="443">בצע בדיקה חוזרת</tspan><tspan x="2004" y="457">ועדכן אומדן</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-data-store" id="ds1" data-kind="dataStore">
+      <path d="M 1542 364 L 1542 396
+               A 28 6 0 0 0 1598 396
+               L 1598 364
+               A 28 6 0 0 0 1542 364 Z" fill="#ffffff" stroke="#2e7d32" stroke-width="1.4"></path>
+      <path d="M 1542 364
+               A 28 6 0 0 0 1598 364" fill="none" stroke="#2e7d32" stroke-width="1.4"></path>
+      <text x="1570" y="416" text-anchor="middle" font-size="10" fill="#263238" direction="rtl">מאגר הפיקדונות</text>
+    </g>
+    </svg><figcaption>תרשים ה-BPMN</figcaption></figure>
+<p class="scrollhint">התרשים רחב מן העמוד, ניתן לגלול אותו לצדדים.</p>
+<p class="difflink"><a href="diagrams/bpmn-solution.html" target="_blank" rel="noopener">פתחו את תרשים ה-BPMN המלא</a><small>עמוד נפרד, אינטראקטיבי</small></p>
+<h3 class="sub">1.2, ייצוג המשתתפים החיצוניים (הדייר והבנק)</h3>
+<p class="answer"><b>תשובה קצרה:</b> התהליך שאנו מדגמים שייך ל<b>חברת הניהול</b>, ואין לנו שליטה או ידיעה על מהלכיהם הפנימיים של הדייר ושל הבנק. לכן ייצגתי כל אחד מהם כ-<b>Pool נפרד ללא פירוט פנימי (ללא פעילויות)</b>, המתקשר עם Pool חברת הניהול ב-<b>message flows בלבד</b> (הודעת עזיבה, זימון, פירוט ניכויים, ערעור, הוראת תשלום, אישור העברה). <i>(מקובל גם לייצג את הדייר כ-Pool מורחב עם "הגשת הודעת עזיבה"/"הגשת ערעור", כל עוד הבנק נשאר ללא פירוט פנימי.)</i></p>
+<p class="qtext"><b>הסבר מורחב:</b> הרעיון הנבדק הוא <b>גבול המשתתפים</b> ורמת הפירוט הראויה למי שנמצא מחוץ לארגון המודל: אנו מפרטים רק את התהליך שבשליטתנו, ואת השאר מייצגים כתיבת-פלט/קלט שאין לנו גישה לתוכה. משפט מזכה נשען על שני עוגנים, (א) הבנק והדייר אינם חלק מחברת הניהול, (ב) לכן הם Pool ולא Lane, וריקים מפעילות פנימית. תרשים שגוי חושף את עצמו בנימוק: מי ששם את "ההעברה הבנקאית" כפעילות <b>בתוך</b> Pool חברת הניהול, או ייצג את הבנק כ-Data Store / Actor, או מתח אליו Sequence Flow (במקום Message Flow חוצה-Pool), לא יוכל לכתוב משפט עקבי, כי הוא ניכס לארגון פעולה שאינה שלו.</p>
+<h3 class="sub">1.3, חלוקת האחריות בין שתי ההכרעות</h3>
+<p class="answer"><b>תשובה קצרה:</b> בדיקת מועד ההודעה היא <b>השוואת תאריכים חד-משמעית</b>, ולכן הטלתי אותה על <b>מערכת הפיקדונות</b> (Lane המערכת, <b>פעילות ממוחשבת</b> ואחריה שער XOR). הערכת הנזק ואומדן עלות התיקון מחייבים <b>שיפוט מקצועי בשטח</b>, ולכן הטלתי אותם על <b>מפקח היציאה</b> (Lane המפקח, <b>פעילות ידנית</b> מלווה בטופס ממצאים). שני בעלי התפקידים הם שני <b>Lanes בתוך אותו Pool</b>, חברת הניהול, כי שניהם שייכים לאותו ארגון ולאותו תהליך.</p>
+<p class="qtext"><b>הסבר מורחב:</b> הרעיון הנבדק הוא ש-<b>Lane מייצג אחריות לביצוע</b> בתוך Pool אחד, וההבחנה בין פעולה שהמחשב יכול להכריע בה לבד (חישוב דטרמיניסטי) לבין פעולה שדורשת עין אנושית (הערכה). המשפט המזכה מקשר כל הכרעה לסוג הפעילות המתאים ולבעל התפקיד הנכון, ומסביר מדוע אלה שני Lanes ולא שני Pools. תרשים שגוי נחשף כך: מי ששיבץ את שתי ההכרעות לאותו נתיב או לאותו סוג פעילות; מי שהפך את המפקח ל-Pool נפרד (ואז נדרשות הודעות בין הארגון לעובד שלו, אבסורד); או מי שנתן ל"מערכת" להחליט אם נגרם נזק, הכרעה שאינה ניתנת לחישוב אוטומטי.</p>
+<h3 class="sub">1.4, המוצאים העסקיים והשער המכריע</h3>
+<p class="answer"><b>תשובה קצרה:</b> לתהליך שני מוצאים: <b>(1) "הפיקדון הוחזר"</b>, הסטטוס עודכן ואישור נשלח לדייר; ו-<b>(2) "הפיקדון מומש במלואו"</b>, תיק החדר נסגר ללא החזר. ייצגתי כל אחד ב-<b>End event נפרד</b>, כי אלה שני מצבי-סיום עסקיים שונים. המסלול אל המוצא שבו הדייר אינו מקבל דבר נובע מן השער <b>"האם אומדן עלות התיקון מגיע לסכום הפיקדון או עולה עליו?"</b>, בענף "כן".</p>
+<p class="qtext"><b>הסבר מורחב:</b> הרעיון הנבדק הוא ששתי תוצאות עסקיות שונות מיוצגות בשני <b>End events</b> נבדלים (ולא בסיום אחד גנרי), ושהסטודנט יודע לקרוא את המסלול הגלובלי ולזהות איזה Gateway מזין את מוצא ה"ללא החזר". תשובה מלאה תוסיף שגם האומדן המעודכן שלאחר הבדיקה החוזרת נבחן שוב באותו שער, כך שגם לולאת הערעור עשויה להסתיים במוצא זה. תרשים שגוי נחשף בנימוק: מי שאיחד את שני המוצאים ל-End event יחיד; מי שתלה את מוצא הדחייה בשער הערעור (7 ימים) או בשער הנזקים (כן/לא נזק) במקום בשער השוואת האומדן לפיקדון; או מי שסיים את התהליך בפעילות ללא End event.</p>
+<p class="qtext">---</p>
+</section>
+<section class="q" id="q2"><h2>שאלה 2, איכות ניסוח דרישות</h2>
+<h3 class="sub">2.א, שלושה ליקויים בניסוח והתכונה שכל אחד מפר</h3>
+<p class="answer"><b>תשובה קצרה:</b> (1) "יטופלו <b>מהר</b>", אין סף מדיד (בכמה זמן?), ולכן מפר <b>ניתנות לאימות/מדידה</b> (verifiability). (2) "<b>נוחה לשימוש</b>", מונח סובייקטיבי ועמום, מפר <b>חד-משמעות</b> (וגם מדידוּת). (3) המשפט אורז <b>שתי דרישות</b>, טיפול מהיר בקריאות דחופות + נוחות שימוש, במשפט אחד, ולכן מפר <b>אטומיות</b> (דרישה אחת בכל משפט). <i>(ליקוי רביעי אפשרי: "שהמערכת תדאג" בסביל, בלי ציון השחקן והאירוע המפעיל, מי פותח את הקריאה ומי משבץ.)</i></p>
+<p class="qtext"><b>הסבר מורחב:</b> השאלה בודקת אם הסטודנט מכיר את תכונות ה"דרישה הטובה" ויודע להצמיד כל ליקוי לתכונה שהוא מפר, לא רק לומר "זה עמום". דרישה טובה היא <b>בת-אימות</b> (יש קריטריון שאפשר להריץ עליו מבחן קבלה), <b>חד-משמעית</b> (קריאה אחת בלבד), <b>אטומית</b> (התנהגות אחת), ו<b>מציינת שחקן ואירוע מפעיל</b>. הטעות הנפוצה היא לרשום שלושה ליקויים שכולם למעשה אותו ליקוי ("מהר עמום", "נוחה עמום", "לא ברור") בלי למפות לתכונות <b>שונות</b>, כאן הניקוד ניתן על ההצמדה המדויקת, ולכן חשוב שכל ליקוי יפנה לתכונה אחרת.</p>
+<h3 class="sub">2.ב, שכתוב החלק הפונקציונלי + שני רכיבים ל"נוחה לשימוש"</h3>
+<p class="answer"><b>תשובה קצרה:</b> דרישה פונקציונלית אחת, אטומית ובת-בדיקה: <b>"כאשר דייר פותח קריאת תחזוקה ברמת דחיפות 'חירום', המערכת תציג אותה לאב הבית בראש תור השיבוץ ותתריע לו עליה תוך 15 דקות ממועד פתיחתה."</b> כדי להפוך את "נוחה לשימוש" לדרישה בת-אימות חייבים להתווסף שני רכיבים: (1) <b>קריטריון כמותי מדיד</b> (מדד + סף, למשל "דייר חדש יפתח קריאת תחזוקה בתוך 3 קליקים / בלי הדרכה מוקדמת, בשיעור הצלחה ≥ 95%"), ו-(2) <b>אוכלוסיית היעד ותנאי המדידה</b> (על מי נמדד, למשל דיירים ללא ניסיון קודם, וכיצד/מתי נבדק, למשל במבחן שמישות מבוקר).</p>
+<p class="qtext"><b>הסבר מורחב:</b> השכתוב מדגים שלושה עקרונות: <b>אירוע מפעיל מפורש</b> ("כאשר דייר פותח ... חירום"), <b>שחקן ותוצאה חד-משמעיים</b> (אב הבית, תור השיבוץ), ו<b>סף מדיד</b> (15 דקות) שאפשר לבנות עליו מקרה-בדיקה. שימו לב שבחרתי רמת דחיפות אחת קבועה ("חירום") מתוך השלוש שבסיפור, במקום המילה הסתמית "דחופות", כך הדרישה נשארת אטומית וחד-משמעית. הטעות הנפוצה היא לשכתב שוב לניסוח כללי ("קריאות דחופות יטופלו מהר יותר") בלי סף וללא אירוע מפעיל, או לאחד שוב את שני החלקים. לגבי "נוחה לשימוש": הרעיון הוא שאיכות (usability) הופכת לדרישה רק כשמצמידים לה <b>מטריקה עם ערך יעד</b> ו<b>הקשר מדידה</b>, בלעדיהם היא כותרת שאיפה, לא דרישה.</p>
+<h3 class="sub">2.ג, מחיר השארת הדרישה עמומה</h3>
+<p class="answer"><b>תשובה קצרה:</b> (1) <b>תכנון הבדיקות וקבלת המערכת</b>, ביום הקבלה אין קריטריון עובר/נכשל, ולכן הצדדים ייכנסו לוויכוח: "קמפוס בית" תטען שטיפול בקריאת חירום תוך 3 שעות אינו "מהר", והספק יטען שכן, ואי-אפשר לחתום על הקבלה. (2) <b>אומדן העלות והלוח זמנים</b>, אומדן שהוגש על בסיס "נוחה לשימוש" חסר-גבולות: הצוות תמחר טופס פשוט, אך הלקוח מצפה לממשק נייד רספונסיבי RTL עם נגישות מלאה, ה-scope מתנפח, האומדן מתפוצץ והלוח זמנים נשבר.</p>
+<p class="qtext"><b>הסבר מורחב:</b> השאלה בודקת את ההבנה שדרישה עמומה אינה רק "לא יפה", היא <b>מייצרת נזק מדיד בהמשך המחזור</b>. בלי סף מדיד, <b>בדיקת הקבלה (acceptance test)</b> מאבדת את הבסיס האובייקטיבי שלה, וכל צד "צודק", מה שמעכב אישור ותשלום. במקביל, <b>האומדן</b> נשען על טווח פרשנות פתוח, ולכן חשוף להתנפחות scope (עד כדי Gold-Plating) או להערכת-חסר. תשובה חלשה מסתפקת ב"זה יגרום לבעיות" בלי לקשור לשני התוצרים המבוקשים ובלי דוגמה קונקרטית מעולם "קמפוס בית"; הניקוד כאן דורש דוגמה ממשית לכל תוצר.</p>
+<p class="qtext">---</p>
+</section>
+<section class="q" id="q3"><h2>שאלה 3, בעלי תפקידים בפרויקט ומשתמשי המערכת</h2>
+<h3 class="sub">3.א, ארבעת התפקידים: אחריות + משימה קונקרטית ב"קמפוס בית"</h3>
+<p class="answer"><b>תשובה קצרה:</b></p>
+<ul>
+<li><b>Business Analyst (BA):</b> אחראי לאסוף, לנתח ולתעד את דרישות העסק ולגשר בין בעלי העניין לצוות הפיתוח. משימה ב"קמפוס בית": לתשאל את רכז השיבוץ ומנהל האזור, למפות את מסלול אישור החוזה (טיוטה → חתימה → אישור → לולאת "החזרה לתיקון") ולתעד אותו כדרישות, וכן לאפיין במדויק את כלל עשרת הימים לפיגור ואת הממשק היומי מול מערכת הסליקה.</li>
+<li><b>Product Owner (PO):</b> אחראי על ה-Product Backlog ותעדוף הערך העסקי, מחליט מה נבנה ובאיזה סדר. משימה: לתעדף שחיוב שכר הדירה, סימון הפיגור וקליטת דיווח התשלומים יסופקו לפני הזמנת המתקנים המשותפים, כי בקרת הגבייה היא הצורך העסקי הדחוף של המנכ"לית.</li>
+<li><b>Scrum Master:</b> אחראי להנחות את תהליך ה-Scrum, להסיר חסמים ולהגן על הצוות. משימה: להסיר את החסם שהצוות אינו יכול לבדוק את הממשק היומי כי חברת האשראי טרם סיפקה קובץ בדיקה, לארגן קובץ mock/stub, ולנהל את ה-standup וה-retrospective של הצוות.</li>
+<li><b>Project Manager (PM):</b> אחראי לתכנן, לתקצב, לתזמן ולבקר את הפרויקט כדי לעמוד בזמן/עלות/scope ולנהל משאבים וסיכונים. משימה: לבנות תוכנית ותקציב לפריסת המערכת בכמה ערים, לנהל את סיכון התלות במערכת הסליקה החיצונית, ולתזמן פיילוט בבניין אחד לפני פריסה מלאה.</li>
+</ul>
+<p class="qtext"><b>הסבר מורחב:</b> מוקד השאלה הוא <b>להבחין בין התפקידים ולא לטשטש אותם</b>: ה-BA עוסק ב<b>מה</b> נדרש (דרישות וניתוח), ה-PO ב<b>סדר העדיפויות והערך</b>, ה-Scrum Master ב<b>תהליך ובהסרת חסמים</b> (הוא אינו מנהל את התוכן ואינו "בוס"), וה-PM ב<b>עמידה במגבלות ובניהול המשאבים והסיכונים</b>. הטעות הנפוצה היא לתת ל-PO ול-PM אותה משימה (תעדוף מול לוח-זמנים מיטשטש), או לתאר את ה-Scrum Master כמנהל המחליט על תכולה. הניקוד דורש שהמשימה תהיה <b>קונקרטית ל"קמפוס בית"</b>, נשענת על שחקן או כלל מהסיפור, ולא הגדרה גנרית.</p>
+<h3 class="sub">3.ב, Project Manager מול Program Manager</h3>
+<p class="answer"><b>תשובה קצרה:</b> PM מנהל <b>פרויקט יחיד</b> אל יעדיו המוגדרים; Program Manager מנהל <b>תוכנית (program)</b>, אשכול פרויקטים קשורים המשרתים יעד אסטרטגי משותף, ומתאם ביניהם תלויות, משאבים משותפים ומימוש התועלות החוצה-פרויקטלי. תרחיש: כאשר "קמפוס בית" מריצה במקביל את מערכת ניהול הנכסים, את <b>מערכת קמפיין השיווק</b> (בקשת מנהלת השיווק) ופרויקט <b>אפליקציית דייר</b> נפרד, שלושתם חולקים תקציב, כוח-אדם ומאגר דיירים משותף, והליד ממערכת השיווק מזין את הרשמת הדייר במערכת הניהול, נדרש Program Manager לתאם את התלות בין הפרויקטים ולהכריע בקונפליקטים על משאבים; PM ממוקד-מערכת-ניהול לבדו אינו יכול.</p>
+<p class="qtext"><b>הסבר מורחב:</b> ההבחנה הנבדקת היא בין <b>פרויקט</b> (מאמץ חד-פעמי עם יעד מוגדר) לבין <b>תוכנית</b> (סל פרויקטים תלויים המכוונים לתועלת אסטרטגית אחת). התרחיש הטוב מדגים <b>תלות אמיתית בין פרויקטים</b> ומשאב משותף, לא סתם "פרויקט גדול". הטעות הנפוצה היא לומר ש-Program Manager הוא "PM של פרויקט גדול יותר" בלי להסביר שהערך שלו הוא <b>התיאום בין כמה פרויקטים נפרדים</b>; פרויקט אחד גדול, מורכב ככל שיהיה, עדיין מנוהל ב-PM.</p>
+<h3 class="sub">3.ג, משתמש ישיר מול משתמש עקיף</h3>
+<p class="answer"><b>תשובה קצרה:</b> (1) <b>משתמש ישיר</b> מתקשר עם המערכת בפועל, מקליד נתונים ומפעיל את הממשק; <b>משתמש עקיף</b> אינו מפעיל את המערכת אך מושפע ממנה, צורך את פלטיה או קובע לה כללים ומגבלות. (2) דוגמה ישיר: <b>אב הבית</b>, שמתחבר ומשבץ קבלנים לקריאות תחזוקה. דוגמה עקיף: <b>מנהל הגבייה</b>, שאינו מקליד במערכת אך קובע את כלל רישום התשלום ("שולם/לא שולם") וצורך את דוח הפיגורים. (3) חובה לאסוף דרישות גם ממשתמשים עקיפים כי הם <b>קובעים כללים עסקיים וצורכים תוצרים</b> שמכריעים אם המערכת מספקת ערך; דילוג עליהם מייצר מערכת ש"עובדת" אך מפרה מדיניות או מחמיצה מטרה. דוגמה: הכלל שדייר בפיגור אינו רשאי להזמין מתקן משותף או לחתום על חוזה חדש, מקורו במנהל הגבייה (משתמש עקיף), אך הוא מכתיב את התנהגות המערכת עבור המשתמשים הישירים.</p>
+<p class="qtext"><b>הסבר מורחב:</b> השאלה בודקת שהסטודנט מבין שהיקף בעלי העניין רחב מ"מי יושב מול המסך". משתמש עקיף אופייני הוא מקבל דוחות, ממונה שקובע מדיניות, או גורם שמושפע מהחלטות המערכת. הסיווג נכון כאשר הוא <b>מנומק</b>: מנהל הגבייה עקיף כי הוא מעצב דרישות וצורך פלט אך אינו מפעיל את הממשק. הטעות הנפוצה היא לפסול משתמש עקיף כ"לא רלוונטי לאפיון", בעוד שבדיוק ממנו מגיעות הדרישות הרוחביות (מדיניות גבייה, פרטיות, דיווח לרגולטור/הנהלה) שהמשתמשים הישירים כלל אינם מודעים להן.</p>
+<p class="qtext">---</p>
+</section>
+<section class="q" id="q4"><h2>שאלה 4, Gold-Plating, Over-Specification וניהול סיכונים</h2>
+<h3 class="sub">4.א, שתי התופעות, ההבדל, ושתי סיבות</h3>
+<p class="answer"><b>תשובה קצרה:</b> <b>Gold-Plating</b>, הוספת פונקציונליות או ליטושים <b>מעבר לדרישות שסוכמו</b>, שאיש לא ביקש, בשלב הפיתוח/העיצוב. <b>Over-Specification</b>, אפיון הדרישות <b>בפירוט או באילוצים מיותרים</b>, מעבר לצורך העסקי האמיתי, כבר בשלב האפיון. <b>ההבדל:</b> Gold-Plating מנפח את <b>המוצר</b> (תכונות עודפות שנבנו), Over-Spec מנפח את <b>המפרט</b> (פירוט ומגבלות מיותרים לפני הבנייה), האחד מונע-מפתחים "אפשר גם להוסיף...", השני מונע-מאפיין/לקוח שמגדיר יתר על המידה. <b>שתי סיבות אופייניות:</b> (1) רצון המפתח/המאפיין להרשים או "לדעת טוב מהמשתמש"; (2) בקרת scope חלשה ודרישות לא-ברורות (אין PO ששומר על הגבול), ולעיתים חוסר-ביטחון של הלקוח המוביל לפירוט-יתר כדי "לא לפספס".</p>
+<p class="qtext"><b>הסבר מורחב:</b> הרעיון הנבדק הוא ששתי התופעות פוגעות בפרויקט <b>משני קצוות שונים של המחזור</b>: Over-Spec בשלב הדרישות (יותר מדי מגבלות, שכובלות עיצוב ומתמחרות עודף), Gold-Plating בשלב הבנייה (יותר מדי מוצר). הטעות הנפוצה היא לבלבל ביניהן או להציג את שתיהן כ"פשוט לעשות יותר מדי". חשוב להראות שהאחת נוגעת ל<b>היקף המוצר</b> והאחרת ל<b>רמת הפירוט של הדרישה</b>, ולתת סיבות שמסבירות את המניע האנושי/הארגוני מאחוריהן.</p>
+<h3 class="sub">4.ב, דוגמת Gold-Plating ב"קמפוס בית" ונזקה</h3>
+<p class="answer"><b>תשובה קצרה:</b> הצוות בונה ביוזמתו, בלי שהתבקש, <b>דשבורד אינטראקטיבי עם מפת חום חיה של תפוסת כל הבניינים ואנימציות</b>, כשהלקוח ביקש רק דוח פשוט של "חדרים פנויים". <b>נזקה:</b> בזבוז זמן ועלות פיתוח על תכונה שאיש לא ביקש, <b>הרחבת משטח הבדיקות</b> (כל תכונה חדשה דורשת מקרי-בדיקה ומייצרת תקלות), ועומס <b>תחזוקה</b> מתמשך, הרכיב המנופח צריך להיות מתוחזק, מעודכן ועלול להישבר, בלי החזר ערך עסקי. במקרה הזה הוא אף מעכב את שחרור תכונת החיוב שבאמת נדרשת.</p>
+<p class="qtext"><b>הסבר מורחב:</b> דוגמה טובה חייבת להיות (א) <b>מעבר לדרישות המפורשות</b> של הסיפור, ו-(ב) בעלת נזק מנומק על ציר קונקרטי (זמן / עלות / בדיקות / תחזוקה). הדשבורד עומד בשני התנאים כי הסיפור ביקש דוח "חדרים פנויים" פשוט, לא מפת-חום. הטעות הנפוצה היא לבחור תכונה ש<b>כן</b> נדרשה בסיפור (למשל הפקת דוחות עצמה) ולקרוא לה Gold-Plating, זו אינה Gold-Plating אלא דרישה לגיטימית. יש לבחור משהו שברור שאיש לא ביקש, ולהצמיד לו נזק ספציפי.</p>
+<h3 class="sub">4.ג, גורם הסיכון המרכזי, פעולה בשלב האפיון, ומתודולוגיה תומכת</h3>
+<p class="answer"><b>תשובה קצרה:</b> גורם הסיכון המרכזי הוא <b>התלות בקובץ התשלומים היומי של מערכת הסליקה החיצונית</b>, שעליו נשענת כל לוגיקת החיוב והפיגור. הוא נשען על שני מאפיינים: (1) <b>מערכת חיצונית שאינה בשליטת החברה</b>, המזרימה נתונים בממשק יומי, קובץ שמאחר, חסר או פגום ישבש את סימון הפיגור (כלל עשרת הימים) ואת הדוחות; (2) <b>פעולות אוטומטיות מונעות-זמן</b> (חיוב ב-1 לחודש, "בפיגור" לאחר 10 ימים) שבהן שגיאה בנתון החיצוני <b>מתפשטת אוטומטית</b> לחוזים רבים. <b>פעולה בשלב האפיון:</b> לבנות מוקדם spike/prototype של הממשק מול קובץ mock, ולסכם עם חברת האשראי את "חוזה הקובץ" (מבנה, קודי דחייה, תזמון, טיפול בכשל וקובץ חסר). <b>מתודולוגיה תומכת:</b> גישת <b>הספירלה (Spiral, מונחית-סיכון)</b>, היא מטפלת בגורם הסיכון הגבוה ביותר במחזור מוקדם, לפני התחייבות לבנייה מלאה.</p>
+<p class="qtext"><b>הסבר מורחב:</b> השאלה פתוחה בכוונה: גם <b>המעבר מ-AS-IS כאוטי</b> (אקסל/נייר/טלפון) עם אי-ודאות בדרישות הוא גורם סיכון מרכזי לגיטימי, ואז הפעולה בשלב האפיון היא <b>אב-טיפוס אבולוציוני</b> של מסלול החוזה/הפיגור שמאומת בסבבים קצרים מול רכז השיבוץ ומנהל האזור, והמתודולוגיה התומכת היא <b>Agile / Evolutionary Prototyping</b> (משוב מוקדם ותכוף מקטין את סיכון הדרישות). הניקוד ניתן על <b>נימוק שנשען על שני מאפיינים מהסיפור</b> + פעולה קונקרטית בשלב הניתוח + מתודולוגיה שבאמת תומכת בפעולה זו ומדוע. הטעות הנפוצה היא לזרוק "המערכת מורכבת" בלי שני מאפיינים, או לנקוב במתודולוגיה בלי לקשור אותה לפעולה (למשל "אג'ייל" סתם, בלי להסביר שהוא מאפשר את המשוב/הפיילוט המוקדם שמפחית את הסיכון שתיארתם).</p>
+<p class="qtext">---</p>
+</section>
+<section class="q" id="q5"><h2>שאלה 5, ניסוח דרישות (הניקוד על דיוק הניסוח בלבד)</h2>
+<h3 class="sub">5.א, שתי דרישות פונקציונליות</h3>
+<p class="answer"><b>תשובה קצרה:</b></p>
+<ul>
+<li><b>FR1:</b> בחלוף עשרה ימים ממועד החיוב ללא פירעונו, המערכת <b>תסמן</b> את החוזה כחוזה בפיגור.</li>
+<li><b>FR2:</b> בראשון לכל חודש, המערכת <b>תפיק</b> חיוב שכר דירה לכל חוזה פעיל.</li>
+</ul>
+<p class="qtext"><b>הסבר מורחב:</b> שתי הדרישות מדגימות ניסוח <b>אטומי</b> (התנהגות אחת בכל משפט), <b>בר-בדיקה</b> (יש אירוע מפעיל וסף ברור, "עשרה ימים", "בראשון לכל חודש") ו<b>עוקב לסיפור</b> (traceable, כל דרישה נגזרת ישירות מכלל בסיפור). כל דרישה נפתחת ב"המערכת ת..." עם פועל פעולה יחיד, מה שמאפשר לכתוב עליה מקרה-בדיקה חד-משמעי. מלכודת נוספת: להציג את "לא יישמר תאריך התשלום, רק שולם/לא שולם" כדרישה <b>טובה</b>, זו דרישה בעייתית הסותרת את כלל עשרת הימים ואת דוח הפיגורים.</p>
+<h3 class="sub">5.ב, user story אחד</h3>
+<p class="answer"><b>תשובה קצרה:</b> (התבנית: "כ<תפקיד>, אני רוצה <מטרה>, כדי ש<תועלת>".)</p>
+<ul>
+<li><b>US1:</b> כרכז שיבוץ, אני רוצה לראות את רשימת החדרים הפנויים, כדי לשבץ סטודנט חדש במהירות.</li>
+<li><b>US2:</b> כאב בית, אני רוצה לשבץ לקריאת תחזוקה קבלן לפי תחום התמחותו, כדי שהתקלה תטופל בידי בעל המקצוע הנכון.</li>
+</ul>
+<p class="qtext"><b>הסבר מורחב:</b> user story טוב ממלא את שלושת מרכיבי התבנית, <b>תפקיד</b> (שחקן ספציפי מהסיפור), <b>מטרה</b> (מה הוא רוצה לעשות), ו<b>תועלת</b> (ה-"כדי ש", הערך העסקי). ה-"כדי ש" הוא מה שמבדיל user story מדרישה יבשה: הוא מסביר <b>למה</b> הפיצ'ר קיים ומאפשר תעדוף לפי ערך. הטעות הנפוצה היא להשמיט את התועלת ("כרכז שיבוץ אני רוצה לראות חדרים פנויים", נקטע), לרשום את המערכת כתפקיד ("כמערכת, אני רוצה..."), או לתאר פתרון טכני במקום מטרה. שימו לב שהתפקיד חייב להיות <b>משתמש אמיתי</b>, לא רכיב תוכנה.</p>
+<h3 class="sub">5.ג, דרישה לא-פונקציונלית אחת</h3>
+<p class="answer"><b>תשובה קצרה:</b></p>
+<ul>
+<li><b>NFR1 (ביצועים):</b> כל דוח יופק ויוצג למשתמש תוך <b>פחות מ-5 שניות</b> בעומס רגיל.</li>
+<li><b>NFR2 (אבטחה):</b> גישה לפרטי חוזה תותר <b>אך ורק</b> לדייר שהחוזה שלו, לרכז השיבוץ ולמנהל האזור; כל ניסיון גישה לא-מורשה ייחסם וייְרשם ביומן.</li>
+</ul>
+<p class="qtext"><b>הסבר מורחב:</b> NFR מגדיר <b>איכות</b> של המערכת (ביצועים, זמינות, אבטחה, שמישות, מדרגיות) ולא פונקציה, ולכן חייב <b>קריטריון מדיד</b>: סף זמן ("פחות מ-5 שניות"), אחוז זמינות, או כלל הרשאה חד-משמעי ("אך ורק ל..."). המדידוּת היא הלב: בלעדיה אי-אפשר לבדוק אם הדרישה מומשה. שימו לב שגם NFR חייב להיות בתחום ה-scope: דרישת ביצועים/אבטחה על נתוני החוזים והדוחות היא בפנים; דרישה על מנגנון קמפיין השיווק, בחוץ.</p>
+<p class="qtext">---</p>
+</section>
+<section class="q" id="q6"><h2>שאלה 6, נימוקי ה-Use Case</h2>
+<figure class="diagram"><svg id="diagram-svg-0" viewBox="0 0 1520 760" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <pattern id="dots0" width="24" height="24" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="0.8" fill="#cbd5e1"></circle></pattern>
+        <marker id="arrow-include0" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polyline points="0 0, 9 3.5, 0 7" fill="none" stroke="#7c3aed" stroke-width="1.2"></polyline></marker>
+      </defs>
+      <rect x="0" y="0" width="1520" height="760" fill="#f8fafc"></rect>
+      <rect x="0" y="0" width="1520" height="760" fill="url(#dots0)"></rect>
+
+      <!-- boundary -->
+      <rect class="system-boundary" x="360" y="70" width="860" height="560" rx="12" fill="#ffffff" stroke="#3b82f6" stroke-width="2.5"></rect>
+      <rect x="360" y="70" width="860" height="44" rx="12" fill="#1e40af"></rect>
+      <rect x="360" y="96" width="860" height="18" fill="#1e40af"></rect>
+      <text x="790" y="99" text-anchor="middle" fill="#ffffff" font-size="14" font-weight="700" font-family="'Noto Sans Hebrew',sans-serif">מערכת "קמפוס בית", חוזים, תשלומים ומתקנים</text>
+
+      <!-- association lines -->
+      <g id="assocLayer0">
+        <line class="assoc-line" data-conn-from="rakaz" data-conn-to="uc-create-agreement" x1="280" y1="172" x2="390" y2="172" stroke="#334155" stroke-width="1.8"></line>
+        <line class="assoc-line" data-conn-from="dayar" data-conn-to="uc-sign-agreement" x1="280" y1="347" x2="406.73554818481523" y2="254.66653184845106" stroke="#334155" stroke-width="1.8"></line>
+        <line class="assoc-line" data-conn-from="dayar" data-conn-to="uc-cancel-agreement" x1="280" y1="347" x2="424.5720930326341" y2="439.33346815154897" stroke="#334155" stroke-width="1.8"></line>
+        <line class="assoc-line" data-conn-from="dayar" data-conn-to="uc-book-facility" x1="280" y1="347" x2="408.11960098924203" y2="316.668042936627" stroke="#334155" stroke-width="1.8"></line>
+        <line class="assoc-line" data-conn-from="dayar" data-conn-to="uc-view-own" x1="280" y1="347" x2="396.28754113762835" y2="377.331957063373" stroke="#334155" stroke-width="1.8"></line>
+        <line class="assoc-line" data-conn-from="manager" data-conn-to="uc-review-agreement" x1="1300" y1="207" x2="1182.742559241079" y2="237.17335071093706" stroke="#334155" stroke-width="1.8"></line>
+        <line class="assoc-line" data-conn-from="manager" data-conn-to="uc-reports" x1="1300" y1="207" x2="1170.9221936352108" y2="176.82664928906294" stroke="#334155" stroke-width="1.8"></line>
+        <line class="assoc-line" data-conn-from="time" data-conn-to="uc-monthly-charge" x1="1300" y1="357" x2="1172.1951219512196" y2="318.1463414634146" stroke="#334155" stroke-width="1.8"></line>
+        <line class="assoc-line" data-conn-from="time" data-conn-to="uc-mark-arrears" x1="1300" y1="357" x2="1183.351341643948" y2="378.5270274315022" stroke="#334155" stroke-width="1.8"></line>
+        <line class="assoc-line" data-conn-from="clearing" data-conn-to="uc-import-payments" x1="1300" y1="507" x2="1186.7784853523412" y2="459.4243815245892" stroke="#334155" stroke-width="1.8"></line>
+        <!-- clickable hitbox for the pedagogically-key clearing association -->
+        <line class="conn-hitbox" data-conn-id="a-clearing" data-hitbox-from="clearing" data-hitbox-to="uc-import-payments" x1="1300" y1="507" x2="1186.7784853523412" y2="459.4243815245892" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('a-clearing','assoc',event)"></line>
+      </g>
+
+      <!-- include arrows -->
+      <g id="includeLayer0">
+        <line class="include-line" data-conn-from="uc-create-agreement" data-conn-to="uc-check-debt" x1="584" y1="172" x2="697.5" y2="172" stroke="#7c3aed" stroke-width="1.6" stroke-dasharray="6 4" marker-end="url(#arrow-include0)"></line>
+        <text data-label-for="uc-create-agreement uc-check-debt" x="640.75" y="164" text-anchor="middle" font-size="9.5" fill="#7c3aed" font-family="'IBM Plex Mono',monospace">«include»</text>
+        <line class="include-line" data-conn-from="uc-book-facility" data-conn-to="uc-check-debt" x1="559.7682143206728" y1="300.3665823761404" x2="706.1781428151926" y2="183.6334176238596" stroke="#7c3aed" stroke-width="1.6" stroke-dasharray="6 4" marker-end="url(#arrow-include0)"></line>
+        <text data-label-for="uc-book-facility uc-check-debt" x="632.9731785679327" y="234" text-anchor="middle" font-size="9.5" fill="#7c3aed" font-family="'IBM Plex Mono',monospace">«include»</text>
+      </g>
+
+      <!-- use cases -->
+      <g id="ucLayer0">
+        <g class="uc-group" id="uc-group-uc-create-agreement" data-uc-id="uc-create-agreement" onclick="showDesc('uc-create-agreement','uc',event)" style="cursor:pointer"><ellipse cx="487" cy="172" rx="97" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"></ellipse><text x="487" y="176" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">הכנת טיוטת חוזה שכירות</text></g>
+        <g class="uc-group" id="uc-group-uc-sign-agreement" data-uc-id="uc-sign-agreement" onclick="showDesc('uc-sign-agreement','uc',event)" style="cursor:pointer"><ellipse cx="487" cy="242" rx="90" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"></ellipse><text x="487" y="246" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">חתימה על חוזה שכירות</text></g>
+        <g class="uc-group" id="uc-group-uc-book-facility" data-uc-id="uc-book-facility" onclick="showDesc('uc-book-facility','uc',event)" style="cursor:pointer"><ellipse cx="487" cy="312" rx="80" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"></ellipse><text x="487" y="316" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">הזמנת מתקן משותף</text></g>
+        <g class="uc-group" id="uc-group-uc-view-own" data-uc-id="uc-view-own" onclick="showDesc('uc-view-own','uc',event)" style="cursor:pointer"><ellipse cx="487" cy="382" rx="92" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"></ellipse><text x="487" y="386" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">צפייה בחוזה ובחיובים</text></g>
+
+        <g class="uc-group" id="uc-group-uc-reports" data-uc-id="uc-reports" onclick="showDesc('uc-reports','uc',event)" style="cursor:pointer"><ellipse cx="1100" cy="172" rx="72" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"></ellipse><text x="1100" y="176" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">הפקת דוחות</text></g>
+        <g class="uc-group" id="uc-group-uc-check-debt" data-uc-id="uc-check-debt" onclick="showDesc('uc-check-debt','uc',event)" style="cursor:pointer"><ellipse cx="793.5" cy="172" rx="96" ry="28" fill="#ece3fb" stroke="#7c3aed" stroke-width="2"></ellipse><text x="793.5" y="176" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">בדיקת מצב חוב של דייר</text></g>
+        <g class="uc-group" id="uc-group-uc-cancel-agreement" data-uc-id="uc-cancel-agreement" onclick="showDesc('uc-cancel-agreement','uc',event)" style="cursor:pointer"><ellipse cx="487" cy="452" rx="70" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"></ellipse><text x="487" y="456" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">ביטול חוזה</text></g>
+
+        <g class="uc-group" id="uc-group-uc-review-agreement" data-uc-id="uc-review-agreement" onclick="showDesc('uc-review-agreement','uc',event)" style="cursor:pointer"><ellipse cx="1100" cy="242" rx="84" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"></ellipse><text x="1100" y="246" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">בדיקת חוזה ואישורו</text></g>
+        <g class="uc-group" id="uc-group-uc-monthly-charge" data-uc-id="uc-monthly-charge" onclick="showDesc('uc-monthly-charge','uc',event)" style="cursor:pointer"><ellipse cx="1100" cy="312" rx="74" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"></ellipse><text x="1100" y="316" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">הפקת חיוב חודשי</text></g>
+        <g class="uc-group" id="uc-group-uc-import-payments" data-uc-id="uc-import-payments" onclick="showDesc('uc-import-payments','uc',event)" style="cursor:pointer"><ellipse cx="1100" cy="452" rx="90" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"></ellipse><text x="1100" y="456" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">קליטת דיווח תשלומים</text></g>
+        <g class="uc-group" id="uc-group-uc-mark-arrears" data-uc-id="uc-mark-arrears" onclick="showDesc('uc-mark-arrears','uc',event)" style="cursor:pointer"><ellipse cx="1100" cy="382" rx="84" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"></ellipse><text x="1100" y="386" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">סימון חוזה כבפיגור</text></g>
+      </g>
+
+      <!-- actors -->
+      <g id="actorLayer0">
+        <g id="actor-group-rakaz" data-actor-id="rakaz" onclick="showDesc('rakaz','actor',event)" style="cursor:pointer" transform="translate(280,172)">
+          <circle cx="0" cy="-60" r="14" fill="#e0f0ff" stroke="#334155" stroke-width="2"></circle><line x1="0" y1="-46" x2="0" y2="-10" stroke="#334155" stroke-width="2"></line><line x1="-18" y1="-36" x2="18" y2="-36" stroke="#334155" stroke-width="2"></line><line x1="0" y1="-10" x2="-14" y2="14" stroke="#334155" stroke-width="2"></line><line x1="0" y1="-10" x2="14" y2="14" stroke="#334155" stroke-width="2"></line>
+          <text x="0" y="30" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b" font-family="'Noto Sans Hebrew',sans-serif">רכז שיבוץ</text>
+        </g>
+        <g id="actor-group-dayar" data-actor-id="dayar" onclick="showDesc('dayar','actor',event)" style="cursor:pointer" transform="translate(280,347)">
+          <circle cx="0" cy="-60" r="14" fill="#e0f0ff" stroke="#334155" stroke-width="2"></circle><line x1="0" y1="-46" x2="0" y2="-10" stroke="#334155" stroke-width="2"></line><line x1="-18" y1="-36" x2="18" y2="-36" stroke="#334155" stroke-width="2"></line><line x1="0" y1="-10" x2="-14" y2="14" stroke="#334155" stroke-width="2"></line><line x1="0" y1="-10" x2="14" y2="14" stroke="#334155" stroke-width="2"></line>
+          <text x="0" y="30" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b" font-family="'Noto Sans Hebrew',sans-serif">דייר/סטודנט</text>
+        </g>
+        <g id="actor-group-manager" data-actor-id="manager" onclick="showDesc('manager','actor',event)" style="cursor:pointer" transform="translate(1300,207)">
+          <circle cx="0" cy="-60" r="14" fill="#e0f0ff" stroke="#334155" stroke-width="2"></circle><line x1="0" y1="-46" x2="0" y2="-10" stroke="#334155" stroke-width="2"></line><line x1="-18" y1="-36" x2="18" y2="-36" stroke="#334155" stroke-width="2"></line><line x1="0" y1="-10" x2="-14" y2="14" stroke="#334155" stroke-width="2"></line><line x1="0" y1="-10" x2="14" y2="14" stroke="#334155" stroke-width="2"></line>
+          <text x="0" y="30" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b" font-family="'Noto Sans Hebrew',sans-serif">מנהל אזור</text>
+        </g>
+        <g id="actor-group-time" data-actor-id="time" onclick="showDesc('time','actor',event)" style="cursor:pointer" transform="translate(1300,357)">
+          <circle cx="0" cy="-60" r="14" fill="#fef3c7" stroke="#334155" stroke-width="2"></circle>
+          <line x1="0" y1="-46" x2="0" y2="-10" stroke="#334155" stroke-width="2"></line>
+          <line x1="-18" y1="-36" x2="18" y2="-36" stroke="#334155" stroke-width="2"></line>
+          <line x1="0" y1="-10" x2="-14" y2="14" stroke="#334155" stroke-width="2"></line>
+          <line x1="0" y1="-10" x2="14" y2="14" stroke="#334155" stroke-width="2"></line>
+          <text x="0" y="30" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b" font-family="'Noto Sans Hebrew',sans-serif">שחקן זמן</text>
+          <text x="0" y="44" text-anchor="middle" font-size="9" fill="#64748b" font-family="'IBM Plex Mono',monospace">«system»</text>
+          <text x="0" y="58" text-anchor="middle" font-size="9.5" fill="#64748b" font-family="'Noto Sans Hebrew',sans-serif">(טריגר מתוזמן)</text>
+        </g>
+        <g id="actor-group-clearing" data-actor-id="clearing" onclick="showDesc('clearing','actor',event)" style="cursor:pointer" transform="translate(1300,507)">
+          <circle cx="0" cy="-60" r="14" fill="#fef3c7" stroke="#334155" stroke-width="2"></circle>
+          <line x1="0" y1="-46" x2="0" y2="-10" stroke="#334155" stroke-width="2"></line>
+          <line x1="-18" y1="-36" x2="18" y2="-36" stroke="#334155" stroke-width="2"></line>
+          <line x1="0" y1="-10" x2="-14" y2="14" stroke="#334155" stroke-width="2"></line>
+          <line x1="0" y1="-10" x2="14" y2="14" stroke="#334155" stroke-width="2"></line>
+          <text x="0" y="30" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b" font-family="'Noto Sans Hebrew',sans-serif">מערכת הסליקה</text>
+          <text x="0" y="44" text-anchor="middle" font-size="9" fill="#64748b" font-family="'IBM Plex Mono',monospace">«system»</text>
+          <text x="0" y="58" text-anchor="middle" font-size="9.5" fill="#64748b" font-family="'Noto Sans Hebrew',sans-serif">(חיצונית, יוזמת)</text>
+        </g>
+      </g>
+    <g class="timing-label"><rect x="1189.0975609756097" y="329.5731707317073" width="94" height="16" fill="white" stroke="#334155" stroke-width="0.8" rx="3"></rect><text x="1236.0975609756097" y="341.5731707317073" font-size="10" text-anchor="middle" fill="#334155" font-family="'Noto Sans Hebrew', sans-serif" direction="rtl">ב-1 לכל חודש</text></g><g class="timing-label"><rect x="1194.675670821974" y="359.76351371575106" width="94" height="16" fill="white" stroke="#334155" stroke-width="0.8" rx="3"></rect><text x="1241.675670821974" y="371.76351371575106" font-size="10" text-anchor="middle" fill="#334155" font-family="'Noto Sans Hebrew', sans-serif" direction="rtl">לאחר 10 ימים</text></g><g class="timing-label"><rect x="1199.8892426761706" y="475.2121907622946" width="87" height="16" fill="white" stroke="#334155" stroke-width="0.8" rx="3"></rect><text x="1243.3892426761706" y="487.2121907622946" font-size="10" text-anchor="middle" fill="#334155" font-family="'Noto Sans Hebrew', sans-serif" direction="rtl">בתום כל יום</text></g></svg><figcaption>תרשים ה-Use Case, חלק 1 מתוך 2</figcaption></figure>
+<figure class="diagram"><svg id="diagram-svg-1" viewBox="0 0 1520 670" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <pattern id="dots1" width="24" height="24" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="0.8" fill="#cbd5e1"></circle></pattern>
+      </defs>
+      <rect x="0" y="0" width="1520" height="640" fill="#f8fafc"></rect>
+      <rect x="0" y="0" width="1520" height="640" fill="url(#dots1)"></rect>
+
+      <rect class="system-boundary" x="360" y="70" width="860" height="480" rx="12" fill="#ffffff" stroke="#3b82f6" stroke-width="2.5"></rect>
+      <rect x="360" y="70" width="860" height="44" rx="12" fill="#1e40af"></rect>
+      <rect x="360" y="96" width="860" height="18" fill="#1e40af"></rect>
+      <text x="790" y="99" text-anchor="middle" fill="#ffffff" font-size="14" font-weight="700" font-family="'Noto Sans Hebrew',sans-serif">מערכת "קמפוס בית", תחזוקה, דוחות וניהול נתוני-אב</text>
+
+      <g id="assocLayer1">
+        <line class="assoc-line" data-conn-from="dayar" data-conn-to="uc-open-maintenance" x1="280" y1="207" x2="404.17558103870414" y2="176.668042936627" stroke="#334155" stroke-width="1.8"></line>
+        <line class="assoc-line" data-conn-from="dayar" data-conn-to="uc-confirm-fixed" x1="280" y1="207" x2="404.17558103870414" y2="237.331957063373" stroke="#334155" stroke-width="1.8"></line>
+        <line class="assoc-line" data-conn-from="avbait" data-conn-to="uc-assign-contractor" x1="280" y1="357" x2="408.8258908861759" y2="317.94803004126925" stroke="#334155" stroke-width="1.8"></line>
+        <line class="assoc-line" data-conn-from="kablan" data-conn-to="uc-report-work" x1="280" y1="507" x2="403.96509788827325" y2="396.47393582305114" stroke="#334155" stroke-width="1.8"></line>
+        <line class="assoc-line" data-conn-from="manager" data-conn-to="uc-approve-excess" x1="1300" y1="172" x2="1190" y2="172" stroke="#334155" stroke-width="1.8"></line>
+        <line class="assoc-line" data-conn-from="sysadmin" data-conn-to="uc-manage-master-data" x1="1300" y1="322" x2="1179.1967383665474" y2="253.01312343590806" stroke="#334155" stroke-width="1.8"></line>
+      </g>
+
+      <g id="ucLayer1">
+        <g class="uc-group" id="uc-group-uc-open-maintenance" data-uc-id="uc-open-maintenance" onclick="showDesc('uc-open-maintenance','uc',event)" style="cursor:pointer"><ellipse cx="487" cy="172" rx="84" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"></ellipse><text x="487" y="176" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">פתיחת קריאת תחזוקה</text></g>
+        <g class="uc-group" id="uc-group-uc-assign-contractor" data-uc-id="uc-assign-contractor" onclick="showDesc('uc-assign-contractor','uc',event)" style="cursor:pointer"><ellipse cx="487" cy="312" rx="80" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"></ellipse><text x="487" y="316" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">שיבוץ קבלן לקריאה</text></g>
+        <g class="uc-group" id="uc-group-uc-report-work" data-uc-id="uc-report-work" onclick="showDesc('uc-report-work','uc',event)" style="cursor:pointer"><ellipse cx="487" cy="382" rx="97" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"></ellipse><text x="487" y="386" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">דיווח סיום עבודה ועלות</text></g>
+        <g class="uc-group" id="uc-group-uc-confirm-fixed" data-uc-id="uc-confirm-fixed" onclick="showDesc('uc-confirm-fixed','uc',event)" style="cursor:pointer"><ellipse cx="487" cy="242" rx="84" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"></ellipse><text x="487" y="246" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">אישור שהתקלה תוקנה</text></g>
+
+        <g class="uc-group" id="uc-group-uc-approve-excess" data-uc-id="uc-approve-excess" onclick="showDesc('uc-approve-excess','uc',event)" style="cursor:pointer"><ellipse cx="1113" cy="172" rx="77" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"></ellipse><text x="1113" y="176" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">אישור עלות חריגה</text></g>
+        <g class="uc-group" id="uc-group-uc-manage-master-data" data-uc-id="uc-manage-master-data" onclick="showDesc('uc-manage-master-data','uc',event)" style="cursor:pointer"><ellipse cx="1113" cy="242" rx="72" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"></ellipse><text x="1113" y="246" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">ניהול נתוני-אב</text></g>
+      </g>
+
+      <g id="actorLayer1">
+        <g id="actor-group-dayar" data-actor-id="dayar" onclick="showDesc('dayar','actor',event)" style="cursor:pointer" transform="translate(280,207)">
+          <circle cx="0" cy="-60" r="14" fill="#e0f0ff" stroke="#334155" stroke-width="2"></circle><line x1="0" y1="-46" x2="0" y2="-10" stroke="#334155" stroke-width="2"></line><line x1="-18" y1="-36" x2="18" y2="-36" stroke="#334155" stroke-width="2"></line><line x1="0" y1="-10" x2="-14" y2="14" stroke="#334155" stroke-width="2"></line><line x1="0" y1="-10" x2="14" y2="14" stroke="#334155" stroke-width="2"></line>
+          <text x="0" y="30" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b" font-family="'Noto Sans Hebrew',sans-serif">דייר/סטודנט</text>
+        </g>
+        <g id="actor-group-avbait" data-actor-id="avbait" onclick="showDesc('avbait','actor',event)" style="cursor:pointer" transform="translate(280,357)">
+          <circle cx="0" cy="-60" r="14" fill="#e0f0ff" stroke="#334155" stroke-width="2"></circle><line x1="0" y1="-46" x2="0" y2="-10" stroke="#334155" stroke-width="2"></line><line x1="-18" y1="-36" x2="18" y2="-36" stroke="#334155" stroke-width="2"></line><line x1="0" y1="-10" x2="-14" y2="14" stroke="#334155" stroke-width="2"></line><line x1="0" y1="-10" x2="14" y2="14" stroke="#334155" stroke-width="2"></line>
+          <text x="0" y="30" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b" font-family="'Noto Sans Hebrew',sans-serif">אב בית</text>
+        </g>
+        <g id="actor-group-kablan" data-actor-id="kablan" onclick="showDesc('kablan','actor',event)" style="cursor:pointer" transform="translate(280,507)">
+          <circle cx="0" cy="-60" r="14" fill="#e0f0ff" stroke="#334155" stroke-width="2"></circle><line x1="0" y1="-46" x2="0" y2="-10" stroke="#334155" stroke-width="2"></line><line x1="-18" y1="-36" x2="18" y2="-36" stroke="#334155" stroke-width="2"></line><line x1="0" y1="-10" x2="-14" y2="14" stroke="#334155" stroke-width="2"></line><line x1="0" y1="-10" x2="14" y2="14" stroke="#334155" stroke-width="2"></line>
+          <text x="0" y="30" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b" font-family="'Noto Sans Hebrew',sans-serif">קבלן</text>
+        </g>
+        <g id="actor-group-manager" data-actor-id="manager" onclick="showDesc('manager','actor',event)" style="cursor:pointer" transform="translate(1300,172)">
+          <circle cx="0" cy="-60" r="14" fill="#e0f0ff" stroke="#334155" stroke-width="2"></circle><line x1="0" y1="-46" x2="0" y2="-10" stroke="#334155" stroke-width="2"></line><line x1="-18" y1="-36" x2="18" y2="-36" stroke="#334155" stroke-width="2"></line><line x1="0" y1="-10" x2="-14" y2="14" stroke="#334155" stroke-width="2"></line><line x1="0" y1="-10" x2="14" y2="14" stroke="#334155" stroke-width="2"></line>
+          <text x="0" y="30" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b" font-family="'Noto Sans Hebrew',sans-serif">מנהל אזור</text>
+        </g>
+        <g id="actor-group-sysadmin" data-actor-id="sysadmin" onclick="showDesc('sysadmin','actor',event)" style="cursor:pointer" transform="translate(1300,322)">
+          <circle cx="0" cy="-60" r="14" fill="#e0f0ff" stroke="#334155" stroke-width="2"></circle><line x1="0" y1="-46" x2="0" y2="-10" stroke="#334155" stroke-width="2"></line><line x1="-18" y1="-36" x2="18" y2="-36" stroke="#334155" stroke-width="2"></line><line x1="0" y1="-10" x2="-14" y2="14" stroke="#334155" stroke-width="2"></line><line x1="0" y1="-10" x2="14" y2="14" stroke="#334155" stroke-width="2"></line>
+          <text x="0" y="30" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b" font-family="'Noto Sans Hebrew',sans-serif">מנהל מערכת</text>
+        </g>
+      </g>
+    </svg><figcaption>תרשים ה-Use Case, חלק 2 מתוך 2</figcaption></figure>
+<p class="difflink"><a href="diagrams/usecase-solution.html" target="_blank" rel="noopener">פתחו את תרשים ה-Use Case המלא</a><small>עמוד נפרד, אינטראקטיבי</small></p>
+<h3 class="sub">6.2, הבדיקה המשותפת (חוב שכר דירה) לפני הזמנת מתקן ולפני חוזה חדש</h3>
+<p class="answer"><b>תשובה קצרה:</b> יצרתי Use Case נפרד, "בדיקת מצב חוב של דייר", וחיברתי אותו ב-<b><code>«include»</code> משני</b> ה-Use Cases, "הזמנת מתקן משותף" ו-"חתימת חוזה שכירות חדש". הבדיקה מתבצעת <b>תמיד</b> כחלק משניהם, ולכן חילצתי אותה ל-Use Case משותף במקום לשכפל את אותה התנהגות בשניהם.</p>
+<p class="qtext"><b>הסבר מורחב:</b> הרעיון הנבדק הוא <b>סמנטיקת <code>«include»</code></b>, חילוץ תת-התנהגות ש<b>חובה</b> מתרחשת כחלק ממספר Use Cases, כדי למנוע שכפול. המשפט המזכה מזהה את "מתבצעת תמיד" כהצדקה ל-include (ולא ל-<code>«extend»</code>, שמסמן התנהגות <b>אופציונלית</b>). תרשים שגוי נחשף בנימוק: שימו לב שהחיבור חייב לצאת <b>משני</b> ה-Use Cases אל ה-include, אחרת אין הצדקה לחילוץ.</p>
+<h3 class="sub">6.3, ייצוג מערכת הסליקה</h3>
+<p class="answer"><b>תשובה קצרה:</b> ייצגתי את מערכת הסליקה כ-<b>Actor (מערכת חיצונית) מחוץ לגבול המערכת</b>, המחובר באסוציאציה ל-Use Case כגון "קליטת דיווח תשלומים". היא אינה חלק מהמערכת שאנו בונים, והיא זו ש<b>יוזמת</b> את הפנייה אלינו בתום כל יום.</p>
+<p class="qtext"><b>הסבר מורחב:</b> הרעיון הנבדק הוא <b>גבול המערכת</b> וזיהוי <b>מערכת חיצונית יוזמת</b> כ-Actor (Actor אינו חייב להיות אדם, גם מערכת אחרת המפעילה את שלנו היא Actor). המשפט המזכה נשען על שני עוגנים: הסליקה מחוץ לגבול, והיא זו שפונה אלינו (ולא להפך). תרשים שגוי נחשף בנימוק: מי שצייר את הסליקה כ-Use Case <b>בתוך</b> הגבול; מי שהפך אותה למחלקה או מסד-נתונים; או מי שהשמיט אותה כליל והשאיר Use Case שמתעדכן "מעצמו", כולם נימוקים לא קוהריים. הכרה מפורשת בכך שאנו איננו פונים אליה אלא היא אלינו, בונוס איכותי, לא תנאי לניקוד מלא.</p>
+<p class="qtext">---</p>
+<h3 class="sub"><b>6.4, הזמנת קמפיין שיווק (3 נק')</b></h3>
+<p class="answer"><b>תשובה קצרה:</b> <b>לא</b>, אין ולא צריך להיות Use Case כזה.</p>
+<p class="qtext"><b>הסבר מורחב:</b> מטרת המערכת היא ניהול חוזי השכירות, התשלומים והתחזוקה בקמפוס. ניהול קמפיין שיווק ברשתות החברתיות הוא פעילות שיווקית שאינה נוגעת למחזור החיים של החוזה, והסיפור מוציא אותה במפורש מגבולות ה-scope (לצד הנהלת חשבונות, סליקת אשראי פנימית וניהול מלאי ריהוט). <b>הנקודה הנבדקת:</b> זיהוי דרישה שהועלתה בידי בעל עניין (מנהלת השיווק) אך אינה בהיקף המערכת.</p>
+<p class="qtext"><i>(מלכודת מכוונת, התשובה הנכונה היא ה"אין".)</i></p>
+</section>
+<section class="q" id="q7"><h2>שאלה 7, נימוקי תרשים המחלקות</h2>
+<figure class="diagram"><svg id="diagram-svg" xmlns="http://www.w3.org/2000/svg" width="1273" height="1252" viewBox="0 0 1273 1252"><defs>
+    <pattern id="dotgrid" width="24" height="24" patternUnits="userSpaceOnUse">
+      <circle cx="12" cy="12" r="0.8" fill="#cbd5e1"></circle>
+    </pattern>
+    <marker id="genHollow" markerWidth="12" markerHeight="10" refX="10" refY="5" orient="auto">
+      <polygon points="0,0 10,5 0,10" fill="white" stroke="#334155" stroke-width="1.5"></polygon>
+    </marker>
+    <marker id="arrOpen" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <polyline points="0,0 9,4 0,8" fill="none" stroke="#334155" stroke-width="1.5"></polyline>
+    </marker>
+    <marker id="compFill" markerWidth="14" markerHeight="10" refX="1" refY="5" orient="auto">
+      <polygon points="0,5 7,0 14,5 7,10" fill="#1e40af" stroke="#1e40af"></polygon>
+    </marker>
+    <marker id="aggHollow" markerWidth="14" markerHeight="10" refX="1" refY="5" orient="auto">
+      <polygon points="0,5 7,0 14,5 7,10" fill="white" stroke="#334155"></polygon>
+    </marker>
+  </defs><rect width="1273" height="1252" fill="url(#dotgrid)"></rect><polyline points="100,142 100,260" fill="none" stroke="#334155" stroke-width="1.8" marker-start="url(#compFill)"></polyline><text x="91" y="161" text-anchor="middle" fill="#64748b" font-size="9.5" font-family="IBM Plex Mono, monospace">1</text><text x="109" y="247" text-anchor="middle" fill="#64748b" font-size="9.5" font-family="IBM Plex Mono, monospace">1..*</text><polyline points="100,328 100,440" fill="none" stroke="#334155" stroke-width="1.8" marker-start="url(#compFill)"></polyline><text x="91" y="347" text-anchor="middle" fill="#64748b" font-size="9.5" font-family="IBM Plex Mono, monospace">1</text><text x="109" y="427" text-anchor="middle" fill="#64748b" font-size="9.5" font-family="IBM Plex Mono, monospace">1..*</text><polyline points="206,481 303,481 400,481" fill="none" stroke="#334155" stroke-width="1.8"></polyline><text x="222" y="493" text-anchor="middle" fill="#64748b" font-size="9.5" font-family="IBM Plex Mono, monospace">0..*</text><text x="384" y="475" text-anchor="middle" fill="#64748b" font-size="9.5" font-family="IBM Plex Mono, monospace">0..*</text><text x="303" y="475" text-anchor="middle" fill="#64748b" font-size="9.5" font-family="IBM Plex Mono, monospace">rents</text><polyline points="559,480 649.5,480 740,480" fill="none" stroke="#334155" stroke-width="1.8"></polyline><text x="575" y="492" text-anchor="middle" fill="#64748b" font-size="9.5" font-family="IBM Plex Mono, monospace">0..*</text><text x="724" y="474" text-anchor="middle" fill="#64748b" font-size="9.5" font-family="IBM Plex Mono, monospace">0..*</text><text x="649.5" y="474" text-anchor="middle" fill="#64748b" font-size="9.5" font-family="IBM Plex Mono, monospace">books</text><polyline points="106.5,60 106.5,30 816.5,30 816.5,445" fill="none" stroke="#334155" stroke-width="1.8"></polyline><text x="115.5" y="47" text-anchor="middle" fill="#64748b" font-size="9.5" font-family="IBM Plex Mono, monospace">1</text><text x="825.5" y="432" text-anchor="middle" fill="#64748b" font-size="9.5" font-family="IBM Plex Mono, monospace">0..*</text><text x="816.5" y="24" text-anchor="middle" fill="#64748b" font-size="9.5" font-family="IBM Plex Mono, monospace">offers</text><polyline points="302.5,787 302.5,833 296,833 296,880" fill="none" stroke="#334155" stroke-width="1.8"></polyline><text x="293.5" y="806" text-anchor="middle" fill="#64748b" font-size="9.5" font-family="IBM Plex Mono, monospace">1</text><text x="305" y="867" text-anchor="middle" fill="#64748b" font-size="9.5" font-family="IBM Plex Mono, monospace">1..*</text><text x="296" y="827" text-anchor="middle" fill="#64748b" font-size="9.5" font-family="IBM Plex Mono, monospace">generates</text><polyline points="479.5,522 479.5,845 516,845 516,870" fill="none" stroke="#334155" stroke-width="1.8"></polyline><text x="470.5" y="541" text-anchor="middle" fill="#64748b" font-size="9.5" font-family="IBM Plex Mono, monospace">1</text><text x="525" y="857" text-anchor="middle" fill="#64748b" font-size="9.5" font-family="IBM Plex Mono, monospace">0..*</text><text x="516" y="839" text-anchor="middle" fill="#64748b" font-size="9.5" font-family="IBM Plex Mono, monospace">opens</text><polyline points="516,1009 516,1090" fill="none" stroke="#334155" stroke-width="1.8"></polyline><text x="507" y="1028" text-anchor="middle" fill="#64748b" font-size="9.5" font-family="IBM Plex Mono, monospace">0..*</text><text x="525" y="1077" text-anchor="middle" fill="#64748b" font-size="9.5" font-family="IBM Plex Mono, monospace">0..1</text><rect x="40" y="60" width="133" height="82" fill="white" stroke="#3b82f6" stroke-width="2" rx="2"></rect><rect x="40" y="60" width="133" height="28" fill="#1e40af" rx="2"></rect><text x="106.5" y="78" text-anchor="middle" fill="white" font-size="11" font-weight="700" font-family="IBM Plex Mono, monospace" style="">Building</text><line x1="40" y1="88" x2="173" y2="88" stroke="#3b82f6" stroke-width="1"></line><text x="46" y="104" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ address : String</text><text x="46" y="118" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ city : String</text><text x="46" y="132" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ floors : Integer</text><rect x="40" y="260" width="185" height="68" fill="white" stroke="#3b82f6" stroke-width="2" rx="2"></rect><rect x="40" y="260" width="185" height="28" fill="#1e40af" rx="2"></rect><text x="132.5" y="278" text-anchor="middle" fill="white" font-size="11" font-weight="700" font-family="IBM Plex Mono, monospace" style="">Apartment</text><line x1="40" y1="288" x2="225" y2="288" stroke="#3b82f6" stroke-width="1"></line><text x="46" y="304" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ apartmentNumber : String</text><text x="46" y="318" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ floor : Integer</text><rect x="40" y="440" width="166" height="82" fill="white" stroke="#3b82f6" stroke-width="2" rx="2"></rect><rect x="40" y="440" width="166" height="28" fill="#1e40af" rx="2"></rect><text x="123" y="458" text-anchor="middle" fill="white" font-size="11" font-weight="700" font-family="IBM Plex Mono, monospace" style="">Room</text><line x1="40" y1="468" x2="206" y2="468" stroke="#3b82f6" stroke-width="1"></line><text x="46" y="484" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ roomNumber : String</text><text x="46" y="498" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ size : Number</text><text x="46" y="512" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ isAvailable : Boolean</text><rect x="400" y="440" width="159" height="82" fill="white" stroke="#3b82f6" stroke-width="2" rx="2"></rect><rect x="400" y="440" width="159" height="28" fill="#1e40af" rx="2"></rect><text x="479.5" y="458" text-anchor="middle" fill="white" font-size="11" font-weight="700" font-family="IBM Plex Mono, monospace" style="">Student</text><line x1="400" y1="468" x2="559" y2="468" stroke="#3b82f6" stroke-width="1"></line><text x="406" y="484" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ name : String</text><text x="406" y="498" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ contactInfo : String</text><text x="406" y="512" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ institution : String</text><rect x="740" y="445" width="153" height="68" fill="white" stroke="#3b82f6" stroke-width="2" rx="2"></rect><rect x="740" y="445" width="153" height="28" fill="#1e40af" rx="2"></rect><text x="816.5" y="463" text-anchor="middle" fill="white" font-size="11" font-weight="700" font-family="IBM Plex Mono, monospace" style="">SharedFacility</text><line x1="740" y1="473" x2="893" y2="473" stroke="#3b82f6" stroke-width="1"></line><text x="746" y="489" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ name : String</text><text x="746" y="503" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ type : FacilityType</text><rect x="210" y="610" width="185" height="191" fill="white" stroke="#3b82f6" stroke-width="2" rx="2"></rect><rect x="210" y="610" width="185" height="38" fill="#1e40af" rx="2"></rect><text x="302.5" y="623" text-anchor="middle" fill="white" font-size="9" font-family="IBM Plex Mono, monospace">«association class»</text><text x="302.5" y="640" text-anchor="middle" fill="white" font-size="11" font-weight="700" font-family="IBM Plex Mono, monospace" style="">RentalAgreement</text><line x1="210" y1="648" x2="395" y2="648" stroke="#3b82f6" stroke-width="1"></line><text x="216" y="664" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ startDate : Date</text><text x="216" y="678" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ endDate : Date</text><text x="216" y="692" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ monthlyRent : Number</text><text x="216" y="706" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ deposit : Number</text><text x="216" y="720" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ status : AgreementStatus</text><text x="216" y="734" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ closureReason : AgreementStatus</text><line x1="210" y1="738" x2="395" y2="738" stroke="#3b82f6" stroke-width="1"></line><text x="216" y="754" text-anchor="start" fill="#2563eb" font-size="10.5" font-style="italic" font-family="IBM Plex Mono, monospace">+ approve()</text><text x="216" y="768" text-anchor="start" fill="#2563eb" font-size="10.5" font-style="italic" font-family="IBM Plex Mono, monospace">+ returnForCorrection()</text><text x="216" y="782" text-anchor="start" fill="#2563eb" font-size="10.5" font-style="italic" font-family="IBM Plex Mono, monospace">+ cancel()</text><text x="216" y="796" text-anchor="start" fill="#2563eb" font-size="10.5" font-style="italic" font-family="IBM Plex Mono, monospace">+ activate()</text><rect x="563" y="610" width="172" height="92" fill="white" stroke="#3b82f6" stroke-width="2" rx="2"></rect><rect x="563" y="610" width="172" height="38" fill="#1e40af" rx="2"></rect><text x="649" y="623" text-anchor="middle" fill="white" font-size="9" font-family="IBM Plex Mono, monospace">«association class»</text><text x="649" y="640" text-anchor="middle" fill="white" font-size="11" font-weight="700" font-family="IBM Plex Mono, monospace" style="">Booking</text><line x1="563" y1="648" x2="735" y2="648" stroke="#3b82f6" stroke-width="1"></line><text x="569" y="664" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ date : Date</text><text x="569" y="678" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ timeSlot : String</text><text x="569" y="692" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ status : BookingStatus</text><rect x="210" y="880" width="172" height="96" fill="white" stroke="#3b82f6" stroke-width="2" rx="2"></rect><rect x="210" y="880" width="172" height="28" fill="#1e40af" rx="2"></rect><text x="296" y="898" text-anchor="middle" fill="white" font-size="11" font-weight="700" font-family="IBM Plex Mono, monospace" style="">Payment</text><line x1="210" y1="908" x2="382" y2="908" stroke="#3b82f6" stroke-width="1"></line><text x="216" y="924" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ amount : Number</text><text x="216" y="938" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ dueDate : Date</text><text x="216" y="952" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ paidDate : Date</text><text x="216" y="966" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ status : PaymentStatus</text><rect x="430" y="870" width="172" height="139" fill="white" stroke="#3b82f6" stroke-width="2" rx="2"></rect><rect x="430" y="870" width="172" height="28" fill="#1e40af" rx="2"></rect><text x="516" y="888" text-anchor="middle" fill="white" font-size="11" font-weight="700" font-family="IBM Plex Mono, monospace" style="">MaintenanceRequest</text><line x1="430" y1="898" x2="602" y2="898" stroke="#3b82f6" stroke-width="1"></line><text x="436" y="914" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ description : String</text><text x="436" y="928" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ urgency : UrgencyLevel</text><text x="436" y="942" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ cost : Number</text><text x="436" y="956" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ status : RequestStatus</text><line x1="430" y1="960" x2="602" y2="960" stroke="#3b82f6" stroke-width="1"></line><text x="436" y="976" text-anchor="start" fill="#2563eb" font-size="10.5" font-style="italic" font-family="IBM Plex Mono, monospace">+ assignContractor()</text><text x="436" y="990" text-anchor="start" fill="#2563eb" font-size="10.5" font-style="italic" font-family="IBM Plex Mono, monospace">+ reportDone(cost)</text><text x="436" y="1004" text-anchor="start" fill="#2563eb" font-size="10.5" font-style="italic" font-family="IBM Plex Mono, monospace">+ confirmFixed()</text><rect x="430" y="1090" width="179" height="82" fill="white" stroke="#3b82f6" stroke-width="2" rx="2"></rect><rect x="430" y="1090" width="179" height="28" fill="#1e40af" rx="2"></rect><text x="519.5" y="1108" text-anchor="middle" fill="white" font-size="11" font-weight="700" font-family="IBM Plex Mono, monospace" style="">Contractor</text><line x1="430" y1="1118" x2="609" y2="1118" stroke="#3b82f6" stroke-width="1"></line><text x="436" y="1134" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ name : String</text><text x="436" y="1148" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ trade : ContractorTrade</text><text x="436" y="1162" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ phone : String</text><rect x="1060" y="60" width="153" height="176" fill="#f8fafc" stroke="#94a3b8" stroke-width="2" stroke-dasharray="5 3" rx="2"></rect><rect x="1060" y="60" width="153" height="38" fill="#475569" rx="2"></rect><text x="1136.5" y="73" text-anchor="middle" fill="white" font-size="9" font-family="IBM Plex Mono, monospace">«enumeration»</text><text x="1136.5" y="90" text-anchor="middle" fill="white" font-size="11" font-weight="700" font-family="IBM Plex Mono, monospace" style="">AgreementStatus</text><line x1="1060" y1="98" x2="1213" y2="98" stroke="#94a3b8" stroke-width="1"></line><text x="1066" y="114" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">Draft</text><text x="1066" y="128" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">AwaitingSignature</text><text x="1066" y="142" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">AwaitingApproval</text><text x="1066" y="156" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">ReturnedForCorrection</text><text x="1066" y="170" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">Active</text><text x="1066" y="184" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">InArrears</text><text x="1066" y="198" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">Ended</text><text x="1066" y="212" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">Cancelled</text><text x="1066" y="226" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">Archived</text><rect x="1060" y="250" width="120" height="92" fill="#f8fafc" stroke="#94a3b8" stroke-width="2" stroke-dasharray="5 3" rx="2"></rect><rect x="1060" y="250" width="120" height="38" fill="#475569" rx="2"></rect><text x="1120" y="263" text-anchor="middle" fill="white" font-size="9" font-family="IBM Plex Mono, monospace">«enumeration»</text><text x="1120" y="280" text-anchor="middle" fill="white" font-size="11" font-weight="700" font-family="IBM Plex Mono, monospace" style="">PaymentStatus</text><line x1="1060" y1="288" x2="1180" y2="288" stroke="#94a3b8" stroke-width="1"></line><text x="1066" y="304" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">Pending</text><text x="1066" y="318" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">Paid</text><text x="1066" y="332" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">Rejected</text><rect x="1060" y="375" width="120" height="92" fill="#f8fafc" stroke="#94a3b8" stroke-width="2" stroke-dasharray="5 3" rx="2"></rect><rect x="1060" y="375" width="120" height="38" fill="#475569" rx="2"></rect><text x="1120" y="388" text-anchor="middle" fill="white" font-size="9" font-family="IBM Plex Mono, monospace">«enumeration»</text><text x="1120" y="405" text-anchor="middle" fill="white" font-size="11" font-weight="700" font-family="IBM Plex Mono, monospace" style="">UrgencyLevel</text><line x1="1060" y1="413" x2="1180" y2="413" stroke="#94a3b8" stroke-width="1"></line><text x="1066" y="429" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">Normal</text><text x="1066" y="443" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">Urgent</text><text x="1066" y="457" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">Emergency</text><rect x="1060" y="500" width="120" height="92" fill="#f8fafc" stroke="#94a3b8" stroke-width="2" stroke-dasharray="5 3" rx="2"></rect><rect x="1060" y="500" width="120" height="38" fill="#475569" rx="2"></rect><text x="1120" y="513" text-anchor="middle" fill="white" font-size="9" font-family="IBM Plex Mono, monospace">«enumeration»</text><text x="1120" y="530" text-anchor="middle" fill="white" font-size="11" font-weight="700" font-family="IBM Plex Mono, monospace" style="">FacilityType</text><line x1="1060" y1="538" x2="1180" y2="538" stroke="#94a3b8" stroke-width="1"></line><text x="1066" y="554" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">Laundry</text><text x="1066" y="568" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">StudyRoom</text><text x="1066" y="582" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">Gym</text><rect x="1060" y="625" width="120" height="92" fill="#f8fafc" stroke="#94a3b8" stroke-width="2" stroke-dasharray="5 3" rx="2"></rect><rect x="1060" y="625" width="120" height="38" fill="#475569" rx="2"></rect><text x="1120" y="638" text-anchor="middle" fill="white" font-size="9" font-family="IBM Plex Mono, monospace">«enumeration»</text><text x="1120" y="655" text-anchor="middle" fill="white" font-size="11" font-weight="700" font-family="IBM Plex Mono, monospace" style="">ContractorTrade</text><line x1="1060" y1="663" x2="1180" y2="663" stroke="#94a3b8" stroke-width="1"></line><text x="1066" y="679" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">Plumbing</text><text x="1066" y="693" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">Electricity</text><text x="1066" y="707" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">HVAC</text><rect x="1060" y="750" width="120" height="92" fill="#f8fafc" stroke="#94a3b8" stroke-width="2" stroke-dasharray="5 3" rx="2"></rect><rect x="1060" y="750" width="120" height="38" fill="#475569" rx="2"></rect><text x="1120" y="763" text-anchor="middle" fill="white" font-size="9" font-family="IBM Plex Mono, monospace">«enumeration»</text><text x="1120" y="780" text-anchor="middle" fill="white" font-size="11" font-weight="700" font-family="IBM Plex Mono, monospace" style="">BookingStatus</text><line x1="1060" y1="788" x2="1180" y2="788" stroke="#94a3b8" stroke-width="1"></line><text x="1066" y="804" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">Requested</text><text x="1066" y="818" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">Confirmed</text><text x="1066" y="832" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">Cancelled</text><rect x="1060" y="875" width="120" height="92" fill="#f8fafc" stroke="#94a3b8" stroke-width="2" stroke-dasharray="5 3" rx="2"></rect><rect x="1060" y="875" width="120" height="38" fill="#475569" rx="2"></rect><text x="1120" y="888" text-anchor="middle" fill="white" font-size="9" font-family="IBM Plex Mono, monospace">«enumeration»</text><text x="1120" y="905" text-anchor="middle" fill="white" font-size="11" font-weight="700" font-family="IBM Plex Mono, monospace" style="">RequestStatus</text><line x1="1060" y1="913" x2="1180" y2="913" stroke="#94a3b8" stroke-width="1"></line><text x="1066" y="929" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">Open</text><text x="1066" y="943" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">Assigned</text><text x="1066" y="957" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">Closed</text><text x="16" y="1192" fill="#64748b" font-size="9" font-family="IBM Plex Mono, monospace">── Association  ◇── Aggregation  ◆── Composition  ──▷ Generalization  |  קרדינליות בשני קצות הקשר  |  --- association-class tether</text><line x1="303" y1="481" x2="302.5" y2="610" stroke="#334155" stroke-width="1.3" stroke-dasharray="4 3" fill="none"></line><line x1="649.5" y1="480" x2="649" y2="610" stroke="#334155" stroke-width="1.3" stroke-dasharray="4 3" fill="none"></line></svg><figcaption>תרשים המחלקות</figcaption></figure>
+<p class="difflink"><a href="diagrams/class-solution.html" target="_blank" rel="noopener">פתחו את תרשים המחלקות המלא</a><small>עמוד נפרד, אינטראקטיבי</small></p>
+<h3 class="sub">7.2, סטודנט וחדר לאורך שנים, ואיפה נשמרים תאריכי החוזה</h3>
+<p class="answer"><b>תשובה קצרה:</b> ייצגתי קשר <b>רבים-לרבים</b> בין <code>Student</code> ל-<code>Room</code>, עם <b>מחלקת קשר <code>RentalAgreement</code></b> הנושאת את <code>startDate</code>, <code>endDate</code>, <code>monthlyRent</code>, <code>deposit</code> ו-<code>status</code>. תכונות אלה שייכות ל<b>זוג</b> סטודנט-חדר בתקופה מסוימת ולא לאף אחד מהם בנפרד, ולכן הן נשמרות במחלקת הקשר, שם נשמרים תאריכי התחילה, הסיום ודמי השכירות.</p>
+<p class="qtext"><b>הסבר מורחב:</b> הרעיון הנבדק הוא <b>מחלקת קשר (association class)</b> על יחס רבים-לרבים המתפרס על-פני זמן, לב התרגיל. תרשים שגוי נחשף בנימוק: מי שהניח יחס <b>1:1</b> בין סטודנט לחדר, או שם את התאריכים בתוך <code>Room</code>/<code>Student</code>, אין לו נימוק קוהרנטי לשאלה "היכן בדיוק נשמרים התאריכים" ברגע ריבוי השכירויות.</p>
+<h3 class="sub">7.3, הקשרים בין בניין, דירה וחדר וקרדינליות</h3>
+<p class="answer"><b>תשובה קצרה:</b> ייצגתי שני קשרי <b>קומפוזיציה</b> (מעוין מלא בצד ה"שלם"): <code>Building</code> ◆—— <code>Apartment</code> ◆—— <code>Room</code>. הקרדינליות: בצד הבניין <code>1</code> ובצד הדירה <code>1..<i></code>; בצד הדירה <code>1</code> ובצד החדר <code>1..</i></code>. המתחייב: דירה וחדר <b>אינם קיימים ללא</b> הבניין שבו הם נמצאים, ולכן הוצאת בניין מניהול החברה גוררת אחריה את דירותיו וחדריו (מחיקה מדורגת או העברה לארכיון).</p>
+<p class="qtext"><b>הסבר מורחב:</b> הרעיון הנבדק הוא <b>קומפוזיציה (תלות-חיים) מול אגרגציה/אסוציאציה</b> + קרדינליות. קומפוזיציה נכונה כאן כי הדירות והחדרים הם חלקים בלתי-נפרדים של הבניין ומחזור-חייהם כפוף לו, בדיוק מה שהסיפור אומר כשהחברה מוציאה בניין מניהול. שגיאות קרדינליות אופייניות: <code>*</code> בצד הדירה (בניין שיכול להתקיים בלי אף דירה) או היעדר קרדינליות כלל.</p>
+<h3 class="sub">7.4, רמת דחיפות וסוג מתקן כרשימות קבועות</h3>
+<p class="answer"><b>תשובה קצרה:</b> ייצגתי אותם כ-<b><code>enumerator</code></b>, למשל <code>UrgencyLevel {Normal, Urgent, Emergency}</code> ו-<code>FacilityType {Laundry, StudyRoom, Gym}</code>, המשמשים כ<b>טיפוס של תכונה</b> במחלקה המשתמשת: <code>urgency: UrgencyLevel</code> ב-<code>MaintenanceRequest</code>, ו-<code>type: FacilityType</code> ב-<code>SharedFacility</code>. אלה קבוצות ערכים סגורות וקבועות, ללא תכונות או התנהגות משלהן.</p>
+<p class="qtext"><b>הסבר מורחב:</b> הרעיון הנבדק הוא <b>שימוש נכון ב-<code>enumerator</code> ומוסכמת החיבור שלו</b>, enum מחובר כ<b>טיפוס של attribute</b>, לא כמחלקה בקצה קו אסוציאציה. הבחירה ב-enum מוצדקת כי מדובר ברשימה סגורה קבועה בלי מצב או התנהגות. תרשים שגוי נחשף בנימוק: מי ש<b>חיבר את ה-enum בקו אסוציאציה עם קרדינליות</b> (שגיאה, enum אינו מחלקה עצמאית שסופרים ממנה מופעים), או מי שהפך אותו ל<b>מחלקה מלאה</b> בלי הצדקה (ניפוח המודל). מקובל גם <code>ContractorTrade</code> כדוגמה שלישית.</p>
+<h3 class="sub">7.5, האם קיימת תכונה לתאריך התשלום בפועל</h3>
+<p class="answer"><b>תשובה קצרה:</b> כן, <b>יש לשמור <code>paidDate</code></b>, ובקשת מנהל הגבייה היא <b>דרישה בעייתית</b>: היא סותרת <b>בתוך הסיפור עצמו</b> את הכלל "חוזה שחיובו לא נפרע בתוך עשרה ימים מסומן כבפיגור" ואת דוח "דיירים בפיגור", בלי תאריך פירעון אי-אפשר לחשב איחור. <b>מחיר אחד</b> של ויתור על התכונה: לא ניתן לחשב פיגור/ריבית ואין audit trail להתאמה מול דיווח הסליקה או להוכחה מול הדייר במחלוקת.</p>
+<p class="qtext"><b>הסבר מורחב:</b> זו <b>מלכודת מכוונת</b>, שאלה שאי-אפשר "לבלף" בה: היא בודקת אם הסטודנט <b>מזהה דרישה בעייתית</b> ומודע ל<b>מחיר העיצובי</b> שלה, ולא סתם מבצע הוראה. התשובה המקצועית מסמנת את הסתירה הפנימית בסיפור ובוחרת לשמור את התכונה.</p>
+<p class="qtext">---</p>
+</section>
+<section class="q" id="q8"><h2>שאלה 8, נימוקי תרשים המצבים (אובייקט: <code>RentalAgreement</code>)</h2>
+<figure class="diagram"><svg id="diagram" viewBox="0 0 1480 1040" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <marker id="arrow" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="#334155"/></marker>
+      <marker id="arrow-green" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="#15803d"/></marker>
+      <marker id="arrow-orange" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="#c2410c"/></marker>
+      <marker id="arrow-red" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="#b91c1c"/></marker>
+      <marker id="arrow-purple" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="#7c3aed"/></marker>
+      <marker id="arrow-teal" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="#0891b2"/></marker>
+      <filter id="shadow" x="-5%" y="-5%" width="110%" height="110%"><feDropShadow dx="0" dy="1" stdDeviation="2" flood-opacity="0.12"/></filter>
+      <pattern id="dotgrid" width="24" height="24" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r="0.8" fill="#cbd5e1"/></pattern>
+    </defs>
+
+    <rect x="0" y="0" width="1480" height="1040" fill="#f8fafc"/>
+    <rect x="0" y="0" width="1480" height="1040" fill="url(#dotgrid)"/>
+
+    <!-- ================= COMPOSITE STATE: IN_APPROVAL ================= -->
+    <g id="state-composite" filter="url(#shadow)">
+      <rect x="95" y="120" width="615" height="470" rx="20" ry="20" fill="#f0f7ff" stroke="#2563eb" stroke-width="2" stroke-dasharray="8 4"/>
+      <text x="114" y="146" font-size="10.5" font-style="italic" fill="#7c3aed" font-family="IBM Plex Mono">«composite»</text>
+      <text x="114" y="170" font-size="15" font-weight="800" fill="#1e293b" font-family="Noto Sans Hebrew, sans-serif">בתהליך אישור</text>
+      <line x1="105" y1="180" x2="700" y2="180" stroke="#3b82f6" stroke-width="1"/>
+      <text x="114" y="199" font-size="10" font-style="italic" fill="#334155" font-family="IBM Plex Mono">entry / setStatus('IN_APPROVAL')</text>
+      <line x1="105" y1="209" x2="700" y2="209" stroke="#94a3b8" stroke-width="1" stroke-dasharray="6 3"/>
+    </g>
+
+    <!-- internal initial pseudostate -->
+    <circle cx="128" cy="267" r="8" fill="#1e293b"/>
+    <path d="M 136 267 L 156 267" fill="none" stroke="#334155" stroke-width="1.8" marker-end="url(#arrow)"/>
+
+    <!-- sub-state S1: DRAFT -->
+    <g id="state-s1" filter="url(#shadow)">
+      <rect x="160" y="238" width="185" height="58" rx="16" ry="16" fill="#ffffff" stroke="#3b82f6" stroke-width="2"/>
+      <rect x="160" y="238" width="185" height="26" rx="16" ry="16" fill="#eef4ff"/>
+      <rect x="160" y="252" width="185" height="12" fill="#eef4ff"/>
+      <text x="252.5" y="256" text-anchor="middle" font-size="12.5" font-weight="700" fill="#1e293b" font-family="Noto Sans Hebrew, sans-serif">טיוטה</text>
+      <line x1="160" y1="264" x2="345" y2="264" stroke="#3b82f6" stroke-width="1"/>
+      <text x="170" y="283" font-size="9" font-style="italic" fill="#334155" font-family="IBM Plex Mono">entry / setStatus('DRAFT')</text>
+    </g>
+
+    <!-- sub-state S2: AWAITING_SIGNATURE -->
+    <g id="state-s2" filter="url(#shadow)">
+      <rect x="445" y="230" width="222" height="58" rx="16" ry="16" fill="#ffffff" stroke="#3b82f6" stroke-width="2"/>
+      <rect x="445" y="230" width="222" height="26" rx="16" ry="16" fill="#eef4ff"/>
+      <rect x="445" y="244" width="222" height="12" fill="#eef4ff"/>
+      <text x="556" y="248" text-anchor="middle" font-size="11.5" font-weight="700" fill="#1e293b" font-family="Noto Sans Hebrew, sans-serif">ממתין לחתימת הסטודנט</text>
+      <line x1="445" y1="256" x2="667" y2="256" stroke="#3b82f6" stroke-width="1"/>
+      <text x="455" y="275" font-size="8.6" font-style="italic" fill="#334155" font-family="IBM Plex Mono">entry / setStatus('AWAITING_SIGNATURE')</text>
+    </g>
+
+    <!-- sub-state S3: AWAITING_APPROVAL -->
+    <g id="state-s3" filter="url(#shadow)">
+      <rect x="445" y="452" width="230" height="58" rx="16" ry="16" fill="#ffffff" stroke="#3b82f6" stroke-width="2"/>
+      <rect x="445" y="452" width="230" height="26" rx="16" ry="16" fill="#eef4ff"/>
+      <rect x="445" y="466" width="230" height="12" fill="#eef4ff"/>
+      <text x="560" y="470" text-anchor="middle" font-size="11.5" font-weight="700" fill="#1e293b" font-family="Noto Sans Hebrew, sans-serif">ממתין לאישור מנהל האזור</text>
+      <line x1="445" y1="478" x2="675" y2="478" stroke="#3b82f6" stroke-width="1"/>
+      <text x="455" y="497" font-size="8.6" font-style="italic" fill="#334155" font-family="IBM Plex Mono">entry / setStatus('AWAITING_APPROVAL')</text>
+    </g>
+
+    <!-- sub-state S4: RETURNED_FOR_CORRECTION -->
+    <g id="state-s4" filter="url(#shadow)">
+      <rect x="150" y="452" width="240" height="58" rx="16" ry="16" fill="#fff7ed" stroke="#c2410c" stroke-width="2"/>
+      <rect x="150" y="452" width="240" height="26" rx="16" ry="16" fill="#ffedd5"/>
+      <rect x="150" y="466" width="240" height="12" fill="#ffedd5"/>
+      <text x="270" y="470" text-anchor="middle" font-size="12" font-weight="700" fill="#7c2d12" font-family="Noto Sans Hebrew, sans-serif">הוחזר לתיקון</text>
+      <line x1="150" y1="478" x2="390" y2="478" stroke="#c2410c" stroke-width="1"/>
+      <text x="160" y="497" font-size="7.8" font-style="italic" fill="#7c2d12" font-family="IBM Plex Mono">entry / setStatus('RETURNED_FOR_CORRECTION')</text>
+    </g>
+
+    <!-- ===== internal transitions (the correction cycle) ===== -->
+    <!-- S1 -> S2 -->
+    <path d="M 345 262 L 443 262" fill="none" stroke="#334155" stroke-width="1.8" marker-end="url(#arrow)"/>
+    <g font-family="IBM Plex Mono" font-size="9.5">
+      <rect x="348" y="235" width="94" height="14" fill="white" opacity="0.92" rx="3"/>
+      <text x="395" y="245" text-anchor="middle" fill="#334155">שליחה לחתימה</text>
+      <rect x="358" y="270" width="76" height="13" fill="white" opacity="0.92" rx="3"/>
+      <text x="396" y="280" text-anchor="middle" font-size="8.6" fill="#0891b2">[רכז השיבוץ]</text>
+    </g>
+
+    <!-- S2 -> S3 (down) -->
+    <path d="M 556 288 L 556 450" fill="none" stroke="#334155" stroke-width="1.8" marker-end="url(#arrow)"/>
+    <g font-family="IBM Plex Mono" font-size="9.5">
+      <rect x="562" y="352" width="86" height="14" fill="white" opacity="0.95" rx="3"/>
+      <text x="605" y="362" text-anchor="middle" fill="#334155">הסטודנט חתם</text>
+      <rect x="562" y="368" width="112" height="13" fill="white" opacity="0.95" rx="3"/>
+      <text x="618" y="378" text-anchor="middle" font-size="8.6" fill="#15803d" style="direction:ltr;unicode-bidi:isolate">/ notifyManager</text>
+    </g>
+
+    <!-- S3 -> S4 (left), correction -->
+    <path d="M 445 481 L 392 481" fill="none" stroke="#c2410c" stroke-width="1.9" marker-end="url(#arrow-orange)"/>
+    <g font-family="IBM Plex Mono" font-size="9.5">
+      <rect x="300" y="420" width="240" height="14" fill="white" opacity="0.95" rx="3"/>
+      <text x="420" y="430" text-anchor="middle" fill="#c2410c">מנהל האזור החזיר לתיקון</text>
+      <rect x="352" y="436" width="86" height="13" fill="white" opacity="0.95" rx="3"/>
+      <text x="395" y="446" text-anchor="middle" font-size="8.6" fill="#0891b2">[נמצא ליקוי]</text>
+    </g>
+
+    <!-- S4 -> S1 (up, leftward back-arc), the correction LOOP -->
+    <path d="M 250 452 L 250 298" fill="none" stroke="#c2410c" stroke-width="2" marker-end="url(#arrow-orange)"/>
+    <g font-family="IBM Plex Mono" font-size="9.3">
+      <rect x="253" y="358" width="196" height="14" fill="white" opacity="0.95" rx="3"/>
+      <text x="352" y="368" text-anchor="start" fill="#c2410c">רכז השיבוץ החל בתיקון</text>
+      <rect x="253" y="374" width="150" height="13" fill="white" opacity="0.9" rx="3"/>
+      <text x="257" y="384" text-anchor="start" font-size="8.4" font-style="italic" fill="#64748b">↺ לולאת תיקון, חוזרת</text>
+    </g>
+
+    <!-- ================= TOP-LEVEL INITIAL ================= -->
+    <circle cx="400" cy="80" r="8" fill="#1e293b"/>
+    <path d="M 400 88 L 400 118" fill="none" stroke="#334155" stroke-width="1.8" marker-end="url(#arrow)"/>
+
+    <!-- ================= ACTIVE ================= -->
+    <g id="state-active" filter="url(#shadow)">
+      <rect x="830" y="150" width="225" height="96" rx="18" ry="18" fill="#ffffff" stroke="#3b82f6" stroke-width="2"/>
+      <rect x="830" y="150" width="225" height="27" rx="18" ry="18" fill="#eef4ff"/>
+      <rect x="830" y="165" width="225" height="12" fill="#eef4ff"/>
+      <text x="942.5" y="169" text-anchor="middle" font-size="14" font-weight="700" fill="#1e293b" font-family="Noto Sans Hebrew, sans-serif">פעיל</text>
+      <line x1="830" y1="177" x2="1055" y2="177" stroke="#3b82f6" stroke-width="1"/>
+      <text x="840" y="196" font-size="9.3" font-style="italic" fill="#334155" font-family="IBM Plex Mono">entry / setStatus('ACTIVE')</text>
+      <text x="840" y="212" font-size="9.3" font-style="italic" fill="#334155" font-family="IBM Plex Mono">do / generateMonthlyCharge()</text>
+      <text x="840" y="228" font-size="9.3" font-style="italic" fill="#334155" font-family="IBM Plex Mono">do / checkEndDateReached()</text>
+    </g>
+
+    <!-- ================= IN_ARREARS ================= -->
+    <g id="state-arrears" filter="url(#shadow)">
+      <rect x="830" y="430" width="225" height="100" rx="18" ry="18" fill="#fef2f2" stroke="#b91c1c" stroke-width="2"/>
+      <rect x="830" y="430" width="225" height="27" rx="18" ry="18" fill="#fee2e2"/>
+      <rect x="830" y="445" width="225" height="12" fill="#fee2e2"/>
+      <text x="942.5" y="449" text-anchor="middle" font-size="14" font-weight="700" fill="#7f1d1d" font-family="Noto Sans Hebrew, sans-serif">בפיגור</text>
+      <line x1="830" y1="457" x2="1055" y2="457" stroke="#b91c1c" stroke-width="1"/>
+      <text x="840" y="476" font-size="9.3" font-style="italic" fill="#7f1d1d" font-family="IBM Plex Mono">entry / setStatus('IN_ARREARS')</text>
+      <text x="840" y="492" font-size="9.3" font-style="italic" fill="#7f1d1d" font-family="IBM Plex Mono">do / awaitDebtSettlement()</text>
+      <text x="840" y="508" font-size="9.3" font-style="italic" fill="#7f1d1d" font-family="IBM Plex Mono">exit / unblockTenant()</text>
+    </g>
+
+    <!-- ================= ENDED ================= -->
+    <g id="state-ended" filter="url(#shadow)">
+      <rect x="1180" y="300" width="210" height="80" rx="18" ry="18" fill="#faf5ff" stroke="#7c3aed" stroke-width="2"/>
+      <rect x="1180" y="300" width="210" height="27" rx="18" ry="18" fill="#f3e8ff"/>
+      <rect x="1180" y="315" width="210" height="12" fill="#f3e8ff"/>
+      <text x="1285" y="319" text-anchor="middle" font-size="14" font-weight="700" fill="#4c1d95" font-family="Noto Sans Hebrew, sans-serif">הסתיים</text>
+      <line x1="1180" y1="327" x2="1390" y2="327" stroke="#7c3aed" stroke-width="1"/>
+      <text x="1190" y="346" font-size="9.3" font-style="italic" fill="#4c1d95" font-family="IBM Plex Mono">entry / setStatus('ENDED');</text>
+      <text x="1190" y="362" font-size="8.4" font-style="italic" fill="#4c1d95" font-family="IBM Plex Mono">        setClosureReason('ENDED')</text>
+    </g>
+
+    <!-- ================= CANCELLED ================= -->
+    <g id="state-cancelled" filter="url(#shadow)">
+      <rect x="430" y="690" width="205" height="80" rx="18" ry="18" fill="#fef2f2" stroke="#b91c1c" stroke-width="2"/>
+      <rect x="430" y="690" width="205" height="27" rx="18" ry="18" fill="#fee2e2"/>
+      <rect x="430" y="705" width="205" height="12" fill="#fee2e2"/>
+      <text x="532.5" y="709" text-anchor="middle" font-size="14" font-weight="700" fill="#7f1d1d" font-family="Noto Sans Hebrew, sans-serif">בוטל</text>
+      <line x1="430" y1="717" x2="635" y2="717" stroke="#b91c1c" stroke-width="1"/>
+      <text x="440" y="736" font-size="9.3" font-style="italic" fill="#7f1d1d" font-family="IBM Plex Mono">entry / setStatus('CANCELLED');</text>
+      <text x="440" y="752" font-size="8" font-style="italic" fill="#7f1d1d" font-family="IBM Plex Mono">        setClosureReason('CANCELLED')</text>
+    </g>
+
+    <!-- ================= ARCHIVE ================= -->
+    <g id="state-archive" filter="url(#shadow)">
+      <rect x="1180" y="490" width="210" height="62" rx="18" ry="18" fill="#ffffff" stroke="#475569" stroke-width="2"/>
+      <rect x="1180" y="490" width="210" height="27" rx="18" ry="18" fill="#f1f5f9"/>
+      <rect x="1180" y="505" width="210" height="12" fill="#f1f5f9"/>
+      <text x="1285" y="509" text-anchor="middle" font-size="14" font-weight="700" fill="#1e293b" font-family="Noto Sans Hebrew, sans-serif">ארכיון</text>
+      <line x1="1180" y1="517" x2="1390" y2="517" stroke="#475569" stroke-width="1"/>
+      <text x="1190" y="536" font-size="9.3" font-style="italic" fill="#334155" font-family="IBM Plex Mono">entry / setStatus('ARCHIVED')</text>
+    </g>
+
+    <!-- ================= FINAL PSEUDOSTATE ================= -->
+    <circle cx="1285" cy="640" r="12" fill="none" stroke="#1e293b" stroke-width="2"/>
+    <circle cx="1285" cy="640" r="7" fill="#1e293b"/>
+
+    <!-- ===== composite border -> ACTIVE : approval (fires from S3) ===== -->
+    <path d="M 710 400 L 775 400 L 775 210 L 828 210" fill="none" stroke="#15803d" stroke-width="2" marker-end="url(#arrow-green)"/>
+    <g font-family="IBM Plex Mono" font-size="9.5">
+      <rect x="640" y="292" width="212" height="14" fill="white" opacity="0.95" rx="3"/>
+      <text x="746" y="302" text-anchor="middle" fill="#15803d">מנהל האזור אישר את החוזה</text>
+      <rect x="700" y="308" width="150" height="13" fill="white" opacity="0.9" rx="3"/>
+      <text x="775" y="318" text-anchor="middle" font-size="8.4" font-style="italic" fill="#64748b">(יוצא מגבול העל־מצב, מ־S3)</text>
+    </g>
+
+    <!-- ===== composite border -> CANCELLED : ביטול [טרם נכנס לתוקף] ===== -->
+    <path d="M 450 590 L 450 655 L 532 655 L 532 688" fill="none" stroke="#b91c1c" stroke-width="2.2" marker-end="url(#arrow-red)"/>
+    <g font-family="IBM Plex Mono" font-size="10">
+      <rect x="300" y="600" width="150" height="15" fill="white" opacity="0.95" rx="3"/>
+      <text x="375" y="611" text-anchor="middle" fill="#b91c1c">ביטול</text>
+      <rect x="286" y="617" width="178" height="13" fill="white" opacity="0.95" rx="3"/>
+      <text x="375" y="627" text-anchor="middle" font-size="8.8" fill="#0891b2">[טרם נכנס לתוקף]</text>
+      <rect x="270" y="632" width="240" height="13" fill="white" opacity="0.9" rx="3"/>
+      <text x="390" y="642" text-anchor="middle" font-size="8.4" font-style="italic" fill="#64748b">חל על כל תת־מצב טרום־תוקף כאחד</text>
+    </g>
+
+    <!-- ===== ACTIVE -> IN_ARREARS ===== -->
+    <path d="M 880 246 L 880 428" fill="none" stroke="#334155" stroke-width="1.8" marker-end="url(#arrow)"/>
+    <g font-family="IBM Plex Mono" font-size="9.2">
+      <rect x="716" y="352" width="164" height="14" fill="white" opacity="0.95" rx="3"/>
+      <text x="798" y="362" text-anchor="middle" fill="#334155">חלפו 10 ימים ללא פירעון החיוב</text>
+      <rect x="792" y="368" width="86" height="13" fill="white" opacity="0.9" rx="3"/>
+      <text x="835" y="378" text-anchor="middle" font-size="8.4" fill="#0891b2">[אירוע זמן]</text>
+    </g>
+
+    <!-- ===== IN_ARREARS -> ACTIVE : החוב נפרע (reversible loop) ===== -->
+    <path d="M 1000 428 L 1000 246" fill="none" stroke="#0891b2" stroke-width="1.8" marker-end="url(#arrow-teal)"/>
+    <g font-family="IBM Plex Mono" font-size="9.5">
+      <rect x="1006" y="322" width="84" height="14" fill="white" opacity="0.95" rx="3"/>
+      <text x="1048" y="332" text-anchor="middle" fill="#0891b2">החוב נפרע</text>
+      <rect x="1006" y="338" width="120" height="13" fill="white" opacity="0.9" rx="3"/>
+      <text x="1010" y="348" text-anchor="start" font-size="8.4" fill="#0891b2">[מערכת סליקה]</text>
+    </g>
+
+    <!-- ===== ACTIVE -> ENDED : natural end (time) ===== -->
+    <path d="M 1055 200 L 1120 200 L 1120 328 L 1178 328" fill="none" stroke="#7c3aed" stroke-width="2" marker-end="url(#arrow-purple)"/>
+    <g font-family="IBM Plex Mono" font-size="9.2">
+      <rect x="1058" y="238" width="152" height="14" fill="white" opacity="0.95" rx="3"/>
+      <text x="1134" y="248" text-anchor="middle" fill="#7c3aed">הגיע תאריך סיום השכירות</text>
+      <rect x="1094" y="254" width="80" height="13" fill="white" opacity="0.9" rx="3"/>
+      <text x="1134" y="264" text-anchor="middle" font-size="8.4" fill="#0891b2">[אירוע זמן]</text>
+    </g>
+
+    <!-- ===== IN_ARREARS -> ENDED : natural end (time) ===== -->
+    <path d="M 1055 470 L 1120 470 L 1120 360 L 1178 360" fill="none" stroke="#7c3aed" stroke-width="2" marker-end="url(#arrow-purple)"/>
+    <g font-family="IBM Plex Mono" font-size="9.2">
+      <rect x="1058" y="474" width="152" height="14" fill="white" opacity="0.95" rx="3"/>
+      <text x="1134" y="484" text-anchor="middle" fill="#7c3aed">הגיע תאריך סיום השכירות</text>
+      <rect x="1094" y="490" width="80" height="13" fill="white" opacity="0.9" rx="3"/>
+      <text x="1134" y="500" text-anchor="middle" font-size="8.4" fill="#0891b2">[אירוע זמן]</text>
+    </g>
+
+    <!-- ===== ENDED -> ARCHIVE (closure window, time event) ===== -->
+    <path d="M 1285 380 L 1285 488" fill="none" stroke="#334155" stroke-width="1.8" marker-end="url(#arrow)"/>
+    <g font-family="IBM Plex Mono" font-size="9.2">
+      <rect x="1215" y="408" width="140" height="14" fill="white" opacity="0.95" rx="3"/>
+      <text x="1285" y="418" text-anchor="middle" fill="#334155" style="direction:ltr;unicode-bidi:isolate">after(30 יום)</text>
+      <rect x="1180" y="424" width="210" height="13" fill="white" opacity="0.9" rx="3"/>
+      <text x="1285" y="434" text-anchor="middle" font-size="8.4" fill="#15803d" style="direction:ltr;unicode-bidi:isolate">/ removeFromActiveLists()</text>
+    </g>
+
+    <!-- ===== CANCELLED -> ARCHIVE (closure window, time event) ===== -->
+    <path d="M 635 730 L 1140 730 L 1140 521 L 1178 521" fill="none" stroke="#334155" stroke-width="1.8" marker-end="url(#arrow)"/>
+    <g font-family="IBM Plex Mono" font-size="9.2">
+      <rect x="805" y="708" width="140" height="14" fill="white" opacity="0.95" rx="3"/>
+      <text x="875" y="718" text-anchor="middle" fill="#334155" style="direction:ltr;unicode-bidi:isolate">after(30 יום)</text>
+      <rect x="770" y="724" width="210" height="13" fill="white" opacity="0.9" rx="3"/>
+      <text x="875" y="734" text-anchor="middle" font-size="8.4" fill="#15803d" style="direction:ltr;unicode-bidi:isolate">/ removeFromActiveLists()</text>
+    </g>
+
+    <!-- ===== S1 (טיוטה) -> FINAL : DIRECT DELETE, no archive ===== -->
+    <!-- the business-fact exception: an abandoned draft never became a contract -->
+    <path d="M 160 285 L 70 285 L 70 640 L 1273 640" fill="none" stroke="#b91c1c" stroke-width="2.6" marker-end="url(#arrow-red)"/>
+    <g font-family="IBM Plex Mono" font-size="10">
+      <rect x="690" y="596" width="322" height="15" fill="white" opacity="0.96" rx="3"/>
+      <text x="851" y="607" text-anchor="middle" font-weight="700" fill="#b91c1c">מחיקת טיוטה נטושה <tspan font-weight="400" fill="#0891b2">[רכז השיבוץ; טרם נשלחה לחתימה]</tspan></text>
+      <rect x="700" y="613" width="302" height="14" fill="white" opacity="0.92" rx="3"/>
+      <text x="851" y="624" text-anchor="middle" font-size="8.6" fill="#15803d" style="direction:ltr;unicode-bidi:isolate">/ delete(), ישירות למצב הסיום, בלי ארכיון</text>
+    </g>
+
+    <!-- ===== ARCHIVE -> FINAL (retention expiry) ===== -->
+    <path d="M 1285 552 L 1285 626" fill="none" stroke="#334155" stroke-width="1.8" marker-end="url(#arrow)"/>
+    <g font-family="IBM Plex Mono" font-size="9.2">
+      <rect x="1220" y="562" width="130" height="14" fill="white" opacity="0.95" rx="3"/>
+      <text x="1285" y="572" text-anchor="middle" fill="#334155" style="direction:ltr;unicode-bidi:isolate">after(7 שנים)</text>
+      <rect x="1145" y="578" width="280" height="13" fill="white" opacity="0.95" rx="3"/>
+      <text x="1285" y="588" text-anchor="middle" font-size="8.2" fill="#0891b2">[אין רשומות שמורות המפנות לחוזה]</text>
+      <rect x="1235" y="592" width="100" height="13" fill="white" opacity="0.9" rx="3"/>
+      <text x="1285" y="602" text-anchor="middle" font-size="8.4" fill="#15803d" style="direction:ltr;unicode-bidi:isolate">/ purge()</text>
+    </g>
+
+    <!-- ================= PEDAGOGY CALLOUTS ================= -->
+    <g>
+      <rect x="60" y="800" width="650" height="148" rx="12" fill="#fff7ed" stroke="#c2410c" stroke-width="1.5"/>
+      <text x="80" y="826" font-size="12.5" font-weight="700" fill="#7c2d12" font-family="Noto Sans Hebrew, sans-serif">8.2, לולאת התיקון (מחזור חוזר)</text>
+      <text x="80" y="847" font-size="10.5" fill="#334155" font-family="Noto Sans Hebrew, sans-serif">הצומת "ממתין לאישור" → "הוחזר לתיקון" → (חץ חוזר) → "טיוטה" סוגר מעגל.</text>
+      <text x="80" y="866" font-size="10.5" fill="#334155" font-family="Noto Sans Hebrew, sans-serif">אותם תת־מצבים נכנסים שוב ושוב, אין צורך ב"תיקון 1 / תיקון 2".</text>
+      <text x="80" y="885" font-size="10.5" fill="#334155" font-family="Noto Sans Hebrew, sans-serif">זהו back-arc אמיתי (מעלה/שמאלה) שהופך את התרשים ללא־ליניארי.</text>
+      <text x="80" y="905" font-size="9.5" font-style="italic" fill="#64748b" font-family="Noto Sans Hebrew, sans-serif">כל תת־המצבים מקובצים בעל־מצב "בתהליך אישור" כדי לשתף את חץ הביטול.</text>
+
+      <rect x="740" y="800" width="680" height="148" rx="12" fill="#f5f3ff" stroke="#7c3aed" stroke-width="1.5"/>
+      <text x="760" y="826" font-size="12.5" font-weight="700" fill="#4c1d95" font-family="Noto Sans Hebrew, sans-serif">8.3, שתי תוצאות נבדלות, ומצב סיום אחד</text>
+      <text x="760" y="847" font-size="10.5" fill="#334155" font-family="Noto Sans Hebrew, sans-serif"><tspan font-weight="700" fill="#b91c1c">ביטול:</tspan> טריגר של שחקן (סטודנט/מנהל אזור), guard [טרם נכנס לתוקף]</text>
+      <text x="760" y="866" font-size="10.5" fill="#334155" font-family="Noto Sans Hebrew, sans-serif"><tspan font-weight="700" fill="#7c3aed">סיום טבעי:</tspan> אירוע זמן (הגעת תאריך הסיום), יוצא מ"פעיל" וגם מ"בפיגור".</text>
+      <text x="760" y="885" font-size="10.5" fill="#334155" font-family="Noto Sans Hebrew, sans-serif">שתיהן <tspan font-weight="700">מצבים</tspan> ולא מצבי סיום: החוזה עדיין קיים, וממשיך אל "ארכיון".</text>
+      <text x="760" y="905" font-size="10.5" fill="#334155" font-family="Noto Sans Hebrew, sans-serif">רק חלוף תקופת השמירה (7 שנים) גורע אותו מהמערכת ← מצב הסיום.</text>
+      <text x="760" y="926" font-size="10.5" fill="#334155" font-family="Noto Sans Hebrew, sans-serif"><tspan font-weight="700" fill="#b91c1c">והחריג:</tspan> טיוטה נטושה נמחקת <tspan font-weight="700">ישירות</tspan>, בלי ארכיון, כי מעולם לא הייתה חוזה.</text>
+    </g>
+
+    <!-- ================= LEGEND ================= -->
+    <g font-family="Noto Sans Hebrew, sans-serif" font-size="11">
+      <circle cx="80" cy="985" r="7" fill="#1e293b"/><text x="94" y="989">Initial</text>
+      <circle cx="175" cy="985" r="10" fill="none" stroke="#1e293b" stroke-width="1.8"/><circle cx="175" cy="985" r="5" fill="#1e293b"/><text x="192" y="989">Final</text>
+      <rect x="262" y="976" width="34" height="18" rx="8" fill="#ffffff" stroke="#3b82f6" stroke-width="2"/><text x="304" y="989">State</text>
+      <rect x="368" y="974" width="46" height="22" rx="10" fill="#f0f7ff" stroke="#2563eb" stroke-width="1.6" stroke-dasharray="6 3"/><text x="422" y="989">Composite</text>
+      <line x1="540" y1="985" x2="575" y2="985" stroke="#15803d" stroke-width="2" marker-end="url(#arrow-green)"/><text x="583" y="989" fill="#15803d">אישור</text>
+      <line x1="650" y1="985" x2="685" y2="985" stroke="#c2410c" stroke-width="2" marker-end="url(#arrow-orange)"/><text x="693" y="989" fill="#c2410c">לולאת תיקון</text>
+      <line x1="800" y1="985" x2="835" y2="985" stroke="#b91c1c" stroke-width="2" marker-end="url(#arrow-red)"/><text x="843" y="989" fill="#b91c1c">ביטול</text>
+      <line x1="915" y1="985" x2="950" y2="985" stroke="#0891b2" stroke-width="2" marker-end="url(#arrow-teal)"/><text x="958" y="989" fill="#0891b2">פירעון החוב</text>
+      <line x1="1065" y1="985" x2="1100" y2="985" stroke="#7c3aed" stroke-width="2" marker-end="url(#arrow-purple)"/><text x="1108" y="989" fill="#7c3aed">סיום טבעי (זמן)</text>
+      <line x1="1255" y1="985" x2="1290" y2="985" stroke="#334155" stroke-width="1.8" marker-end="url(#arrow)"/><text x="1298" y="989" fill="#334155">מעבר בסיסי</text>
+    </g>
+  </svg><figcaption>תרשים המצבים</figcaption></figure>
+<p class="difflink"><a href="diagrams/state-solution.html" target="_blank" rel="noopener">פתחו את תרשים המצבים המלא</a><small>עמוד נפרד, אינטראקטיבי</small></p>
+<h3 class="sub">8.2, חוזה שנבדק, מוחזר לתיקון ומוגש שוב יותר מפעם אחת</h3>
+<p class="answer"><b>תשובה קצרה:</b> ייצגתי <b>חץ החוזר</b> ממצב "הוחזר לתיקון" אל מצב הטיוטה, היוצר <b>מעגל</b>: "ממתין לאישור מנהל האזור" → "הוחזר לתיקון" → "טיוטה" → "ממתין לחתימת הסטודנט" → "ממתין לאישור מנהל האזור", וכך אותם מצבים נכנסים שוב ושוב בכל סבב, בלי צורך במצב חדש לכל תיקון. האירוע על חץ החזרה הוא <b>תחילת</b> התיקון; ההגשה מחדש לאישור מיוצגת בחצים שאחריו, ולא בחץ החוזר עצמו.</p>
+<p class="qtext"><b>הסבר מורחב:</b> הרעיון הנבדק הוא <b>מעבר אחורה (back-arc)</b>, מחזור חיים שאינו קווי אלא כולל מעגל, המבטא חזרה. המשפט המזכה מסביר שהחזרה של אותם מצבים היא בדיוק מה שמאפשר "כמה פעמים". תרשים שגוי נחשף בנימוק: מי שצייר <b>שרשרת קווית ללא חץ חוזר</b> (אז אין דרך לחזור לתיקון), או מי שהמציא <b>מצב נפרד לכל סבב</b> ("תיקון 1", "תיקון 2"), סימן מובהק ל<b>תרשים זרימה מחופש ל-State Diagram</b>, כי במצבים סופרים סטטוסים, לא אירועים.</p>
+<h3 class="sub">8.3, שתי הדרכים שבהן חוזה נסגר</h3>
+<p class="answer"><b>תשובה קצרה:</b> ייצגתי שני מעברים שונים: (1) <b>ביטול</b>, מעבר למצב "בוטל" (<b>מצב תוצאה, לא מצב סיום</b>) שמקורו ב<b>פעולת שחקן</b> (הסטודנט או מנהל האזור), אפשרי <b>רק</b> ממצבי טרום-תוקף, עם guard "החוזה טרם נכנס לתוקף". (2) <b>סיום</b>, מעבר ממצב "פעיל" (או "בפיגור") ל-"הסתיים", שמקורו ב<b>אירוע זמן</b>, הגעת תאריך סיום השכירות, ולא בפעולת משתמש.</p>
+<p class="qtext"><b>הסבר מורחב:</b> הרעיון הנבדק הוא <b>שני סיומים עסקיים נבדלים</b> + <b>מקור הטריגר</b> (שחקן אנושי מול אירוע זמן) + <b>guard</b>. המשפט המזכה מבחין בין הביטול (יזום, מוגבל ב-guard לפני תוקף) לבין הסיום (אוטומטי, מונע-זמן). תרשים שגוי נחשף בנימוק: מי שייחס את שני המעברים לאותו טריגר; מי שהפעיל את הסיום <b>בידי משתמש</b> (במקום אירוע זמן); מי שמתח חץ "בוטל" <b>מ"פעיל"</b> (סותר את הסיפור, אי-אפשר לבטל חוזה שכבר בתוקף); או מי שמיזג את שני הסיומים למצב אחד ללא הבחנה. שימו לב ש<b>אף אחת משתי הדרכים אינה מצב הסיום</b>: "הסתיים" ו"בוטל" הם מצבי תוצאה, והחוזה עדיין קיים במערכת ונדרש לדיווח. שניהם ממשיכים אל מצב <b>"ארכיון"</b>, וממנו יוצא מעבר יחיד אל מצב הסיום באירוע זמן, <code>after(7 שנים)</code>, תקופת ההתיישנות האזרחית על חוזה. <b>החריג הנגדי:</b> בתרשים יש חץ אחד שכן מוביל ישירות אל מצב הסיום בלי ארכיון, מחיקת <b>טיוטה נטושה</b> שמעולם לא נשלחה לחתימה. ההבדל הוא <b>מבחן העובדה העסקית</b>: מאורכב מה שאפשר יהיה להישאל עליו; נמחק מה שמעולם לא היה חוזה. שימו לב ש<b>ביטול אינו מחיקה</b>, חוזה שנחתם ובוטל הוא אירוע מדווח לכל דבר.</p>
+<p class="qtext">---</p>
+<h3 class="sub"><b>8.4, המצב "בפיגור" (2 נק')</b></h3>
+<p class="answer"><b>תשובה קצרה:</b> "בפיגור" הוא <b>מצב חוקי בעל יציאה</b>, לא מצב סיום. אליו מגיעים מ"פעיל" כאשר החוב לא נפרע במועד, וממנו <b>חוזרים אל "פעיל"</b> עם פירעון החוב, שני מעברים הפוכים בין אותם שני מצבים.</p>
+<p class="qtext"><b>הסבר מורחב:</b> המעבר "פעיל → בפיגור" מופעל בהגיע המועד ללא תשלום (אינו יזום בידי משתמש), והמעבר "בפיגור → פעיל" מופעל בקליטת דיווח הפירעון ממערכת הסליקה. מחזור החיים אינו קווי: אותו זוג מצבים יכול להתחלף כמה פעמים לאורך חיי החוזה.</p>
+</section>
+<section class="q" id="discussion"><h2>שאלות ותגובות</h2><p class="qtext">מצאתם טעות או יש לכם שאלה על המבחן או על הפתרון? כתבו כאן למטה (נדרש חשבון GitHub חינמי). ציינו את מספר השאלה, למשל "שאלה 7.3". התגובות נשמרות ב-Discussions של המאגר ונענה שם.</p><script src="https://giscus.app/client.js" data-repo="dcodish/SAD-course-materials" data-repo-id="R_kgDOTE5NGg" data-category="Q&amp;A" data-category-id="DIC_kwDOTE5NGs4DDpGr" data-mapping="pathname" data-strict="0" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="bottom" data-theme="light" data-lang="he" crossorigin="anonymous" async></script></section>
+<footer>פתרון לדוגמה. התרשימים הם פתרון אחד מני כמה; פתרון שונה אך עקבי ומנומק מזכה אף הוא בניקוד מלא.</footer>
+</div>
+
+<script>
+// white background rects behind every state-diagram transition label (text.tl)
+addEventListener('load', () => {
+  document.querySelectorAll('text.tl').forEach(t => {
+    const b = t.getBBox();
+    const r = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+    r.setAttribute('x', b.x - 3); r.setAttribute('y', b.y - 1);
+    r.setAttribute('width', b.width + 6); r.setAttribute('height', b.height + 2);
+    r.setAttribute('rx', 3); r.setAttribute('fill', '#ffffff'); r.setAttribute('fill-opacity', '0.92');
+    t.parentNode.insertBefore(r, t.parentNode.firstChild);
+  });
+});
+</script>
+</body>
+</html>

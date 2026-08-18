@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>פתרון שאלה 8, תרשים מצבים (חוזה שכירות), קמפוס בית</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600;700&family=Noto+Sans+Hebrew:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;background:#eef2f6;font-family:'Noto Sans Hebrew',sans-serif;color:#1e293b;}
+  .header-bar{padding:14px 20px 6px 20px;}
+  .header-bar h1{font-size:18px;margin:0 0 3px 0;}
+  .header-bar p{font-size:12.5px;color:#64748b;margin:0;line-height:1.6;}
+  .diagram-wrap{overflow:auto;padding:14px 20px 30px 20px;direction:ltr;}
+  .diagram-wrap svg{display:block;background:#f8fafc;border-radius:10px;box-shadow:0 1px 3px rgba(0,0,0,.08);min-width:1480px;}
+  .vp-export-btn{
+    position:fixed;bottom:20px;right:20px;z-index:1000;
+    background:#1e40af;color:#fff;border:none;border-radius:6px;
+    padding:8px 16px;font-size:13px;cursor:pointer;font-family:'IBM Plex Mono',monospace;
+  }
+  .vp-export-btn:hover{background:#1e3a8a;}
+</style>
+</head>
+<body>
+
+  <div class="header-bar">
+    <h1>פתרון שאלה 8, תרשים מצבים (חוזה שכירות), קמפוס בית</h1>
+    <p>מסלול החיים של אובייקט RentalAgreement (חוזה שכירות): על־מצב "בתהליך אישור" המקבץ את תת־המצבים שלפני כניסה לתוקף, לולאת תיקון חוזרת (8.2), מעבר הפיך בין פעיל לבפיגור, ושתי תוצאות נבדלות (8.3): ביטול מול סיום טבעי. שתיהן <b>מצבים</b>, לא מצבי סיום: החוזה ממשיך אל "ארכיון", ורק חלוף תקופת השמירה (7 שנים) גורע אותו מהמערכת. החריג המנוגד: <b>טיוטה נטושה נמחקת ישירות</b>, בלי לעבור בארכיון, כי מעולם לא הפכה לעובדה עסקית שיש עליה מה לדווח.</p>
+  </div>
+
+  <div class="diagram-wrap">
+  <svg id="diagram" viewBox="0 0 1480 1040" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <marker id="arrow" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="#334155"/></marker>
+      <marker id="arrow-green" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="#15803d"/></marker>
+      <marker id="arrow-orange" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="#c2410c"/></marker>
+      <marker id="arrow-red" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="#b91c1c"/></marker>
+      <marker id="arrow-purple" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="#7c3aed"/></marker>
+      <marker id="arrow-teal" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="#0891b2"/></marker>
+      <filter id="shadow" x="-5%" y="-5%" width="110%" height="110%"><feDropShadow dx="0" dy="1" stdDeviation="2" flood-opacity="0.12"/></filter>
+      <pattern id="dotgrid" width="24" height="24" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r="0.8" fill="#cbd5e1"/></pattern>
+    </defs>
+
+    <rect x="0" y="0" width="1480" height="1040" fill="#f8fafc"/>
+    <rect x="0" y="0" width="1480" height="1040" fill="url(#dotgrid)"/>
+
+    <!-- ================= COMPOSITE STATE: IN_APPROVAL ================= -->
+    <g id="state-composite" filter="url(#shadow)">
+      <rect x="95" y="120" width="615" height="470" rx="20" ry="20" fill="#f0f7ff" stroke="#2563eb" stroke-width="2" stroke-dasharray="8 4"/>
+      <text x="114" y="146" font-size="10.5" font-style="italic" fill="#7c3aed" font-family="IBM Plex Mono">«composite»</text>
+      <text x="114" y="170" font-size="15" font-weight="800" fill="#1e293b" font-family="Noto Sans Hebrew, sans-serif">בתהליך אישור</text>
+      <line x1="105" y1="180" x2="700" y2="180" stroke="#3b82f6" stroke-width="1"/>
+      <text x="114" y="199" font-size="10" font-style="italic" fill="#334155" font-family="IBM Plex Mono">entry / setStatus('IN_APPROVAL')</text>
+      <line x1="105" y1="209" x2="700" y2="209" stroke="#94a3b8" stroke-width="1" stroke-dasharray="6 3"/>
+    </g>
+
+    <!-- internal initial pseudostate -->
+    <circle cx="128" cy="267" r="8" fill="#1e293b"/>
+    <path d="M 136 267 L 156 267" fill="none" stroke="#334155" stroke-width="1.8" marker-end="url(#arrow)"/>
+
+    <!-- sub-state S1: DRAFT -->
+    <g id="state-s1" filter="url(#shadow)">
+      <rect x="160" y="238" width="185" height="58" rx="16" ry="16" fill="#ffffff" stroke="#3b82f6" stroke-width="2"/>
+      <rect x="160" y="238" width="185" height="26" rx="16" ry="16" fill="#eef4ff"/>
+      <rect x="160" y="252" width="185" height="12" fill="#eef4ff"/>
+      <text x="252.5" y="256" text-anchor="middle" font-size="12.5" font-weight="700" fill="#1e293b" font-family="Noto Sans Hebrew, sans-serif">טיוטה</text>
+      <line x1="160" y1="264" x2="345" y2="264" stroke="#3b82f6" stroke-width="1"/>
+      <text x="170" y="283" font-size="9" font-style="italic" fill="#334155" font-family="IBM Plex Mono">entry / setStatus('DRAFT')</text>
+    </g>
+
+    <!-- sub-state S2: AWAITING_SIGNATURE -->
+    <g id="state-s2" filter="url(#shadow)">
+      <rect x="445" y="230" width="222" height="58" rx="16" ry="16" fill="#ffffff" stroke="#3b82f6" stroke-width="2"/>
+      <rect x="445" y="230" width="222" height="26" rx="16" ry="16" fill="#eef4ff"/>
+      <rect x="445" y="244" width="222" height="12" fill="#eef4ff"/>
+      <text x="556" y="248" text-anchor="middle" font-size="11.5" font-weight="700" fill="#1e293b" font-family="Noto Sans Hebrew, sans-serif">ממתין לחתימת הסטודנט</text>
+      <line x1="445" y1="256" x2="667" y2="256" stroke="#3b82f6" stroke-width="1"/>
+      <text x="455" y="275" font-size="8.6" font-style="italic" fill="#334155" font-family="IBM Plex Mono">entry / setStatus('AWAITING_SIGNATURE')</text>
+    </g>
+
+    <!-- sub-state S3: AWAITING_APPROVAL -->
+    <g id="state-s3" filter="url(#shadow)">
+      <rect x="445" y="452" width="230" height="58" rx="16" ry="16" fill="#ffffff" stroke="#3b82f6" stroke-width="2"/>
+      <rect x="445" y="452" width="230" height="26" rx="16" ry="16" fill="#eef4ff"/>
+      <rect x="445" y="466" width="230" height="12" fill="#eef4ff"/>
+      <text x="560" y="470" text-anchor="middle" font-size="11.5" font-weight="700" fill="#1e293b" font-family="Noto Sans Hebrew, sans-serif">ממתין לאישור מנהל האזור</text>
+      <line x1="445" y1="478" x2="675" y2="478" stroke="#3b82f6" stroke-width="1"/>
+      <text x="455" y="497" font-size="8.6" font-style="italic" fill="#334155" font-family="IBM Plex Mono">entry / setStatus('AWAITING_APPROVAL')</text>
+    </g>
+
+    <!-- sub-state S4: RETURNED_FOR_CORRECTION -->
+    <g id="state-s4" filter="url(#shadow)">
+      <rect x="150" y="452" width="240" height="58" rx="16" ry="16" fill="#fff7ed" stroke="#c2410c" stroke-width="2"/>
+      <rect x="150" y="452" width="240" height="26" rx="16" ry="16" fill="#ffedd5"/>
+      <rect x="150" y="466" width="240" height="12" fill="#ffedd5"/>
+      <text x="270" y="470" text-anchor="middle" font-size="12" font-weight="700" fill="#7c2d12" font-family="Noto Sans Hebrew, sans-serif">הוחזר לתיקון</text>
+      <line x1="150" y1="478" x2="390" y2="478" stroke="#c2410c" stroke-width="1"/>
+      <text x="160" y="497" font-size="7.8" font-style="italic" fill="#7c2d12" font-family="IBM Plex Mono">entry / setStatus('RETURNED_FOR_CORRECTION')</text>
+    </g>
+
+    <!-- ===== internal transitions (the correction cycle) ===== -->
+    <!-- S1 -> S2 -->
+    <path d="M 345 262 L 443 262" fill="none" stroke="#334155" stroke-width="1.8" marker-end="url(#arrow)"/>
+    <g font-family="IBM Plex Mono" font-size="9.5">
+      <rect x="348" y="235" width="94" height="14" fill="white" opacity="0.92" rx="3"/>
+      <text x="395" y="245" text-anchor="middle" fill="#334155">שליחה לחתימה</text>
+      <rect x="358" y="270" width="76" height="13" fill="white" opacity="0.92" rx="3"/>
+      <text x="396" y="280" text-anchor="middle" font-size="8.6" fill="#0891b2">[רכז השיבוץ]</text>
+    </g>
+
+    <!-- S2 -> S3 (down) -->
+    <path d="M 556 288 L 556 450" fill="none" stroke="#334155" stroke-width="1.8" marker-end="url(#arrow)"/>
+    <g font-family="IBM Plex Mono" font-size="9.5">
+      <rect x="562" y="352" width="86" height="14" fill="white" opacity="0.95" rx="3"/>
+      <text x="605" y="362" text-anchor="middle" fill="#334155">הסטודנט חתם</text>
+      <rect x="562" y="368" width="112" height="13" fill="white" opacity="0.95" rx="3"/>
+      <text x="618" y="378" text-anchor="middle" font-size="8.6" fill="#15803d" style="direction:ltr;unicode-bidi:isolate">/ notifyManager</text>
+    </g>
+
+    <!-- S3 -> S4 (left), correction -->
+    <path d="M 445 481 L 392 481" fill="none" stroke="#c2410c" stroke-width="1.9" marker-end="url(#arrow-orange)"/>
+    <g font-family="IBM Plex Mono" font-size="9.5">
+      <rect x="300" y="420" width="240" height="14" fill="white" opacity="0.95" rx="3"/>
+      <text x="420" y="430" text-anchor="middle" fill="#c2410c">מנהל האזור החזיר לתיקון</text>
+      <rect x="352" y="436" width="86" height="13" fill="white" opacity="0.95" rx="3"/>
+      <text x="395" y="446" text-anchor="middle" font-size="8.6" fill="#0891b2">[נמצא ליקוי]</text>
+    </g>
+
+    <!-- S4 -> S1 (up, leftward back-arc), the correction LOOP -->
+    <path d="M 250 452 L 250 298" fill="none" stroke="#c2410c" stroke-width="2" marker-end="url(#arrow-orange)"/>
+    <g font-family="IBM Plex Mono" font-size="9.3">
+      <rect x="253" y="358" width="196" height="14" fill="white" opacity="0.95" rx="3"/>
+      <text x="352" y="368" text-anchor="start" fill="#c2410c">רכז השיבוץ החל בתיקון</text>
+      <rect x="253" y="374" width="150" height="13" fill="white" opacity="0.9" rx="3"/>
+      <text x="257" y="384" text-anchor="start" font-size="8.4" font-style="italic" fill="#64748b">↺ לולאת תיקון, חוזרת</text>
+    </g>
+
+    <!-- ================= TOP-LEVEL INITIAL ================= -->
+    <circle cx="400" cy="80" r="8" fill="#1e293b"/>
+    <path d="M 400 88 L 400 118" fill="none" stroke="#334155" stroke-width="1.8" marker-end="url(#arrow)"/>
+
+    <!-- ================= ACTIVE ================= -->
+    <g id="state-active" filter="url(#shadow)">
+      <rect x="830" y="150" width="225" height="96" rx="18" ry="18" fill="#ffffff" stroke="#3b82f6" stroke-width="2"/>
+      <rect x="830" y="150" width="225" height="27" rx="18" ry="18" fill="#eef4ff"/>
+      <rect x="830" y="165" width="225" height="12" fill="#eef4ff"/>
+      <text x="942.5" y="169" text-anchor="middle" font-size="14" font-weight="700" fill="#1e293b" font-family="Noto Sans Hebrew, sans-serif">פעיל</text>
+      <line x1="830" y1="177" x2="1055" y2="177" stroke="#3b82f6" stroke-width="1"/>
+      <text x="840" y="196" font-size="9.3" font-style="italic" fill="#334155" font-family="IBM Plex Mono">entry / setStatus('ACTIVE')</text>
+      <text x="840" y="212" font-size="9.3" font-style="italic" fill="#334155" font-family="IBM Plex Mono">do / generateMonthlyCharge()</text>
+      <text x="840" y="228" font-size="9.3" font-style="italic" fill="#334155" font-family="IBM Plex Mono">do / checkEndDateReached()</text>
+    </g>
+
+    <!-- ================= IN_ARREARS ================= -->
+    <g id="state-arrears" filter="url(#shadow)">
+      <rect x="830" y="430" width="225" height="100" rx="18" ry="18" fill="#fef2f2" stroke="#b91c1c" stroke-width="2"/>
+      <rect x="830" y="430" width="225" height="27" rx="18" ry="18" fill="#fee2e2"/>
+      <rect x="830" y="445" width="225" height="12" fill="#fee2e2"/>
+      <text x="942.5" y="449" text-anchor="middle" font-size="14" font-weight="700" fill="#7f1d1d" font-family="Noto Sans Hebrew, sans-serif">בפיגור</text>
+      <line x1="830" y1="457" x2="1055" y2="457" stroke="#b91c1c" stroke-width="1"/>
+      <text x="840" y="476" font-size="9.3" font-style="italic" fill="#7f1d1d" font-family="IBM Plex Mono">entry / setStatus('IN_ARREARS')</text>
+      <text x="840" y="492" font-size="9.3" font-style="italic" fill="#7f1d1d" font-family="IBM Plex Mono">do / awaitDebtSettlement()</text>
+      <text x="840" y="508" font-size="9.3" font-style="italic" fill="#7f1d1d" font-family="IBM Plex Mono">exit / unblockTenant()</text>
+    </g>
+
+    <!-- ================= ENDED ================= -->
+    <g id="state-ended" filter="url(#shadow)">
+      <rect x="1180" y="300" width="210" height="80" rx="18" ry="18" fill="#faf5ff" stroke="#7c3aed" stroke-width="2"/>
+      <rect x="1180" y="300" width="210" height="27" rx="18" ry="18" fill="#f3e8ff"/>
+      <rect x="1180" y="315" width="210" height="12" fill="#f3e8ff"/>
+      <text x="1285" y="319" text-anchor="middle" font-size="14" font-weight="700" fill="#4c1d95" font-family="Noto Sans Hebrew, sans-serif">הסתיים</text>
+      <line x1="1180" y1="327" x2="1390" y2="327" stroke="#7c3aed" stroke-width="1"/>
+      <text x="1190" y="346" font-size="9.3" font-style="italic" fill="#4c1d95" font-family="IBM Plex Mono">entry / setStatus('ENDED');</text>
+      <text x="1190" y="362" font-size="8.4" font-style="italic" fill="#4c1d95" font-family="IBM Plex Mono">        setClosureReason('ENDED')</text>
+    </g>
+
+    <!-- ================= CANCELLED ================= -->
+    <g id="state-cancelled" filter="url(#shadow)">
+      <rect x="430" y="690" width="205" height="80" rx="18" ry="18" fill="#fef2f2" stroke="#b91c1c" stroke-width="2"/>
+      <rect x="430" y="690" width="205" height="27" rx="18" ry="18" fill="#fee2e2"/>
+      <rect x="430" y="705" width="205" height="12" fill="#fee2e2"/>
+      <text x="532.5" y="709" text-anchor="middle" font-size="14" font-weight="700" fill="#7f1d1d" font-family="Noto Sans Hebrew, sans-serif">בוטל</text>
+      <line x1="430" y1="717" x2="635" y2="717" stroke="#b91c1c" stroke-width="1"/>
+      <text x="440" y="736" font-size="9.3" font-style="italic" fill="#7f1d1d" font-family="IBM Plex Mono">entry / setStatus('CANCELLED');</text>
+      <text x="440" y="752" font-size="8" font-style="italic" fill="#7f1d1d" font-family="IBM Plex Mono">        setClosureReason('CANCELLED')</text>
+    </g>
+
+    <!-- ================= ARCHIVE ================= -->
+    <g id="state-archive" filter="url(#shadow)">
+      <rect x="1180" y="490" width="210" height="62" rx="18" ry="18" fill="#ffffff" stroke="#475569" stroke-width="2"/>
+      <rect x="1180" y="490" width="210" height="27" rx="18" ry="18" fill="#f1f5f9"/>
+      <rect x="1180" y="505" width="210" height="12" fill="#f1f5f9"/>
+      <text x="1285" y="509" text-anchor="middle" font-size="14" font-weight="700" fill="#1e293b" font-family="Noto Sans Hebrew, sans-serif">ארכיון</text>
+      <line x1="1180" y1="517" x2="1390" y2="517" stroke="#475569" stroke-width="1"/>
+      <text x="1190" y="536" font-size="9.3" font-style="italic" fill="#334155" font-family="IBM Plex Mono">entry / setStatus('ARCHIVED')</text>
+    </g>
+
+    <!-- ================= FINAL PSEUDOSTATE ================= -->
+    <circle cx="1285" cy="640" r="12" fill="none" stroke="#1e293b" stroke-width="2"/>
+    <circle cx="1285" cy="640" r="7" fill="#1e293b"/>
+
+    <!-- ===== composite border -> ACTIVE : approval (fires from S3) ===== -->
+    <path d="M 710 400 L 775 400 L 775 210 L 828 210" fill="none" stroke="#15803d" stroke-width="2" marker-end="url(#arrow-green)"/>
+    <g font-family="IBM Plex Mono" font-size="9.5">
+      <rect x="640" y="292" width="212" height="14" fill="white" opacity="0.95" rx="3"/>
+      <text x="746" y="302" text-anchor="middle" fill="#15803d">מנהל האזור אישר את החוזה</text>
+      <rect x="700" y="308" width="150" height="13" fill="white" opacity="0.9" rx="3"/>
+      <text x="775" y="318" text-anchor="middle" font-size="8.4" font-style="italic" fill="#64748b">(יוצא מגבול העל־מצב, מ־S3)</text>
+    </g>
+
+    <!-- ===== composite border -> CANCELLED : ביטול [טרם נכנס לתוקף] ===== -->
+    <path d="M 450 590 L 450 655 L 532 655 L 532 688" fill="none" stroke="#b91c1c" stroke-width="2.2" marker-end="url(#arrow-red)"/>
+    <g font-family="IBM Plex Mono" font-size="10">
+      <rect x="300" y="600" width="150" height="15" fill="white" opacity="0.95" rx="3"/>
+      <text x="375" y="611" text-anchor="middle" fill="#b91c1c">ביטול</text>
+      <rect x="286" y="617" width="178" height="13" fill="white" opacity="0.95" rx="3"/>
+      <text x="375" y="627" text-anchor="middle" font-size="8.8" fill="#0891b2">[טרם נכנס לתוקף]</text>
+      <rect x="270" y="632" width="240" height="13" fill="white" opacity="0.9" rx="3"/>
+      <text x="390" y="642" text-anchor="middle" font-size="8.4" font-style="italic" fill="#64748b">חל על כל תת־מצב טרום־תוקף כאחד</text>
+    </g>
+
+    <!-- ===== ACTIVE -> IN_ARREARS ===== -->
+    <path d="M 880 246 L 880 428" fill="none" stroke="#334155" stroke-width="1.8" marker-end="url(#arrow)"/>
+    <g font-family="IBM Plex Mono" font-size="9.2">
+      <rect x="716" y="352" width="164" height="14" fill="white" opacity="0.95" rx="3"/>
+      <text x="798" y="362" text-anchor="middle" fill="#334155">חלפו 10 ימים ללא פירעון החיוב</text>
+      <rect x="792" y="368" width="86" height="13" fill="white" opacity="0.9" rx="3"/>
+      <text x="835" y="378" text-anchor="middle" font-size="8.4" fill="#0891b2">[אירוע זמן]</text>
+    </g>
+
+    <!-- ===== IN_ARREARS -> ACTIVE : החוב נפרע (reversible loop) ===== -->
+    <path d="M 1000 428 L 1000 246" fill="none" stroke="#0891b2" stroke-width="1.8" marker-end="url(#arrow-teal)"/>
+    <g font-family="IBM Plex Mono" font-size="9.5">
+      <rect x="1006" y="322" width="84" height="14" fill="white" opacity="0.95" rx="3"/>
+      <text x="1048" y="332" text-anchor="middle" fill="#0891b2">החוב נפרע</text>
+      <rect x="1006" y="338" width="120" height="13" fill="white" opacity="0.9" rx="3"/>
+      <text x="1010" y="348" text-anchor="start" font-size="8.4" fill="#0891b2">[מערכת סליקה]</text>
+    </g>
+
+    <!-- ===== ACTIVE -> ENDED : natural end (time) ===== -->
+    <path d="M 1055 200 L 1120 200 L 1120 328 L 1178 328" fill="none" stroke="#7c3aed" stroke-width="2" marker-end="url(#arrow-purple)"/>
+    <g font-family="IBM Plex Mono" font-size="9.2">
+      <rect x="1058" y="238" width="152" height="14" fill="white" opacity="0.95" rx="3"/>
+      <text x="1134" y="248" text-anchor="middle" fill="#7c3aed">הגיע תאריך סיום השכירות</text>
+      <rect x="1094" y="254" width="80" height="13" fill="white" opacity="0.9" rx="3"/>
+      <text x="1134" y="264" text-anchor="middle" font-size="8.4" fill="#0891b2">[אירוע זמן]</text>
+    </g>
+
+    <!-- ===== IN_ARREARS -> ENDED : natural end (time) ===== -->
+    <path d="M 1055 470 L 1120 470 L 1120 360 L 1178 360" fill="none" stroke="#7c3aed" stroke-width="2" marker-end="url(#arrow-purple)"/>
+    <g font-family="IBM Plex Mono" font-size="9.2">
+      <rect x="1058" y="474" width="152" height="14" fill="white" opacity="0.95" rx="3"/>
+      <text x="1134" y="484" text-anchor="middle" fill="#7c3aed">הגיע תאריך סיום השכירות</text>
+      <rect x="1094" y="490" width="80" height="13" fill="white" opacity="0.9" rx="3"/>
+      <text x="1134" y="500" text-anchor="middle" font-size="8.4" fill="#0891b2">[אירוע זמן]</text>
+    </g>
+
+    <!-- ===== ENDED -> ARCHIVE (closure window, time event) ===== -->
+    <path d="M 1285 380 L 1285 488" fill="none" stroke="#334155" stroke-width="1.8" marker-end="url(#arrow)"/>
+    <g font-family="IBM Plex Mono" font-size="9.2">
+      <rect x="1215" y="408" width="140" height="14" fill="white" opacity="0.95" rx="3"/>
+      <text x="1285" y="418" text-anchor="middle" fill="#334155" style="direction:ltr;unicode-bidi:isolate">after(30 יום)</text>
+      <rect x="1180" y="424" width="210" height="13" fill="white" opacity="0.9" rx="3"/>
+      <text x="1285" y="434" text-anchor="middle" font-size="8.4" fill="#15803d" style="direction:ltr;unicode-bidi:isolate">/ removeFromActiveLists()</text>
+    </g>
+
+    <!-- ===== CANCELLED -> ARCHIVE (closure window, time event) ===== -->
+    <path d="M 635 730 L 1140 730 L 1140 521 L 1178 521" fill="none" stroke="#334155" stroke-width="1.8" marker-end="url(#arrow)"/>
+    <g font-family="IBM Plex Mono" font-size="9.2">
+      <rect x="805" y="708" width="140" height="14" fill="white" opacity="0.95" rx="3"/>
+      <text x="875" y="718" text-anchor="middle" fill="#334155" style="direction:ltr;unicode-bidi:isolate">after(30 יום)</text>
+      <rect x="770" y="724" width="210" height="13" fill="white" opacity="0.9" rx="3"/>
+      <text x="875" y="734" text-anchor="middle" font-size="8.4" fill="#15803d" style="direction:ltr;unicode-bidi:isolate">/ removeFromActiveLists()</text>
+    </g>
+
+    <!-- ===== S1 (טיוטה) -> FINAL : DIRECT DELETE, no archive ===== -->
+    <!-- the business-fact exception: an abandoned draft never became a contract -->
+    <path d="M 160 285 L 70 285 L 70 640 L 1273 640" fill="none" stroke="#b91c1c" stroke-width="2.6" marker-end="url(#arrow-red)"/>
+    <g font-family="IBM Plex Mono" font-size="10">
+      <rect x="690" y="596" width="322" height="15" fill="white" opacity="0.96" rx="3"/>
+      <text x="851" y="607" text-anchor="middle" font-weight="700" fill="#b91c1c">מחיקת טיוטה נטושה <tspan font-weight="400" fill="#0891b2">[רכז השיבוץ; טרם נשלחה לחתימה]</tspan></text>
+      <rect x="700" y="613" width="302" height="14" fill="white" opacity="0.92" rx="3"/>
+      <text x="851" y="624" text-anchor="middle" font-size="8.6" fill="#15803d" style="direction:ltr;unicode-bidi:isolate">/ delete(), ישירות למצב הסיום, בלי ארכיון</text>
+    </g>
+
+    <!-- ===== ARCHIVE -> FINAL (retention expiry) ===== -->
+    <path d="M 1285 552 L 1285 626" fill="none" stroke="#334155" stroke-width="1.8" marker-end="url(#arrow)"/>
+    <g font-family="IBM Plex Mono" font-size="9.2">
+      <rect x="1220" y="562" width="130" height="14" fill="white" opacity="0.95" rx="3"/>
+      <text x="1285" y="572" text-anchor="middle" fill="#334155" style="direction:ltr;unicode-bidi:isolate">after(7 שנים)</text>
+      <rect x="1145" y="578" width="280" height="13" fill="white" opacity="0.95" rx="3"/>
+      <text x="1285" y="588" text-anchor="middle" font-size="8.2" fill="#0891b2">[אין רשומות שמורות המפנות לחוזה]</text>
+      <rect x="1235" y="592" width="100" height="13" fill="white" opacity="0.9" rx="3"/>
+      <text x="1285" y="602" text-anchor="middle" font-size="8.4" fill="#15803d" style="direction:ltr;unicode-bidi:isolate">/ purge()</text>
+    </g>
+
+    <!-- ================= PEDAGOGY CALLOUTS ================= -->
+    <g>
+      <rect x="60" y="800" width="650" height="148" rx="12" fill="#fff7ed" stroke="#c2410c" stroke-width="1.5"/>
+      <text x="80" y="826" font-size="12.5" font-weight="700" fill="#7c2d12" font-family="Noto Sans Hebrew, sans-serif">8.2, לולאת התיקון (מחזור חוזר)</text>
+      <text x="80" y="847" font-size="10.5" fill="#334155" font-family="Noto Sans Hebrew, sans-serif">הצומת "ממתין לאישור" → "הוחזר לתיקון" → (חץ חוזר) → "טיוטה" סוגר מעגל.</text>
+      <text x="80" y="866" font-size="10.5" fill="#334155" font-family="Noto Sans Hebrew, sans-serif">אותם תת־מצבים נכנסים שוב ושוב, אין צורך ב"תיקון 1 / תיקון 2".</text>
+      <text x="80" y="885" font-size="10.5" fill="#334155" font-family="Noto Sans Hebrew, sans-serif">זהו back-arc אמיתי (מעלה/שמאלה) שהופך את התרשים ללא־ליניארי.</text>
+      <text x="80" y="905" font-size="9.5" font-style="italic" fill="#64748b" font-family="Noto Sans Hebrew, sans-serif">כל תת־המצבים מקובצים בעל־מצב "בתהליך אישור" כדי לשתף את חץ הביטול.</text>
+
+      <rect x="740" y="800" width="680" height="148" rx="12" fill="#f5f3ff" stroke="#7c3aed" stroke-width="1.5"/>
+      <text x="760" y="826" font-size="12.5" font-weight="700" fill="#4c1d95" font-family="Noto Sans Hebrew, sans-serif">8.3, שתי תוצאות נבדלות, ומצב סיום אחד</text>
+      <text x="760" y="847" font-size="10.5" fill="#334155" font-family="Noto Sans Hebrew, sans-serif"><tspan font-weight="700" fill="#b91c1c">ביטול:</tspan> טריגר של שחקן (סטודנט/מנהל אזור), guard [טרם נכנס לתוקף]</text>
+      <text x="760" y="866" font-size="10.5" fill="#334155" font-family="Noto Sans Hebrew, sans-serif"><tspan font-weight="700" fill="#7c3aed">סיום טבעי:</tspan> אירוע זמן (הגעת תאריך הסיום), יוצא מ"פעיל" וגם מ"בפיגור".</text>
+      <text x="760" y="885" font-size="10.5" fill="#334155" font-family="Noto Sans Hebrew, sans-serif">שתיהן <tspan font-weight="700">מצבים</tspan> ולא מצבי סיום: החוזה עדיין קיים, וממשיך אל "ארכיון".</text>
+      <text x="760" y="905" font-size="10.5" fill="#334155" font-family="Noto Sans Hebrew, sans-serif">רק חלוף תקופת השמירה (7 שנים) גורע אותו מהמערכת ← מצב הסיום.</text>
+      <text x="760" y="926" font-size="10.5" fill="#334155" font-family="Noto Sans Hebrew, sans-serif"><tspan font-weight="700" fill="#b91c1c">והחריג:</tspan> טיוטה נטושה נמחקת <tspan font-weight="700">ישירות</tspan>, בלי ארכיון, כי מעולם לא הייתה חוזה.</text>
+    </g>
+
+    <!-- ================= LEGEND ================= -->
+    <g font-family="Noto Sans Hebrew, sans-serif" font-size="11">
+      <circle cx="80" cy="985" r="7" fill="#1e293b"/><text x="94" y="989">Initial</text>
+      <circle cx="175" cy="985" r="10" fill="none" stroke="#1e293b" stroke-width="1.8"/><circle cx="175" cy="985" r="5" fill="#1e293b"/><text x="192" y="989">Final</text>
+      <rect x="262" y="976" width="34" height="18" rx="8" fill="#ffffff" stroke="#3b82f6" stroke-width="2"/><text x="304" y="989">State</text>
+      <rect x="368" y="974" width="46" height="22" rx="10" fill="#f0f7ff" stroke="#2563eb" stroke-width="1.6" stroke-dasharray="6 3"/><text x="422" y="989">Composite</text>
+      <line x1="540" y1="985" x2="575" y2="985" stroke="#15803d" stroke-width="2" marker-end="url(#arrow-green)"/><text x="583" y="989" fill="#15803d">אישור</text>
+      <line x1="650" y1="985" x2="685" y2="985" stroke="#c2410c" stroke-width="2" marker-end="url(#arrow-orange)"/><text x="693" y="989" fill="#c2410c">לולאת תיקון</text>
+      <line x1="800" y1="985" x2="835" y2="985" stroke="#b91c1c" stroke-width="2" marker-end="url(#arrow-red)"/><text x="843" y="989" fill="#b91c1c">ביטול</text>
+      <line x1="915" y1="985" x2="950" y2="985" stroke="#0891b2" stroke-width="2" marker-end="url(#arrow-teal)"/><text x="958" y="989" fill="#0891b2">פירעון החוב</text>
+      <line x1="1065" y1="985" x2="1100" y2="985" stroke="#7c3aed" stroke-width="2" marker-end="url(#arrow-purple)"/><text x="1108" y="989" fill="#7c3aed">סיום טבעי (זמן)</text>
+      <line x1="1255" y1="985" x2="1290" y2="985" stroke="#334155" stroke-width="1.8" marker-end="url(#arrow)"/><text x="1298" y="989" fill="#334155">מעבר בסיסי</text>
+    </g>
+  </svg>
+  </div>
+
+  <button class="vp-export-btn" onclick="exportXMI()">Download .xmi (Visual Paradigm)</button>
+
+<script>
+const diagramModel = {
+  kind: 'state',
+  title: 'פתרון שאלה 8, תרשים מצבים (חוזה שכירות), קמפוס בית',
+  parts: [{
+    id: 'part-1',
+    label: 'RentalAgreement lifecycle',
+    splitRationale: '',
+    elements: [
+      { kind: 'pseudostate', id: 'init_top', subKind: 'initial', x: 400, y: 80 },
+      { kind: 'state', id: 'composite', name: 'בתהליך אישור', isComposite: true,
+        statusConstant: 'IN_APPROVAL',
+        activities: { entry: ["setStatus('IN_APPROVAL')"], exit: [], do: [] },
+        x: 95, y: 120, w: 615, h: 470,
+        subElements: [
+          { kind: 'pseudostate', id: 'init_inner', subKind: 'initial', x: 128, y: 267 },
+          { kind: 'state', id: 's1', name: 'טיוטה', isComposite: false,
+            statusConstant: 'DRAFT',
+            activities: { entry: ["setStatus('DRAFT')"], exit: [], do: [] },
+            x: 160, y: 238, w: 185, h: 58, subElements: [] },
+          { kind: 'state', id: 's2', name: 'ממתין לחתימת הסטודנט', isComposite: false,
+            statusConstant: 'AWAITING_SIGNATURE',
+            activities: { entry: ["setStatus('AWAITING_SIGNATURE')"], exit: [], do: [] },
+            x: 445, y: 230, w: 222, h: 58, subElements: [] },
+          { kind: 'state', id: 's3', name: 'ממתין לאישור מנהל האזור', isComposite: false,
+            statusConstant: 'AWAITING_APPROVAL',
+            activities: { entry: ["setStatus('AWAITING_APPROVAL')"], exit: [], do: [] },
+            x: 445, y: 452, w: 230, h: 58, subElements: [] },
+          { kind: 'state', id: 's4', name: 'הוחזר לתיקון', isComposite: false,
+            statusConstant: 'RETURNED_FOR_CORRECTION',
+            activities: { entry: ["setStatus('RETURNED_FOR_CORRECTION')"], exit: [], do: [] },
+            x: 150, y: 452, w: 240, h: 58, subElements: [] }
+        ] },
+      { kind: 'state', id: 'active', name: 'פעיל', isComposite: false,
+        statusConstant: 'ACTIVE',
+        activities: { entry: ["setStatus('ACTIVE')"], exit: [], do: ['generateMonthlyCharge()', 'checkEndDateReached()'] },
+        x: 830, y: 150, w: 225, h: 96, subElements: [] },
+      { kind: 'state', id: 'arrears', name: 'בפיגור', isComposite: false,
+        statusConstant: 'IN_ARREARS',
+        activities: { entry: ["setStatus('IN_ARREARS')"], exit: ['unblockTenant()'], do: ['awaitDebtSettlement()'] },
+        x: 830, y: 430, w: 225, h: 100, subElements: [] },
+      { kind: 'state', id: 'ended', name: 'הסתיים', isComposite: false,
+        statusConstant: 'ENDED',
+        activities: { entry: ["setStatus('ENDED')", "setClosureReason('ENDED')"], exit: [], do: [] },
+        x: 1180, y: 300, w: 210, h: 80, subElements: [] },
+      { kind: 'state', id: 'cancelled', name: 'בוטל', isComposite: false,
+        statusConstant: 'CANCELLED',
+        activities: { entry: ["setStatus('CANCELLED')", "setClosureReason('CANCELLED')"], exit: [], do: [] },
+        x: 430, y: 690, w: 205, h: 80, subElements: [] },
+      { kind: 'state', id: 'archive', name: 'ארכיון', isComposite: false,
+        statusConstant: 'ARCHIVED',
+        activities: { entry: ["setStatus('ARCHIVED')"], exit: [], do: [] },
+        x: 1180, y: 490, w: 210, h: 62, subElements: [] },
+      { kind: 'pseudostate', id: 'final_1', subKind: 'final', x: 1285, y: 640 }
+    ],
+    relationships: [
+      { kind: 'transition', id: 't_init',    from: 'init_top',   to: 'composite', event: '', guard: '', action: '', isSelf: false },
+      { kind: 'transition', id: 't_inner',   from: 'init_inner', to: 's1',        event: '', guard: '', action: '', isSelf: false },
+      { kind: 'transition', id: 't_s1_s2',   from: 's1', to: 's2', event: 'שליחה לחתימה', guard: 'רכז השיבוץ', action: '', isSelf: false },
+      { kind: 'transition', id: 't_s2_s3',   from: 's2', to: 's3', event: 'הסטודנט חתם', guard: '', action: 'notifyManager', isSelf: false },
+      { kind: 'transition', id: 't_s3_s4',   from: 's3', to: 's4', event: 'מנהל האזור החזיר לתיקון', guard: 'נמצא ליקוי', action: '', isSelf: false },
+      { kind: 'transition', id: 't_s4_s1',   from: 's4', to: 's1', event: 'רכז השיבוץ החל בתיקון', guard: '', action: '', isSelf: false },
+      { kind: 'transition', id: 't_comp_a',  from: 'composite', to: 'active', event: 'מנהל האזור אישר את החוזה', guard: '', action: '', isSelf: false },
+      { kind: 'transition', id: 't_comp_c',  from: 'composite', to: 'cancelled', event: 'ביטול', guard: 'טרם נכנס לתוקף', action: '', isSelf: false },
+      { kind: 'transition', id: 't_a_r',     from: 'active', to: 'arrears', event: 'חלפו 10 ימים ללא פירעון החיוב', guard: 'אירוע זמן', action: '', isSelf: false },
+      { kind: 'transition', id: 't_r_a',     from: 'arrears', to: 'active', event: 'החוב נפרע', guard: 'מערכת סליקה', action: '', isSelf: false },
+      { kind: 'transition', id: 't_a_e',     from: 'active', to: 'ended', event: 'הגיע תאריך סיום השכירות', guard: 'אירוע זמן', action: '', isSelf: false },
+      { kind: 'transition', id: 't_r_e',     from: 'arrears', to: 'ended', event: 'הגיע תאריך סיום השכירות', guard: 'אירוע זמן', action: '', isSelf: false },
+      { kind: 'transition', id: 't_c_ar',    from: 'cancelled', to: 'archive', event: 'after(30 יום)', guard: '', action: 'removeFromActiveLists()', isSelf: false },
+      { kind: 'transition', id: 't_e_ar',    from: 'ended', to: 'archive', event: 'after(30 יום)', guard: '', action: 'removeFromActiveLists()', isSelf: false },
+      { kind: 'transition', id: 't_ar_f',    from: 'archive', to: 'final_1', event: 'after(7 שנים)', guard: 'אין רשומות שמורות המפנות לחוזה', action: 'purge()', isSelf: false },
+      { kind: 'transition', id: 't_s1_f',    from: 's1', to: 'final_1', event: 'מחיקת טיוטה נטושה', guard: 'רכז השיבוץ; טרם נשלחה לחתימה', action: 'delete()', isSelf: false }
+    ]
+  }]
+};
+
+function xmlEscape(s) {
+  return String(s ?? '')
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;').replace(/'/g, '&apos;');
+}
+
+function downloadFile(filename, mimeType, content) {
+  const blob = new Blob([content], { type: mimeType });
+  const url  = URL.createObjectURL(blob);
+  const a    = Object.assign(document.createElement('a'), { href: url, download: filename });
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(() => { URL.revokeObjectURL(url); a.remove(); }, 1000);
+}
+
+function xmiBody(elements, rels) {
+  const lines = [];
+  lines.push(`    <packagedElement xmi:type="uml:StateMachine" xmi:id="sm_1" name="${xmlEscape(diagramModel.title)}">`);
+  lines.push(`      <region xmi:type="uml:Region" xmi:id="region_1">`);
+  function emitVertex(el, indent) {
+    if (el.kind === 'pseudostate') {
+      lines.push(`${indent}<subvertex xmi:type="uml:Pseudostate" xmi:id="${el.id}" kind="${el.subKind}"/>`);
+    } else if (el.kind === 'state') {
+      const hasSub = el.subElements && el.subElements.length;
+      const head = `${indent}<subvertex xmi:type="uml:State" xmi:id="${el.id}" name="${xmlEscape(el.name)}"`;
+      if (hasSub) {
+        lines.push(head + `>`);
+        lines.push(`${indent}  <region xmi:type="uml:Region" xmi:id="${el.id}_region">`);
+        el.subElements.forEach(se => emitVertex(se, indent + '    '));
+        lines.push(`${indent}  </region>`);
+        lines.push(`${indent}</subvertex>`);
+      } else {
+        lines.push(head + `/>`);
+      }
+    }
+  }
+  elements.forEach(el => emitVertex(el, '        '));
+  for (const r of rels) {
+    if (r.kind === 'transition') {
+      const nm = [r.event, r.guard ? `[${r.guard}]` : '', r.action ? `/ ${r.action}` : '']
+                 .filter(Boolean).join(' ');
+      lines.push(`        <transition xmi:type="uml:Transition" xmi:id="${r.id}" source="${r.from}" target="${r.to}"${nm ? ` name="${xmlEscape(nm)}"` : ''}/>`);
+    }
+  }
+  lines.push(`      </region>`);
+  lines.push(`    </packagedElement>`);
+  return lines.join('\n');
+}
+
+function exportXMI() {
+  const m = diagramModel;
+  const title = xmlEscape(m.title || 'diagram');
+  const allElements = m.parts.flatMap(p => p.elements);
+  const allRelationships = m.parts.flatMap(p => p.relationships);
+  const body = xmiBody(allElements, allRelationships);
+  const xmi = `<?xml version="1.0" encoding="UTF-8"?>
+<xmi:XMI xmi:version="2.1"
+  xmlns:xmi="http://www.omg.org/XMI"
+  xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML">
+  <uml:Model xmi:id="model_1" name="${title}">
+${body}
+  </uml:Model>
+</xmi:XMI>`;
+  downloadFile(title.replace(/\s+/g, '_') + '.xmi', 'application/xml', xmi);
+}
+</script>
+</body>
+</html>

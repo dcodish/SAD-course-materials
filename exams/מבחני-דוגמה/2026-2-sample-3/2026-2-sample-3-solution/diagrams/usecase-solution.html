@@ -1,0 +1,1565 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>ספר פתוח, Use Case Diagram</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Hebrew:wght@400;600&family=IBM+Plex+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+/* inlined uc-diagram-common.css */
+/* uc-diagram-common.css, SAD MCP shared styles for use case diagrams */
+
+/* ── Base layout ─────────────────────────────────────────────────────────── */
+body { margin: 0; padding: 20px 0; background: #f8fafc;
+  font-family: 'Noto Sans Hebrew', sans-serif; color: #1e293b; }
+h1.page-title { text-align: center; font-size: 18px; color: #1e40af;
+  margin: 0 0 10px; font-weight: 700; }
+.diagram-part { display: flex; justify-content: center; }
+
+/* ── Tab bar ─────────────────────────────────────────────────────────────── */
+.tab-bar { display: flex; justify-content: center; gap: 8px; margin: 12px 0 4px; }
+.tab { padding: 7px 20px; border: 1px solid #cbd5e1; background: #f8fafc;
+  color: #475569; font-size: 13px; font-weight: 600; cursor: pointer;
+  border-radius: 6px; font-family: 'Noto Sans Hebrew', sans-serif; }
+.tab.active { background: #1e40af; color: #fff; border-color: #1e40af; }
+.split-rationale { text-align: center; font-size: 11px; color: #64748b;
+  margin: 0 0 8px; font-style: italic; }
+
+/* ── Buttons ─────────────────────────────────────────────────────────────── */
+.fix-btn { padding: 8px 20px; border: 1px solid #3b82f6; background: #eff6ff;
+  color: #1e40af; font-size: 12px; font-weight: 600; cursor: pointer;
+  border-radius: 6px; font-family: 'Noto Sans Hebrew', sans-serif; }
+.fix-btn:hover { background: #dbeafe; }
+.vp-export-btn { position: fixed; bottom: 20px; right: 20px; z-index: 1000;
+  background: #1e40af; color: #fff; border: none; border-radius: 6px;
+  padding: 8px 16px; font-size: 13px; cursor: pointer;
+  font-family: 'IBM Plex Mono', monospace; }
+.vp-export-btn:hover { background: #1e3a8a; }
+
+/* ── Assumptions panel ───────────────────────────────────────────────────── */
+.assumptions-panel { display: flex; gap: 24px; max-width: 1000px;
+  margin: 20px auto; padding: 16px 20px; background: #fff;
+  border: 1px solid #cbd5e1; border-radius: 8px; direction: rtl; }
+.assumptions-col { flex: 1; min-width: 0; }
+.assumptions-col h3 { margin: 0 0 6px; font-size: 13px; font-weight: 600; color: #1e40af; }
+.assumptions-col ul { margin: 0; padding-right: 18px; }
+.assumptions-col li { color: #334155; font-size: 12px; line-height: 1.6; }
+
+/* ── User stories summary panel ──────────────────────────────────────────── */
+.user-stories-panel { max-width: 1000px; margin: 12px auto 20px; padding: 16px 20px;
+  background: #fff; border: 1px solid #cbd5e1; border-radius: 8px; direction: rtl; }
+.user-stories-panel h3 { margin: 0 0 8px; font-size: 13px; font-weight: 600; color: #1e40af; }
+.user-stories-panel ul { margin: 0; padding-right: 18px; }
+.user-stories-panel li { color: #334155; font-size: 12px; line-height: 1.7; }
+
+/* ── UC modal ────────────────────────────────────────────────────────────── */
+body.uc-modal-open { overflow: hidden; }
+.uc-modal[hidden] { display: none !important; }
+.uc-modal { position: fixed; inset: 0; z-index: 2000; display: flex;
+  align-items: flex-start; justify-content: center; padding: 40px 20px;
+  overflow-y: auto; direction: rtl; font-family: 'Noto Sans Hebrew', sans-serif; }
+.uc-modal-backdrop { position: absolute; inset: 0; background: rgba(15,23,42,0.55); }
+.uc-modal-body { position: relative; z-index: 1; width: 100%; max-width: 960px;
+  background: #fff; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,.25);
+  padding: 28px 32px 32px; color: #1e293b; }
+.uc-modal-close { position: absolute; top: 10px; left: 14px; background: none;
+  border: none; font-size: 24px; color: #64748b; cursor: pointer; }
+.uc-modal-body header { border-bottom: 1px solid #e2e8f0; padding-bottom: 12px;
+  margin-bottom: 18px; }
+.uc-modal-body .uc-id { display: inline-block; font-family: 'IBM Plex Mono',monospace;
+  font-size: 11px; color: #64748b; background: #f1f5f9; padding: 2px 8px;
+  border-radius: 4px; margin-bottom: 6px; }
+.uc-modal-body .uc-name { margin: 0 0 4px; font-size: 20px; color: #1e40af; font-weight: 700; }
+.uc-modal-body .uc-primary { font-size: 13px; color: #334155; }
+.uc-modal-body .uc-primary-label { color: #64748b; margin-left: 6px; }
+.uc-modal-body .uc-primary-link { color: #1e40af; cursor: pointer; font-weight: 600;
+  text-decoration: underline dotted; }
+.uc-description { margin-bottom: 20px; font-size: 14px; line-height: 1.7; color: #334155; }
+.uc-scenarios h3 { font-size: 14px; color: #1e40af; margin: 18px 0 6px;
+  border-right: 3px solid #3b82f6; padding-right: 10px; }
+.uc-scenarios ol { margin: 0 0 14px; padding-right: 22px; }
+.uc-scenarios ol li { color: #1e293b; font-size: 13px; line-height: 1.9; }
+.step-actor { color: #1e40af; font-weight: 600; cursor: pointer; text-decoration: underline dotted; }
+.step-system { color: #475569; font-style: italic; }
+.step-include { color: #7c3aed; font-family: 'IBM Plex Mono', monospace; font-size: 11px; }
+.step-uc-ref { color: #7c3aed; cursor: pointer; text-decoration: underline; }
+.ext-inline, .ext-sub { list-style: none; color: #64748b; font-size: 12px;
+  padding-right: 24px; line-height: 1.7; }
+.uc-prepostuser { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 18px;
+  margin: 18px 0 20px; }
+.uc-prepostuser > div { background: #f8fafc; border: 1px solid #e2e8f0;
+  border-radius: 8px; padding: 12px 14px; }
+.uc-prepostuser h4 { margin: 0 0 6px; font-size: 12px; color: #1e40af; font-weight: 600; }
+.uc-prepostuser ul { margin: 0; padding-right: 18px; font-size: 12px;
+  color: #334155; line-height: 1.7; }
+.uc-wireframe { border-top: 1px dashed #cbd5e1; padding-top: 16px; margin-top: 6px; }
+.uc-wireframe:empty, .uc-wireframe[hidden] { display: none; }
+
+/* ── Actor pulse ─────────────────────────────────────────────────────────── */
+.actor-pulse { animation: actor-pulse 0.6s ease-in-out 3; }
+@keyframes actor-pulse {
+  0%, 100% { filter: none; }
+  50%      { filter: drop-shadow(0 0 8px #3b82f6); }
+}
+
+/* ── Wireframe scoped theme (wf-*) ───────────────────────────────────────── */
+.wf-screen { background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px;
+  padding: 18px 20px; font-family: 'Noto Sans Hebrew', sans-serif;
+  color: #1e293b; direction: rtl; max-width: 760px; margin: 0 auto; }
+.wf-heading { margin: 0 0 14px; font-size: 15px; color: #1e40af; font-weight: 700;
+  border-bottom: 1px solid #e2e8f0; padding-bottom: 6px; }
+.wf-section { margin: 14px 0; }
+.wf-row { display: flex; gap: 10px; align-items: center; margin: 6px 0; }
+.wf-label { font-size: 12px; color: #475569; min-width: 120px; }
+.wf-input, .wf-textarea, .wf-select { flex: 1; background: #fff;
+  border: 1px solid #cbd5e1; border-radius: 4px; padding: 6px 8px;
+  font-size: 12px; color: #334155; }
+.wf-textarea { min-height: 60px; }
+.wf-table { width: 100%; border-collapse: collapse; margin: 10px 0; font-size: 12px; }
+.wf-table th, .wf-table td { border: 1px solid #cbd5e1; padding: 6px 8px; text-align: right; }
+.wf-table th { background: #e2e8f0; color: #1e40af; font-weight: 600; }
+.wf-actions { display: flex; gap: 8px; margin-top: 12px; justify-content: flex-start; }
+.wf-button { background: #fff; border: 1px solid #64748b; border-radius: 4px;
+  padding: 6px 14px; font-size: 12px; color: #334155; cursor: default; }
+.wf-primary { background: #1e40af; color: #fff; border-color: #1e40af; }
+.wf-image-box { border: 1px dashed #94a3b8; background: #f1f5f9; color: #64748b;
+  text-align: center; padding: 24px; border-radius: 4px; font-size: 12px; margin: 10px 0; }
+.wf-hint { font-size: 11px; color: #64748b; font-style: italic; margin: 6px 0; }
+.wf-badge { display: inline-block; background: #e0f2fe; color: #0369a1;
+  padding: 2px 8px; border-radius: 999px; font-size: 10px; font-weight: 600; }
+
+</style>
+  <!-- REQUIRED: uc-diagram-common.css sets display:flex on .diagram-part, which overrides
+       the browser's [hidden]{display:none}. This one-liner restores correct tab switching. -->
+  <style>[hidden] { display: none !important; }</style>
+</head>
+<body>
+  <h1 class="page-title">פתרון שאלה 6, תרשים Use Case, "ספר פתוח" (רשת השאלת ספריות)</h1>
+
+  <!-- Tab bar -->
+  <div class="tab-bar">
+    <button class="tab active" onclick="showDiagram(0)">מחזור ההשאלה</button>
+    <button class="tab"        onclick="showDiagram(1)">ניהול ומינהלה</button>
+  </div>
+
+  <!-- Split rationale -->
+  <div class="split-rationale">Split by actor groups: מחזור השאלות / מינהלה, אחריות נבדלת (16 use cases &gt; 8)</div>
+
+  <!-- Fix Layout button -->
+  <div style="text-align:center;margin:8px 0;">
+    <button onclick="fixLayout(currentLayout())" class="fix-btn">Fix Layout</button>
+  </div>
+
+  <!-- ============================ TAB 1, מחזור ההשאלה ============================ -->
+  <div class="diagram-part" id="diagram-0">
+    <svg id="diagram-svg-0" viewBox="0 0 1240 840" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <pattern id="dots-0" width="24" height="24" patternUnits="userSpaceOnUse">
+          <circle cx="12" cy="12" r="0.8" fill="#cbd5e1"/>
+        </pattern>
+        <marker id="arrow-include-0" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+          <polyline points="0 0, 9 3.5, 0 7" fill="none" stroke="#7c3aed" stroke-width="1.2"/>
+        </marker>
+      </defs>
+      <rect x="0" y="0" width="1240" height="840" fill="#f8fafc"/>
+      <rect x="0" y="0" width="1240" height="840" fill="url(#dots-0)"/>
+
+      <!-- System boundary -->
+      <rect class="system-boundary" x="220" y="72" width="860" height="620" rx="12" fill="#ffffff" stroke="#3b82f6" stroke-width="2.5"/>
+      <rect x="220" y="72" width="860" height="44" rx="12" fill="#1e40af"/>
+      <rect x="220" y="94" width="860" height="22" fill="#1e40af"/>
+      <text x="650" y="101" text-anchor="middle" fill="#ffffff" font-family="'Noto Sans Hebrew',sans-serif" font-weight="700" font-size="15" direction="rtl">מערכת ניהול השאלות ברשת הספריות</text>
+
+      <!-- Association lines (visible) -->
+      <line data-conn-from="patron" data-conn-to="uc-reserve" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+      <line data-conn-from="patron" data-conn-to="uc-renew" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+      <line data-conn-from="patron" data-conn-to="uc-view-account" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+      <line data-conn-from="librarian" data-conn-to="uc-checkout" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+      <line data-conn-from="librarian" data-conn-to="uc-return" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+      <line data-conn-from="librarian" data-conn-to="uc-declare-lost" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+      <line data-conn-from="time" data-conn-to="uc-mark-overdue" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+      <line data-conn-from="ilnetwork" data-conn-to="uc-receive-copy" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+
+      <!-- Association hitboxes -->
+      <line class="conn-hitbox" data-conn-id="as-patron-reserve" data-hitbox-from="patron" data-hitbox-to="uc-reserve" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('as-patron-reserve','assoc',event)"/>
+      <line class="conn-hitbox" data-conn-id="as-patron-renew" data-hitbox-from="patron" data-hitbox-to="uc-renew" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('as-patron-renew','assoc',event)"/>
+      <line class="conn-hitbox" data-conn-id="as-patron-view" data-hitbox-from="patron" data-hitbox-to="uc-view-account" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('as-patron-view','assoc',event)"/>
+      <line class="conn-hitbox" data-conn-id="as-lib-checkout" data-hitbox-from="librarian" data-hitbox-to="uc-checkout" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('as-lib-checkout','assoc',event)"/>
+      <line class="conn-hitbox" data-conn-id="as-lib-return" data-hitbox-from="librarian" data-hitbox-to="uc-return" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('as-lib-return','assoc',event)"/>
+      <line class="conn-hitbox" data-conn-id="as-lib-lost" data-hitbox-from="librarian" data-hitbox-to="uc-declare-lost" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('as-lib-lost','assoc',event)"/>
+      <line class="conn-hitbox" data-conn-id="as-time-overdue" data-hitbox-from="time" data-hitbox-to="uc-mark-overdue" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('as-time-overdue','assoc',event)"/>
+      <line class="conn-hitbox" data-conn-id="as-iln-receive" data-hitbox-from="ilnetwork" data-hitbox-to="uc-receive-copy" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('as-iln-receive','assoc',event)"/>
+
+      <!-- «include» lines + labels + hitboxes -->
+      <line data-conn-from="uc-reserve" data-conn-to="uc-check-eligibility" x1="0" y1="0" x2="0" y2="0" stroke="#7c3aed" stroke-width="1.6" stroke-dasharray="6 4" marker-end="url(#arrow-include-0)"/>
+      <text data-label-for="uc-reserve uc-check-eligibility" x="0" y="0" text-anchor="middle" font-size="9.5" fill="#7c3aed" font-family="'IBM Plex Mono',monospace">«include»</text>
+      <line class="conn-hitbox" data-conn-id="inc-reserve-elig" data-hitbox-from="uc-reserve" data-hitbox-to="uc-check-eligibility" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('inc-reserve-elig','assoc',event)"/>
+
+      <line data-conn-from="uc-checkout" data-conn-to="uc-check-eligibility" x1="0" y1="0" x2="0" y2="0" stroke="#7c3aed" stroke-width="1.6" stroke-dasharray="6 4" marker-end="url(#arrow-include-0)"/>
+      <text data-label-for="uc-checkout uc-check-eligibility" x="0" y="0" text-anchor="middle" font-size="9.5" fill="#7c3aed" font-family="'IBM Plex Mono',monospace">«include»</text>
+      <line class="conn-hitbox" data-conn-id="inc-checkout-elig" data-hitbox-from="uc-checkout" data-hitbox-to="uc-check-eligibility" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('inc-checkout-elig','assoc',event)"/>
+
+      <line data-conn-from="uc-renew" data-conn-to="uc-check-eligibility" x1="0" y1="0" x2="0" y2="0" stroke="#7c3aed" stroke-width="1.6" stroke-dasharray="6 4" marker-end="url(#arrow-include-0)"/>
+      <text data-label-for="uc-renew uc-check-eligibility" x="0" y="0" text-anchor="middle" font-size="9.5" fill="#7c3aed" font-family="'IBM Plex Mono',monospace">«include»</text>
+      <line class="conn-hitbox" data-conn-id="inc-renew-elig" data-hitbox-from="uc-renew" data-hitbox-to="uc-check-eligibility" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('inc-renew-elig','assoc',event)"/>
+
+      <!-- Use Cases -->
+      <g id="uc-group-uc-reserve" data-uc-id="uc-reserve" onclick="showDesc('uc-reserve','uc',event)" style="cursor:pointer">
+        <ellipse cx="346" cy="150" rx="96" ry="30" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+        <text x="346" y="154" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">הצבת הזמנה</text>
+      </g>
+      <g id="uc-group-uc-renew" data-uc-id="uc-renew" onclick="showDesc('uc-renew','uc',event)" style="cursor:pointer">
+        <ellipse cx="346" cy="224" rx="96" ry="30" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+        <text x="346" y="228" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">חידוש השאלה</text>
+      </g>
+      <g id="uc-group-uc-view-account" data-uc-id="uc-view-account" onclick="showDesc('uc-view-account','uc',event)" style="cursor:pointer">
+        <ellipse cx="346" cy="298" rx="96" ry="34" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+        <text x="346" y="292" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">צפייה בחשבון</text>
+        <text x="346" y="307" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">המנוי</text>
+      </g>
+      <g id="uc-group-uc-checkout" data-uc-id="uc-checkout" onclick="showDesc('uc-checkout','uc',event)" style="cursor:pointer">
+        <ellipse cx="346" cy="372" rx="96" ry="30" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+        <text x="346" y="376" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">השאלת עותק</text>
+      </g>
+      <g id="uc-group-uc-return" data-uc-id="uc-return" onclick="showDesc('uc-return','uc',event)" style="cursor:pointer">
+        <ellipse cx="346" cy="446" rx="96" ry="30" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+        <text x="346" y="450" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">קליטת החזרה</text>
+      </g>
+      <g id="uc-group-uc-declare-lost" data-uc-id="uc-declare-lost" onclick="showDesc('uc-declare-lost','uc',event)" style="cursor:pointer">
+        <ellipse cx="346" cy="520" rx="96" ry="34" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+        <text x="346" y="514" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">הכרזת עותק</text>
+        <text x="346" y="529" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">כאבוד</text>
+      </g>
+      <g id="uc-group-uc-mark-overdue" data-uc-id="uc-mark-overdue" onclick="showDesc('uc-mark-overdue','uc',event)" style="cursor:pointer">
+        <ellipse cx="346" cy="594" rx="96" ry="34" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+        <text x="346" y="588" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">סימון השאלה</text>
+        <text x="346" y="603" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">באיחור</text>
+      </g>
+      <g id="uc-group-uc-check-eligibility" data-uc-id="uc-check-eligibility" onclick="showDesc('uc-check-eligibility','uc',event)" style="cursor:pointer">
+        <ellipse cx="648" cy="150" rx="104" ry="34" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+        <text x="648" y="144" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">בדיקת כשירות</text>
+        <text x="648" y="159" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">מנוי</text>
+      </g>
+      <g id="uc-group-uc-receive-copy" data-uc-id="uc-receive-copy" onclick="showDesc('uc-receive-copy','uc',event)" style="cursor:pointer">
+        <ellipse cx="950" cy="150" rx="100" ry="34" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+        <text x="950" y="144" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">קליטת הודעה על</text>
+        <text x="950" y="159" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">עותק שהתקבל</text>
+      </g>
+
+      <!-- Actors -->
+      <g id="actor-group-patron" data-actor-id="patron" onclick="showDesc('patron','actor',event)" style="cursor:pointer">
+        <circle cx="0" cy="-60" r="14" fill="#e0f0ff" stroke="#334155" stroke-width="2"/>
+        <line x1="0" y1="-46" x2="0" y2="-10" stroke="#334155" stroke-width="2"/>
+        <line x1="-18" y1="-36" x2="18" y2="-36" stroke="#334155" stroke-width="2"/>
+        <line x1="0" y1="-10" x2="-14" y2="14" stroke="#334155" stroke-width="2"/>
+        <line x1="0" y1="-10" x2="14" y2="14" stroke="#334155" stroke-width="2"/>
+        <text x="0" y="30" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">מנוי</text>
+      </g>
+      <g id="actor-group-librarian" data-actor-id="librarian" onclick="showDesc('librarian','actor',event)" style="cursor:pointer">
+        <circle cx="0" cy="-60" r="14" fill="#e0f0ff" stroke="#334155" stroke-width="2"/>
+        <line x1="0" y1="-46" x2="0" y2="-10" stroke="#334155" stroke-width="2"/>
+        <line x1="-18" y1="-36" x2="18" y2="-36" stroke="#334155" stroke-width="2"/>
+        <line x1="0" y1="-10" x2="-14" y2="14" stroke="#334155" stroke-width="2"/>
+        <line x1="0" y1="-10" x2="14" y2="14" stroke="#334155" stroke-width="2"/>
+        <text x="0" y="30" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">ספרן</text>
+      </g>
+      <g id="actor-group-time" data-actor-id="time" onclick="showDesc('time','actor',event)" style="cursor:pointer">
+        <circle cx="0" cy="-60" r="14" fill="#fef3c7" stroke="#334155" stroke-width="2"/>
+        <line x1="0" y1="-46" x2="0" y2="-10" stroke="#334155" stroke-width="2"/>
+        <line x1="-18" y1="-36" x2="18" y2="-36" stroke="#334155" stroke-width="2"/>
+        <line x1="0" y1="-10" x2="-14" y2="14" stroke="#334155" stroke-width="2"/>
+        <line x1="0" y1="-10" x2="14" y2="14" stroke="#334155" stroke-width="2"/>
+        <text x="0" y="30" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">שחקן זמן</text>
+        <text x="0" y="44" text-anchor="middle" font-size="9" fill="#64748b" font-family="'IBM Plex Mono',monospace" font-style="italic">«system»</text>
+      </g>
+      <g id="actor-group-ilnetwork" data-actor-id="ilnetwork" onclick="showDesc('ilnetwork','actor',event)" style="cursor:pointer">
+        <circle cx="0" cy="-60" r="14" fill="#fef3c7" stroke="#334155" stroke-width="2"/>
+        <line x1="0" y1="-46" x2="0" y2="-10" stroke="#334155" stroke-width="2"/>
+        <line x1="-18" y1="-36" x2="18" y2="-36" stroke="#334155" stroke-width="2"/>
+        <line x1="0" y1="-10" x2="-14" y2="14" stroke="#334155" stroke-width="2"/>
+        <line x1="0" y1="-10" x2="14" y2="14" stroke="#334155" stroke-width="2"/>
+        <text x="0" y="30" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">רשת ההשאלה</text>
+        <text x="0" y="44" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">הבין-ספרייתית</text>
+        <text x="0" y="58" text-anchor="middle" font-size="9" fill="#64748b" font-family="'IBM Plex Mono',monospace" font-style="italic">«system»</text>
+      </g>
+    </svg>
+  </div>
+
+  <!-- ============================ TAB 2, ניהול ומינהלה ============================ -->
+  <div class="diagram-part" id="diagram-1" hidden>
+    <svg id="diagram-svg-1" viewBox="0 0 1240 780" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <pattern id="dots-1" width="24" height="24" patternUnits="userSpaceOnUse">
+          <circle cx="12" cy="12" r="0.8" fill="#cbd5e1"/>
+        </pattern>
+        <marker id="arrow-include-1" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+          <polyline points="0 0, 9 3.5, 0 7" fill="none" stroke="#7c3aed" stroke-width="1.2"/>
+        </marker>
+      </defs>
+      <rect x="0" y="0" width="1240" height="780" fill="#f8fafc"/>
+      <rect x="0" y="0" width="1240" height="780" fill="url(#dots-1)"/>
+
+      <!-- System boundary -->
+      <rect class="system-boundary" x="220" y="72" width="860" height="560" rx="12" fill="#ffffff" stroke="#3b82f6" stroke-width="2.5"/>
+      <rect x="220" y="72" width="860" height="44" rx="12" fill="#1e40af"/>
+      <rect x="220" y="94" width="860" height="22" fill="#1e40af"/>
+      <text x="650" y="101" text-anchor="middle" fill="#ffffff" font-family="'Noto Sans Hebrew',sans-serif" font-weight="700" font-size="15" direction="rtl">מערכת ניהול השאלות ברשת הספריות</text>
+
+      <!-- Association lines (visible) -->
+      <line data-conn-from="branchManager" data-conn-to="uc-manage-fine" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+      <line data-conn-from="branchManager" data-conn-to="uc-reports" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+      <line data-conn-from="acquisitions" data-conn-to="uc-reports" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+      <line data-conn-from="acquisitions" data-conn-to="uc-add-title" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+      <line data-conn-from="acquisitions" data-conn-to="uc-order-copies" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+      <line data-conn-from="sysAdmin" data-conn-to="uc-manage-branches" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+      <line data-conn-from="sysAdmin" data-conn-to="uc-manage-membership-types" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+      <line data-conn-from="sysAdmin" data-conn-to="uc-manage-policy" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+
+      <!-- Association hitboxes -->
+      <line class="conn-hitbox" data-conn-id="as-bm-fine" data-hitbox-from="branchManager" data-hitbox-to="uc-manage-fine" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('as-bm-fine','assoc',event)"/>
+      <line class="conn-hitbox" data-conn-id="as-bm-reports" data-hitbox-from="branchManager" data-hitbox-to="uc-reports" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('as-bm-reports','assoc',event)"/>
+      <line class="conn-hitbox" data-conn-id="as-acq-reports" data-hitbox-from="acquisitions" data-hitbox-to="uc-reports" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('as-acq-reports','assoc',event)"/>
+      <line class="conn-hitbox" data-conn-id="as-acq-addtitle" data-hitbox-from="acquisitions" data-hitbox-to="uc-add-title" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('as-acq-addtitle','assoc',event)"/>
+      <line class="conn-hitbox" data-conn-id="as-acq-order" data-hitbox-from="acquisitions" data-hitbox-to="uc-order-copies" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('as-acq-order','assoc',event)"/>
+      <line class="conn-hitbox" data-conn-id="as-sa-branches" data-hitbox-from="sysAdmin" data-hitbox-to="uc-manage-branches" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('as-sa-branches','assoc',event)"/>
+      <line class="conn-hitbox" data-conn-id="as-sa-memtypes" data-hitbox-from="sysAdmin" data-hitbox-to="uc-manage-membership-types" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('as-sa-memtypes','assoc',event)"/>
+      <line class="conn-hitbox" data-conn-id="as-sa-policy" data-hitbox-from="sysAdmin" data-hitbox-to="uc-manage-policy" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('as-sa-policy','assoc',event)"/>
+
+      <!-- Use Cases: left (branchManager + acquisitions) -->
+      <g id="uc-group-uc-manage-fine" data-uc-id="uc-manage-fine" onclick="showDesc('uc-manage-fine','uc',event)" style="cursor:pointer">
+        <ellipse cx="350" cy="150" rx="100" ry="34" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+        <text x="350" y="144" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">מחיקה או הפחתה</text>
+        <text x="350" y="159" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">של קנס</text>
+      </g>
+      <g id="uc-group-uc-reports" data-uc-id="uc-reports" onclick="showDesc('uc-reports','uc',event)" style="cursor:pointer">
+        <ellipse cx="350" cy="224" rx="100" ry="30" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+        <text x="350" y="228" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">הפקת דוחות</text>
+      </g>
+      <g id="uc-group-uc-add-title" data-uc-id="uc-add-title" onclick="showDesc('uc-add-title','uc',event)" style="cursor:pointer">
+        <ellipse cx="350" cy="298" rx="100" ry="34" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+        <text x="350" y="292" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">הוספת כותר</text>
+        <text x="350" y="307" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">לקטלוג</text>
+      </g>
+      <g id="uc-group-uc-order-copies" data-uc-id="uc-order-copies" onclick="showDesc('uc-order-copies','uc',event)" style="cursor:pointer">
+        <ellipse cx="350" cy="372" rx="100" ry="34" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+        <text x="350" y="366" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">הזמנת עותקים</text>
+        <text x="350" y="381" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">חדשים</text>
+      </g>
+
+      <!-- Use Cases: right (sysAdmin) -->
+      <g id="uc-group-uc-manage-branches" data-uc-id="uc-manage-branches" onclick="showDesc('uc-manage-branches','uc',event)" style="cursor:pointer">
+        <ellipse cx="950" cy="150" rx="100" ry="30" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+        <text x="950" y="154" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">ניהול סניפים</text>
+      </g>
+      <g id="uc-group-uc-manage-membership-types" data-uc-id="uc-manage-membership-types" onclick="showDesc('uc-manage-membership-types','uc',event)" style="cursor:pointer">
+        <ellipse cx="950" cy="224" rx="100" ry="34" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+        <text x="950" y="218" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">ניהול סוגי</text>
+        <text x="950" y="233" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">מנויים</text>
+      </g>
+      <g id="uc-group-uc-manage-policy" data-uc-id="uc-manage-policy" onclick="showDesc('uc-manage-policy','uc',event)" style="cursor:pointer">
+        <ellipse cx="950" cy="298" rx="100" ry="34" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+        <text x="950" y="292" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">הגדרת מדיניות</text>
+        <text x="950" y="307" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">השאלה וקנסות</text>
+      </g>
+
+      <!-- Actors -->
+      <g id="actor-group-branchManager" data-actor-id="branchManager" onclick="showDesc('branchManager','actor',event)" style="cursor:pointer">
+        <circle cx="0" cy="-60" r="14" fill="#e0f0ff" stroke="#334155" stroke-width="2"/>
+        <line x1="0" y1="-46" x2="0" y2="-10" stroke="#334155" stroke-width="2"/>
+        <line x1="-18" y1="-36" x2="18" y2="-36" stroke="#334155" stroke-width="2"/>
+        <line x1="0" y1="-10" x2="-14" y2="14" stroke="#334155" stroke-width="2"/>
+        <line x1="0" y1="-10" x2="14" y2="14" stroke="#334155" stroke-width="2"/>
+        <text x="0" y="30" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">מנהל סניף</text>
+      </g>
+      <g id="actor-group-acquisitions" data-actor-id="acquisitions" onclick="showDesc('acquisitions','actor',event)" style="cursor:pointer">
+        <circle cx="0" cy="-60" r="14" fill="#e0f0ff" stroke="#334155" stroke-width="2"/>
+        <line x1="0" y1="-46" x2="0" y2="-10" stroke="#334155" stroke-width="2"/>
+        <line x1="-18" y1="-36" x2="18" y2="-36" stroke="#334155" stroke-width="2"/>
+        <line x1="0" y1="-10" x2="-14" y2="14" stroke="#334155" stroke-width="2"/>
+        <line x1="0" y1="-10" x2="14" y2="14" stroke="#334155" stroke-width="2"/>
+        <text x="0" y="30" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">רכז רכש</text>
+      </g>
+      <g id="actor-group-sysAdmin" data-actor-id="sysAdmin" onclick="showDesc('sysAdmin','actor',event)" style="cursor:pointer">
+        <circle cx="0" cy="-60" r="14" fill="#e0f0ff" stroke="#334155" stroke-width="2"/>
+        <line x1="0" y1="-46" x2="0" y2="-10" stroke="#334155" stroke-width="2"/>
+        <line x1="-18" y1="-36" x2="18" y2="-36" stroke="#334155" stroke-width="2"/>
+        <line x1="0" y1="-10" x2="-14" y2="14" stroke="#334155" stroke-width="2"/>
+        <line x1="0" y1="-10" x2="14" y2="14" stroke="#334155" stroke-width="2"/>
+        <text x="0" y="30" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">מנהל מערכת</text>
+      </g>
+    </svg>
+  </div>
+
+  <!-- Assumptions / open-questions panel -->
+  <div id="assumptions-panel" class="assumptions-panel" hidden>
+    <div class="assumptions-col" id="assumptions-col">
+      <h3>הנחות</h3><ul id="assumptions-list"></ul>
+    </div>
+    <div class="assumptions-col" id="open-questions-col">
+      <h3>שאלות פתוחות</h3><ul id="open-questions-list"></ul>
+    </div>
+  </div>
+
+  <!-- User stories summary -->
+  <div id="user-stories-panel" class="user-stories-panel" hidden>
+    <h3>סיפורי משתמש</h3>
+    <ul id="user-stories-list"></ul>
+  </div>
+
+  <!-- UC modal -->
+  <div id="uc-modal" class="uc-modal" hidden role="dialog" aria-modal="true">
+    <div class="uc-modal-backdrop" onclick="closeUcModal()"></div>
+    <div class="uc-modal-body"></div>
+  </div>
+
+  <!-- VP export button -->
+  <button class="vp-export-btn" onclick="exportXMI()">Download .xmi (Visual Paradigm)</button>
+
+  <!-- DIAGRAM DATA ONLY, all functions are in uc-diagram-common.js. -->
+  <script>
+    var diagramLayouts = [
+      {
+        svgId: 'diagram-svg-0',
+        boundary: { x: 220, y: 72, width: 860, height: 620 },
+        actors: [
+          { id: 'patron',    label: 'מנוי',                    side: 'left',  x: 124,  y: 200, ucIds: ['uc-reserve','uc-renew','uc-view-account'] },
+          { id: 'librarian', label: 'ספרן',                    side: 'left',  x: 124,  y: 430, ucIds: ['uc-checkout','uc-return','uc-declare-lost'] },
+          { id: 'time',      label: 'שחקן זמן',                side: 'left',  x: 124,  y: 650, ucIds: ['uc-mark-overdue'] },
+          { id: 'ilnetwork', label: 'רשת ההשאלה הבין-ספרייתית', side: 'right', x: 1180, y: 300, ucIds: ['uc-receive-copy'] }
+        ],
+        useCases: [
+          { id: 'uc-reserve',           cx: 346, cy: 150, rx: 96,  ry: 30 },
+          { id: 'uc-renew',             cx: 346, cy: 224, rx: 96,  ry: 30 },
+          { id: 'uc-view-account',      cx: 346, cy: 298, rx: 96,  ry: 34 },
+          { id: 'uc-checkout',          cx: 346, cy: 372, rx: 96,  ry: 30 },
+          { id: 'uc-return',            cx: 346, cy: 446, rx: 96,  ry: 30 },
+          { id: 'uc-declare-lost',      cx: 346, cy: 520, rx: 96,  ry: 34 },
+          { id: 'uc-mark-overdue',      cx: 346, cy: 594, rx: 96,  ry: 34 },
+          { id: 'uc-check-eligibility', cx: 648, cy: 150, rx: 104, ry: 34 },
+          { id: 'uc-receive-copy',      cx: 950, cy: 150, rx: 100, ry: 34 }
+        ],
+        connections: [
+          { from: 'patron',    to: 'uc-reserve',      type: 'association' },
+          { from: 'patron',    to: 'uc-renew',        type: 'association' },
+          { from: 'patron',    to: 'uc-view-account', type: 'association' },
+          { from: 'librarian', to: 'uc-checkout',     type: 'association' },
+          { from: 'librarian', to: 'uc-return',       type: 'association' },
+          { from: 'librarian', to: 'uc-declare-lost', type: 'association' },
+          { from: 'time',      to: 'uc-mark-overdue', type: 'association', timing: 'בכל יום' },
+          { from: 'ilnetwork', to: 'uc-receive-copy', type: 'association' },
+          { from: 'uc-reserve',  to: 'uc-check-eligibility', type: 'include' },
+          { from: 'uc-checkout', to: 'uc-check-eligibility', type: 'include' },
+          { from: 'uc-renew',    to: 'uc-check-eligibility', type: 'include' }
+        ]
+      },
+      {
+        svgId: 'diagram-svg-1',
+        boundary: { x: 220, y: 72, width: 860, height: 560 },
+        actors: [
+          { id: 'branchManager', label: 'מנהל סניף',  side: 'left',  x: 124,  y: 200, ucIds: ['uc-manage-fine','uc-reports'] },
+          { id: 'acquisitions',  label: 'רכז רכש',    side: 'left',  x: 124,  y: 430, ucIds: ['uc-reports','uc-add-title','uc-order-copies'] },
+          { id: 'sysAdmin',      label: 'מנהל מערכת', side: 'right', x: 1180, y: 300, ucIds: ['uc-manage-branches','uc-manage-membership-types','uc-manage-policy'] }
+        ],
+        useCases: [
+          { id: 'uc-manage-fine',             cx: 350, cy: 150, rx: 100, ry: 34 },
+          { id: 'uc-reports',                 cx: 350, cy: 224, rx: 100, ry: 30 },
+          { id: 'uc-add-title',               cx: 350, cy: 298, rx: 100, ry: 34 },
+          { id: 'uc-order-copies',            cx: 350, cy: 372, rx: 100, ry: 34 },
+          { id: 'uc-manage-branches',         cx: 950, cy: 150, rx: 100, ry: 30 },
+          { id: 'uc-manage-membership-types', cx: 950, cy: 224, rx: 100, ry: 34 },
+          { id: 'uc-manage-policy',           cx: 950, cy: 298, rx: 100, ry: 34 }
+        ],
+        connections: [
+          { from: 'branchManager', to: 'uc-manage-fine',             type: 'association' },
+          { from: 'branchManager', to: 'uc-reports',                 type: 'association' },
+          { from: 'acquisitions',  to: 'uc-reports',                 type: 'association' },
+          { from: 'acquisitions',  to: 'uc-add-title',               type: 'association' },
+          { from: 'acquisitions',  to: 'uc-order-copies',            type: 'association' },
+          { from: 'sysAdmin',      to: 'uc-manage-branches',         type: 'association' },
+          { from: 'sysAdmin',      to: 'uc-manage-membership-types', type: 'association' },
+          { from: 'sysAdmin',      to: 'uc-manage-policy',           type: 'association' }
+        ]
+      }
+    ];
+
+    var actorDescriptions = {
+      'patron':        { name: 'מנוי',                     desc: 'מנוי הרשום ברשת הספריות. יוזם הזמנות, חידושים וצפייה בחשבונו.' },
+      'librarian':     { name: 'ספרן',                     desc: 'ספרן בסניף. מטפל בהשאלות, בהחזרות ובהכרזת עותקים אבודים.' },
+      'time':          { name: 'שחקן זמן',                 desc: 'שחקן «system» המייצג את שעון המערכת. מפעיל תהליכים מתוזמנים (למשל סימון איחורים יומי).' },
+      'ilnetwork':     { name: 'רשת ההשאלה הבין-ספרייתית', desc: 'מערכת «system» חיצונית ארצית. יוזמת פנייה למערכת כאשר עותק מושאל בין-ספרייתי מגיע לסניף.' },
+      'branchManager': { name: 'מנהל סניף',                desc: 'מנהל סניף. מוסמך למחוק או להפחית קנסות ולהפיק דוחות תפעוליים.' },
+      'acquisitions':  { name: 'רכז רכש',                  desc: 'רכז רכש. מוסיף כותרים לקטלוג ומזמין עותקים חדשים לסניפים.' },
+      'sysAdmin':      { name: 'מנהל מערכת',               desc: 'מנהל מערכת. מגדיר נתוני-אב: סניפים, סוגי מנויים ומדיניות השאלה וקנסות.' }
+    };
+
+    var assocDescriptions = {
+      'as-patron-reserve': { name: 'מנוי - הצבת הזמנה',        desc: 'המנוי יוזם הצבת הזמנה על כותר. תפקיד: Initiator.' },
+      'as-patron-renew':   { name: 'מנוי - חידוש השאלה',       desc: 'המנוי יוזם חידוש השאלה קיימת. תפקיד: Initiator.' },
+      'as-patron-view':    { name: 'מנוי - צפייה בחשבון המנוי', desc: 'המנוי יוזם צפייה בחשבונו. תפקיד: Initiator.' },
+      'as-lib-checkout':   { name: 'ספרן - השאלת עותק',        desc: 'הספרן יוזם את השאלת העותק למנוי. תפקיד: Initiator.' },
+      'as-lib-return':     { name: 'ספרן - קליטת החזרה',       desc: 'הספרן יוזם את קליטת ההחזרה; חישוב קנס מתבצע בתוך ה-UC. תפקיד: Initiator.' },
+      'as-lib-lost':       { name: 'ספרן - הכרזת עותק כאבוד',   desc: 'הספרן יוזם הכרזת עותק כאבוד. תפקיד: Initiator.' },
+      'as-time-overdue':   { name: 'שחקן זמן - סימון השאלה באיחור', desc: 'שחקן הזמן מפעיל את התהליך היומי לסימון איחורים. תפקיד: Initiator. תזמון: בכל יום.' },
+      'as-iln-receive':    { name: 'רשת ההשאלה - קליטת הודעה על עותק שהתקבל', desc: 'הרשת החיצונית יוזמת את הפנייה עם הגעת עותק. תפקיד: Initiator.' },
+      'inc-reserve-elig':  { name: 'הצבת הזמנה «include» בדיקת כשירות מנוי', desc: 'בדיקת הכשירות מתבצעת תמיד כחלק מהצבת הזמנה.' },
+      'inc-checkout-elig': { name: 'השאלת עותק «include» בדיקת כשירות מנוי', desc: 'בדיקת הכשירות מתבצעת תמיד כחלק מהשאלת עותק.' },
+      'inc-renew-elig':    { name: 'חידוש השאלה «include» בדיקת כשירות מנוי', desc: 'בדיקת הכשירות מתבצעת תמיד כחלק מחידוש השאלה.' },
+      'as-bm-fine':        { name: 'מנהל סניף - מחיקה או הפחתה של קנס', desc: 'מנהל הסניף יוזם מחיקה או הפחתה של קנס. תפקיד: Initiator.' },
+      'as-bm-reports':     { name: 'מנהל סניף - הפקת דוחות',   desc: 'מנהל הסניף יוזם הפקת דוחות תפעוליים. תפקיד: Initiator.' },
+      'as-acq-reports':    { name: 'רכז רכש - הפקת דוחות',    desc: 'רכז הרכש יוזם הפקת דוחות רכש ומלאי. תפקיד: Initiator.' },
+      'as-acq-addtitle':   { name: 'רכז רכש - הוספת כותר לקטלוג', desc: 'רכז הרכש יוזם הוספת כותר חדש לקטלוג. תפקיד: Initiator.' },
+      'as-acq-order':      { name: 'רכז רכש - הזמנת עותקים חדשים', desc: 'רכז הרכש יוזם הזמנת עותקים חדשים. תפקיד: Initiator.' },
+      'as-sa-branches':    { name: 'מנהל מערכת - ניהול סניפים', desc: 'מנהל המערכת יוזם ניהול סניפים. תפקיד: Initiator.' },
+      'as-sa-memtypes':    { name: 'מנהל מערכת - ניהול סוגי מנויים', desc: 'מנהל המערכת יוזם ניהול סוגי מנויים. תפקיד: Initiator.' },
+      'as-sa-policy':      { name: 'מנהל מערכת - הגדרת מדיניות השאלה וקנסות', desc: 'מנהל המערכת יוזם הגדרת מדיניות השאלה וקנסות. תפקיד: Initiator.' }
+    };
+
+    var useCaseDocs = {
+      'uc-reserve': {
+        id: 'uc-reserve', name: 'הצבת הזמנה', primaryActor: 'patron', secondaryActors: [],
+        description: 'מנוי מציב הזמנה על כותר שכל עותקיו מושאלים כדי להיכנס לתור ההמתנה.',
+        preconditions: ['המנוי מזוהה ומחובר למערכת.', 'הכותר קיים בקטלוג הרשת.'],
+        postconditions: ['נוצרה רשומת הזמנה בסטטוס "ממתינה" והמנוי שובץ בתור לפי סדר הגעה.'],
+        scenarios: [
+          { id: 'sc-happy', name: 'מסלול מרכזי', flow: [
+            { kind: 'actor',   actor: 'patron', text: 'מזין את שם הכותר או מספר ה-ISBN בשדה החיפוש' },
+            { kind: 'system',                    text: 'מציג את פרטי הכותר, מספר העותקים הזמינים (0) ואת אורך תור ההמתנה' },
+            { kind: 'include', uc: 'uc-check-eligibility', text: '' },
+            { kind: 'actor',   actor: 'patron', text: 'בוחר את סניף האיסוף המבוקש ומאשר את ההזמנה' },
+            { kind: 'system',                    text: 'מוודא שאין למנוי הזמנה פעילה כפולה על אותו כותר' },
+            { kind: 'system',                    text: 'שומר רשומת הזמנה בסטטוס "ממתינה", משבץ בתור ומציג את המיקום בתור' }
+          ], extensions: [
+            { at: 2, text: 'אם קיים עותק זמין, המערכת מציעה השאלה מיידית במקום הזמנה.' },
+            { at: 5, text: 'אם קיימת הזמנה כפולה, המערכת דוחה ומציגה את מיקום ההזמנה הקיימת.' }
+          ] }
+        ],
+        userStories: [
+          { role: 'מנוי', want: 'להציב הזמנה על כותר תפוס', so: 'אקבל אותו כשיתפנה בלי לבדוק זמינות שוב ושוב' },
+          { role: 'ספרן', want: 'שהמערכת תנהל תור המתנה לפי סדר הגעה', so: 'אחלק עותקים בהוגנות' }
+        ],
+        wireframe: '<div class="wf-screen"><h3 class="wf-heading">הצבת הזמנה על כותר</h3>'
+          + '<div class="wf-row"><label class="wf-label">חיפוש כותר / ISBN</label><input class="wf-input" disabled placeholder="לדוגמה: 978-965-..."></div>'
+          + '<div class="wf-row"><label class="wf-label">סניף איסוף</label><select class="wf-select" disabled><option>בחירת סניף</option></select></div>'
+          + '<table class="wf-table"><thead><tr><th>כותר</th><th>עותקים זמינים</th><th>מיקום בתור</th></tr></thead>'
+          + '<tbody><tr><td>יסודות ההנדסה התעשייתית</td><td>0</td><td>3</td></tr></tbody></table>'
+          + '<div class="wf-actions"><button class="wf-button wf-primary">אישור הזמנה</button><button class="wf-button">ביטול</button></div>'
+          + '<p class="wf-hint">לחיצה על "אישור הזמנה" משבצת אותך בתור ההמתנה לפי סדר הגעה.</p></div>'
+      },
+      'uc-checkout': {
+        id: 'uc-checkout', name: 'השאלת עותק', primaryActor: 'librarian', secondaryActors: ['patron'],
+        description: 'ספרן מבצע השאלת עותק פיזי למנוי ומעדכן את סטטוס העותק במערכת.',
+        preconditions: ['הספרן מזוהה בעמדת ההשאלה.', 'למנוי כרטיס פעיל.'],
+        postconditions: ['נוצרה רשומת השאלה עם תאריך יעד להחזרה וסטטוס העותק עודכן ל"מושאל".'],
+        scenarios: [
+          { id: 'sc-happy', name: 'מסלול מרכזי', flow: [
+            { kind: 'actor',   actor: 'librarian', text: 'סורק את ברקוד כרטיס המנוי' },
+            { kind: 'system',                      text: 'מציג את פרטי המנוי ואת מספר ההשאלות הפעילות שלו' },
+            { kind: 'include', uc: 'uc-check-eligibility', text: '' },
+            { kind: 'actor',   actor: 'librarian', text: 'סורק את ברקוד העותק המבוקש' },
+            { kind: 'system',                      text: 'מחשב תאריך יעד להחזרה לפי מדיניות סוג המנוי' },
+            { kind: 'system',                      text: 'שומר רשומת השאלה, מעדכן סטטוס עותק ל"מושאל" ומדפיס אישור' }
+          ], extensions: [
+            { at: 2, text: 'אם הכרטיס פג תוקף, המערכת חוסמת את ההשאלה ומפנה לחידוש כרטיס.' },
+            { at: 4, text: 'אם העותק שמור להזמנה של מנוי אחר, המערכת מתריעה ומונעת השאלה.' }
+          ] }
+        ],
+        userStories: [
+          { role: 'ספרן', want: 'להשאיל עותק בסריקת ברקוד', so: 'ההשאלה תירשם מהר ובלי טעויות' },
+          { role: 'מנוי', want: 'שההשאלה שלי תירשם עם תאריך החזרה ברור', so: 'אדע מתי להחזיר בלי קנס' }
+        ],
+        wireframe: '<div class="wf-screen"><h3 class="wf-heading">עמדת השאלה</h3>'
+          + '<div class="wf-row"><label class="wf-label">ברקוד כרטיס מנוי</label><input class="wf-input" disabled placeholder="סרוק כרטיס"></div>'
+          + '<div class="wf-row"><label class="wf-label">ברקוד עותק</label><input class="wf-input" disabled placeholder="סרוק עותק"></div>'
+          + '<table class="wf-table"><thead><tr><th>מנוי</th><th>השאלות פעילות</th><th>כשירות</th></tr></thead>'
+          + '<tbody><tr><td>ישראל ישראלי</td><td>2 / 5</td><td>כשיר</td></tr></tbody></table>'
+          + '<div class="wf-row"><label class="wf-label">תאריך החזרה</label><input class="wf-input" disabled placeholder="מחושב אוטומטית"></div>'
+          + '<div class="wf-actions"><button class="wf-button wf-primary">אישור השאלה</button><button class="wf-button">ביטול</button></div></div>'
+      },
+      'uc-renew': {
+        id: 'uc-renew', name: 'חידוש השאלה', primaryActor: 'patron', secondaryActors: [],
+        description: 'מנוי מאריך את תקופת ההשאלה של עותק שברשותו כאשר אין עליו הזמנה ממתינה.',
+        preconditions: ['למנוי השאלה פעילה על העותק.', 'המנוי מזוהה ומחובר למערכת.'],
+        postconditions: ['תאריך היעד של ההשאלה עודכן קדימה לפי מדיניות סוג המנוי.'],
+        scenarios: [
+          { id: 'sc-happy', name: 'מסלול מרכזי', flow: [
+            { kind: 'actor',   actor: 'patron', text: 'בוחר מרשימת ההשאלות הפעילות את העותק לחידוש' },
+            { kind: 'system',                    text: 'בודק שלא קיימת הזמנה ממתינה על הכותר' },
+            { kind: 'include', uc: 'uc-check-eligibility', text: '' },
+            { kind: 'system',                    text: 'בודק שטרם נוצלה מכסת החידושים המותרת לעותק' },
+            { kind: 'actor',   actor: 'patron', text: 'מאשר את בקשת החידוש' },
+            { kind: 'system',                    text: 'מעדכן את תאריך היעד ומציג את התאריך החדש' }
+          ], extensions: [
+            { at: 2, text: 'אם קיימת הזמנה ממתינה, המערכת דוחה את החידוש ומבקשת החזרה עד תאריך היעד.' },
+            { at: 4, text: 'אם נוצלה מכסת החידושים, המערכת דוחה ומציגה את המכסה שנוצלה.' }
+          ] }
+        ],
+        userStories: [
+          { role: 'מנוי', want: 'לחדש השאלה בלי להגיע לסניף', so: 'אמשיך להשתמש בעותק בלי קנס' },
+          { role: 'ספרן', want: 'שהמערכת תמנע חידוש כשיש הזמנה ממתינה', so: 'מנויים ממתינים לא ייפגעו' }
+        ],
+        wireframe: '<div class="wf-screen"><h3 class="wf-heading">חידוש השאלה</h3>'
+          + '<table class="wf-table"><thead><tr><th>עותק</th><th>תאריך יעד</th><th>חידושים שנוצלו</th><th></th></tr></thead>'
+          + '<tbody><tr><td>ניתוח מערכות מידע</td><td>12/07/2026</td><td>1 / 2</td><td><button class="wf-button wf-primary">חדש</button></td></tr></tbody></table>'
+          + '<p class="wf-hint">חידוש אפשרי רק כאשר אין הזמנה ממתינה על הכותר וטרם נוצלה מכסת החידושים.</p></div>'
+      },
+      'uc-return': {
+        id: 'uc-return', name: 'קליטת החזרה', primaryActor: 'librarian', secondaryActors: [],
+        description: 'ספרן קולט החזרת עותק, מעדכן את סטטוסו וכאשר ההחזרה באיחור המערכת מחשבת ורושמת קנס.',
+        preconditions: ['העותק רשום כמושאל במערכת.', 'הספרן מזוהה בעמדת ההחזרה.'],
+        postconditions: ['סטטוס העותק עודכן ל"זמין" או שובץ להזמנה ממתינה; אם היה איחור נרשם קנס לחשבון המנוי.'],
+        scenarios: [
+          { id: 'sc-happy', name: 'מסלול מרכזי', flow: [
+            { kind: 'actor',   actor: 'librarian', text: 'סורק את ברקוד העותק המוחזר' },
+            { kind: 'system',                      text: 'מאתר את רשומת ההשאלה הפתוחה ומשווה את תאריך ההחזרה לתאריך היעד' },
+            { kind: 'system',                      text: 'אם ההחזרה באיחור, מחשב קנס לפי ימי האיחור ומדיניות הקנסות ורושם אותו לחשבון המנוי' },
+            { kind: 'system',                      text: 'בודק אם קיימת הזמנה ממתינה על הכותר' },
+            { kind: 'actor',   actor: 'librarian', text: 'מניח את העותק במדף האיסוף או במדף הכללי לפי הנחיית המערכת' },
+            { kind: 'system',                      text: 'מעדכן את סטטוס העותק ("שמור להזמנה" או "זמין") וסוגר את רשומת ההשאלה' }
+          ], extensions: [
+            { at: 2, text: 'אם העותק אינו רשום כמושאל, המערכת מתריעה על החזרה לא צפויה.' },
+            { at: 3, text: 'אם המנוי פטור מקנסות לפי סוגו, המערכת מדלגת על חישוב הקנס.' }
+          ] }
+        ],
+        userStories: [
+          { role: 'ספרן', want: 'לקלוט החזרה ולראות מיד אם יש איחור', so: 'הקנס יירשם נכון במעמד ההחזרה' },
+          { role: 'מנהל סניף', want: 'שכל קנס איחור ייווצר אוטומטית בקליטת ההחזרה', so: 'הגבייה תהיה עקבית' }
+        ],
+        wireframe: '<div class="wf-screen"><h3 class="wf-heading">קליטת החזרה</h3>'
+          + '<div class="wf-row"><label class="wf-label">ברקוד עותק</label><input class="wf-input" disabled placeholder="סרוק עותק"></div>'
+          + '<table class="wf-table"><thead><tr><th>עותק</th><th>תאריך יעד</th><th>ימי איחור</th><th>קנס</th></tr></thead>'
+          + '<tbody><tr><td>יסודות ההנדסה התעשייתית</td><td>05/07/2026</td><td>4</td><td>8 ש"ח</td></tr></tbody></table>'
+          + '<div class="wf-image-box">[הנחיית מדף: שמור להזמנה מס\' 3182]</div>'
+          + '<div class="wf-actions"><button class="wf-button wf-primary">אישור החזרה</button></div></div>'
+      },
+      'uc-mark-overdue': {
+        id: 'uc-mark-overdue', name: 'סימון השאלה באיחור', primaryActor: 'time', secondaryActors: [],
+        description: 'תהליך מתוזמן יומי המסמן השאלות שחלף תאריך היעד שלהן כמאחרות ומעדכן את חשבון המנוי.',
+        preconditions: ['קיימות השאלות פעילות שתאריך היעד שלהן חלף.'],
+        postconditions: ['ההשאלות שחלף מועדן סומנו "באיחור" וחשבון המנוי עודכן; מנויים מעל הסף סומנו כחסומים.'],
+        scenarios: [
+          { id: 'sc-happy', name: 'מסלול מרכזי', flow: [
+            { kind: 'actor',  actor: 'time', text: 'מפעיל את התהליך היומי בשעה קבועה' },
+            { kind: 'system',                text: 'סורק את כלל ההשאלות הפעילות ומאתר את אלו שתאריך היעד שלהן חלף' },
+            { kind: 'system',                text: 'מסמן כל השאלה כזו בסטטוס "באיחור"' },
+            { kind: 'system',                text: 'מעדכן את מונה ימי האיחור המצטבר בחשבון המנוי' },
+            { kind: 'system',                text: 'מסמן מנויים שחצו את סף האיחור כ"חסומים להשאלה חדשה"' }
+          ], extensions: [
+            { at: 2, text: 'אם אין השאלות באיחור, התהליך מסתיים ללא שינוי.' }
+          ] }
+        ],
+        userStories: [
+          { role: 'מנהל סניף', want: 'שהמערכת תסמן איחורים אוטומטית בכל יום', so: 'לא אצטרך לבדוק השאלות ידנית' },
+          { role: 'ספרן', want: 'שמנוי מאחר יסומן כחסום', so: 'לא אשאיל לו עותק נוסף בטעות' }
+        ],
+        wireframe: ''
+      },
+      'uc-declare-lost': {
+        id: 'uc-declare-lost', name: 'הכרזת עותק כאבוד', primaryActor: 'librarian', secondaryActors: [],
+        description: 'ספרן מכריז עותק שלא הוחזר לאורך זמן או שאבד בפועל כאבוד ומחייב את המנוי בעלות ההחלפה.',
+        preconditions: ['העותק רשום כמושאל וחלף פרק זמן ממושך מתאריך היעד.'],
+        postconditions: ['סטטוס העותק עודכן ל"אבוד" ונרשם חיוב עלות החלפה לחשבון המנוי.'],
+        scenarios: [
+          { id: 'sc-happy', name: 'מסלול מרכזי', flow: [
+            { kind: 'actor',  actor: 'librarian', text: 'מאתר את רשומת ההשאלה של העותק שלא הוחזר' },
+            { kind: 'system',                     text: 'מציג את פרטי העותק, ימי האיחור ועלות ההחלפה מהקטלוג' },
+            { kind: 'actor',  actor: 'librarian', text: 'מאשר את הכרזת העותק כאבוד' },
+            { kind: 'system',                     text: 'מעדכן את סטטוס העותק ל"אבוד" ומסיר אותו ממלאי הסניף' },
+            { kind: 'system',                     text: 'רושם חיוב עלות החלפה לחשבון המנוי וסוגר את רשומת ההשאלה' }
+          ], extensions: [
+            { at: 3, text: 'אם המנוי מדווח שהעותק נמצא לפני האישור, הספרן מבטל ועובר לקליטת החזרה.' }
+          ] }
+        ],
+        userStories: [
+          { role: 'ספרן', want: 'להכריז עותק שאבד ולחייב את המנוי', so: 'המלאי ישקף את המצב האמיתי' },
+          { role: 'מנהל סניף', want: 'שעלות ההחלפה תיגבה אוטומטית', so: 'הפסד העותק יכוסה' }
+        ],
+        wireframe: '<div class="wf-screen"><h3 class="wf-heading">הכרזת עותק כאבוד</h3>'
+          + '<table class="wf-table"><thead><tr><th>עותק</th><th>מנוי</th><th>ימי איחור</th><th>עלות החלפה</th></tr></thead>'
+          + '<tbody><tr><td>תכן מערכות מידע</td><td>דנה כהן</td><td>62</td><td>140 ש"ח</td></tr></tbody></table>'
+          + '<p class="wf-hint">הכרזה כאבוד מסירה את העותק מהמלאי ומחייבת את חשבון המנוי בעלות ההחלפה.</p>'
+          + '<div class="wf-actions"><button class="wf-button wf-primary">הכרז כאבוד</button><button class="wf-button">ביטול</button></div></div>'
+      },
+      'uc-receive-copy': {
+        id: 'uc-receive-copy', name: 'קליטת הודעה על עותק שהתקבל', primaryActor: 'ilnetwork', secondaryActors: [],
+        description: 'רשת ההשאלה הבין-ספרייתית מודיעה שעותק שהוזמן ממקור בין-ספרייתי הגיע לסניף, והמערכת קולטת ומשבצת אותו להזמנה.',
+        preconditions: ['קיימת הזמנה בין-ספרייתית פתוחה במערכת.'],
+        postconditions: ['העותק נרשם כזמין לאיסוף עבור המנוי המזמין וההזמנה עודכנה ל"מוכנה לאיסוף".'],
+        scenarios: [
+          { id: 'sc-happy', name: 'מסלול מרכזי', flow: [
+            { kind: 'actor',  actor: 'ilnetwork', text: 'שולחת הודעת הגעה עם מזהה ההזמנה ומזהה העותק' },
+            { kind: 'system',                     text: 'מאמת את מזהה ההזמנה מול הזמנה בין-ספרייתית פתוחה' },
+            { kind: 'system',                     text: 'רושם את העותק כפריט זמני במלאי הסניף' },
+            { kind: 'system',                     text: 'משבץ את העותק להזמנה ומעדכן אותה ל"מוכנה לאיסוף"' },
+            { kind: 'system',                     text: 'רושם את המנוי המזמין לרשימת ההתראות לאיסוף' }
+          ], extensions: [
+            { at: 2, text: 'אם מזהה ההזמנה אינו תואם הזמנה פתוחה, המערכת דוחה את ההודעה ורושמת אותה לבירור.' }
+          ] }
+        ],
+        userStories: [
+          { role: 'ספרן', want: 'שהמערכת תקלוט אוטומטית עותקים שהגיעו מהרשת', so: 'לא אצטרך להזין אותם ידנית' },
+          { role: 'מנוי', want: 'שהזמנתי הבין-ספרייתית תסומן כמוכנה לאיסוף מיד עם הגעתה', so: 'אבוא לאסוף בזמן' }
+        ],
+        wireframe: ''
+      },
+      'uc-view-account': {
+        id: 'uc-view-account', name: 'צפייה בחשבון המנוי', primaryActor: 'patron', secondaryActors: [],
+        description: 'מנוי צופה בהשאלות הפעילות, בהזמנות ובקנסות הפתוחים בחשבונו.',
+        preconditions: ['המנוי מזוהה ומחובר למערכת.'],
+        postconditions: ['הוצג למנוי מצב חשבונו העדכני.'],
+        scenarios: [
+          { id: 'sc-happy', name: 'מסלול מרכזי', flow: [
+            { kind: 'actor',  actor: 'patron', text: 'בוחר בתפריט "החשבון שלי"' },
+            { kind: 'system',                  text: 'טוען את רשימת ההשאלות הפעילות עם תאריכי היעד' },
+            { kind: 'system',                  text: 'טוען את ההזמנות הממתינות ואת מיקומן בתור' },
+            { kind: 'system',                  text: 'טוען את יתרת הקנסות הפתוחים' },
+            { kind: 'actor',  actor: 'patron', text: 'מסנן את התצוגה לפי סוג פריט (השאלות / הזמנות / קנסות)' },
+            { kind: 'system',                  text: 'מציג את הרשימה המסוננת' }
+          ], extensions: [
+            { at: 2, text: 'אם אין פעילות בחשבון, המערכת מציגה הודעת "אין פריטים להצגה".' }
+          ] }
+        ],
+        userStories: [
+          { role: 'מנוי', want: 'לראות את כל ההשאלות וההזמנות שלי במקום אחד', so: 'אדע מה עליי להחזיר ומה ממתין' },
+          { role: 'מנוי', want: 'לראות את יתרת הקנסות שלי', so: 'אשלם לפני שאחסם להשאלות' }
+        ],
+        wireframe: '<div class="wf-screen"><h3 class="wf-heading">החשבון שלי</h3>'
+          + '<div class="wf-actions"><button class="wf-button">השאלות</button><button class="wf-button">הזמנות</button><button class="wf-button">קנסות</button></div>'
+          + '<table class="wf-table"><thead><tr><th>פריט</th><th>סטטוס</th><th>תאריך יעד / מיקום</th></tr></thead>'
+          + '<tbody><tr><td>ניתוח מערכות מידע</td><td>מושאל</td><td>12/07/2026</td></tr>'
+          + '<tr><td>יסודות ההנדסה</td><td>ממתינה</td><td>מקום 3 בתור</td></tr></tbody></table>'
+          + '<p class="wf-hint">יתרת קנסות פתוחה: 8 ש"ח.</p></div>'
+      },
+      'uc-check-eligibility': {
+        id: 'uc-check-eligibility', name: 'בדיקת כשירות מנוי',
+        description: 'תת-התנהגות משותפת המוודאת שהמנוי כשיר לפעולה: אין לו קנס מעל הסף ולא חרג ממכסת ההשאלות.',
+        preconditions: ['המנוי מזוהה במערכת.'],
+        postconditions: ['נקבע אם המנוי כשיר להמשך הפעולה, עם סיבה במקרה של אי-כשירות.'],
+        scenarios: [
+          { id: 'sc-elig', name: 'בדיקת כשירות', flow: [
+            { kind: 'system', text: 'מאחזר את יתרת הקנסות הפתוחים של המנוי' },
+            { kind: 'system', text: 'בודק שהיתרה אינה עולה על סף החסימה' },
+            { kind: 'system', text: 'סופר את מספר ההשאלות הפעילות ומשווה למכסת סוג המנוי' },
+            { kind: 'system', text: 'מחזיר "כשיר" או "לא כשיר" בצירוף הסיבה' }
+          ], extensions: [
+            { at: 2, text: 'אם היתרה מעל הסף, מחזיר "לא כשיר: קנס פתוח".' },
+            { at: 3, text: 'אם נוצלה המכסה, מחזיר "לא כשיר: חריגה ממכסת השאלות".' }
+          ] }
+        ],
+        userStories: [
+          { role: 'ספרן', want: 'שהמערכת תוודא כשירות מנוי אוטומטית לפני כל פעולה', so: 'לא אשאיל למנוי חסום' }
+        ],
+        wireframe: ''
+      },
+      'uc-manage-fine': {
+        id: 'uc-manage-fine', name: 'מחיקה או הפחתה של קנס', primaryActor: 'branchManager', secondaryActors: [],
+        description: 'מנהל סניף מוחק או מפחית קנס שנרשם למנוי, בכפוף לנימוק מתועד.',
+        preconditions: ['קיים קנס פתוח בחשבון המנוי.', 'מנהל הסניף מזוהה והורשה.'],
+        postconditions: ['סכום הקנס עודכן או אופס ונרשמה רשומת ביקורת עם הנימוק ומזהה המנהל.'],
+        scenarios: [
+          { id: 'sc-happy', name: 'מסלול מרכזי', flow: [
+            { kind: 'actor',  actor: 'branchManager', text: 'מאתר את חשבון המנוי לפי מספר מנוי או שם' },
+            { kind: 'system',                         text: 'מציג את רשימת הקנסות הפתוחים ואת פרטי ההשאלה שגרמה לכל קנס' },
+            { kind: 'actor',  actor: 'branchManager', text: 'בוחר קנס ומזין סכום מופחת או בוחר מחיקה מלאה' },
+            { kind: 'actor',  actor: 'branchManager', text: 'מזין נימוק לשינוי' },
+            { kind: 'system',                         text: 'מעדכן את סכום הקנס ורושם רשומת ביקורת עם הנימוק ומזהה המנהל' },
+            { kind: 'system',                         text: 'מציג את היתרה המעודכנת בחשבון המנוי' }
+          ], extensions: [
+            { at: 4, text: 'אם לא הוזן נימוק, המערכת חוסמת את השמירה.' }
+          ] }
+        ],
+        userStories: [
+          { role: 'מנהל סניף', want: 'להפחית קנס במקרים חריגים עם נימוק', so: 'אפעיל שיקול דעת מול מנויים' },
+          { role: 'מנהל מערכת', want: 'שכל שינוי קנס יתועד ברשומת ביקורת', so: 'תהיה שקיפות ובקרה' }
+        ],
+        wireframe: '<div class="wf-screen"><h3 class="wf-heading">ניהול קנס מנוי</h3>'
+          + '<div class="wf-row"><label class="wf-label">חיפוש מנוי</label><input class="wf-input" disabled placeholder="מספר מנוי או שם"></div>'
+          + '<table class="wf-table"><thead><tr><th>קנס</th><th>סכום</th><th>סיבה</th></tr></thead>'
+          + '<tbody><tr><td>#4471</td><td>24 ש"ח</td><td>איחור 12 ימים</td></tr></tbody></table>'
+          + '<div class="wf-row"><label class="wf-label">סכום מעודכן</label><input class="wf-input" disabled placeholder="0 = מחיקה מלאה"></div>'
+          + '<div class="wf-row"><label class="wf-label">נימוק</label><input class="wf-input" disabled placeholder="חובה"></div>'
+          + '<div class="wf-actions"><button class="wf-button wf-primary">שמירה</button></div></div>'
+      },
+      'uc-reports': {
+        id: 'uc-reports', name: 'הפקת דוחות', primaryActor: 'branchManager', secondaryActors: ['acquisitions'],
+        description: 'מנהל סניף או רכז רכש מפיק דוח תפעולי על השאלות, קנסות או מלאי לפי חתכי תאריך וסניף.',
+        preconditions: ['למפיק הרשאת צפייה בדוחות.'],
+        postconditions: ['הופק דוח לצפייה או להורדה לפי הפרמטרים שנבחרו ונרשמה הפקתו ביומן.'],
+        scenarios: [
+          { id: 'sc-happy', name: 'מסלול מרכזי', flow: [
+            { kind: 'actor',  actor: 'branchManager', text: 'בוחר את סוג הדוח (השאלות / קנסות / מלאי)' },
+            { kind: 'actor',  actor: 'branchManager', text: 'מגדיר טווח תאריכים וסניף' },
+            { kind: 'system',                         text: 'אוסף את הנתונים מהמערכת לפי הפרמטרים שנבחרו' },
+            { kind: 'system',                         text: 'מחשב את הסיכומים ומציג את הדוח בטבלה ובתרשים' },
+            { kind: 'actor',  actor: 'branchManager', text: 'מוריד את הדוח כקובץ' },
+            { kind: 'system',                         text: 'מייצר קובץ להורדה ורושם את הפקת הדוח ביומן' }
+          ], extensions: [
+            { at: 3, text: 'אם אין נתונים בטווח שנבחר, המערכת מציגה דוח ריק עם הודעה מתאימה.' }
+          ] }
+        ],
+        userStories: [
+          { role: 'מנהל סניף', want: 'להפיק דוח קנסות והשאלות לסניף', so: 'אנהל את פעילות הסניף לפי נתונים' },
+          { role: 'רכז רכש', want: 'להפיק דוח מלאי וביקוש לכותרים', so: 'אחליט אילו עותקים להזמין' }
+        ],
+        wireframe: '<div class="wf-screen"><h3 class="wf-heading">הפקת דוחות</h3>'
+          + '<div class="wf-row"><label class="wf-label">סוג דוח</label><select class="wf-select" disabled><option>השאלות</option><option>קנסות</option><option>מלאי</option></select></div>'
+          + '<div class="wf-row"><label class="wf-label">מתאריך</label><input class="wf-input" disabled placeholder="01/06/2026"></div>'
+          + '<div class="wf-row"><label class="wf-label">עד תאריך</label><input class="wf-input" disabled placeholder="30/06/2026"></div>'
+          + '<div class="wf-row"><label class="wf-label">סניף</label><select class="wf-select" disabled><option>כל הסניפים</option></select></div>'
+          + '<div class="wf-image-box">[תצוגה מקדימה של תרשים הדוח]</div>'
+          + '<div class="wf-actions"><button class="wf-button wf-primary">הפקה</button><button class="wf-button">הורדה כקובץ</button></div></div>'
+      },
+      'uc-add-title': {
+        id: 'uc-add-title', name: 'הוספת כותר לקטלוג', primaryActor: 'acquisitions', secondaryActors: [],
+        description: 'רכז רכש מוסיף כותר חדש לקטלוג הרשת עם פרטיו הביבליוגרפיים ועלות ההחלפה.',
+        preconditions: ['רכז הרכש מזוהה והורשה.', 'הכותר אינו קיים כבר בקטלוג.'],
+        postconditions: ['נוצרה רשומת כותר חדשה בקטלוג הרשת.'],
+        scenarios: [
+          { id: 'sc-happy', name: 'מסלול מרכזי', flow: [
+            { kind: 'actor',  actor: 'acquisitions', text: 'מזין ISBN, שם הכותר, מחבר ושנת הוצאה' },
+            { kind: 'system',                        text: 'מוודא שה-ISBN אינו קיים כבר בקטלוג' },
+            { kind: 'actor',  actor: 'acquisitions', text: 'מזין קטגוריה נושאית ועלות החלפה' },
+            { kind: 'system',                        text: 'מאמת את שלמות השדות הנדרשים' },
+            { kind: 'system',                        text: 'שומר את רשומת הכותר ומציג הודעת אישור עם מזהה הכותר' }
+          ], extensions: [
+            { at: 2, text: 'אם ה-ISBN כבר קיים, המערכת מפנה לרשומה הקיימת להוספת עותקים.' }
+          ] }
+        ],
+        userStories: [
+          { role: 'רכז רכש', want: 'להוסיף כותר חדש לקטלוג הרשת', so: 'ניתן יהיה להזמין ולהשאיל אותו' },
+          { role: 'ספרן', want: 'שכל כותר בקטלוג יכלול עלות החלפה', so: 'חיוב עותק אבוד יחושב נכון' }
+        ],
+        wireframe: '<div class="wf-screen"><h3 class="wf-heading">הוספת כותר לקטלוג</h3>'
+          + '<div class="wf-row"><label class="wf-label">ISBN</label><input class="wf-input" disabled placeholder="978-965-..."></div>'
+          + '<div class="wf-row"><label class="wf-label">שם הכותר</label><input class="wf-input" disabled></div>'
+          + '<div class="wf-row"><label class="wf-label">מחבר</label><input class="wf-input" disabled></div>'
+          + '<div class="wf-row"><label class="wf-label">קטגוריה</label><select class="wf-select" disabled><option>הנדסת תעשייה</option></select></div>'
+          + '<div class="wf-row"><label class="wf-label">עלות החלפה</label><input class="wf-input" disabled placeholder="בש\'\'ח"></div>'
+          + '<div class="wf-actions"><button class="wf-button wf-primary">שמירת כותר</button></div></div>'
+      },
+      'uc-order-copies': {
+        id: 'uc-order-copies', name: 'הזמנת עותקים חדשים', primaryActor: 'acquisitions', secondaryActors: [],
+        description: 'רכז רכש מזמין עותקים פיזיים נוספים של כותר קיים עבור סניף.',
+        preconditions: ['הכותר קיים בקטלוג.', 'רכז הרכש מזוהה והורשה.'],
+        postconditions: ['נרשמה הזמנת רכש לעותקים בסטטוס "מוזמן".'],
+        scenarios: [
+          { id: 'sc-happy', name: 'מסלול מרכזי', flow: [
+            { kind: 'actor',  actor: 'acquisitions', text: 'בוחר כותר קיים מהקטלוג' },
+            { kind: 'system',                        text: 'מציג את מספר העותקים הקיימים לכל סניף' },
+            { kind: 'actor',  actor: 'acquisitions', text: 'מזין את מספר העותקים לרכישה ואת סניף היעד' },
+            { kind: 'system',                        text: 'מחשב את עלות ההזמנה לפי מחיר העותק' },
+            { kind: 'actor',  actor: 'acquisitions', text: 'מאשר את ההזמנה' },
+            { kind: 'system',                        text: 'שומר הזמנת רכש בסטטוס "מוזמן" ומציג מזהה הזמנה' }
+          ], extensions: [
+            { at: 3, text: 'אם המספר שהוזן אינו חיובי, המערכת חוסמת ומבקשת ערך תקין.' }
+          ] }
+        ],
+        userStories: [
+          { role: 'רכז רכש', want: 'להזמין עותקים נוספים לכותר מבוקש', so: 'תור ההמתנה יתקצר' },
+          { role: 'מנהל סניף', want: 'שהזמנות רכש יירשמו עם סניף יעד', so: 'העותקים יגיעו לסניף הנכון' }
+        ],
+        wireframe: '<div class="wf-screen"><h3 class="wf-heading">הזמנת עותקים חדשים</h3>'
+          + '<div class="wf-row"><label class="wf-label">כותר</label><input class="wf-input" disabled placeholder="חיפוש בקטלוג"></div>'
+          + '<table class="wf-table"><thead><tr><th>סניף</th><th>עותקים קיימים</th><th>ממתינים בתור</th></tr></thead>'
+          + '<tbody><tr><td>באר שבע</td><td>2</td><td>7</td></tr></tbody></table>'
+          + '<div class="wf-row"><label class="wf-label">כמות לרכישה</label><input class="wf-input" disabled placeholder="לדוגמה: 3"></div>'
+          + '<div class="wf-row"><label class="wf-label">סניף יעד</label><select class="wf-select" disabled><option>באר שבע</option></select></div>'
+          + '<div class="wf-actions"><button class="wf-button wf-primary">אישור הזמנה</button></div></div>'
+      },
+      'uc-manage-branches': {
+        id: 'uc-manage-branches', name: 'ניהול סניפים', primaryActor: 'sysAdmin', secondaryActors: [],
+        description: 'מנהל מערכת מוסיף, מעדכן או משבית סניף ברשת ומגדיר את פרטיו.',
+        preconditions: ['מנהל המערכת מזוהה והורשה.'],
+        postconditions: ['רשומת הסניף נוצרה או עודכנה במערכת.'],
+        scenarios: [
+          { id: 'sc-happy', name: 'מסלול מרכזי', flow: [
+            { kind: 'actor',  actor: 'sysAdmin', text: 'בוחר "הוספת סניף" או בוחר סניף קיים לעריכה' },
+            { kind: 'actor',  actor: 'sysAdmin', text: 'מזין את שם הסניף, כתובת ושעות פעילות' },
+            { kind: 'system',                    text: 'מאמת שאין סניף כפול באותו שם' },
+            { kind: 'actor',  actor: 'sysAdmin', text: 'מגדיר את מספר עמדות ההשאלה בסניף' },
+            { kind: 'system',                    text: 'שומר את רשומת הסניף ומציג אותה ברשימת הסניפים' }
+          ], extensions: [
+            { at: 3, text: 'אם השם כבר קיים, המערכת מתריעה ומונעת שמירה.' }
+          ] }
+        ],
+        userStories: [
+          { role: 'מנהל מערכת', want: 'להוסיף ולעדכן סניפים ברשת', so: 'המערכת תשקף את מבנה הרשת בפועל' },
+          { role: 'מנהל סניף', want: 'ששעות הפעילות של הסניף יופיעו במערכת', so: 'מנויים יראו מידע נכון' }
+        ],
+        wireframe: '<div class="wf-screen"><h3 class="wf-heading">ניהול סניפים</h3>'
+          + '<div class="wf-row"><label class="wf-label">שם הסניף</label><input class="wf-input" disabled></div>'
+          + '<div class="wf-row"><label class="wf-label">כתובת</label><input class="wf-input" disabled></div>'
+          + '<div class="wf-row"><label class="wf-label">שעות פעילות</label><input class="wf-input" disabled placeholder="08:00-20:00"></div>'
+          + '<div class="wf-row"><label class="wf-label">עמדות השאלה</label><input class="wf-input" disabled placeholder="לדוגמה: 4"></div>'
+          + '<div class="wf-actions"><button class="wf-button wf-primary">שמירה</button><button class="wf-button">השבתת סניף</button></div></div>'
+      },
+      'uc-manage-membership-types': {
+        id: 'uc-manage-membership-types', name: 'ניהול סוגי מנויים', primaryActor: 'sysAdmin', secondaryActors: [],
+        description: 'מנהל מערכת מגדיר סוגי מנוי ואת מכסות ההשאלה, החידושים והקנסות של כל סוג.',
+        preconditions: ['מנהל המערכת מזוהה והורשה.'],
+        postconditions: ['רשומת סוג המנוי נשמרה ותשמש בחישובי כשירות ומכסות.'],
+        scenarios: [
+          { id: 'sc-happy', name: 'מסלול מרכזי', flow: [
+            { kind: 'actor',  actor: 'sysAdmin', text: 'בוחר "הוספת סוג מנוי" או סוג קיים לעריכה' },
+            { kind: 'actor',  actor: 'sysAdmin', text: 'מזין את שם הסוג ואת מכסת ההשאלות המרבית' },
+            { kind: 'actor',  actor: 'sysAdmin', text: 'מזין את תקופת ההשאלה ומספר החידושים המותר' },
+            { kind: 'actor',  actor: 'sysAdmin', text: 'מזין את סף הקנס לחסימת השאלות' },
+            { kind: 'system',                    text: 'מאמת שהערכים חיוביים ועקביים' },
+            { kind: 'system',                    text: 'שומר את סוג המנוי ומציג אותו ברשימת הסוגים' }
+          ], extensions: [
+            { at: 5, text: 'אם ערך אינו חוקי, המערכת מסמנת את השדה ומונעת שמירה.' }
+          ] }
+        ],
+        userStories: [
+          { role: 'מנהל מערכת', want: 'להגדיר מכסות שונות לסוגי מנוי', so: 'סטודנט וסגל יקבלו תנאים מתאימים' },
+          { role: 'ספרן', want: 'שמכסת ההשאלות תיגזר מסוג המנוי', so: 'בדיקת הכשירות תפעל נכון' }
+        ],
+        wireframe: '<div class="wf-screen"><h3 class="wf-heading">ניהול סוגי מנויים</h3>'
+          + '<div class="wf-row"><label class="wf-label">שם הסוג</label><input class="wf-input" disabled placeholder="סטודנט / סגל"></div>'
+          + '<div class="wf-row"><label class="wf-label">מכסת השאלות</label><input class="wf-input" disabled placeholder="לדוגמה: 5"></div>'
+          + '<div class="wf-row"><label class="wf-label">תקופת השאלה (ימים)</label><input class="wf-input" disabled placeholder="14"></div>'
+          + '<div class="wf-row"><label class="wf-label">חידושים מותרים</label><input class="wf-input" disabled placeholder="2"></div>'
+          + '<div class="wf-row"><label class="wf-label">סף קנס לחסימה</label><input class="wf-input" disabled placeholder="בש\'\'ח"></div>'
+          + '<div class="wf-actions"><button class="wf-button wf-primary">שמירה</button></div></div>'
+      },
+      'uc-manage-policy': {
+        id: 'uc-manage-policy', name: 'הגדרת מדיניות השאלה וקנסות', primaryActor: 'sysAdmin', secondaryActors: [],
+        description: 'מנהל מערכת מגדיר את חוקי המדיניות הכלל-רשתיים: תעריף קנס יומי, סף חסימה וימי איחור להכרזת אובדן.',
+        preconditions: ['מנהל המערכת מזוהה והורשה.'],
+        postconditions: ['פרמטרי המדיניות נשמרו ויחולו על חישובי הקנס והכשירות.'],
+        scenarios: [
+          { id: 'sc-happy', name: 'מסלול מרכזי', flow: [
+            { kind: 'actor',  actor: 'sysAdmin', text: 'פותח את מסך מדיניות הרשת' },
+            { kind: 'actor',  actor: 'sysAdmin', text: 'מזין את תעריף הקנס היומי לכל יום איחור' },
+            { kind: 'actor',  actor: 'sysAdmin', text: 'מזין את סף הקנס המצטבר לחסימת מנוי' },
+            { kind: 'actor',  actor: 'sysAdmin', text: 'מזין את מספר ימי האיחור להכרזת עותק כאבוד' },
+            { kind: 'system',                    text: 'מאמת את סבירות הערכים שהוזנו' },
+            { kind: 'system',                    text: 'שומר את פרמטרי המדיניות ורושם רשומת ביקורת' }
+          ], extensions: [
+            { at: 5, text: 'אם ערך חורג מהטווח המותר, המערכת מונעת שמירה ומציגה את הטווח.' }
+          ] }
+        ],
+        userStories: [
+          { role: 'מנהל מערכת', want: 'להגדיר תעריף קנס וסף חסימה אחידים לרשת', so: 'המדיניות תהיה עקבית בכל הסניפים' },
+          { role: 'מנהל סניף', want: 'שכל חישובי הקנס יתבססו על מדיניות מרכזית', so: 'לא יהיו הבדלים שרירותיים בין סניפים' }
+        ],
+        wireframe: '<div class="wf-screen"><h3 class="wf-heading">מדיניות השאלה וקנסות</h3>'
+          + '<div class="wf-row"><label class="wf-label">קנס יומי (ש"ח ליום)</label><input class="wf-input" disabled placeholder="2"></div>'
+          + '<div class="wf-row"><label class="wf-label">סף קנס לחסימה</label><input class="wf-input" disabled placeholder="30"></div>'
+          + '<div class="wf-row"><label class="wf-label">ימי איחור להכרזת אובדן</label><input class="wf-input" disabled placeholder="60"></div>'
+          + '<p class="wf-hint">הפרמטרים חלים על כל הסניפים ומשמשים את חישוב הקנס ובדיקת הכשירות.</p>'
+          + '<div class="wf-actions"><button class="wf-button wf-primary">שמירת מדיניות</button></div></div>'
+      }
+    };
+
+    var diagramModel = (function () {
+      function uc(id, x, y, rx, ry) {
+        var d = useCaseDocs[id];
+        return { kind: 'useCase', id: id, name: d.name, description: d.description,
+          primaryActor: d.primaryActor, secondaryActors: d.secondaryActors || [],
+          preconditions: d.preconditions || [], postconditions: d.postconditions || [],
+          scenarios: d.scenarios || [], userStories: d.userStories || [],
+          wireframe: d.wireframe || '', x: x, y: y, rx: rx, ry: ry };
+      }
+      function actor(id, type, side) {
+        return { kind: 'actor', id: id, name: actorDescriptions[id].name, actorType: type, side: side, x: 0, y: 0 };
+      }
+      var SPLIT = 'Split by actor groups: מחזור השאלות / מינהלה, אחריות נבדלת (16 use cases > 8)';
+      return {
+        kind: 'use-case',
+        title: 'מערכת ניהול השאלות ברשת הספריות, ספר פתוח',
+        assumptions: [
+          'כל מנוי מזוהה במערכת באמצעות מספר מנוי יחיד.',
+          'חישוב הקנס וגבייתו מתבצעים בתוך "קליטת החזרה" ואינם מקרה שימוש נפרד.',
+          'שתי קבוצות השחקנים, מחזור ההשאלה והמינהלה, נבדלות ואינן חולקות שחקן.'
+        ],
+        openQuestions: [
+          'האם נדרש אישור נוסף (למשל של מנהל אזור) למחיקת קנס מעל סכום מסוים?',
+          'האם רשת ההשאלה הבין-ספרייתית מספקת עדכוני סטטוס נוספים מעבר להודעת הגעת עותק?'
+        ],
+        parts: [
+          {
+            id: 'part-1', label: 'מחזור ההשאלה', splitRationale: SPLIT,
+            elements: [
+              actor('patron', 'human', 'left'),
+              actor('librarian', 'human', 'left'),
+              actor('time', 'system', 'left'),
+              actor('ilnetwork', 'system', 'right'),
+              uc('uc-reserve', 346, 150, 96, 30),
+              uc('uc-renew', 346, 224, 96, 30),
+              uc('uc-view-account', 346, 298, 96, 34),
+              uc('uc-checkout', 346, 372, 96, 30),
+              uc('uc-return', 346, 446, 96, 30),
+              uc('uc-declare-lost', 346, 520, 96, 34),
+              uc('uc-mark-overdue', 346, 594, 96, 34),
+              uc('uc-check-eligibility', 648, 150, 104, 34),
+              uc('uc-receive-copy', 950, 150, 100, 34),
+              { kind: 'system', id: 'sys-boundary-1', name: 'מערכת ניהול השאלות ברשת הספריות', x: 220, y: 72, w: 860, h: 620 }
+            ],
+            relationships: [
+              { kind: 'actorAssoc', id: 'as-patron-reserve', actorId: 'patron', ucId: 'uc-reserve', role: 'initiator', description: 'המנוי יוזם הצבת הזמנה על כותר.' },
+              { kind: 'actorAssoc', id: 'as-patron-renew', actorId: 'patron', ucId: 'uc-renew', role: 'initiator', description: 'המנוי יוזם חידוש השאלה קיימת.' },
+              { kind: 'actorAssoc', id: 'as-patron-view', actorId: 'patron', ucId: 'uc-view-account', role: 'initiator', description: 'המנוי יוזם צפייה בחשבונו.' },
+              { kind: 'actorAssoc', id: 'as-lib-checkout', actorId: 'librarian', ucId: 'uc-checkout', role: 'initiator', description: 'הספרן יוזם השאלת עותק.' },
+              { kind: 'actorAssoc', id: 'as-lib-return', actorId: 'librarian', ucId: 'uc-return', role: 'initiator', description: 'הספרן יוזם קליטת החזרה.' },
+              { kind: 'actorAssoc', id: 'as-lib-lost', actorId: 'librarian', ucId: 'uc-declare-lost', role: 'initiator', description: 'הספרן יוזם הכרזת עותק כאבוד.' },
+              { kind: 'actorAssoc', id: 'as-time-overdue', actorId: 'time', ucId: 'uc-mark-overdue', role: 'initiator', description: 'שחקן הזמן מפעיל את סימון האיחורים היומי.' },
+              { kind: 'actorAssoc', id: 'as-iln-receive', actorId: 'ilnetwork', ucId: 'uc-receive-copy', role: 'initiator', description: 'הרשת החיצונית יוזמת קליטת הודעה על עותק שהתקבל.' },
+              { kind: 'include', id: 'inc-reserve-elig', from: 'uc-reserve', to: 'uc-check-eligibility' },
+              { kind: 'include', id: 'inc-checkout-elig', from: 'uc-checkout', to: 'uc-check-eligibility' },
+              { kind: 'include', id: 'inc-renew-elig', from: 'uc-renew', to: 'uc-check-eligibility' }
+            ]
+          },
+          {
+            id: 'part-2', label: 'ניהול ומינהלה', splitRationale: SPLIT,
+            elements: [
+              actor('branchManager', 'human', 'left'),
+              actor('acquisitions', 'human', 'left'),
+              actor('sysAdmin', 'human', 'right'),
+              uc('uc-manage-fine', 350, 150, 100, 34),
+              uc('uc-reports', 350, 224, 100, 30),
+              uc('uc-add-title', 350, 298, 100, 34),
+              uc('uc-order-copies', 350, 372, 100, 34),
+              uc('uc-manage-branches', 950, 150, 100, 30),
+              uc('uc-manage-membership-types', 950, 224, 100, 34),
+              uc('uc-manage-policy', 950, 298, 100, 34),
+              { kind: 'system', id: 'sys-boundary-2', name: 'מערכת ניהול השאלות ברשת הספריות', x: 220, y: 72, w: 860, h: 560 }
+            ],
+            relationships: [
+              { kind: 'actorAssoc', id: 'as-bm-fine', actorId: 'branchManager', ucId: 'uc-manage-fine', role: 'initiator', description: 'מנהל הסניף יוזם מחיקה או הפחתה של קנס.' },
+              { kind: 'actorAssoc', id: 'as-bm-reports', actorId: 'branchManager', ucId: 'uc-reports', role: 'initiator', description: 'מנהל הסניף יוזם הפקת דוחות.' },
+              { kind: 'actorAssoc', id: 'as-acq-reports', actorId: 'acquisitions', ucId: 'uc-reports', role: 'initiator', description: 'רכז הרכש יוזם הפקת דוחות רכש ומלאי.' },
+              { kind: 'actorAssoc', id: 'as-acq-addtitle', actorId: 'acquisitions', ucId: 'uc-add-title', role: 'initiator', description: 'רכז הרכש יוזם הוספת כותר לקטלוג.' },
+              { kind: 'actorAssoc', id: 'as-acq-order', actorId: 'acquisitions', ucId: 'uc-order-copies', role: 'initiator', description: 'רכז הרכש יוזם הזמנת עותקים חדשים.' },
+              { kind: 'actorAssoc', id: 'as-sa-branches', actorId: 'sysAdmin', ucId: 'uc-manage-branches', role: 'initiator', description: 'מנהל המערכת יוזם ניהול סניפים.' },
+              { kind: 'actorAssoc', id: 'as-sa-memtypes', actorId: 'sysAdmin', ucId: 'uc-manage-membership-types', role: 'initiator', description: 'מנהל המערכת יוזם ניהול סוגי מנויים.' },
+              { kind: 'actorAssoc', id: 'as-sa-policy', actorId: 'sysAdmin', ucId: 'uc-manage-policy', role: 'initiator', description: 'מנהל המערכת יוזם הגדרת מדיניות השאלה וקנסות.' }
+            ]
+          }
+        ]
+      };
+    })();
+  </script>
+  <script>
+/* inlined uc-diagram-common.js */
+/* uc-diagram-common.js, SAD MCP shared runtime for use case diagrams
+   Depends on globals defined in the inline <script> of each diagram:
+   diagramLayouts, actorDescriptions, assocDescriptions, useCaseDocs, diagramModel
+
+   This file is deployed by hand to themathbible.com (see CLAUDE.md, Static Assets).
+   Keep UC_RUNTIME_VERSION in sync with package.json on every deploy, it prints to the
+   browser console so you can confirm which runtime is actually live vs. the repo.
+*/
+const UC_RUNTIME_VERSION = '2.3.2';
+if (typeof console !== 'undefined') console.info('[sad-mcp] uc-diagram runtime v' + UC_RUNTIME_VERSION);
+
+// ── fixLayout constants ───────────────────────────────────────────────────
+const HEADER_H  = 44;
+const UC_PAD    = 30;
+const UC_GAP    = 14;
+const ACTOR_PAD = 80;
+
+// ── fixLayout ─────────────────────────────────────────────────────────────
+function fixLayout(layout) {
+  const svg = document.getElementById(layout.svgId);
+  if (!svg) return;
+  const b = layout.boundary;
+
+  // Step 1, Group UCs by the side of their owning actor.
+  const ucSide = {};
+  layout.actors.forEach(a =>
+    a.ucIds.forEach(uid => {
+      ucSide[uid] = ucSide[uid] && ucSide[uid] !== a.side ? 'center' : a.side;
+    })
+  );
+  const cols = { left: [], right: [], center: [] };
+  layout.useCases.forEach(uc => cols[ucSide[uc.id] || 'center'].push(uc));
+
+  // Step 2, Sort each column by actor order (top-to-bottom on that side).
+  function sortCol(ucs, side) {
+    const ordered = layout.actors.filter(a => a.side === side).sort((a, bb) => a.y - bb.y);
+    ucs.sort((a, bb) => {
+      const ai = ordered.findIndex(act => act.ucIds.includes(a.id));
+      const bi = ordered.findIndex(act => act.ucIds.includes(bb.id));
+      return (ai < 0 ? 999 : ai) - (bi < 0 ? 999 : bi);
+    });
+  }
+  sortCol(cols.left,  'left');
+  sortCol(cols.right, 'right');
+
+  // Step 3, Adaptive column X positions. Widen boundary if needed.
+  const COL_GAP = 30;
+  const maxRx = ucs => (ucs.length ? Math.max(...ucs.map(u => u.rx)) : 0);
+  const lRx = maxRx(cols.left), cRx = maxRx(cols.center), rRx = maxRx(cols.right);
+  const gaps = (cRx ? 2 * COL_GAP : (lRx && rRx ? 2 * COL_GAP : 0));
+  const needed = 2 * UC_PAD + 2 * lRx + 2 * cRx + 2 * rRx + gaps;
+  if (b.width < needed) b.width = needed;
+
+  const leftX   = b.x + UC_PAD + lRx;
+  const rightX  = b.x + b.width - UC_PAD - rRx;
+  const centerX = (leftX + rightX) / 2;
+
+  function place(ucs, colX, colName) {
+    ucs.forEach((uc, i) => {
+      uc.cy = b.y + HEADER_H + UC_PAD + uc.ry + i * (uc.ry * 2 + UC_GAP);
+      uc.cx = colX;
+      uc.col = colName;
+    });
+  }
+  place(cols.left,   leftX,   'left');
+  place(cols.right,  rightX,  'right');
+  place(cols.center, centerX, 'center');
+
+  // Step 4, Clamp and resolve overlaps. Idempotent fixed-point loop.
+  const minX = b.x + UC_PAD;
+  const maxX = b.x + b.width - UC_PAD;
+  const minY = b.y + HEADER_H + UC_PAD;
+  let changed = true, iter = 0;
+  while (changed && iter++ < 40) {
+    changed = false;
+    for (const uc of layout.useCases) {
+      const nx = Math.max(minX + uc.rx, Math.min(maxX - uc.rx, uc.cx));
+      if (nx !== uc.cx) { uc.cx = nx; changed = true; }
+      const ny = Math.max(minY + uc.ry, uc.cy);
+      if (ny !== uc.cy) { uc.cy = ny; changed = true; }
+    }
+    for (const col of Object.values(cols)) {
+      col.sort((a, bb) => a.cy - bb.cy);
+      for (let i = 1; i < col.length; i++) {
+        const prev = col[i - 1], cur = col[i];
+        const nd = prev.cy + prev.ry + UC_GAP + cur.ry;
+        if (cur.cy < nd) { cur.cy = nd; changed = true; }
+      }
+    }
+  }
+
+  // Step 5, Expand boundary height to fit all UCs.
+  const maxBottom = Math.max(...layout.useCases.map(uc => uc.cy + uc.ry));
+  b.height = Math.max(b.height, maxBottom - b.y + UC_PAD);
+
+  // Step 6, Re-center actors on their UC group; push bottom actors below boundary.
+  layout.actors.forEach(actor => {
+    const myUCs = layout.useCases.filter(u => actor.ucIds.includes(u.id));
+    if (actor.side === 'left' || actor.side === 'right') {
+      if (myUCs.length) actor.y = myUCs.reduce((s, u) => s + u.cy, 0) / myUCs.length;
+      actor.x = actor.side === 'left' ? b.x - ACTOR_PAD : b.x + b.width + ACTOR_PAD;
+    } else if (actor.side === 'bottom') {
+      actor.y = b.y + b.height + ACTOR_PAD;
+    }
+  });
+
+  // Step 6b, Enforce a minimum vertical gap between actors on the same side.
+  // Step 6 centers each actor on its UCs' mean cy, which can place two single-UC
+  // actors barely one row apart (~UC_GAP) so their stick figures + labels overlap.
+  // Push later actors down to keep centers at least ACTOR_MIN_GAP apart (CR #6).
+  const ACTOR_MIN_GAP = 150;
+  ['left', 'right'].forEach(side => {
+    const col = layout.actors.filter(a => a.side === side).sort((a, bb) => a.y - bb.y);
+    for (let i = 1; i < col.length; i++) {
+      const need = col[i - 1].y + ACTOR_MIN_GAP;
+      if (col[i].y < need) col[i].y = need;
+    }
+  });
+
+  // Step 7, Write UC positions to the SVG (absolute attributes).
+  layout.useCases.forEach(uc => {
+    const g = svg.querySelector('[id="uc-group-' + uc.id + '"]');
+    if (!g) return;
+    const el = g.querySelector('ellipse');
+    if (!el) return;
+    const dx = uc.cx - parseFloat(el.getAttribute('cx'));
+    const dy = uc.cy - parseFloat(el.getAttribute('cy'));
+    el.setAttribute('cx', uc.cx);
+    el.setAttribute('cy', uc.cy);
+    g.querySelectorAll('text').forEach(t => {
+      t.setAttribute('x', parseFloat(t.getAttribute('x') || 0) + dx);
+      t.setAttribute('y', parseFloat(t.getAttribute('y') || 0) + dy);
+    });
+    g.removeAttribute('transform');
+  });
+  layout.actors.forEach(actor => {
+    // Scope to THIS svg: a shared actor id (e.g. 'head') repeats across tabs, so
+    // document.getElementById returns the first tab's figure and moves the wrong
+    // one, leaving this tab's figure detached from its (correctly placed) line.
+    const g = svg.querySelector('[id="actor-group-' + actor.id + '"]');
+    if (g) g.setAttribute('transform', `translate(${actor.x},${actor.y})`);
+  });
+
+  // Step 8, Recalculate every connection line endpoint.
+  svg.querySelectorAll('[data-conn-from][data-conn-to]').forEach(line => {
+    const fId = line.getAttribute('data-conn-from');
+    const tId = line.getAttribute('data-conn-to');
+    const fUC = layout.useCases.find(u => u.id === fId);
+    const fAc = layout.actors.find(a => a.id === fId);
+    const tUC = layout.useCases.find(u => u.id === tId);
+    const tAc = layout.actors.find(a => a.id === tId);
+    const from = fAc ? { x: fAc.x, y: fAc.y } : fUC ? { x: fUC.cx, y: fUC.cy } : null;
+    const to   = tAc ? { x: tAc.x, y: tAc.y } : tUC ? { x: tUC.cx, y: tUC.cy } : null;
+    if (!from || !to) return;
+    let x1 = from.x, y1 = from.y, x2 = to.x, y2 = to.y;
+    if (fUC) { const a = Math.atan2(to.y - fUC.cy, to.x - fUC.cx);     x1 = fUC.cx + fUC.rx * Math.cos(a); y1 = fUC.cy + fUC.ry * Math.sin(a); }
+    if (tUC) { const a = Math.atan2(from.y - tUC.cy, from.x - tUC.cx); x2 = tUC.cx + tUC.rx * Math.cos(a); y2 = tUC.cy + tUC.ry * Math.sin(a); }
+    line.setAttribute('x1', x1); line.setAttribute('y1', y1);
+    line.setAttribute('x2', x2); line.setAttribute('y2', y2);
+
+    const hitbox = svg.querySelector(
+      `.conn-hitbox[data-hitbox-from="${fId}"][data-hitbox-to="${tId}"]`);
+    if (hitbox) {
+      hitbox.setAttribute('x1', x1); hitbox.setAttribute('y1', y1);
+      hitbox.setAttribute('x2', x2); hitbox.setAttribute('y2', y2);
+    }
+
+    // Reposition «include»/«extend» text label associated with this line.
+    const lbl = svg.querySelector(`[data-label-for="${fId} ${tId}"]`);
+    if (lbl) {
+      lbl.setAttribute('x', (x1 + x2) / 2);
+      lbl.setAttribute('y', (y1 + y2) / 2 - 8);
+    }
+  });
+
+  // Step 9, Resize boundary rect and SVG viewBox (both width and height).
+  const br = svg.querySelector('.system-boundary, rect[rx="12"]');
+  if (br) { br.setAttribute('width', b.width); br.setAttribute('height', b.height); }
+  const vb = svg.getAttribute('viewBox');
+  if (vb) {
+    const p = vb.split(/\s+/);
+    p[3] = Math.max(parseFloat(p[3]), b.y + b.height + 120);
+    const ACTOR_LABEL_MARGIN = 120;
+    const maxActorX = layout.actors.length
+      ? Math.max(...layout.actors.map(a => a.x))
+      : b.x + b.width;
+    p[2] = Math.max(parseFloat(p[2]), maxActorX + ACTOR_LABEL_MARGIN);
+    svg.setAttribute('viewBox', p.join(' '));
+  }
+
+  // Step 10, Timing labels.
+  renderTimingLabels(layout);
+}
+
+// ── renderTimingLabels ────────────────────────────────────────────────────
+function renderTimingLabels(layout) {
+  const svg = document.getElementById(layout.svgId);
+  if (!svg) return;
+  svg.querySelectorAll('.timing-label').forEach(el => el.remove());
+  const NS = 'http://www.w3.org/2000/svg';
+  (layout.connections || []).forEach(conn => {
+    if (!conn.timing) return;
+    const line = svg.querySelector(
+      `[data-conn-from="${conn.from}"][data-conn-to="${conn.to}"]`);
+    if (!line) return;
+    const x1 = +line.getAttribute('x1'), y1 = +line.getAttribute('y1');
+    const x2 = +line.getAttribute('x2'), y2 = +line.getAttribute('y2');
+    const mx = (x1 + x2) / 2, my = (y1 + y2) / 2;
+    const w = 10 + conn.timing.length * 7, h = 16;
+    const g = document.createElementNS(NS, 'g');
+    g.setAttribute('class', 'timing-label');
+    const rect = document.createElementNS(NS, 'rect');
+    rect.setAttribute('x', mx - w / 2); rect.setAttribute('y', my - h / 2);
+    rect.setAttribute('width', w);      rect.setAttribute('height', h);
+    rect.setAttribute('fill', 'white'); rect.setAttribute('stroke', '#334155');
+    rect.setAttribute('stroke-width', '0.8'); rect.setAttribute('rx', '3');
+    const text = document.createElementNS(NS, 'text');
+    text.setAttribute('x', mx); text.setAttribute('y', my + 4);
+    text.setAttribute('font-size', '10'); text.setAttribute('text-anchor', 'middle');
+    text.setAttribute('fill', '#334155');
+    text.setAttribute('font-family', "'Noto Sans Hebrew', sans-serif");
+    text.setAttribute('direction', 'rtl');
+    text.textContent = conn.timing;
+    g.appendChild(rect); g.appendChild(text);
+    svg.appendChild(g);
+  });
+}
+
+// ── Tabs ──────────────────────────────────────────────────────────────────
+let activeTab = 0;
+function currentLayout() { return diagramLayouts[activeTab]; }
+function showDiagram(index) {
+  activeTab = index;
+  document.querySelectorAll('.diagram-part').forEach((p, i) => p.hidden = i !== index);
+  document.querySelectorAll('.tab').forEach((t, i) => t.classList.toggle('active', i === index));
+  fixLayout(diagramLayouts[index]);
+}
+
+// ── Small popup (actors & associations) ───────────────────────────────────
+function showDesc(id, type, event) {
+  if (type === 'uc') { openUcModal(id); event.stopPropagation(); return; }
+  showPopup(id, type, event);
+}
+
+function showPopup(id, type, event) {
+  hideDesc();
+  const data = type === 'actor' ? actorDescriptions[id]
+             : type === 'assoc' ? assocDescriptions[id]
+             : null;
+  if (!data) return;
+  const panel = document.createElement('div');
+  panel.id = 'desc-panel';
+  panel.innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+      <strong style="font-size:12px;color:#1e40af;direction:rtl;">${data.name}</strong>
+      <span onclick="hideDesc()" style="cursor:pointer;color:#94a3b8;font-size:18px;line-height:1;margin-right:6px;">×</span>
+    </div>
+    <div style="font-size:11px;color:#334155;line-height:1.6;direction:rtl;">${data.desc}</div>`;
+  Object.assign(panel.style, {
+    position:'fixed', background:'#fff', border:'1.5px solid #2980b9',
+    borderRadius:'8px', padding:'12px 16px', maxWidth:'300px',
+    boxShadow:'0 4px 14px rgba(0,0,0,.15)', zIndex:'1000',
+    left: event.clientX + 'px', top: event.clientY + 'px'
+  });
+  document.body.appendChild(panel);
+  const r = panel.getBoundingClientRect();
+  if (r.right  > window.innerWidth)  panel.style.left = (window.innerWidth  - r.width  - 10) + 'px';
+  if (r.bottom > window.innerHeight) panel.style.top  = (event.clientY - r.height - 10) + 'px';
+  event.stopPropagation();
+}
+
+function hideDesc() { document.getElementById('desc-panel')?.remove(); }
+
+document.addEventListener('click', e => {
+  if (!e.target.closest('[data-uc-id]') &&
+      !e.target.closest('[data-actor-id]') &&
+      !e.target.closest('[data-conn-id]')) hideDesc();
+});
+
+// ── UC modal ──────────────────────────────────────────────────────────────
+function wireframeSafe(html) {
+  const forbidden = [/<script\b/i, /\son\w+\s*=/i, /<iframe\b/i,
+    /src\s*=\s*["']https?:/i, /href\s*=\s*["']https?:/i, /@import\b/i, /<style\b/i];
+  return !forbidden.some(rx => rx.test(html));
+}
+
+function openUcModal(id) {
+  const doc = useCaseDocs[id];
+  if (!doc) return;
+  const actorName = aid => (actorDescriptions[aid]?.name) || aid;
+  const ucName    = uid => (useCaseDocs[uid]?.name) || uid;
+  const esc = s => String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+
+  let scenariosHtml = '';
+  (doc.scenarios || []).forEach(sce => {
+    scenariosHtml += `<h3>${esc(sce.name || sce.id)}</h3><ol>`;
+    (sce.flow || []).forEach((step, i) => {
+      if (step.kind === 'actor') {
+        scenariosHtml += `<li><strong class="step-actor" data-actor-id="${esc(step.actor)}">${esc(actorName(step.actor))}</strong>: ${esc(step.text || '')}</li>`;
+      } else if (step.kind === 'system') {
+        scenariosHtml += `<li><em class="step-system">המערכת</em>: ${esc(step.text || '')}</li>`;
+      } else if (step.kind === 'include') {
+        scenariosHtml += `<li><span class="step-include">«include» </span><a class="step-uc-ref" data-uc-ref="${esc(step.uc)}">${esc(ucName(step.uc))}</a>${step.text ? ', ' + esc(step.text) : ''}</li>`;
+      } else if (step.kind === 'extension') {
+        scenariosHtml += `<li class="ext-inline">${step.at ? esc(String(step.at)) + 'a. ' : ''}${esc(step.text || '')}</li>`;
+      }
+      (sce.extensions || []).filter(e => e.at === i + 1).forEach((ext, j) => {
+        scenariosHtml += `<li class="ext-sub">${i + 1}${String.fromCharCode(97 + j)}. ${esc(ext.text)}</li>`;
+      });
+    });
+    scenariosHtml += '</ol>';
+  });
+
+  const listItems = items => (items || []).map(s => `<li>${esc(s)}</li>`).join('');
+  const usItems   = (doc.userStories || []).map(us =>
+    `<li>${esc('בתור ' + us.role + ', אני רוצה ' + us.want + ', כדי ש' + us.so)}</li>`).join('');
+
+  const wfHtml = (doc.wireframe && wireframeSafe(doc.wireframe))
+    ? `<section class="uc-wireframe">${doc.wireframe}</section>` : '';
+  if (doc.wireframe && !wireframeSafe(doc.wireframe))
+    console.warn(`Wireframe for ${id} failed safety check.`);
+
+  // Single innerHTML write, avoids silent failures in sandboxed iframe environments.
+  const body = document.querySelector('#uc-modal .uc-modal-body');
+  body.innerHTML = `
+    <button class="uc-modal-close" onclick="closeUcModal()" aria-label="Close">×</button>
+    <header>
+      <span class="uc-id">${esc(doc.id)}</span>
+      <h2 class="uc-name">${esc(doc.name)}</h2>
+      <div class="uc-primary">
+        <span class="uc-primary-label">שחקן ראשי:</span>
+        <a class="uc-primary-link" data-actor-pulse="${esc(doc.primaryActor)}">${esc(actorName(doc.primaryActor))}</a>
+      </div>
+    </header>
+    <section class="uc-description">${esc(doc.description || '')}</section>
+    <section class="uc-scenarios">${scenariosHtml}</section>
+    <section class="uc-prepostuser">
+      <div class="uc-pre"><h4>תנאים מוקדמים</h4><ul>${listItems(doc.preconditions)}</ul></div>
+      <div class="uc-post"><h4>תנאים סופיים</h4><ul>${listItems(doc.postconditions)}</ul></div>
+      <div class="uc-stories"><h4>סיפורי משתמש</h4><ul>${usItems}</ul></div>
+    </section>
+    ${wfHtml}`;
+
+  body.querySelector('.uc-primary-link').onclick = () => { closeUcModal(); pulseActor(doc.primaryActor); };
+  body.querySelectorAll('.step-actor').forEach(el => {
+    el.onclick = () => { closeUcModal(); pulseActor(el.dataset.actorId); };
+  });
+  body.querySelectorAll('.step-uc-ref').forEach(el => {
+    el.onclick = () => openUcModal(el.dataset.ucRef);
+  });
+
+  const modal = document.getElementById('uc-modal');
+  modal.hidden = false;
+  document.body.classList.add('uc-modal-open');
+}
+
+function closeUcModal() {
+  const modal = document.getElementById('uc-modal');
+  if (modal) modal.hidden = true;
+  document.body.classList.remove('uc-modal-open');
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeUcModal(); });
+
+function pulseActor(actorId) {
+  const g = document.getElementById('actor-group-' + actorId);
+  if (!g) return;
+  g.classList.add('actor-pulse');
+  setTimeout(() => g.classList.remove('actor-pulse'), 2000);
+}
+
+// ── Assumptions panel ─────────────────────────────────────────────────────
+function renderAssumptions() {
+  const a = (diagramModel && diagramModel.assumptions)   || [];
+  const q = (diagramModel && diagramModel.openQuestions) || [];
+  const panel = document.getElementById('assumptions-panel');
+  if (!panel) return;
+  if (!a.length && !q.length) { panel.hidden = true; return; }
+  panel.hidden = false;
+  const fillList = (listEl, items) => {
+    listEl.innerHTML = '';
+    items.forEach(s => { const li = document.createElement('li'); li.textContent = s; listEl.appendChild(li); });
+  };
+  fillList(document.getElementById('assumptions-list'),    a);
+  fillList(document.getElementById('open-questions-list'), q);
+  document.getElementById('assumptions-col').hidden    = !a.length;
+  document.getElementById('open-questions-col').hidden = !q.length;
+}
+
+// ── XMI export ────────────────────────────────────────────────────────────
+function xmlEscape(s) {
+  return String(s == null ? '' : s)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;').replace(/'/g,'&apos;');
+}
+
+function downloadFile(filename, mimeType, content) {
+  const blob = new Blob([content], { type: mimeType });
+  const url  = URL.createObjectURL(blob);
+  const a = Object.assign(document.createElement('a'), { href: url, download: filename });
+  document.body.appendChild(a); a.click();
+  setTimeout(() => { URL.revokeObjectURL(url); a.remove(); }, 1000);
+}
+
+function xmiBody(elements, rels) {
+  const lines = [];
+  function flowText(uc) {
+    const actorName = id => (elements.find(e => e.kind === 'actor'   && e.id === id) || {}).name || id;
+    const ucName    = id => (elements.find(e => e.kind === 'useCase' && e.id === id) || {}).name || id;
+    const out = [];
+    (uc.scenarios || []).forEach(sc => {
+      out.push((sc.name || sc.id) + ':');
+      (sc.flow || []).forEach((step, i) => {
+        const n = i + 1;
+        if      (step.kind === 'actor')     out.push('  ' + n + '. ' + actorName(step.actor) + ': ' + step.text);
+        else if (step.kind === 'system')    out.push('  ' + n + '. System: ' + step.text);
+        else if (step.kind === 'include')   out.push('  ' + n + '. «include» ' + ucName(step.uc) + (step.text ? ', ' + step.text : ''));
+        else if (step.kind === 'extension') out.push('  ' + n + 'a. ' + step.text);
+        (sc.extensions || []).filter(e => e.at === n).forEach((e, j) => {
+          out.push('  ' + n + String.fromCharCode(97 + j) + '. ' + e.text);
+        });
+      });
+    });
+    return out.join('\n');
+  }
+
+  for (const el of elements) {
+    if (el.kind === 'useCase') {
+      const hasDocs = (el.preconditions  && el.preconditions.length)
+                   || (el.postconditions && el.postconditions.length)
+                   || (el.scenarios      && el.scenarios.length);
+      if (!hasDocs) {
+        lines.push('    <packagedElement xmi:type="uml:UseCase" xmi:id="' + el.id + '" name="' + xmlEscape(el.name) + '"/>');
+      } else {
+        lines.push('    <packagedElement xmi:type="uml:UseCase" xmi:id="' + el.id + '" name="' + xmlEscape(el.name) + '">');
+        (el.preconditions || []).forEach((p, i) => {
+          lines.push('      <precondition xmi:type="uml:Constraint" xmi:id="' + el.id + '-pre-' + (i+1) + '" name="pre-' + (i+1) + '">');
+          lines.push('        <specification xmi:type="uml:OpaqueExpression" xmi:id="' + el.id + '-pre-' + (i+1) + '-s"><body>' + xmlEscape(p) + '</body></specification>');
+          lines.push('      </precondition>');
+        });
+        (el.postconditions || []).forEach((p, i) => {
+          lines.push('      <postcondition xmi:type="uml:Constraint" xmi:id="' + el.id + '-post-' + (i+1) + '" name="post-' + (i+1) + '">');
+          lines.push('        <specification xmi:type="uml:OpaqueExpression" xmi:id="' + el.id + '-post-' + (i+1) + '-s"><body>' + xmlEscape(p) + '</body></specification>');
+          lines.push('      </postcondition>');
+        });
+        if (el.scenarios && el.scenarios.length) {
+          lines.push('      <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="' + el.id + '-flow" name="Flow of Events">');
+          lines.push('        <body>' + xmlEscape(flowText(el)) + '</body>');
+          lines.push('      </ownedBehavior>');
+        }
+        lines.push('    </packagedElement>');
+      }
+    }
+    if (el.kind === 'actor')
+      lines.push('    <packagedElement xmi:type="uml:Actor" xmi:id="' + el.id + '" name="' + xmlEscape(el.name) + '"/>');
+  }
+  for (const r of rels) {
+    if (r.kind === 'actorAssoc') {
+      lines.push('    <packagedElement xmi:type="uml:Association" xmi:id="' + r.id + '">');
+      lines.push('      <ownedEnd xmi:type="uml:Property" xmi:id="' + r.id + '-e1" association="' + r.id + '" type="' + r.actorId + '"/>');
+      lines.push('      <ownedEnd xmi:type="uml:Property" xmi:id="' + r.id + '-e2" association="' + r.id + '" type="' + r.ucId   + '"/>');
+      lines.push('    </packagedElement>');
+    }
+    if (r.kind === 'include')
+      lines.push('    <packagedElement xmi:type="uml:Include" xmi:id="' + r.id + '" includingCase="' + r.from + '" addition="' + r.to + '"/>');
+    if (r.kind === 'extend')
+      lines.push('    <packagedElement xmi:type="uml:Extend"  xmi:id="' + r.id + '" extendedCase="'  + r.to   + '" extension="' + r.from + '"/>');
+    if (r.kind === 'generalization')
+      lines.push('    <packagedElement xmi:type="uml:Generalization" xmi:id="' + r.id + '" specific="' + r.from + '" general="' + r.to + '"/>');
+  }
+  return lines.join('\n');
+}
+
+function exportXMI() {
+  const m     = diagramModel;
+  const title = xmlEscape(m.title || 'diagram');
+  const body  = xmiBody(m.parts.flatMap(p => p.elements), m.parts.flatMap(p => p.relationships));
+  const xmi   =
+    '<?xml version="1.0" encoding="UTF-8"?>\n' +
+    '<xmi:XMI xmi:version="2.1"\n' +
+    '  xmlns:xmi="http://www.omg.org/XMI"\n' +
+    '  xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML">\n' +
+    '  <uml:Model xmi:id="model_1" name="' + title + '">\n' +
+    body + '\n' +
+    '  </uml:Model>\n' +
+    '</xmi:XMI>';
+  downloadFile(title.replace(/\s+/g, '_') + '.xmi', 'application/xml', xmi);
+}
+
+// ── User stories summary panel ────────────────────────────────────────────
+function renderUserStoriesSummary() {
+  const panel = document.getElementById('user-stories-panel');
+  if (!panel) return;
+  const seen = new Set();
+  const stories = [];
+  Object.values(useCaseDocs).forEach(doc => {
+    (doc.userStories || []).forEach(us => {
+      const key = us.role + '|' + us.want + '|' + us.so;
+      if (!seen.has(key)) { seen.add(key); stories.push(us); }
+    });
+  });
+  if (!stories.length) { panel.hidden = true; return; }
+  panel.hidden = false;
+  const list = document.getElementById('user-stories-list');
+  if (!list) return;
+  list.innerHTML = '';
+  stories.forEach(us => {
+    const li = document.createElement('li');
+    li.textContent = 'בתור ' + us.role + ', אני רוצה ' + us.want + ', כדי ש' + us.so;
+    list.appendChild(li);
+  });
+}
+
+// ── Init ──────────────────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  diagramLayouts.forEach(l => fixLayout(l));
+  renderAssumptions();
+  renderUserStoriesSummary();
+});
+
+</script>
+</body>
+</html>

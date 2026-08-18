@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>הזמנת שולחן (Reservation), תרשים מצבים</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;700&family=Noto+Sans+Hebrew:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  body { background:#f8fafc; margin:0; padding:20px; font-family:'Noto Sans Hebrew','IBM Plex Mono',monospace; }
+  h1 { font-size:18px; color:#1e293b; margin:0 0 4px; }
+  .sub { font-size:12px; color:#64748b; margin:0 0 14px; }
+  .svg-wrap { background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; overflow:auto; }
+  svg { display:block; direction:ltr; }
+  .vp-export-btn {
+    position:fixed; bottom:20px; right:20px; z-index:1000;
+    background:#1e40af; color:#fff; border:none; border-radius:6px;
+    padding:8px 16px; font-size:13px; cursor:pointer;
+    font-family:'IBM Plex Mono',monospace;
+  }
+  .vp-export-btn:hover { background:#1e3a8a; }
+  [data-state] { cursor:pointer; }
+  [data-state]:hover { filter: drop-shadow(0 2px 6px rgba(37,99,235,.55)); }
+  #modal-overlay {
+    position:fixed; inset:0; background:rgba(15,23,42,.5); z-index:2000;
+    display:flex; align-items:center; justify-content:center; padding:24px;
+  }
+  #modal-overlay[hidden] { display:none; }
+  #modal {
+    background:#fff; border-radius:12px; max-width:600px; width:100%;
+    max-height:82vh; overflow-y:auto; padding:22px 26px;
+    box-shadow:0 20px 50px rgba(15,23,42,.35); position:relative;
+    font-family:'Noto Sans Hebrew',sans-serif;
+  }
+  #modal h2 { margin:0 0 2px; font-size:18px; color:#1e293b; }
+  #modal .status-const {
+    font-family:'IBM Plex Mono',monospace; font-size:11px; color:#64748b;
+    direction:ltr; display:inline-block; margin-bottom:10px;
+  }
+  #modal h3 { font-size:13px; color:#2563eb; margin:14px 0 4px; }
+  #modal p, #modal li { font-size:13.5px; color:#334155; line-height:1.65; margin:0 0 6px; }
+  #modal ul { margin:0; padding-right:18px; }
+  #modal .teach {
+    background:#f0f7ff; border-right:3px solid #2563eb; border-radius:6px;
+    padding:10px 12px; margin-top:14px;
+  }
+  #modal .teach h3 { margin-top:0; }
+  .modal-close {
+    position:absolute; top:12px; left:12px; border:none; background:#f1f5f9;
+    border-radius:6px; width:28px; height:28px; font-size:16px; cursor:pointer; color:#475569;
+  }
+  .modal-close:hover { background:#e2e8f0; }
+</style>
+</head>
+<body>
+<h1>הזמנת שולחן (Reservation), תרשים מצבים</h1>
+<p class="sub">מחזור החיים של הזמנת שולחן במערכת ניהול ההזמנות "שולחן פנוי" &nbsp;|&nbsp; קורס 364-1-1411, מבחן לדוגמה סמסטר ב' 2026, מועד מיוחד &nbsp;|&nbsp; לחצו על כל מצב בתרשים לקבלת הסבר מפורט</p>
+
+<div class="diagram-part" id="part-1">
+<div class="svg-wrap">
+<svg width="1600" height="1240" viewBox="0 0 1600 1240" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <pattern id="dotgrid" width="24" height="24" patternUnits="userSpaceOnUse">
+      <circle cx="12" cy="12" r="0.8" fill="#cbd5e1"/>
+    </pattern>
+    <marker id="arrow" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#334155"/>
+    </marker>
+  </defs>
+  <rect x="0" y="0" width="1600" height="1240" fill="url(#dotgrid)"/>
+
+  <!-- ============ composite state (drawn first, behind) ============ -->
+  <g data-state="st-composite">
+    <title>מצב-על: כל התקופה שההזמנה קיימת אך טרם הושבו האורחים, לחץ להסבר</title>
+    <rect x="280" y="100" width="980" height="400" rx="20" ry="20"
+          fill="#f0f7ff" stroke="#2563eb" stroke-width="2" stroke-dasharray="8 4"/>
+    <text x="304" y="126" font-size="10" fill="#64748b" font-family="'IBM Plex Mono',monospace">&#171;composite&#187;</text>
+    <text x="304" y="144" font-size="13" font-weight="700" fill="#1e293b" font-family="'Noto Sans Hebrew',sans-serif">&#1496;&#1512;&#1501; &#1492;&#1493;&#1513;&#1489;&#1492;</text>
+    <text x="304" y="162" font-size="10" fill="#334155" font-family="'IBM Plex Mono',monospace">entry / setStatus('PRE_SEATED')</text>
+  </g>
+
+  <!-- ============ states ============ -->
+  <!-- REQUESTED (LEFT) -->
+  <g data-state="st-requested">
+    <title>מבוקשת, הלקוח שלח בקשת הזמנה שטרם טופלה, לחץ להסבר</title>
+    <rect x="350" y="260" width="220" height="82" rx="18" ry="18" fill="#ffffff" stroke="none"/>
+    <path d="M 350 286 v -8 a18 18 0 0 1 18 -18 h 184 a18 18 0 0 1 18 18 v 8 z" fill="#eef4ff"/>
+    <line x1="350" y1="286" x2="570" y2="286" stroke="#3b82f6" stroke-width="1"/>
+    <rect x="350" y="260" width="220" height="82" rx="18" ry="18" fill="none" stroke="#3b82f6" stroke-width="2"/>
+    <text x="460" y="278" font-size="12" font-weight="700" fill="#1e293b" text-anchor="middle" font-family="'Noto Sans Hebrew',sans-serif">&#1502;&#1489;&#1493;&#1511;&#1513;&#1514;</text>
+    <text x="360" y="306" font-size="10" fill="#334155" font-family="'IBM Plex Mono',monospace">entry / setStatus('REQUESTED')</text>
+  </g>
+  <!-- WAITLISTED (MIDDLE) -->
+  <g data-state="st-waitlisted">
+    <title>רשימת המתנה, אין כרגע שולחן פנוי, ההזמנה ממתינה, לחץ להסבר</title>
+    <rect x="660" y="260" width="220" height="82" rx="18" ry="18" fill="#ffffff" stroke="none"/>
+    <path d="M 660 286 v -8 a18 18 0 0 1 18 -18 h 184 a18 18 0 0 1 18 18 v 8 z" fill="#eef4ff"/>
+    <line x1="660" y1="286" x2="880" y2="286" stroke="#3b82f6" stroke-width="1"/>
+    <rect x="660" y="260" width="220" height="82" rx="18" ry="18" fill="none" stroke="#3b82f6" stroke-width="2"/>
+    <text x="770" y="278" font-size="12" font-weight="700" fill="#1e293b" text-anchor="middle" font-family="'Noto Sans Hebrew',sans-serif">&#1512;&#1513;&#1497;&#1502;&#1514; &#1492;&#1502;&#1514;&#1504;&#1492;</text>
+    <text x="670" y="306" font-size="10" fill="#334155" font-family="'IBM Plex Mono',monospace">entry / setStatus('WAITLISTED')</text>
+  </g>
+  <!-- CONFIRMED (RIGHT) -->
+  <g data-state="st-confirmed">
+    <title>מאושרת, קיים שולחן פנוי וההזמנה אושרה, ממתינה להשבת אורחים, לחץ להסבר</title>
+    <rect x="970" y="260" width="220" height="82" rx="18" ry="18" fill="#ffffff" stroke="none"/>
+    <path d="M 970 286 v -8 a18 18 0 0 1 18 -18 h 184 a18 18 0 0 1 18 18 v 8 z" fill="#eef4ff"/>
+    <line x1="970" y1="286" x2="1190" y2="286" stroke="#3b82f6" stroke-width="1"/>
+    <rect x="970" y="260" width="220" height="82" rx="18" ry="18" fill="none" stroke="#3b82f6" stroke-width="2"/>
+    <text x="1080" y="278" font-size="12" font-weight="700" fill="#1e293b" text-anchor="middle" font-family="'Noto Sans Hebrew',sans-serif">&#1502;&#1488;&#1493;&#1513;&#1512;&#1514;</text>
+    <text x="980" y="306" font-size="10" fill="#334155" font-family="'IBM Plex Mono',monospace">entry / setStatus('CONFIRMED')</text>
+  </g>
+
+  <!-- CANCELLED (outside, left of composite) -->
+  <g data-state="st-cancelled">
+    <title>בוטלה, ההזמנה בוטלה לפני ההשבה; הרשומה נשמרת לדוח ביטולים, לחץ להסבר</title>
+    <rect x="40" y="610" width="220" height="80" rx="18" ry="18" fill="#ffffff" stroke="none"/>
+    <path d="M 40 636 v -8 a18 18 0 0 1 18 -18 h 184 a18 18 0 0 1 18 18 v 8 z" fill="#eef4ff"/>
+    <line x1="40" y1="636" x2="260" y2="636" stroke="#3b82f6" stroke-width="1"/>
+    <rect x="40" y="610" width="220" height="80" rx="18" ry="18" fill="none" stroke="#3b82f6" stroke-width="2"/>
+    <text x="150" y="628" font-size="12" font-weight="700" fill="#1e293b" text-anchor="middle" font-family="'Noto Sans Hebrew',sans-serif">&#1489;&#1493;&#1496;&#1500;&#1492;</text>
+    <text x="50" y="656" font-size="10" fill="#334155" font-family="'IBM Plex Mono',monospace">entry / setStatus('CANCELLED');</text>
+    <text x="50" y="672" font-size="9" fill="#334155" font-family="'IBM Plex Mono',monospace">        setClosureReason('CANCELLED')</text>
+  </g>
+  <!-- EXPIRED (under WAITLISTED) -->
+  <g data-state="st-expired">
+    <title>פגת-תוקף, חלף מועד ההזמנה בעודה בהמתנה, לחץ להסבר</title>
+    <rect x="660" y="610" width="220" height="80" rx="18" ry="18" fill="#ffffff" stroke="none"/>
+    <path d="M 660 636 v -8 a18 18 0 0 1 18 -18 h 184 a18 18 0 0 1 18 18 v 8 z" fill="#eef4ff"/>
+    <line x1="660" y1="636" x2="880" y2="636" stroke="#3b82f6" stroke-width="1"/>
+    <rect x="660" y="610" width="220" height="80" rx="18" ry="18" fill="none" stroke="#3b82f6" stroke-width="2"/>
+    <text x="770" y="628" font-size="12" font-weight="700" fill="#1e293b" text-anchor="middle" font-family="'Noto Sans Hebrew',sans-serif">&#1508;&#1490;&#1514;-&#1514;&#1493;&#1511;&#1507;</text>
+    <text x="670" y="656" font-size="10" fill="#334155" font-family="'IBM Plex Mono',monospace">entry / setStatus('EXPIRED');</text>
+    <text x="670" y="672" font-size="9" fill="#334155" font-family="'IBM Plex Mono',monospace">        setClosureReason('EXPIRED')</text>
+  </g>
+  <!-- SEATED (under CONFIRMED) -->
+  <g data-state="st-seated">
+    <title>פעילה, האורחים הושבו לשולחן, הסעודה מתקיימת, לחץ להסבר</title>
+    <rect x="970" y="610" width="220" height="80" rx="18" ry="18" fill="#ffffff" stroke="none"/>
+    <path d="M 970 636 v -8 a18 18 0 0 1 18 -18 h 184 a18 18 0 0 1 18 18 v 8 z" fill="#eef4ff"/>
+    <line x1="970" y1="636" x2="1190" y2="636" stroke="#3b82f6" stroke-width="1"/>
+    <rect x="970" y="610" width="220" height="80" rx="18" ry="18" fill="none" stroke="#3b82f6" stroke-width="2"/>
+    <text x="1080" y="628" font-size="12" font-weight="700" fill="#1e293b" text-anchor="middle" font-family="'Noto Sans Hebrew',sans-serif">&#1508;&#1506;&#1497;&#1500;&#1492;</text>
+    <text x="980" y="656" font-size="10" fill="#334155" font-family="'IBM Plex Mono',monospace">entry / setStatus('SEATED')</text>
+  </g>
+  <!-- NO_SHOW (far right) -->
+  <g data-state="st-noshow">
+    <title>לא הופיעו, האורחים לא הגיעו תוך רבע שעה מהמועד, לחץ להסבר</title>
+    <rect x="1300" y="610" width="220" height="80" rx="18" ry="18" fill="#ffffff" stroke="none"/>
+    <path d="M 1300 636 v -8 a18 18 0 0 1 18 -18 h 184 a18 18 0 0 1 18 18 v 8 z" fill="#eef4ff"/>
+    <line x1="1300" y1="636" x2="1520" y2="636" stroke="#3b82f6" stroke-width="1"/>
+    <rect x="1300" y="610" width="220" height="80" rx="18" ry="18" fill="none" stroke="#3b82f6" stroke-width="2"/>
+    <text x="1410" y="628" font-size="12" font-weight="700" fill="#1e293b" text-anchor="middle" font-family="'Noto Sans Hebrew',sans-serif">&#1500;&#1488; &#1492;&#1493;&#1508;&#1497;&#1506;&#1493;</text>
+    <text x="1310" y="656" font-size="10" fill="#334155" font-family="'IBM Plex Mono',monospace">entry / setStatus('NO_SHOW');</text>
+    <text x="1310" y="672" font-size="9" fill="#334155" font-family="'IBM Plex Mono',monospace">        setClosureReason('NO_SHOW')</text>
+  </g>
+  <!-- COMPLETED (under SEATED) -->
+  <g data-state="st-completed">
+    <title>הושלמה, הסעודה הסתיימה וההזמנה נסגרה בהצלחה, לחץ להסבר</title>
+    <rect x="970" y="770" width="220" height="80" rx="18" ry="18" fill="#ffffff" stroke="none"/>
+    <path d="M 970 796 v -8 a18 18 0 0 1 18 -18 h 184 a18 18 0 0 1 18 18 v 8 z" fill="#eef4ff"/>
+    <line x1="970" y1="796" x2="1190" y2="796" stroke="#3b82f6" stroke-width="1"/>
+    <rect x="970" y="770" width="220" height="80" rx="18" ry="18" fill="none" stroke="#3b82f6" stroke-width="2"/>
+    <text x="1080" y="788" font-size="12" font-weight="700" fill="#1e293b" text-anchor="middle" font-family="'Noto Sans Hebrew',sans-serif">&#1492;&#1493;&#1513;&#1500;&#1502;&#1492;</text>
+    <text x="980" y="816" font-size="10" fill="#334155" font-family="'IBM Plex Mono',monospace">entry / setStatus('COMPLETED');</text>
+    <text x="980" y="832" font-size="9" fill="#334155" font-family="'IBM Plex Mono',monospace">        setClosureReason('COMPLETED')</text>
+  </g>
+
+  <!-- ============ pseudostates ============ -->
+  <g data-state="ps-initial">
+    <title>מצב התחלתי, נקודת הכניסה למחזור החיים, לחץ להסבר</title>
+    <circle cx="350" cy="58" r="8" fill="#1e293b"/>
+  </g>
+  <g data-state="ps-initial-inner">
+    <title>מצב התחלתי פנימי של מצב-העל, לחץ להסבר</title>
+    <circle cx="320" cy="301" r="8" fill="#1e293b"/>
+  </g>
+  <g data-state="st-archive">
+    <title>ארכיון, ההזמנה נסגרה אך הרשומה עדיין קיימת במערכת, לחץ להסבר</title>
+    <rect x="660" y="890" width="220" height="62" rx="18" ry="18" fill="#ffffff" stroke="none"/>
+    <path d="M 660 916 v -8 a18 18 0 0 1 18 -18 h 184 a18 18 0 0 1 18 18 v 8 z" fill="#f1f5f9"/>
+    <line x1="660" y1="916" x2="880" y2="916" stroke="#475569" stroke-width="1"/>
+    <rect x="660" y="890" width="220" height="62" rx="18" ry="18" fill="none" stroke="#475569" stroke-width="2"/>
+    <text x="770" y="908" font-size="12" font-weight="700" fill="#1e293b" text-anchor="middle" font-family="'Noto Sans Hebrew',sans-serif">ארכיון</text>
+    <text x="670" y="936" font-size="10" fill="#334155" font-family="'IBM Plex Mono',monospace">entry / setStatus('ARCHIVED')</text>
+  </g>
+  <g data-state="ps-final">
+    <title>מצב סיום, רשומת ההזמנה נגרעה מהמערכת ואינה קיימת עוד, לחץ להסבר</title>
+    <circle cx="770" cy="1060" r="12" fill="none" stroke="#1e293b" stroke-width="2"/>
+    <circle cx="770" cy="1060" r="7" fill="#1e293b"/>
+  </g>
+
+  <!-- ============ transitions ============ -->
+  <!-- top initial -> composite -->
+  <path d="M 350 66 L 350 100" fill="none" stroke="#334155" stroke-width="1.8" marker-end="url(#arrow)"/>
+  <!-- inner initial -> requested -->
+  <path d="M 328 301 L 350 301" fill="none" stroke="#334155" stroke-width="1.8" marker-end="url(#arrow)"/>
+  <!-- requested -> waitlisted (adjacent) -->
+  <path d="M 570 301 L 660 301" fill="none" stroke="#334155" stroke-width="1.8" marker-end="url(#arrow)"/>
+  <!-- waitlisted -> confirmed (adjacent) -->
+  <path d="M 880 301 L 970 301" fill="none" stroke="#334155" stroke-width="1.8" marker-end="url(#arrow)"/>
+  <!-- requested -> confirmed (arc above the row) -->
+  <path d="M 520 260 C 560 175, 980 175, 1020 260" fill="none" stroke="#334155" stroke-width="1.8" marker-end="url(#arrow)"/>
+  <!-- requested self-loop (below the box) -->
+  <path d="M 400 342 C 400 402, 490 402, 490 342" fill="none" stroke="#334155" stroke-width="1.8" marker-end="url(#arrow)"/>
+  <!-- composite border-exit -> cancelled -->
+  <path d="M 280 400 L 150 400 L 150 610" fill="none" stroke="#334155" stroke-width="1.8" marker-end="url(#arrow)"/>
+  <!-- waitlisted -> expired (down, time) -->
+  <path d="M 770 342 L 770 610" fill="none" stroke="#334155" stroke-width="1.8" marker-end="url(#arrow)"/>
+  <!-- confirmed -> seated (down, exits composite bottom) -->
+  <path d="M 1050 342 L 1050 610" fill="none" stroke="#334155" stroke-width="1.8" marker-end="url(#arrow)"/>
+  <!-- confirmed -> no_show (down-right) -->
+  <path d="M 1150 342 L 1150 470 L 1410 470 L 1410 610" fill="none" stroke="#334155" stroke-width="1.8" marker-end="url(#arrow)"/>
+  <!-- seated -> completed (down) -->
+  <path d="M 1080 690 L 1080 770" fill="none" stroke="#334155" stroke-width="1.8" marker-end="url(#arrow)"/>
+  <!-- ==== closure transitions: outcome states -> ARCHIVE (time events) ==== -->
+  <!-- expired -> archive (top entry) -->
+  <path d="M 770 690 L 770 888" fill="none" stroke="#334155" stroke-width="1.8" marker-end="url(#arrow)"/>
+  <!-- cancelled -> archive (left entry) -->
+  <path d="M 150 690 L 150 921 L 658 921" fill="none" stroke="#334155" stroke-width="1.8" marker-end="url(#arrow)"/>
+  <!-- completed -> archive (right entry, upper) -->
+  <path d="M 1080 850 L 1080 905 L 882 905" fill="none" stroke="#334155" stroke-width="1.8" marker-end="url(#arrow)"/>
+  <!-- no_show -> archive (right entry, lower) -->
+  <path d="M 1410 690 L 1410 940 L 882 940" fill="none" stroke="#334155" stroke-width="1.8" marker-end="url(#arrow)"/>
+  <!-- ==== retention transition: ARCHIVE -> final ==== -->
+  <path d="M 770 952 L 770 1048" fill="none" stroke="#334155" stroke-width="1.8" marker-end="url(#arrow)"/>
+
+  <!-- ============ transition labels ============ -->
+  <g font-size="10" font-family="'Noto Sans Hebrew','IBM Plex Mono',monospace">
+  <!-- closure transitions -> archive: time events (NOTATION: every non-initial transition is labelled) -->
+  <text class="tl" x="790" y="800" text-anchor="start" fill="#334155" style="direction:ltr;unicode-bidi:isolate">after(30 יום)</text>
+  <text class="tl" x="790" y="813" text-anchor="start" fill="#15803d">/ removeFromActiveLists()</text>
+  <text class="tl" x="170" y="845" text-anchor="start" fill="#334155" style="direction:ltr;unicode-bidi:isolate">after(30 יום)</text>
+  <text class="tl" x="170" y="858" text-anchor="start" fill="#15803d">/ removeFromActiveLists()</text>
+  <text class="tl" x="1100" y="880" text-anchor="start" fill="#334155" style="direction:ltr;unicode-bidi:isolate">after(30 יום)</text>
+  <text class="tl" x="1100" y="893" text-anchor="start" fill="#15803d">/ removeFromActiveLists()</text>
+  <text class="tl" x="1395" y="965" text-anchor="end" fill="#334155" style="direction:ltr;unicode-bidi:isolate">after(30 יום)</text>
+  <text class="tl" x="1395" y="978" text-anchor="end" fill="#15803d">/ removeFromActiveLists()</text>
+  <!-- retention transition -> final -->
+  <text class="tl" x="790" y="985" text-anchor="start" fill="#334155" style="direction:ltr;unicode-bidi:isolate">after(שנתיים)</text>
+  <text class="tl" x="790" y="998" text-anchor="start" fill="#0891b2">[אין רשומות שמורות המפנות להזמנה]</text>
+  <text class="tl" x="790" y="1011" text-anchor="start" fill="#15803d">/ purge()</text>
+    <!-- requested -> waitlisted -->
+    <text class="tl" x="615" y="290" text-anchor="middle" fill="#334155">&#1488;&#1497;&#1503; &#1513;&#1493;&#1500;&#1495;&#1503; &#1508;&#1504;&#1493;&#1497;</text>
+    <!-- waitlisted -> confirmed -->
+    <text class="tl" x="925" y="280" text-anchor="middle" fill="#334155">&#1492;&#1514;&#1508;&#1504;&#1492; &#1513;&#1493;&#1500;&#1495;&#1503;</text>
+    <text class="tl" x="925" y="293" text-anchor="middle" fill="#0891b2">[&#1502;&#1488;&#1512;&#1495;]</text>
+    <!-- requested -> confirmed (arc) -->
+    <text class="tl" x="770" y="156" text-anchor="middle" fill="#334155">&#1488;&#1497;&#1513;&#1493;&#1512; &#1492;&#1494;&#1502;&#1504;&#1492;</text>
+    <text class="tl" x="770" y="169" text-anchor="middle" fill="#0891b2">[&#1502;&#1488;&#1512;&#1495;, &#1511;&#1497;&#1497;&#1501; &#1513;&#1493;&#1500;&#1495;&#1503; &#1508;&#1504;&#1493;&#1497;]</text>
+    <!-- requested self loop -->
+    <text class="tl" x="445" y="416" text-anchor="middle" fill="#334155">&#1506;&#1491;&#1499;&#1493;&#1503; &#1508;&#1512;&#1496;&#1497; &#1489;&#1511;&#1513;&#1492;</text>
+    <text class="tl" x="445" y="429" text-anchor="middle" fill="#0891b2">[&#1500;&#1511;&#1493;&#1495;]</text>
+    <!-- composite -> cancelled -->
+    <text class="tl" x="205" y="378" text-anchor="middle" fill="#334155">&#1489;&#1497;&#1496;&#1493;&#1500;</text>
+    <text class="tl" x="205" y="391" text-anchor="middle" fill="#0891b2">[&#1500;&#1511;&#1493;&#1495; / &#1502;&#1504;&#1492;&#1500; &#1505;&#1504;&#1497;&#1507;]</text>
+    <!-- waitlisted -> expired -->
+    <text class="tl" x="782" y="440" text-anchor="start" fill="#334155">&#1495;&#1500;&#1507; &#1492;&#1502;&#1493;&#1506;&#1491;</text>
+    <text class="tl" x="782" y="453" text-anchor="start" fill="#0891b2">[&#1513;&#1495;&#1511;&#1503; &#1494;&#1502;&#1503; / Time]</text>
+    <!-- confirmed -> seated -->
+    <text class="tl" x="1062" y="416" text-anchor="start" fill="#334155">&#1492;&#1493;&#1513;&#1489;&#1514; &#1488;&#1493;&#1512;&#1495;&#1497;&#1501;</text>
+    <text class="tl" x="1062" y="429" text-anchor="start" fill="#0891b2">[&#1502;&#1488;&#1512;&#1495;]</text>
+    <!-- confirmed -> no_show -->
+    <text class="tl" x="1280" y="461" text-anchor="middle" fill="#334155">&#1495;&#1500;&#1507; &#1512;&#1489;&#1506; &#1513;&#1506;&#1492; &#1502;&#1492;&#1502;&#1493;&#1506;&#1491;</text>
+    <text class="tl" x="1280" y="486" text-anchor="middle" fill="#0891b2">[&#1513;&#1495;&#1511;&#1503; &#1494;&#1502;&#1503; / &#1505;&#1497;&#1502;&#1493;&#1503; &#1502;&#1488;&#1512;&#1495;]</text>
+    <!-- seated -> completed -->
+    <text class="tl" x="1092" y="726" text-anchor="start" fill="#334155">&#1514;&#1493;&#1501; &#1492;&#1505;&#1506;&#1493;&#1491;&#1492;</text>
+    <text class="tl" x="1092" y="739" text-anchor="start" fill="#0891b2">[&#1502;&#1488;&#1512;&#1495;]</text>
+  </g>
+
+  <!-- ============ legend ============ -->
+  <g font-size="10" font-family="'Noto Sans Hebrew','IBM Plex Mono',monospace" fill="#64748b">
+    <circle cx="80" cy="1196" r="6" fill="#1e293b"/>
+    <text x="94" y="1200">&#1502;&#1510;&#1489; &#1492;&#1514;&#1495;&#1500;&#1514;&#1497;</text>
+    <circle cx="185" cy="1196" r="8" fill="none" stroke="#1e293b" stroke-width="1.5"/>
+    <circle cx="185" cy="1196" r="4" fill="#1e293b"/>
+    <text x="200" y="1200">&#1502;&#1510;&#1489; &#1505;&#1497;&#1493;&#1501;</text>
+    <rect x="280" y="1188" width="34" height="16" rx="6" fill="#fff" stroke="#3b82f6" stroke-width="1.5"/>
+    <text x="322" y="1200">&#1502;&#1510;&#1489;</text>
+    <rect x="370" y="1188" width="34" height="16" rx="6" fill="#f0f7ff" stroke="#2563eb" stroke-width="1.5" stroke-dasharray="5 3"/>
+    <text x="412" y="1200">&#1502;&#1510;&#1489;-&#1506;&#1500; (composite)</text>
+    <line x1="540" y1="1196" x2="580" y2="1196" stroke="#334155" stroke-width="1.8" marker-end="url(#arrow)"/>
+    <text x="590" y="1200">&#1502;&#1506;&#1489;&#1512;: &#1488;&#1497;&#1512;&#1493;&#1506; <tspan fill="#0891b2">[&#1514;&#1504;&#1488;&#1497;]</tspan> <tspan fill="#15803d">/ &#1508;&#1506;&#1493;&#1500;&#1492;</tspan></text>
+  </g>
+</svg>
+</div>
+</div>
+
+<div id="modal-overlay" hidden>
+  <div id="modal" dir="rtl" role="dialog" aria-modal="true">
+    <button class="modal-close" onclick="closeStateModal()">&#10005;</button>
+    <h2 id="modal-title"></h2>
+    <span id="modal-status" class="status-const"></span>
+    <div id="modal-body"></div>
+  </div>
+</div>
+
+<button class="vp-export-btn" onclick="exportXMI()">Download .xmi (Visual Paradigm)</button>
+
+<script>
+const diagramModel = {
+  kind: 'state',
+  title: 'Reservation Lifecycle, Shulchan Panui',
+  parts: [{
+    id: 'part-1',
+    label: 'Reservation',
+    splitRationale: '',
+    elements: [
+      { kind: 'pseudostate', id: 'ps-initial', subKind: 'initial', x: 350, y: 58 },
+      { kind: 'state', id: 'st-composite', name: 'טרם הושבה', isComposite: true,
+        statusConstant: 'PRE_SEATED',
+        activities: { entry: ["setStatus('PRE_SEATED')"], exit: [], do: [] },
+        x: 280, y: 100, w: 980, h: 400,
+        subElements: [
+          { kind: 'pseudostate', id: 'ps-initial-inner', subKind: 'initial', x: 320, y: 301 },
+          { kind: 'state', id: 'st-requested', name: 'מבוקשת', isComposite: false,
+            statusConstant: 'REQUESTED',
+            activities: { entry: ["setStatus('REQUESTED')"], exit: [], do: [] },
+            x: 350, y: 260, w: 220, h: 82, subElements: [] },
+          { kind: 'state', id: 'st-waitlisted', name: 'רשימת המתנה', isComposite: false,
+            statusConstant: 'WAITLISTED',
+            activities: { entry: ["setStatus('WAITLISTED')"], exit: [], do: [] },
+            x: 660, y: 260, w: 220, h: 82, subElements: [] },
+          { kind: 'state', id: 'st-confirmed', name: 'מאושרת', isComposite: false,
+            statusConstant: 'CONFIRMED',
+            activities: { entry: ["setStatus('CONFIRMED')"], exit: [], do: [] },
+            x: 970, y: 260, w: 220, h: 82, subElements: [] }
+        ] },
+      { kind: 'state', id: 'st-cancelled', name: 'בוטלה', isComposite: false,
+        statusConstant: 'CANCELLED',
+        activities: { entry: ["setStatus('CANCELLED')", "setClosureReason('CANCELLED')"], exit: [], do: [] },
+        x: 40, y: 610, w: 220, h: 80, subElements: [] },
+      { kind: 'state', id: 'st-expired', name: 'פגת-תוקף', isComposite: false,
+        statusConstant: 'EXPIRED',
+        activities: { entry: ["setStatus('EXPIRED')", "setClosureReason('EXPIRED')"], exit: [], do: [] },
+        x: 660, y: 610, w: 220, h: 80, subElements: [] },
+      { kind: 'state', id: 'st-seated', name: 'פעילה', isComposite: false,
+        statusConstant: 'SEATED',
+        activities: { entry: ["setStatus('SEATED')"], exit: [], do: [] },
+        x: 970, y: 610, w: 220, h: 80, subElements: [] },
+      { kind: 'state', id: 'st-noshow', name: 'לא הופיעו', isComposite: false,
+        statusConstant: 'NO_SHOW',
+        activities: { entry: ["setStatus('NO_SHOW')", "setClosureReason('NO_SHOW')"], exit: [], do: [] },
+        x: 1300, y: 610, w: 220, h: 80, subElements: [] },
+      { kind: 'state', id: 'st-completed', name: 'הושלמה', isComposite: false,
+        statusConstant: 'COMPLETED',
+        activities: { entry: ["setStatus('COMPLETED')", "setClosureReason('COMPLETED')"], exit: [], do: [] },
+        x: 970, y: 770, w: 220, h: 80, subElements: [] },
+      { kind: 'state', id: 'st-archive', name: 'ארכיון', isComposite: false,
+        statusConstant: 'ARCHIVED',
+        activities: { entry: ["setStatus('ARCHIVED')"], exit: [], do: [] },
+        x: 660, y: 890, w: 220, h: 62, subElements: [] },
+      { kind: 'pseudostate', id: 'ps-final', subKind: 'final', x: 770, y: 1060 }
+    ],
+    relationships: [
+      { kind: 'transition', id: 't1',  from: 'ps-initial',       to: 'st-composite', event: '', guard: '', action: '', isSelf: false },
+      { kind: 'transition', id: 't2',  from: 'ps-initial-inner', to: 'st-requested', event: '', guard: '', action: '', isSelf: false },
+      { kind: 'transition', id: 't3',  from: 'st-requested',     to: 'st-waitlisted', event: 'אין שולחן פנוי', guard: '', action: '', isSelf: false },
+      { kind: 'transition', id: 't4',  from: 'st-waitlisted',    to: 'st-confirmed', event: 'התפנה שולחן', guard: 'מארח', action: '', isSelf: false },
+      { kind: 'transition', id: 't5',  from: 'st-requested',     to: 'st-confirmed', event: 'אישור הזמנה', guard: 'מארח, קיים שולחן פנוי', action: '', isSelf: false },
+      { kind: 'transition', id: 't6',  from: 'st-requested',     to: 'st-requested', event: 'עדכון פרטי בקשה', guard: 'לקוח', action: '', isSelf: true },
+      { kind: 'transition', id: 't7',  from: 'st-composite',     to: 'st-cancelled', event: 'ביטול', guard: 'לקוח / מנהל סניף', action: '', isSelf: false },
+      { kind: 'transition', id: 't8',  from: 'st-waitlisted',    to: 'st-expired', event: 'חלף המועד', guard: 'שחקן זמן / Time', action: '', isSelf: false },
+      { kind: 'transition', id: 't9',  from: 'st-confirmed',     to: 'st-seated', event: 'הושבת אורחים', guard: 'מארח', action: '', isSelf: false },
+      { kind: 'transition', id: 't10', from: 'st-confirmed',     to: 'st-noshow', event: 'חלף רבע שעה מהמועד', guard: 'שחקן זמן / סימון מארח', action: '', isSelf: false },
+      { kind: 'transition', id: 't11', from: 'st-seated',        to: 'st-completed', event: 'תום הסעודה', guard: 'מארח', action: '', isSelf: false },
+      { kind: 'transition', id: 't12', from: 'st-completed',     to: 'st-archive', event: 'after(30 יום)', guard: '', action: 'removeFromActiveLists()', isSelf: false },
+      { kind: 'transition', id: 't13', from: 'st-cancelled',     to: 'st-archive', event: 'after(30 יום)', guard: '', action: 'removeFromActiveLists()', isSelf: false },
+      { kind: 'transition', id: 't14', from: 'st-noshow',        to: 'st-archive', event: 'after(30 יום)', guard: '', action: 'removeFromActiveLists()', isSelf: false },
+      { kind: 'transition', id: 't15', from: 'st-expired',       to: 'st-archive', event: 'after(30 יום)', guard: '', action: 'removeFromActiveLists()', isSelf: false },
+      { kind: 'transition', id: 't16', from: 'st-archive',       to: 'ps-final',   event: 'after(שנתיים)', guard: 'אין רשומות שמורות המפנות להזמנה', action: 'purge()', isSelf: false }
+    ]
+  }]
+};
+
+function xmlEscape(s) {
+  return String(s ?? '')
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;').replace(/'/g, '&apos;');
+}
+
+function downloadFile(filename, mimeType, content) {
+  const blob = new Blob([content], { type: mimeType });
+  const url = URL.createObjectURL(blob);
+  const a = Object.assign(document.createElement('a'), { href: url, download: filename });
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(() => { URL.revokeObjectURL(url); a.remove(); }, 1000);
+}
+
+function xmiBody(elements, rels) {
+  const lines = [];
+  lines.push(`    <packagedElement xmi:type="uml:StateMachine" xmi:id="sm_1" name="${xmlEscape(diagramModel.title)}">`);
+  lines.push(`      <region xmi:type="uml:Region" xmi:id="region_1">`);
+  const walk = els => {
+    for (const el of els) {
+      if (el.kind === 'pseudostate')
+        lines.push(`        <subvertex xmi:type="uml:Pseudostate" xmi:id="${el.id}" kind="${el.subKind}"/>`);
+      if (el.kind === 'state') {
+        lines.push(`        <subvertex xmi:type="uml:State" xmi:id="${el.id}" name="${xmlEscape(el.name)}"/>`);
+        if (el.subElements && el.subElements.length) walk(el.subElements);
+      }
+    }
+  };
+  walk(elements);
+  for (const r of rels) {
+    if (r.kind === 'transition')
+      lines.push(`        <transition xmi:type="uml:Transition" xmi:id="${r.id}" source="${r.from}" target="${r.to}"${r.event ? ` name="${xmlEscape(r.event)}"` : ''}/>`);
+  }
+  lines.push(`      </region>`);
+  lines.push(`    </packagedElement>`);
+  return lines.join('\n');
+}
+
+function exportXMI() {
+  const m = diagramModel;
+  const title = xmlEscape(m.title || 'diagram');
+  const allElements = m.parts.flatMap(p => p.elements);
+  const allRelationships = m.parts.flatMap(p => p.relationships);
+  const body = xmiBody(allElements, allRelationships);
+  const xmi = `<?xml version="1.0" encoding="UTF-8"?>
+<xmi:XMI xmi:version="2.1"
+  xmlns:xmi="http://www.omg.org/XMI"
+  xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML">
+  <uml:Model xmi:id="model_1" name="${title}">
+${body}
+  </uml:Model>
+</xmi:XMI>`;
+  downloadFile(title.replace(/\s+/g, '_') + '.xmi', 'application/xml', xmi);
+}
+
+// ============ educational state explanations ============
+const STATE_INFO = {
+  'ps-initial': {
+    title: 'מצב התחלתי (Initial)',
+    status: '',
+    covers: 'פסאודו-מצב ולא מצב אמיתי: נקודת הכניסה היחידה למחזור החיים של הזמנת השולחן. הוא מסמן היכן "נולד" אובייקט ההזמנה.',
+    logic: 'החץ היוצא ממנו הוא היחיד בתרשים שמותר לו להיות ללא תווית אירוע. הכניסה מובילה אל מצב-העל "טרם הושבה", ומשם המצב ההתחלתי הפנימי מפנה אל "מבוקשת".',
+    teach: 'בכל תרשים יש בדיוק מצב התחלתי אחד ברמה העליונה, ללא חצים נכנסים. סימון אירוע על החץ הזה הוא שגיאה.'
+  },
+  'ps-initial-inner': {
+    title: 'מצב התחלתי פנימי של מצב-העל',
+    status: '',
+    covers: 'פסאודו-מצב התחלתי בתוך מצב-העל "טרם הושבה". הוא קובע לאיזה תת-מצב נכנסים כאשר חץ מגיע אל גבול מצב-העל.',
+    logic: 'חץ שנכנס אל מסגרת מצב-העל אינו אומר באיזה תת-מצב מתחילים, המצב ההתחלתי הפנימי עונה על כך: כל כניסה למצב-העל מתחילה ב"מבוקשת".',
+    teach: 'זהו המנגנון הסטנדרטי ב-UML לכניסה למצב מורכב: חץ אל הגבול ⟵ מצב התחלתי פנימי ⟵ תת-המצב הראשון.'
+  },
+  'st-composite': {
+    title: 'טרם הושבה, מצב-על (composite)',
+    status: 'PRE_SEATED',
+    covers: 'כל התקופה שבה ההזמנה קיימת אך האורחים עדיין לא הושבו לשולחן: מרגע קבלת הבקשה ועד לאישור, לפקיעה, או לביטול. בכל רגע נתון ההזמנה נמצאת בדיוק באחד משלושת תתי-המצבים שבפנים (מבוקשת, רשימת המתנה, מאושרת).',
+    logic: 'שלושת תתי-המצבים חולקים מעבר יוצא משותף: אירוע "ביטול" יכול לקרות בכל שלב לפני ההשבה, לא משנה אם ההזמנה מבוקשת, בהמתנה או מאושרת. במקום לצייר שלושה חצי "ביטול" זהים (אחד מכל תת-מצב), מציירים חץ אחד מגבול מצב-העל. הגבלת ה-guard [לקוח / מנהל סניף] וגם עצם היות ההזמנה בתוך מצב-העל מבטיחים שביטול חוקי רק לפני ההשבה.',
+    teach: 'זו המטרה הפדגוגית של מצבי-על: קיבוץ תתי-מצבים שיש להם מעבר יוצא משותף, וכך צמצום כפילויות ותנאים. חץ היוצא מהגבול "יורה" מכל תת-מצב פעיל, כאן חץ ביטול אחד מחליף שלושה.'
+  },
+  'st-requested': {
+    title: 'מבוקשת',
+    status: 'REQUESTED',
+    covers: 'הלקוח שלח בקשת הזמנה (טלפונית או באפליקציה) שטרם טופלה. זהו שלב "הפתיחה" של ההזמנה, לפני שהמארח בדק אם יש שולחן פנוי.',
+    logic: 'מהמצב הזה שני עתידים אפשריים לפי זמינות שולחן: אם יש שולחן פנוי, "אישור הזמנה" (מהמארח) מוביל ישירות ל"מאושרת"; אם אין, "אין שולחן פנוי" מעביר ל"רשימת המתנה". הלולאה העצמית "עדכון פרטי בקשה" מבטאת אירוע שמשנה נתונים (מספר סועדים, שעה מבוקשת) אך אינו משנה את מצב ההזמנה, ולכן חץ שחוזר לאותו מצב ולא מצב חדש.',
+    teach: 'אירוע שמעדכן מידע פנימי בלי לשנות התנהגות = מעבר-עצמי (self-transition). טעות נפוצה היא להמציא מצב חדש ("מתעדכנת") לכל עדכון, מצב מצדיק את קיומו רק אם ההתנהגות או החוקים שונים.'
+  },
+  'st-waitlisted': {
+    title: 'רשימת המתנה',
+    status: 'WAITLISTED',
+    covers: 'אין כרגע שולחן פנוי במועד המבוקש, וההזמנה ממתינה בתור. שלב "פסיבי", ההזמנה תקינה אך תלויה בהתפנות שולחן לפני שיחלוף המועד.',
+    logic: 'זהו המצב המעניין ביותר בתרשים: יש לו שתי יציאות שמופעלות מטריגרים שונים לגמרי. (1) יציאה מבוססת-אירוע: "התפנה שולחן" (מהמארח) מקדם ל"מאושרת". (2) יציאה מבוססת-זמן: "חלף המועד" (שחקן הזמן) מעביר ל"פגת-תוקף". אותה המתנה יכולה להסתיים בהצלחה או בכישלון, ומה שמכריע הוא מי הפעיל את המעבר, פעולה אנושית מול אירוע זמן.',
+    teach: 'שימו לב שמצב יכול להיות מוחלף בשני סוגי טריגרים שונים: אירוע יזום (אדם) לעומת אירוע זמן (שחקן הזמן / Time). לא כל מעבר מתחיל ממשתמש, לוח הזמנים הוא טריגר לגיטימי.'
+  },
+  'st-confirmed': {
+    title: 'מאושרת',
+    status: 'CONFIRMED',
+    covers: 'קיים שולחן פנוי וההזמנה אושרה, אך האורחים עדיין לא הגיעו/הושבו. "מצב היעד" של שלב הטרום-הושבה, מרגע האישור ועד ההגעה בפועל.',
+    logic: 'למצב שני מסלולי כניסה: המסלול הישיר (מ"מבוקשת", כשהיה שולחן פנוי מלכתחילה) והמסלול דרך ההמתנה (מ"רשימת המתנה", לאחר שהתפנה שולחן). המצב עצמו זהה בשני המקרים, מצב אינו "זוכר" איך הגיעו אליו. משלושת ההמשכים לאחר האישור, כל אחד נבדל בטריגר: "הושבת אורחים" (פעולת מארח) ⟵ פעילה; "חלף רבע שעה מהמועד" (שחקן זמן, או סימון ידני של המארח) ⟵ לא הופיעו; ו"ביטול" (מגבול מצב-העל) ⟵ בוטלה, אך רק כל עוד טרם הושבו, שכן ביטול חוקי רק לפני ההשבה.',
+    teach: 'ריבוי חצים נכנסים למצב אחד תקין ונפוץ, אל תשכפלו מצב ("מאושרת מיידית" / "מאושרת אחרי המתנה") אם ההתנהגות זהה. וכן: שלושה המשכים הנבדלים בטריגר (אדם מול זמן) ובחוקיות (ביטול רק לפני השבה) הם דוגמה טובה להסתעפות לפי אירועים ותנאים.'
+  },
+  'st-seated': {
+    title: 'פעילה',
+    status: 'SEATED',
+    covers: 'האורחים הגיעו והושבו לשולחן; הסעודה מתקיימת. מרגע ההושבה הביטול כבר אינו אפשרי, לכן מצב זה נמצא מחוץ למצב-העל "טרם הושבה".',
+    logic: 'הכניסה לכאן היא באירוע "הושבת אורחים" מהמארח, והיא חוצה את גבול מצב-העל כלפי מטה, כלומר יוצאת אל עולם "אחרי ההשבה", שבו כלל הביטול המשותף כבר לא חל. היציאה היחידה היא "תום הסעודה" אל "הושלמה".',
+    teach: 'מיקום מצב מחוץ למצב-העל הוא החלטת מודל: הוצאנו את "פעילה" החוצה בדיוק כדי שחץ הביטול המשותף (שחל רק בתוך מצב-העל) לא יחול עליה. גבול מצב-העל אינו רק ציור, הוא מגדיר על אילו מצבים חל המעבר המשותף.'
+  },
+  'st-completed': {
+    title: 'הושלמה',
+    status: 'COMPLETED',
+    covers: 'הסעודה הסתיימה וההזמנה נסגרה בהצלחה. זהו הסיום ה"חיובי" של מחזור החיים.',
+    logic: 'מגיעים לכאן רק מ"פעילה", באירוע "תום הסעודה". מכאן מעבר-השלמה אל מצב הסיום. זהו אחד מארבעה מצבים סופיים (הושלמה, בוטלה, לא הופיעו, פגת-תוקף) שכולם מנקזים אל אותו מצב סיום דרך רצועת איסוף אופקית משותפת בתחתית התרשים.',
+    teach: 'מעבר של השלמה אל מצב הסיום הוא סטנדרט UML ומותר לו להיות ללא תווית אירוע. ריכוז ארבעת המצבים הסופיים לרצועת איסוף אחת שומר על התרשים נקי ומונע הצלבות חצים.'
+  },
+  'st-cancelled': {
+    title: 'בוטלה',
+    status: 'CANCELLED',
+    covers: 'ההזמנה בוטלה לפני שהאורחים הושבו, ביוזמת הלקוח או מנהל הסניף. סיום "שלילי" אך לגיטימי של מחזור החיים.',
+    logic: 'המעבר לכאן הוא חץ הביטול המשותף היוצא מגבול מצב-העל "טרם הושבה", ולכן הוא תופס את ההזמנה בכל אחד משלושת תתי-המצבים (מבוקשת / רשימת המתנה / מאושרת). הרשומה אינה נמחקת אלא נשמרת: ההזמנה מגיעה למצב סיום (ארכיון לוגי) כדי שתיכלל בדוח הביטולים החודשי. שמירת הרשומה, ולא מחיקתה, היא שמאפשרת את הדיווח.',
+    teach: 'שני לקחים: (1) חץ אחד מגבול מצב-העל חוסך שלושה חצי ביטול כפולים, התועלת המעשית של composite; (2) במערכות מידע עסקיות לא מוחקים רשומות מבוטלות אלא שומרים אותן (soft delete) לצורכי ביקורת ודוחות, כאן דוח הביטולים החודשי.'
+  },
+  'st-noshow': {
+    title: 'לא הופיעו',
+    status: 'NO_SHOW',
+    covers: 'ההזמנה אושרה אך האורחים לא הגיעו תוך רבע שעה מהמועד. הזמנה "מבוזבזת" שהשולחן שוריין עבורה לשווא.',
+    logic: 'המעבר מ"מאושרת" מופעל בשני אופנים שקולים: אוטומטית על ידי שחקן הזמן (חלפה רבע שעה) או בסימון ידני של המארח. שימו לב להבדל מ"בוטלה": ביטול הוא פעולה אקטיבית לפני המועד, ואילו אי-הופעה מזוהה בדיעבד אחרי המועד. שני המצבים סופיים ומנקזים למצב הסיום, אך הם נבדלים במקור הטריגר ובעיתוי.',
+    teach: 'אותו מעבר יכול להיות מופעל מכמה מקורות (זמן או אדם) ועדיין להוביל לאותו מצב, זה תקין. ההבחנה בין "בוטלה" ל"לא הופיעו" ממחישה שמצבים נבדלים לפי הסמנטיקה העסקית, לא רק לפי התוצאה (בשניהם השולחן מתפנה).'
+  },
+  'st-expired': {
+    title: 'פגת-תוקף',
+    status: 'EXPIRED',
+    covers: 'ההזמנה נותרה ב"רשימת המתנה" עד שחלף מועד ההזמנה, ומעולם לא שובצה לשולחן. סיום עקב פקיעת זמן בזמן המתנה.',
+    logic: 'המעבר לכאן מ"רשימת המתנה" מופעל אך ורק על ידי שחקן הזמן ("חלף המועד"), זהו העתיד ה"שלילי" של ההמתנה, לעומת "התפנה שולחן" שהוא העתיד ה"חיובי". השוו זאת ל"לא הופיעו": שם ההזמנה כבר הייתה מאושרת ושולחן שוריין, וכאן שולחן מעולם לא נמצא. שני המצבים נגרמים מזמן אך במשמעות עסקית שונה.',
+    teach: 'למצב "רשימת המתנה" שתי יציאות מבוססות-אירועים שונים, האחת אנושית (התפנה שולחן) והאחת מבוססת-זמן (חלף המועד). הבחנה בין פקיעה בהמתנה (פגת-תוקף) לבין אי-הופעה אחרי אישור מדגישה שהמשמעות העסקית, לא רק הטריגר, קובעת את זהות המצב.'
+  },
+  'st-archive': {
+    title: 'ארכיון',
+    status: 'ARCHIVED',
+    covers: 'ההזמנה נסגרה, בכל אחת מארבע הדרכים, אך הרשומה עדיין קיימת במערכת. היא פשוט אינה מוצגת עוד במסכי העבודה של המארח, שמסננים ומציגים רק הזמנות פעילות. כאן היא ממשיכה לשרת את דוח הביטולים החודשי ואת ניתוחי העומס העונתיים.',
+    logic: 'נכנסים אליו מכל ארבעת מצבי התוצאה, הושלמה, בוטלה, לא הופיעו ופגת-תוקף, כעבור 30 יום מהסגירה, אחרי שהדוח החודשי כבר רץ. יש לו יציאה אחת בלבד: after(שנתיים) אל מצב הסיום, עם guard שמוודא שאין רשומה שמורה אחרת המפנה להזמנה. שנתיים ולא שבע, משום שאין כאן חיוב כספי אלא רשומה תפעולית, והצורך היחיד שמצדיק שמירה הוא השוואת עומסים שנה-מול-שנה.',
+    teach: 'זה הלב של התרשים: "נסגרה" אינו "נמחקה". כל ארבע התוצאות מתנקזות למצב אחד, וסיבת הסגירה אינה אובדת, היא נשמרה ב-setClosureReason בתכונה נפרדת שהמעבר לארכיון אינו דורס. שימו לב שאין למצב פעילות do, "להישמר" אינו התנהגות.'
+  },
+  'ps-final': {
+    title: 'מצב סיום (Final)',
+    status: '',
+    covers: 'פסאודו-מצב שמשמעותו אחת בלבד: רשומת ההזמנה נגרעה מהמערכת ואינה קיימת עוד. זהו סוף הקיום, לא סוף התהליך.',
+    logic: 'מגיעים אליו ממצב אחד בלבד, "ארכיון", ובאירוע זמן יחיד: after(שנתיים), חלוף תקופת השמירה. אף מצב תוצאה עסקי, הושלמה, בוטלה, לא הופיעו או פגת-תוקף, אינו מחובר ישירות למצב הסיום, משום שסגירת ההזמנה אינה מוחקת אותה.',
+    teach: 'זו הנקודה הנבחנת: מצב הסיום אינו "ההזמנה הסתיימה" אלא "ההזמנה כבר לא במערכת". מי שמסמן את "הושלמה" או "בוטלה" כמצב סיום, טוען למעשה שהרשומה נמחקת ברגע הסגירה, וזו סתירה לדוח הביטולים החודשי שהסיפור דורש. הטריגר היחיד שמוביל לכאן הוא חלוף תקופת השמירה.'
+  }
+};
+
+function openStateModal(key) {
+  const info = STATE_INFO[key];
+  if (!info) return;
+  document.getElementById('modal-title').textContent = info.title;
+  const st = document.getElementById('modal-status');
+  st.textContent = info.status ? "entry / setStatus('" + info.status + "')" : '';
+  st.style.display = info.status ? 'inline-block' : 'none';
+  document.getElementById('modal-body').innerHTML =
+    '<h3>מה המצב מכסה</h3><p>' + info.covers + '</p>' +
+    '<h3>הלוגיקה</h3><p>' + info.logic + '</p>' +
+    '<div class="teach"><h3>נקודת לימוד</h3><p>' + info.teach + '</p></div>';
+  document.getElementById('modal-overlay').hidden = false;
+}
+
+function closeStateModal() {
+  document.getElementById('modal-overlay').hidden = true;
+}
+
+addEventListener('load', () => {
+  document.querySelectorAll('[data-state]').forEach(g => {
+    g.addEventListener('click', e => { e.stopPropagation(); openStateModal(g.dataset.state); });
+  });
+  document.getElementById('modal-overlay').addEventListener('click', e => {
+    if (e.target.id === 'modal-overlay') closeStateModal();
+  });
+  addEventListener('keydown', e => { if (e.key === 'Escape') closeStateModal(); });
+  const hashKey = location.hash.slice(1);
+  if (STATE_INFO[hashKey]) openStateModal(hashKey);
+});
+
+// white background rects behind every transition label
+addEventListener('load', () => {
+  document.querySelectorAll('text.tl').forEach(t => {
+    const b = t.getBBox();
+    const r = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+    r.setAttribute('x', b.x - 3); r.setAttribute('y', b.y - 1);
+    r.setAttribute('width', b.width + 6); r.setAttribute('height', b.height + 2);
+    r.setAttribute('rx', 3); r.setAttribute('fill', '#ffffff'); r.setAttribute('fill-opacity', '0.92');
+    t.parentNode.insertBefore(r, t.parentNode.firstChild);
+  });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,1380 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>שולחן פנוי, Use Case Diagram</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Hebrew:wght@400;600&family=IBM+Plex+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+/* inlined uc-diagram-common.css */
+/* uc-diagram-common.css, SAD MCP shared styles for use case diagrams */
+
+/* ── Base layout ─────────────────────────────────────────────────────────── */
+body { margin: 0; padding: 20px 0; background: #f8fafc;
+  font-family: 'Noto Sans Hebrew', sans-serif; color: #1e293b; }
+h1.page-title { text-align: center; font-size: 18px; color: #1e40af;
+  margin: 0 0 10px; font-weight: 700; }
+.diagram-part { display: flex; justify-content: center; }
+
+/* ── Tab bar ─────────────────────────────────────────────────────────────── */
+.tab-bar { display: flex; justify-content: center; gap: 8px; margin: 12px 0 4px; }
+.tab { padding: 7px 20px; border: 1px solid #cbd5e1; background: #f8fafc;
+  color: #475569; font-size: 13px; font-weight: 600; cursor: pointer;
+  border-radius: 6px; font-family: 'Noto Sans Hebrew', sans-serif; }
+.tab.active { background: #1e40af; color: #fff; border-color: #1e40af; }
+.split-rationale { text-align: center; font-size: 11px; color: #64748b;
+  margin: 0 0 8px; font-style: italic; }
+
+/* ── Buttons ─────────────────────────────────────────────────────────────── */
+.fix-btn { padding: 8px 20px; border: 1px solid #3b82f6; background: #eff6ff;
+  color: #1e40af; font-size: 12px; font-weight: 600; cursor: pointer;
+  border-radius: 6px; font-family: 'Noto Sans Hebrew', sans-serif; }
+.fix-btn:hover { background: #dbeafe; }
+.vp-export-btn { position: fixed; bottom: 20px; right: 20px; z-index: 1000;
+  background: #1e40af; color: #fff; border: none; border-radius: 6px;
+  padding: 8px 16px; font-size: 13px; cursor: pointer;
+  font-family: 'IBM Plex Mono', monospace; }
+.vp-export-btn:hover { background: #1e3a8a; }
+
+/* ── Assumptions panel ───────────────────────────────────────────────────── */
+.assumptions-panel { display: flex; gap: 24px; max-width: 1000px;
+  margin: 20px auto; padding: 16px 20px; background: #fff;
+  border: 1px solid #cbd5e1; border-radius: 8px; direction: rtl; }
+.assumptions-col { flex: 1; min-width: 0; }
+.assumptions-col h3 { margin: 0 0 6px; font-size: 13px; font-weight: 600; color: #1e40af; }
+.assumptions-col ul { margin: 0; padding-right: 18px; }
+.assumptions-col li { color: #334155; font-size: 12px; line-height: 1.6; }
+
+/* ── User stories summary panel ──────────────────────────────────────────── */
+.user-stories-panel { max-width: 1000px; margin: 12px auto 20px; padding: 16px 20px;
+  background: #fff; border: 1px solid #cbd5e1; border-radius: 8px; direction: rtl; }
+.user-stories-panel h3 { margin: 0 0 8px; font-size: 13px; font-weight: 600; color: #1e40af; }
+.user-stories-panel ul { margin: 0; padding-right: 18px; }
+.user-stories-panel li { color: #334155; font-size: 12px; line-height: 1.7; }
+
+/* ── UC modal ────────────────────────────────────────────────────────────── */
+body.uc-modal-open { overflow: hidden; }
+.uc-modal[hidden] { display: none !important; }
+.uc-modal { position: fixed; inset: 0; z-index: 2000; display: flex;
+  align-items: flex-start; justify-content: center; padding: 40px 20px;
+  overflow-y: auto; direction: rtl; font-family: 'Noto Sans Hebrew', sans-serif; }
+.uc-modal-backdrop { position: absolute; inset: 0; background: rgba(15,23,42,0.55); }
+.uc-modal-body { position: relative; z-index: 1; width: 100%; max-width: 960px;
+  background: #fff; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,.25);
+  padding: 28px 32px 32px; color: #1e293b; }
+.uc-modal-close { position: absolute; top: 10px; left: 14px; background: none;
+  border: none; font-size: 24px; color: #64748b; cursor: pointer; }
+.uc-modal-body header { border-bottom: 1px solid #e2e8f0; padding-bottom: 12px;
+  margin-bottom: 18px; }
+.uc-modal-body .uc-id { display: inline-block; font-family: 'IBM Plex Mono',monospace;
+  font-size: 11px; color: #64748b; background: #f1f5f9; padding: 2px 8px;
+  border-radius: 4px; margin-bottom: 6px; }
+.uc-modal-body .uc-name { margin: 0 0 4px; font-size: 20px; color: #1e40af; font-weight: 700; }
+.uc-modal-body .uc-primary { font-size: 13px; color: #334155; }
+.uc-modal-body .uc-primary-label { color: #64748b; margin-left: 6px; }
+.uc-modal-body .uc-primary-link { color: #1e40af; cursor: pointer; font-weight: 600;
+  text-decoration: underline dotted; }
+.uc-description { margin-bottom: 20px; font-size: 14px; line-height: 1.7; color: #334155; }
+.uc-scenarios h3 { font-size: 14px; color: #1e40af; margin: 18px 0 6px;
+  border-right: 3px solid #3b82f6; padding-right: 10px; }
+.uc-scenarios ol { margin: 0 0 14px; padding-right: 22px; }
+.uc-scenarios ol li { color: #1e293b; font-size: 13px; line-height: 1.9; }
+.step-actor { color: #1e40af; font-weight: 600; cursor: pointer; text-decoration: underline dotted; }
+.step-system { color: #475569; font-style: italic; }
+.step-include { color: #7c3aed; font-family: 'IBM Plex Mono', monospace; font-size: 11px; }
+.step-uc-ref { color: #7c3aed; cursor: pointer; text-decoration: underline; }
+.ext-inline, .ext-sub { list-style: none; color: #64748b; font-size: 12px;
+  padding-right: 24px; line-height: 1.7; }
+.uc-prepostuser { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 18px;
+  margin: 18px 0 20px; }
+.uc-prepostuser > div { background: #f8fafc; border: 1px solid #e2e8f0;
+  border-radius: 8px; padding: 12px 14px; }
+.uc-prepostuser h4 { margin: 0 0 6px; font-size: 12px; color: #1e40af; font-weight: 600; }
+.uc-prepostuser ul { margin: 0; padding-right: 18px; font-size: 12px;
+  color: #334155; line-height: 1.7; }
+.uc-wireframe { border-top: 1px dashed #cbd5e1; padding-top: 16px; margin-top: 6px; }
+.uc-wireframe:empty, .uc-wireframe[hidden] { display: none; }
+
+/* ── Actor pulse ─────────────────────────────────────────────────────────── */
+.actor-pulse { animation: actor-pulse 0.6s ease-in-out 3; }
+@keyframes actor-pulse {
+  0%, 100% { filter: none; }
+  50%      { filter: drop-shadow(0 0 8px #3b82f6); }
+}
+
+/* ── Wireframe scoped theme (wf-*) ───────────────────────────────────────── */
+.wf-screen { background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px;
+  padding: 18px 20px; font-family: 'Noto Sans Hebrew', sans-serif;
+  color: #1e293b; direction: rtl; max-width: 760px; margin: 0 auto; }
+.wf-heading { margin: 0 0 14px; font-size: 15px; color: #1e40af; font-weight: 700;
+  border-bottom: 1px solid #e2e8f0; padding-bottom: 6px; }
+.wf-section { margin: 14px 0; }
+.wf-row { display: flex; gap: 10px; align-items: center; margin: 6px 0; }
+.wf-label { font-size: 12px; color: #475569; min-width: 120px; }
+.wf-input, .wf-textarea, .wf-select { flex: 1; background: #fff;
+  border: 1px solid #cbd5e1; border-radius: 4px; padding: 6px 8px;
+  font-size: 12px; color: #334155; }
+.wf-textarea { min-height: 60px; }
+.wf-table { width: 100%; border-collapse: collapse; margin: 10px 0; font-size: 12px; }
+.wf-table th, .wf-table td { border: 1px solid #cbd5e1; padding: 6px 8px; text-align: right; }
+.wf-table th { background: #e2e8f0; color: #1e40af; font-weight: 600; }
+.wf-actions { display: flex; gap: 8px; margin-top: 12px; justify-content: flex-start; }
+.wf-button { background: #fff; border: 1px solid #64748b; border-radius: 4px;
+  padding: 6px 14px; font-size: 12px; color: #334155; cursor: default; }
+.wf-primary { background: #1e40af; color: #fff; border-color: #1e40af; }
+.wf-image-box { border: 1px dashed #94a3b8; background: #f1f5f9; color: #64748b;
+  text-align: center; padding: 24px; border-radius: 4px; font-size: 12px; margin: 10px 0; }
+.wf-hint { font-size: 11px; color: #64748b; font-style: italic; margin: 6px 0; }
+.wf-badge { display: inline-block; background: #e0f2fe; color: #0369a1;
+  padding: 2px 8px; border-radius: 999px; font-size: 10px; font-weight: 600; }
+
+</style>
+  <!-- REQUIRED: uc-diagram-common.css sets display:flex on .diagram-part, which overrides
+       the browser's [hidden]{display:none}. This one-liner restores correct tab switching. -->
+  <style>[hidden] { display: none !important; }</style>
+</head>
+<body>
+  <h1 class="page-title">פתרון שאלה 6, תרשים Use Case, "שולחן פנוי" (רשת מסעדות)</h1>
+
+  <!-- Tab bar -->
+  <div class="tab-bar">
+    <button class="tab active" onclick="showDiagram(0)">מחזור ההזמנה</button>
+    <button class="tab"        onclick="showDiagram(1)">אירועים, ניהול ודוחות</button>
+  </div>
+
+  <!-- Split rationale -->
+  <div class="split-rationale">Split by UC count: 15 use cases &gt; 8 threshold</div>
+
+  <!-- Fix Layout button -->
+  <div style="text-align:center;margin:8px 0;">
+    <button onclick="fixLayout(currentLayout())" class="fix-btn">Fix Layout</button>
+  </div>
+
+  <!-- ============================ TAB 1, מחזור ההזמנה ============================ -->
+  <div class="diagram-part" id="diagram-0">
+    <svg id="diagram-svg-0" viewBox="0 0 1300 860" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <pattern id="dots-0" width="24" height="24" patternUnits="userSpaceOnUse">
+          <circle cx="12" cy="12" r="0.8" fill="#cbd5e1"/>
+        </pattern>
+        <marker id="arrow-include-0" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+          <polyline points="0 0, 9 3.5, 0 7" fill="none" stroke="#7c3aed" stroke-width="1.2"/>
+        </marker>
+      </defs>
+      <rect x="0" y="0" width="1300" height="860" fill="#f8fafc"/>
+      <rect x="0" y="0" width="1300" height="860" fill="url(#dots-0)"/>
+
+      <!-- System boundary -->
+      <rect class="system-boundary" x="240" y="72" width="820" height="640" rx="12" fill="#ffffff" stroke="#3b82f6" stroke-width="2.5"/>
+      <rect x="240" y="72" width="820" height="44" rx="12" fill="#1e40af"/>
+      <rect x="240" y="94" width="820" height="22" fill="#1e40af"/>
+      <text x="650" y="101" text-anchor="middle" fill="#ffffff" font-family="'Noto Sans Hebrew',sans-serif" font-weight="700" font-size="15" direction="rtl">מערכת ניהול הזמנות ואירועים, "שולחן פנוי"</text>
+
+      <!-- Association lines (visible) -->
+      <line data-conn-from="cust" data-conn-to="uc-submit" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+      <line data-conn-from="cust" data-conn-to="uc-cancelCust" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+      <line data-conn-from="cust" data-conn-to="uc-view" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+      <line data-conn-from="platform" data-conn-to="uc-intake" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+      <line data-conn-from="host" data-conn-to="uc-confirmTable" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+      <line data-conn-from="host" data-conn-to="uc-seat" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+      <line data-conn-from="host" data-conn-to="uc-complete" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+      <line data-conn-from="host" data-conn-to="uc-noshow" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+      <line data-conn-from="time" data-conn-to="uc-noshow" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+      <line data-conn-from="time" data-conn-to="uc-expire" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+      <line data-conn-from="host" data-conn-to="uc-viewTonight" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+
+      <!-- Association hitboxes -->
+      <line class="conn-hitbox" data-conn-id="as-cust-submit" data-hitbox-from="cust" data-hitbox-to="uc-submit" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('as-cust-submit','assoc',event)"/>
+      <line class="conn-hitbox" data-conn-id="as-cust-cancel" data-hitbox-from="cust" data-hitbox-to="uc-cancelCust" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('as-cust-cancel','assoc',event)"/>
+      <line class="conn-hitbox" data-conn-id="as-cust-view" data-hitbox-from="cust" data-hitbox-to="uc-view" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('as-cust-view','assoc',event)"/>
+      <line class="conn-hitbox" data-conn-id="as-plat-intake" data-hitbox-from="platform" data-hitbox-to="uc-intake" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('as-plat-intake','assoc',event)"/>
+      <line class="conn-hitbox" data-conn-id="as-host-confirm" data-hitbox-from="host" data-hitbox-to="uc-confirmTable" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('as-host-confirm','assoc',event)"/>
+      <line class="conn-hitbox" data-conn-id="as-host-seat" data-hitbox-from="host" data-hitbox-to="uc-seat" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('as-host-seat','assoc',event)"/>
+      <line class="conn-hitbox" data-conn-id="as-host-complete" data-hitbox-from="host" data-hitbox-to="uc-complete" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('as-host-complete','assoc',event)"/>
+      <line class="conn-hitbox" data-conn-id="as-host-noshow" data-hitbox-from="host" data-hitbox-to="uc-noshow" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('as-host-noshow','assoc',event)"/>
+      <line class="conn-hitbox" data-conn-id="as-time-noshow" data-hitbox-from="time" data-hitbox-to="uc-noshow" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('as-time-noshow','assoc',event)"/>
+      <line class="conn-hitbox" data-conn-id="as-time-expire" data-hitbox-from="time" data-hitbox-to="uc-expire" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('as-time-expire','assoc',event)"/>
+
+      <!-- «include» line + label + hitbox -->
+      <line data-conn-from="uc-confirmTable" data-conn-to="uc-availability" x1="0" y1="0" x2="0" y2="0" stroke="#7c3aed" stroke-width="1.6" stroke-dasharray="6 4" marker-end="url(#arrow-include-0)"/>
+      <text data-label-for="uc-confirmTable uc-availability" x="0" y="0" text-anchor="middle" font-size="9.5" fill="#7c3aed" font-family="'IBM Plex Mono',monospace">«include»</text>
+      <line class="conn-hitbox" data-conn-id="inc-confirmTable-avail" data-hitbox-from="uc-confirmTable" data-hitbox-to="uc-availability" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('inc-confirmTable-avail','assoc',event)"/>
+
+      <!-- «extend» line + label + hitbox (waitlist handling extends table confirmation) -->
+      <line data-conn-from="uc-waitlist" data-conn-to="uc-confirmTable" x1="0" y1="0" x2="0" y2="0" stroke="#7c3aed" stroke-width="1.6" stroke-dasharray="6 4" marker-end="url(#arrow-include-0)"/>
+      <text data-label-for="uc-waitlist uc-confirmTable" x="0" y="0" text-anchor="middle" font-size="9.5" fill="#7c3aed" font-family="'IBM Plex Mono',monospace">«extend»</text>
+      <line class="conn-hitbox" data-conn-id="ext-waitlist-confirm" data-hitbox-from="uc-waitlist" data-hitbox-to="uc-confirmTable" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('ext-waitlist-confirm','assoc',event)"/>
+
+      <!-- host to view-tonight association hitbox -->
+      <line class="conn-hitbox" data-conn-id="as-host-viewtonight" data-hitbox-from="host" data-hitbox-to="uc-viewTonight" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('as-host-viewtonight','assoc',event)"/>
+
+      <!-- Use Cases: left (cust + platform) -->
+      <g id="uc-group-uc-submit" data-uc-id="uc-submit" onclick="showDesc('uc-submit','uc',event)" style="cursor:pointer">
+        <ellipse cx="380" cy="150" rx="100" ry="30" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+        <text x="380" y="154" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">הגשת בקשת הזמנה</text>
+      </g>
+      <g id="uc-group-uc-cancelCust" data-uc-id="uc-cancelCust" onclick="showDesc('uc-cancelCust','uc',event)" style="cursor:pointer">
+        <ellipse cx="380" cy="224" rx="96" ry="30" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+        <text x="380" y="228" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">ביטול הזמנה</text>
+      </g>
+      <g id="uc-group-uc-view" data-uc-id="uc-view" onclick="showDesc('uc-view','uc',event)" style="cursor:pointer">
+        <ellipse cx="380" cy="298" rx="96" ry="30" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+        <text x="380" y="302" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">צפייה בהזמנות</text>
+      </g>
+      <g id="uc-group-uc-intake" data-uc-id="uc-intake" onclick="showDesc('uc-intake','uc',event)" style="cursor:pointer">
+        <ellipse cx="380" cy="372" rx="106" ry="34" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+        <text x="380" y="366" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">קליטת בקשת הזמנה</text>
+        <text x="380" y="381" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">מהפלטפורמה</text>
+      </g>
+
+      <!-- Use Cases: right (host + time) -->
+      <g id="uc-group-uc-confirmTable" data-uc-id="uc-confirmTable" onclick="showDesc('uc-confirmTable','uc',event)" style="cursor:pointer">
+        <ellipse cx="920" cy="150" rx="106" ry="30" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+        <text x="920" y="154" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">אישור הזמנת שולחן</text>
+      </g>
+      <g id="uc-group-uc-seat" data-uc-id="uc-seat" onclick="showDesc('uc-seat','uc',event)" style="cursor:pointer">
+        <ellipse cx="920" cy="224" rx="96" ry="30" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+        <text x="920" y="228" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">הושבת אורחים</text>
+      </g>
+      <g id="uc-group-uc-complete" data-uc-id="uc-complete" onclick="showDesc('uc-complete','uc',event)" style="cursor:pointer">
+        <ellipse cx="920" cy="298" rx="100" ry="30" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+        <text x="920" y="302" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">סימון סיום הזמנה</text>
+      </g>
+      <g id="uc-group-uc-noshow" data-uc-id="uc-noshow" onclick="showDesc('uc-noshow','uc',event)" style="cursor:pointer">
+        <ellipse cx="920" cy="372" rx="96" ry="30" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+        <text x="920" y="376" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">סימון אי-הגעה</text>
+      </g>
+      <g id="uc-group-uc-expire" data-uc-id="uc-expire" onclick="showDesc('uc-expire','uc',event)" style="cursor:pointer">
+        <ellipse cx="920" cy="446" rx="106" ry="34" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+        <text x="920" y="440" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">סימון פקיעת</text>
+        <text x="920" y="455" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">רשימת המתנה</text>
+      </g>
+      <g id="uc-group-uc-viewTonight" data-uc-id="uc-viewTonight" onclick="showDesc('uc-viewTonight','uc',event)" style="cursor:pointer">
+        <ellipse cx="920" cy="546" rx="112" ry="32" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+        <text x="920" y="542" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">צפייה בהזמנות</text>
+        <text x="920" y="557" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">הערב (מארח)</text>
+      </g>
+
+      <!-- Include target (center) -->
+      <g id="uc-group-uc-availability" data-uc-id="uc-availability" onclick="showDesc('uc-availability','uc',event)" style="cursor:pointer">
+        <ellipse cx="650" cy="170" rx="112" ry="36" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+        <text x="650" y="164" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">בדיקת זמינות</text>
+        <text x="650" y="179" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">למועד / לתאריך</text>
+      </g>
+      <!-- «extend» source (center) -->
+      <g id="uc-group-uc-waitlist" data-uc-id="uc-waitlist" onclick="showDesc('uc-waitlist','uc',event)" style="cursor:pointer">
+        <ellipse cx="650" cy="320" rx="110" ry="32" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+        <text x="650" y="316" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">טיפול ברשימת</text>
+        <text x="650" y="331" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">המתנה</text>
+      </g>
+
+      <!-- Actors -->
+      <g id="actor-group-cust" data-actor-id="cust" onclick="showDesc('cust','actor',event)" style="cursor:pointer">
+        <circle cx="0" cy="-60" r="14" fill="#e0f0ff" stroke="#334155" stroke-width="2"/>
+        <line x1="0" y1="-46" x2="0" y2="-10" stroke="#334155" stroke-width="2"/>
+        <line x1="-18" y1="-36" x2="18" y2="-36" stroke="#334155" stroke-width="2"/>
+        <line x1="0" y1="-10" x2="-14" y2="14" stroke="#334155" stroke-width="2"/>
+        <line x1="0" y1="-10" x2="14" y2="14" stroke="#334155" stroke-width="2"/>
+        <text x="0" y="30" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">לקוח</text>
+      </g>
+      <g id="actor-group-platform" data-actor-id="platform" onclick="showDesc('platform','actor',event)" style="cursor:pointer">
+        <circle cx="0" cy="-60" r="14" fill="#fef3c7" stroke="#334155" stroke-width="2"/>
+        <line x1="0" y1="-46" x2="0" y2="-10" stroke="#334155" stroke-width="2"/>
+        <line x1="-18" y1="-36" x2="18" y2="-36" stroke="#334155" stroke-width="2"/>
+        <line x1="0" y1="-10" x2="-14" y2="14" stroke="#334155" stroke-width="2"/>
+        <line x1="0" y1="-10" x2="14" y2="14" stroke="#334155" stroke-width="2"/>
+        <text x="0" y="30" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">פלטפורמת ההזמנות</text>
+        <text x="0" y="44" text-anchor="middle" font-size="9" fill="#64748b" font-family="'IBM Plex Mono',monospace" font-style="italic">«system»</text>
+      </g>
+      <g id="actor-group-host" data-actor-id="host" onclick="showDesc('host','actor',event)" style="cursor:pointer">
+        <circle cx="0" cy="-60" r="14" fill="#e0f0ff" stroke="#334155" stroke-width="2"/>
+        <line x1="0" y1="-46" x2="0" y2="-10" stroke="#334155" stroke-width="2"/>
+        <line x1="-18" y1="-36" x2="18" y2="-36" stroke="#334155" stroke-width="2"/>
+        <line x1="0" y1="-10" x2="-14" y2="14" stroke="#334155" stroke-width="2"/>
+        <line x1="0" y1="-10" x2="14" y2="14" stroke="#334155" stroke-width="2"/>
+        <text x="0" y="30" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">מארח</text>
+      </g>
+      <g id="actor-group-time" data-actor-id="time" onclick="showDesc('time','actor',event)" style="cursor:pointer">
+        <circle cx="0" cy="-60" r="14" fill="#fef3c7" stroke="#334155" stroke-width="2"/>
+        <line x1="0" y1="-46" x2="0" y2="-10" stroke="#334155" stroke-width="2"/>
+        <line x1="-18" y1="-36" x2="18" y2="-36" stroke="#334155" stroke-width="2"/>
+        <line x1="0" y1="-10" x2="-14" y2="14" stroke="#334155" stroke-width="2"/>
+        <line x1="0" y1="-10" x2="14" y2="14" stroke="#334155" stroke-width="2"/>
+        <text x="0" y="30" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">שחקן זמן</text>
+        <text x="0" y="44" text-anchor="middle" font-size="9" fill="#64748b" font-family="'IBM Plex Mono',monospace" font-style="italic">«system»</text>
+      </g>
+    </svg>
+  </div>
+
+  <!-- ============================ TAB 2, אירועים, ניהול ודוחות ============================ -->
+  <div class="diagram-part" id="diagram-1" hidden>
+    <svg id="diagram-svg-1" viewBox="0 0 1300 760" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <pattern id="dots-1" width="24" height="24" patternUnits="userSpaceOnUse">
+          <circle cx="12" cy="12" r="0.8" fill="#cbd5e1"/>
+        </pattern>
+        <marker id="arrow-include-1" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+          <polyline points="0 0, 9 3.5, 0 7" fill="none" stroke="#7c3aed" stroke-width="1.2"/>
+        </marker>
+      </defs>
+      <rect x="0" y="0" width="1300" height="760" fill="#f8fafc"/>
+      <rect x="0" y="0" width="1300" height="760" fill="url(#dots-1)"/>
+
+      <!-- System boundary -->
+      <rect class="system-boundary" x="240" y="72" width="820" height="560" rx="12" fill="#ffffff" stroke="#3b82f6" stroke-width="2.5"/>
+      <rect x="240" y="72" width="820" height="44" rx="12" fill="#1e40af"/>
+      <rect x="240" y="94" width="820" height="22" fill="#1e40af"/>
+      <text x="650" y="101" text-anchor="middle" fill="#ffffff" font-family="'Noto Sans Hebrew',sans-serif" font-weight="700" font-size="15" direction="rtl">מערכת ניהול הזמנות ואירועים, "שולחן פנוי"</text>
+
+      <!-- Association lines (visible) -->
+      <line data-conn-from="coord" data-conn-to="uc-confirmEvent" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+      <line data-conn-from="coord" data-conn-to="uc-manageEvent" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+      <line data-conn-from="coord" data-conn-to="uc-reports" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+      <line data-conn-from="bmanager" data-conn-to="uc-overrideCancel" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+      <line data-conn-from="bmanager" data-conn-to="uc-reports" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+      <line data-conn-from="sysadmin" data-conn-to="uc-masterdata" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+
+      <!-- Association hitboxes -->
+      <line class="conn-hitbox" data-conn-id="as-coord-confirm" data-hitbox-from="coord" data-hitbox-to="uc-confirmEvent" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('as-coord-confirm','assoc',event)"/>
+      <line class="conn-hitbox" data-conn-id="as-coord-manage" data-hitbox-from="coord" data-hitbox-to="uc-manageEvent" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('as-coord-manage','assoc',event)"/>
+      <line class="conn-hitbox" data-conn-id="as-coord-reports" data-hitbox-from="coord" data-hitbox-to="uc-reports" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('as-coord-reports','assoc',event)"/>
+      <line class="conn-hitbox" data-conn-id="as-bm-override" data-hitbox-from="bmanager" data-hitbox-to="uc-overrideCancel" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('as-bm-override','assoc',event)"/>
+      <line class="conn-hitbox" data-conn-id="as-bm-reports" data-hitbox-from="bmanager" data-hitbox-to="uc-reports" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('as-bm-reports','assoc',event)"/>
+      <line class="conn-hitbox" data-conn-id="as-sa-masterdata" data-hitbox-from="sysadmin" data-hitbox-to="uc-masterdata" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('as-sa-masterdata','assoc',event)"/>
+
+      <!-- «include» line + label + hitbox -->
+      <line data-conn-from="uc-confirmEvent" data-conn-to="uc-availability" x1="0" y1="0" x2="0" y2="0" stroke="#7c3aed" stroke-width="1.6" stroke-dasharray="6 4" marker-end="url(#arrow-include-1)"/>
+      <text data-label-for="uc-confirmEvent uc-availability" x="0" y="0" text-anchor="middle" font-size="9.5" fill="#7c3aed" font-family="'IBM Plex Mono',monospace">«include»</text>
+      <line class="conn-hitbox" data-conn-id="inc-confirmEvent-avail" data-hitbox-from="uc-confirmEvent" data-hitbox-to="uc-availability" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('inc-confirmEvent-avail','assoc',event)"/>
+
+      <!-- Use Cases: left (coord) -->
+      <g id="uc-group-uc-confirmEvent" data-uc-id="uc-confirmEvent" onclick="showDesc('uc-confirmEvent','uc',event)" style="cursor:pointer">
+        <ellipse cx="380" cy="150" rx="106" ry="30" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+        <text x="380" y="154" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">אישור הזמנת אירוע</text>
+      </g>
+      <g id="uc-group-uc-manageEvent" data-uc-id="uc-manageEvent" onclick="showDesc('uc-manageEvent','uc',event)" style="cursor:pointer">
+        <ellipse cx="380" cy="224" rx="106" ry="30" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+        <text x="380" y="228" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">ניהול הזמנת אירוע</text>
+      </g>
+
+      <!-- Use Case: center (reports, shared coord + bmanager) -->
+      <g id="uc-group-uc-reports" data-uc-id="uc-reports" onclick="showDesc('uc-reports','uc',event)" style="cursor:pointer">
+        <ellipse cx="650" cy="150" rx="102" ry="34" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+        <text x="650" y="144" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">הפקת דוחות</text>
+        <text x="650" y="159" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">תפעוליים</text>
+      </g>
+
+      <!-- Use Cases: right (bmanager + sysadmin) -->
+      <g id="uc-group-uc-overrideCancel" data-uc-id="uc-overrideCancel" onclick="showDesc('uc-overrideCancel','uc',event)" style="cursor:pointer">
+        <ellipse cx="920" cy="150" rx="108" ry="34" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+        <text x="920" y="144" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">ביטול-על של</text>
+        <text x="920" y="159" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">הזמנה מאושרת</text>
+      </g>
+      <g id="uc-group-uc-masterdata" data-uc-id="uc-masterdata" onclick="showDesc('uc-masterdata','uc',event)" style="cursor:pointer">
+        <ellipse cx="920" cy="224" rx="112" ry="32" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+        <text x="920" y="228" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">הגדרת נתוני-אב</text>
+      </g>
+
+      <!-- Include target (center, duplicated so its «include» renders on this tab) -->
+      <g id="uc-group-uc-availability" data-uc-id="uc-availability" onclick="showDesc('uc-availability','uc',event)" style="cursor:pointer">
+        <ellipse cx="650" cy="300" rx="112" ry="36" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+        <text x="650" y="294" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">בדיקת זמינות</text>
+        <text x="650" y="309" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">למועד / לתאריך</text>
+      </g>
+
+      <!-- Actors -->
+      <g id="actor-group-coord" data-actor-id="coord" onclick="showDesc('coord','actor',event)" style="cursor:pointer">
+        <circle cx="0" cy="-60" r="14" fill="#e0f0ff" stroke="#334155" stroke-width="2"/>
+        <line x1="0" y1="-46" x2="0" y2="-10" stroke="#334155" stroke-width="2"/>
+        <line x1="-18" y1="-36" x2="18" y2="-36" stroke="#334155" stroke-width="2"/>
+        <line x1="0" y1="-10" x2="-14" y2="14" stroke="#334155" stroke-width="2"/>
+        <line x1="0" y1="-10" x2="14" y2="14" stroke="#334155" stroke-width="2"/>
+        <text x="0" y="30" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">רכז אירועים</text>
+      </g>
+      <g id="actor-group-bmanager" data-actor-id="bmanager" onclick="showDesc('bmanager','actor',event)" style="cursor:pointer">
+        <circle cx="0" cy="-60" r="14" fill="#e0f0ff" stroke="#334155" stroke-width="2"/>
+        <line x1="0" y1="-46" x2="0" y2="-10" stroke="#334155" stroke-width="2"/>
+        <line x1="-18" y1="-36" x2="18" y2="-36" stroke="#334155" stroke-width="2"/>
+        <line x1="0" y1="-10" x2="-14" y2="14" stroke="#334155" stroke-width="2"/>
+        <line x1="0" y1="-10" x2="14" y2="14" stroke="#334155" stroke-width="2"/>
+        <text x="0" y="30" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">מנהל סניף</text>
+      </g>
+      <g id="actor-group-sysadmin" data-actor-id="sysadmin" onclick="showDesc('sysadmin','actor',event)" style="cursor:pointer">
+        <circle cx="0" cy="-60" r="14" fill="#e0f0ff" stroke="#334155" stroke-width="2"/>
+        <line x1="0" y1="-46" x2="0" y2="-10" stroke="#334155" stroke-width="2"/>
+        <line x1="-18" y1="-36" x2="18" y2="-36" stroke="#334155" stroke-width="2"/>
+        <line x1="0" y1="-10" x2="-14" y2="14" stroke="#334155" stroke-width="2"/>
+        <line x1="0" y1="-10" x2="14" y2="14" stroke="#334155" stroke-width="2"/>
+        <text x="0" y="30" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">מנהל מערכת</text>
+      </g>
+    </svg>
+  </div>
+
+  <!-- Assumptions / open-questions panel -->
+  <div id="assumptions-panel" class="assumptions-panel" hidden>
+    <div class="assumptions-col" id="assumptions-col">
+      <h3>הנחות</h3><ul id="assumptions-list"></ul>
+    </div>
+    <div class="assumptions-col" id="open-questions-col">
+      <h3>שאלות פתוחות</h3><ul id="open-questions-list"></ul>
+    </div>
+  </div>
+
+  <!-- User stories summary -->
+  <div id="user-stories-panel" class="user-stories-panel" hidden>
+    <h3>סיפורי משתמש</h3>
+    <ul id="user-stories-list"></ul>
+  </div>
+
+  <!-- UC modal -->
+  <div id="uc-modal" class="uc-modal" hidden role="dialog" aria-modal="true">
+    <div class="uc-modal-backdrop" onclick="closeUcModal()"></div>
+    <div class="uc-modal-body"></div>
+  </div>
+
+  <!-- VP export button -->
+  <button class="vp-export-btn" onclick="exportXMI()">Download .xmi (Visual Paradigm)</button>
+
+  <!-- DIAGRAM DATA ONLY, all functions are in uc-diagram-common.js. -->
+  <script>
+    function wf(title, rows, btns){
+      var r = rows.map(function(x){ return '<div class="wf-row"><label class="wf-label">'+x+'</label><input class="wf-input" disabled/></div>'; }).join('');
+      var b = (btns||['אישור','ביטול']).map(function(x,i){ return '<button class="wf-button'+(i===0?' wf-primary':'')+'">'+x+'</button>'; }).join('');
+      return '<div class="wf-screen"><h3 class="wf-heading">'+title+'</h3>'+r+'<div class="wf-actions">'+b+'</div><p class="wf-hint">מסך להמחשה בלבד.</p></div>';
+    }
+    function ual(role,want,so){ return { role: role, want: want, so: so }; }
+
+    var diagramLayouts = [
+      {
+        svgId: 'diagram-svg-0',
+        boundary: { x: 240, y: 72, width: 820, height: 640 },
+        actors: [
+          { id: 'cust',     label: 'לקוח',             side: 'left',  x: 130,  y: 224, ucIds: ['uc-submit','uc-cancelCust','uc-view'] },
+          { id: 'platform', label: 'פלטפורמת ההזמנות', side: 'left',  x: 130,  y: 372, ucIds: ['uc-intake'] },
+          { id: 'host',     label: 'מארח',             side: 'right', x: 1170, y: 260, ucIds: ['uc-confirmTable','uc-seat','uc-complete','uc-noshow','uc-viewTonight'] },
+          { id: 'time',     label: 'שחקן זמן',         side: 'right', x: 1170, y: 560, ucIds: ['uc-noshow','uc-expire'] }
+        ],
+        useCases: [
+          { id: 'uc-submit',       cx: 380, cy: 150, rx: 100, ry: 30 },
+          { id: 'uc-cancelCust',   cx: 380, cy: 224, rx: 96,  ry: 30 },
+          { id: 'uc-view',         cx: 380, cy: 298, rx: 96,  ry: 30 },
+          { id: 'uc-intake',       cx: 380, cy: 372, rx: 106, ry: 34 },
+          { id: 'uc-confirmTable', cx: 920, cy: 150, rx: 106, ry: 30 },
+          { id: 'uc-seat',         cx: 920, cy: 224, rx: 96,  ry: 30 },
+          { id: 'uc-complete',     cx: 920, cy: 298, rx: 100, ry: 30 },
+          { id: 'uc-noshow',       cx: 920, cy: 372, rx: 96,  ry: 30 },
+          { id: 'uc-expire',       cx: 920, cy: 446, rx: 106, ry: 34 },
+          { id: 'uc-viewTonight',  cx: 920, cy: 546, rx: 112, ry: 32 },
+          { id: 'uc-availability', cx: 650, cy: 170, rx: 112, ry: 36 },
+          { id: 'uc-waitlist',     cx: 650, cy: 320, rx: 110, ry: 32 }
+        ],
+        connections: [
+          { from: 'cust',     to: 'uc-submit',       type: 'association' },
+          { from: 'cust',     to: 'uc-cancelCust',   type: 'association' },
+          { from: 'cust',     to: 'uc-view',         type: 'association' },
+          { from: 'platform', to: 'uc-intake',       type: 'association' },
+          { from: 'host',     to: 'uc-confirmTable', type: 'association' },
+          { from: 'host',     to: 'uc-seat',         type: 'association' },
+          { from: 'host',     to: 'uc-complete',     type: 'association' },
+          { from: 'host',     to: 'uc-noshow',       type: 'association' },
+          { from: 'host',     to: 'uc-viewTonight',  type: 'association' },
+          { from: 'time',     to: 'uc-noshow',       type: 'association', timing: 'אחרי חלון חסד 15 דק׳' },
+          { from: 'time',     to: 'uc-expire',       type: 'association', timing: 'בחלוף המועד' },
+          { from: 'uc-confirmTable', to: 'uc-availability', type: 'include' },
+          { from: 'uc-waitlist',     to: 'uc-confirmTable',  type: 'extend' }
+        ]
+      },
+      {
+        svgId: 'diagram-svg-1',
+        boundary: { x: 240, y: 72, width: 820, height: 560 },
+        actors: [
+          { id: 'coord',    label: 'רכז אירועים', side: 'left',  x: 130,  y: 190, ucIds: ['uc-confirmEvent','uc-manageEvent','uc-reports'] },
+          { id: 'bmanager', label: 'מנהל סניף',   side: 'right', x: 1170, y: 190, ucIds: ['uc-overrideCancel','uc-reports'] },
+          { id: 'sysadmin', label: 'מנהל מערכת',  side: 'right', x: 1170, y: 340, ucIds: ['uc-masterdata'] }
+        ],
+        useCases: [
+          { id: 'uc-confirmEvent',  cx: 380, cy: 150, rx: 106, ry: 30 },
+          { id: 'uc-manageEvent',   cx: 380, cy: 224, rx: 106, ry: 30 },
+          { id: 'uc-reports',       cx: 650, cy: 150, rx: 102, ry: 34 },
+          { id: 'uc-overrideCancel',cx: 920, cy: 150, rx: 108, ry: 34 },
+          { id: 'uc-masterdata',    cx: 920, cy: 224, rx: 112, ry: 32 },
+          { id: 'uc-availability',  cx: 650, cy: 300, rx: 112, ry: 36 }
+        ],
+        connections: [
+          { from: 'coord',    to: 'uc-confirmEvent',   type: 'association' },
+          { from: 'coord',    to: 'uc-manageEvent',    type: 'association' },
+          { from: 'coord',    to: 'uc-reports',        type: 'association' },
+          { from: 'bmanager', to: 'uc-overrideCancel', type: 'association' },
+          { from: 'bmanager', to: 'uc-reports',        type: 'association' },
+          { from: 'sysadmin', to: 'uc-masterdata',     type: 'association' },
+          { from: 'uc-confirmEvent', to: 'uc-availability', type: 'include' }
+        ]
+      }
+    ];
+
+    var actorDescriptions = {
+      'cust':     { name: 'לקוח',             desc: 'לקוח המבקש שולחן או אירוע. מוסר פרטי בקשה, מבטל וצופה בהזמנותיו.' },
+      'platform': { name: 'פלטפורמת ההזמנות', desc: 'מערכת «system» חיצונית (צד שלישי) היוזמת פנייה: מעבירה אלינו בקשות הזמנה שלקוחות ביצעו באתר החיצוני. איננו פונים אליה ביוזמתנו.' },
+      'host':     { name: 'מארח',             desc: 'המארח/ת בסניף. מאשר הזמנות שולחן, מושיב אורחים, מסמן סיום ואי-הגעה.' },
+      'time':     { name: 'שחקן זמן',         desc: 'שחקן «system» המייצג את שעון המערכת. מפעיל מעברי מצב מתוזמנים: סימון אי-הגעה בחלוף חלון החסד ופקיעת רשומות המתנה שחלף מועדן.' },
+      'coord':    { name: 'רכז אירועים',      desc: 'רכז האירועים. מאשר ומלווה הזמנות אירוע פרטי באולם ומפיק דוח אירועים.' },
+      'bmanager': { name: 'מנהל סניף',        desc: 'מנהל הסניף. מוסמך לביטול-על של הזמנה מאושרת (לפנות מקום לאירוע) ולהפקת דוחות תפעוליים.' },
+      'sysadmin': { name: 'מנהל מערכת',       desc: 'מנהל המערכת. מגדיר נתוני-אב: סניפים, שולחנות, אולמות וחבילות תפריט.' }
+    };
+
+    var assocDescriptions = {
+      'as-cust-submit':   { name: 'לקוח - הגשת בקשת הזמנה', desc: 'הלקוח יוזם הגשת בקשת הזמנת שולחן. תפקיד: Initiator.' },
+      'as-cust-cancel':   { name: 'לקוח - ביטול הזמנה',     desc: 'הלקוח יוזם ביטול הזמנתו כל עוד לא הושבו האורחים. תפקיד: Initiator.' },
+      'as-cust-view':     { name: 'לקוח - צפייה בהזמנות',   desc: 'הלקוח יוזם צפייה בהזמנותיו ובסטטוסן. תפקיד: Initiator.' },
+      'as-plat-intake':   { name: 'פלטפורמת ההזמנות - קליטת בקשת הזמנה מהפלטפורמה', desc: 'הפלטפורמה החיצונית יוזמת את העברת הבקשה, והמערכת קולטת אותה. תפקיד: Initiator.' },
+      'as-host-confirm':  { name: 'מארח - אישור הזמנת שולחן', desc: 'המארח יוזם בדיקת זמינות ואישור הזמנת שולחן. תפקיד: Initiator.' },
+      'as-host-seat':     { name: 'מארח - הושבת אורחים',    desc: 'המארח יוזם הושבת אורחים והפיכת ההזמנה לפעילה. תפקיד: Initiator.' },
+      'as-host-complete': { name: 'מארח - סימון סיום הזמנה', desc: 'המארח יוזם סימון סיום הסעודה ושחרור השולחן. תפקיד: Initiator.' },
+      'as-host-noshow':   { name: 'מארח - סימון אי-הגעה',   desc: 'המארח יוזם סימון ידני של הזמנה שאורחיה לא הגיעו. תפקיד: Initiator.' },
+      'as-time-noshow':   { name: 'שחקן זמן - סימון אי-הגעה', desc: 'שחקן הזמן מפעיל סימון אוטומטי של אי-הגעה. תפקיד: Initiator. תזמון: אחרי חלון חסד 15 דק׳.' },
+      'as-time-expire':   { name: 'שחקן זמן - סימון פקיעת רשימת המתנה', desc: 'שחקן הזמן מפעיל פקיעת רשומות המתנה שחלף מועדן. תפקיד: Initiator. תזמון: בחלוף המועד.' },
+      'as-host-viewtonight': { name: 'מארח - צפייה בהזמנות הערב', desc: 'המארח יוזם צפייה ברשימת ההזמנות של הערב בסניפו בתחילת המשמרת. תפקיד: Initiator. (בקשה זו בתוך היקף המערכת, שאילתה על נתונים שהמערכת מנהלת.)' },
+      'ext-waitlist-confirm': { name: 'טיפול ברשימת המתנה «extend» אישור הזמנת שולחן', desc: 'טיפול ברשימת ההמתנה מרחיב את אישור הזמנת השולחן, ומופעל רק בהתקיים התנאי "אין שולחן פנוי במועד", התנהגות אופציונלית/מותנית, ולכן «extend» ולא «include».' },
+      'inc-confirmTable-avail': { name: 'אישור הזמנת שולחן «include» בדיקת זמינות למועד', desc: 'בדיקת הזמינות מתבצעת תמיד כחלק מאישור הזמנת שולחן.' },
+      'as-coord-confirm': { name: 'רכז אירועים - אישור הזמנת אירוע', desc: 'רכז האירועים יוזם בדיקת זמינות ואישור הזמנת אירוע. תפקיד: Initiator.' },
+      'as-coord-manage':  { name: 'רכז אירועים - ניהול הזמנת אירוע', desc: 'רכז האירועים יוזם ליווי ועדכון הזמנת האירוע. תפקיד: Initiator.' },
+      'as-coord-reports': { name: 'רכז אירועים - הפקת דוחות תפעוליים', desc: 'רכז האירועים יוזם הפקת דוח אירועים צפויים. תפקיד: Initiator.' },
+      'as-bm-override':   { name: 'מנהל סניף - ביטול-על של הזמנה מאושרת', desc: 'מנהל הסניף יוזם ביטול-על של הזמנה מאושרת. תפקיד: Initiator.' },
+      'as-bm-reports':    { name: 'מנהל סניף - הפקת דוחות תפעוליים', desc: 'מנהל הסניף יוזם הפקת דוח ביטולים חודשי. תפקיד: Initiator.' },
+      'as-sa-masterdata': { name: 'מנהל מערכת - הגדרת נתוני-אב', desc: 'מנהל המערכת יוזם הגדרת סניפים, שולחנות, אולמות וחבילות תפריט. תפקיד: Initiator.' },
+      'inc-confirmEvent-avail': { name: 'אישור הזמנת אירוע «include» בדיקת זמינות למועד', desc: 'בדיקת הזמינות מתבצעת תמיד כחלק מאישור הזמנת אירוע.' }
+    };
+
+    var useCaseDocs = {
+      'uc-availability': {
+        id: 'uc-availability', name: 'בדיקת זמינות למועד',
+        description: 'בדיקה אם קיים שולחן פנוי מתאים למועד המבוקש, או אולם פנוי לתאריך המבוקש. תת-התנהגות משותפת ל"אישור הזמנת שולחן" ול"אישור הזמנת אירוע".',
+        secondaryActors: [],
+        preconditions: ['התקבל מועד או תאריך מבוקש ומספר סועדים או משתתפים.'],
+        postconditions: ['הוחזרה רשימת המשאבים הפנויים המתאימים, או חיווי שאין משאב פנוי.'],
+        scenarios: [ { id: 'sc', name: 'בדיקת זמינות', flow: [
+          { kind: 'system', text: 'מקבל מועד/תאריך ומספר סועדים ומחפש משאב פנוי מתאים' },
+          { kind: 'system', text: 'מסנן שולחנות/אולמות תפוסים באותו חלון זמן' },
+          { kind: 'system', text: 'מחזיר את רשימת המשאבים הפנויים או חיווי שאין פנוי' }
+        ], extensions: [
+          { at: 1, text: 'אם לא נמסר מספר סועדים תקין, הבדיקה נעצרת ומדווח על קלט חסר.' }
+        ] } ],
+        userStories: [ ual('מארח','שהמערכת תבדוק זמינות שולחן אוטומטית לפני אישור','שלא יובטח אותו שולחן פעמיים') ],
+        wireframe: ''
+      },
+      'uc-waitlist': {
+        id: 'uc-waitlist', name: 'טיפול ברשימת המתנה', primaryActor: 'host', secondaryActors: ['time'],
+        description: 'הרחבה (extend) של "אישור הזמנת שולחן": כאשר אין שולחן פנוי במועד המבוקש, נכנסת הבקשה לרשימת המתנה. אם מתפנה שולחן לפני המועד היא מאושרת, ואם חלף המועד, היא פוקעת. מתרחש רק בחלק מן הבקשות, ולכן «extend» ולא «include».',
+        preconditions: ['נבדקה זמינות ולא נמצא שולחן פנוי למועד המבוקש.'],
+        postconditions: ['הבקשה ברשימת המתנה, עד שתאושר או תפקע.'],
+        scenarios: [ { id: 'sc', name: 'מסלול מרכזי', flow: [
+          { kind: 'system', text: 'מכניס את הבקשה לרשימת המתנה ומעדכן סטטוס ל"רשימת המתנה"' },
+          { kind: 'system', text: 'אם מתפנה שולחן לפני המועד, מזמן את המארח לאישור' }
+        ], extensions: [ { at: 2, text: 'אם חלף המועד בלי ששולחן התפנה, שחקן הזמן מסמן את הבקשה כפגת-תוקף.' } ] } ],
+        userStories: [ ual('מארח','שבקשה ללא שולחן פנוי תיכנס לרשימת המתנה ולא תידחה מיד','שלא נאבד לקוחות כשמתפנה מקום') ],
+        wireframe: ''
+      },
+      'uc-viewTonight': {
+        id: 'uc-viewTonight', name: 'צפייה בהזמנות הערב', primaryActor: 'host', secondaryActors: [],
+        description: 'המארח צופה בתחילת המשמרת ברשימת ההזמנות של אותו ערב בסניפו. בקשה זו נמצאת בתוך היקף המערכת, היא שאילתה על נתוני ההזמנות שהמערכת ממילא מנהלת (בשונה מניהול קופה או הזמנת מנות במטבח, שמחוץ ל-scope).',
+        preconditions: ['המארח מחובר למערכת ומשויך לסניף.'],
+        postconditions: ['הוצגה רשימת ההזמנות של הערב עם הסטטוס של כל אחת.'],
+        scenarios: [ { id: 'sc', name: 'מסלול מרכזי', flow: [
+          { kind: 'actor', actor: 'host', text: 'בוחר את התאריך הנוכחי ואת סניפו' },
+          { kind: 'system', text: 'מציג את כל ההזמנות של הערב עם מועד, מספר סועדים וסטטוס' }
+        ], extensions: [] } ],
+        userStories: [ ual('מארח','לראות בתחילת המשמרת את כל ההזמנות של הערב','שאדע לאילו שולחנות להיערך') ],
+        wireframe: wf('הזמנות הערב', ['תאריך','סניף'], ['הצגה'])
+      },
+      'uc-submit': {
+        id: 'uc-submit', name: 'הגשת בקשת הזמנה', primaryActor: 'cust', secondaryActors: [],
+        description: 'הלקוח מוסר את פרטי הבקשה: שם, טלפון, דוא"ל, מספר סועדים, מועד מבוקש והערה מיוחדת.',
+        preconditions: ['ללקוח קיימים פרטי קשר תקינים.'],
+        postconditions: ['נוצרה בקשת הזמנה בסטטוס "מבוקשת".'],
+        scenarios: [ { id: 'sc', name: 'מסלול מרכזי', flow: [
+          { kind: 'actor', actor: 'cust', text: 'מזין שם, טלפון, דוא"ל, מספר סועדים ומועד מבוקש' },
+          { kind: 'actor', actor: 'cust', text: 'מוסיף הערה מיוחדת (אלרגיה / אירוע חגיגי) לפי הצורך' },
+          { kind: 'system', text: 'שומר את הבקשה בסטטוס "מבוקשת" ומציג אישור קליטה' }
+        ], extensions: [ { at: 1, text: 'אם חסר שדה חובה, המערכת מסמנת את השדה ואינה שומרת.' } ] } ],
+        userStories: [ ual('לקוח','להגיש בקשת הזמנת שולחן עם פרטיי והמועד הרצוי','שאקבל שולחן במסעדה'), ual('לקוח','לציין הערה מיוחדת כגון אלרגיה','שהמסעדה תיערך בהתאם') ],
+        wireframe: wf('הגשת בקשת הזמנה', ['שם מלא','טלפון','דוא"ל','מספר סועדים','מועד מבוקש','הערה מיוחדת'], ['שליחת בקשה','ניקוי'])
+      },
+      'uc-cancelCust': {
+        id: 'uc-cancelCust', name: 'ביטול הזמנה', primaryActor: 'cust', secondaryActors: [],
+        description: 'הלקוח מבטל את הזמנתו כל עוד לא הושבו האורחים.',
+        preconditions: ['ההזמנה אינה במצב "פעילה" (טרם הושבו האורחים).'],
+        postconditions: ['ההזמנה עברה לסטטוס "בוטלה".'],
+        scenarios: [ { id: 'sc', name: 'מסלול מרכזי', flow: [
+          { kind: 'actor', actor: 'cust', text: 'בוחר הזמנה פעילה שטרם הושבה' },
+          { kind: 'actor', actor: 'cust', text: 'מאשר את הביטול' },
+          { kind: 'system', text: 'מעדכן את סטטוס ההזמנה ל"בוטלה" ומשחרר את השולחן' }
+        ], extensions: [ { at: 1, text: 'אם ההזמנה כבר הושבה, המערכת חוסמת את הביטול ומציגה הסבר.' } ] } ],
+        userStories: [ ual('לקוח','לבטל הזמנה שלא אוכל להגיע אליה','שהשולחן ישוחרר ולא יסומן כאי-הגעה') ],
+        wireframe: wf('ביטול הזמנה', ['בחירת הזמנה','סטטוס נוכחי'], ['ביטול הזמנה','חזרה'])
+      },
+      'uc-view': {
+        id: 'uc-view', name: 'צפייה בהזמנות', primaryActor: 'cust', secondaryActors: [],
+        description: 'הלקוח צופה בכל עת בהזמנותיו ובסטטוס שלהן.',
+        preconditions: ['ללקוח קיימת לפחות הזמנה אחת במערכת.'],
+        postconditions: ['הוצגה רשימת ההזמנות והסטטוסים.'],
+        scenarios: [ { id: 'sc', name: 'מסלול מרכזי', flow: [
+          { kind: 'actor', actor: 'cust', text: 'פותח את מסך "ההזמנות שלי"' },
+          { kind: 'system', text: 'מציג את רשימת הזמנות הלקוח עם הסטטוס העדכני של כל אחת' }
+        ], extensions: [ { at: 2, text: 'אם אין הזמנות, המערכת מציגה הודעה ריקה מתאימה.' } ] } ],
+        userStories: [ ual('לקוח','לראות את סטטוס הזמנותיי בכל עת','שאדע אם השולחן שלי אושר') ],
+        wireframe: wf('ההזמנות שלי', ['סינון לפי סטטוס','טווח תאריכים'], ['רענון','סגירה'])
+      },
+      'uc-intake': {
+        id: 'uc-intake', name: 'קליטת בקשת הזמנה מהפלטפורמה', primaryActor: 'platform', secondaryActors: [],
+        description: 'קליטת בקשות שלקוחות ביצעו באתר צד-שלישי, כבקשות הזמנה רגילות במערכת.',
+        preconditions: ['בקשה חדשה התקבלה מהפלטפורמה החיצונית.'],
+        postconditions: ['נוצרה בקשת הזמנה בסטטוס "מבוקשת".'],
+        scenarios: [ { id: 'sc', name: 'מסלול מרכזי', flow: [
+          { kind: 'actor', actor: 'platform', text: 'שולח בקשת הזמנה שלקוח ביצע באתר החיצוני' },
+          { kind: 'system', text: 'ממפה את השדות ויוצר בקשת הזמנה בסטטוס "מבוקשת"' }
+        ], extensions: [ { at: 1, text: 'אם חסרים שדות חובה, המערכת דוחה את הקליטה ומתעדת את הכשל.' } ] } ],
+        userStories: [ ual('מנהל סניף','שבקשות מהפלטפורמה ייקלטו אוטומטית','שלא תאבד אף בקשת הזמנה') ]
+      },
+      'uc-confirmTable': {
+        id: 'uc-confirmTable', name: 'אישור הזמנת שולחן', primaryActor: 'host', secondaryActors: [],
+        description: 'המארח בודק זמינות ומאשר את הזמנת השולחן למועד המבוקש.',
+        preconditions: ['קיימת בקשת הזמנה בסטטוס "מבוקשת" או "רשימת המתנה".'],
+        postconditions: ['ההזמנה עברה לסטטוס "מאושרת" ושולחן שוריין.'],
+        scenarios: [ { id: 'sc', name: 'מסלול מרכזי', flow: [
+          { kind: 'actor', actor: 'host', text: 'בוחר בקשת הזמנה ממתינה' },
+          { kind: 'include', uc: 'uc-availability', text: 'בדיקת זמינות שולחן למועד' },
+          { kind: 'system', text: 'משריין את השולחן ומעדכן את הסטטוס ל"מאושרת"' }
+        ], extensions: [ { at: 2, text: 'אם אין שולחן פנוי, ההזמנה נכנסת לרשימת המתנה.' } ] } ],
+        userStories: [ ual('מארח','לאשר הזמנת שולחן פנוי למועד','שהאורחים יקבלו מקום ושלא יובטח אותו שולחן פעמיים') ],
+        wireframe: wf('אישור הזמנת שולחן', ['בקשת הזמנה','מועד מבוקש','שולחן פנוי מוצע'], ['אישור הזמנה','לרשימת המתנה'])
+      },
+      'uc-seat': {
+        id: 'uc-seat', name: 'הושבת אורחים', primaryActor: 'host', secondaryActors: [],
+        description: 'במועד ההגעה המארח מושיב את האורחים וההזמנה הופכת ל"פעילה".',
+        preconditions: ['ההזמנה בסטטוס "מאושרת".'],
+        postconditions: ['ההזמנה עברה לסטטוס "פעילה".'],
+        scenarios: [ { id: 'sc', name: 'מסלול מרכזי', flow: [
+          { kind: 'actor', actor: 'host', text: 'מאתר את ההזמנה המאושרת בהגעת האורחים' },
+          { kind: 'system', text: 'מעדכן את הסטטוס ל"פעילה" ומסמן את השולחן כתפוס' }
+        ], extensions: [ { at: 1, text: 'אם השולחן עוד תפוס, המארח בוחר שולחן חלופי פנוי.' } ] } ],
+        userStories: [ ual('מארח','לסמן שהאורחים הושבו','שמצב השולחן יהיה מעודכן וההזמנה תיסגר תקין בהמשך') ],
+        wireframe: wf('הושבת אורחים', ['הזמנה מאושרת','שולחן'], ['הושבה','חזרה'])
+      },
+      'uc-complete': {
+        id: 'uc-complete', name: 'סימון סיום הזמנה', primaryActor: 'host', secondaryActors: [],
+        description: 'בתום הסעודה המארח מסמן את ההזמנה כ"הושלמה".',
+        preconditions: ['ההזמנה בסטטוס "פעילה".'],
+        postconditions: ['ההזמנה עברה לסטטוס "הושלמה".'],
+        scenarios: [ { id: 'sc', name: 'מסלול מרכזי', flow: [
+          { kind: 'actor', actor: 'host', text: 'מסמן את ההזמנה הפעילה כהושלמה בתום הסעודה' },
+          { kind: 'system', text: 'מעדכן סטטוס ל"הושלמה" ומשחרר את השולחן' }
+        ], extensions: [] } ],
+        userStories: [ ual('מארח','לסמן שהסעודה הסתיימה','שהשולחן יתפנה להזמנה הבאה') ],
+        wireframe: wf('סימון סיום הזמנה', ['הזמנה פעילה'], ['סימון הושלמה','חזרה'])
+      },
+      'uc-noshow': {
+        id: 'uc-noshow', name: 'סימון אי-הגעה', primaryActor: 'host', secondaryActors: ['time'],
+        description: 'סימון הזמנה מאושרת כ"לא הופיעו" כאשר האורחים לא הגיעו בחלון החסד, ידנית ע"י המארח או אוטומטית ע"י שחקן הזמן.',
+        preconditions: ['ההזמנה בסטטוס "מאושרת" וחלף חלון החסד.'],
+        postconditions: ['ההזמנה עברה לסטטוס "לא הופיעו".'],
+        scenarios: [
+          { id: 'sc', name: 'סימון ידני', flow: [
+            { kind: 'actor', actor: 'host', text: 'מסמן ידנית הזמנה מאושרת שאורחיה לא הגיעו' },
+            { kind: 'system', text: 'מעדכן סטטוס ל"לא הופיעו" ומשחרר את השולחן' }
+          ], extensions: [] },
+          { id: 'sc2', name: 'סימון אוטומטי', flow: [
+            { kind: 'actor', actor: 'time', text: 'מפעיל בדיקה בחלוף רבע שעה מן המועד' },
+            { kind: 'system', text: 'מסמן אוטומטית הזמנות ללא הגעה כ"לא הופיעו"' }
+          ], extensions: [] }
+        ],
+        userStories: [ ual('מנהל סניף','שהזמנות ללא הגעה יסומנו','שנוכל לצמצם אובדן שולחנות ולנתח אי-הגעות') ],
+        wireframe: wf('סימון אי-הגעה', ['הזמנה מאושרת','זמן שחלף מהמועד'], ['סימון לא הופיעו','חזרה'])
+      },
+      'uc-expire': {
+        id: 'uc-expire', name: 'סימון פקיעת רשימת המתנה', primaryActor: 'time', secondaryActors: [],
+        description: 'סימון אוטומטי של הזמנה ברשימת המתנה כ"פגת-תוקף" כאשר חלף מועדה בלי ששולחן התפנה.',
+        preconditions: ['קיימת הזמנה ברשימת המתנה שמועדה חלף.'],
+        postconditions: ['ההזמנה עברה לסטטוס "פגת-תוקף".'],
+        scenarios: [ { id: 'sc', name: 'מסלול מרכזי', flow: [
+          { kind: 'actor', actor: 'time', text: 'מפעיל בדיקה תקופתית של רשימות ההמתנה' },
+          { kind: 'system', text: 'מסמן הזמנות שמועדן חלף ללא שולחן פנוי כ"פגת-תוקף"' }
+        ], extensions: [] } ],
+        userStories: [ ual('מארח','שרשימת ההמתנה תתנקה אוטומטית','שלא אטפל בבקשות שכבר אינן רלוונטיות') ]
+      },
+      'uc-confirmEvent': {
+        id: 'uc-confirmEvent', name: 'אישור הזמנת אירוע', primaryActor: 'coord', secondaryActors: [],
+        description: 'רכז האירועים מאשר הזמנת אירוע פרטי באולם לתאריך מבוקש, כולל בחירת חבילת תפריט ורישום פיקדון.',
+        preconditions: ['הלקוח מסר אולם, תאריך, מספר משתתפים וחבילת תפריט.'],
+        postconditions: ['הזמנת האירוע עברה לסטטוס "מאושרת".'],
+        scenarios: [ { id: 'sc', name: 'מסלול מרכזי', flow: [
+          { kind: 'actor', actor: 'coord', text: 'בוחר את בקשת האירוע ואת האולם' },
+          { kind: 'include', uc: 'uc-availability', text: 'בדיקת זמינות האולם לתאריך' },
+          { kind: 'system', text: 'רושם את סכום הפיקדון ומעדכן סטטוס ל"מאושרת"' }
+        ], extensions: [ { at: 2, text: 'אם האולם תפוס בתאריך, הרכז מציע תאריך/אולם חלופי.' } ] } ],
+        userStories: [ ual('רכז אירועים','לאשר הזמנת אירוע באולם פנוי','שהאירוע הפרטי יובטח ללקוח') ],
+        wireframe: wf('אישור הזמנת אירוע', ['אולם','תאריך','מספר משתתפים','חבילת תפריט','סכום פיקדון'], ['אישור אירוע','חלופה'])
+      },
+      'uc-manageEvent': {
+        id: 'uc-manageEvent', name: 'ניהול הזמנת אירוע', primaryActor: 'coord', secondaryActors: [],
+        description: 'רכז האירועים מלווה את הזמנת האירוע מרגע האישור ועד סיומה, ומעדכן פרטים ופיקדון.',
+        preconditions: ['קיימת הזמנת אירוע מאושרת.'],
+        postconditions: ['פרטי האירוע עודכנו או שהאירוע סומן כהושלם.'],
+        scenarios: [ { id: 'sc', name: 'מסלול מרכזי', flow: [
+          { kind: 'actor', actor: 'coord', text: 'פותח הזמנת אירוע מאושרת ומעדכן פרטים או סטטוס תשלום הפיקדון' },
+          { kind: 'system', text: 'שומר את העדכון ומציג את מצב האירוע' }
+        ], extensions: [] } ],
+        userStories: [ ual('רכז אירועים','לעדכן פרטי אירוע ופיקדון לאורך זמן','שהאירוע ינוהל עד סיומו בצורה מסודרת') ],
+        wireframe: wf('ניהול הזמנת אירוע', ['אירוע','פרטים לעדכון','פיקדון שולם?'], ['שמירה','סיום אירוע'])
+      },
+      'uc-overrideCancel': {
+        id: 'uc-overrideCancel', name: 'ביטול-על של הזמנה מאושרת', primaryActor: 'bmanager', secondaryActors: [],
+        description: 'מנהל הסניף מבטל הזמנת שולחן מאושרת (גם לאחר אישור) כדי לפנות מקום לאירוע פרטי, הרשאה שאין למארח וללקוח.',
+        preconditions: ['ההזמנה בסטטוס "מאושרת".'],
+        postconditions: ['ההזמנה עברה לסטטוס "בוטלה" והשולחן פנוי לאירוע.'],
+        scenarios: [ { id: 'sc', name: 'מסלול מרכזי', flow: [
+          { kind: 'actor', actor: 'bmanager', text: 'בוחר הזמנה מאושרת שיש לפנות' },
+          { kind: 'actor', actor: 'bmanager', text: 'מבצע ביטול-על ומזין את סיבת הביטול' },
+          { kind: 'system', text: 'מעדכן סטטוס ל"בוטלה" עם סיבת הביטול ומשחרר את השולחן' }
+        ], extensions: [ { at: 1, text: 'אם ההזמנה כבר הושבה, הביטול-על אינו זמין.' } ] } ],
+        userStories: [ ual('מנהל סניף','לבטל הזמנה מאושרת כדי לפנות מקום לאירוע','שאוכל להקצות את האולם/השולחן לאירוע פרטי') ],
+        wireframe: wf('ביטול-על של הזמנה', ['הזמנה מאושרת','סיבת ביטול'], ['ביטול-על','חזרה'])
+      },
+      'uc-reports': {
+        id: 'uc-reports', name: 'הפקת דוחות תפעוליים', primaryActor: 'bmanager', secondaryActors: ['coord'],
+        description: 'הפקת דוח ביטולים חודשי (מנהל סניף) ודוח אירועים צפויים לחודש הקרוב (רכז אירועים).',
+        preconditions: ['קיימים נתוני הזמנות/אירועים לתקופה המבוקשת.'],
+        postconditions: ['הופק והוצג הדוח המבוקש.'],
+        scenarios: [ { id: 'sc', name: 'מסלול מרכזי', flow: [
+          { kind: 'actor', actor: 'bmanager', text: 'בוחר סוג דוח ותקופה' },
+          { kind: 'system', text: 'מפיק את הדוח (למשל ביטולים וסיבותיהם) ומציג אותו' }
+        ], extensions: [ { at: 2, text: 'אם אין נתונים לתקופה, המערכת מציגה דוח ריק עם חיווי.' } ] } ],
+        userStories: [ ual('מנהל סניף','דוח ביטולים חודשי עם סיבות הביטול','שאבין מדוע אובדים שולחנות'), ual('רכז אירועים','דוח אירועים צפויים לחודש הקרוב','שאיערך מראש לאירועים') ],
+        wireframe: wf('הפקת דוחות תפעוליים', ['סוג דוח','מהתאריך','עד התאריך'], ['הפקת דוח','ייצוא'])
+      },
+      'uc-masterdata': {
+        id: 'uc-masterdata', name: 'הגדרת נתוני-אב', primaryActor: 'sysadmin', secondaryActors: [],
+        description: 'מנהל המערכת מגדיר סניפים, שולחנות, אולמות וחבילות תפריט לאירועים, וסוגר סניף בעת הצורך.',
+        preconditions: ['למנהל המערכת הרשאת ניהול נתוני-אב.'],
+        postconditions: ['נתוני-האב עודכנו במערכת.'],
+        scenarios: [ { id: 'sc', name: 'מסלול מרכזי', flow: [
+          { kind: 'actor', actor: 'sysadmin', text: 'בוחר ישות (סניף/שולחן/אולם/חבילת תפריט) ומזין את פרטיה' },
+          { kind: 'system', text: 'מוודא תקינות ושומר את הרשומה' }
+        ], extensions: [ { at: 1, text: 'בסגירת סניף, המערכת מוציאה אותו וישויותיו התלויות מניהול פעיל.' } ] } ],
+        userStories: [ ual('מנהל מערכת','להגדיר סניפים, שולחנות, אולמות וחבילות תפריט','שכל הסניפים ינוהלו במערכת אחת') ],
+        wireframe: wf('הגדרת נתוני-אב', ['סוג ישות','שם','פרטים נוספים'], ['שמירה','מחיקה'])
+      }
+    };
+
+    var diagramModel = (function () {
+      function uc(id) {
+        var d = useCaseDocs[id];
+        return { kind: 'useCase', id: id, name: d.name, description: d.description,
+          primaryActor: d.primaryActor || null, secondaryActors: d.secondaryActors || [],
+          preconditions: d.preconditions || [], postconditions: d.postconditions || [],
+          scenarios: d.scenarios || [], userStories: d.userStories || [],
+          wireframe: d.wireframe || '' };
+      }
+      function actor(id, type, side) {
+        return { kind: 'actor', id: id, name: actorDescriptions[id].name, actorType: type, side: side, x: 0, y: 0 };
+      }
+      var SPLIT = 'Split by UC count: 15 use cases > 8 threshold';
+      return {
+        kind: 'use-case',
+        title: 'מערכת ניהול הזמנות ואירועים, "שולחן פנוי"',
+        assumptions: [
+          'כל בקשה מפלטפורמת ההזמנות החיצונית נקלטת אצלנו כבקשת הזמנה רגילה, איננו פונים אל הפלטפורמה ביוזמתנו.',
+          'שחקן הזמן (Time) הוא טריגר מערכת אוטומטי לפקיעת המתנה ולסימון אי-הגעה בחלוף חלון החסד.',
+          'סיבת הביטול נשמרת בכל ביטול, בניגוד לבקשת מנהל התפעול, אחרת לא ניתן להפיק את דוח הביטולים החודשי.'
+        ],
+        openQuestions: [
+          'האם אישור בקשה מהפלטפורמה יכול להתבצע אוטומטית כשקיים שולחן פנוי, או תמיד ידנית ע"י המארח?'
+        ],
+        parts: [
+          {
+            id: 'part-1', label: 'מחזור ההזמנה', splitRationale: SPLIT,
+            elements: [
+              actor('cust', 'human', 'left'),
+              actor('platform', 'system', 'left'),
+              actor('host', 'human', 'right'),
+              actor('time', 'system', 'right'),
+              uc('uc-submit'),
+              uc('uc-cancelCust'),
+              uc('uc-view'),
+              uc('uc-intake'),
+              uc('uc-confirmTable'),
+              uc('uc-seat'),
+              uc('uc-complete'),
+              uc('uc-noshow'),
+              uc('uc-expire'),
+              uc('uc-viewTonight'),
+              uc('uc-availability'),
+              uc('uc-waitlist'),
+              { kind: 'system', id: 'sys-boundary-1', name: 'מערכת ניהול הזמנות ואירועים, "שולחן פנוי"', x: 240, y: 72, w: 820, h: 640 }
+            ],
+            relationships: [
+              { kind: 'actorAssoc', id: 'as-cust-submit',   actorId: 'cust',     ucId: 'uc-submit',       role: 'initiator', description: 'הלקוח יוזם הגשת בקשת הזמנה.' },
+              { kind: 'actorAssoc', id: 'as-cust-cancel',   actorId: 'cust',     ucId: 'uc-cancelCust',   role: 'initiator', description: 'הלקוח יוזם ביטול הזמנה.' },
+              { kind: 'actorAssoc', id: 'as-cust-view',     actorId: 'cust',     ucId: 'uc-view',         role: 'initiator', description: 'הלקוח יוזם צפייה בהזמנותיו.' },
+              { kind: 'actorAssoc', id: 'as-plat-intake',   actorId: 'platform', ucId: 'uc-intake',       role: 'initiator', description: 'הפלטפורמה יוזמת קליטת בקשה.' },
+              { kind: 'actorAssoc', id: 'as-host-confirm',  actorId: 'host',     ucId: 'uc-confirmTable', role: 'initiator', description: 'המארח יוזם אישור הזמנת שולחן.' },
+              { kind: 'actorAssoc', id: 'as-host-seat',     actorId: 'host',     ucId: 'uc-seat',         role: 'initiator', description: 'המארח יוזם הושבת אורחים.' },
+              { kind: 'actorAssoc', id: 'as-host-complete', actorId: 'host',     ucId: 'uc-complete',     role: 'initiator', description: 'המארח יוזם סימון סיום הזמנה.' },
+              { kind: 'actorAssoc', id: 'as-host-noshow',   actorId: 'host',     ucId: 'uc-noshow',       role: 'initiator', description: 'המארח יוזם סימון אי-הגעה ידני.' },
+              { kind: 'actorAssoc', id: 'as-time-noshow',   actorId: 'time',     ucId: 'uc-noshow',       role: 'participant', description: 'שחקן הזמן מפעיל סימון אי-הגעה אוטומטי.', timing: 'אחרי חלון חסד 15 דק׳' },
+              { kind: 'actorAssoc', id: 'as-time-expire',   actorId: 'time',     ucId: 'uc-expire',       role: 'initiator', description: 'שחקן הזמן מפעיל פקיעת רשימת המתנה.', timing: 'בחלוף המועד' },
+              { kind: 'actorAssoc', id: 'as-host-viewtonight', actorId: 'host',  ucId: 'uc-viewTonight',  role: 'initiator', description: 'המארח יוזם צפייה בהזמנות הערב (בתוך היקף המערכת).' },
+              { kind: 'include', id: 'inc-confirmTable-avail', from: 'uc-confirmTable', to: 'uc-availability' },
+              { kind: 'extend', id: 'ext-waitlist-confirm', from: 'uc-waitlist', to: 'uc-confirmTable' }
+            ]
+          },
+          {
+            id: 'part-2', label: 'אירועים, ניהול ודוחות', splitRationale: SPLIT,
+            elements: [
+              actor('coord', 'human', 'left'),
+              actor('bmanager', 'human', 'right'),
+              actor('sysadmin', 'human', 'right'),
+              uc('uc-confirmEvent'),
+              uc('uc-manageEvent'),
+              uc('uc-reports'),
+              uc('uc-overrideCancel'),
+              uc('uc-masterdata'),
+              { kind: 'system', id: 'sys-boundary-2', name: 'מערכת ניהול הזמנות ואירועים, "שולחן פנוי"', x: 240, y: 72, w: 820, h: 560 }
+            ],
+            relationships: [
+              { kind: 'actorAssoc', id: 'as-coord-confirm', actorId: 'coord',    ucId: 'uc-confirmEvent',   role: 'initiator', description: 'רכז האירועים יוזם אישור הזמנת אירוע.' },
+              { kind: 'actorAssoc', id: 'as-coord-manage',  actorId: 'coord',    ucId: 'uc-manageEvent',    role: 'initiator', description: 'רכז האירועים יוזם ניהול הזמנת אירוע.' },
+              { kind: 'actorAssoc', id: 'as-coord-reports', actorId: 'coord',    ucId: 'uc-reports',        role: 'initiator', description: 'רכז האירועים יוזם הפקת דוח אירועים.' },
+              { kind: 'actorAssoc', id: 'as-bm-override',   actorId: 'bmanager', ucId: 'uc-overrideCancel', role: 'initiator', description: 'מנהל הסניף יוזם ביטול-על של הזמנה מאושרת.' },
+              { kind: 'actorAssoc', id: 'as-bm-reports',    actorId: 'bmanager', ucId: 'uc-reports',        role: 'initiator', description: 'מנהל הסניף יוזם הפקת דוח ביטולים.' },
+              { kind: 'actorAssoc', id: 'as-sa-masterdata', actorId: 'sysadmin', ucId: 'uc-masterdata',     role: 'initiator', description: 'מנהל המערכת יוזם הגדרת נתוני-אב.' },
+              { kind: 'include', id: 'inc-confirmEvent-avail', from: 'uc-confirmEvent', to: 'uc-availability' }
+            ]
+          }
+        ]
+      };
+    })();
+  </script>
+  <script>
+/* inlined uc-diagram-common.js */
+/* uc-diagram-common.js, SAD MCP shared runtime for use case diagrams
+   Depends on globals defined in the inline <script> of each diagram:
+   diagramLayouts, actorDescriptions, assocDescriptions, useCaseDocs, diagramModel
+
+   This file is deployed by hand to themathbible.com (see CLAUDE.md, Static Assets).
+   Keep UC_RUNTIME_VERSION in sync with package.json on every deploy, it prints to the
+   browser console so you can confirm which runtime is actually live vs. the repo.
+*/
+const UC_RUNTIME_VERSION = '2.3.2';
+if (typeof console !== 'undefined') console.info('[sad-mcp] uc-diagram runtime v' + UC_RUNTIME_VERSION);
+
+// ── fixLayout constants ───────────────────────────────────────────────────
+const HEADER_H  = 44;
+const UC_PAD    = 30;
+const UC_GAP    = 14;
+const ACTOR_PAD = 80;
+
+// ── fixLayout ─────────────────────────────────────────────────────────────
+function fixLayout(layout) {
+  const svg = document.getElementById(layout.svgId);
+  if (!svg) return;
+  const b = layout.boundary;
+
+  // Step 1, Group UCs by the side of their owning actor.
+  const ucSide = {};
+  layout.actors.forEach(a =>
+    a.ucIds.forEach(uid => {
+      ucSide[uid] = ucSide[uid] && ucSide[uid] !== a.side ? 'center' : a.side;
+    })
+  );
+  const cols = { left: [], right: [], center: [] };
+  layout.useCases.forEach(uc => cols[ucSide[uc.id] || 'center'].push(uc));
+
+  // Step 2, Sort each column by actor order (top-to-bottom on that side).
+  function sortCol(ucs, side) {
+    const ordered = layout.actors.filter(a => a.side === side).sort((a, bb) => a.y - bb.y);
+    ucs.sort((a, bb) => {
+      const ai = ordered.findIndex(act => act.ucIds.includes(a.id));
+      const bi = ordered.findIndex(act => act.ucIds.includes(bb.id));
+      return (ai < 0 ? 999 : ai) - (bi < 0 ? 999 : bi);
+    });
+  }
+  sortCol(cols.left,  'left');
+  sortCol(cols.right, 'right');
+
+  // Step 3, Adaptive column X positions. Widen boundary if needed.
+  const COL_GAP = 30;
+  const maxRx = ucs => (ucs.length ? Math.max(...ucs.map(u => u.rx)) : 0);
+  const lRx = maxRx(cols.left), cRx = maxRx(cols.center), rRx = maxRx(cols.right);
+  const gaps = (cRx ? 2 * COL_GAP : (lRx && rRx ? 2 * COL_GAP : 0));
+  const needed = 2 * UC_PAD + 2 * lRx + 2 * cRx + 2 * rRx + gaps;
+  if (b.width < needed) b.width = needed;
+
+  const leftX   = b.x + UC_PAD + lRx;
+  const rightX  = b.x + b.width - UC_PAD - rRx;
+  const centerX = (leftX + rightX) / 2;
+
+  function place(ucs, colX, colName) {
+    ucs.forEach((uc, i) => {
+      uc.cy = b.y + HEADER_H + UC_PAD + uc.ry + i * (uc.ry * 2 + UC_GAP);
+      uc.cx = colX;
+      uc.col = colName;
+    });
+  }
+  place(cols.left,   leftX,   'left');
+  place(cols.right,  rightX,  'right');
+  place(cols.center, centerX, 'center');
+
+  // Step 4, Clamp and resolve overlaps. Idempotent fixed-point loop.
+  const minX = b.x + UC_PAD;
+  const maxX = b.x + b.width - UC_PAD;
+  const minY = b.y + HEADER_H + UC_PAD;
+  let changed = true, iter = 0;
+  while (changed && iter++ < 40) {
+    changed = false;
+    for (const uc of layout.useCases) {
+      const nx = Math.max(minX + uc.rx, Math.min(maxX - uc.rx, uc.cx));
+      if (nx !== uc.cx) { uc.cx = nx; changed = true; }
+      const ny = Math.max(minY + uc.ry, uc.cy);
+      if (ny !== uc.cy) { uc.cy = ny; changed = true; }
+    }
+    for (const col of Object.values(cols)) {
+      col.sort((a, bb) => a.cy - bb.cy);
+      for (let i = 1; i < col.length; i++) {
+        const prev = col[i - 1], cur = col[i];
+        const nd = prev.cy + prev.ry + UC_GAP + cur.ry;
+        if (cur.cy < nd) { cur.cy = nd; changed = true; }
+      }
+    }
+  }
+
+  // Step 5, Expand boundary height to fit all UCs.
+  const maxBottom = Math.max(...layout.useCases.map(uc => uc.cy + uc.ry));
+  b.height = Math.max(b.height, maxBottom - b.y + UC_PAD);
+
+  // Step 6, Re-center actors on their UC group; push bottom actors below boundary.
+  layout.actors.forEach(actor => {
+    const myUCs = layout.useCases.filter(u => actor.ucIds.includes(u.id));
+    if (actor.side === 'left' || actor.side === 'right') {
+      if (myUCs.length) actor.y = myUCs.reduce((s, u) => s + u.cy, 0) / myUCs.length;
+      actor.x = actor.side === 'left' ? b.x - ACTOR_PAD : b.x + b.width + ACTOR_PAD;
+    } else if (actor.side === 'bottom') {
+      actor.y = b.y + b.height + ACTOR_PAD;
+    }
+  });
+
+  // Step 6b, Enforce a minimum vertical gap between actors on the same side.
+  // Step 6 centers each actor on its UCs' mean cy, which can place two single-UC
+  // actors barely one row apart (~UC_GAP) so their stick figures + labels overlap.
+  // Push later actors down to keep centers at least ACTOR_MIN_GAP apart (CR #6).
+  const ACTOR_MIN_GAP = 150;
+  ['left', 'right'].forEach(side => {
+    const col = layout.actors.filter(a => a.side === side).sort((a, bb) => a.y - bb.y);
+    for (let i = 1; i < col.length; i++) {
+      const need = col[i - 1].y + ACTOR_MIN_GAP;
+      if (col[i].y < need) col[i].y = need;
+    }
+  });
+
+  // Step 7, Write UC positions to the SVG (absolute attributes).
+  layout.useCases.forEach(uc => {
+    const g = svg.querySelector('[id="uc-group-' + uc.id + '"]');
+    if (!g) return;
+    const el = g.querySelector('ellipse');
+    if (!el) return;
+    const dx = uc.cx - parseFloat(el.getAttribute('cx'));
+    const dy = uc.cy - parseFloat(el.getAttribute('cy'));
+    el.setAttribute('cx', uc.cx);
+    el.setAttribute('cy', uc.cy);
+    g.querySelectorAll('text').forEach(t => {
+      t.setAttribute('x', parseFloat(t.getAttribute('x') || 0) + dx);
+      t.setAttribute('y', parseFloat(t.getAttribute('y') || 0) + dy);
+    });
+    g.removeAttribute('transform');
+  });
+  layout.actors.forEach(actor => {
+    // Scope to THIS svg: a shared actor id (e.g. 'head') repeats across tabs, so
+    // document.getElementById returns the first tab's figure and moves the wrong
+    // one, leaving this tab's figure detached from its (correctly placed) line.
+    const g = svg.querySelector('[id="actor-group-' + actor.id + '"]');
+    if (g) g.setAttribute('transform', `translate(${actor.x},${actor.y})`);
+  });
+
+  // Step 8, Recalculate every connection line endpoint.
+  svg.querySelectorAll('[data-conn-from][data-conn-to]').forEach(line => {
+    const fId = line.getAttribute('data-conn-from');
+    const tId = line.getAttribute('data-conn-to');
+    const fUC = layout.useCases.find(u => u.id === fId);
+    const fAc = layout.actors.find(a => a.id === fId);
+    const tUC = layout.useCases.find(u => u.id === tId);
+    const tAc = layout.actors.find(a => a.id === tId);
+    const from = fAc ? { x: fAc.x, y: fAc.y } : fUC ? { x: fUC.cx, y: fUC.cy } : null;
+    const to   = tAc ? { x: tAc.x, y: tAc.y } : tUC ? { x: tUC.cx, y: tUC.cy } : null;
+    if (!from || !to) return;
+    let x1 = from.x, y1 = from.y, x2 = to.x, y2 = to.y;
+    if (fUC) { const a = Math.atan2(to.y - fUC.cy, to.x - fUC.cx);     x1 = fUC.cx + fUC.rx * Math.cos(a); y1 = fUC.cy + fUC.ry * Math.sin(a); }
+    if (tUC) { const a = Math.atan2(from.y - tUC.cy, from.x - tUC.cx); x2 = tUC.cx + tUC.rx * Math.cos(a); y2 = tUC.cy + tUC.ry * Math.sin(a); }
+    line.setAttribute('x1', x1); line.setAttribute('y1', y1);
+    line.setAttribute('x2', x2); line.setAttribute('y2', y2);
+
+    const hitbox = svg.querySelector(
+      `.conn-hitbox[data-hitbox-from="${fId}"][data-hitbox-to="${tId}"]`);
+    if (hitbox) {
+      hitbox.setAttribute('x1', x1); hitbox.setAttribute('y1', y1);
+      hitbox.setAttribute('x2', x2); hitbox.setAttribute('y2', y2);
+    }
+
+    // Reposition «include»/«extend» text label associated with this line.
+    const lbl = svg.querySelector(`[data-label-for="${fId} ${tId}"]`);
+    if (lbl) {
+      lbl.setAttribute('x', (x1 + x2) / 2);
+      lbl.setAttribute('y', (y1 + y2) / 2 - 8);
+    }
+  });
+
+  // Step 9, Resize boundary rect and SVG viewBox (both width and height).
+  const br = svg.querySelector('.system-boundary, rect[rx="12"]');
+  if (br) { br.setAttribute('width', b.width); br.setAttribute('height', b.height); }
+  const vb = svg.getAttribute('viewBox');
+  if (vb) {
+    const p = vb.split(/\s+/);
+    p[3] = Math.max(parseFloat(p[3]), b.y + b.height + 120);
+    const ACTOR_LABEL_MARGIN = 120;
+    const maxActorX = layout.actors.length
+      ? Math.max(...layout.actors.map(a => a.x))
+      : b.x + b.width;
+    p[2] = Math.max(parseFloat(p[2]), maxActorX + ACTOR_LABEL_MARGIN);
+    svg.setAttribute('viewBox', p.join(' '));
+  }
+
+  // Step 10, Timing labels.
+  renderTimingLabels(layout);
+}
+
+// ── renderTimingLabels ────────────────────────────────────────────────────
+function renderTimingLabels(layout) {
+  const svg = document.getElementById(layout.svgId);
+  if (!svg) return;
+  svg.querySelectorAll('.timing-label').forEach(el => el.remove());
+  const NS = 'http://www.w3.org/2000/svg';
+  (layout.connections || []).forEach(conn => {
+    if (!conn.timing) return;
+    const line = svg.querySelector(
+      `[data-conn-from="${conn.from}"][data-conn-to="${conn.to}"]`);
+    if (!line) return;
+    const x1 = +line.getAttribute('x1'), y1 = +line.getAttribute('y1');
+    const x2 = +line.getAttribute('x2'), y2 = +line.getAttribute('y2');
+    const mx = (x1 + x2) / 2, my = (y1 + y2) / 2;
+    const w = 10 + conn.timing.length * 7, h = 16;
+    const g = document.createElementNS(NS, 'g');
+    g.setAttribute('class', 'timing-label');
+    const rect = document.createElementNS(NS, 'rect');
+    rect.setAttribute('x', mx - w / 2); rect.setAttribute('y', my - h / 2);
+    rect.setAttribute('width', w);      rect.setAttribute('height', h);
+    rect.setAttribute('fill', 'white'); rect.setAttribute('stroke', '#334155');
+    rect.setAttribute('stroke-width', '0.8'); rect.setAttribute('rx', '3');
+    const text = document.createElementNS(NS, 'text');
+    text.setAttribute('x', mx); text.setAttribute('y', my + 4);
+    text.setAttribute('font-size', '10'); text.setAttribute('text-anchor', 'middle');
+    text.setAttribute('fill', '#334155');
+    text.setAttribute('font-family', "'Noto Sans Hebrew', sans-serif");
+    text.setAttribute('direction', 'rtl');
+    text.textContent = conn.timing;
+    g.appendChild(rect); g.appendChild(text);
+    svg.appendChild(g);
+  });
+}
+
+// ── Tabs ──────────────────────────────────────────────────────────────────
+let activeTab = 0;
+function currentLayout() { return diagramLayouts[activeTab]; }
+function showDiagram(index) {
+  activeTab = index;
+  document.querySelectorAll('.diagram-part').forEach((p, i) => p.hidden = i !== index);
+  document.querySelectorAll('.tab').forEach((t, i) => t.classList.toggle('active', i === index));
+  fixLayout(diagramLayouts[index]);
+}
+
+// ── Small popup (actors & associations) ───────────────────────────────────
+function showDesc(id, type, event) {
+  if (type === 'uc') { openUcModal(id); event.stopPropagation(); return; }
+  showPopup(id, type, event);
+}
+
+function showPopup(id, type, event) {
+  hideDesc();
+  const data = type === 'actor' ? actorDescriptions[id]
+             : type === 'assoc' ? assocDescriptions[id]
+             : null;
+  if (!data) return;
+  const panel = document.createElement('div');
+  panel.id = 'desc-panel';
+  panel.innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+      <strong style="font-size:12px;color:#1e40af;direction:rtl;">${data.name}</strong>
+      <span onclick="hideDesc()" style="cursor:pointer;color:#94a3b8;font-size:18px;line-height:1;margin-right:6px;">×</span>
+    </div>
+    <div style="font-size:11px;color:#334155;line-height:1.6;direction:rtl;">${data.desc}</div>`;
+  Object.assign(panel.style, {
+    position:'fixed', background:'#fff', border:'1.5px solid #2980b9',
+    borderRadius:'8px', padding:'12px 16px', maxWidth:'300px',
+    boxShadow:'0 4px 14px rgba(0,0,0,.15)', zIndex:'1000',
+    left: event.clientX + 'px', top: event.clientY + 'px'
+  });
+  document.body.appendChild(panel);
+  const r = panel.getBoundingClientRect();
+  if (r.right  > window.innerWidth)  panel.style.left = (window.innerWidth  - r.width  - 10) + 'px';
+  if (r.bottom > window.innerHeight) panel.style.top  = (event.clientY - r.height - 10) + 'px';
+  event.stopPropagation();
+}
+
+function hideDesc() { document.getElementById('desc-panel')?.remove(); }
+
+document.addEventListener('click', e => {
+  if (!e.target.closest('[data-uc-id]') &&
+      !e.target.closest('[data-actor-id]') &&
+      !e.target.closest('[data-conn-id]')) hideDesc();
+});
+
+// ── UC modal ──────────────────────────────────────────────────────────────
+function wireframeSafe(html) {
+  const forbidden = [/<script\b/i, /\son\w+\s*=/i, /<iframe\b/i,
+    /src\s*=\s*["']https?:/i, /href\s*=\s*["']https?:/i, /@import\b/i, /<style\b/i];
+  return !forbidden.some(rx => rx.test(html));
+}
+
+function openUcModal(id) {
+  const doc = useCaseDocs[id];
+  if (!doc) return;
+  const actorName = aid => (actorDescriptions[aid]?.name) || aid;
+  const ucName    = uid => (useCaseDocs[uid]?.name) || uid;
+  const esc = s => String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+
+  let scenariosHtml = '';
+  (doc.scenarios || []).forEach(sce => {
+    scenariosHtml += `<h3>${esc(sce.name || sce.id)}</h3><ol>`;
+    (sce.flow || []).forEach((step, i) => {
+      if (step.kind === 'actor') {
+        scenariosHtml += `<li><strong class="step-actor" data-actor-id="${esc(step.actor)}">${esc(actorName(step.actor))}</strong>: ${esc(step.text || '')}</li>`;
+      } else if (step.kind === 'system') {
+        scenariosHtml += `<li><em class="step-system">המערכת</em>: ${esc(step.text || '')}</li>`;
+      } else if (step.kind === 'include') {
+        scenariosHtml += `<li><span class="step-include">«include» </span><a class="step-uc-ref" data-uc-ref="${esc(step.uc)}">${esc(ucName(step.uc))}</a>${step.text ? ', ' + esc(step.text) : ''}</li>`;
+      } else if (step.kind === 'extension') {
+        scenariosHtml += `<li class="ext-inline">${step.at ? esc(String(step.at)) + 'a. ' : ''}${esc(step.text || '')}</li>`;
+      }
+      (sce.extensions || []).filter(e => e.at === i + 1).forEach((ext, j) => {
+        scenariosHtml += `<li class="ext-sub">${i + 1}${String.fromCharCode(97 + j)}. ${esc(ext.text)}</li>`;
+      });
+    });
+    scenariosHtml += '</ol>';
+  });
+
+  const listItems = items => (items || []).map(s => `<li>${esc(s)}</li>`).join('');
+  const usItems   = (doc.userStories || []).map(us =>
+    `<li>${esc('בתור ' + us.role + ', אני רוצה ' + us.want + ', כדי ש' + us.so)}</li>`).join('');
+
+  const wfHtml = (doc.wireframe && wireframeSafe(doc.wireframe))
+    ? `<section class="uc-wireframe">${doc.wireframe}</section>` : '';
+  if (doc.wireframe && !wireframeSafe(doc.wireframe))
+    console.warn(`Wireframe for ${id} failed safety check.`);
+
+  // Single innerHTML write, avoids silent failures in sandboxed iframe environments.
+  const body = document.querySelector('#uc-modal .uc-modal-body');
+  body.innerHTML = `
+    <button class="uc-modal-close" onclick="closeUcModal()" aria-label="Close">×</button>
+    <header>
+      <span class="uc-id">${esc(doc.id)}</span>
+      <h2 class="uc-name">${esc(doc.name)}</h2>
+      <div class="uc-primary">
+        <span class="uc-primary-label">שחקן ראשי:</span>
+        <a class="uc-primary-link" data-actor-pulse="${esc(doc.primaryActor)}">${esc(actorName(doc.primaryActor))}</a>
+      </div>
+    </header>
+    <section class="uc-description">${esc(doc.description || '')}</section>
+    <section class="uc-scenarios">${scenariosHtml}</section>
+    <section class="uc-prepostuser">
+      <div class="uc-pre"><h4>תנאים מוקדמים</h4><ul>${listItems(doc.preconditions)}</ul></div>
+      <div class="uc-post"><h4>תנאים סופיים</h4><ul>${listItems(doc.postconditions)}</ul></div>
+      <div class="uc-stories"><h4>סיפורי משתמש</h4><ul>${usItems}</ul></div>
+    </section>
+    ${wfHtml}`;
+
+  body.querySelector('.uc-primary-link').onclick = () => { closeUcModal(); pulseActor(doc.primaryActor); };
+  body.querySelectorAll('.step-actor').forEach(el => {
+    el.onclick = () => { closeUcModal(); pulseActor(el.dataset.actorId); };
+  });
+  body.querySelectorAll('.step-uc-ref').forEach(el => {
+    el.onclick = () => openUcModal(el.dataset.ucRef);
+  });
+
+  const modal = document.getElementById('uc-modal');
+  modal.hidden = false;
+  document.body.classList.add('uc-modal-open');
+}
+
+function closeUcModal() {
+  const modal = document.getElementById('uc-modal');
+  if (modal) modal.hidden = true;
+  document.body.classList.remove('uc-modal-open');
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeUcModal(); });
+
+function pulseActor(actorId) {
+  const g = document.getElementById('actor-group-' + actorId);
+  if (!g) return;
+  g.classList.add('actor-pulse');
+  setTimeout(() => g.classList.remove('actor-pulse'), 2000);
+}
+
+// ── Assumptions panel ─────────────────────────────────────────────────────
+function renderAssumptions() {
+  const a = (diagramModel && diagramModel.assumptions)   || [];
+  const q = (diagramModel && diagramModel.openQuestions) || [];
+  const panel = document.getElementById('assumptions-panel');
+  if (!panel) return;
+  if (!a.length && !q.length) { panel.hidden = true; return; }
+  panel.hidden = false;
+  const fillList = (listEl, items) => {
+    listEl.innerHTML = '';
+    items.forEach(s => { const li = document.createElement('li'); li.textContent = s; listEl.appendChild(li); });
+  };
+  fillList(document.getElementById('assumptions-list'),    a);
+  fillList(document.getElementById('open-questions-list'), q);
+  document.getElementById('assumptions-col').hidden    = !a.length;
+  document.getElementById('open-questions-col').hidden = !q.length;
+}
+
+// ── XMI export ────────────────────────────────────────────────────────────
+function xmlEscape(s) {
+  return String(s == null ? '' : s)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;').replace(/'/g,'&apos;');
+}
+
+function downloadFile(filename, mimeType, content) {
+  const blob = new Blob([content], { type: mimeType });
+  const url  = URL.createObjectURL(blob);
+  const a = Object.assign(document.createElement('a'), { href: url, download: filename });
+  document.body.appendChild(a); a.click();
+  setTimeout(() => { URL.revokeObjectURL(url); a.remove(); }, 1000);
+}
+
+function xmiBody(elements, rels) {
+  const lines = [];
+  function flowText(uc) {
+    const actorName = id => (elements.find(e => e.kind === 'actor'   && e.id === id) || {}).name || id;
+    const ucName    = id => (elements.find(e => e.kind === 'useCase' && e.id === id) || {}).name || id;
+    const out = [];
+    (uc.scenarios || []).forEach(sc => {
+      out.push((sc.name || sc.id) + ':');
+      (sc.flow || []).forEach((step, i) => {
+        const n = i + 1;
+        if      (step.kind === 'actor')     out.push('  ' + n + '. ' + actorName(step.actor) + ': ' + step.text);
+        else if (step.kind === 'system')    out.push('  ' + n + '. System: ' + step.text);
+        else if (step.kind === 'include')   out.push('  ' + n + '. «include» ' + ucName(step.uc) + (step.text ? ', ' + step.text : ''));
+        else if (step.kind === 'extension') out.push('  ' + n + 'a. ' + step.text);
+        (sc.extensions || []).filter(e => e.at === n).forEach((e, j) => {
+          out.push('  ' + n + String.fromCharCode(97 + j) + '. ' + e.text);
+        });
+      });
+    });
+    return out.join('\n');
+  }
+
+  for (const el of elements) {
+    if (el.kind === 'useCase') {
+      const hasDocs = (el.preconditions  && el.preconditions.length)
+                   || (el.postconditions && el.postconditions.length)
+                   || (el.scenarios      && el.scenarios.length);
+      if (!hasDocs) {
+        lines.push('    <packagedElement xmi:type="uml:UseCase" xmi:id="' + el.id + '" name="' + xmlEscape(el.name) + '"/>');
+      } else {
+        lines.push('    <packagedElement xmi:type="uml:UseCase" xmi:id="' + el.id + '" name="' + xmlEscape(el.name) + '">');
+        (el.preconditions || []).forEach((p, i) => {
+          lines.push('      <precondition xmi:type="uml:Constraint" xmi:id="' + el.id + '-pre-' + (i+1) + '" name="pre-' + (i+1) + '">');
+          lines.push('        <specification xmi:type="uml:OpaqueExpression" xmi:id="' + el.id + '-pre-' + (i+1) + '-s"><body>' + xmlEscape(p) + '</body></specification>');
+          lines.push('      </precondition>');
+        });
+        (el.postconditions || []).forEach((p, i) => {
+          lines.push('      <postcondition xmi:type="uml:Constraint" xmi:id="' + el.id + '-post-' + (i+1) + '" name="post-' + (i+1) + '">');
+          lines.push('        <specification xmi:type="uml:OpaqueExpression" xmi:id="' + el.id + '-post-' + (i+1) + '-s"><body>' + xmlEscape(p) + '</body></specification>');
+          lines.push('      </postcondition>');
+        });
+        if (el.scenarios && el.scenarios.length) {
+          lines.push('      <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="' + el.id + '-flow" name="Flow of Events">');
+          lines.push('        <body>' + xmlEscape(flowText(el)) + '</body>');
+          lines.push('      </ownedBehavior>');
+        }
+        lines.push('    </packagedElement>');
+      }
+    }
+    if (el.kind === 'actor')
+      lines.push('    <packagedElement xmi:type="uml:Actor" xmi:id="' + el.id + '" name="' + xmlEscape(el.name) + '"/>');
+  }
+  for (const r of rels) {
+    if (r.kind === 'actorAssoc') {
+      lines.push('    <packagedElement xmi:type="uml:Association" xmi:id="' + r.id + '">');
+      lines.push('      <ownedEnd xmi:type="uml:Property" xmi:id="' + r.id + '-e1" association="' + r.id + '" type="' + r.actorId + '"/>');
+      lines.push('      <ownedEnd xmi:type="uml:Property" xmi:id="' + r.id + '-e2" association="' + r.id + '" type="' + r.ucId   + '"/>');
+      lines.push('    </packagedElement>');
+    }
+    if (r.kind === 'include')
+      lines.push('    <packagedElement xmi:type="uml:Include" xmi:id="' + r.id + '" includingCase="' + r.from + '" addition="' + r.to + '"/>');
+    if (r.kind === 'extend')
+      lines.push('    <packagedElement xmi:type="uml:Extend"  xmi:id="' + r.id + '" extendedCase="'  + r.to   + '" extension="' + r.from + '"/>');
+    if (r.kind === 'generalization')
+      lines.push('    <packagedElement xmi:type="uml:Generalization" xmi:id="' + r.id + '" specific="' + r.from + '" general="' + r.to + '"/>');
+  }
+  return lines.join('\n');
+}
+
+function exportXMI() {
+  const m     = diagramModel;
+  const title = xmlEscape(m.title || 'diagram');
+  const body  = xmiBody(m.parts.flatMap(p => p.elements), m.parts.flatMap(p => p.relationships));
+  const xmi   =
+    '<?xml version="1.0" encoding="UTF-8"?>\n' +
+    '<xmi:XMI xmi:version="2.1"\n' +
+    '  xmlns:xmi="http://www.omg.org/XMI"\n' +
+    '  xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML">\n' +
+    '  <uml:Model xmi:id="model_1" name="' + title + '">\n' +
+    body + '\n' +
+    '  </uml:Model>\n' +
+    '</xmi:XMI>';
+  downloadFile(title.replace(/\s+/g, '_') + '.xmi', 'application/xml', xmi);
+}
+
+// ── User stories summary panel ────────────────────────────────────────────
+function renderUserStoriesSummary() {
+  const panel = document.getElementById('user-stories-panel');
+  if (!panel) return;
+  const seen = new Set();
+  const stories = [];
+  Object.values(useCaseDocs).forEach(doc => {
+    (doc.userStories || []).forEach(us => {
+      const key = us.role + '|' + us.want + '|' + us.so;
+      if (!seen.has(key)) { seen.add(key); stories.push(us); }
+    });
+  });
+  if (!stories.length) { panel.hidden = true; return; }
+  panel.hidden = false;
+  const list = document.getElementById('user-stories-list');
+  if (!list) return;
+  list.innerHTML = '';
+  stories.forEach(us => {
+    const li = document.createElement('li');
+    li.textContent = 'בתור ' + us.role + ', אני רוצה ' + us.want + ', כדי ש' + us.so;
+    list.appendChild(li);
+  });
+}
+
+// ── Init ──────────────────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  diagramLayouts.forEach(l => fixLayout(l));
+  renderAssumptions();
+  renderUserStoriesSummary();
+});
+
+</script>
+</body>
+</html>
