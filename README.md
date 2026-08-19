@@ -12,8 +12,8 @@
 
 - **הרצאה 1** — מבוא לניתוח ועיצוב מערכות מידע → [צפייה במצגת](https://dcodish.github.io/SAD-course-materials/lecture-01/) · [PDF להדפסה](Lectures%20PDF%20Format/lecture-01.pdf) · _עודכן 17.08.2026_
 - **הרצאה 2** — תיעוד תהליכים עסקיים — BPMN → [צפייה במצגת](https://dcodish.github.io/SAD-course-materials/lecture-02/) · [PDF להדפסה](Lectures%20PDF%20Format/lecture-02.pdf) · _עודכן 17.08.2026_
-- **הרצאה 3** — דרישות → [צפייה במצגת](https://dcodish.github.io/SAD-course-materials/lecture-03/) · [PDF להדפסה](Lectures%20PDF%20Format/lecture-03.pdf) · _עודכן 15.08.2026_
-- **הרצאה 4-5** — תרשים תרחישי שימוש — Use Case → [צפייה במצגת](https://dcodish.github.io/SAD-course-materials/lecture-04-05/) · [PDF להדפסה](Lectures%20PDF%20Format/lecture-04-05.pdf) · _עודכן 09.08.2026_
+- **הרצאה 3** — דרישות → [צפייה במצגת](https://dcodish.github.io/SAD-course-materials/lecture-03/) · [PDF להדפסה](Lectures%20PDF%20Format/lecture-03.pdf) · _עודכן 19.08.2026_
+- **הרצאה 4-5** — תרשים תרחישי שימוש — Use Case → [צפייה במצגת](https://dcodish.github.io/SAD-course-materials/lecture-04-05/) · [PDF להדפסה](Lectures%20PDF%20Format/lecture-04-05.pdf) · _עודכן 19.08.2026_
 - **הרצאה 6-7** — תרשים מחלקות — Class Diagram → [צפייה במצגת](https://dcodish.github.io/SAD-course-materials/lecture-06-07/) · [PDF להדפסה](Lectures%20PDF%20Format/lecture-06-07.pdf) · _עודכן 19.08.2026_
 
 עמוד נחיתה מסודר לכל ההרצאות: <https://dcodish.github.io/SAD-course-materials/>

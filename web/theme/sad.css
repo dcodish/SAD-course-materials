@@ -14,15 +14,19 @@
   /* Primary */
   --blue:        #0070C0;   /* PRIMARY_BLUE */
   --dark-blue:   #004E8C;
-  /* ⚠️ KNOWN CONTRAST ISSUE, deliberately NOT fixed here (2026-08-17). This token is used in two
-     CONFLICTING roles: as a dark chip fill carrying WHITE text (lecture 6-7's lead bars, the
-     .sdlc-step.done dot — 3.09:1), and as a tint carrying DARK-BLUE text (lectures 3 and 4-5,
-     ~45 spots incl. lecture-03 `smart`'s convention pill — 2.75:1). No single value satisfies
-     both: darkening it to #1C7FB8 lifts the white cases to 4.40 but drops the dark-blue cases
-     to 1.94. The real fix is to SPLIT the token — --light-blue as the chip fill (white text)
-     plus a new pale --tint-blue (dark text) — and repoint the dark-text rules in lectures 3
-     and 4-5. That is a course-wide pass, so it is logged rather than done piecemeal. */
-  --light-blue:  #2E9ADE;
+  /* SPLIT 2026-08-19, resolving the two-roles contrast issue logged on 2026-08-17. One token
+     was doing two incompatible jobs and failing both: a chip fill under WHITE text (3.09:1)
+     and a tint under DARK-BLUE text (2.75:1) — which want the fill darker and lighter
+     respectively. Now there are two:
+       --light-blue  chip / lead-bar fill, WHITE text on it   → 4.82:1  (was 3.09)
+       --tint-blue   pale panel, --dark-blue text on it       → 7.00:1  (was 2.75)
+     Measured split of the 90 affected text runs: lecture 6-7's 15 lead-bar slides are all
+     white-on-fill (fixed by the darkening alone — #1C7FB8 as first logged reached only
+     4.40, so the fill went one step darker to clear 4.5); lectures 3 and 4-5 are dark-on-tint apart
+     from L4-5's `section-use-case-diagram`, whose road chips are white and stay on the fill.
+     Before repointing any NEW use, check which of the two roles it is. */
+  --light-blue:  #1A78B0;
+  --tint-blue:   #DCEBF7;
   --gray:        #9EA2A8;
   /* Text */
   --body:        #333333;
@@ -340,7 +344,9 @@
 /* "last updated" stamp — students keep old downloads, so the cover says how old
    this copy is. Quiet on purpose: it is provenance, not content. */
 .reveal section.title-slide .updated {
-  margin-top: 22px; color: #BBD8EE; font-size: 14px; font-weight: 500;
+  /* same #DCEBF7 as .course / .lecture-no above it — a dimmer shade was 2.09:1 on the
+     gradient's light end, below even the cover's own convention. */
+  margin-top: 22px; color: #DCEBF7; font-size: 14px; font-weight: 500;
   letter-spacing: .02em; opacity: .9;
 }
 
