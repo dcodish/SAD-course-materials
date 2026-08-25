@@ -120,11 +120,11 @@ h2{ page-break-after:avoid; } tr{ page-break-inside:avoid; }
 </ul></li>
 <li><a href="#5-דרישות" id="toc-5-דרישות">5. דרישות</a>
 <ul>
-<li><a href="#51-דרישות-פונקציונליות-fr" id="toc-51-דרישות-פונקציונליות-fr">5.1 דרישות פונקציונליות (FR)</a></li>
-<li><a href="#52-דרישות-לא-פונקציונליות-nfr" id="toc-52-דרישות-לא-פונקציונליות-nfr">5.2 דרישות לא-פונקציונליות
+<li><a href="#51-מילון-נתונים" id="toc-51-מילון-נתונים">5.1 מילון
+נתונים</a></li>
+<li><a href="#52-דרישות-פונקציונליות-fr" id="toc-52-דרישות-פונקציונליות-fr">5.2 דרישות פונקציונליות (FR)</a></li>
+<li><a href="#53-דרישות-לא-פונקציונליות-nfr" id="toc-53-דרישות-לא-פונקציונליות-nfr">5.3 דרישות לא-פונקציונליות
 (NFR)</a></li>
-<li><a href="#53-דרישות-נתונים-dr" id="toc-53-דרישות-נתונים-dr">5.3
-דרישות נתונים (DR)</a></li>
 <li><a href="#54-כללים-עסקיים-br" id="toc-54-כללים-עסקיים-br">5.4 כללים
 עסקיים (BR)</a></li>
 </ul></li>
@@ -447,7 +447,1002 @@ h2{ page-break-after:avoid; } tr{ page-break-inside:avoid; }
 אחריה תת-הדרישות האטומיות שלה, כל אחת ניתנת לבדיקה (SMART) בפני עצמה.
 עמודת העדיפות (MoSCoW) מופיעה על דרישת-העל ומבטאת <strong>היקף למהדורה
 הראשונה</strong> — לא סדר בנייה.</p>
-<h3 id="51-דרישות-פונקציונליות-fr">5.1 דרישות פונקציונליות (FR)</h3>
+<p><strong>מילון הנתונים (5.1) בא ראשון</strong> — הישויות, השדות,
+הפורמט, החובה והייחודיות מוגדרים שם <strong>פעם אחת</strong>, וכל דרישה
+מפנה אליו במקום לחזור על רשימת שדות.</p>
+<h3 id="51-מילון-נתונים">5.1 מילון נתונים</h3>
+<p>כל ישות מוגדרת <strong>פעם אחת</strong>: השדות, הפורמט, החובה
+והייחודיות. הדרישות בסעיפים הבאים <strong>מפנות</strong> לכאן במקום
+לחזור על רשימות שדות — כך שינוי שדה מתעדכן במקום אחד, וכל הדרישות שמפנות
+אליו מתעדכנות איתו.</p>
+<p>נאמר פעם אחת, ותקף לכל המילון: כלל ברמת שדה (&quot;מספר רישוי ייחודי&quot;,
+&quot;רשימה סגורה&quot;) הוא <strong>דרישה פונקציונלית ברמת השדה</strong> —
+והמילון הוא המקום שבו היא חיה.</p>
+<p>ולפני השדות — שאלת הפתיחה על כל ישות: <strong>מי הבעלים של
+הנתון?</strong></p>
+<ul>
+<li>🏠 <strong>בבעלות המערכת שלנו</strong> — כל ארבע פעולות ה-CRUD
+(יצירה, קריאה, עדכון, מחיקה) אצלנו.</li>
+<li>🔗 <strong>מנוהל במערכת חיצונית</strong> — מגיע אלינו בממשק; אצלנו
+בעיקר קריאה ותוספות מקומיות.</li>
+</ul>
+<blockquote>
+<p>בחניון כל <strong>הישויות</strong> בבעלותנו. מה שמגיע ממערכת חיצונית
+הוא <strong>שדות</strong> בודדים — מספר הרכב ממערכת ה-LPR, אסמכתת הסליקה
+משער התשלום, סטטוס מסירת ההודעה — והם מסומנים 🔗 בעמודת ההערות.</p>
+</blockquote>
+<h4 id="511-כניסה--כרטיס-ticket-house">5.1.1 כניסה / כרטיס (Ticket)
+🏠</h4>
+<p><strong>בעלות:</strong> 🏠 בבעלות המערכת — נוצר במחסום הכניסה ונסגר
+ביציאה.</p>
+<table>
+<thead>
+<tr>
+<th>שדה</th>
+<th>ערכים / פורמט</th>
+<th style="text-align: center;">חובה</th>
+<th style="text-align: center;">ייחודי</th>
+<th>הערות</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>מזהה כרטיס</td>
+<td>ברקוד מוקצה אוטומטית</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">✓</td>
+<td>מודפס על הכרטיס הפיזי</td>
+</tr>
+<tr>
+<td>שעת כניסה</td>
+<td>תאריך ושעה</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td>נכתבת על ידי המערכת ברגע פתיחת המחסום</td>
+</tr>
+<tr>
+<td>מפלס</td>
+<td>מרשימת המפלסים</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td></td>
+</tr>
+<tr>
+<td>מספר רכב</td>
+<td>מספר רישוי</td>
+<td style="text-align: center;">רשות</td>
+<td style="text-align: center;">—</td>
+<td>🔗 נקלט ממערכת ה-LPR; ריק אם הזיהוי נכשל — ואז הבירור ידני</td>
+</tr>
+<tr>
+<td>סטטוס תשלום</td>
+<td>לא שולם / שולם / פג חלון היציאה</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td>ברירת מחדל: לא שולם</td>
+</tr>
+</tbody>
+</table>
+<h4 id="512-מנוי-subscription-house">5.1.2 מנוי (Subscription) 🏠</h4>
+<p><strong>בעלות:</strong> 🏠 בבעלות המערכת — מנוהל במלואו אצלנו.</p>
+<table>
+<thead>
+<tr>
+<th>שדה</th>
+<th>ערכים / פורמט</th>
+<th style="text-align: center;">חובה</th>
+<th style="text-align: center;">ייחודי</th>
+<th>הערות</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>מזהה מנוי</td>
+<td>מוקצה אוטומטית</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">✓</td>
+<td>אינו ניתן לשינוי</td>
+</tr>
+<tr>
+<td>שם</td>
+<td>טקסט</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td></td>
+</tr>
+<tr>
+<td>ת&quot;ז / ח&quot;פ</td>
+<td>9 ספרות</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">✓</td>
+<td>מזהה העוגן — מונע כפילות מנויים</td>
+</tr>
+<tr>
+<td>טלפון</td>
+<td>ספרות בלבד</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td>ערוץ ההודעות והתזכורות</td>
+</tr>
+<tr>
+<td>אמצעי תשלום</td>
+<td>כרטיס אשראי / הוראת קבע</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td>משמש לחידוש האוטומטי; נשמרת אסמכתה בלבד</td>
+</tr>
+<tr>
+<td>תאריך תוקף</td>
+<td>תאריך</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td>חידוש מאריך אותו</td>
+</tr>
+<tr>
+<td>סטטוס</td>
+<td>פעיל / מושהה / פג</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td>ברירת מחדל: פעיל · רק &quot;פעיל&quot; פותח מחסום בתג</td>
+</tr>
+</tbody>
+</table>
+<h4 id="513-תג-rfid-tag-house">5.1.3 תג (RFID Tag) 🏠</h4>
+<p><strong>בעלות:</strong> 🏠 בבעלות המערכת.</p>
+<table>
+<thead>
+<tr>
+<th>שדה</th>
+<th>ערכים / פורמט</th>
+<th style="text-align: center;">חובה</th>
+<th style="text-align: center;">ייחודי</th>
+<th>הערות</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>מזהה תג</td>
+<td>מזהה RFID</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">✓</td>
+<td>מודפס על התג הפיזי</td>
+</tr>
+<tr>
+<td>מנוי משויך</td>
+<td>הפניה לישות מנוי</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td>תג אינו קיים בלי מנוי</td>
+</tr>
+<tr>
+<td>סטטוס</td>
+<td>פעיל / מושהה / מבוטל</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td>תג אבוד מבוטל ולא נמחק — ההיסטוריה נשמרת</td>
+</tr>
+</tbody>
+</table>
+<h4 id="514-רכב-vehicle-house">5.1.4 רכב (Vehicle) 🏠</h4>
+<p><strong>בעלות:</strong> 🏠 בבעלות המערכת.</p>
+<table>
+<thead>
+<tr>
+<th>שדה</th>
+<th>ערכים / פורמט</th>
+<th style="text-align: center;">חובה</th>
+<th style="text-align: center;">ייחודי</th>
+<th>הערות</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>מספר רישוי</td>
+<td>ספרות בלבד</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">✓</td>
+<td>🔗 מגיע לרוב ממערכת ה-LPR</td>
+</tr>
+<tr>
+<td>סוג</td>
+<td>פרטי / מסחרי / אופנוע</td>
+<td style="text-align: center;">רשות</td>
+<td style="text-align: center;">—</td>
+<td></td>
+</tr>
+<tr>
+<td>צבע</td>
+<td>טקסט</td>
+<td style="text-align: center;">רשות</td>
+<td style="text-align: center;">—</td>
+<td>עוזר בבירור מחלוקות מול הצילום</td>
+</tr>
+<tr>
+<td>מנוי משויך</td>
+<td>הפניה לישות מנוי</td>
+<td style="text-align: center;">רשות</td>
+<td style="text-align: center;">—</td>
+<td>ריק ברכב מזדמן</td>
+</tr>
+</tbody>
+</table>
+<h4 id="515-עסקת-חניה-parking-transaction-house">5.1.5 עסקת חניה
+(Parking Transaction) 🏠</h4>
+<p><strong>בעלות:</strong> 🏠 בבעלות המערכת.</p>
+<table>
+<thead>
+<tr>
+<th>שדה</th>
+<th>ערכים / פורמט</th>
+<th style="text-align: center;">חובה</th>
+<th style="text-align: center;">ייחודי</th>
+<th>הערות</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>מזהה עסקה</td>
+<td>מוקצה אוטומטית</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">✓</td>
+<td></td>
+</tr>
+<tr>
+<td>כרטיס / תג</td>
+<td>הפניה לישות כניסה/כרטיס או לישות תג</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td>מזדמן מזוהה בכרטיס, מנוי בתג</td>
+</tr>
+<tr>
+<td>שעת כניסה</td>
+<td>תאריך ושעה</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td></td>
+</tr>
+<tr>
+<td>שעת יציאה</td>
+<td>תאריך ושעה</td>
+<td style="text-align: center;">רשות</td>
+<td style="text-align: center;">—</td>
+<td>ריק כל עוד הרכב בחניון</td>
+</tr>
+<tr>
+<td>משך</td>
+<td>דקות</td>
+<td style="text-align: center;">רשות</td>
+<td style="text-align: center;">—</td>
+<td>מחושב מהפרש השעות</td>
+</tr>
+<tr>
+<td>סכום מחושב</td>
+<td>סכום בש&quot;ח</td>
+<td style="text-align: center;">רשות</td>
+<td style="text-align: center;">—</td>
+<td>מחושב לפי התעריף שהיה בתוקף בשעת הכניסה</td>
+</tr>
+<tr>
+<td>סטטוס</td>
+<td>פתוחה / שולמה / נסגרה / במחלוקת</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h4 id="516-תשלום-payment-house">5.1.6 תשלום (Payment) 🏠</h4>
+<p><strong>בעלות:</strong> 🏠 הרשומה בבעלותנו — אך הסליקה מתבצעת
+ב<strong>שער תשלום חיצוני</strong>. אצלנו נשמרים אסמכתה וסטטוס בלבד —
+<strong>ללא פרטי אשראי</strong>.</p>
+<table>
+<thead>
+<tr>
+<th>שדה</th>
+<th>ערכים / פורמט</th>
+<th style="text-align: center;">חובה</th>
+<th style="text-align: center;">ייחודי</th>
+<th>הערות</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>מזהה תשלום</td>
+<td>מוקצה אוטומטית</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">✓</td>
+<td></td>
+</tr>
+<tr>
+<td>עסקה משויכת</td>
+<td>הפניה לישות עסקת חניה</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">✓</td>
+<td>תשלום אחד לעסקה</td>
+</tr>
+<tr>
+<td>אמצעי</td>
+<td>מזומן / כרטיס / אפליקציה</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td>רשימה סגורה</td>
+</tr>
+<tr>
+<td>סכום</td>
+<td>סכום בש&quot;ח</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td>תואם את הסכום המחושב של העסקה</td>
+</tr>
+<tr>
+<td>שעה</td>
+<td>תאריך ושעה</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td></td>
+</tr>
+<tr>
+<td>מספר קבלה</td>
+<td>הפניה לישות קבלה</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">✓</td>
+<td></td>
+</tr>
+<tr>
+<td>מזהה סליקה</td>
+<td>אסמכתה משער התשלום</td>
+<td style="text-align: center;">רשות</td>
+<td style="text-align: center;">✓</td>
+<td>🔗 מוחזר מהשער — אסמכתה בלבד, לא פרטי כרטיס · ריק בתשלום מזומן</td>
+</tr>
+</tbody>
+</table>
+<h4 id="517-תעריף-tariff-house">5.1.7 תעריף (Tariff) 🏠</h4>
+<p><strong>בעלות:</strong> 🏠 בבעלות המערכת — <strong>ישות
+תצורה</strong>: שינוי תעריף הוא החלטת הנהלה (ראו קטלוג החוקים העסקיים),
+לא החלטת מפתח.</p>
+<table>
+<thead>
+<tr>
+<th>שדה</th>
+<th>ערכים / פורמט</th>
+<th style="text-align: center;">חובה</th>
+<th style="text-align: center;">ייחודי</th>
+<th>הערות</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>מזהה תעריף</td>
+<td>מוקצה אוטומטית</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">✓</td>
+<td></td>
+</tr>
+<tr>
+<td>תעריף שעה ראשונה</td>
+<td>סכום בש&quot;ח</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td></td>
+</tr>
+<tr>
+<td>תעריף שעה נוספת</td>
+<td>סכום בש&quot;ח</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td></td>
+</tr>
+<tr>
+<td>תקרה יומית</td>
+<td>סכום בש&quot;ח</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td>החיוב אינו עולה מעליה</td>
+</tr>
+<tr>
+<td>תאריך תחולה</td>
+<td>תאריך</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td>תעריף אינו נמחק — נכנס תעריף חדש בתחולה מאוחרת, ועסקאות קיימות
+נשארות בתעריף שהיה</td>
+</tr>
+</tbody>
+</table>
+<h4 id="518-אירוע-event-house">5.1.8 אירוע (Event) 🏠</h4>
+<p><strong>בעלות:</strong> 🏠 בבעלות המערכת.</p>
+<table>
+<thead>
+<tr>
+<th>שדה</th>
+<th>ערכים / פורמט</th>
+<th style="text-align: center;">חובה</th>
+<th style="text-align: center;">ייחודי</th>
+<th>הערות</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>מזהה אירוע</td>
+<td>מוקצה אוטומטית</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">✓</td>
+<td></td>
+</tr>
+<tr>
+<td>שם</td>
+<td>טקסט</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td></td>
+</tr>
+<tr>
+<td>חלון זמן</td>
+<td>תאריך ושעת התחלה וסיום</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td></td>
+</tr>
+<tr>
+<td>מפלס שמור</td>
+<td>מרשימת המפלסים</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td>המפלס נחסם לחניה מזדמנת בחלון הזמן</td>
+</tr>
+<tr>
+<td>תעריף אירוע</td>
+<td>סכום בש&quot;ח</td>
+<td style="text-align: center;">רשות</td>
+<td style="text-align: center;">—</td>
+<td>ריק = התעריף הרגיל</td>
+</tr>
+</tbody>
+</table>
+<h4 id="519-דוח-אכיפה-enforcement-report-house">5.1.9 דוח אכיפה
+(Enforcement Report) 🏠</h4>
+<p><strong>בעלות:</strong> 🏠 בבעלות המערכת; דוח שהועבר לעירייה ממשיך
+להתנהל שם.</p>
+<table>
+<thead>
+<tr>
+<th>שדה</th>
+<th>ערכים / פורמט</th>
+<th style="text-align: center;">חובה</th>
+<th style="text-align: center;">ייחודי</th>
+<th>הערות</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>מזהה דוח</td>
+<td>מוקצה אוטומטית</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">✓</td>
+<td></td>
+</tr>
+<tr>
+<td>רכב</td>
+<td>הפניה לישות רכב</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td></td>
+</tr>
+<tr>
+<td>שעה</td>
+<td>תאריך ושעה</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td></td>
+</tr>
+<tr>
+<td>סוג עבירה</td>
+<td>חריגת זמן / חניה במקום שמור / יציאה ללא תשלום</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td>רשימה סגורה</td>
+</tr>
+<tr>
+<td>פקח מטפל</td>
+<td>הפניה לישות משתמש צוות</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td></td>
+</tr>
+<tr>
+<td>צילום</td>
+<td>קובץ תמונה</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td>הראיה במחלוקת — בלעדיה הדוח אינו תקף</td>
+</tr>
+<tr>
+<td>סטטוס טיפול</td>
+<td>נפתח / נסגר / בוטל / הועבר לעירייה</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h4 id="5110-נעילת-גלגל-סנדל-house">5.1.10 נעילת גלגל (סנדל) 🏠</h4>
+<p><strong>בעלות:</strong> 🏠 בבעלות המערכת.</p>
+<table>
+<thead>
+<tr>
+<th>שדה</th>
+<th>ערכים / פורמט</th>
+<th style="text-align: center;">חובה</th>
+<th style="text-align: center;">ייחודי</th>
+<th>הערות</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>מזהה נעילה</td>
+<td>מוקצה אוטומטית</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">✓</td>
+<td></td>
+</tr>
+<tr>
+<td>רכב</td>
+<td>הפניה לישות רכב</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td></td>
+</tr>
+<tr>
+<td>שעת הצמדה</td>
+<td>תאריך ושעה</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td></td>
+</tr>
+<tr>
+<td>שעת שחרור</td>
+<td>תאריך ושעה</td>
+<td style="text-align: center;">רשות</td>
+<td style="text-align: center;">—</td>
+<td>ריק כל עוד הסנדל מוצמד</td>
+</tr>
+<tr>
+<td>פקח מטפל</td>
+<td>הפניה לישות משתמש צוות</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h4 id="5111-משמרת-shift-house">5.1.11 משמרת (Shift) 🏠</h4>
+<p><strong>בעלות:</strong> 🏠 בבעלות המערכת.</p>
+<table>
+<thead>
+<tr>
+<th>שדה</th>
+<th>ערכים / פורמט</th>
+<th style="text-align: center;">חובה</th>
+<th style="text-align: center;">ייחודי</th>
+<th>הערות</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>מזהה משמרת</td>
+<td>מוקצה אוטומטית</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">✓</td>
+<td></td>
+</tr>
+<tr>
+<td>אחראי</td>
+<td>הפניה לישות משתמש צוות</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td>בתפקיד &quot;אחראי משמרת&quot;</td>
+</tr>
+<tr>
+<td>שעת פתיחה</td>
+<td>תאריך ושעה</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td></td>
+</tr>
+<tr>
+<td>שעת סגירה</td>
+<td>תאריך ושעה</td>
+<td style="text-align: center;">רשות</td>
+<td style="text-align: center;">—</td>
+<td>ריק כל עוד המשמרת פתוחה</td>
+</tr>
+<tr>
+<td>מזומן צפוי</td>
+<td>סכום בש&quot;ח</td>
+<td style="text-align: center;">רשות</td>
+<td style="text-align: center;">—</td>
+<td>מחושב מתשלומי המזומן שנרשמו במשמרת</td>
+</tr>
+<tr>
+<td>מזומן נספר</td>
+<td>סכום בש&quot;ח</td>
+<td style="text-align: center;">רשות</td>
+<td style="text-align: center;">—</td>
+<td>נקלט ידנית בסגירת המשמרת</td>
+</tr>
+<tr>
+<td>פער</td>
+<td>סכום בש&quot;ח</td>
+<td style="text-align: center;">רשות</td>
+<td style="text-align: center;">—</td>
+<td>מחושב: נספר פחות צפוי · פער חורג מחייב אישור מנהל</td>
+</tr>
+</tbody>
+</table>
+<h4 id="5112-משתמש-צוות-staff-user-house">5.1.12 משתמש צוות (Staff User)
+🏠</h4>
+<p><strong>בעלות:</strong> 🏠 בבעלות המערכת — מנוהל במלואו אצלנו.</p>
+<table>
+<thead>
+<tr>
+<th>שדה</th>
+<th>ערכים / פורמט</th>
+<th style="text-align: center;">חובה</th>
+<th style="text-align: center;">ייחודי</th>
+<th>הערות</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>מזהה משתמש</td>
+<td>מוקצה אוטומטית</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">✓</td>
+<td>אינו ניתן לשינוי</td>
+</tr>
+<tr>
+<td>שם</td>
+<td>טקסט</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td></td>
+</tr>
+<tr>
+<td>שם משתמש</td>
+<td>טקסט</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">✓</td>
+<td>נדחה אם כבר קיים במערכת</td>
+</tr>
+<tr>
+<td>תפקיד</td>
+<td>אחראי משמרת / פקח תא / פקח אכיפה / מנהל תפעול</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td>רשימה סגורה — קובע הרשאות</td>
+</tr>
+<tr>
+<td>הרשאות</td>
+<td>נגזרות מהתפקיד</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td></td>
+</tr>
+<tr>
+<td>סטטוס</td>
+<td>פעיל / לא פעיל</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td>ברירת מחדל: פעיל · &quot;לא פעיל&quot; חוסם גישה ושומר את הרשומה</td>
+</tr>
+</tbody>
+</table>
+<h4 id="5113-דגימת-תפוסה-occupancy-sample-house">5.1.13 דגימת תפוסה
+(Occupancy Sample) 🏠</h4>
+<p><strong>בעלות:</strong> 🏠 בבעלות המערכת — נכתבת על ידי המערכת
+בלבד.</p>
+<table>
+<thead>
+<tr>
+<th>שדה</th>
+<th>ערכים / פורמט</th>
+<th style="text-align: center;">חובה</th>
+<th style="text-align: center;">ייחודי</th>
+<th>הערות</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>שעת דגימה</td>
+<td>תאריך ושעה</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">✓</td>
+<td>דגימה אחת לכל חותם זמן</td>
+</tr>
+<tr>
+<td>סה&quot;כ תפוס</td>
+<td>מספר שלם ≥ 0</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td>לא יעלה על מספר המקומות בחניון</td>
+</tr>
+<tr>
+<td>תפוס לפי מפלס</td>
+<td>מספר שלם ≥ 0, ערך לכל מפלס</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td>סכום המפלסים שווה לסה&quot;כ</td>
+</tr>
+</tbody>
+</table>
+<h4 id="5114-קבלה-receipt-house">5.1.14 קבלה (Receipt) 🏠</h4>
+<p><strong>בעלות:</strong> 🏠 בבעלות המערכת.</p>
+<table>
+<thead>
+<tr>
+<th>שדה</th>
+<th>ערכים / פורמט</th>
+<th style="text-align: center;">חובה</th>
+<th style="text-align: center;">ייחודי</th>
+<th>הערות</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>מספר קבלה</td>
+<td>מוקצה אוטומטית, רציף</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">✓</td>
+<td>הרציפות נדרשת לביקורת גזברות העירייה — אין דילוגים</td>
+</tr>
+<tr>
+<td>עסקה</td>
+<td>הפניה לישות עסקת חניה</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td></td>
+</tr>
+<tr>
+<td>סכום</td>
+<td>סכום בש&quot;ח</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td></td>
+</tr>
+<tr>
+<td>מע&quot;מ</td>
+<td>סכום בש&quot;ח</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td></td>
+</tr>
+<tr>
+<td>שעה</td>
+<td>תאריך ושעה</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h4 id="5115-רשומת-יומן-ביקורת-audit-log-house">5.1.15 רשומת יומן ביקורת
+(Audit Log) 🏠</h4>
+<p><strong>בעלות:</strong> 🏠 בבעלות המערכת — נכתבת על ידי המערכת בלבד;
+אין יצירה, עדכון או מחיקה ידניים.</p>
+<table>
+<thead>
+<tr>
+<th>שדה</th>
+<th>ערכים / פורמט</th>
+<th style="text-align: center;">חובה</th>
+<th style="text-align: center;">ייחודי</th>
+<th>הערות</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>מזהה רשומה</td>
+<td>מוקצה אוטומטית</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">✓</td>
+<td></td>
+</tr>
+<tr>
+<td>משתמש</td>
+<td>הפניה לישות משתמש צוות</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td></td>
+</tr>
+<tr>
+<td>פעולה</td>
+<td>טקסט</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td></td>
+</tr>
+<tr>
+<td>שעה</td>
+<td>תאריך ושעה</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td>נכתבת על ידי המערכת, אינה ניתנת לעריכה</td>
+</tr>
+<tr>
+<td>ערך לפני</td>
+<td>טקסט</td>
+<td style="text-align: center;">רשות</td>
+<td style="text-align: center;">—</td>
+<td>נשמר בפעולות רגישות בלבד</td>
+</tr>
+<tr>
+<td>ערך אחרי</td>
+<td>טקסט</td>
+<td style="text-align: center;">רשות</td>
+<td style="text-align: center;">—</td>
+<td>נשמר בפעולות רגישות בלבד</td>
+</tr>
+</tbody>
+</table>
+<h4 id="5116-החזר--זיכוי-refund-house">5.1.16 החזר / זיכוי (Refund)
+🏠</h4>
+<p><strong>בעלות:</strong> 🏠 הרשומה בבעלותנו; הזיכוי בפועל מתבצע בשער
+התשלום החיצוני.</p>
+<table>
+<thead>
+<tr>
+<th>שדה</th>
+<th>ערכים / פורמט</th>
+<th style="text-align: center;">חובה</th>
+<th style="text-align: center;">ייחודי</th>
+<th>הערות</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>מזהה החזר</td>
+<td>מוקצה אוטומטית</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">✓</td>
+<td></td>
+</tr>
+<tr>
+<td>תשלום מקורי</td>
+<td>הפניה לישות תשלום</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td></td>
+</tr>
+<tr>
+<td>סכום החזר</td>
+<td>סכום בש&quot;ח, ≤ סכום התשלום המקורי</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td></td>
+</tr>
+<tr>
+<td>שעה</td>
+<td>תאריך ושעה</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td></td>
+</tr>
+<tr>
+<td>סיבה</td>
+<td>טקסט</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td>נדרשת לביקורת</td>
+</tr>
+</tbody>
+</table>
+<h4 id="5117-הודעה--תזכורת-notification-house">5.1.17 הודעה / תזכורת
+(Notification) 🏠</h4>
+<p><strong>בעלות:</strong> 🏠 הרשומה בבעלותנו; ה<strong>שליחה</strong>
+בפועל מתבצעת בשער SMS חיצוני.</p>
+<table>
+<thead>
+<tr>
+<th>שדה</th>
+<th>ערכים / פורמט</th>
+<th style="text-align: center;">חובה</th>
+<th style="text-align: center;">ייחודי</th>
+<th>הערות</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>מזהה</td>
+<td>מוקצה אוטומטית</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">✓</td>
+<td></td>
+</tr>
+<tr>
+<td>נמען</td>
+<td>הפניה לישות מנוי</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td></td>
+</tr>
+<tr>
+<td>סוג</td>
+<td>תפוגת מנוי / חידוש אוטומטי / חריגת זמן</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td>רשימה סגורה</td>
+</tr>
+<tr>
+<td>שעת שליחה</td>
+<td>תאריך ושעה</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td></td>
+</tr>
+<tr>
+<td>סטטוס מסירה</td>
+<td>נשלחה / נכשלה / ממתינה</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td>🔗 מוחזר משער ה-SMS החיצוני</td>
+</tr>
+</tbody>
+</table>
+<h4 id="5118-מחסום--עמדה-barrier--station-house">5.1.18 מחסום / עמדה
+(Barrier · Station) 🏠</h4>
+<p><strong>בעלות:</strong> 🏠 בבעלות המערכת — רשימת הציוד מוגדרת
+אצלנו.</p>
+<table>
+<thead>
+<tr>
+<th>שדה</th>
+<th>ערכים / פורמט</th>
+<th style="text-align: center;">חובה</th>
+<th style="text-align: center;">ייחודי</th>
+<th>הערות</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>מזהה עמדה</td>
+<td>מוקצה אוטומטית</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">✓</td>
+<td></td>
+</tr>
+<tr>
+<td>מיקום</td>
+<td>טקסט</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td></td>
+</tr>
+<tr>
+<td>סוג</td>
+<td>מחסום כניסה / מחסום יציאה / עמדת תשלום</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td>רשימה סגורה</td>
+</tr>
+<tr>
+<td>סטטוס תקינות</td>
+<td>תקין / תקלה / בתחזוקה</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td>&quot;תקלה&quot; מפעילה התראה לאחראי המשמרת</td>
+</tr>
+<tr>
+<td>גרסת תוכנה</td>
+<td>מחרוזת גרסה</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="52-דרישות-פונקציונליות-fr">5.2 דרישות פונקציונליות (FR)</h3>
 <h4 id="fr-1--המערכת-תאפשר-למבקר-שעתי-להיכנס-לחניון">FR-1 — המערכת תאפשר
 למבקר שעתי להיכנס לחניון</h4>
 <table>
@@ -1479,7 +2474,7 @@ h2{ page-break-after:avoid; } tr{ page-break-inside:avoid; }
 </tbody>
 </table>
 <hr />
-<h3 id="52-דרישות-לא-פונקציונליות-nfr">5.2 דרישות לא-פונקציונליות
+<h3 id="53-דרישות-לא-פונקציונליות-nfr">5.3 דרישות לא-פונקציונליות
 (NFR)</h3>
 <table>
 <thead>
@@ -1587,108 +2582,6 @@ h2{ page-break-after:avoid; } tr{ page-break-inside:avoid; }
 <td>NFR-18</td>
 <td>שלט התפוסה יתעדכן תוך 2 שניות משינוי במונה התפוסה.</td>
 <td>ביצועים</td>
-</tr>
-</tbody>
-</table>
-<hr />
-<h3 id="53-דרישות-נתונים-dr">5.3 דרישות נתונים (DR)</h3>
-<table>
-<thead>
-<tr>
-<th>מזהה</th>
-<th>הדרישה (SMART)</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>DR-1</td>
-<td>המערכת תשמור לכל <strong>כניסה/כרטיס</strong>: מזהה כרטיס, שעת
-כניסה, מפלס, מספר רכב (LPR), סטטוס תשלום.</td>
-</tr>
-<tr>
-<td>DR-2</td>
-<td>המערכת תשמור לכל <strong>מנוי</strong>: מזהה מנוי, שם, ת&quot;ז/ח&quot;פ,
-טלפון, אמצעי תשלום, תאריך תוקף, סטטוס (פעיל/מושהה/פג).</td>
-</tr>
-<tr>
-<td>DR-3</td>
-<td>המערכת תשמור לכל <strong>תג</strong>: מזהה תג RFID, מנוי משויך,
-סטטוס (פעיל/מושהה/מבוטל).</td>
-</tr>
-<tr>
-<td>DR-4</td>
-<td>המערכת תשמור לכל <strong>רכב</strong>: מספר רישוי, סוג/צבע, בעלים או
-מנוי משויך.</td>
-</tr>
-<tr>
-<td>DR-5</td>
-<td>המערכת תשמור לכל <strong>עסקת חניה</strong>: מזהה עסקה, שעת כניסה,
-שעת יציאה, משך, סכום מחושב, סטטוס.</td>
-</tr>
-<tr>
-<td>DR-6</td>
-<td>המערכת תשמור לכל <strong>תשלום</strong>: מזהה תשלום, עסקה משויכת,
-אמצעי, סכום, שעה, מספר קבלה, מזהה סליקה.</td>
-</tr>
-<tr>
-<td>DR-7</td>
-<td>המערכת תשמור לכל <strong>תעריף</strong>: מזהה, תעריף שעה ראשונה,
-תעריף שעה נוספת, תקרה יומית, תאריך תחולה.</td>
-</tr>
-<tr>
-<td>DR-8</td>
-<td>המערכת תשמור לכל <strong>אירוע</strong>: מזהה, שם, חלון זמן, מפלס
-שמור, תעריף אירוע.</td>
-</tr>
-<tr>
-<td>DR-9</td>
-<td>המערכת תשמור לכל <strong>דוח אכיפה</strong>: מזהה, רכב, שעה, סוג
-עבירה, פקח מטפל, צילום, סטטוס טיפול.</td>
-</tr>
-<tr>
-<td>DR-10</td>
-<td>המערכת תשמור לכל <strong>נעילת גלגל (סנדל)</strong>: מזהה, רכב, שעת
-הצמדה, שעת שחרור, פקח מטפל.</td>
-</tr>
-<tr>
-<td>DR-11</td>
-<td>המערכת תשמור לכל <strong>משמרת</strong>: מזהה, אחראי, שעת
-פתיחה/סגירה, מזומן צפוי, מזומן נספר, פער.</td>
-</tr>
-<tr>
-<td>DR-12</td>
-<td>המערכת תשמור לכל <strong>משתמש צוות</strong>: מזהה, שם, תפקיד,
-הרשאות, סטטוס.</td>
-</tr>
-<tr>
-<td>DR-13</td>
-<td>המערכת תשמור לכל <strong>דגימת תפוסה</strong>: שעת דגימה, סה&quot;כ תפוס,
-תפוס לפי מפלס.</td>
-</tr>
-<tr>
-<td>DR-14</td>
-<td>המערכת תשמור לכל <strong>קבלה</strong>: מספר קבלה, עסקה, סכום, מע&quot;מ,
-שעה.</td>
-</tr>
-<tr>
-<td>DR-15</td>
-<td>המערכת תשמור לכל <strong>רשומת יומן ביקורת</strong>: מזהה, משתמש,
-פעולה, שעה, ערך לפני ואחרי.</td>
-</tr>
-<tr>
-<td>DR-16</td>
-<td>המערכת תשמור לכל <strong>החזר/סליקה</strong>: מזהה, תשלום מקורי,
-סכום החזר, שעה, סיבה.</td>
-</tr>
-<tr>
-<td>DR-17</td>
-<td>המערכת תשמור לכל <strong>הודעה/תזכורת</strong>: מזהה, נמען, סוג, שעת
-שליחה, סטטוס מסירה.</td>
-</tr>
-<tr>
-<td>DR-18</td>
-<td>המערכת תשמור לכל <strong>מחסום/עמדה</strong>: מזהה, מיקום, סוג,
-סטטוס תקינות, גרסת תוכנה.</td>
 </tr>
 </tbody>
 </table>

@@ -121,11 +121,11 @@ h2{ page-break-after:avoid; } tr{ page-break-inside:avoid; }
 </ul></li>
 <li><a href="#5-דרישות" id="toc-5-דרישות">5. דרישות</a>
 <ul>
-<li><a href="#51-דרישות-פונקציונליות-fr" id="toc-51-דרישות-פונקציונליות-fr">5.1 דרישות פונקציונליות (FR)</a></li>
-<li><a href="#52-דרישות-לא-פונקציונליות-nfr" id="toc-52-דרישות-לא-פונקציונליות-nfr">5.2 דרישות לא-פונקציונליות
+<li><a href="#51-מילון-נתונים" id="toc-51-מילון-נתונים">5.1 מילון
+נתונים</a></li>
+<li><a href="#52-דרישות-פונקציונליות-fr" id="toc-52-דרישות-פונקציונליות-fr">5.2 דרישות פונקציונליות (FR)</a></li>
+<li><a href="#53-דרישות-לא-פונקציונליות-nfr" id="toc-53-דרישות-לא-פונקציונליות-nfr">5.3 דרישות לא-פונקציונליות
 (NFR)</a></li>
-<li><a href="#53-דרישות-נתונים-dr" id="toc-53-דרישות-נתונים-dr">5.3
-דרישות נתונים (DR)</a></li>
 <li><a href="#54-כללים-עסקיים-br" id="toc-54-כללים-עסקיים-br">5.4 כללים
 עסקיים (BR)</a></li>
 </ul></li>
@@ -432,8 +432,1272 @@ online (מי מסתובב עם מזומן היום?), ולראות היסטור�
 <strong>MoSCoW</strong> (Must / Should / Could / Won&#39;t) — זהו
 <strong>היקף (scope) לגרסה הראשונה</strong>, לא סדר בנייה. הדרישות
 המפורטות (האטומיות) הן אלה הנספרות לסך-הכול.</p>
+<p><strong>מילון הנתונים (5.1) בא ראשון</strong> — הישויות, השדות,
+הפורמט, החובה והייחודיות מוגדרים שם <strong>פעם אחת</strong>, וכל דרישה
+מפנה אליו במקום לחזור על רשימת שדות.</p>
 </blockquote>
-<h3 id="51-דרישות-פונקציונליות-fr">5.1 דרישות פונקציונליות (FR)</h3>
+<h3 id="51-מילון-נתונים">5.1 מילון נתונים</h3>
+<p>כל ישות מוגדרת <strong>פעם אחת</strong>: השדות, הפורמט, החובה
+והייחודיות. הדרישות בסעיפים הבאים <strong>מפנות</strong> לכאן במקום
+לחזור על רשימות שדות — כך שינוי שדה מתעדכן במקום אחד, וכל הדרישות שמפנות
+אליו מתעדכנות איתו.</p>
+<p>נאמר פעם אחת, ותקף לכל המילון: כלל ברמת שדה (&quot;מספר חבר ייחודי&quot;,
+&quot;רשימה סגורה&quot;) הוא <strong>דרישה פונקציונלית ברמת השדה</strong> —
+והמילון הוא המקום שבו היא חיה.</p>
+<p>ולפני השדות — שאלת הפתיחה על כל ישות: <strong>מי הבעלים של
+הנתון?</strong></p>
+<ul>
+<li>🏠 <strong>בבעלות המערכת שלנו</strong> — כל ארבע פעולות ה-CRUD
+(יצירה, קריאה, עדכון, מחיקה) אצלנו.</li>
+<li>🔗 <strong>מנוהל במערכת חיצונית</strong> — מגיע אלינו בממשק; אצלנו
+בעיקר קריאה ותוספות מקומיות.</li>
+</ul>
+<blockquote>
+<p>בספרייה כל <strong>הישויות</strong> בבעלותנו. מה שמגיע ממערכת חיצונית
+הוא <strong>שדות</strong> בודדים — אסמכתת שער התשלום, סטטוס מסירת ה-SMS,
+קטלוג הספק — והם מסומנים 🔗 בעמודת ההערות.</p>
+</blockquote>
+<h4 id="511-חבר-house">5.1.1 חבר 🏠</h4>
+<p><strong>בעלות:</strong> 🏠 בבעלות המערכת — נוצר, מתעדכן ומושעה
+אצלנו.</p>
+<table>
+<thead>
+<tr>
+<th>שדה</th>
+<th>ערכים / פורמט</th>
+<th style="text-align: center;">חובה</th>
+<th style="text-align: center;">ייחודי</th>
+<th>הערות</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>מספר חבר</td>
+<td>מוקצה אוטומטית</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">✓</td>
+<td>מוקצה בהרשמה; אינו ניתן לשינוי</td>
+</tr>
+<tr>
+<td>שם מלא</td>
+<td>טקסט</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td></td>
+</tr>
+<tr>
+<td>ת.ז.</td>
+<td>9 ספרות</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">✓</td>
+<td>מזהה העוגן להרשמה — מונע כפילות חברים</td>
+</tr>
+<tr>
+<td>טלפון</td>
+<td>ספרות בלבד</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td></td>
+</tr>
+<tr>
+<td>דוא&quot;ל</td>
+<td>פורמט תקין</td>
+<td style="text-align: center;">רשות</td>
+<td style="text-align: center;">—</td>
+<td>חובה אם ערוץ התזכורת המועדף הוא דוא&quot;ל</td>
+</tr>
+<tr>
+<td>כתובת</td>
+<td>טקסט</td>
+<td style="text-align: center;">רשות</td>
+<td style="text-align: center;">—</td>
+<td></td>
+</tr>
+<tr>
+<td>מדרגת חברות</td>
+<td>רגיל / סטודנט / גמלאי / ילד</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td>רשימה סגורה — קובעת מכסות ודמי מנוי (ראו ישות פרמטרי מדיניות)</td>
+</tr>
+<tr>
+<td>תאריך הצטרפות</td>
+<td>תאריך</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td></td>
+</tr>
+<tr>
+<td>תאריך תפוגת מנוי</td>
+<td>תאריך</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td>חידוש מאריך אותו</td>
+</tr>
+<tr>
+<td>סטטוס</td>
+<td>פעיל / מושעה</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td>ברירת מחדל: פעיל · &quot;מושעה&quot; חוסם השאלה והזמנה</td>
+</tr>
+<tr>
+<td>ערוץ תזכורת מועדף</td>
+<td>SMS / דוא&quot;ל / טלפון</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td>רשימה סגורה — קובע את ערוץ ההתראה</td>
+</tr>
+<tr>
+<td>יתרת קנס</td>
+<td>סכום בש&quot;ח, ≥ 0</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td>מחושבת מסכום הקנסות הפתוחים</td>
+</tr>
+</tbody>
+</table>
+<h4 id="512-כותר-title-house">5.1.2 כותר (Title) 🏠</h4>
+<p><strong>בעלות:</strong> 🏠 בבעלות המערכת — הקטלוג מנוהל אצלנו.</p>
+<table>
+<thead>
+<tr>
+<th>שדה</th>
+<th>ערכים / פורמט</th>
+<th style="text-align: center;">חובה</th>
+<th style="text-align: center;">ייחודי</th>
+<th>הערות</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>מזהה כותר</td>
+<td>מוקצה אוטומטית</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">✓</td>
+<td></td>
+</tr>
+<tr>
+<td>שם</td>
+<td>טקסט</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td></td>
+</tr>
+<tr>
+<td>מחבר</td>
+<td>טקסט</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td></td>
+</tr>
+<tr>
+<td>ISBN</td>
+<td>פורמט ISBN תקין</td>
+<td style="text-align: center;">רשות</td>
+<td style="text-align: center;">✓</td>
+<td>ריק בפריטים שאין להם ISBN (משחק, כתב-עת)</td>
+</tr>
+<tr>
+<td>סוג פריט</td>
+<td>ספר / שמע / דיגיטלי / כתב-עת / משחק</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td>רשימה סגורה — קובע את תקופת ההשאלה</td>
+</tr>
+<tr>
+<td>נושא</td>
+<td>מרשימת הנושאים</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td></td>
+</tr>
+<tr>
+<td>מו&quot;ל</td>
+<td>טקסט</td>
+<td style="text-align: center;">רשות</td>
+<td style="text-align: center;">—</td>
+<td></td>
+</tr>
+<tr>
+<td>שנת הוצאה</td>
+<td>שנה</td>
+<td style="text-align: center;">רשות</td>
+<td style="text-align: center;">—</td>
+<td></td>
+</tr>
+<tr>
+<td>תקציר</td>
+<td>טקסט חופשי</td>
+<td style="text-align: center;">רשות</td>
+<td style="text-align: center;">—</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h4 id="513-עותק-copy-house">5.1.3 עותק (Copy) 🏠</h4>
+<p><strong>בעלות:</strong> 🏠 בבעלות המערכת — כל עותק פיזי נרשם, מועבר
+ונגרע אצלנו.</p>
+<table>
+<thead>
+<tr>
+<th>שדה</th>
+<th>ערכים / פורמט</th>
+<th style="text-align: center;">חובה</th>
+<th style="text-align: center;">ייחודי</th>
+<th>הערות</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>מזהה עותק (ברקוד)</td>
+<td>ברקוד</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">✓</td>
+<td>הברקוד המודבק על הפריט — הוא מה שנסרק בדלפק</td>
+</tr>
+<tr>
+<td>כותר</td>
+<td>הפניה לישות כותר</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td>עותק אינו קיים בלי כותר</td>
+</tr>
+<tr>
+<td>סניף</td>
+<td>הפניה לישות סניף</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td>הסניף שבו העותק מוצב כרגע — משתנה בהעברה</td>
+</tr>
+<tr>
+<td>מיקום מדף</td>
+<td>טקסט</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td></td>
+</tr>
+<tr>
+<td>מצב פיזי</td>
+<td>תקין / בלוי / פגום</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td></td>
+</tr>
+<tr>
+<td>סטטוס</td>
+<td>זמין / מושאל / מוזמן / בהעברה / אבוד / פגום</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td>רשימה סגורה</td>
+</tr>
+<tr>
+<td>תאריך רכישה</td>
+<td>תאריך</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h4 id="514-השאלה-loan-house">5.1.4 השאלה (Loan) 🏠</h4>
+<p><strong>בעלות:</strong> 🏠 בבעלות המערכת — נוצרת בדלפק ונסגרת
+בהחזרה.</p>
+<table>
+<thead>
+<tr>
+<th>שדה</th>
+<th>ערכים / פורמט</th>
+<th style="text-align: center;">חובה</th>
+<th style="text-align: center;">ייחודי</th>
+<th>הערות</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>מזהה השאלה</td>
+<td>מוקצה אוטומטית</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">✓</td>
+<td></td>
+</tr>
+<tr>
+<td>עותק</td>
+<td>הפניה לישות עותק</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td>עותק מסוים, לא כותר</td>
+</tr>
+<tr>
+<td>חבר</td>
+<td>הפניה לישות חבר</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td></td>
+</tr>
+<tr>
+<td>סניף השאלה</td>
+<td>הפניה לישות סניף</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td></td>
+</tr>
+<tr>
+<td>תאריך השאלה</td>
+<td>תאריך ושעה</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td></td>
+</tr>
+<tr>
+<td>מועד החזרה</td>
+<td>תאריך</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td>מחושב מסוג הפריט (ראו ישות פרמטרי מדיניות)</td>
+</tr>
+<tr>
+<td>תאריך החזרה בפועל</td>
+<td>תאריך ושעה</td>
+<td style="text-align: center;">רשות</td>
+<td style="text-align: center;">—</td>
+<td>ריק כל עוד ההשאלה פתוחה</td>
+</tr>
+<tr>
+<td>מספר חידושים שבוצעו</td>
+<td>מספר שלם ≥ 0</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td>ברירת מחדל 0; התקרה בפרמטרי המדיניות</td>
+</tr>
+<tr>
+<td>סטטוס</td>
+<td>פעילה / הוחזרה / באיחור / אבודה</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h4 id="515-הזמנה-reservation-house">5.1.5 הזמנה (Reservation) 🏠</h4>
+<p><strong>בעלות:</strong> 🏠 בבעלות המערכת.</p>
+<table>
+<thead>
+<tr>
+<th>שדה</th>
+<th>ערכים / פורמט</th>
+<th style="text-align: center;">חובה</th>
+<th style="text-align: center;">ייחודי</th>
+<th>הערות</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>מזהה הזמנה</td>
+<td>מוקצה אוטומטית</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">✓</td>
+<td></td>
+</tr>
+<tr>
+<td>חבר</td>
+<td>הפניה לישות חבר</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td></td>
+</tr>
+<tr>
+<td>כותר</td>
+<td>הפניה לישות כותר</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td>מזמינים <strong>כותר</strong>, לא עותק מסוים — כל עותק פנוי מספק את
+ההזמנה</td>
+</tr>
+<tr>
+<td>סניף איסוף</td>
+<td>הפניה לישות סניף</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td>עשוי להצריך העברה בין-סניפית</td>
+</tr>
+<tr>
+<td>תאריך הזמנה</td>
+<td>תאריך ושעה</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td>קובע את המיקום בתור</td>
+</tr>
+<tr>
+<td>מיקום בתור</td>
+<td>מספר שלם ≥ 1</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td>מחושב מתאריכי ההזמנה</td>
+</tr>
+<tr>
+<td>סטטוס</td>
+<td>בתור / מיועד לאיסוף / נאספה / בוטלה / פגה</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td></td>
+</tr>
+<tr>
+<td>תאריך תפוגת החזקה</td>
+<td>תאריך</td>
+<td style="text-align: center;">רשות</td>
+<td style="text-align: center;">—</td>
+<td>נקבע כשההזמנה עוברת ל&quot;מיועד לאיסוף&quot;</td>
+</tr>
+</tbody>
+</table>
+<h4 id="516-קנס-fine-house">5.1.6 קנס (Fine) 🏠</h4>
+<p><strong>בעלות:</strong> 🏠 בבעלות המערכת — נוצר, נגבה או נמחל
+אצלנו.</p>
+<table>
+<thead>
+<tr>
+<th>שדה</th>
+<th>ערכים / פורמט</th>
+<th style="text-align: center;">חובה</th>
+<th style="text-align: center;">ייחודי</th>
+<th>הערות</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>מזהה קנס</td>
+<td>מוקצה אוטומטית</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">✓</td>
+<td></td>
+</tr>
+<tr>
+<td>חבר</td>
+<td>הפניה לישות חבר</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td></td>
+</tr>
+<tr>
+<td>השאלה מקושרת</td>
+<td>הפניה לישות השאלה</td>
+<td style="text-align: center;">רשות</td>
+<td style="text-align: center;">—</td>
+<td>ריק בקנס שאינו נובע מהשאלה</td>
+</tr>
+<tr>
+<td>סכום</td>
+<td>סכום בש&quot;ח, חיובי</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td>מחושב מתעריף הקנס היומי עד התקרה</td>
+</tr>
+<tr>
+<td>סוג</td>
+<td>איחור / אובדן / נזק</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td>רשימה סגורה</td>
+</tr>
+<tr>
+<td>תאריך יצירה</td>
+<td>תאריך</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td></td>
+</tr>
+<tr>
+<td>סטטוס תשלום</td>
+<td>פתוח / שולם / נמחל</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td></td>
+</tr>
+<tr>
+<td>מזהה מוחל</td>
+<td>הפניה לישות משתמש צוות</td>
+<td style="text-align: center;">רשות</td>
+<td style="text-align: center;">—</td>
+<td>חובה כשהסטטוס &quot;נמחל&quot; — מי אישר את המחילה</td>
+</tr>
+</tbody>
+</table>
+<h4 id="517-תשלום-payment-house">5.1.7 תשלום (Payment) 🏠</h4>
+<p><strong>בעלות:</strong> 🏠 הרשומה בבעלותנו — אך סליקת הכרטיס מתבצעת
+ב<strong>שער תשלום חיצוני</strong>. אצלנו נשמרים אסמכתה וסטטוס בלבד —
+<strong>ללא פרטי אשראי</strong> (NFR-9).</p>
+<table>
+<thead>
+<tr>
+<th>שדה</th>
+<th>ערכים / פורמט</th>
+<th style="text-align: center;">חובה</th>
+<th style="text-align: center;">ייחודי</th>
+<th>הערות</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>מזהה תשלום</td>
+<td>מוקצה אוטומטית</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">✓</td>
+<td></td>
+</tr>
+<tr>
+<td>חבר</td>
+<td>הפניה לישות חבר</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td></td>
+</tr>
+<tr>
+<td>סכום</td>
+<td>סכום בש&quot;ח, חיובי</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td></td>
+</tr>
+<tr>
+<td>אמצעי</td>
+<td>מזומן / כרטיס / מקוון</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td>רשימה סגורה</td>
+</tr>
+<tr>
+<td>סוג</td>
+<td>קנס / דמי חבר / דמי החלפה</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td></td>
+</tr>
+<tr>
+<td>תאריך</td>
+<td>תאריך ושעה</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td></td>
+</tr>
+<tr>
+<td>מספר קבלה</td>
+<td>מוקצה אוטומטית</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">✓</td>
+<td></td>
+</tr>
+<tr>
+<td>מזהה הגובה</td>
+<td>הפניה לישות משתמש צוות</td>
+<td style="text-align: center;">רשות</td>
+<td style="text-align: center;">—</td>
+<td>ריק בתשלום מקוון שביצע החבר בעצמו</td>
+</tr>
+<tr>
+<td>אסמכתת שער התשלום</td>
+<td>מזהה שמחזיר השער</td>
+<td style="text-align: center;">רשות</td>
+<td style="text-align: center;">✓</td>
+<td>🔗 מגיע מהשער החיצוני — אסמכתה בלבד, לא פרטי כרטיס</td>
+</tr>
+</tbody>
+</table>
+<h4 id="518-ספק-supplier-house">5.1.8 ספק (Supplier) 🏠</h4>
+<p><strong>בעלות:</strong> 🏠 רשומת הספק בבעלותנו;
+<strong>קטלוג</strong> הספק עצמו נקרא דרך ממשק ה-API שלו ואינו נשמר
+אצלנו.</p>
+<table>
+<thead>
+<tr>
+<th>שדה</th>
+<th>ערכים / פורמט</th>
+<th style="text-align: center;">חובה</th>
+<th style="text-align: center;">ייחודי</th>
+<th>הערות</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>מזהה ספק</td>
+<td>מוקצה אוטומטית</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">✓</td>
+<td></td>
+</tr>
+<tr>
+<td>שם</td>
+<td>טקסט</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">✓</td>
+<td></td>
+</tr>
+<tr>
+<td>איש קשר</td>
+<td>טקסט</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td></td>
+</tr>
+<tr>
+<td>טלפון ודוא&quot;ל</td>
+<td>טלפון + פורמט דוא&quot;ל תקין</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td></td>
+</tr>
+<tr>
+<td>כתובת ממשק ה-API</td>
+<td>כתובת URL</td>
+<td style="text-align: center;">רשות</td>
+<td style="text-align: center;">—</td>
+<td>🔗 דרכה נקרא הקטלוג; ריק בספק שאין לו ממשק</td>
+</tr>
+<tr>
+<td>תנאי התקשרות</td>
+<td>טקסט חופשי</td>
+<td style="text-align: center;">רשות</td>
+<td style="text-align: center;">—</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h4 id="519-הזמנת-רכש-purchase-order-house">5.1.9 הזמנת רכש (Purchase
+Order) 🏠</h4>
+<p><strong>בעלות:</strong> 🏠 בבעלות המערכת.</p>
+<table>
+<thead>
+<tr>
+<th>שדה</th>
+<th>ערכים / פורמט</th>
+<th style="text-align: center;">חובה</th>
+<th style="text-align: center;">ייחודי</th>
+<th>הערות</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>מזהה הזמנה</td>
+<td>מוקצה אוטומטית</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">✓</td>
+<td></td>
+</tr>
+<tr>
+<td>ספק</td>
+<td>הפניה לישות ספק</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td></td>
+</tr>
+<tr>
+<td>שורות ההזמנה</td>
+<td>כותר + כמות (מספר שלם ≥ 1)</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td>לפחות שורה אחת</td>
+</tr>
+<tr>
+<td>סכום כולל</td>
+<td>סכום בש&quot;ח</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td>מחושב משורות ההזמנה</td>
+</tr>
+<tr>
+<td>תאריך הזמנה</td>
+<td>תאריך</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td></td>
+</tr>
+<tr>
+<td>סטטוס</td>
+<td>טיוטה / נשלחה / התקבלה חלקית / הושלמה / בוטלה</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td></td>
+</tr>
+<tr>
+<td>תקציב מקושר</td>
+<td>מזהה תקציב שנתי</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h4 id="5110-הצעת-רכש-acquisition-suggestion-house">5.1.10 הצעת רכש
+(Acquisition Suggestion) 🏠</h4>
+<p><strong>בעלות:</strong> 🏠 בבעלות המערכת.</p>
+<table>
+<thead>
+<tr>
+<th>שדה</th>
+<th>ערכים / פורמט</th>
+<th style="text-align: center;">חובה</th>
+<th style="text-align: center;">ייחודי</th>
+<th>הערות</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>מזהה הצעה</td>
+<td>מוקצה אוטומטית</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">✓</td>
+<td></td>
+</tr>
+<tr>
+<td>מקור ההצעה</td>
+<td>חבר / צוות</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td></td>
+</tr>
+<tr>
+<td>מציע</td>
+<td>הפניה לישות חבר או לישות משתמש צוות</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td>לפי מקור ההצעה</td>
+</tr>
+<tr>
+<td>הכותר המוצע</td>
+<td>טקסט: שם, מחבר, ISBN אם ידוע</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td>עדיין <strong>אינו</strong> ישות כותר — כותר נוצר רק אם ההצעה אושרה
+ונרכשה</td>
+</tr>
+<tr>
+<td>תאריך</td>
+<td>תאריך</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td></td>
+</tr>
+<tr>
+<td>סטטוס אישור</td>
+<td>ממתינה / אושרה / נדחתה</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td>ברירת מחדל: ממתינה</td>
+</tr>
+<tr>
+<td>מזהה המאשר</td>
+<td>הפניה לישות משתמש צוות</td>
+<td style="text-align: center;">רשות</td>
+<td style="text-align: center;">—</td>
+<td>חובה כשהסטטוס אינו &quot;ממתינה&quot;</td>
+</tr>
+</tbody>
+</table>
+<h4 id="5111-העברה-בין-סניפית-transfer-house">5.1.11 העברה בין-סניפית
+(Transfer) 🏠</h4>
+<p><strong>בעלות:</strong> 🏠 בבעלות המערכת.</p>
+<table>
+<thead>
+<tr>
+<th>שדה</th>
+<th>ערכים / פורמט</th>
+<th style="text-align: center;">חובה</th>
+<th style="text-align: center;">ייחודי</th>
+<th>הערות</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>מזהה העברה</td>
+<td>מוקצה אוטומטית</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">✓</td>
+<td></td>
+</tr>
+<tr>
+<td>עותק</td>
+<td>הפניה לישות עותק</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td></td>
+</tr>
+<tr>
+<td>סניף מקור</td>
+<td>הפניה לישות סניף</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td></td>
+</tr>
+<tr>
+<td>סניף יעד</td>
+<td>הפניה לישות סניף</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td>שונה מסניף המקור</td>
+</tr>
+<tr>
+<td>הזמנה מקושרת</td>
+<td>הפניה לישות הזמנה</td>
+<td style="text-align: center;">רשות</td>
+<td style="text-align: center;">—</td>
+<td>ריק בהעברה יזומה שאינה בעקבות הזמנה</td>
+</tr>
+<tr>
+<td>תאריך בקשה</td>
+<td>תאריך</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td></td>
+</tr>
+<tr>
+<td>סטטוס</td>
+<td>נדרשה / בדרך / הגיעה / בוטלה</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td>בזמן &quot;בדרך&quot; סטטוס העותק הוא &quot;בהעברה&quot;</td>
+</tr>
+<tr>
+<td>מזהה המאשר</td>
+<td>הפניה לישות משתמש צוות</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h4 id="5112-אירוע-event-house">5.1.12 אירוע (Event) 🏠</h4>
+<p><strong>בעלות:</strong> 🏠 בבעלות המערכת.</p>
+<table>
+<thead>
+<tr>
+<th>שדה</th>
+<th>ערכים / פורמט</th>
+<th style="text-align: center;">חובה</th>
+<th style="text-align: center;">ייחודי</th>
+<th>הערות</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>מזהה אירוע</td>
+<td>מוקצה אוטומטית</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">✓</td>
+<td></td>
+</tr>
+<tr>
+<td>שם</td>
+<td>טקסט</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td></td>
+</tr>
+<tr>
+<td>סניף</td>
+<td>הפניה לישות סניף</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td></td>
+</tr>
+<tr>
+<td>תאריך ושעה</td>
+<td>תאריך ושעה עתידיים</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td></td>
+</tr>
+<tr>
+<td>חדר</td>
+<td>טקסט</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td></td>
+</tr>
+<tr>
+<td>קיבולת מרבית</td>
+<td>מספר שלם ≥ 1</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td>הרשמה מעבר לה נכנסת לרשימת המתנה</td>
+</tr>
+<tr>
+<td>מזהה מנהל אחראי</td>
+<td>הפניה לישות משתמש צוות</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h4 id="5113-הרשמה-לאירוע-registration-house">5.1.13 הרשמה לאירוע
+(Registration) 🏠</h4>
+<p><strong>בעלות:</strong> 🏠 בבעלות המערכת — חיה ומתה עם האירוע
+שלה.</p>
+<table>
+<thead>
+<tr>
+<th>שדה</th>
+<th>ערכים / פורמט</th>
+<th style="text-align: center;">חובה</th>
+<th style="text-align: center;">ייחודי</th>
+<th>הערות</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>מזהה הרשמה</td>
+<td>מוקצה אוטומטית</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">✓</td>
+<td></td>
+</tr>
+<tr>
+<td>אירוע</td>
+<td>הפניה לישות אירוע</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td></td>
+</tr>
+<tr>
+<td>חבר</td>
+<td>הפניה לישות חבר</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td>חבר יחיד לכל אירוע — הרשמה כפולה נדחית</td>
+</tr>
+<tr>
+<td>תאריך הרשמה</td>
+<td>תאריך ושעה</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td>קובע את הסדר ברשימת ההמתנה</td>
+</tr>
+<tr>
+<td>סטטוס</td>
+<td>רשום / רשימת המתנה / בוטל</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td></td>
+</tr>
+<tr>
+<td>סימון נוכחות</td>
+<td>כן / לא</td>
+<td style="text-align: center;">רשות</td>
+<td style="text-align: center;">—</td>
+<td>נקלט רק לאחר מועד האירוע</td>
+</tr>
+</tbody>
+</table>
+<h4 id="5114-סניף-branch-house">5.1.14 סניף (Branch) 🏠</h4>
+<p><strong>בעלות:</strong> 🏠 בבעלות המערכת — רשימת הסניפים מוגדרת
+אצלנו.</p>
+<table>
+<thead>
+<tr>
+<th>שדה</th>
+<th>ערכים / פורמט</th>
+<th style="text-align: center;">חובה</th>
+<th style="text-align: center;">ייחודי</th>
+<th>הערות</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>מזהה סניף</td>
+<td>מוקצה אוטומטית</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">✓</td>
+<td></td>
+</tr>
+<tr>
+<td>שם</td>
+<td>טקסט</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">✓</td>
+<td></td>
+</tr>
+<tr>
+<td>כתובת</td>
+<td>טקסט</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td></td>
+</tr>
+<tr>
+<td>שעות פעילות</td>
+<td>טווח שעות לכל יום בשבוע</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td>בסיס לחישוב הזמינות (NFR-3)</td>
+</tr>
+<tr>
+<td>מזהה מנהל הסניף</td>
+<td>הפניה לישות משתמש צוות</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h4 id="5115-משתמש-צוות-staff-user-house">5.1.15 משתמש צוות (Staff User)
+🏠</h4>
+<p><strong>בעלות:</strong> 🏠 בבעלות המערכת — מנוהל במלואו אצלנו.</p>
+<table>
+<thead>
+<tr>
+<th>שדה</th>
+<th>ערכים / פורמט</th>
+<th style="text-align: center;">חובה</th>
+<th style="text-align: center;">ייחודי</th>
+<th>הערות</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>מזהה משתמש</td>
+<td>מוקצה אוטומטית</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">✓</td>
+<td>אינו ניתן לשינוי</td>
+</tr>
+<tr>
+<td>שם</td>
+<td>טקסט</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td></td>
+</tr>
+<tr>
+<td>שם משתמש</td>
+<td>טקסט</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">✓</td>
+<td>נדחה אם כבר קיים במערכת</td>
+</tr>
+<tr>
+<td>תפקיד</td>
+<td>ספרן דלפק / ספרן רכש / מנהל סניף / מנהל רשת</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td>רשימה סגורה — קובע הרשאות</td>
+</tr>
+<tr>
+<td>סניף משויך</td>
+<td>הפניה לישות סניף</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td>מנהל הרשת משויך למטה</td>
+</tr>
+<tr>
+<td>הרשאות</td>
+<td>נגזרות מהתפקיד</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td>ראו NFR-7</td>
+</tr>
+<tr>
+<td>סטטוס</td>
+<td>פעיל / לא פעיל</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td>ברירת מחדל: פעיל · &quot;לא פעיל&quot; חוסם גישה ושומר את הרשומה</td>
+</tr>
+<tr>
+<td>תאריך כניסה אחרון</td>
+<td>תאריך ושעה</td>
+<td style="text-align: center;">רשות</td>
+<td style="text-align: center;">—</td>
+<td>נכתב על ידי המערכת</td>
+</tr>
+</tbody>
+</table>
+<h4 id="5116-פרמטרי-מדיניות-policy-house">5.1.16 פרמטרי מדיניות (Policy)
+🏠</h4>
+<p><strong>בעלות:</strong> 🏠 בבעלות המערכת — <strong>ישות
+תצורה</strong>: רשומה אחת פעילה, ששינוי בה הוא החלטת הנהלה (ראו קטלוג
+החוקים העסקיים), לא החלטת מפתח.</p>
+<table>
+<thead>
+<tr>
+<th>שדה</th>
+<th>ערכים / פורמט</th>
+<th style="text-align: center;">חובה</th>
+<th style="text-align: center;">ייחודי</th>
+<th>הערות</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>תקופת השאלה לפי סוג פריט</td>
+<td>ימים, ערך לכל סוג פריט</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td>קובעת את &quot;מועד החזרה&quot; בהשאלה</td>
+</tr>
+<tr>
+<td>תעריף קנס יומי</td>
+<td>סכום בש&quot;ח ליום איחור</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td></td>
+</tr>
+<tr>
+<td>תקרת קנס</td>
+<td>סכום בש&quot;ח</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td>הקנס אינו עולה מעליה</td>
+</tr>
+<tr>
+<td>מכסת השאלה לפי מדרגה</td>
+<td>מספר פריטים, ערך לכל מדרגת חברות</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td></td>
+</tr>
+<tr>
+<td>מכסת הזמנה לפי מדרגה</td>
+<td>מספר הזמנות, ערך לכל מדרגה</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td></td>
+</tr>
+<tr>
+<td>דמי מנוי לפי מדרגה</td>
+<td>סכום בש&quot;ח לשנה, ערך לכל מדרגה</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h4 id="5117-תזכורת--התראה-notification-house">5.1.17 תזכורת / התראה
+(Notification) 🏠</h4>
+<p><strong>בעלות:</strong> 🏠 הרשומה בבעלותנו; ה<strong>שליחה</strong>
+בפועל מתבצעת בשער SMS חיצוני.</p>
+<table>
+<thead>
+<tr>
+<th>שדה</th>
+<th>ערכים / פורמט</th>
+<th style="text-align: center;">חובה</th>
+<th style="text-align: center;">ייחודי</th>
+<th>הערות</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>מזהה</td>
+<td>מוקצה אוטומטית</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">✓</td>
+<td></td>
+</tr>
+<tr>
+<td>חבר</td>
+<td>הפניה לישות חבר</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td></td>
+</tr>
+<tr>
+<td>ערוץ</td>
+<td>SMS / דוא&quot;ל / טלפון</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td>נגזר מערוץ התזכורת המועדף של החבר</td>
+</tr>
+<tr>
+<td>סוג</td>
+<td>מקדימה / איחור / הזמנה מוכנה / אירוע</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td>רשימה סגורה</td>
+</tr>
+<tr>
+<td>מועד שליחה</td>
+<td>תאריך ושעה</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td></td>
+</tr>
+<tr>
+<td>סטטוס מסירה</td>
+<td>נשלחה / נכשלה / ממתינה</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td>🔗 מוחזר משער ה-SMS החיצוני (ראו NFR-15)</td>
+</tr>
+</tbody>
+</table>
+<h4 id="5118-יומן-ביקורת-audit-log-house">5.1.18 יומן ביקורת (Audit Log)
+🏠</h4>
+<p><strong>בעלות:</strong> 🏠 בבעלות המערכת — נכתב על ידי המערכת בלבד;
+אין יצירה, עדכון או מחיקה ידניים.</p>
+<table>
+<thead>
+<tr>
+<th>שדה</th>
+<th>ערכים / פורמט</th>
+<th style="text-align: center;">חובה</th>
+<th style="text-align: center;">ייחודי</th>
+<th>הערות</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>מזהה רשומה</td>
+<td>מוקצה אוטומטית</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">✓</td>
+<td></td>
+</tr>
+<tr>
+<td>מזהה המשתמש</td>
+<td>הפניה לישות משתמש צוות</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td></td>
+</tr>
+<tr>
+<td>הפעולה</td>
+<td>טקסט</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td></td>
+</tr>
+<tr>
+<td>הישות שעליה בוצעה</td>
+<td>שם הישות + מזהה הרשומה</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td></td>
+</tr>
+<tr>
+<td>ערך לפני</td>
+<td>טקסט</td>
+<td style="text-align: center;">רשות</td>
+<td style="text-align: center;">—</td>
+<td>נשמר בפעולות רגישות בלבד</td>
+</tr>
+<tr>
+<td>ערך אחרי</td>
+<td>טקסט</td>
+<td style="text-align: center;">רשות</td>
+<td style="text-align: center;">—</td>
+<td>נשמר בפעולות רגישות בלבד</td>
+</tr>
+<tr>
+<td>חותם זמן</td>
+<td>תאריך ושעה</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td>נכתב על ידי המערכת, אינו ניתן לעריכה</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="52-דרישות-פונקציונליות-fr">5.2 דרישות פונקציונליות (FR)</h3>
 <h4 id="שחקן-חברה">שחקן: חבר/ה</h4>
 <p><strong>FR-1 — חיפוש בקטלוג המקוון</strong></p>
 <table>
@@ -1123,8 +2387,8 @@ online (מי מסתובב עם מזומן היום?), ולראות היסטור�
 </tr>
 <tr>
 <td>FR-15.1</td>
-<td>המערכת תאפשר לספרן הרכש להוסיף כותר חדש עם כל שדות התיאור (שם, מחבר,
-ISBN, סוג, נושא, מו&quot;ל, שנה).</td>
+<td>המערכת תאפשר לספרן הרכש להוסיף כותר חדש עם שדות החובה שבמילון
+הנתונים (ישות <strong>כותר</strong>, 5.1.2).</td>
 <td>ספרן רכש</td>
 <td>—</td>
 </tr>
@@ -1556,7 +2820,7 @@ ISBN, סוג, נושא, מו&quot;ל, שנה).</td>
 </tbody>
 </table>
 <hr />
-<h3 id="52-דרישות-לא-פונקציונליות-nfr">5.2 דרישות לא-פונקציונליות
+<h3 id="53-דרישות-לא-פונקציונליות-nfr">5.3 דרישות לא-פונקציונליות
 (NFR)</h3>
 <table>
 <thead>
@@ -1685,123 +2949,6 @@ PCI-DSS חיצוני בלבד.</td>
 <td>תמיכת דפדפנים/מכשירים</td>
 <td>ממשק החבר יפעל תקין בשתי הגרסאות האחרונות של הדפדפנים הנפוצים
 ובמכשירי מובייל ברוחב מסך ≥ 320 פיקסלים.</td>
-</tr>
-</tbody>
-</table>
-<hr />
-<h3 id="53-דרישות-נתונים-dr">5.3 דרישות נתונים (DR)</h3>
-<table>
-<thead>
-<tr>
-<th>מזהה</th>
-<th>הדרישה (SMART)</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>DR-1</strong></td>
-<td>המערכת תשמור לכל <strong>חבר</strong>: מספר חבר, שם מלא, ת.ז., פרטי
-קשר (טלפון, דוא&quot;ל, כתובת), מדרגת חברות, תאריך הצטרפות, תאריך תפוגת מנוי,
-סטטוס (פעיל/מושעה), ערוץ תזכורת מועדף ויתרת קנס.</td>
-</tr>
-<tr>
-<td><strong>DR-2</strong></td>
-<td>המערכת תשמור לכל <strong>כותר (Title)</strong>: מזהה כותר, שם, מחבר,
-ISBN, סוג פריט (ספר/שמע/דיגיטלי/כתב-עת/משחק), נושא, מו&quot;ל, שנת הוצאה
-ותקציר.</td>
-</tr>
-<tr>
-<td><strong>DR-3</strong></td>
-<td>המערכת תשמור לכל <strong>עותק (Copy)</strong>: מזהה עותק (ברקוד),
-הכותר שאליו הוא שייך, סניף, מיקום מדף, מצב פיזי, סטטוס
-(זמין/מושאל/מוזמן/בהעברה/אבוד/פגום) ותאריך רכישה.</td>
-</tr>
-<tr>
-<td><strong>DR-4</strong></td>
-<td>המערכת תשמור לכל <strong>השאלה (Loan)</strong>: מזהה השאלה, העותק,
-החבר, סניף השאלה, תאריך השאלה, מועד החזרה, תאריך החזרה בפועל, מספר
-חידושים שבוצעו וסטטוס.</td>
-</tr>
-<tr>
-<td><strong>DR-5</strong></td>
-<td>המערכת תשמור לכל <strong>הזמנה (Reservation)</strong>: מזהה הזמנה,
-החבר, הכותר, סניף איסוף, תאריך הזמנה, מיקום בתור, סטטוס (בתור/מיועד
-לאיסוף/נאספה/בוטלה/פגה) ותאריך תפוגת החזקה.</td>
-</tr>
-<tr>
-<td><strong>DR-6</strong></td>
-<td>המערכת תשמור לכל <strong>קנס (Fine)</strong>: מזהה קנס, החבר, ההשאלה
-המקושרת, סכום, סוג (איחור/אובדן/נזק), תאריך יצירה, סטטוס תשלום ומזהה
-מוחל אם נמחל.</td>
-</tr>
-<tr>
-<td><strong>DR-7</strong></td>
-<td>המערכת תשמור לכל <strong>תשלום (Payment)</strong>: מזהה תשלום, החבר,
-סכום, אמצעי (מזומן/כרטיס/מקוון), סוג (קנס/דמי חבר/דמי החלפה), תאריך,
-מזהה קבלה ומזהה הגובה.</td>
-</tr>
-<tr>
-<td><strong>DR-8</strong></td>
-<td>המערכת תשמור לכל <strong>ספק (Supplier)</strong>: מזהה ספק, שם, איש
-קשר, פרטי התקשרות, כתובת ממשק ה-API ותנאי התקשרות.</td>
-</tr>
-<tr>
-<td><strong>DR-9</strong></td>
-<td>המערכת תשמור לכל <strong>הזמנת רכש (Purchase Order)</strong>: מזהה
-הזמנה, הספק, רשימת פריטים וכמויות, סכום כולל, תאריך הזמנה, סטטוס ותקציב
-מקושר.</td>
-</tr>
-<tr>
-<td><strong>DR-10</strong></td>
-<td>המערכת תשמור לכל <strong>הצעת רכש (Acquisition Suggestion)</strong>:
-מזהה, מקור ההצעה (חבר/צוות), הכותר המוצע, תאריך, סטטוס אישור ומזהה
-המאשר.</td>
-</tr>
-<tr>
-<td><strong>DR-11</strong></td>
-<td>המערכת תשמור לכל <strong>העברה בין-סניפית (Transfer)</strong>: מזהה
-העברה, העותק, סניף מקור, סניף יעד, החבר/ההזמנה המקושרים, תאריך בקשה,
-סטטוס ומזהה המאשר.</td>
-</tr>
-<tr>
-<td><strong>DR-12</strong></td>
-<td>המערכת תשמור לכל <strong>אירוע (Event)</strong>: מזהה אירוע, שם,
-סניף, תאריך ושעה, חדר, קיבולת מרבית ומזהה מנהל אחראי.</td>
-</tr>
-<tr>
-<td><strong>DR-13</strong></td>
-<td>המערכת תשמור לכל <strong>הרשמה לאירוע (Registration)</strong>: מזהה
-הרשמה, האירוע, החבר, תאריך הרשמה, סטטוס (רשום/רשימת המתנה/בוטל) וסימון
-נוכחות.</td>
-</tr>
-<tr>
-<td><strong>DR-14</strong></td>
-<td>המערכת תשמור לכל <strong>סניף (Branch)</strong>: מזהה סניף, שם,
-כתובת, שעות פעילות ומזהה מנהל הסניף.</td>
-</tr>
-<tr>
-<td><strong>DR-15</strong></td>
-<td>המערכת תשמור לכל <strong>משתמש צוות (Staff User)</strong>: מזהה
-משתמש, שם, תפקיד, סניף משויך, הרשאות, סטטוס (פעיל/לא פעיל) ותאריך כניסה
-אחרון.</td>
-</tr>
-<tr>
-<td><strong>DR-16</strong></td>
-<td>המערכת תשמור <strong>פרמטרי מדיניות (Policy)</strong>: תקופות השאלה
-לפי סוג פריט, תעריף קנס יומי ותקרה, מכסות השאלה והזמנה לכל מדרגה, ודמי
-מנוי לכל מדרגה.</td>
-</tr>
-<tr>
-<td><strong>DR-17</strong></td>
-<td>המערכת תשמור לכל <strong>תזכורת/התראה (Notification)</strong>: מזהה,
-החבר, ערוץ (SMS/דוא&quot;ל/טלפון), סוג (מקדימה/איחור/הזמנה מוכנה/אירוע), מועד
-שליחה וסטטוס מסירה.</td>
-</tr>
-<tr>
-<td><strong>DR-18</strong></td>
-<td>המערכת תשמור <strong>יומן ביקורת (Audit Log)</strong>: מזהה רשומה,
-מזהה המשתמש, הפעולה, הישות שעליה בוצעה, ערך לפני ואחרי (בפעולות רגישות)
-וחותם זמן.</td>
 </tr>
 </tbody>
 </table>
