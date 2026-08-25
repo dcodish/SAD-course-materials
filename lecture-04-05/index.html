@@ -16,7 +16,7 @@
       <div class="course">ניתוח ועיצוב מערכות מידע</div>
       <h1>תרשים תרחישי שימוש — Use Case</h1>
       <div class="lecture-no">הרצאה 4-5</div>
-      <div class="updated">עודכן: 19.08.2026</div>
+      <div class="updated">עודכן: 25.08.2026</div>
     </section>
     <section class="toc-slide has-acro-footer" data-slug="toc">
       <h1>סדר היום</h1>
@@ -144,7 +144,9 @@
     <section data-slug="functional-requirements" class="has-acro-footer">
       <div class="sdlc-chip" title="שלב 3 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>ניתוח דרישות</div>
       <style>
-        section[data-slug="functional-requirements"] table.sad td { font-size:16.5px; line-height:1.35; vertical-align:middle; }
+        section[data-slug="functional-requirements"] table.sad td { font-size:14px; line-height:1.3; vertical-align:middle; padding:4px 10px; }
+        section[data-slug="functional-requirements"] table.sad th { padding:4px 10px; font-size:14px; }
+        section[data-slug="functional-requirements"] td.fr-id .fr-prio { margin-top:2px !important; }
         section[data-slug="functional-requirements"] table.sad td.fr-id { font-family:'IBM Plex Mono',monospace;
           font-weight:700; color:var(--dark-blue); white-space:nowrap; text-align:center; }
         section[data-slug="functional-requirements"] table.sad td.fr-src { white-space:nowrap; text-align:center; color:#475569; }
@@ -160,8 +162,8 @@
       <div class="subtitle">דרישה טובה היא <span class="en term" data-term="smart">SMART</span> · לכל דרישה מזהה (<span class="en">FR</span>) ו<b>עדיפות</b> לפי <span class="en term" data-term="moscow">MoSCoW</span> — מה חובה בגרסה הראשונה ומה יכול לחכות</div>
       <div class="body">
 
-        <div class="card" style="background:var(--tint-blue); border:1px solid var(--blue); padding:10px 14px;">
-          <p style="margin:0; color:var(--dark-blue); font-size:17px;">
+        <div class="card" style="background:var(--tint-blue); border:1px solid var(--blue); padding:7px 12px;">
+          <p style="margin:0; color:var(--dark-blue); font-size:15px;">
             <b>תזכורת:</b> דרישה פונקציונלית מתארת <b>פעולה/שירות</b> שאפשר לבדוק שקרה — לא "המערכת תהיה נוחה", אלא מה בדיוק היא עושה.
           </p>
         </div>
@@ -171,11 +173,17 @@
           <tr><td class="fr-id">FR-1<div class="fr-prio"><span class="prio-should">Should</span></div></td><td>המערכת תאפשר לסטודנט לסנן את התפריט לפי פרופיל תזונתי (צמחוני / טבעוני / ללא-גלוטן) ולהציג רק פריטים תואמים.</td><td class="fr-src">סטודנט</td></tr>
           <tr><td class="fr-id">FR-2<div class="fr-prio"><span class="prio-must">Must</span></div></td><td>המערכת תשלח התראת "מוכן לאיסוף" תוך 10 שניות מרגע שהמטבח סימן את ההזמנה כמוכנה.</td><td class="fr-src">סטודנט</td></tr>
           <tr><td class="fr-id">FR-3<div class="fr-prio"><span class="prio-must">Must</span></div></td><td>המערכת תאמת כל איסוף באמצעות קוד חד-פעמי בן 6 ספרות לפני מסירת ההזמנה.</td><td class="fr-src">דלפק</td></tr>
-          <tr><td class="fr-id">FR-4<div class="fr-prio"><span class="prio-should">Should</span></div></td><td>המערכת תאפשר למנהל לסמן פריט כ"אזל", ותסיר אותו מיידית מהתפריט הזמין להזמנה חדשה.</td><td class="fr-src">מנהל</td></tr>
+          <!-- 2026-08-25 (David): FR-4 Should→Must (class challenge: without availability
+               management you can't order correctly — agreed). FR-6 (staff, Must — the CRUD
+               capstone later in this deck) and NEW FR-7 (favorites, the missing Could
+               example) added; numbers/priorities stay IDENTICAL to L3's tracking table. -->
+          <tr><td class="fr-id">FR-4<div class="fr-prio"><span class="prio-must">Must</span></div></td><td>המערכת תאפשר למנהל לסמן פריט כ"אזל", ותסיר אותו מיידית מהתפריט הזמין להזמנה חדשה.</td><td class="fr-src">מנהל</td></tr>
           <tr><td class="fr-id">FR-5<div class="fr-prio"><span class="prio-wont">Won't</span></div></td><td>בסוף כל יום המערכת תפיק דוח מכירות המפרט כמות ומחזור לכל פריט, לפי קפיטריה.</td><td class="fr-src">מנהל</td></tr>
+          <tr><td class="fr-id">FR-6<div class="fr-prio"><span class="prio-must">Must</span></div></td><td>המערכת תאפשר למנהל לנהל את עובדי הקמפוס, תפקידיהם והרשאות הגישה שלהם.</td><td class="fr-src">מנהל</td></tr>
+          <tr><td class="fr-id">FR-7<div class="fr-prio"><span class="prio-could">Could</span></div></td><td>המערכת תאפשר לסטודנט לשמור הזמנה כמועדפת ולשחזר אותה להזמנה חדשה בלחיצה אחת.</td><td class="fr-src">סטודנט</td></tr>
         </table>
 
-        <p class="src" style="margin:6px 0 0; text-align:center;"><span class="en">Must</span> = חובה (ליבת המערכת) · <span class="en">Should</span> = רצוי · <span class="en">Could</span> = אפשרי · <span class="en">Won't</span> = לא בגרסה זו</p>
+        <p class="src" style="margin:3px 0 0; text-align:center; font-size:13px;"><span class="en">Must</span> = חובה (ליבת המערכת) · <span class="en">Should</span> = רצוי · <span class="en">Could</span> = אפשרי · <span class="en">Won't</span> = לא בגרסה זו</p>
 
         <p class="bottom-line fragment">המזהה והעדיפות מלווים כל דרישה — למעקב, בדיקה, ושיוך לתרחיש שמממש אותה.</p>
 
@@ -293,7 +301,7 @@
             <td class="fr-decided"><span>מקור הקוד + מי מקליד</span></td>
           </tr>
           <tr>
-            <td class="fr-id">FR-4<div class="fr-prio"><span class="prio-should">Should</span></div></td>
+            <td class="fr-id">FR-4<div class="fr-prio"><span class="prio-must">Must</span></div></td>
             <td>בסימון פריט כ"אזל", המערכת תציג אותו בתפריט כ<span class="resolved">"לא זמין" (מעומעם, ללא הוספה לעגלה)</span> ולא תמחק אותו; הפריט יחזור להיות זמין בביטול הסימון.</td>
             <td class="fr-decided"><span>משמעות "הסרה"</span></td>
           </tr>
@@ -312,7 +320,8 @@
     <!-- Requirement format, sample 1 = the detail slide's FR-4 (item availability) shown as a
          high-level requirement decomposed into its detailed SMART requirements (FR-4.1..4.4).
          Numbers match the detail slide exactly (FR-4 = availability). High-level = "המערכת תאפשר ל..."
-         (general), detailed = full SMART "המערכת ת..." sentences. MoSCoW priority (Should) sits on the
+         (general), detailed = full SMART "המערכת ת..." sentences. MoSCoW priority (Must since
+         2026-08-25 — was Should; class challenge accepted) sits on the
          HIGH-LEVEL requirement, matching the list + detail slides. Pairs with
          slide-requirement-format-process (FR-3, a process with an exception). Sized to fill. -->
     <section data-slug="requirement-format" class="has-acro-footer">
@@ -324,7 +333,7 @@
         section[data-slug="requirement-format"] .tag { border-radius:6px; padding:3px 11px; font-size:14px; font-weight:700; }
         section[data-slug="requirement-format"] .tag-hl { background:var(--dark-blue); color:#fff; }
         section[data-slug="requirement-format"] .tag-actor { background:#fff; border:1px solid var(--blue); color:var(--dark-blue); }
-        section[data-slug="requirement-format"] .tag-should { background:var(--orange); color:#fff; font-family:Arial; }
+        section[data-slug="requirement-format"] .tag-must { background:var(--dark-blue); color:#fff; font-family:Arial; }
         section[data-slug="requirement-format"] .hl-text { font-size:23px; color:var(--dark-blue); font-weight:600; line-height:1.45; margin:0; }
         section[data-slug="requirement-format"] .det-label { font-weight:700; color:var(--blue); font-size:19px; margin:22px 0 10px; }
         section[data-slug="requirement-format"] ul.det { list-style:none; margin:0; padding:0 22px 0 0; }
@@ -340,7 +349,7 @@
             <span class="hl-id">FR-4</span>
             <span class="tag tag-hl">דרישה כללית</span>
             <span class="tag tag-actor">שחקן: מנהל</span>
-            <span class="tag tag-should">Should</span>
+            <span class="tag tag-must">Must</span>
           </div>
           <p class="hl-text">המערכת תאפשר למנהל לנהל את זמינות פריטי התפריט.</p>
         </div>
