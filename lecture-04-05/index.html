@@ -1171,49 +1171,50 @@
         <span class="step">קשרים</span>
       </div>
     </section>
-    <!-- B2 — System boundary. Redesigned 2026-07-14: now SHOWS the box notation (the
-         boundary rectangle with use cases inside, actors outside, out-of-scope items
-         outside) instead of only listing in/out. The ⚠️ AI-invents-out-of-scope beat kept.
-         Schematic is styled HTML (the full proper diagram is on the p19/p38 slides). -->
+    <!-- B2 — System boundary. 2026-08-26 (David, post-lecture): "empty boxes only — no
+         actors or use cases inside; keep the focus on the boundary notation itself."
+         The 2026-07-14 populated schematic (UCs inside, actors + out-of-scope ellipses
+         outside) moved its teaching into TEXT cards; the graphic is now ONE empty
+         boundary box — the notation, nothing else. The full populated diagram still
+         arrives on slide-use-case-overview (31). ⚠️ AI-invents-out-of-scope beat kept. -->
     <section data-slug="system-boundary" class="has-acro-footer">
       <div class="sdlc-chip" title="שלב 3 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>ניתוח דרישות</div>
       <style>
-        section[data-slug="system-boundary"] .bnd { display:flex; align-items:center; justify-content:center; gap:30px; margin:2px 0; }
+        section[data-slug="system-boundary"] .bnd { display:flex; align-items:center; justify-content:center; margin:4px 0; }
         section[data-slug="system-boundary"] .sysbox { position:relative; border:2.5px solid var(--blue); border-radius:14px;
-          background:#fff; padding:40px 24px 18px; display:flex; flex-direction:column; gap:11px; }
+          background:#fff; width:min(560px, 62%); height:250px; display:flex; align-items:center; justify-content:center; }
         section[data-slug="system-boundary"] .sysbox .hdr { position:absolute; top:0; inset-inline:0; background:var(--dark-blue);
-          color:#fff; font-weight:700; text-align:center; padding:6px; border-radius:11px 11px 0 0; font-size:16px; }
-        section[data-slug="system-boundary"] .uc { width:240px; height:52px; border-radius:50%; background:#d4e9f7;
-          border:1.8px solid #2980b9; display:flex; align-items:center; justify-content:center; font-size:16px; color:#1a1a2e; }
-        section[data-slug="system-boundary"] .side { display:flex; flex-direction:column; gap:20px; }
-        section[data-slug="system-boundary"] .actor { text-align:center; font-size:15px; color:#1e293b; font-weight:600; }
-        section[data-slug="system-boundary"] .actor .fig { font-size:38px; display:block; line-height:1; }
-        section[data-slug="system-boundary"] .outlbl { color:var(--red); font-weight:700; font-size:14px; text-align:center; margin-bottom:2px; }
-        section[data-slug="system-boundary"] .out { width:170px; height:44px; border-radius:50%; background:#f1f5f9;
-          border:1.7px dashed #94a3b8; color:#64748b; display:flex; align-items:center; justify-content:center; font-size:14.5px; }
+          color:#fff; font-weight:700; text-align:center; padding:7px; border-radius:11px 11px 0 0; font-size:16.5px; }
+        section[data-slug="system-boundary"] .sysbox .hint { color:#cbd5e1; font-size:15px; font-style:italic; }
+        section[data-slug="system-boundary"] .rules { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
+        section[data-slug="system-boundary"] .rules .card { padding:10px 14px; }
+        section[data-slug="system-boundary"] .rules .panel-title { font-size:16px; }
+        section[data-slug="system-boundary"] .rules p { margin:0; font-size:15px; line-height:1.45; }
+        section[data-slug="system-boundary"] .callout.warn { font-size:15.5px; }
       </style>
       <h1>גבול המערכת (<span class="en">System Boundary</span>)</h1>
-      <div class="subtitle">התיבה: תרחישים בפנים, שחקנים בחוץ — ומה נכנס זו החלטה עסקית</div>
+      <div class="subtitle">מלבן עם שם המערכת — זו כל הסימוניה · מה נכנס פנימה זו החלטה עסקית</div>
       <div class="body">
 
         <div class="bnd">
-          <!-- actors (right, RTL-first): outside the box -->
-          <div class="side">
-            <div class="actor"><span class="fig">🧍</span>סטודנט</div>
-            <div class="actor"><span class="fig">🧍</span>מנהל</div>
-          </div>
-          <!-- the system box: use cases inside -->
           <div class="sysbox">
-            <div class="hdr">מערכת הזמנת אוכל</div>
-            <div class="uc">הזמנה ותשלום</div>
-            <div class="uc">איסוף ואימות</div>
-            <div class="uc">ניהול ודוחות</div>
+            <div class="hdr">מערכת הזמנת האוכל בקמפוס</div>
+            <span class="hint">בינתיים ריק — בכוונה</span>
           </div>
-          <!-- out of scope (left): outside the box, dashed/greyed -->
-          <div class="side">
-            <div class="outlbl">⛔ מחוץ לגבול</div>
-            <div class="out">משלוח לחדרים</div>
-            <div class="out">רכש מספקים</div>
+        </div>
+
+        <div class="rules fragment">
+          <div class="card">
+            <div class="panel-title">מה יחיה בפנים</div>
+            <p><b>רק תרחישי שימוש</b> — כל מה שהמערכת מתחייבת לעשות. נצייר אותם בהמשך.</p>
+          </div>
+          <div class="card">
+            <div class="panel-title">מה עומד בחוץ</div>
+            <p>ה<b>שחקנים</b> — מי שמפעיל את המערכת. תמיד מחוץ למלבן, לעולם לא בתוכו.</p>
+          </div>
+          <div class="card">
+            <div class="panel-title">ומה שמעבר לגבול</div>
+            <p>משלוח לחדרים, רכש מספקים — <b>לא מופיעים בתרשים בכלל</b>. הגבול מתעד גם מה החלטנו <em>לא</em> לבנות.</p>
           </div>
         </div>
 
@@ -1223,7 +1224,7 @@
           כש-<span class="en">AI</span> ממציא משלוח, הוא חצה גבול <b>שאתם</b> הגדרתם. הגבול הוא שלכם.
         </div>
 
-        <p class="bottom-line">בתוך התיבה = תרחישי השימוש · מחוצה לה = השחקנים. מה נכנס — החלטה אנושית, לא של ה-<span class="en">AI</span>.</p>
+        <p class="bottom-line">המלבן קובע תחום אחריות: בפנים — מה שהמערכת עושה · בחוץ — מי שמפעיל אותה · מעבר לו — מה שבמודע לא ייבנה.</p>
 
       </div>
     <div class="acro-footer"><span class="acro"><span class="en">AI</span> = <span class="en">Artificial Intelligence</span> · בינה מלאכותית</span></div>
@@ -1231,18 +1232,20 @@
     <!-- B — big systems split into SEVERAL use-case diagrams, one per area/subsystem, each
          with its own boundary (per request 2026-07-14, "be creative"). Campus example is
          partitioned into 3 areas (ordering / kitchen+pickup / management) to show the idea;
-         note that truly large systems (bank, hospital) have many such diagrams. Ties to KISS. -->
+         note that truly large systems (bank, hospital) have many such diagrams. Ties to KISS.
+         2026-08-26 (David, post-lecture): same principle as slide 25 — the boxes hold PLAIN
+         TEXT ("in this area we discuss features relevant to X"), not UC ellipses, and the
+         non-UML actor emoji lines were removed. Boundary boxes stay empty of notation until
+         the real diagrams. -->
     <section data-slug="use-case-areas">
       <div class="sdlc-chip" title="שלב 3 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>ניתוח דרישות</div>
       <style>
         section[data-slug="use-case-areas"] .areas { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
         section[data-slug="use-case-areas"] .area { position:relative; border:2px solid var(--blue); border-radius:12px;
-          background:#fff; padding:34px 12px 12px; display:flex; flex-direction:column; gap:8px; }
+          background:#fff; padding:40px 16px 14px; display:flex; flex-direction:column; }
         section[data-slug="use-case-areas"] .area .hdr { position:absolute; top:0; inset-inline:0; background:var(--dark-blue);
           color:#fff; font-weight:700; text-align:center; padding:6px; border-radius:10px 10px 0 0; font-size:15px; }
-        section[data-slug="use-case-areas"] .uc { border-radius:50%/60%; background:#d4e9f7; border:1.6px solid #2980b9;
-          padding:8px 6px; text-align:center; font-size:15px; color:#1a1a2e; }
-        section[data-slug="use-case-areas"] .who { text-align:center; font-size:16px; color:#475569; margin-top:auto; padding-top:4px; }
+        section[data-slug="use-case-areas"] .area p { margin:0; font-size:15.5px; line-height:1.55; color:#1e293b; }
       </style>
       <h1>מערכת גדולה — כמה תרשימים, לכל אחד אזור משלו</h1>
       <div class="subtitle">כשהמערכת גדלה מפצלים לתת-מערכות — כל אחת תרשים <span class="en">use case</span> נפרד עם גבול משלה</div>
@@ -1255,26 +1258,17 @@
 
           <div class="area fragment">
             <div class="hdr">📱 אזור ההזמנה</div>
-            <div class="uc">עיון בתפריט</div>
-            <div class="uc">הזמנה ותשלום</div>
-            <div class="uc">מעקב אחר הזמנה</div>
-            <div class="who">🎓 סטודנט</div>
+            <p>באזור זה נדון ביכולות הרלוונטיות ל<b>הזמנה</b>: עיון בתפריט, הזמנה ותשלום, ומעקב אחר הזמנה.</p>
           </div>
 
           <div class="area fragment">
             <div class="hdr">🍳 מטבח ואיסוף</div>
-            <div class="uc">תור הכנה</div>
-            <div class="uc">סימון "מוכן"</div>
-            <div class="uc">אימות איסוף</div>
-            <div class="who">👨‍🍳 מטבח · 🧾 דלפק</div>
+            <p>באזור זה נדון ביכולות הרלוונטיות ל<b>מטבח ולאיסוף</b>: תור ההכנה, סימון "מוכן", ואימות האיסוף.</p>
           </div>
 
           <div class="area fragment">
             <div class="hdr">📊 אזור הניהול</div>
-            <div class="uc">ניהול תפריט ומלאי</div>
-            <div class="uc">דוח מכירות</div>
-            <div class="uc">דוח שימוש</div>
-            <div class="who">👔 מנהל · <span class="en">IT</span></div>
+            <p>באזור זה נדון ביכולות הרלוונטיות ל<b>ניהול</b>: תפריט ומלאי, ודוחות.</p>
           </div>
 
         </div>
@@ -1288,26 +1282,30 @@
       </div>
     </section>
     <!-- B3 — Actors: roles (not people); who counts as an actor (create_actors_slide.py).
-         Hebrew text originally verbatim from the script.
-
-         2026-07-17 — STRICT DOCTRINE (David): **שחקן = מי שיוזם.** The slide used the looser
-         test ("מתקשר ... שולח ומקבל מסרים ויוזם") and listed 💳 שער תשלום · 🏛️ חשבונות · 🔔 התראות
-         as non-human actors. Under the strict rule those are things the system CALLS — API
-         calls, i.e. design dependencies, not actors. This restores `NOTATION.md §1` verbatim:
-         "Does it trigger us, or do we call it? Triggers = actor."
-         They aren't deleted — they became the COUNTER-EXAMPLE, which is the better lesson and
-         keeps the material: an external system is an actor only if it triggers us on its own
-         (a gateway that notifies us of a refund WOULD be one). ⏰ זמן survives as the non-human
-         actor precisely because it triggers scheduled use cases (the FR-5 end-of-day report).
-         Note this is a course simplification, not UML: the spec defines an Actor as a role
-         that *interacts with* the subject (exchanging signals/data), with no initiation test.
-         Also gone: "ראשיים" in the people-card title — there is no primary/secondary in this
-         course any more (see slide-association). -->
+         2026-07-17 — STRICT DOCTRINE (David): **שחקן = מי שיוזם** (NOTATION.md §1); no
+         primary/secondary; systems we CALL are API calls (counter-example card), ⏰ time is
+         an actor because it triggers scheduled UCs. Course simplification vs UML — see notes.
+         2026-08-26 (David, post-lecture): (1) actors now drawn as PROPER UML stick figures
+         (inline SVG, name below) instead of emoji cards; (2) non-human actors carry
+         STEREOTYPE notation — «system» / «time» — with the amber head per NOTATION §1;
+         (3) the payment-gateway "actor when it notifies us" example was UNINTUITIVE in
+         class — replaced by מערכת הרישום (nightly student feed pushed TO us; ties to the
+         L3 CRUD external-data row). The gateway's dual role is DEFERRED to the speaker
+         notes; the ⛔ counter-example card still shows it as the we-call-it case.
+         ⚠️ DIVERGENCE: NOTATION.md §1 draws ALL non-human actors with «system» (no «time»
+         stereotype exists in the tool). Slides now teach «time» for the time actor —
+         logged in the dossier divergence list until NOTATION/runtime catch up.
+         Hebrew MALE forms on figure labels per NOTATION §1. -->
     <section data-slug="actors" class="has-acro-footer">
       <div class="sdlc-chip" title="שלב 3 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>ניתוח דרישות</div>
       <style>
-        section[data-slug="actors"] .not-actor li { font-size:16px !important; line-height:1.5; }
-        section[data-slug="actors"] .note { font-size:15px; color:var(--muted); margin:2px 0 0; }
+        section[data-slug="actors"] .not-actor li { font-size:15.5px !important; line-height:1.5; }
+        section[data-slug="actors"] .note { font-size:14.5px; color:var(--muted); margin:2px 0 0; }
+        section[data-slug="actors"] .figrow { display:flex; justify-content:space-evenly; align-items:flex-end; gap:8px; }
+        section[data-slug="actors"] .fig { display:flex; flex-direction:column; align-items:center; gap:3px; }
+        section[data-slug="actors"] .fig .stereo { font-size:14px; color:#92400E; font-weight:700; height:18px; }
+        section[data-slug="actors"] .fig .nm { font-size:15px; font-weight:700; color:#1e293b; text-align:center; line-height:1.25; }
+        section[data-slug="actors"] .caption { text-align:center; font-size:14.5px; color:#475569; margin:4px 0 0; }
       </style>
       <h1><span class="en">Actor</span> - שחקן</h1>
       <div class="subtitle">מי ש<b>יוזם</b> תרחיש במערכת — אדם, מערכת אחרת, או <b>זמן</b></div>
@@ -1319,23 +1317,34 @@
 
         <div class="cols" style="align-items:stretch;">
 
-          <div class="card fragment" style="display:flex; flex-direction:column; gap:10px;">
-            <div class="panel-title">שחקנים (אנשים)</div>
-            <div class="cols-3" style="grid-template-columns:1fr; gap:8px;">
-              <div class="card tight center">🎓 סטודנט/ית</div>
-              <div class="card tight center">🍽️ מנהל/ת קפיטריה</div>
-              <div class="card tight center">👨‍🍳 עובד/ת מטבח · דלפק</div>
+          <div class="card fragment" style="display:flex; flex-direction:column; gap:8px;">
+            <div class="panel-title">שחקנים אנושיים — כך מציירים</div>
+            <div class="figrow">
+              <div class="fig"><span class="stereo"></span>
+                <svg viewBox="0 0 44 66" width="42" height="63"><circle cx="22" cy="9" r="7.5" fill="#fff" stroke="#1e293b" stroke-width="2.2"/><line x1="22" y1="16.5" x2="22" y2="40" stroke="#1e293b" stroke-width="2.2" stroke-linecap="round"/><line x1="6" y1="25" x2="38" y2="25" stroke="#1e293b" stroke-width="2.2" stroke-linecap="round"/><line x1="22" y1="40" x2="9" y2="60" stroke="#1e293b" stroke-width="2.2" stroke-linecap="round"/><line x1="22" y1="40" x2="35" y2="60" stroke="#1e293b" stroke-width="2.2" stroke-linecap="round"/></svg>
+                <span class="nm">סטודנט</span></div>
+              <div class="fig"><span class="stereo"></span>
+                <svg viewBox="0 0 44 66" width="42" height="63"><circle cx="22" cy="9" r="7.5" fill="#fff" stroke="#1e293b" stroke-width="2.2"/><line x1="22" y1="16.5" x2="22" y2="40" stroke="#1e293b" stroke-width="2.2" stroke-linecap="round"/><line x1="6" y1="25" x2="38" y2="25" stroke="#1e293b" stroke-width="2.2" stroke-linecap="round"/><line x1="22" y1="40" x2="9" y2="60" stroke="#1e293b" stroke-width="2.2" stroke-linecap="round"/><line x1="22" y1="40" x2="35" y2="60" stroke="#1e293b" stroke-width="2.2" stroke-linecap="round"/></svg>
+                <span class="nm">מנהל קפיטריה</span></div>
+              <div class="fig"><span class="stereo"></span>
+                <svg viewBox="0 0 44 66" width="42" height="63"><circle cx="22" cy="9" r="7.5" fill="#fff" stroke="#1e293b" stroke-width="2.2"/><line x1="22" y1="16.5" x2="22" y2="40" stroke="#1e293b" stroke-width="2.2" stroke-linecap="round"/><line x1="6" y1="25" x2="38" y2="25" stroke="#1e293b" stroke-width="2.2" stroke-linecap="round"/><line x1="22" y1="40" x2="9" y2="60" stroke="#1e293b" stroke-width="2.2" stroke-linecap="round"/><line x1="22" y1="40" x2="35" y2="60" stroke="#1e293b" stroke-width="2.2" stroke-linecap="round"/></svg>
+                <span class="nm">עובד מטבח · דלפק</span></div>
             </div>
+            <p class="caption">דמות מקל, השם מתחתיה — זו כל הסימוניה. תפקיד, לא אדם ספציפי.</p>
           </div>
 
-          <div class="card fragment" style="display:flex; flex-direction:column; gap:10px;">
-            <div class="panel-title">שחקנים לא-אנושיים</div>
-            <div class="cols-3" style="grid-template-columns:1fr; gap:8px;">
-              <div class="card tight center">⏰ זמן / מתזמן</div>
-              <div class="card tight center">💳 שער תשלום — <b>כשהוא מודיע לנו</b> (החזר / כשל חיוב)</div>
+          <div class="card fragment" style="display:flex; flex-direction:column; gap:8px;">
+            <div class="panel-title">שחקנים לא-אנושיים — עם סטריאוטיפ</div>
+            <div class="figrow">
+              <div class="fig"><span class="stereo">«system»</span>
+                <svg viewBox="0 0 44 66" width="42" height="63"><circle cx="22" cy="9" r="7.5" fill="#F59E0B" stroke="#1e293b" stroke-width="2.2"/><line x1="22" y1="16.5" x2="22" y2="40" stroke="#1e293b" stroke-width="2.2" stroke-linecap="round"/><line x1="6" y1="25" x2="38" y2="25" stroke="#1e293b" stroke-width="2.2" stroke-linecap="round"/><line x1="22" y1="40" x2="9" y2="60" stroke="#1e293b" stroke-width="2.2" stroke-linecap="round"/><line x1="22" y1="40" x2="35" y2="60" stroke="#1e293b" stroke-width="2.2" stroke-linecap="round"/></svg>
+                <span class="nm">מערכת הרישום</span></div>
+              <div class="fig"><span class="stereo">«time»</span>
+                <svg viewBox="0 0 44 66" width="42" height="63"><circle cx="22" cy="9" r="7.5" fill="#F59E0B" stroke="#1e293b" stroke-width="2.2"/><line x1="22" y1="16.5" x2="22" y2="40" stroke="#1e293b" stroke-width="2.2" stroke-linecap="round"/><line x1="6" y1="25" x2="38" y2="25" stroke="#1e293b" stroke-width="2.2" stroke-linecap="round"/><line x1="22" y1="40" x2="9" y2="60" stroke="#1e293b" stroke-width="2.2" stroke-linecap="round"/><line x1="22" y1="40" x2="35" y2="60" stroke="#1e293b" stroke-width="2.2" stroke-linecap="round"/></svg>
+                <span class="nm">⏰ זמן</span></div>
             </div>
-            <p class="note">הזמן <b>מפעיל</b> תרחישים מתוזמנים (דוח סוף-יום) — ולכן הוא שחקן.</p>
-            <p class="note">מערכת חיצונית ש<b>מפעילה אותנו</b> מיוזמתה — היא שחקן לכל דבר. <b>אותה</b> מערכת בכיוון ההפוך (אנחנו פונים אליה) היא קריאת <span class="en">API</span> ולא שחקן.</p>
+            <p class="note">מערכת הרישום <b>שולחת אלינו</b> כל לילה את עדכון הסטודנטים — היא מפעילה אותנו, ולכן שחקן <span class="en">«system»</span> (ראש כתום).</p>
+            <p class="note">הזמן <b>מפעיל</b> תרחישים מתוזמנים (דוח סוף-יום) — שחקן <span class="en">«time»</span>.</p>
           </div>
 
         </div>
@@ -1343,15 +1352,14 @@
         <div class="cols fragment" style="align-items:stretch;">
           <div class="callout good">
             <span class="label">✅ יוזם = שחקן</span>
-            מי שמתחיל את התרחיש — סטודנט, מנהל, עובד דלפק… וגם <b>⏰ זמן</b>.
+            מי שמתחיל את התרחיש — סטודנט, מנהל, עובד דלפק… וגם מערכת חיצונית שפונה אלינו, וגם <b>⏰ זמן</b>.
           </div>
           <div class="callout bad">
             <span class="label">⛔ שניים שנראים כמו שחקן — ואינם</span>
             <ul class="bullets not-actor" style="margin:4px 0 0;">
               <li><b>עקיף</b> — רק <b>מקבל פלט</b> או מושפע (הנהלה שמקבלת דוח מודפס)</li>
-              <li><b>מה שאנחנו קוראים לו</b> — 🔔 שירות התראות · 🏛️ חשבונות אוניברסיטה, וגם
-                💳 שער תשלום <b>כשאנחנו מחייבים דרכו</b>: אנחנו פונים אליהם. זו קריאת
-                <span class="en">API</span> — <b>הכיוון</b> הוא שקובע.</li>
+              <li><b>מה שאנחנו קוראים לו</b> — 💳 שער תשלום · 🔔 שירות התראות: אנחנו פונים אליהם
+                כדי לחייב או לשלוח. זו קריאת <span class="en">API</span> — <b>הכיוון</b> הוא שקובע.</li>
             </ul>
           </div>
         </div>
@@ -1361,60 +1369,121 @@
       </div>
       <aside class="notes">
         דוקטרינה (דוד, 2026-07-17; חודדה 2026-08-09): שחקן = מי שיוזם. אין ראשי/משני. מערכת שאנחנו
-        קוראים לה = קריאת API, שייכת לעיצוב — אבל מערכת חיצונית ש<b>מפעילה אותנו</b> היא שחקן לכל דבר,
-        ולכן שער התשלום מופיע בשני הצדדים: שחקן כשהוא מודיע על החזר/כשל, קריאת API כשאנחנו מחייבים דרכו.
-        הכיוון הוא שקובע.
+        קוראים לה = קריאת API, שייכת לעיצוב.
+        הדוגמה המתקדמת (נדחתה מהשקף ב-2026-08-26 — לא אינטואיטיבית בכיתה): שער התשלום יכול להופיע
+        בשני הצדדים — שחקן כשהוא מודיע לנו מיוזמתו על החזר/כשל (webhook), קריאת API כשאנחנו מחייבים
+        דרכו. הכיוון הוא שקובע. להעלות רק אם נשאלים.
+        סימון: דמות מקל + שם; לא-אנושי = ראש כתום + סטריאוטיפ «system», ולשחקן הזמן — «time».
+        שימו לב: הכלי (sad-mcp) מכיר כרגע רק «system»; ה-«time» הוא חידוד של הקורס — נרשם ביומן
+        הפערים עד שה-NOTATION והרנטיים יעודכנו.
         זו החמרה מכוונת ביחס ל-UML, שמגדיר שחקן כמי ש"מתקשר" עם המערכת ללא מבחן יוזמה.
       </aside>
     <div class="acro-footer"><span class="acro"><span class="en">UML</span> = <span class="en">Unified Modeling Language</span> · שפת מידול אחידה</span></div>
     </section>
     <!-- B3.5 — class discussion: "is it an actor?" (per request 2026-07-14). 8 candidate
-         cases, no answers on screen — the instructor runs the debate.
-         TEST (David, 2026-07-17, strict): **שחקן = מי שיוזם.** "Does it trigger us, or do we
-         call it? Triggers = actor" (NOTATION.md §1). The slide previously ran the looser
-         direct-vs-indirect test, which flipped two answers — see 2 and 8.
-         INSTRUCTOR ANSWER KEY (not shown to students):
-           1 סטודנט מזמין        → ✅ actor — he starts the scenario
-           2 שער תשלום           → ❌ NOT (CHANGED 2026-07-17; was ✅ "exchanges messages"). WE call it
-                                    to charge → an API call, i.e. design. It WOULD be an actor if it
-                                    notified us on its own (e.g. a refund webhook). The best debate on
-                                    the slide — it separates "talks to us" from "starts something".
-           3 הנהלה מקבלת דוח במייל → ❌ NOT — only RECEIVES output; would BE an actor if they log in and pull it
-           4 עובד מטבח מסמן מוכן  → ✅ actor
-           5 הזמן (טריגר זמן)     → ✅ actor — Time TRIGGERS us (the FR-5 end-of-day report). The one
-                                    non-human actor in the campus system under this rule.
-           6 טכנאי IT מתחזק שרת   → ❌ NOT — maintenance/infrastructure, not a functional user
-           7 חבר שאוכל את המנה    → ❌ NOT — indirect beneficiary, no interaction
-           8 מדפסת מדבקות         → ❌ NOT (sharpened 2026-07-17): we send TO it. Same rule as 2 —
-                                    no longer an "edge case", which is a bonus of the strict test.
-         So: actors = 1, 4, 5. Everything else is either indirect (3, 6, 7) or something we call (2, 8). -->
+         cases. TEST (David, 2026-07-17, strict): **שחקן = מי שיוזם** — "Does it trigger us,
+         or do we call it? Triggers = actor" (NOTATION.md §1).
+         2026-08-26 (David, post-lecture): converted to FLIP CARDS like the rest of the
+         course quizzes (pattern copied from L3 slide-fr-nfr-good-bad): argue first, click
+         the card, it flips to the ✅/⛔ verdict + a one-line explanation. Inline onclick
+         only (course convention — survives fragment inlining). Answers therefore now
+         appear on screen after the flip — instructor controls when.
+         Key: actors = 1, 4, 5 · indirect = 3, 6, 7 · things we call = 2, 8. -->
     <section data-slug="actor-or-not">
       <div class="sdlc-chip" title="שלב 3 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>ניתוח דרישות</div>
       <style>
         section[data-slug="actor-or-not"] > .body { display:flex; flex-direction:column; gap:14px; }
         section[data-slug="actor-or-not"] .cases { display:grid; grid-template-columns:repeat(4,1fr);
           grid-template-rows:1fr 1fr; gap:16px; flex:1 1 auto; min-height:0; }
-        section[data-slug="actor-or-not"] .case { border:1.5px solid #cbd5e1; border-radius:12px; background:#f8fafc;
-          padding:14px 12px; display:flex; flex-direction:column; align-items:center; justify-content:center;
-          gap:12px; position:relative; }
+        section[data-slug="actor-or-not"] .case { perspective:1000px; cursor:pointer; position:relative; }
+        section[data-slug="actor-or-not"] .case .inner { position:relative; width:100%; height:100%;
+          transition:transform .5s; transform-style:preserve-3d; }
+        section[data-slug="actor-or-not"] .case.flipped .inner { transform:rotateY(180deg); }
+        section[data-slug="actor-or-not"] .face { position:absolute; inset:0; backface-visibility:hidden;
+          -webkit-backface-visibility:hidden; border:1.5px solid #cbd5e1; border-radius:12px; background:#f8fafc;
+          padding:12px 12px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:9px; }
+        section[data-slug="actor-or-not"] .face.back { transform:rotateY(180deg); }
+        section[data-slug="actor-or-not"] .face.back.yes { background:#F0FDF4; border-color:var(--green); }
+        section[data-slug="actor-or-not"] .face.back.no { background:#FEF2F2; border-color:#DC2626; }
         section[data-slug="actor-or-not"] .case .n { position:absolute; top:8px; inset-inline-start:12px; font-size:15px;
           color:#94a3b8; font-weight:700; }
-        section[data-slug="actor-or-not"] .case .emo { font-size:46px; line-height:1; }
-        section[data-slug="actor-or-not"] .case .txt { font-size:19px; text-align:center; color:#1e293b; line-height:1.4; }
+        section[data-slug="actor-or-not"] .case .emo { font-size:40px; line-height:1; }
+        section[data-slug="actor-or-not"] .case .txt { font-size:17.5px; text-align:center; color:#1e293b; line-height:1.35; }
+        section[data-slug="actor-or-not"] .verdict { font-weight:800; font-size:17px; }
+        section[data-slug="actor-or-not"] .back.yes .verdict { color:#166534; }
+        section[data-slug="actor-or-not"] .back.no .verdict { color:#B91C1C; }
+        section[data-slug="actor-or-not"] .face.back p { margin:0; font-size:14px; line-height:1.45; text-align:center; color:#1f2d3d; }
       </style>
       <h1>שחקן או לא? — דיון בכיתה</h1>
-      <div class="subtitle">המבחן: <b>מי יוזם?</b> הוא מפעיל אותנו — או שאנחנו מפעילים אותו?</div>
+      <div class="subtitle">המבחן: <b>מי יוזם?</b> · התווכחו על כל מקרה — ואז <b>לחצו על הכרטיס</b> להפוך אותו ולראות את התשובה</div>
       <div class="body">
 
         <div class="cases">
-          <div class="case fragment"><span class="n">1</span><div class="emo">🎓</div><div class="txt">סטודנט שמזמין אוכל מהאפליקציה</div></div>
-          <div class="case fragment"><span class="n">2</span><div class="emo">💳</div><div class="txt">שער התשלום שמאשר עסקה</div></div>
-          <div class="case fragment"><span class="n">3</span><div class="emo">🏛️</div><div class="txt">הנהלה שמקבלת דוח חודשי במייל</div></div>
-          <div class="case fragment"><span class="n">4</span><div class="emo">👨‍🍳</div><div class="txt">עובד מטבח שמסמן הזמנה כ"מוכנה"</div></div>
-          <div class="case fragment"><span class="n">5</span><div class="emo">⏰</div><div class="txt">הזמן — מפעיל אוטומטית דוח סוף-יום</div></div>
-          <div class="case fragment"><span class="n">6</span><div class="emo">🔧</div><div class="txt">טכנאי <span class="en">IT</span> שמתחזק את השרת</div></div>
-          <div class="case fragment"><span class="n">7</span><div class="emo">🍔</div><div class="txt">חבר שאוכל מנה שהוזמנה עבורו</div></div>
-          <div class="case fragment"><span class="n">8</span><div class="emo">🖨️</div><div class="txt">מדפסת שמדפיסה מדבקת הזמנה</div></div>
+
+          <div class="case fragment" onclick="this.classList.toggle('flipped')">
+            <div class="inner">
+              <div class="face front"><span class="n">1</span><div class="emo">🎓</div><div class="txt">סטודנט שמזמין אוכל מהאפליקציה</div></div>
+              <div class="face back yes"><span class="n">1</span><div class="verdict">✅ שחקן</div>
+                <p>הוא <b>מתחיל</b> את התרחיש — פותח את האפליקציה ומזמין.</p></div>
+            </div>
+          </div>
+
+          <div class="case fragment" onclick="this.classList.toggle('flipped')">
+            <div class="inner">
+              <div class="face front"><span class="n">2</span><div class="emo">💳</div><div class="txt">שער התשלום שמאשר עסקה</div></div>
+              <div class="face back no"><span class="n">2</span><div class="verdict">⛔ לא שחקן</div>
+                <p><b>אנחנו</b> קוראים לו כדי לחייב — קריאת <span class="en">API</span>. היה שחקן אילו פנה אלינו מיוזמתו.</p></div>
+            </div>
+          </div>
+
+          <div class="case fragment" onclick="this.classList.toggle('flipped')">
+            <div class="inner">
+              <div class="face front"><span class="n">3</span><div class="emo">🏛️</div><div class="txt">הנהלה שמקבלת דוח חודשי במייל</div></div>
+              <div class="face back no"><span class="n">3</span><div class="verdict">⛔ לא שחקן</div>
+                <p>רק <b>מקבלת פלט</b>. אילו נכנסה והפיקה את הדוח בעצמה — שחקן.</p></div>
+            </div>
+          </div>
+
+          <div class="case fragment" onclick="this.classList.toggle('flipped')">
+            <div class="inner">
+              <div class="face front"><span class="n">4</span><div class="emo">👨‍🍳</div><div class="txt">עובד מטבח שמסמן הזמנה כ"מוכנה"</div></div>
+              <div class="face back yes"><span class="n">4</span><div class="verdict">✅ שחקן</div>
+                <p>יוזם: הסימון שלו מתחיל תרחיש — ומפעיל את ההתראה לסטודנט.</p></div>
+            </div>
+          </div>
+
+          <div class="case fragment" onclick="this.classList.toggle('flipped')">
+            <div class="inner">
+              <div class="face front"><span class="n">5</span><div class="emo">⏰</div><div class="txt">הזמן — מפעיל אוטומטית דוח סוף-יום</div></div>
+              <div class="face back yes"><span class="n">5</span><div class="verdict">✅ שחקן «time»</div>
+                <p>הזמן <b>מפעיל</b> תרחישים מתוזמנים — השחקן הלא-אנושי הקבוע במערכת שלנו.</p></div>
+            </div>
+          </div>
+
+          <div class="case fragment" onclick="this.classList.toggle('flipped')">
+            <div class="inner">
+              <div class="face front"><span class="n">6</span><div class="emo">🔧</div><div class="txt">טכנאי <span class="en">IT</span> שמתחזק את השרת</div></div>
+              <div class="face back no"><span class="n">6</span><div class="verdict">⛔ לא שחקן</div>
+                <p>מתחזק <b>תשתית</b> — אינו משתמש פונקציונלי של המערכת.</p></div>
+            </div>
+          </div>
+
+          <div class="case fragment" onclick="this.classList.toggle('flipped')">
+            <div class="inner">
+              <div class="face front"><span class="n">7</span><div class="emo">🍔</div><div class="txt">חבר שאוכל מנה שהוזמנה עבורו</div></div>
+              <div class="face back no"><span class="n">7</span><div class="verdict">⛔ לא שחקן</div>
+                <p><b>נהנה עקיף</b> — אין לו שום אינטראקציה עם המערכת.</p></div>
+            </div>
+          </div>
+
+          <div class="case fragment" onclick="this.classList.toggle('flipped')">
+            <div class="inner">
+              <div class="face front"><span class="n">8</span><div class="emo">🖨️</div><div class="txt">מדפסת שמדפיסה מדבקת הזמנה</div></div>
+              <div class="face back no"><span class="n">8</span><div class="verdict">⛔ לא שחקן</div>
+                <p>אנחנו <b>שולחים אליה</b> — אותו כלל כמו שער התשלום: הכיוון קובע.</p></div>
+            </div>
+          </div>
+
         </div>
 
         <p class="bottom-line">רמז: מי שמושפע, מי שרק מקבל פלט, ומה שאנחנו קוראים לו — אף אחד מהם אינו שחקן. רק מי ש<b>יוזם</b>.</p>
@@ -1651,78 +1720,77 @@
       </div>
     <div class="acro-footer"><span class="acro"><span class="en">AI</span> = <span class="en">Artificial Intelligence</span> · בינה מלאכותית</span></div>
     </section>
-    <!-- D2 — the ANCHOR of the documentation block: what a documented use case contains.
-         Reworked 2026-07-16 (David) when the block moved up to sit right after the diagram:
-         it used to be titled "תבנית Flow of Events" and was the only slide on the template.
-         Now it is the MAP — header fields + the three flows — and each part is drilled by
-         the slides that follow (flow-of-events / scenario-or-not / extensions-when /
-         pre-post-conditions), so this one deliberately stays shallow.
-         The trio ראשית · חלופית · חריג is the lecture's canonical terminology (= the tool's
-         main scenario / alt / extension — see the dossier's divergence log). Hebrew verbatim
-         from the original create_flow_of_events_template_slide.py.
-
-         2026-07-16 (David): the card used to be headed "שלוש זרימות" — but a חריג is NOT a
-         standalone flow; it hangs off the step that can fail (and an alt branches inside the
-         main flow). Calling all three "זרימות" contradicted the very next slide, whose table
-         puts loop/alt "בזרימה הראשית" and the extension "תלוי בצעד שנכשל". Reframed as ONE
-         flow + two things that branch off it. The .src line keeps the textbook/VP wording
-         ("זרימה חלופית" / "זרימת חריג") recognisable for exams without teaching it as the model. -->
+    <!-- D2 — the flows anchor of the documentation block.
+         2026-08-26 (David, post-lecture): the slide was MIXING two topics — flows + the
+         header fields (pre/post-conditions). Header-fields card REMOVED (slide 39,
+         pre-post-conditions, owns that; שם/שחקן are trivial and taught in passing there).
+         Now FLOWS ONLY, and reworded to David's framing: main + alternate are the
+         if/then/else that happen WITHIN the main flow; the exception is the third thing,
+         hanging on a step. Added a worked mini-flow schematic ("the explanation was not
+         easy to follow") and the VP terminology: VP calls the חריג an **Extension**
+         (confirmed — the vp-walkthrough screenshots + NOTATION §11b). The «extend»-vs-
+         Extension trap is NOT disambiguated here (students meet «extend» only in Section
+         C) — that lives on extensions-when + the FAQ.
+         2026-07-16 doctrine kept: ONE flow + two branch-offs; only the main stands alone;
+         the .src line keeps the textbook "זרימה חלופית/זרימת חריג" wording recognisable. -->
     <section data-slug="flow-of-events-template" class="has-acro-footer">
       <div class="sdlc-chip" title="שלב 3 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>ניתוח דרישות</div>
       <style>
-        /* Cards fill the canvas (same fix as why-document — David, 2026-07-16). */
         section[data-slug="flow-of-events-template"] .anatomy { flex:1 1 auto; min-height:0; align-items:stretch; }
-        section[data-slug="flow-of-events-template"] .anatomy > .card { justify-content:center; padding:24px 26px; }
-        section[data-slug="flow-of-events-template"] .anatomy .panel-title { font-size:24px; }
-        section[data-slug="flow-of-events-template"] table.sad { font-size:19px; }
-        section[data-slug="flow-of-events-template"] table.sad td,
-        section[data-slug="flow-of-events-template"] table.sad th { padding:12px 14px; }
-        section[data-slug="flow-of-events-template"] .callout { font-size:20px; }
-        section[data-slug="flow-of-events-template"] .src { font-size:16px; }
+        section[data-slug="flow-of-events-template"] .anatomy > .card { padding:16px 20px; }
+        section[data-slug="flow-of-events-template"] .callout { font-size:17px; }
+        section[data-slug="flow-of-events-template"] .callout .label { font-size:17.5px; }
+        section[data-slug="flow-of-events-template"] .src { font-size:15px; }
+        /* worked mini-flow */
+        section[data-slug="flow-of-events-template"] .flow { display:flex; flex-direction:column; gap:7px; font-size:16px; }
+        section[data-slug="flow-of-events-template"] .step { background:#F0FDF4; border:1px solid var(--green);
+          border-radius:8px; padding:6px 12px; color:#14532D; }
+        section[data-slug="flow-of-events-template"] .step b.sn { font-family:'IBM Plex Mono',monospace; }
+        section[data-slug="flow-of-events-template"] .alt { background:var(--tint-blue); border:1px solid var(--blue);
+          border-radius:8px; padding:6px 12px 6px; margin-inline-start:34px; color:var(--dark-blue); font-size:15px; }
+        section[data-slug="flow-of-events-template"] .exc { background:#FEF2F2; border:1px solid #DC2626;
+          border-radius:8px; padding:6px 12px; margin-inline-start:34px; color:#7F1D1D; font-size:15px; }
       </style>
-      <h1>מה יש בתוך תרחיש מתועד?</h1>
-      <div class="subtitle">התרשים אמר <b>אילו</b> תרחישים יש — התיעוד אומר <b>מה קורה</b> בכל אחד</div>
+      <h1>הזרימות — מה קורה בתוך תרחיש</h1>
+      <div class="subtitle">זרימה <b>אחת</b> — ושני דברים שמסתעפים ממנה · שדות הכותרת (תנאי קדם וסיום) — בשקף משלהם, בהמשך</div>
       <div class="body">
 
         <div class="cols anatomy">
 
-          <div class="card" style="display:flex; flex-direction:column; gap:10px;">
-            <div class="panel-title">שדות כותרת</div>
-            <table class="sad">
-              <tr><th style="width:42%;">שדה</th><th>תיאור</th></tr>
-              <tr><td>שם התרחיש</td><td class="muted">מזהה את ה-<span class="en">use case</span></td></tr>
-              <tr><td>שחקן</td><td class="muted">מי יוזם את התרחיש</td></tr>
-              <tr><td>תנאי קדם <span class="en">(Pre-condition)</span></td><td class="muted">מה חייב להתקיים לפני</td></tr>
-              <tr><td>תנאי סיום <span class="en">(Post-condition)</span></td><td class="muted">מה מובטח אחרי</td></tr>
-            </table>
-          </div>
-
-          <div class="card" style="display:flex; flex-direction:column; gap:11px;">
-            <div class="panel-title">זרימה אחת — ושתי הסתעפויות</div>
-
+          <div class="card" style="display:flex; flex-direction:column; gap:10px; justify-content:center;">
             <div class="callout good fragment">
               <span class="label">ראשית <span class="en">(Main)</span> — <u>הזרימה</u></span>
-              מסלול ההצלחה. רק היא עומדת בפני עצמה.
+              רצף הצעדים הממוספר של מסלול ההצלחה. <b>רק היא עומדת בפני עצמה.</b>
             </div>
-
             <div class="callout ai fragment">
-              <span class="label">חלופית <span class="en">(Alternate)</span> — מסתעפת</span>
-              וריאציות תקינות — <b>בתוך</b> הזרימה, בנקודת ההחלטה.
+              <span class="label">חלופית <span class="en">(Alternate)</span> — ה-<span class="en">if / else</span> שבתוך הזרימה</span>
+              וריאציה <b>תקינה</b>: "אם בכרטיס סטודנט… אחרת באשראי". מתפצלת בנקודת החלטה — <b>וחוזרת</b> לזרימה.
             </div>
-
             <div class="callout bad fragment">
-              <span class="label">חריג <span class="en">(Exception)</span> — נתלה</span>
-              כשמשהו נכשל — <b>על הצעד</b> שיכול להיכשל. לא רץ לבדו.
+              <span class="label">חריג <span class="en">(Exception)</span> — נתלה על צעד</span>
+              כשצעד <b>נכשל</b>: לא חלק מהזרימה — תלוי על הצעד, ובסופו תמיד ↩ חוזרים לזרימה או ⛔ מסיימים.
+              ב-<span class="en">Visual Paradigm</span> תפגשו אותו בשם <b><span class="en">Extension</span></b>.
             </div>
-
             <p class="src fragment" style="margin:2px 0 0;">
               בספרות ובכלים תפגשו גם ״זרימה חלופית״ / ״זרימת חריג״ — אותם מושגים בדיוק.
             </p>
           </div>
 
+          <div class="card fragment" style="display:flex; flex-direction:column; gap:8px; justify-content:center;">
+            <div class="panel-title">כך זה נראה — הזמנת אוכל</div>
+            <div class="flow">
+              <div class="step"><b class="sn">1.</b> הסטודנט מרכיב את ההזמנה</div>
+              <div class="step"><b class="sn">2.</b> בוחר אמצעי תשלום ומשלם</div>
+              <div class="alt">חלופית 2א: אם כרטיס סטודנט — חיוב ישיר · אחרת — אשראי. <b>שני המסלולים תקינים וחוזרים לצעד 3.</b></div>
+              <div class="exc">חריג 2ב: התשלום נכשל — הצגת הסיבה ↩ חזרה לצעד 2</div>
+              <div class="step"><b class="sn">3.</b> המערכת מציגה אישור וקוד איסוף</div>
+              <div class="step"><b class="sn">4.</b> ההזמנה נכנסת לתור ההכנה</div>
+            </div>
+          </div>
+
         </div>
 
-        <p class="bottom-line fragment">המבנה הזה הוא בדיוק מה ש-<span class="en">AI</span> יודע למלא - ומה שאתם יודעים לאתגר.</p>
+        <p class="bottom-line fragment">ראשית = הזרימה · חלופית = <span class="en">if/else</span> בתוכה · חריג = תלוי על צעד שנכשל — והמבנה הזה הוא בדיוק מה ש-<span class="en">AI</span> יודע למלא ואתם יודעים לאתגר.</p>
 
       </div>
     <div class="acro-footer"><span class="acro"><span class="en">AI</span> = <span class="en">Artificial Intelligence</span> · בינה מלאכותית</span></div>
@@ -1733,17 +1801,24 @@
          ("משלם על ההזמנה" hides a whole sub-flow); (2) repetition/decisions/failures are
          STRUCTURE, not prose — the four constructs, each with exactly one home.
          Authority: uml-use-case-diagram/NOTATION.md §11b, enforced by uml_usecase_validate_model.
+         2026-08-26 (David, post-lecture, with a VP screenshot): the constructs table now
+         shows VP'S OWN NOTATION — the reserved words the Flow of Events editor renders in
+         green: if / else if / end if (alt) · while…end while and loop…until (two loop
+         forms) · the Extension panel attached per-step as "3.a" · a new Scenario-rail
+         entry. Same four constructs, now with exactly what students type in the tool.
          Sizing lives in the scoped block below (the theme's ul/li + td rules beat inline
          font-size — see SLIDE_AUTHORING.md "bullet font sizes"). Nothing is pinned with
          margin-top:auto: the .sdlc-chip floats over the bottom-left corner (z-index 6). -->
     <section data-slug="flow-of-events">
       <div class="sdlc-chip" title="שלב 3 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>ניתוח דרישות</div>
       <style>
-        section[data-slug="flow-of-events"] .lead { font-size:21px; line-height:1.55; margin:6px 0 0; }
-        section[data-slug="flow-of-events"] .callout { font-size:20px; }
-        section[data-slug="flow-of-events"] table.sad { font-size:19px; }
+        section[data-slug="flow-of-events"] .lead { font-size:20px; line-height:1.5; margin:6px 0 0; }
+        section[data-slug="flow-of-events"] .callout { font-size:18.5px; }
+        section[data-slug="flow-of-events"] table.sad { font-size:16.5px; }
         section[data-slug="flow-of-events"] table.sad td,
-        section[data-slug="flow-of-events"] table.sad th { padding:13px 12px; }
+        section[data-slug="flow-of-events"] table.sad th { padding:9px 11px; }
+        section[data-slug="flow-of-events"] .vpkw { font-family:'IBM Plex Mono',monospace; color:#2E7D32;
+          font-weight:600; font-size:14.5px; white-space:nowrap; direction:ltr; unicode-bidi:isolate; }
         section[data-slug="flow-of-events"] .steps { font-size:19px; line-height:1.65; }
         section[data-slug="flow-of-events"] .next-up { font-size:17px; margin:6px 0 0; }
         /* Spread the right rail over the full height instead of leaving dead space below.
@@ -1777,35 +1852,44 @@
               </span>
             </div>
 
+            <!-- 2026-08-26 (David): the old label "אף פעם לא אם…אחרת" read as "we never do
+                 if/else" — wrong message. We DO if/else; the ban is on writing it as PROSE
+                 inside a step instead of the structured construct. -->
             <div class="callout warn fragment">
-              <span class="label">⚠️ אף פעם לא ״אם… אחרת״ בתוך צעד</span>
-              תנאי שנכתב כפרוזה נעלם מהקורא. הוא <b>מבנה</b> — ראו משמאל.
+              <span class="label">⚠️ ״אם… אחרת״ — כן, אבל כמבנה. לא כפרוזה בתוך צעד</span>
+              תנאי שהוסתר בפרוזה נעלם מהקורא. יש לנו <span class="en">if/else</span> —
+              בפורמט המובנה של העורך: <span class="vpkw">if / else if / end if</span>. ראו משמאל.
             </div>
           </div>
 
           <!-- left: the four constructs, each with one home -->
           <div class="card" style="display:flex; flex-direction:column; gap:10px; min-height:0;">
-            <div class="panel-title">ארבעה מבנים — לכל אחד בית אחד</div>
+            <div class="panel-title">ארבעה מבנים — לכל אחד בית אחד, ול-<span class="en">VP</span> סימון משלו</div>
             <table class="sad">
-              <tr><th style="width:40%;">מה אני מתאר</th><th>המבנה</th></tr>
+              <tr><th style="width:34%;">מה אני מתאר</th><th style="width:30%;">המבנה</th><th>כך מקלידים ב-<span class="en">Visual Paradigm</span></th></tr>
               <tr class="fragment">
                 <td>פעולה שחוזרת עד שנגמר</td>
                 <td><b>לולאה</b> <span class="en">(loop)</span><br><span class="muted">בזרימה הראשית</span></td>
+                <td><span class="vpkw">while … end while</span><br><span class="vpkw">loop … until</span></td>
               </tr>
               <tr class="fragment">
                 <td>החלטה <b>עסקית</b> — כמה תוצאות תקינות</td>
                 <td><b>חלופית</b> <span class="en">(alt)</span><br><span class="muted">בזרימה הראשית</span></td>
+                <td><span class="vpkw">if … / else if … / end if</span></td>
               </tr>
               <tr class="fragment">
                 <td>משהו <b>נכשל</b> — קלט שגוי, נדחה, לא נמצא</td>
                 <td><b>חריג</b> <span class="en">(extension)</span><br><span class="muted">תלוי בצעד שנכשל</span></td>
+                <td>לוח ה-<span class="en">Extension</span> — נצמד לצעד: <span class="vpkw">3.a</span></td>
               </tr>
               <tr class="fragment">
                 <td><b>פעולה אחרת</b> או מסלול אחר לאותה מטרה</td>
                 <td><b>תרחיש נפרד</b> <span class="en">(scenario)</span></td>
+                <td>שורה חדשה ברשימת ה-<span class="en">Scenario</span></td>
               </tr>
             </table>
-            <p class="src next-up fragment">בהמשך, אחד-אחד: תרחיש · חריג · תנאי קדם וסיום.</p>
+            <p class="src next-up fragment">מילים שמורות בעורך ה-<span class="en">Flow of Events</span>: מקלידים בתחילת שורה — והעורך מזהה (ומוריק) אותן.
+              בהמשך, אחד-אחד: תרחיש · חריג · תנאי קדם וסיום.</p>
           </div>
 
         </div>
@@ -1818,77 +1902,83 @@
          (1) a distinct operation inside a CRUD "ניהול X" UC (>=4: הוספה/צפייה/עדכון/מחיקה),
          (2) same goal, meaningfully different path/trigger. A different ERROR is never a
          scenario (-> חריג); a different BUSINESS CHOICE is never a scenario (-> חלופית).
-         Ties back to slide-requirement-crud-example (FR-6) — same CRUD instinct, now in the flow. -->
+         Ties back to slide-requirement-crud-example (FR-6) — same CRUD instinct, now in the flow.
+         2026-08-26 (David: "looks bad visually") — RELAID OUT: the old two loose columns
+         (space-between, unequal card counts, headers floating far from content) became two
+         COLORED PANELS (✓ green / ✗ red), each header attached to its two equal-height
+         cards; the ⚠️ AI callout is now full-width under both. Content unchanged. -->
     <section data-slug="scenario-or-not" class="has-acro-footer">
       <div class="sdlc-chip" title="שלב 3 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>ניתוח דרישות</div>
       <style>
-        /* Sized to fill the canvas; the theme's td/li rules beat inline font-size. */
-        section[data-slug="scenario-or-not"] .lead { font-size:20px; line-height:1.55; margin:8px 0 0; }
-        section[data-slug="scenario-or-not"] .callout { font-size:19px; }
-        section[data-slug="scenario-or-not"] .card .panel-title { font-size:20px; }
-        section[data-slug="scenario-or-not"] .tag { font-size:16px; padding:3px 12px; }
-        section[data-slug="scenario-or-not"] .src { font-size:16px; }
-        section[data-slug="scenario-or-not"] .rail { justify-content:space-between; }
+        section[data-slug="scenario-or-not"] .duo { flex:1 1 auto; min-height:0; display:grid;
+          grid-template-columns:1fr 1fr; gap:16px; align-items:stretch; }
+        section[data-slug="scenario-or-not"] .panel { border-radius:14px; padding:12px 14px;
+          display:flex; flex-direction:column; gap:10px; }
+        section[data-slug="scenario-or-not"] .panel.ok { background:#F0FDF4; border:1.5px solid var(--green); }
+        section[data-slug="scenario-or-not"] .panel.no { background:#FEF2F2; border:1.5px solid #DC2626; }
+        section[data-slug="scenario-or-not"] .ph { font-weight:800; font-size:19px; }
+        section[data-slug="scenario-or-not"] .panel.ok .ph { color:#166534; }
+        section[data-slug="scenario-or-not"] .panel.no .ph { color:#B91C1C; }
+        section[data-slug="scenario-or-not"] .pcards { flex:1 1 auto; min-height:0; display:grid;
+          grid-auto-rows:1fr; gap:10px; }
+        section[data-slug="scenario-or-not"] .pcards .card { display:flex; flex-direction:column;
+          justify-content:center; gap:6px; margin:0; }
+        section[data-slug="scenario-or-not"] .card .panel-title { font-size:18.5px; }
+        section[data-slug="scenario-or-not"] .lead { font-size:17.5px; line-height:1.5; margin:0; }
+        section[data-slug="scenario-or-not"] .tag { font-size:15px; padding:3px 12px; }
+        section[data-slug="scenario-or-not"] .src { font-size:14.5px; }
+        section[data-slug="scenario-or-not"] .verdict { font-weight:800; font-size:16px; color:#B91C1C; }
+        section[data-slug="scenario-or-not"] .callout.warn { font-size:17px; margin-top:10px; }
       </style>
       <h1>מה זה תרחיש <span class="en">(scenario)</span> — ומה לא?</h1>
       <div class="subtitle">״ניהול X״ עם תרחיש אחד מעורפל = התיעוד הכי רזה שיש</div>
       <div class="body">
 
-        <div class="cols" style="flex:1 1 auto; min-height:0; align-items:stretch;">
+        <div class="duo">
 
           <!-- right (RTL-first): the two admissible reasons -->
-          <div class="rail" style="display:flex; flex-direction:column; gap:10px; min-height:0;">
-            <div class="callout good">
-              <span class="label">✓ שתי סיבות מוצדקות — ורק הן</span>
-            </div>
-
-            <div class="card tight fragment">
-              <div class="panel-title">1 · פעולה נפרדת בתוך <span class="en term" data-term="crud">CRUD</span></div>
-              <p class="lead">
-                <span class="en">UC</span> מסוג <b>״ניהול X״</b> חייב <b>תרחיש לכל פעולה</b>:
-              </p>
-              <p class="lead">
-                <span class="tag">הוספה</span> <span class="tag">צפייה</span>
-                <span class="tag">עדכון</span> <span class="tag">מחיקה</span>
-              </p>
-              <p class="src" style="margin:10px 0 0;">בדיוק ה-<span class="en">CRUD</span> שכתבנו כדרישה — עכשיו בזרימה.</p>
-            </div>
-
-            <div class="card tight fragment">
-              <div class="panel-title">2 · אותה מטרה, מסלול אחר</div>
-              <p class="lead">
-                נתיב או טריגר שונה מהותית — ״רישום רגיל״ מול ״רישום מאוחר עם קנס״.
-              </p>
+          <div class="panel ok">
+            <div class="ph">✓ שתי סיבות מוצדקות — ורק הן</div>
+            <div class="pcards">
+              <div class="card tight fragment">
+                <div class="panel-title">1 · פעולה נפרדת בתוך <span class="en term" data-term="crud">CRUD</span></div>
+                <p class="lead"><span class="en">UC</span> מסוג <b>״ניהול X״</b> חייב <b>תרחיש לכל פעולה</b>:</p>
+                <p class="lead">
+                  <span class="tag">הוספה</span> <span class="tag">צפייה</span>
+                  <span class="tag">עדכון</span> <span class="tag">מחיקה</span>
+                </p>
+                <p class="src" style="margin:4px 0 0;">בדיוק ה-<span class="en">CRUD</span> שכתבנו כדרישה — עכשיו בזרימה.</p>
+              </div>
+              <div class="card tight fragment">
+                <div class="panel-title">2 · אותה מטרה, מסלול אחר</div>
+                <p class="lead">נתיב או טריגר שונה <b>מהותית</b> — ״רישום רגיל״ מול ״רישום מאוחר עם קנס״: אותה מטרה, דרך אחרת להשיג אותה.</p>
+              </div>
             </div>
           </div>
 
           <!-- left: what is NOT a scenario -->
-          <div class="rail" style="display:flex; flex-direction:column; gap:10px; min-height:0;">
-            <div class="callout bad">
-              <span class="label">✗ מה שנראה כמו תרחיש — ואינו</span>
-            </div>
-
-            <div class="card tight fragment">
-              <div class="panel-title">תוצאת <b>שגיאה</b> אחרת</div>
-              <p class="lead">
-                ״התשלום נדחה״ אינו תרחיש — הוא <b>חריג</b> של תרחיש קיים.
-              </p>
-            </div>
-
-            <div class="card tight fragment">
-              <div class="panel-title"><b>בחירה עסקית</b> בתוך מסלול אחד</div>
-              <p class="lead">
-                ״שילם בכרטיס סטודנט או באשראי״ אינו תרחיש — הוא <b>חלופית</b>
-                <span class="en">(alt)</span> בתוך הזרימה.
-              </p>
-            </div>
-
-            <div class="callout warn fragment">
-              <span class="label">⚠️ מה <span class="en">AI</span> נוטה לעשות</span>
-              כותב ל-״ניהול תפריט״ תרחיש אחד — ״המנהל מנהל את התפריט״ — ומדלג על שלוש פעולות.
+          <div class="panel no">
+            <div class="ph">✗ מה שנראה כמו תרחיש — ואינו</div>
+            <div class="pcards">
+              <div class="card tight fragment">
+                <div class="panel-title">תוצאת <b>שגיאה</b> אחרת</div>
+                <p class="lead">״התשלום נדחה״ אינו תרחיש — משהו <b>נכשל</b> בדרך למטרה.</p>
+                <p class="verdict">← זה חריג <span class="en">(extension)</span> של תרחיש קיים</p>
+              </div>
+              <div class="card tight fragment">
+                <div class="panel-title"><b>בחירה עסקית</b> בתוך מסלול אחד</div>
+                <p class="lead">״שילם בכרטיס סטודנט או באשראי״ אינו תרחיש — שתי דרכים תקינות באותו מסלול.</p>
+                <p class="verdict">← זו חלופית <span class="en">(alt)</span> בתוך הזרימה</p>
+              </div>
             </div>
           </div>
 
+        </div>
+
+        <div class="callout warn fragment">
+          <span class="label">⚠️ מה <span class="en">AI</span> נוטה לעשות</span>
+          כותב ל-״ניהול תפריט״ תרחיש אחד — ״המנהל מנהל את התפריט״ — ומדלג על שלוש פעולות.
+          עכשיו יש לכם את המבחן: ניהול = תרחיש לכל פעולה.
         </div>
 
         <p class="bottom-line fragment">תרחיש = <b>מטרה שהושגה</b> במסלול שלם. שגיאה ← חריג · בחירה ← חלופית.</p>
@@ -1945,9 +2035,17 @@
               <span class="en term" data-term="crud">CRUD</span>.
             </div>
 
-            <div class="callout good" style="font-size:15px;">
-              <span class="label">💡 זה אותו תיעוד</span>
-              בדיוק מה שנפתח בלחיצה על תרחיש בתרשים — ומה שנראה עוד מעט ב-<span class="en">Visual Paradigm</span>.
+            <!-- 2026-08-26 (David): the embed is MCP-generated (single source with the diagram
+                 modal) so it STAYS AS-IS, Hebrew included. Two dialect differences vs VP,
+                 named here so the in-class mention has an anchor: the tool writes ״חזור״ for
+                 a loop (not while/until), and renders extensions INSIDE the text — VP puts
+                 them in the Extension panel at the bottom. Different systems, same concepts. -->
+            <div class="callout good" style="font-size:14.5px;">
+              <span class="label">💡 אותו תיעוד — בניב של הכלי שלנו</span>
+              מה שנפתח בלחיצה על תרחיש בתרשים. הניב שונה מ-<span class="en">VP</span>:
+              כאן לולאה = ״חזור״ (לא <span class="en">while</span>), והחריגים משולבים <b>בתוך</b> הטקסט —
+              ב-<span class="en">VP</span> הם בלוח ה-<span class="en">Extension</span> שבתחתית.
+              מערכות שונות — אותם מושגים בדיוק.
             </div>
           </div>
 
@@ -1962,6 +2060,9 @@
       <aside class="notes">
         להראות קודם "הזמנה ותשלום" — לולאה, alt, וחריג שחוזר לשלב. אחר כך ללחוץ על
         "ניהול תפריט ומלאי" ולעבור בין ארבעת התרחישים (CRUD) — זה מכין את השקף הבא.
+        נקודה לומר בכיתה (דוד, 2026-08-26): מערכות מתעדות שונה — הכלי שלנו כותב ״חזור״
+        ומשלב חריגים בטקסט; VP כותב while/until ומרכז את החריגים בלוח Extension בתחתית.
+        אותם מושגים, ניב אחר. התצוגה נשארת כמות שהיא כי היא נוצרת ישירות מנתוני ה-MCP.
       </aside>
     <div class="acro-footer"><span class="acro"><span class="en">CRUD</span> = <span class="en">Create, Read, Update, Delete</span> · יצירה, קריאה, עדכון, מחיקה</span></div>
     </section>
@@ -2420,6 +2521,300 @@
         "עמדה" — ההומונים אמיתי אצלנו: §10 מגדיר עמדת מטבח, ושקף אימות האיסוף אומר "עמדת דלפק".
       </aside>
     <div class="acro-footer"><span class="acro"><span class="en">FR</span> = <span class="en">Functional Requirement</span> · דרישה פונקציונלית</span> &nbsp;·&nbsp; <span class="acro"><span class="en">AI</span> = <span class="en">Artificial Intelligence</span> · בינה מלאכותית</span></div>
+    </section>
+    <!-- D-END step 0 (NEW 2026-08-26, David follow-up): "what I'm missing is the PROCESS a
+         student would go through… how should students take the requirements list, understand
+         the actors, decide whether to divide into several diagrams, and what tells them this
+         is a use case versus not." The recipe slide — opens the payoff trio:
+         method (this) → mapping (req-to-uc) → the built diagram (basic-diagram) → admin area.
+         Each step names its test and points back at the slide that taught it. Step 2 carries
+         David's standing pedagogy rule: ALWAYS ask "מי מנהל את המערכת?" — the admin-area
+         slide (2 ahead) is where the campus answer lands. -->
+    <section data-slug="uc-method" class="has-acro-footer">
+      <div class="sdlc-chip" title="שלב 3 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>ניתוח דרישות</div>
+      <style>
+        section[data-slug="uc-method"] .steps { flex:1 1 auto; min-height:0; display:grid;
+          grid-template-columns:1fr 1fr; grid-auto-rows:1fr; gap:11px; }
+        section[data-slug="uc-method"] .stp { display:flex; gap:14px; align-items:center; padding:12px 16px; margin:0; }
+        section[data-slug="uc-method"] .stp .n { flex:0 0 auto; width:38px; height:38px; border-radius:50%;
+          background:var(--dark-blue); color:#fff; font-weight:800; font-size:19px; display:flex;
+          align-items:center; justify-content:center; }
+        section[data-slug="uc-method"] .stp .t { font-weight:800; color:var(--dark-blue); font-size:18px; }
+        section[data-slug="uc-method"] .stp p { margin:3px 0 0; font-size:16px; line-height:1.5; }
+        section[data-slug="uc-method"] .stp .test { color:#B45309; font-weight:700; }
+        section[data-slug="uc-method"] .bottom-line { margin-bottom:28px; }
+      </style>
+      <h1>מרשימת הדרישות לתרשים — המתכון</h1>
+      <div class="subtitle">שישה צעדים, ולכל אחד <b>מבחן</b> — זה בדיוק התהליך שתעברו בפרויקט</div>
+      <div class="body">
+
+        <div class="steps">
+
+          <div class="card stp fragment"><span class="n">1</span><div>
+            <div class="t">התחילו מרשימת הדרישות</div>
+            <p>טבלת המעקב (<span class="en">FR-n</span> + שחקן-מקור + עדיפות) היא חומר הגלם —
+               לא הראיונות הגולמיים ולא הזיכרון.</p>
+          </div></div>
+
+          <div class="card stp fragment"><span class="n">2</span><div>
+            <div class="t">אתרו את השחקנים</div>
+            <p>עברו על עמודת השחקן ושאלו: <span class="test">מי יוזם?</span> אל תשכחו את
+               הלא-אנושיים — ⏰ זמן, מערכת שדוחפת אלינו — ואת השאלה:
+               <span class="test">מי מנהל את המערכת?</span></p>
+          </div></div>
+
+          <div class="card stp fragment"><span class="n">3</span><div>
+            <div class="t">קבעו את הגבול</div>
+            <p>מלבן, שם מערכת — ומה <b>בחוץ</b> נשאר בחוץ.
+               <span class="test">האם זו החלטה שלנו או של ה-AI?</span> הגבול הוא שלכם.</p>
+          </div></div>
+
+          <div class="card stp fragment"><span class="n">4</span><div>
+            <div class="t">הפכו דרישות לתרחישים — לא 1:1</div>
+            <p>על כל דרישה: <span class="test">האם זו מטרה ששחקן משיג מול המערכת?</span>
+               כן — תרחיש (פועל + מושא). לא — צעד בזרימה, פירוט, או אילוץ. השקף הבא עושה את זה לכל הרשימה.</p>
+          </div></div>
+
+          <div class="card stp fragment"><span class="n">5</span><div>
+            <div class="t">חלקו לאזורים — אם צריך</div>
+            <p><span class="test">מעל ~10 תרחישים? קבוצת שחקנים נפרדת לגמרי?</span>
+               תרשים לכל אזור אחריות, כל אחד עם גבול משלו (זוכרים את שלושת האזורים?). <span class="en">KISS</span>.</p>
+          </div></div>
+
+          <div class="card stp fragment"><span class="n">6</span><div>
+            <div class="t">חברו קווים — ובדקו שלמות</div>
+            <p>כל תרחיש מחובר לשחקן · כל שחקן עושה משהו · מטריצת ה-<span class="en">CRUD</span> מכוסה ·
+               <span class="test">ולמנהל המערכת יש תרחישים?</span> אם לא — כנראה חסר אזור שלם.</p>
+          </div></div>
+
+        </div>
+
+        <p class="bottom-line fragment">דרישות ← שחקנים ← גבול ← תרחישים ← אזורים ← קווים ובדיקה. עכשיו נעשה את זה על הקמפוס.</p>
+
+      </div>
+    <div class="acro-footer"><span class="acro"><span class="en">FR</span> = <span class="en">Functional Requirement</span> · דרישה פונקציונלית</span> &nbsp;·&nbsp; <span class="acro"><span class="en">CRUD</span> = <span class="en">Create, Read, Update, Delete</span> · יצירה, קריאה, עדכון, מחיקה</span> &nbsp;·&nbsp; <span class="acro"><span class="en">KISS</span> = <span class="en">Keep It Simple, Stupid</span> · שמור על פשטות</span> &nbsp;·&nbsp; <span class="acro"><span class="en">AI</span> = <span class="en">Artificial Intelligence</span> · בינה מלאכותית</span></div>
+    </section>
+    <!-- D-END (NEW 2026-08-26, David post-lecture): the lecture reached slide 42 in ~2h of 3
+         and never built a diagram — "it is not good to leave a use case diagram lecture and
+         not even build a single diagram." This slide is step 1 of the payoff pair: the FULL
+         requirements list (FR-1..12, the canon born 2026-08-25 in the materials doc) with
+         each requirement's FATE — and the headline lesson David asked for: THE MAPPING IS
+         NOT 1:1. Fates: becomes a UC · dissolves into another UC's flow · two-into-one ·
+         another area's diagram (ties to slide 26) · documented-but-not-modeled (Won't/Could).
+         Bottom strip: two UCs born NOT from parent FRs (track-order ← detail FR-2.5;
+         sync ← the data dictionary's 🔗 interface) + the never-UCs (NFR, BR).
+         Step 2 (next slide, slide-basic-diagram) draws the resulting diagram. -->
+    <section data-slug="req-to-uc" class="has-acro-footer">
+      <div class="sdlc-chip" title="שלב 3 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>ניתוח דרישות</div>
+      <style>
+        section[data-slug="req-to-uc"] table.sad { font-size:12.5px; }
+        section[data-slug="req-to-uc"] table.sad th { padding:3px 9px; font-size:12.5px; }
+        section[data-slug="req-to-uc"] table.sad td { padding:2px 9px; line-height:1.25; vertical-align:middle; }
+        section[data-slug="req-to-uc"] td.fr-id { font-family:'IBM Plex Mono',monospace; font-weight:700;
+          color:var(--dark-blue); white-space:nowrap; }
+        section[data-slug="req-to-uc"] .fate { display:inline-block; border-radius:999px; padding:0 9px;
+          font-size:12px; font-weight:700; white-space:nowrap; line-height:19px; }
+        section[data-slug="req-to-uc"] .f-uc   { background:#F0FDF4; color:#166534; border:1px solid #16653433; }
+        section[data-slug="req-to-uc"] .f-step { background:var(--tint-blue); color:var(--dark-blue); border:1px solid #1e40af33; }
+        section[data-slug="req-to-uc"] .f-merge{ background:#F5F3FF; color:#6D28D9; border:1px solid #6D28D933; }
+        section[data-slug="req-to-uc"] .f-area { background:#FFF7ED; color:#B45309; border:1px solid #B4530933; }
+        section[data-slug="req-to-uc"] .f-none { background:#F1F5F9; color:#64748b; border:1px solid #cbd5e1; }
+        section[data-slug="req-to-uc"] .born { font-size:12.5px; color:#475569; margin:3px 0 0; text-align:center; }
+        section[data-slug="req-to-uc"] .callout.warn { font-size:13px; padding:6px 11px; margin-top:3px; }
+        section[data-slug="req-to-uc"] .callout.warn .label { font-size:13.5px; }
+      </style>
+      <h1>מדרישות לתרחישים — וזה <b>לא</b> מיפוי 1:1</h1>
+      <div class="subtitle">כל הדרישות הפונקציונליות של הקמפוס — ומה עלה בגורלה של כל אחת בתרשים</div>
+      <div class="body">
+
+        <table class="sad fragment">
+          <tr><th style="width:92px;">מזהה · עדיפות</th><th style="width:300px;">הדרישה (בקצרה)</th><th>← מה קרה לה בתרשים</th></tr>
+          <tr><td class="fr-id">FR-8 · Must</td><td>עיון בתפריט</td><td><span class="fate f-uc">✅ תרחיש</span> עיון בתפריט</td></tr>
+          <tr><td class="fr-id">FR-9 · Must</td><td>הרכבת הזמנה ותשלום</td><td><span class="fate f-uc">✅ תרחיש</span> הזמנה ותשלום</td></tr>
+          <tr><td class="fr-id">FR-3 · Must</td><td>אימות ומסירה בקוד איסוף</td><td><span class="fate f-uc">✅ תרחיש</span> אימות איסוף</td></tr>
+          <tr><td class="fr-id">FR-10 · Must</td><td>תור ההכנה במטבח</td><td><span class="fate f-uc">✅ תרחיש</span> צפייה בתור הכנה — <b>שני יוזמים</b> (גם המנהל)</td></tr>
+          <tr><td class="fr-id">FR-12 · Must</td><td>זיהוי הזמנה שלא נאספה</td><td><span class="fate f-uc">✅ תרחיש</span> טיפול בהזמנה שלא נאספה — השחקן: <b>⏰ זמן</b></td></tr>
+          <tr><td class="fr-id">FR-1 · Should</td><td>סינון לפי פרופיל תזונתי</td><td><span class="fate f-step">🔍 צעד בתוך תרחיש</span> ה-alt של עיון בתפריט</td></tr>
+          <tr><td class="fr-id">FR-2 · Must</td><td>התראת "מוכנה לאיסוף"</td><td><span class="fate f-step">🔍 צעד בתוך תרחיש</span> הצעד האחרון של מעקב אחר הזמנה</td></tr>
+          <tr><td class="fr-id">FR-4 · Must</td><td>ניהול זמינות פריטים</td><td rowspan="2" style="vertical-align:middle;"><span class="fate f-merge">🔗 שתיים ← אחד</span> ניהול תפריט ומלאי</td></tr>
+          <tr><td class="fr-id">FR-11 · Must</td><td>ניהול פריטי התפריט</td></tr>
+          <tr><td class="fr-id">FR-6 · Must</td><td>ניהול עובדים והרשאות</td><td><span class="fate f-area">🗺️ אזור אחר</span> תרשים אזור הניהול — <b>עוד שני שקפים</b></td></tr>
+          <tr><td class="fr-id">FR-5 · Won't</td><td>דוח מכירות סוף-יום</td><td><span class="fate f-none">⛔ מתועדת, לא בתרשים</span> נדחתה במודע מגרסה 1</td></tr>
+          <tr><td class="fr-id">FR-7 · Could</td><td>הזמנה מועדפת בלחיצה</td><td><span class="fate f-none">⛔ מתועדת, לא בתרשים</span> אם יישאר זמן — תצטרף</td></tr>
+        </table>
+
+        <p class="born fragment">ושני תרחישים שלא נולדו מדרישה כללית בכלל: <b>מעקב אחר הזמנה</b> — מדרישה מפורטת
+          (<span class="en">FR-2.5</span>) · <b>עדכון נתוני סטודנטים</b> — ממילון הנתונים (ישות סטודנט 🔗, הממשק הלילי).
+          ולעולם לא הופכות לתרחיש: <span class="en">NFR</span> · חוקים עסקיים — הן חלות <em>על</em> התרחישים.</p>
+
+        <div class="callout warn fragment" style="font-size:14.5px;">
+          <span class="label">⚠️ המבחן על כל דרישה</span>
+          "האם זו <b>מטרה</b> ששחקן משיג מול המערכת?" כן — תרחיש. לא — היא צעד, פירוט, אילוץ… או החלטה שנדחתה.
+          זה בדיוק מה ש-<span class="en">AI</span> מפספס כשהוא הופך כל שורת דרישה לבועה.
+        </div>
+
+        <p class="bottom-line fragment">דרישה יכולה להפוך לתרחיש, להיבלע בצעד, להתאחד עם אחרת, לעבור לתרשים אחר — או להישאר מתועדת בלבד. <b>לא 1:1.</b></p>
+
+      </div>
+    <div class="acro-footer"><span class="acro"><span class="en">NFR</span> = <span class="en">Non-Functional Requirement</span> · דרישה לא-פונקציונלית</span> &nbsp;·&nbsp; <span class="acro"><span class="en">FR</span> = <span class="en">Functional Requirement</span> · דרישה פונקציונלית</span> &nbsp;·&nbsp; <span class="acro"><span class="en">AI</span> = <span class="en">Artificial Intelligence</span> · בינה מלאכותית</span></div>
+    </section>
+    <!-- D-END step 2 (NEW 2026-08-26, David post-lecture): THE PAYOFF — the basic campus
+         diagram actually drawn, before Section C. Associations only (no include/extend/
+         generalization — the assumptions panel in the asset says so out loud); includes the
+         two non-human actors so students see how they work: מערכת הרישום «system» (nightly
+         push) and ⏰ זמן «time» (end of pickup window) — both with the mandatory timing
+         labels. Embeds assets/usecase-campus-basic.html (built from the simple asset +
+         donor pieces of the full model; model validated with uml_usecase_validate_model —
+         see the asset's provenance comment). צפייה בתור הכנה carries TWO initiator lines —
+         the slide-44 lesson gets its first sighting here.
+         ⚠️ «time» on the clock actor is the 2026-08-26 slide doctrine; the mcp runtime
+         still labels time actors «system» — divergence logged in the dossier. -->
+    <section data-slug="basic-diagram">
+      <div class="sdlc-chip" title="שלב 3 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>ניתוח דרישות</div>
+      <style>
+        section[data-slug="basic-diagram"] .look li { font-size:14.5px !important; line-height:1.45; }
+        section[data-slug="basic-diagram"] .card .panel-title { font-size:16.5px; }
+      </style>
+      <h1>בונים את התרשים — מערכת הזמנת האוכל</h1>
+      <div class="subtitle">גבול · שחקנים · תרחישים · קווי שיוך — בלי אף קשר "מתקדם". <b>לחצו</b> על תרחיש, שחקן או קו.</div>
+      <div class="body">
+
+        <div style="flex:1 1 auto; min-height:0; display:grid; grid-template-columns:262px 1fr; gap:16px;">
+
+          <!-- right rail (RTL-first): what to notice -->
+          <div style="display:flex; flex-direction:column; gap:9px; min-height:0;">
+            <div class="card tight">
+              <div class="panel-title">מה לשים לב</div>
+              <ul class="bullets look">
+                <li><b>⏰ זמן «time»</b> — קו עם <b>תווית תזמון</b>: "בתום חלון האיסוף". חובה.</li>
+                <li><b>מערכת הרישום «system»</b> — היא <b>דוחפת</b> אלינו מדי לילה, ולכן שחקן.</li>
+                <li><b>צפייה בתור הכנה</b> — שני קווים: גם עובד המטבח וגם המנהל יוזמים.</li>
+                <li>ראש כתום = שחקן לא-אנושי.</li>
+              </ul>
+            </div>
+
+            <div class="callout good" style="font-size:14px;">
+              <span class="label">✅ מה שאין כאן — בכוונה</span>
+              אף «include», אף «extend», אף הורשה. תרשים שלם ותקין גם בלעדיהם —
+              הקשרים המתקדמים הם חידוד, לא תנאי.
+            </div>
+
+            <div class="callout ai" style="font-size:14px;">
+              <span class="label">🖱️ יש תיעוד מאחורי הכול</span>
+              לחיצה על תרחיש פותחת את ה-<span class="en">Flow of Events</span> המלא שלו —
+              בדיוק הזרימות, החריגים והתרחישים שלמדנו.
+            </div>
+          </div>
+
+          <!-- left: the live diagram -->
+          <div style="display:flex; min-height:0; padding-bottom:24px;">
+            <div class="embed"><iframe src="assets/usecase-campus-basic.html?embed=1" title="מערכת הזמנת האוכל בקמפוס — התרשים הבסיסי" loading="lazy"></iframe></div>
+          </div>
+
+        </div>
+
+      </div>
+      <aside class="notes">
+        השקף נולד מהמשוב של 2026-08-26: ההרצאה נעצרה בשקף 42 בלי לבנות אף תרשים. הזרימה בכיתה:
+        קודם שקף המיפוי (הקודם) — אילו דרישות הפכו לתרחישים; אחר כך לפתוח כאן את התוצאה.
+        להדגים לחיצה על "עדכון נתוני סטודנטים" (החדש) ועל הקו של ⏰. הקשרים המתקדמים — מכאן
+        ממשיכים לחלק ג'.
+      </aside>
+    </section>
+    <!-- D-END step 3 (NEW 2026-08-26, David follow-up): "we did not include any of the system
+         admin activities — on the pedagogy side, students should ALWAYS think about someone
+         needing to manage the system. Where does that happen?" — HERE. The second boundary
+         the mapping slide promised for FR-6: אזור הניהול, drawn as a compact static SVG
+         (teaching schematic — no modals, so hand-authored in the slide is fine, same as the
+         boundary/KISS schematics). Two actors: מנהל קפיטריה (FR-6 — staff & permissions) and
+         the NEW מנהל מערכת (system admin) with ניהול קפיטריות — dictionary-born (the קפיטריה
+         entity is 🏠 ours; someone must maintain the list). The nuance callout separates the
+         admin-as-ACTOR (functional admin work) from the IT-technician NON-actor of quiz
+         case 6 (infrastructure maintenance). David's standing rule is the ⚠️ close. -->
+    <section data-slug="admin-area" class="has-acro-footer">
+      <div class="sdlc-chip" title="שלב 3 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>ניתוח דרישות</div>
+      <style>
+        section[data-slug="admin-area"] .wrap { flex:1 1 auto; min-height:0; display:grid;
+          grid-template-columns:1fr 300px; gap:16px; align-items:stretch; }
+        section[data-slug="admin-area"] .dia { display:flex; align-items:center; justify-content:center;
+          background:#f8fafc; border:1px solid #E2E8F0; border-radius:12px; }
+        section[data-slug="admin-area"] .rail { display:flex; flex-direction:column; gap:10px; justify-content:center; }
+        section[data-slug="admin-area"] .callout { font-size:14.5px; margin:0; }
+        section[data-slug="admin-area"] .callout .label { font-size:15px; }
+      </style>
+      <h1>ומי מנהל את המערכת? — אזור הניהול</h1>
+      <div class="subtitle">התרשים השני שהבטחנו: <span class="en">FR-6</span> לא נעלמה — היא גרה כאן</div>
+      <div class="body">
+
+        <div class="wrap">
+
+          <div class="dia fragment">
+            <svg viewBox="0 0 640 360" style="width:100%; max-height:100%;" xmlns="http://www.w3.org/2000/svg">
+              <!-- boundary -->
+              <rect x="200" y="28" width="330" height="304" rx="12" fill="#ffffff" stroke="#3b82f6" stroke-width="2.5"/>
+              <rect x="200" y="28" width="330" height="36" rx="12" fill="#1e40af"/>
+              <rect x="200" y="46" width="330" height="18" fill="#1e40af"/>
+              <text x="365" y="52" text-anchor="middle" font-size="13" font-weight="700" fill="#ffffff"
+                    font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">מערכת הזמנת האוכל — אזור הניהול</text>
+              <!-- lines first (behind) -->
+              <line x1="95" y1="120" x2="360" y2="130" stroke="#334155" stroke-width="1.8"/>
+              <line x1="95" y1="278" x2="360" y2="268" stroke="#334155" stroke-width="1.8"/>
+              <!-- UCs -->
+              <ellipse cx="360" cy="130" rx="128" ry="30" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+              <text x="360" y="134" text-anchor="middle" font-size="12" font-weight="500" fill="#1a1a2e"
+                    font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">ניהול עובדים והרשאות</text>
+              <ellipse cx="360" cy="268" rx="110" ry="30" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+              <text x="360" y="272" text-anchor="middle" font-size="12" font-weight="500" fill="#1a1a2e"
+                    font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">ניהול קפיטריות</text>
+              <!-- actors -->
+              <g transform="translate(75,145)">
+                <circle cx="0" cy="-52" r="12" fill="#e0f0ff" stroke="#334155" stroke-width="2"/>
+                <line x1="0" y1="-40" x2="0" y2="-10" stroke="#334155" stroke-width="2"/>
+                <line x1="-15" y1="-31" x2="15" y2="-31" stroke="#334155" stroke-width="2"/>
+                <line x1="0" y1="-10" x2="-12" y2="10" stroke="#334155" stroke-width="2"/>
+                <line x1="0" y1="-10" x2="12" y2="10" stroke="#334155" stroke-width="2"/>
+                <text x="0" y="28" text-anchor="middle" font-size="12" font-weight="600" fill="#1e293b"
+                      font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">מנהל קפיטריה</text>
+              </g>
+              <g transform="translate(75,303)">
+                <circle cx="0" cy="-52" r="12" fill="#e0f0ff" stroke="#334155" stroke-width="2"/>
+                <line x1="0" y1="-40" x2="0" y2="-10" stroke="#334155" stroke-width="2"/>
+                <line x1="-15" y1="-31" x2="15" y2="-31" stroke="#334155" stroke-width="2"/>
+                <line x1="0" y1="-10" x2="-12" y2="10" stroke="#334155" stroke-width="2"/>
+                <line x1="0" y1="-10" x2="12" y2="10" stroke="#334155" stroke-width="2"/>
+                <text x="0" y="28" text-anchor="middle" font-size="12" font-weight="600" fill="#1e293b"
+                      font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">מנהל מערכת</text>
+              </g>
+            </svg>
+          </div>
+
+          <div class="rail">
+            <div class="card tight fragment">
+              <div class="panel-title">מאיפה זה הגיע</div>
+              <p style="margin:0; font-size:14.5px; line-height:1.5;"><b>ניהול עובדים והרשאות</b> —
+                <span class="en">FR-6</span> (Must). <b>ניהול קפיטריות</b> — בכלל לא מדרישה:
+                <b>ממילון הנתונים</b>. ישות "קפיטריה" בבעלותנו — מישהו חייב לתחזק את הרשימה.</p>
+            </div>
+
+            <div class="callout good fragment">
+              <span class="label">✅ מנהל מערכת — כן שחקן</span>
+              עבודת ניהול <b>פונקציונלית</b> בתוך המערכת: הגדרת קפיטריות, הרשאות. לעומת
+              טכנאי ה-<span class="en">IT</span> שמתחזק שרת (זוכרים? מקרה 6) — תשתית, לא שחקן.
+            </div>
+
+            <div class="callout warn fragment">
+              <span class="label">⚠️ הכלל לפרויקט שלכם</span>
+              בכל מערכת שתמדלו, שאלו: <b>"מי מנהל את המערכת?"</b> אם לאף שחקן אין תרחישי
+              ניהול — כנראה חסר לכם אזור שלם. זה הצעד האחרון במתכון.
+            </div>
+          </div>
+
+        </div>
+
+        <p class="bottom-line fragment">אזור התפעול + אזור הניהול = המערכת. מי שמצייר רק את מה שהמשתמש הראשי עושה — צייר חצי מערכת.</p>
+
+      </div>
+    <div class="acro-footer"><span class="acro"><span class="en">FR</span> = <span class="en">Functional Requirement</span> · דרישה פונקציונלית</span></div>
     </section>
     <!-- C1 — The complete relationship set + the non-relations (create_relationships_map_slide.py).
          Ported + enriched: the four real relationships reveal as a grid one at a time,
@@ -3982,14 +4377,16 @@
             <div class="panel-title">📚 ספרייה עירונית ׳אשכול׳ <span class="badge b-class">בכיתה</span></div>
             <div class="stat"><span>152 דרישות</span><span>FR · NFR · DR · BR</span><span>הורשת שחקנים</span><span>⏰ תזמון</span></div>
             <p class="lead">רשת של 3 סניפים: השאלות, הזמנות, קנסות, רכש מספקים. נריץ יחד בכיתה ונפרק את התרשים על המסך.</p>
-            <p class="path"><span class="en">practice/library.html</span></p>
+            <!-- 2026-08-26: paths now point at the COURSE SITE (materials/) — the dossiers
+                 are published there; lecture-04-05/practice/ stays the source of truth. -->
+            <p class="path">באתר הקורס: <span class="en">materials</span> · 3-ניתוח-דרישות · תרגול-בכיתה</p>
           </div>
 
           <div class="card doc fragment" style="display:flex; flex-direction:column; gap:5px;">
             <div class="panel-title">🅿️ חניון ׳כיכר המרכז׳ <span class="badge b-home">בבית</span></div>
             <div class="stat"><span>136 דרישות</span><span>FR · NFR · DR · BR</span><span>שער תשלום = API</span><span>⏰ תזמון</span></div>
             <p class="lead">חניון עירוני בתשלום: כניסה, יציאה, מנויים, אכיפה. אותו תהליך בדיוק — זו מטלת הבית (השקף האחרון).</p>
-            <p class="path"><span class="en">practice/parking.html</span></p>
+            <p class="path">באתר הקורס: <span class="en">materials</span> · 3-ניתוח-דרישות · תרגיל-בית</p>
           </div>
 
         </div>
@@ -4004,7 +4401,7 @@
 
       </div>
       <aside class="notes">
-        הקלט הוא מסמך אפיון מלא (practice/library.html, practice/parking.html) — לא בלוב של פסקה. בכיתה מזינים
+        הקלט הוא מסמך אפיון מלא (באתר הקורס: materials/3-ניתוח-דרישות — תרגול-בכיתה / תרגיל-בית) — לא בלוב של פסקה. בכיתה מזינים
         את הספרייה ל-Claude, מקבלים תרשים use case, ומבקרים אותו לפי הדוקטרינה של ההרצאה: מי שחקן ומי API,
         include מומצא (login!), extend נדיר, גבול המערכת. החניון — מטלת בית (שקף אחרון). אין תשובה "נכונה"
         אחת; הערך הוא בזיהוי מה ה-AI פספס/המציא/הניח.
@@ -4066,7 +4463,7 @@
         <div class="hero fragment">
           <h3>קחו את מסמך האפיון של <b>החניון ׳כיכר המרכז׳</b></h3>
           <p>מסמך מלא: תיאור הארגון, מצב קיים, ראיונות, ו-136 דרישות מפורטות (<span class="en">FR/NFR/DR/BR</span>).
-            הקובץ: <span class="path">lecture-04-05/practice/parking.html</span></p>
+            הקובץ באתר הקורס: <span class="path">materials · 3-ניתוח-דרישות · תרגיל-בית · מסמך-אפיון-חניון</span></p>
         </div>
 
         <div class="steps">
@@ -4092,7 +4489,7 @@
       </div>
       <aside class="notes">
         מטלת הבית = מראה של ההדגמה בכיתה, על הדוגמה השנייה (חניון; אם בכיתה עשיתם חניון — הגישו ספרייה).
-        המסמך ב-practice/parking.html (או library.html). התוצר המדורג הוא הביקורת, לא ציור ה-AI — בדיוק החוט
+        המסמך באתר הקורס: materials/3-ניתוח-דרישות/תרגיל-בית (ההנחיות המלאות ב-README שם). התוצר המדורג הוא הביקורת, לא ציור ה-AI — בדיוק החוט
         של כל ההרצאה. לוודא שהסטודנטים מזהים: שער התשלום הוא API (לא שחקן), ⏰ הזמן שחקן, אין login כתרחיש.
       </aside>
     <div class="acro-footer"><span class="acro"><span class="en">NFR</span> = <span class="en">Non-Functional Requirement</span> · דרישה לא-פונקציונלית</span> &nbsp;·&nbsp; <span class="acro"><span class="en">FR</span> = <span class="en">Functional Requirement</span> · דרישה פונקציונלית</span> &nbsp;·&nbsp; <span class="acro"><span class="en">AI</span> = <span class="en">Artificial Intelligence</span> · בינה מלאכותית</span></div>
