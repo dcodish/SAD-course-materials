@@ -96,6 +96,24 @@ body.uc-modal-open { overflow: hidden; }
 .uc-description { margin-bottom: 20px; font-size: 14px; line-height: 1.7; color: #334155; }
 .uc-scenarios h3 { font-size: 14px; color: #1e40af; margin: 18px 0 6px;
   border-right: 3px solid #3b82f6; padding-right: 10px; }
+
+/* ── Scenario rail (NOTATION §11c) ────────────────────────────────────────
+   A UC with more than one scenario (a CRUD "ניהול X" and its four operations)
+   shows a numbered rail with one flow at a time — the VP Flow-of-Events
+   presentation, matching the course's flow-of-events viewer. */
+.uc-sc-rail-title { font-size: 12px; color: #64748b; font-weight: 700; margin: 18px 0 8px; }
+.uc-sc-split { display: grid; grid-template-columns: 200px minmax(0, 1fr); gap: 14px;
+  align-items: start; }
+.uc-sc-rail { display: flex; flex-direction: column; gap: 6px; }
+.uc-sc-tab { appearance: none; text-align: start; border: 1px solid #cbd5e1;
+  background: #f8fafc; border-radius: 6px; padding: 7px 10px; cursor: pointer;
+  font-family: inherit; font-size: 13px; color: #334155; }
+.uc-sc-tab:hover { background: #eef2f7; }
+.uc-sc-tab[aria-selected="true"] { background: #e0f2fe; border-color: #0284c7;
+  color: #0c4a6e; font-weight: 600; }
+.uc-sc-tab .uc-sc-num { display: block; font-size: 10px; color: #64748b;
+  font-family: 'IBM Plex Mono', monospace; }
+.uc-sc-pane > h3 { margin-top: 0; }
 .uc-scenarios ol { margin: 0 0 14px; padding-right: 22px; }
 .uc-scenarios ol li { color: #1e293b; font-size: 13px; line-height: 1.9; }
 .step-actor { color: #1e40af; font-weight: 600; cursor: pointer; text-decoration: underline dotted; }
@@ -1690,8 +1708,8 @@ function openUcModal(id) {
   const ctx = { actorName, ucName, ucId: id };
   const esc = ucEsc;
 
-  let scenariosHtml = '';
-  (doc.scenarios || []).forEach(sce => {
+  const sces = doc.scenarios || [];
+  const scFlowHtml = sce => {
     // `at` is a dot-numbered label; legacy models used a plain step number.
     const extByAt = new Map();
     (sce.extensions || []).forEach(e => {
@@ -1699,9 +1717,28 @@ function openUcModal(id) {
       if (!extByAt.has(at)) extByAt.set(at, []);
       extByAt.get(at).push(e);
     });
-    scenariosHtml += `<h3>${esc(sce.name || sce.id)}</h3>` +
-                     ucFlowHtml(sce.flow, '', extByAt, ctx);
-  });
+    return ucFlowHtml(sce.flow, '', extByAt, ctx);
+  };
+  // NOTATION §11c: a multi-scenario UC (a CRUD "ניהול X" carries one scenario per
+  // operation) must READ as separate scenarios — numbered rail, one flow shown at a
+  // time, same presentation as VP's Flow-of-Events tab. Stacked bare headings made
+  // four scenarios look like sub-sections of a single flow.
+  let scenariosHtml = '';
+  if (sces.length > 1) {
+    const tabs = sces.map((sce, i) =>
+      `<button type="button" class="uc-sc-tab" data-sc-ix="${i}" aria-selected="${i === 0}">` +
+      `<span class="uc-sc-num">תרחיש ${i + 1}</span>${esc(sce.name || sce.id)}</button>`).join('');
+    const panes = sces.map((sce, i) =>
+      `<div class="uc-sc-pane" data-sc-ix="${i}"${i ? ' style="display:none"' : ''}>` +
+      `<h3>${esc(sce.name || sce.id)}</h3>${scFlowHtml(sce)}</div>`).join('');
+    scenariosHtml =
+      `<div class="uc-sc-rail-title">תרחישים (${sces.length})</div>` +
+      `<div class="uc-sc-split"><div class="uc-sc-rail">${tabs}</div><div class="uc-sc-panes">${panes}</div></div>`;
+  } else {
+    sces.forEach(sce => {
+      scenariosHtml += `<h3>${esc(sce.name || sce.id)}</h3>` + scFlowHtml(sce);
+    });
+  }
 
   const listItems = items => (items || []).map(s => `<li>${esc(s)}</li>`).join('');
   const usItems   = (doc.userStories || []).map(us =>
@@ -1738,6 +1775,15 @@ function openUcModal(id) {
   });
   body.querySelectorAll('.step-uc-ref').forEach(el => {
     el.onclick = () => openUcModal(el.dataset.ucRef);
+  });
+  body.querySelectorAll('.uc-sc-tab').forEach(tab => {
+    tab.onclick = () => {
+      body.querySelectorAll('.uc-sc-tab').forEach(t =>
+        t.setAttribute('aria-selected', String(t === tab)));
+      body.querySelectorAll('.uc-sc-pane').forEach(p => {
+        p.style.display = p.dataset.scIx === tab.dataset.scIx ? '' : 'none';
+      });
+    };
   });
 
   const modal = document.getElementById('uc-modal');
