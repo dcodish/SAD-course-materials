@@ -16,7 +16,7 @@
       <div class="course">ניתוח ועיצוב מערכות מידע</div>
       <h1>תרשים מחלקות — Class Diagram</h1>
       <div class="lecture-no">הרצאה 6-7</div>
-      <div class="updated">עודכן: 19.08.2026</div>
+      <div class="updated">עודכן: 30.08.2026</div>
     </section>
     <section class="toc-slide" data-slug="toc">
       <h1>סדר היום</h1>
@@ -647,119 +647,6 @@
       </aside>
     <div class="acro-footer"><span class="acro"><span class="en">AI</span> = <span class="en">Artificial Intelligence</span> · בינה מלאכותית</span></div>
     </section>
-    <!-- B3 — UML מול שפת תכנות. NEW 2026-08-10 (David: "I want to discuss the difference between UML
-         and a specific language — all conventions here are UML, but when switching to other languages
-         conventions may change and so can capabilities, such as different data types").
-         Placed immediately BEFORE the attributes slide, which is where types first get written down,
-         so students never assume `String` / `Money` are literal code.
-         Three beats: (1) the same attribute in four targets — the type name is NOT a language type;
-         (2) UML has constructs a language may not (multiple inheritance, ◆/◇); (3) the model is not
-         written for a language, so don't shrink it to a language's limits during analysis.
-         Same thesis as A6's "גזירה, לא העתקה" and the planned class-diagram↔database slide. -->
-    <section data-slug="uml-vs-language" class="has-acro-footer">
-      <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
-      <style>
-        section[data-slug="uml-vs-language"] .hero > p{ font-size:19px; }
-        section[data-slug="uml-vs-language"] .mid{ flex:1 1 auto; min-height:0; display:grid;
-          grid-template-columns:1.62fr 1fr; gap:14px; align-items:stretch; }
-        section[data-slug="uml-vs-language"] .mid > .card{ display:flex; flex-direction:column; }
-        section[data-slug="uml-vs-language"] table.sad{ width:100%; border-collapse:collapse; }
-        section[data-slug="uml-vs-language"] table.sad th{ font-size:14.5px; padding:9px 5px; text-align:center; }
-        section[data-slug="uml-vs-language"] table.sad th.uml{ background:var(--dark-blue); }
-        section[data-slug="uml-vs-language"] table.sad td{ font-size:13.5px; padding:13px 5px; text-align:center;
-          direction:ltr; font-family:'Consolas','Courier New',monospace; }
-        section[data-slug="uml-vs-language"] table.sad td.uml{ font-weight:700; color:var(--dark-blue); background:#E1EFF7; }
-        section[data-slug="uml-vs-language"] table.sad td.he{ direction:rtl; font-family:inherit; font-size:12.5px; color:var(--muted); line-height:1.3; }
-        /* C# is the language the course project is built in, so it gets the eye. */
-        section[data-slug="uml-vs-language"] table.sad th.mine{ background:var(--orange); }
-        section[data-slug="uml-vs-language"] table.sad th.mine .yours{ display:block; font-size:10.5px;
-          font-weight:400; opacity:.95; direction:rtl; }
-        section[data-slug="uml-vs-language"] table.sad td.mine{ background:var(--hero-bg); font-weight:700; color:#7c3a00; }
-        section[data-slug="uml-vs-language"] .tcap{ margin:8px 0 0; font-size:14px; color:var(--muted); line-height:1.4; }
-        section[data-slug="uml-vs-language"] .gaps{ flex:1; display:flex; flex-direction:column; gap:10px; }
-        section[data-slug="uml-vs-language"] .gap{ flex:1; display:flex; flex-direction:column; justify-content:center; }
-        section[data-slug="uml-vs-language"] .gap{ background:#fff; border:1px solid var(--card-border);
-          border-inline-start:4px solid var(--orange); border-radius:10px; padding:8px 12px; }
-        section[data-slug="uml-vs-language"] .gap .gt{ font-size:17.5px; font-weight:800; color:var(--dark-blue); }
-        section[data-slug="uml-vs-language"] .gap .gd{ font-size:15.5px; color:var(--body); line-height:1.4; }
-      </style>
-      <h1><span class="en">UML</span> מול שפת תכנות</h1>
-      <div class="subtitle">התרשים הוא ה<b>סימון</b> — השפה היא ה<b>מימוש</b>, והמעבר ביניהם אינו אוטומטי</div>
-      <div class="body">
-
-        <div class="hero">
-          <h3>כל מה שנלמד בהרצאה הוא תקן <span class="en">UML</span> — ולא שייך לאף שפה</h3>
-          <p><span class="en">UML</span> נוצר כדי שמהנדס יוכל לתאר מערכת בלי להתחייב ל-<span class="en">Java</span>, ל-<span class="en">Python</span> או ל-<span class="en">SQL</span>. לכן שם הטיפוס בתרשים הוא <b>שם שאנחנו בוחרים</b>, לא מילה שמורה בשפה.</p>
-        </div>
-
-        <div class="mid">
-
-          <div class="card">
-            <div class="panel-title">אותו מרכיב במודל, חמישה יעדים</div>
-            <table class="sad">
-              <tr>
-                <th class="uml">בתרשים <span class="en">(UML)</span></th>
-                <th class="mine"><span dir="ltr">C#</span><span class="yours">הפרויקט שלכם</span></th>
-                <th>Java</th><th>Python</th><th>SQL</th>
-              </tr>
-              <tr><td class="uml">String</td><td class="mine">string</td><td>String</td><td>str</td><td>VARCHAR(n)</td></tr>
-              <tr><td class="uml">DateTime</td><td class="mine">DateTime</td><td>LocalDateTime</td><td>datetime</td><td>TIMESTAMP</td></tr>
-              <tr><td class="uml">Money</td><td class="mine">decimal</td><td>BigDecimal</td><td>Decimal</td><td>NUMERIC(10,2)</td></tr>
-              <tr><td class="uml">- private</td><td class="mine">private</td><td>private</td><td class="he">מוסכמה בלבד — אין אכיפה</td><td class="he">הרשאות / <span class="en">View</span></td></tr>
-              <tr><td class="uml">Phone [0..*]</td><td class="mine">List&lt;Phone&gt;</td><td>List&lt;Phone&gt;</td><td>list[Phone]</td><td class="he">טבלה עם מפתח זר</td></tr>
-            </table>
-            <p class="tcap">השורה האחרונה היא <b>קשר</b> ולא תכונה — ולכן הריבוי בה חוקי. בקוד הוא הופך ל<b>אוסף של אובייקטים</b>, ובמסד הנתונים ל<b>טבלה עם מפתח זר</b> — אין שם רשימה בכלל.</p>
-          </div>
-
-          <div class="card">
-            <div class="panel-title">איפה השפה לא עוקבת</div>
-            <div class="gaps">
-              <div class="gap">
-                <div class="gt"><span class="en">Money</span> אינו טיפוס בשום שפה</div>
-                <div class="gd">זה <b>טיפוס תחום</b> שאנחנו הגדרנו. מותר וכדאי — התרשים מדבר בשפת העסק.</div>
-              </div>
-              <div class="gap">
-                <div class="gt">הורשה מרובה</div>
-                <div class="gd">קיימת ב-<span class="en">UML</span> וב-<span class="en" dir="ltr">C++</span>; ב-<span class="en">Java</span> וב-<span class="en" dir="ltr">C#</span> רק דרך <span class="en">interface</span>.</div>
-              </div>
-              <div class="gap">
-                <div class="gt">הרכבה וצבירה <span class="en">◆ ◇</span></div>
-                <div class="gd">אין להן מילה שמורה באף שפה — הן הופכות ל<b>כלל מחיקה</b> ולבדיקות בקוד ובמסד הנתונים.</div>
-              </div>
-            </div>
-          </div>
-
-        </div>
-
-        <p class="bottom-line">המודל לא נכתב עבור שפה מסוימת — אל תצמצמו אותו למגבלות של שפה בשלב הניתוח.</p>
-
-      </div>
-      <aside class="notes">
-        המסר: כל מה שאנחנו מלמדים כאן — ‎+/-/#‎, ◆/◇, ריבוי, שמות טיפוסים — הוא <b>תקן UML</b>, לא תחביר של שפה.
-        UML הומצא בדיוק כדי לתאר מערכת בלי להתחייב לטכנולוגיה, ולכן אותו תרשים יכול להתממש ב-Java, ב-Python או
-        כסכימה במסד נתונים — אחרת בכל אחד מהם.
-        הטבלה: String הוא str ב-Python ו-VARCHAR ב-SQL.
-        <b>השורה האחרונה עדינה וכדאי לעצור עליה.</b> היא מכוונת ל<b>קשר</b> ‎Student —— 0..* Phone‎, לא לתכונה
-        רב-ערכית: תכונה עם ‎[0..*]‎ מפרה 1ONF (ראו שקף 46 — 1ONF, הראשון משלושת שקפי הנירמול), ואילו ריבוי על <b>קשר</b> חוקי ואף חובה.
-        בקוד שניהם נראים אותו דבר — ‎<code>List&lt;T&gt;</code>‎ — וזו בדיוק המלכודת: <b>ההבדל הוא מה נמצא בתוך הרשימה</b>.
-        ‎<code>List&lt;string&gt;</code>‎ = ערכים בלי זהות ובלי תכונות משלהם (הפרה); ‎<code>List&lt;Phone&gt;</code>‎ = אוסף של
-        <b>אובייקטים</b> עם זהות (תקין). במסד הנתונים אין רשימה כלל — יש טבלת Phone עם <b>מפתח זר</b> חזרה ל-Student,
-        וה-ORM הוא זה שמרכיב מהן את האוסף. אם ישאלו: כן, בקוד אמיתי ‎<code>List&lt;string&gt;</code>‎ כן שורד לפעמים
-        (תגיות שאף אחד לא מחפש בנפרד) — זו החלטת עיצוב מודעת, מאותה משפחה של דה-נורמליזציה.
-        <b>עמודת C# היא השפה שבה הם יכתבו את הפרויקט — אליה להצביע.</b> שתי נקודות שכדאי לומר עליה:
-        (1) <b>DateTime</b> ב-C# נכתב בדיוק כמו בתרשים — צירוף מקרים נוח, ולא כלל; ב-Java זה LocalDateTime.
-        (2) <b>decimal</b> הוא הכי קרוב שיש לטיפוס כסף — הוא נבנה בדיוק כדי למנוע שגיאות עיגול בכסף — ובכל זאת
-        הוא <b>לא</b> Money: אין בו מטבע. כלומר גם השפה הכי נוחה עדיין לא נותנת את הטיפוס שהתרשים ביקש,
-        ומישהו יצטרך לממש אותו. זו ההדגמה הכי חדה לכך שהתרשים מתאר <b>כוונה</b> והשפה מספקת <b>אמצעים</b>.
-        השורה הכי מעניינת לדיון היא הנראות: ב-Python אין private אמיתי — קו תחתון הוא מוסכמה בלבד וכל אחד יכול
-        לגשת. כלומר אותו סימן מינוס בתרשים <b>נאכף</b> בשפה אחת ורק <b>מומלץ</b> באחרת. זו דוגמה טובה לכך
-        שהתרשים מבטא <b>כוונת עיצוב</b>, והשפה מחליטה כמה היא אוכפת אותה.
-        ⚠️ הטעות שכדאי למנוע: סטודנט שמכיר שפה אחת מנסה לכתוב את התרשים בתחביר שלה (int, str, void) — ומקבל
-        מודל שקשור לטכנולוגיה לפני שהוחלט עליה. בשלב הניתוח בוחרים שם טיפוס שמובן לאיש העסקים.
-        זו אותה תזה של השקופית ״מהו תרשים מחלקות״: <b>גזירה, לא העתקה</b> — וגם ההקדמה להשוואה מול מסד הנתונים.
-      </aside>
-    <div class="acro-footer"><span class="acro"><span class="en">UML</span> = <span class="en">Unified Modeling Language</span> · שפת מידול אחידה</span></div>
-    </section>
     <!-- B4 — תכונות / Attributes.
          Format + name : Type [= default] {constraint}; rules (camelCase name, dataType,
          default, {} constraint, visibility). Right: the הזמנה attribute compartment expanded
@@ -879,6 +766,119 @@
       </aside>
     <div class="acro-footer"><span class="acro"><span class="en">UML</span> = <span class="en">Unified Modeling Language</span> · שפת מידול אחידה</span> &nbsp;·&nbsp; <span class="acro"><span class="en">AI</span> = <span class="en">Artificial Intelligence</span> · בינה מלאכותית</span></div>
     </section>
+    <!-- B3 — UML מול שפת תכנות. NEW 2026-08-10 (David: "I want to discuss the difference between UML
+         and a specific language — all conventions here are UML, but when switching to other languages
+         conventions may change and so can capabilities, such as different data types").
+         Placed immediately BEFORE the attributes slide, which is where types first get written down,
+         so students never assume `String` / `Money` are literal code.
+         Three beats: (1) the same attribute in four targets — the type name is NOT a language type;
+         (2) UML has constructs a language may not (multiple inheritance, ◆/◇); (3) the model is not
+         written for a language, so don't shrink it to a language's limits during analysis.
+         Same thesis as A6's "גזירה, לא העתקה" and the planned class-diagram↔database slide. -->
+    <section data-slug="uml-vs-language" class="has-acro-footer">
+      <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
+      <style>
+        section[data-slug="uml-vs-language"] .hero > p{ font-size:19px; }
+        section[data-slug="uml-vs-language"] .mid{ flex:1 1 auto; min-height:0; display:grid;
+          grid-template-columns:1.62fr 1fr; gap:14px; align-items:stretch; }
+        section[data-slug="uml-vs-language"] .mid > .card{ display:flex; flex-direction:column; }
+        section[data-slug="uml-vs-language"] table.sad{ width:100%; border-collapse:collapse; }
+        section[data-slug="uml-vs-language"] table.sad th{ font-size:14.5px; padding:9px 5px; text-align:center; }
+        section[data-slug="uml-vs-language"] table.sad th.uml{ background:var(--dark-blue); }
+        section[data-slug="uml-vs-language"] table.sad td{ font-size:13.5px; padding:13px 5px; text-align:center;
+          direction:ltr; font-family:'Consolas','Courier New',monospace; }
+        section[data-slug="uml-vs-language"] table.sad td.uml{ font-weight:700; color:var(--dark-blue); background:#E1EFF7; }
+        section[data-slug="uml-vs-language"] table.sad td.he{ direction:rtl; font-family:inherit; font-size:12.5px; color:var(--muted); line-height:1.3; }
+        /* C# is the language the course project is built in, so it gets the eye. */
+        section[data-slug="uml-vs-language"] table.sad th.mine{ background:var(--orange); }
+        section[data-slug="uml-vs-language"] table.sad th.mine .yours{ display:block; font-size:10.5px;
+          font-weight:400; opacity:.95; direction:rtl; }
+        section[data-slug="uml-vs-language"] table.sad td.mine{ background:var(--hero-bg); font-weight:700; color:#7c3a00; }
+        section[data-slug="uml-vs-language"] .tcap{ margin:8px 0 0; font-size:14px; color:var(--muted); line-height:1.4; }
+        section[data-slug="uml-vs-language"] .gaps{ flex:1; display:flex; flex-direction:column; gap:10px; }
+        section[data-slug="uml-vs-language"] .gap{ flex:1; display:flex; flex-direction:column; justify-content:center; }
+        section[data-slug="uml-vs-language"] .gap{ background:#fff; border:1px solid var(--card-border);
+          border-inline-start:4px solid var(--orange); border-radius:10px; padding:8px 12px; }
+        section[data-slug="uml-vs-language"] .gap .gt{ font-size:17.5px; font-weight:800; color:var(--dark-blue); }
+        section[data-slug="uml-vs-language"] .gap .gd{ font-size:15.5px; color:var(--body); line-height:1.4; }
+      </style>
+      <h1><span class="en">UML</span> מול שפת תכנות</h1>
+      <div class="subtitle">התרשים הוא ה<b>סימון</b> — השפה היא ה<b>מימוש</b>, והמעבר ביניהם אינו אוטומטי</div>
+      <div class="body">
+
+        <div class="hero">
+          <h3>כל מה שנלמד בהרצאה הוא תקן <span class="en">UML</span> — ולא שייך לאף שפה</h3>
+          <p><span class="en">UML</span> נוצר כדי שמהנדס יוכל לתאר מערכת בלי להתחייב ל-<span class="en">Java</span>, ל-<span class="en">Python</span> או ל-<span class="en">SQL</span>. לכן שם הטיפוס בתרשים הוא <b>שם שאנחנו בוחרים</b>, לא מילה שמורה בשפה.</p>
+        </div>
+
+        <div class="mid">
+
+          <div class="card">
+            <div class="panel-title">אותו מרכיב במודל, חמישה יעדים</div>
+            <table class="sad">
+              <tr>
+                <th class="uml">בתרשים <span class="en">(UML)</span></th>
+                <th class="mine"><span dir="ltr">C#</span><span class="yours">הפרויקט שלכם</span></th>
+                <th>Java</th><th>Python</th><th>SQL</th>
+              </tr>
+              <tr><td class="uml">String</td><td class="mine">string</td><td>String</td><td>str</td><td>VARCHAR(n)</td></tr>
+              <tr><td class="uml">DateTime</td><td class="mine">DateTime</td><td>LocalDateTime</td><td>datetime</td><td>TIMESTAMP</td></tr>
+              <tr><td class="uml">Money</td><td class="mine">decimal</td><td>BigDecimal</td><td>Decimal</td><td>NUMERIC(10,2)</td></tr>
+              <tr><td class="uml">- private</td><td class="mine">private</td><td>private</td><td class="he">מוסכמה בלבד — אין אכיפה</td><td class="he">הרשאות / <span class="en">View</span></td></tr>
+              <tr><td class="uml">Phone [0..*]</td><td class="mine">List&lt;Phone&gt;</td><td>List&lt;Phone&gt;</td><td>list[Phone]</td><td class="he">טבלה עם מפתח זר</td></tr>
+            </table>
+            <p class="tcap">השורה האחרונה היא <b>קשר</b> ולא תכונה — ולכן הריבוי בה חוקי. בקוד הוא הופך ל<b>אוסף של אובייקטים</b>, ובמסד הנתונים ל<b>טבלה עם מפתח זר</b> — אין שם רשימה בכלל.</p>
+          </div>
+
+          <div class="card">
+            <div class="panel-title">איפה השפה לא עוקבת</div>
+            <div class="gaps">
+              <div class="gap">
+                <div class="gt"><span class="en">Money</span> אינו טיפוס בשום שפה</div>
+                <div class="gd">זה <b>טיפוס תחום</b> שאנחנו הגדרנו. מותר וכדאי — התרשים מדבר בשפת העסק.</div>
+              </div>
+              <div class="gap">
+                <div class="gt">הורשה מרובה</div>
+                <div class="gd">קיימת ב-<span class="en">UML</span> וב-<span class="en" dir="ltr">C++</span>; ב-<span class="en">Java</span> וב-<span class="en" dir="ltr">C#</span> רק דרך <span class="en">interface</span>.</div>
+              </div>
+              <div class="gap">
+                <div class="gt">הרכבה וצבירה <span class="en">◆ ◇</span></div>
+                <div class="gd">אין להן מילה שמורה באף שפה — הן הופכות ל<b>כלל מחיקה</b> ולבדיקות בקוד ובמסד הנתונים.</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <p class="bottom-line">המודל לא נכתב עבור שפה מסוימת — אל תצמצמו אותו למגבלות של שפה בשלב הניתוח.</p>
+
+      </div>
+      <aside class="notes">
+        המסר: כל מה שאנחנו מלמדים כאן — ‎+/-/#‎, ◆/◇, ריבוי, שמות טיפוסים — הוא <b>תקן UML</b>, לא תחביר של שפה.
+        UML הומצא בדיוק כדי לתאר מערכת בלי להתחייב לטכנולוגיה, ולכן אותו תרשים יכול להתממש ב-Java, ב-Python או
+        כסכימה במסד נתונים — אחרת בכל אחד מהם.
+        הטבלה: String הוא str ב-Python ו-VARCHAR ב-SQL.
+        <b>השורה האחרונה עדינה וכדאי לעצור עליה.</b> היא מכוונת ל<b>קשר</b> ‎Student —— 0..* Phone‎, לא לתכונה
+        רב-ערכית: תכונה עם ‎[0..*]‎ מפרה 1ONF (ראו שקף 46 — 1ONF, הראשון משלושת שקפי הנירמול), ואילו ריבוי על <b>קשר</b> חוקי ואף חובה.
+        בקוד שניהם נראים אותו דבר — ‎<code>List&lt;T&gt;</code>‎ — וזו בדיוק המלכודת: <b>ההבדל הוא מה נמצא בתוך הרשימה</b>.
+        ‎<code>List&lt;string&gt;</code>‎ = ערכים בלי זהות ובלי תכונות משלהם (הפרה); ‎<code>List&lt;Phone&gt;</code>‎ = אוסף של
+        <b>אובייקטים</b> עם זהות (תקין). במסד הנתונים אין רשימה כלל — יש טבלת Phone עם <b>מפתח זר</b> חזרה ל-Student,
+        וה-ORM הוא זה שמרכיב מהן את האוסף. אם ישאלו: כן, בקוד אמיתי ‎<code>List&lt;string&gt;</code>‎ כן שורד לפעמים
+        (תגיות שאף אחד לא מחפש בנפרד) — זו החלטת עיצוב מודעת, מאותה משפחה של דה-נורמליזציה.
+        <b>עמודת C# היא השפה שבה הם יכתבו את הפרויקט — אליה להצביע.</b> שתי נקודות שכדאי לומר עליה:
+        (1) <b>DateTime</b> ב-C# נכתב בדיוק כמו בתרשים — צירוף מקרים נוח, ולא כלל; ב-Java זה LocalDateTime.
+        (2) <b>decimal</b> הוא הכי קרוב שיש לטיפוס כסף — הוא נבנה בדיוק כדי למנוע שגיאות עיגול בכסף — ובכל זאת
+        הוא <b>לא</b> Money: אין בו מטבע. כלומר גם השפה הכי נוחה עדיין לא נותנת את הטיפוס שהתרשים ביקש,
+        ומישהו יצטרך לממש אותו. זו ההדגמה הכי חדה לכך שהתרשים מתאר <b>כוונה</b> והשפה מספקת <b>אמצעים</b>.
+        השורה הכי מעניינת לדיון היא הנראות: ב-Python אין private אמיתי — קו תחתון הוא מוסכמה בלבד וכל אחד יכול
+        לגשת. כלומר אותו סימן מינוס בתרשים <b>נאכף</b> בשפה אחת ורק <b>מומלץ</b> באחרת. זו דוגמה טובה לכך
+        שהתרשים מבטא <b>כוונת עיצוב</b>, והשפה מחליטה כמה היא אוכפת אותה.
+        ⚠️ הטעות שכדאי למנוע: סטודנט שמכיר שפה אחת מנסה לכתוב את התרשים בתחביר שלה (int, str, void) — ומקבל
+        מודל שקשור לטכנולוגיה לפני שהוחלט עליה. בשלב הניתוח בוחרים שם טיפוס שמובן לאיש העסקים.
+        זו אותה תזה של השקופית ״מהו תרשים מחלקות״: <b>גזירה, לא העתקה</b> — וגם ההקדמה להשוואה מול מסד הנתונים.
+      </aside>
+    <div class="acro-footer"><span class="acro"><span class="en">UML</span> = <span class="en">Unified Modeling Language</span> · שפת מידול אחידה</span></div>
+    </section>
     <!-- B5 — מזהים. NEW 2026-08-11 (David: build a slide on the identity/PK issue).
          This is the answer to the single loudest question students import from the database course,
          where every table has a primary key: does every class need an id?
@@ -944,7 +944,7 @@
           <div class="callout ai">
             <span class="label">💾 אז איך מעדכנים אותן במסד הנתונים?</span>
             לאובייקט בזיכרון יש זהות <b>בחינם</b> — ההפניה עצמה. לשורה בטבלה אין: כדי לעדכן צריך לדעת <b>לאן לפנות</b>.
-            <span class="ln">כדי <b>להוסיף</b> שורה לא צריך מזהה · כדי <b>לעדכן או למחוק</b> — כן. לכן למחלקה בלי מזהה עסקי המסד <b>ממציא</b> מפתח משלו — והוא נשאר במסד, לא בתרשים.</span>
+            <span class="ln">כדי <b>להוסיף</b> שורה לא צריך מזהה · כדי <b>לעדכן או למחוק</b> — כן. לכן למחלקה בלי מזהה עסקי המסד <b>מוצא</b> מפתח משלו — לרוב הצירוף של הקשרים שלה, ולפעמים מפתח שהוא ממציא — והוא נשאר במסד, לא בתרשים.</span>
           </div>
           <div class="callout warn">
             <span class="label">⚠️ ומפתח זר אינו תכונה</span>
@@ -983,8 +983,13 @@
          so students could compare between the two").
          Same picture twice — the class box on top, the table it becomes underneath:
            · Order      — has a business identifier → it simply BECOMES the primary key. Nothing invented.
-           · OrderLine  — has no identifier at all → the table still needs one, so the DATABASE invents
-                          lineId. It exists only in the table and never travels back into the diagram.
+           · OrderLine  — has no identifier at all → the table still needs one, and it comes from the two
+                          RELATIONSHIPS the line already holds: (orderId, itemId) is a composite PK, each half
+                          also an FK. Nothing invented, nothing travels back into the diagram.
+         2026-08-30: was a DB-invented surrogate `lineId`; changed to the composite key so the slide matches
+         the example project students copy (SAD project/example_project — OrderItems PK = orderId + productId,
+         OrderItem.cs holds `order`/`product` references and derives the key from them). The surrogate is
+         still mentioned in the notes as the fallback when the same item may appear twice in one order.
          The Orders table also shows `studentId FK`, which appears in the table and NOT in the class box —
          the same fact as the FK rule on the previous slide, now visible rather than asserted.
          TERMINOLOGY: model side = מחלקה / אובייקט, database side = טבלה / שורה. Never "רשומה". -->
@@ -1017,7 +1022,7 @@
           justify-content:space-between; align-items:center; gap:14px;
           font-family:'Consolas','Courier New',monospace; font-size:15px; color:#1e293b; }
         section[data-slug="identity-examples"] .tbl .cl.pk{ background:#EAF6EC; font-weight:700; }
-        section[data-slug="identity-examples"] .tbl .cl.made{ background:#FFF6E6; font-weight:700; color:#8a4b00; }
+        section[data-slug="identity-examples"] .tbl .cl.pkfk{ background:linear-gradient(90deg,#EAF6EC 55%,#FBEAEA); font-weight:700; }
         section[data-slug="identity-examples"] .tbl .cl.fk{ background:#FBEAEA; }
         section[data-slug="identity-examples"] .tbl .cl .rt{ direction:rtl; white-space:nowrap;
           font-family:'Heebo',Arial,sans-serif; font-size:13px; font-weight:600; color:var(--muted);
@@ -1067,13 +1072,12 @@
             <div class="arw">↓<small>הופכת לטבלה</small></div>
             <div class="tbl">
               <div class="hd">OrderLines</div>
-              <div class="cl made">lineId<span class="rt">המסד המציא אותו</span></div>
-              <div class="cl fk">orderId<span class="rt">מפתח זר</span></div>
-              <div class="cl fk">itemId<span class="rt">מפתח זר</span></div>
+              <div class="cl pkfk">orderId<span class="rt">מפתח ראשי מורכב + זר</span></div>
+              <div class="cl pkfk">itemId<span class="rt">מפתח ראשי מורכב + זר</span></div>
               <div class="cl">quantity · unitPrice · notes</div>
             </div>
-            <div class="vd">לטבלה <b>חייב</b> להיות מפתח כדי שאפשר יהיה לעדכן שורה — אז המסד <b>מייצר</b> אותו.
-              <br><span class="en" dir="ltr">lineId</span> נשאר בטבלה בלבד ו<b>לא חוזר</b> לתרשים: הוא לא עובדה עסקית.</div>
+            <div class="vd">לטבלה <b>חייב</b> להיות מפתח כדי שאפשר יהיה לעדכן שורה — והוא מגיע מ<b>שני הקשרים</b> שהשורה כבר מחזיקה: איזו הזמנה, איזה פריט.
+              <br>הצמד הוא המפתח, ושום דבר <b>לא חוזר</b> לתרשים: שם הקשרים כבר מצוירים.</div>
           </div>
 
         </div>
@@ -1088,12 +1092,18 @@
         בטבלה: הוא <b>לא</b> מופיע בתיבת המחלקה. בתרשים ״מי הזמין״ מיוצג בקשר; בטבלה הוא מפתח זר. אותה עובדה,
         שתי שפות.
         <b>משמאל — OrderLine.</b> אין לה מזהה, וזה תקין: אף אחד לא מפנה ל״שורה 3״. אבל לטבלה <b>חייב</b> להיות
-        מפתח — אחרת אין איך לכתוב <code>UPDATE ... WHERE</code>. לכן המסד מייצר <code>lineId</code>. הוא נולד
-        מ<b>צורך אחסון</b>, לא מהתחום, ולכן הוא לא חוזר לתרשים המחלקות.
-        <b>שאלה טובה לכיתה:</b> ״למה לא פשוט <code>(orderId, itemId)</code> כמפתח?״ — כי אז אותו פריט לא יוכל
-        להופיע פעמיים באותה הזמנה (שניצל עם בצל ושניצל בלי). ברגע שרוצים לאפשר את זה, צריך מזהה נפרד לשורה.
-        זו בדיוק ההחלטה שמבדילה בין <b>מחלקה מתווכת</b> (זהות משלה) לבין <b>מחלקת קשר</b> (מזוהה לפי הצמד) —
-        ונחזור אליה בחלק ג׳.
+        מפתח — אחרת אין איך לכתוב <code>UPDATE ... WHERE</code>. ומאיפה הוא מגיע? מ<b>שני הקשרים</b> שהשורה
+        כבר מחזיקה: <code>(orderId, itemId)</code> הוא מפתח ראשי מורכב, וכל חצי שלו הוא גם מפתח זר. לא המצאנו
+        כלום — ולכן גם אין מה להחזיר לתרשים: הקשרים כבר מצוירים שם.
+        <b>השאלה שתגיע:</b> ״האובייקט בזיכרון לא מחזיק שום מזהה — אז כשמשנים כמות, איך הקוד יודע איזו שורה לעדכן?״
+        כי האובייקט מחזיק <b>הפניה</b> להזמנה ולפריט, ולכל אחת מהן יש מזהה עסקי. הקוד גוזר את המפתח מההפניות:
+        <code>UPDATE OrderLines SET quantity = 3 WHERE orderId = 1042 AND itemId = 'SCH'</code>.
+        זה בדיוק מה שקורה בפרויקט הדוגמה שלכם: <code>OrderItem</code> מחזיק <code>order</code> ו-<code>product</code>,
+        וטבלת <code>OrderItems</code> מזוהה לפי <code>orderId + productId</code>.
+        <b>שאלה טובה לכיתה:</b> ״ומה אם אותו פריט מופיע פעמיים באותה הזמנה (שניצל עם בצל ושניצל בלי)?״ — אז הצמד
+        כבר לא מזהה שורה, וצריך מספר סידורי בתוך ההזמנה או מפתח שהמסד ממציא (<code>lineId</code>). גם הוא
+        נשאר במסד. זו בדיוק ההחלטה שמבדילה בין <b>מחלקה מתווכת</b> (זהות משלה) לבין <b>מחלקת קשר</b> (מזוהה
+        לפי הצמד) — ונחזור אליה בחלק ג׳.
         <b>המסר לסיום:</b> אל תוסיפו לתרשים מזהה רק כי ״לכל טבלה יש מפתח״. המסד יסתדר; התרשים מתאר את התחום.
       </aside>
     </section>
@@ -1262,7 +1272,7 @@
         section[data-slug="enumeration"] .en-cols{ flex:1 1 auto; min-height:0; display:grid;
           grid-template-columns:0.88fr 1.12fr; gap:14px; align-items:stretch; }
         section[data-slug="enumeration"] .en-cols > .card{ display:flex; flex-direction:column; }
-        section[data-slug="enumeration"] .enum-svg{ display:block; width:100%; max-height:290px; height:auto; margin:auto; }
+        section[data-slug="enumeration"] .enum-svg{ display:block; width:100%; max-height:300px; height:auto; margin:auto; }
         section[data-slug="enumeration"] .conv{ margin-top:8px; background:#EAF3FB; border:1px solid #cfe3f5;
           border-radius:10px; padding:8px 12px; font-size:14px; color:var(--body); line-height:1.45; }
         section[data-slug="enumeration"] .conv b{ color:var(--dark-blue); }
@@ -1287,36 +1297,48 @@
 
           <div class="card">
             <div class="panel-title" style="text-align:center;">הסימון</div>
-            <svg class="enum-svg" viewBox="0 0 300 320" xmlns="http://www.w3.org/2000/svg" role="img"
-                 aria-label="תיבת enumeration בשם OrderStatus עם חמישה ערכים, ומתחתיה מחלקת Order עם התכונה status — בלי קו ביניהן">
-              <rect x="86" y="6" width="128" height="44" fill="#475569"/>
-              <text x="150" y="24" text-anchor="middle" font-size="11" fill="#e2e8f0" font-style="italic"
-                    font-family="'Segoe UI',Arial,sans-serif">&laquo;enumeration&raquo;</text>
-              <text x="150" y="42" text-anchor="middle" font-size="14" font-weight="700" fill="#ffffff"
-                    font-family="'Segoe UI',Arial,sans-serif">OrderStatus</text>
-              <text x="98" y="72"  text-anchor="start" direction="ltr" font-size="14" fill="#1e293b"
-                    font-family="'Segoe UI',Arial,sans-serif">Pending</text>
-              <text x="98" y="98"  text-anchor="start" direction="ltr" font-size="14" fill="#1e293b"
-                    font-family="'Segoe UI',Arial,sans-serif">InPreparation</text>
-              <text x="98" y="124" text-anchor="start" direction="ltr" font-size="14" fill="#1e293b"
-                    font-family="'Segoe UI',Arial,sans-serif">Ready</text>
-              <text x="98" y="150" text-anchor="start" direction="ltr" font-size="14" fill="#1e293b"
-                    font-family="'Segoe UI',Arial,sans-serif">Collected</text>
-              <text x="98" y="176" text-anchor="start" direction="ltr" font-size="14" fill="#1e293b"
-                    font-family="'Segoe UI',Arial,sans-serif">Cancelled</text>
-              <line x1="86" y1="50" x2="214" y2="50" stroke="#94a3b8" stroke-width="1.4" stroke-dasharray="5 3"/>
-              <rect x="86" y="6" width="128" height="182" fill="none" stroke="#94a3b8" stroke-width="1.8" stroke-dasharray="5 3"/>
+            <svg class="enum-svg" viewBox="0 0 400 320" xmlns="http://www.w3.org/2000/svg" role="img"
+                 aria-label="שתי תיבות enumeration: OrderStatus עם חמישה ערכים ומתחתיה מחלקת Order עם התכונה status, ולצידה DayOfWeek עם שבעת ימי השבוע — בלי קו בין enum למחלקה">
+              <!-- OrderStatus + the Order class that uses it -->
+              <rect x="14" y="6" width="128" height="44" fill="#475569"/>
+              <text x="78" y="24" text-anchor="middle" font-size="11" fill="#e2e8f0" font-style="italic" font-family="'Segoe UI',Arial,sans-serif">&laquo;enumeration&raquo;</text>
+              <text x="78" y="42" text-anchor="middle" font-size="14" font-weight="700" fill="#ffffff" font-family="'Segoe UI',Arial,sans-serif">OrderStatus</text>
+              <text x="26" y="72" text-anchor="start" direction="ltr" font-size="14" fill="#1e293b" font-family="'Segoe UI',Arial,sans-serif">Pending</text>
+              <text x="26" y="94" text-anchor="start" direction="ltr" font-size="14" fill="#1e293b" font-family="'Segoe UI',Arial,sans-serif">InPreparation</text>
+              <text x="26" y="116" text-anchor="start" direction="ltr" font-size="14" fill="#1e293b" font-family="'Segoe UI',Arial,sans-serif">Ready</text>
+              <text x="26" y="138" text-anchor="start" direction="ltr" font-size="14" fill="#1e293b" font-family="'Segoe UI',Arial,sans-serif">Collected</text>
+              <text x="26" y="160" text-anchor="start" direction="ltr" font-size="14" fill="#1e293b" font-family="'Segoe UI',Arial,sans-serif">Cancelled</text>
+              <line x1="14" y1="50" x2="142" y2="50" stroke="#94a3b8" stroke-width="1.4" stroke-dasharray="5 3"/>
+              <rect x="14" y="6" width="128" height="166" fill="none" stroke="#94a3b8" stroke-width="1.8" stroke-dasharray="5 3"/>
 
-              <rect x="40" y="214" width="180" height="58" fill="#fff" stroke="#3b82f6" stroke-width="1.6"/>
-              <rect x="40" y="214" width="180" height="26" fill="#1e40af"/>
-              <text x="130" y="232" text-anchor="middle" direction="ltr" font-size="14" font-weight="700"
+              <rect x="0" y="208" width="156" height="58" fill="#fff" stroke="#3b82f6" stroke-width="1.6"/>
+              <rect x="0" y="208" width="156" height="26" fill="#1e40af"/>
+              <text x="78" y="226" text-anchor="middle" direction="ltr" font-size="14" font-weight="700"
                     fill="#fff" font-family="'Segoe UI',Arial,sans-serif">Order</text>
-              <text x="48" y="258" text-anchor="start" direction="ltr" font-size="11" fill="#1e293b"
+              <text x="6" y="252" text-anchor="start" direction="ltr" font-size="11" fill="#1e293b"
                     font-family="'Consolas','Courier New',monospace">- status : OrderStatus</text>
 
-              <text x="150" y="296" text-anchor="middle" direction="rtl" font-size="13" fill="#C62828" font-weight="700"
-                    font-family="'Noto Sans Hebrew',sans-serif">אין קו בין השתיים!</text>
-              <text x="150" y="314" text-anchor="middle" direction="rtl" font-size="12" fill="#94a3b8"
+              <!-- DayOfWeek — the enum used in the code demo on the other side of the slide -->
+              <rect x="258" y="6" width="128" height="44" fill="#475569"/>
+              <text x="322" y="24" text-anchor="middle" font-size="11" fill="#e2e8f0" font-style="italic" font-family="'Segoe UI',Arial,sans-serif">&laquo;enumeration&raquo;</text>
+              <text x="322" y="42" text-anchor="middle" font-size="14" font-weight="700" fill="#ffffff" font-family="'Segoe UI',Arial,sans-serif">DayOfWeek</text>
+              <text x="270" y="72" text-anchor="start" direction="ltr" font-size="14" fill="#1e293b" font-family="'Segoe UI',Arial,sans-serif">Sunday</text>
+              <text x="270" y="94" text-anchor="start" direction="ltr" font-size="14" fill="#1e293b" font-family="'Segoe UI',Arial,sans-serif">Monday</text>
+              <text x="270" y="116" text-anchor="start" direction="ltr" font-size="14" fill="#1e293b" font-family="'Segoe UI',Arial,sans-serif">Tuesday</text>
+              <text x="270" y="138" text-anchor="start" direction="ltr" font-size="14" fill="#1e293b" font-family="'Segoe UI',Arial,sans-serif">Wednesday</text>
+              <text x="270" y="160" text-anchor="start" direction="ltr" font-size="14" fill="#1e293b" font-family="'Segoe UI',Arial,sans-serif">Thursday</text>
+              <text x="270" y="182" text-anchor="start" direction="ltr" font-size="14" fill="#1e293b" font-family="'Segoe UI',Arial,sans-serif">Friday</text>
+              <text x="270" y="204" text-anchor="start" direction="ltr" font-size="14" fill="#1e293b" font-family="'Segoe UI',Arial,sans-serif">Saturday</text>
+              <line x1="258" y1="50" x2="386" y2="50" stroke="#94a3b8" stroke-width="1.4" stroke-dasharray="5 3"/>
+              <rect x="258" y="6" width="128" height="210" fill="none" stroke="#94a3b8" stroke-width="1.8" stroke-dasharray="5 3"/>
+              <text x="322" y="246" text-anchor="middle" direction="rtl" font-size="12" fill="#64748b"
+                    font-family="'Noto Sans Hebrew',sans-serif">ה-enum שבדוגמת הקוד</text>
+              <text x="322" y="262" text-anchor="middle" direction="rtl" font-size="11" fill="#94a3b8"
+                    font-family="'Noto Sans Hebrew',sans-serif">(מובנה ב-C#)</text>
+
+              <text x="200" y="296" text-anchor="middle" direction="rtl" font-size="13" fill="#C62828" font-weight="700"
+                    font-family="'Noto Sans Hebrew',sans-serif">אין קו בין enum למחלקה!</text>
+              <text x="200" y="314" text-anchor="middle" direction="rtl" font-size="12" fill="#94a3b8"
                     font-family="'Noto Sans Hebrew',sans-serif">טיפוס התכונה הוא כל הקישור</text>
             </svg>
             <div class="conv">
@@ -1394,26 +1416,32 @@
       <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
       <style>
         section[data-slug="enum-or-class"] .lead{ background:var(--light-blue); border:1px solid var(--blue); flex:0 0 auto; }
-        section[data-slug="enum-or-class"] .lead .lt{ font-size:18px; font-weight:800; color:#fff; margin-bottom:5px; }
+        section[data-slug="enum-or-class"] .lead .lt{ font-size:17px; font-weight:800; color:#fff; margin-bottom:5px; }
         section[data-slug="enum-or-class"] .tests{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
         section[data-slug="enum-or-class"] .tst{ background:rgba(255,255,255,.92); border-radius:10px; padding:7px 12px;
           font-size:15.5px; line-height:1.4; color:var(--body); }
         section[data-slug="enum-or-class"] .tst b{ color:var(--dark-blue); }
         section[data-slug="enum-or-class"] .vs{ flex:1 1 auto; min-height:0; display:grid; grid-template-columns:1fr 1fr; gap:14px; }
-        section[data-slug="enum-or-class"] .col{ border-radius:14px; padding:11px 15px; display:flex; flex-direction:column; gap:7px; }
+        section[data-slug="enum-or-class"] .col{ border-radius:14px; padding:9px 15px; display:flex; flex-direction:column; gap:7px; }
         section[data-slug="enum-or-class"] .col.e{ background:#EAF6EC; border:2px solid var(--green); }
         section[data-slug="enum-or-class"] .col.c{ background:#EAF3FB; border:2px solid var(--blue); }
         section[data-slug="enum-or-class"] .col .ct{ font-size:21px; font-weight:800; }
         section[data-slug="enum-or-class"] .col.e .ct{ color:var(--green); }
         section[data-slug="enum-or-class"] .col.c .ct{ color:var(--dark-blue); }
-        section[data-slug="enum-or-class"] .col ul{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:13px; }
-        section[data-slug="enum-or-class"] .col li{ position:relative; padding-inline-start:22px; font-size:17.5px; line-height:1.45; }
+        section[data-slug="enum-or-class"] .col ul{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:8px; }
+        section[data-slug="enum-or-class"] .col li{ position:relative; padding-inline-start:22px; font-size:16.5px; line-height:1.4; }
         section[data-slug="enum-or-class"] .col li::before{ content:"•"; position:absolute; inset-inline-start:4px; font-weight:800; }
         section[data-slug="enum-or-class"] .col.e li::before{ color:var(--green); }
         section[data-slug="enum-or-class"] .col.c li::before{ color:var(--blue); }
         section[data-slug="enum-or-class"] .col .egs{ margin-top:auto; font-size:15.5px; color:var(--muted); border-top:1px dashed #b9c6d4; padding-top:7px; }
         section[data-slug="enum-or-class"] .col .egs b{ color:var(--dark-blue); }
-        section[data-slug="enum-or-class"] .callout{ flex:0 0 auto; font-size:15.5px; padding:9px 13px; }
+        section[data-slug="enum-or-class"] .nos{ flex:0 0 auto; display:grid; grid-template-columns:repeat(4,1fr); gap:10px; }
+        section[data-slug="enum-or-class"] .no{ background:#FBEAEA; border:1.5px solid var(--red); border-radius:10px;
+          padding:7px 11px; font-size:14.5px; line-height:1.38; color:var(--body); }
+        section[data-slug="enum-or-class"] .no .nt{ display:block; font-weight:800; color:#8b1f1f; font-size:15.5px; margin-bottom:2px; }
+        section[data-slug="enum-or-class"] .no code{ direction:ltr; unicode-bidi:isolate; font-family:'Consolas','Courier New',monospace; font-size:13.5px; }
+        section[data-slug="enum-or-class"] .nos-title{ flex:0 0 auto; font-size:16px; font-weight:800; color:var(--red); margin:2px 0 -4px; }
+        section[data-slug="enum-or-class"] .callout{ flex:0 0 auto; font-size:15px; padding:8px 13px; }
         section[data-slug="enum-or-class"] .callout .q2{ display:block; margin-top:4px; }
       </style>
       <h1><span class="en">enum</span> או מחלקה?</h1>
@@ -1436,7 +1464,6 @@
               <li>סגורה ו<b>יציבה</b> — משתנה פעם בשנים, אם בכלל</li>
               <li>ה<b>קוד מתפצל</b> לפיה: מה שקורה ל״מוכן״ שונה ממה שקורה ל״בוטל״</li>
               <li>שינוי בה הוא <b>שינוי קוד</b> — וזה בסדר, כי ממילא צריך לכתוב את ההתנהגות החדשה</li>
-              <li><b>האורך הוא סימפטום, לא כלל</b> — עשרות ערכים כמעט תמיד אומרים ״טבלה״, כי אף קוד לא מתפצל ל-80 מקרים</li>
             </ul>
             <div class="egs"><b>דוגמאות:</b> <span class="en" dir="ltr">OrderStatus</span> · <span class="en" dir="ltr">DayOfWeek</span> · סוג תשלום</div>
           </div>
@@ -1453,10 +1480,21 @@
 
         </div>
 
+        <div class="nos-title">✗ ארבעה דברים שלא עושים להם <span class="en">enum</span>:</div>
+        <div class="nos">
+          <div class="no"><span class="nt">מספרים</span>
+            גודל 1–10 הוא <code>size : Integer {1..10}</code> — לא <code>One, Two, Three…</code>. ערך שסופרים או מחשבים איתו הוא טיפוס מספרי עם אילוץ.</div>
+          <div class="no"><span class="nt">ערכים שהעסק מנהל</span>
+            אם מישהו בארגון מוסיף ערך ממסך — זו טבלה, כלומר מחלקה. <span class="en">enum</span> משתנה רק בגרסה.</div>
+          <div class="no"><span class="nt">יותר מ-≈20 ערכים</span>
+            כלל אצבע: אף קוד לא מתפצל ל-80 מקרים, ורשימה כזו תמיד תשתנה. זו טבלה.</div>
+          <div class="no"><span class="nt">ערכים עם נתונים משלהם</span>
+            אם לכל ערך יש מחיר, תיאור או התנהגות שונה — זו מחלקה, ואם ההתנהגות שונה, הורשה (חלק ג׳).</div>
+        </div>
+
         <div class="callout warn">
           <span class="label">⚠️ ואי אפשר מסך ניהול ל-<span class="en">enum</span></span>
-          ה-<span class="en">enum</span> <b>מהודר לתוך התוכנה</b>. הוספת ערך = שינוי קוד ← בנייה ← בדיקות ← <b>גרסה חדשה בייצור</b>.
-          <span class="q2">ולכן: אם כל מה שצריך זו <b>רשימה נפתחת</b> שמישהו בארגון עשוי להרחיב — זו <b>טבלה עם מסך ניהול</b>, כלומר מחלקה. מסך ניהול מחייב טבלה; טבלה מחייבת מחלקה.</span>
+          ה-<span class="en">enum</span> <b>מהודר לתוך התוכנה</b>. הוספת ערך = שינוי קוד ← בנייה ← בדיקות ← <b>גרסה חדשה בייצור</b>. מסך ניהול מחייב טבלה; טבלה מחייבת מחלקה.
         </div>
 
         <p class="bottom-line">אם משתמש צריך להוסיף ערך ביום שלישי בצהריים — זה כבר לא <span class="en">enum</span>.</p>
@@ -1479,12 +1517,15 @@
         <b>״יש הגבלה על אורך רשימת ה-enum?״ (שאלה שחוזרת):</b> <u>טכנית — לא</u>. ב-C# ה-enum יושב על int,
         כלומר מיליארדי ערכים אפשריים (ואפשר לבחור byte/long). ב-Java יש תקרה מעשית של הקומפיילר סביב אלפי
         ערכים, ובפייתון אין מגבלה. כלומר שום רשימה עסקית סבירה לא תיתקל במגבלה טכנית.
-        <u>עיצובית — האורך הוא סימפטום ולא כלל</u>. ה-≈20 שמופיע בכלי הקורס הוא <b>כלל אצבע</b>, לא גבול: רשימה
+        <u>עיצובית — האורך הוא סימפטום ולא כלל</u>. ה-≈20 שעל השקופית ובכלי הקורס הוא <b>כלל אצבע</b>, לא גבול: רשימה
         ארוכה כמעט תמיד נכשלת בשתי השאלות שלמעלה — אף קוד לא מתפצל ל-80 מקרים (אז אין סיבה שהקוד יכיר אותם),
         ורשימות ארוכות נוטות להשתנות ולדרוש תרגום/סדר/השבתה. גם <code>switch</code> על 80 ערכים בלתי-אפשרי לתחזוקה.
         ולכן בשני הכיוונים: enum של 40 ערכים יכול להיות תקין לגמרי אם הם קבועים והקוד באמת מתפצל לפיהם
         (קודי שגיאה, מטבעות); ורשימה של <b>שלושה</b> ערכים יכולה להיות טעות אם העסק רוצה לערוך אותה.
-        <b>המסר לכיתה:</b> אל תספרו ערכים — תשאלו מי הבעלים והאם הקוד מתפצל.
+        <b>למה ״לא מספרים״ (הכלל הראשון ברצועה האדומה):</b> סטודנטים כותבים enum ל״גודל 1–10״ או ל״שנה״. מספר שסופרים
+        בו, משווים או מחשבים איתו הוא <b>טיפוס מספרי</b> עם אילוץ בסוגריים מסולסלים — בדיוק כמו בשקופית לוחית הרישוי,
+        רק הפוך: שם ״מספר״ שלא מחשבים איתו היה String; כאן מספר אמיתי לא הופך לרשימת שמות.
+        <b>המסר לכיתה:</b> אל תספרו ערכים — תשאלו מי הבעלים והאם הקוד מתפצל; וארבעת ה-✗ הם המקרים שחוזרים במבחן.
         קישור קדימה: אם לערכים יש <b>תכונות והתנהגות</b> שונות — זו כבר לא רשימה ולא טבלה אלא <b>הורשה</b>,
         ונראה את זה בחלק ג׳ עם שני סוגי התשלום.
       </aside>
@@ -3077,70 +3118,146 @@
       </aside>
     </section>
     <!-- C (Section ג, part 1) — מפת הקשרים: the whole relationship set as a legend grid.
-         Each card carries the glyph (inline SVG), the He+En name, and a one-liner. Below:
-         the "levels by priority" ladder (old slide 29): קשר רגיל ← מחלקת קשר ← מחלקה מתווכת ←
-         n-ary. This is the section's map; the next slides drill each relationship on campus.
+         REBUILT 2026-08-30 (David, pre-session): (1) the four DEGREES of association are now visibly
+         INSIDE the association card — a thumbnail ladder — and clicking the card zooms into the full
+         ladder with a glyph per degree (students used to read the bottom strip as a 5th/6th kind);
+         (2) aggregation + composition merged into ONE whole–part card (◇/◆) that zooms the same way,
+         so the map shows FOUR kinds of relationship and two of them open; (3) interface/API stays out
+         on purpose — see the 2026-08-17 note below and in the speaker notes.
+         Overlay pattern = slide-relationship-or-not (inline onclick, no <script>, .rq/.rq-box).
          Glyphs + doctrine per ../SAD MCP/skills/uml-class-diagram/NOTATION.md:
-         association = solid line no arrow; aggregation = hollow ◇ at whole; composition =
-         filled ◆ at whole; generalization = hollow ▷ at parent; dependency = dashed + open
-         arrow, NOT drawn on the domain model (external systems only). -->
+         association = solid line no arrow; aggregation = hollow ◇ at whole (identify only, draw a
+         plain line); composition = filled ◆ at whole; generalization = hollow ▷ at parent;
+         dependency = dashed + open arrow, NOT drawn on the domain model (external systems only). -->
     <section data-slug="relationships-map" class="has-acro-footer">
       <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
       <style>
         section[data-slug="relationships-map"] .rel-grid {
-          flex:1; display:grid; grid-template-columns:repeat(5,1fr); gap:9px; align-items:stretch; }
+          flex:1 1 auto; min-height:0; display:grid; grid-template-columns:repeat(4,1fr); gap:14px; align-items:stretch; }
         section[data-slug="relationships-map"] .rel-grid .card {
-          display:flex; flex-direction:column; align-items:center; gap:6px; text-align:center;
-          padding:11px 7px; }
+          display:flex; flex-direction:column; align-items:center; gap:5px; text-align:center;
+          padding:10px 10px 8px; position:relative; }
+        section[data-slug="relationships-map"] .rel-grid .card.zoom { cursor:pointer; border:2px solid var(--blue);
+          transition:box-shadow .15s, transform .15s; }
+        section[data-slug="relationships-map"] .rel-grid .card.zoom:hover { box-shadow:0 8px 22px rgba(0,112,192,.35); transform:translateY(-2px); }
         section[data-slug="relationships-map"] .glyph { width:100%; max-width:120px; height:auto; display:block; margin:2px 0; }
-        section[data-slug="relationships-map"] .rel-name { font-size:16.5px; font-weight:700; color:var(--dark-blue); line-height:1.15; }
-        section[data-slug="relationships-map"] .rel-en { font-size:13px; color:var(--blue); font-weight:700; }
-        section[data-slug="relationships-map"] .rel-desc { font-size:14px; color:var(--muted); line-height:1.35; margin-top:auto; }
-        section[data-slug="relationships-map"] .ladder-card { padding:10px 18px; border:2px solid var(--blue); }
-        section[data-slug="relationships-map"] .ladder-sub { text-align:center; font-size:14.5px; color:var(--muted); margin:-2px 0 7px; }
-        section[data-slug="relationships-map"] .ladder {
-          display:flex; align-items:center; justify-content:center; flex-wrap:wrap; gap:9px; }
-        section[data-slug="relationships-map"] .ladder .step {
-          background:var(--light-blue); color:#fff; border-radius:999px; padding:5px 15px;
-          font-size:17px; font-weight:700; }
-        section[data-slug="relationships-map"] .ladder .arrow { color:var(--blue); font-size:22px; font-weight:700; }
-        section[data-slug="relationships-map"] .ladder-cap { text-align:center; font-size:15.5px; color:var(--muted); margin-top:7px; }
+        section[data-slug="relationships-map"] .glyph.two { max-width:160px; }
+        section[data-slug="relationships-map"] .rel-name { font-size:20px; font-weight:800; color:var(--dark-blue); line-height:1.15; }
+        section[data-slug="relationships-map"] .rel-en { font-size:14px; color:var(--blue); font-weight:700; }
+        section[data-slug="relationships-map"] .rel-desc { font-size:14px; color:var(--muted); line-height:1.4; }
+        /* thumbnail inside a zoomable card */
+        section[data-slug="relationships-map"] .thumb { margin-top:auto; width:100%; background:#EAF3FB; border:1.5px dashed var(--blue);
+          border-radius:10px; padding:7px 8px 6px; display:flex; flex-direction:column; gap:5px; }
+        section[data-slug="relationships-map"] .thumb .tt { font-size:13.5px; font-weight:800; color:var(--dark-blue); }
+        section[data-slug="relationships-map"] .thumb .mini { display:flex; align-items:center; justify-content:center; flex-wrap:wrap; gap:3px; }
+        section[data-slug="relationships-map"] .thumb .mini .p { background:var(--light-blue); color:#fff; border-radius:999px;
+          padding:2px 8px; font-size:11.5px; font-weight:700; white-space:nowrap; }
+        section[data-slug="relationships-map"] .thumb .mini .a { color:var(--blue); font-size:13px; font-weight:800; }
+        section[data-slug="relationships-map"] .thumb { flex:1 1 auto; justify-content:flex-start; }
+        section[data-slug="relationships-map"] .thumb.plain { border-style:solid; border-color:#cfe3f5; background:#f8fbfe; }
+        section[data-slug="relationships-map"] .thumb .g4 { display:grid; grid-template-columns:1fr 1fr; gap:6px; flex:1 1 auto; align-content:space-evenly; }
+        section[data-slug="relationships-map"] .thumb .g2 { display:flex; flex-direction:column; gap:6px; flex:1 1 auto; justify-content:space-evenly; }
+        section[data-slug="relationships-map"] .thumb .g4 > div, section[data-slug="relationships-map"] .thumb .g2 > div {
+          background:#fff; border-radius:8px; padding:3px 4px 2px; border:1px solid #dbe7f3; }
+        section[data-slug="relationships-map"] .thumb svg { width:100%; height:auto; display:block; margin:0 auto; }
+        section[data-slug="relationships-map"] .thumb .g2 svg { max-width:300px; }
+        section[data-slug="relationships-map"] .thumb.plain svg { max-width:300px; background:#fff; border-radius:8px; border:1px solid #dbe7f3; }
+        section[data-slug="relationships-map"] .thumb .l { font-size:12px; font-weight:700; color:var(--dark-blue); line-height:1.3; }
+        section[data-slug="relationships-map"] .thumb.plain .l { font-weight:400; color:var(--body); font-size:12.5px; }
+        section[data-slug="relationships-map"] .thumb .zoom-hint { margin-top:auto; }
+        section[data-slug="relationships-map"] .thumb .zoom-hint { font-size:12px; color:var(--blue); font-weight:700; }
+        /* ── zoom overlays ───────────────────────────────────────────── */
+        section[data-slug="relationships-map"] .rq { position:absolute; inset:0; z-index:20;
+          background:rgba(15,23,42,.55); display:flex; align-items:center; justify-content:center; padding:24px; }
+        section[data-slug="relationships-map"] .rq[hidden] { display:none; }
+        section[data-slug="relationships-map"] .rq-box { background:#fff; border-radius:14px; width:100%; max-width:1180px;
+          max-height:100%; overflow:auto; padding:16px 22px 14px; position:relative; box-shadow:0 18px 50px rgba(0,0,0,.3); }
+        section[data-slug="relationships-map"] .rq-x { position:absolute; top:8px; inset-inline-end:12px; border:0;
+          background:transparent; font-size:20px; color:#64748b; cursor:pointer; line-height:1; }
+        section[data-slug="relationships-map"] .rq-h { font-size:24px; font-weight:800; color:var(--dark-blue); text-align:center; }
+        section[data-slug="relationships-map"] .rq-sub { font-size:15.5px; color:var(--muted); text-align:center; margin:2px 0 12px; }
+        section[data-slug="relationships-map"] .steps { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; align-items:stretch; }
+        section[data-slug="relationships-map"] .step-c { border:1.5px solid #cfe3f5; border-radius:12px; padding:8px 10px 10px; background:#f8fbfe;
+          display:flex; flex-direction:column; gap:6px; text-align:center; }
+        section[data-slug="relationships-map"] .step-c .sn { display:inline-block; align-self:center; background:var(--light-blue); color:#fff;
+          border-radius:999px; padding:4px 16px; font-size:17px; font-weight:800; }
+        section[data-slug="relationships-map"] .step-c svg { width:100%; height:auto; background:#fff; border:1px solid #eef2f7; border-radius:8px; }
+        section[data-slug="relationships-map"] .step-c .when { font-size:14px; line-height:1.4; color:var(--body); }
+        section[data-slug="relationships-map"] .step-c .when b { color:var(--dark-blue); }
+        section[data-slug="relationships-map"] .step-c .ex { font-size:12.5px; color:var(--muted); margin-top:auto; }
+        section[data-slug="relationships-map"] .rq-cap { font-size:15px; color:var(--body); text-align:center; margin:12px 0 0; line-height:1.5; }
+        section[data-slug="relationships-map"] .rq-cap b { color:var(--dark-blue); }
+        section[data-slug="relationships-map"] .rq-cap .warn-line { color:#8b1f1f; font-weight:700; }
+        /* whole–part overlay */
+        section[data-slug="relationships-map"] .wp { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+        section[data-slug="relationships-map"] .wp-c { border-radius:12px; padding:10px 14px 12px; display:flex; flex-direction:column; gap:7px; }
+        section[data-slug="relationships-map"] .wp-c.ag { background:#FFF6E6; border:2px solid var(--orange); }
+        section[data-slug="relationships-map"] .wp-c.co { background:#EAF6EC; border:2px solid var(--green); }
+        section[data-slug="relationships-map"] .wp-c .wt { font-size:21px; font-weight:800; text-align:center; }
+        section[data-slug="relationships-map"] .wp-c.ag .wt { color:#8a4b00; }
+        section[data-slug="relationships-map"] .wp-c.co .wt { color:#1b5e20; }
+        section[data-slug="relationships-map"] .wp-c svg { width:100%; max-width:300px; height:auto; display:block; margin:0 auto;
+          background:#fff; border:1px solid #eef2f7; border-radius:8px; }
+        section[data-slug="relationships-map"] .wp-c ul { list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:5px; }
+        section[data-slug="relationships-map"] .wp-c li { position:relative; padding-inline-start:18px; font-size:14.5px; line-height:1.42; color:var(--body); }
+        section[data-slug="relationships-map"] .wp-c li::before { content:"•"; position:absolute; inset-inline-start:3px; font-weight:800; }
+        section[data-slug="relationships-map"] .wp-c.ag li::before { color:var(--orange); }
+        section[data-slug="relationships-map"] .wp-c.co li::before { color:var(--green); }
+        section[data-slug="relationships-map"] .wp-c li b { color:var(--dark-blue); }
+        section[data-slug="relationships-map"] .wp-c .pol { margin-top:auto; border-radius:9px; padding:6px 10px; font-size:14px; font-weight:700; text-align:center; }
+        section[data-slug="relationships-map"] .wp-c.ag .pol { background:#fff; color:#8a4b00; border:1.5px dashed var(--orange); }
+        section[data-slug="relationships-map"] .wp-c.co .pol { background:#fff; color:#1b5e20; border:1.5px dashed var(--green); }
       </style>
       <h1>מפת הקשרים</h1>
-      <div class="subtitle">חמישה סוגי הקשר <b>שבהם נשתמש</b> — ומתחתם: ארבע הדרגות של <span class="en">Association</span></div>
+      <div class="subtitle">ארבעה סוגי קשר <b>שבהם נשתמש</b> — שניים מהם נפתחים בלחיצה: <span class="en">Association</span> על ארבע דרגותיו, ושלם–חלק על שני סימוניו</div>
       <div class="body">
 
         <div class="rel-grid">
 
-          <div class="card">
+          <!-- 1. Association — with the four degrees INSIDE the card (thumbnail) -->
+          <div class="card zoom" onclick="document.getElementById('rm-assoc').hidden=false">
             <svg class="glyph" viewBox="0 0 110 40" role="img" aria-label="קו מלא בלי חץ — אסוציאציה">
               <line x1="8" y1="20" x2="102" y2="20" stroke="#334155" stroke-width="2"/>
+              <text x="12" y="13" font-size="9" fill="#475569" font-family="Arial">1..*</text>
+              <text x="86" y="13" font-size="9" fill="#475569" font-family="Arial">0..*</text>
             </svg>
             <div class="rel-name">אסוציאציה</div>
             <div class="rel-en"><span class="en">Association</span></div>
             <div class="rel-desc">קו מלא, בלי חץ — הקשר הבסיסי. קרדינליות בשני הקצוות.</div>
+            <div class="thumb">
+              <div class="tt">ארבע דרגות של אותו קשר — מהפשוט למורכב</div>
+              <div class="g4">
+                <div><div class="l">1 · קשר רגיל</div><svg viewBox="0 0 240 90" aria-label="Student 1..* — 0..* Course"> <rect x="8" y="30" width="78" height="30" fill="#fff" stroke="#3b82f6" stroke-width="1.5"/> <text x="47" y="49" text-anchor="middle" font-size="12" font-weight="700" fill="#1e293b" font-family="Arial">Student</text> <rect x="154" y="30" width="78" height="30" fill="#fff" stroke="#3b82f6" stroke-width="1.5"/> <text x="193" y="49" text-anchor="middle" font-size="12" font-weight="700" fill="#1e293b" font-family="Arial">Course</text> <line x1="86" y1="45" x2="154" y2="45" stroke="#334155" stroke-width="2"/> <text x="90" y="40" font-size="10" fill="#475569" font-family="Arial">0..*</text> <text x="132" y="40" font-size="10" fill="#475569" font-family="Arial">1..*</text> </svg></div>
+                <div><div class="l">2 · מחלקת קשר</div><svg viewBox="0 0 240 90" aria-label="Student — Course with Enrollment hanging on the line"> <rect x="8" y="10" width="78" height="26" fill="#fff" stroke="#3b82f6" stroke-width="1.5"/> <text x="47" y="27" text-anchor="middle" font-size="12" font-weight="700" fill="#1e293b" font-family="Arial">Student</text> <rect x="154" y="10" width="78" height="26" fill="#fff" stroke="#3b82f6" stroke-width="1.5"/> <text x="193" y="27" text-anchor="middle" font-size="12" font-weight="700" fill="#1e293b" font-family="Arial">Course</text> <line x1="86" y1="23" x2="154" y2="23" stroke="#334155" stroke-width="2"/> <line x1="120" y1="23" x2="120" y2="52" stroke="#334155" stroke-width="1.5" stroke-dasharray="4,3"/> <rect x="76" y="52" width="88" height="32" fill="#fff" stroke="#3b82f6" stroke-width="1.5"/> <text x="120" y="65" text-anchor="middle" font-size="11" font-weight="700" fill="#1e293b" font-family="Arial">Enrollment</text> <text x="120" y="78" text-anchor="middle" font-size="9.5" fill="#475569" font-family="Consolas,monospace">- grade</text> </svg></div>
+                <div><div class="l">3 · מחלקה מתווכת</div><svg viewBox="0 0 240 90" aria-label="Student — Enrollment — Course"> <rect x="4" y="30" width="62" height="30" fill="#fff" stroke="#3b82f6" stroke-width="1.5"/> <text x="35" y="49" text-anchor="middle" font-size="11" font-weight="700" fill="#1e293b" font-family="Arial">Student</text> <rect x="86" y="24" width="68" height="42" fill="#fff" stroke="#3b82f6" stroke-width="1.5"/> <text x="120" y="39" text-anchor="middle" font-size="11" font-weight="700" fill="#1e293b" font-family="Arial">Enrollment</text> <text x="120" y="52" text-anchor="middle" font-size="9" fill="#475569" font-family="Consolas,monospace">- semester</text> <text x="120" y="62" text-anchor="middle" font-size="9" fill="#475569" font-family="Consolas,monospace">- grade</text> <rect x="174" y="30" width="62" height="30" fill="#fff" stroke="#3b82f6" stroke-width="1.5"/> <text x="205" y="49" text-anchor="middle" font-size="11" font-weight="700" fill="#1e293b" font-family="Arial">Course</text> <line x1="66" y1="45" x2="86" y2="45" stroke="#334155" stroke-width="2"/> <line x1="154" y1="45" x2="174" y2="45" stroke="#334155" stroke-width="2"/> <text x="68" y="40" font-size="8.5" fill="#475569" font-family="Arial">1</text> <text x="76" y="40" font-size="8.5" fill="#475569" font-family="Arial">*</text> <text x="157" y="40" font-size="8.5" fill="#475569" font-family="Arial">*</text> <text x="167" y="40" font-size="8.5" fill="#475569" font-family="Arial">1</text> </svg></div>
+                <div><div class="l">4 · n-ary</div><svg viewBox="0 0 240 90" aria-label="diamond in the centre, three lines to Supplier, Product, Warehouse"> <rect x="4" y="6" width="66" height="24" fill="#fff" stroke="#3b82f6" stroke-width="1.5"/> <text x="37" y="22" text-anchor="middle" font-size="10.5" font-weight="700" fill="#1e293b" font-family="Arial">Supplier</text> <rect x="170" y="6" width="66" height="24" fill="#fff" stroke="#3b82f6" stroke-width="1.5"/> <text x="203" y="22" text-anchor="middle" font-size="10.5" font-weight="700" fill="#1e293b" font-family="Arial">Product</text> <rect x="87" y="62" width="66" height="24" fill="#fff" stroke="#3b82f6" stroke-width="1.5"/> <text x="120" y="78" text-anchor="middle" font-size="10.5" font-weight="700" fill="#1e293b" font-family="Arial">Warehouse</text> <polygon points="120,30 134,42 120,54 106,42" fill="#fff" stroke="#334155" stroke-width="2"/> <line x1="70" y1="18" x2="106" y2="42" stroke="#334155" stroke-width="2"/> <line x1="170" y1="18" x2="134" y2="42" stroke="#334155" stroke-width="2"/> <line x1="120" y1="54" x2="120" y2="62" stroke="#334155" stroke-width="2"/> </svg></div>
+              </div>
+              <div class="zoom-hint">🔍 לחיצה להרחבה</div>
+            </div>
           </div>
 
-          <div class="card">
-            <svg class="glyph" viewBox="0 0 110 40" role="img" aria-label="קו עם מעוין חלול בקצה השלם — צבירה">
-              <line x1="30" y1="20" x2="102" y2="20" stroke="#334155" stroke-width="2"/>
-              <polygon points="8,20 19,13 30,20 19,27" fill="#fff" stroke="#334155" stroke-width="2"/>
+          <!-- 2. Whole–part — aggregation + composition in ONE card (merged 2026-08-30) -->
+          <div class="card zoom" onclick="document.getElementById('rm-part').hidden=false">
+            <svg class="glyph two" viewBox="0 0 160 40" role="img" aria-label="שני קווים: מעוין חלול ומעוין מלא בקצה השלם">
+              <line x1="30" y1="12" x2="150" y2="12" stroke="#334155" stroke-width="2"/>
+              <polygon points="8,12 19,6 30,12 19,18" fill="#fff" stroke="#334155" stroke-width="2"/>
+              <line x1="30" y1="30" x2="150" y2="30" stroke="#334155" stroke-width="2"/>
+              <polygon points="8,30 19,24 30,30 19,36" fill="#334155" stroke="#334155" stroke-width="2"/>
             </svg>
-            <div class="rel-name">צבירה</div>
-            <div class="rel-en"><span class="en">Aggregation</span></div>
-            <div class="rel-desc">◇ שלם–חלק. החלק קיים גם בלי השלם. <b>לזיהוי בלבד</b> — לא מייצרים.</div>
+            <div class="rel-name">שלם–חלק</div>
+            <div class="rel-en"><span class="en">Aggregation / Composition</span></div>
+            <div class="rel-desc">מעוין בקצה ה<b>שלם</b>. השאלה: האם החלק חי בלי השלם?</div>
+            <div class="thumb">
+              <div class="tt">שני סימונים — מדיניות שונה לכל אחד</div>
+              <div class="g2">
+                <div><div class="l">צבירה ◇ — לזיהוי בלבד, מציירים קו רגיל</div><svg viewBox="0 0 300 60" aria-label="Gym ◇— Member"> <rect x="8" y="16" width="90" height="28" fill="#fff" stroke="#3b82f6" stroke-width="1.5"/> <text x="53" y="34" text-anchor="middle" font-size="12" font-weight="700" fill="#1e293b" font-family="Arial">Gym</text> <rect x="202" y="16" width="90" height="28" fill="#fff" stroke="#3b82f6" stroke-width="1.5"/> <text x="247" y="34" text-anchor="middle" font-size="12" font-weight="700" fill="#1e293b" font-family="Arial">Member</text> <polygon points="98,30 110,23 122,30 110,37" fill="#fff" stroke="#334155" stroke-width="2"/> <line x1="122" y1="30" x2="202" y2="30" stroke="#334155" stroke-width="2"/> </svg></div>
+                <div><div class="l">הרכבה ◆ — מציירים, ויש לזה מחיר</div><svg viewBox="0 0 300 60" aria-label="Order ◆— OrderLine"> <rect x="8" y="16" width="90" height="28" fill="#fff" stroke="#3b82f6" stroke-width="1.5"/> <text x="53" y="34" text-anchor="middle" font-size="12" font-weight="700" fill="#1e293b" font-family="Arial">Order</text> <rect x="202" y="16" width="90" height="28" fill="#fff" stroke="#3b82f6" stroke-width="1.5"/> <text x="247" y="34" text-anchor="middle" font-size="12" font-weight="700" fill="#1e293b" font-family="Arial">OrderLine</text> <polygon points="98,30 110,23 122,30 110,37" fill="#334155" stroke="#334155" stroke-width="2"/> <line x1="122" y1="30" x2="202" y2="30" stroke="#334155" stroke-width="2"/> <text x="126" y="25" font-size="10" fill="#475569" font-family="Arial">1</text> <text x="186" y="25" font-size="10" fill="#475569" font-family="Arial">1..*</text> </svg></div>
+              </div>
+              <div class="zoom-hint">🔍 לחיצה להרחבה</div>
+            </div>
           </div>
 
-          <div class="card">
-            <svg class="glyph" viewBox="0 0 110 40" role="img" aria-label="קו עם מעוין מלא בקצה השלם — הרכבה">
-              <line x1="30" y1="20" x2="102" y2="20" stroke="#334155" stroke-width="2"/>
-              <polygon points="8,20 19,13 30,20 19,27" fill="#334155" stroke="#334155" stroke-width="2"/>
-            </svg>
-            <div class="rel-name">הרכבה</div>
-            <div class="rel-en"><span class="en">Composition</span></div>
-            <div class="rel-desc">◆ החלק לא קיים בלי השלם.</div>
-          </div>
-
+          <!-- 3. Generalization -->
           <div class="card">
             <svg class="glyph" viewBox="0 0 110 40" role="img" aria-label="קו עם משולש חלול בקצה ההורה — הכללה">
               <line x1="26" y1="20" x2="102" y2="20" stroke="#334155" stroke-width="2"/>
@@ -3149,15 +3266,31 @@
             <div class="rel-name">הכללה / הורשה</div>
             <div class="rel-en"><span class="en">Generalization</span></div>
             <div class="rel-desc">▷ יחס <span class="en">is-a</span>. רק כששונים ב<b>קשרים</b> — לא בתכונות.</div>
+            <div class="thumb plain">
+              <div class="tt">דוגמה</div>
+              <svg viewBox="0 0 240 96" aria-label="Payment with two children CreditCardPayment and CampusCardPayment">
+                <rect x="80" y="6" width="80" height="26" fill="#fff" stroke="#3b82f6" stroke-width="1.5"/>
+                <text x="120" y="23" text-anchor="middle" font-size="11.5" font-weight="700" fill="#1e293b" font-family="Arial">Payment</text>
+                <rect x="8" y="64" width="100" height="26" fill="#fff" stroke="#3b82f6" stroke-width="1.5"/>
+                <text x="58" y="81" text-anchor="middle" font-size="10" font-weight="700" fill="#1e293b" font-family="Arial">CreditCardPayment</text>
+                <rect x="132" y="64" width="100" height="26" fill="#fff" stroke="#3b82f6" stroke-width="1.5"/>
+                <text x="182" y="81" text-anchor="middle" font-size="10" font-weight="700" fill="#1e293b" font-family="Arial">CampusCardPayment</text>
+                <polygon points="120,32 112,44 128,44" fill="#fff" stroke="#334155" stroke-width="2"/>
+                <line x1="120" y1="44" x2="120" y2="52" stroke="#334155" stroke-width="2"/>
+                <line x1="58" y1="52" x2="182" y2="52" stroke="#334155" stroke-width="2"/>
+                <line x1="58" y1="52" x2="58" y2="64" stroke="#334155" stroke-width="2"/>
+                <line x1="182" y1="52" x2="182" y2="64" stroke="#334155" stroke-width="2"/>
+              </svg>
+              <div class="l">שונים ב<b>קשרים</b>: אשראי ← חברת אשראי; כרטיס-אוניברסיטה ← חשבון סטודנט</div>
+            </div>
           </div>
 
-          <!-- REMOVED 2026-08-17: the sixth card was ממשק (Interface/API) with the ball-and-socket
-               glyph. The two interface slides were parked on 2026-08-15 (scope: concept only, we do
-               NOT draw «interface» or the realization triangle), and dependency-quiz was stripped of
-               its interface framing — so this card was the only place in the deck a student ever met
-               that notation, with nothing downstream teaching or using it. The notes below already
-               said "חמישה סוגים" and "לכן הוא לא מופיע במפה"; the card was the leftover. -->
+          <!-- REMOVED 2026-08-17: the interface card (ball-and-socket). Interface slides were parked
+               2026-08-15 (concept only, we do NOT draw «interface» or realization); nothing downstream
+               teaches that notation. Re-checked 2026-08-30 (David asked "are we missing interfaces?") —
+               still out, same reason. Answer if asked: what we DRAW is a dependency to «external system». -->
 
+          <!-- 4. Dependency -->
           <div class="card">
             <svg class="glyph" viewBox="0 0 110 40" role="img" aria-label="קו מקווקו עם חץ פתוח — תלות">
               <line x1="20" y1="20" x2="102" y2="20" stroke="#334155" stroke-width="2" stroke-dasharray="6,4"/>
@@ -3166,48 +3299,187 @@
             <div class="rel-name">תלות</div>
             <div class="rel-en"><span class="en">Dependency</span></div>
             <div class="rel-desc">קו מקווקו + חץ פתוח למערכת חיצונית שאנחנו קוראים לה. <span class="tag muted">«external system»</span></div>
+            <div class="thumb plain">
+              <div class="tt">דוגמה</div>
+              <svg viewBox="0 0 240 96" aria-label="Payment depends on external system PaymentGateway">
+                <rect x="8" y="34" width="80" height="28" fill="#fff" stroke="#3b82f6" stroke-width="1.5"/>
+                <text x="48" y="52" text-anchor="middle" font-size="11.5" font-weight="700" fill="#1e293b" font-family="Arial">Payment</text>
+                <rect x="130" y="22" width="102" height="52" fill="#f1f5f9" stroke="#475569" stroke-width="1.5"/>
+                <text x="181" y="40" text-anchor="middle" font-size="9.5" font-style="italic" fill="#475569" font-family="Arial">&laquo;external system&raquo;</text>
+                <text x="181" y="58" text-anchor="middle" font-size="11" font-weight="700" fill="#1e293b" font-family="Arial">PaymentGateway</text>
+                <line x1="88" y1="48" x2="128" y2="48" stroke="#334155" stroke-width="2" stroke-dasharray="6,4"/>
+                <polyline points="118,40 128,48 118,56" fill="none" stroke="#334155" stroke-width="2"/>
+              </svg>
+              <div class="l">אנחנו <b>קוראים</b> לסליקה — היא לא מחלקה שלנו</div>
+            </div>
           </div>
 
         </div>
 
-        <div class="card ladder-card">
-          <div class="panel-title" style="text-align:center;">
-            כולן דרגות של קשר <span class="en">Association</span> — מהפשוט למורכב
-          </div>
-          <div class="ladder-sub">מתי הקשר הרגיל (הכרטיס הראשון למעלה) לא מספיק, ומה עושים אז</div>
-          <div class="ladder">
-            <span class="step">קשר רגיל</span>
-            <span class="arrow">←</span>
-            <span class="step">מחלקת קשר</span>
-            <span class="arrow">←</span>
-            <span class="step">מחלקה מתווכת</span>
-            <span class="arrow">←</span>
-            <span class="step">קשר <span class="en">n-ary</span></span>
-          </div>
-          <div class="ladder-cap">בחרו תמיד את הדרגה הפשוטה ביותר שמספיקה. קשר <span class="en">n-ary</span> — לפרק למחלקה מתווכת.
-            <br><b>שימו לב:</b> מחלקה מתווכת אינה סימון <i>על</i> הקשר — היא <b>מחליפה</b> אותו בשתי אסוציאציות ומחלקה באמצע.</div>
-        </div>
-
-        <p class="bottom-line">בשקפים הבאים נצלול לכל קשר בנפרד — על מודל הזמנת האוכל בקמפוס.</p>
+        <p class="bottom-line">למעלה — <b>איזה סוג קשר</b>; בתוך הכרטיס הראשון — <b>כמה מסובך</b> הקשר הרגיל שלנו. בשקפים הבאים נצלול לכל אחד על מודל הקמפוס.</p>
 
       </div>
+
+      <!-- ── overlay 1: the four degrees of association ─────────────────────── -->
+      <div class="rq" id="rm-assoc" hidden onclick="this.hidden=true">
+        <div class="rq-box" onclick="event.stopPropagation()">
+          <button class="rq-x" onclick="this.closest('.rq').hidden=true">✕</button>
+          <div class="rq-h">כולן דרגות של קשר <span class="en">Association</span> — מהפשוט למורכב</div>
+          <div class="rq-sub">מתי הקשר הרגיל לא מספיק, ומה עושים אז. בחרו תמיד את הדרגה הפשוטה ביותר שמספיקה.</div>
+          <div class="steps">
+
+            <div class="step-c">
+              <span class="sn">1 · קשר רגיל</span>
+              <svg viewBox="0 0 240 90" direction="ltr" aria-label="Student 1..* — 0..* Course">
+                <rect x="8" y="30" width="78" height="30" fill="#fff" stroke="#3b82f6" stroke-width="1.5"/>
+                <text x="47" y="49" text-anchor="middle" font-size="12" font-weight="700" fill="#1e293b" font-family="Arial">Student</text>
+                <rect x="154" y="30" width="78" height="30" fill="#fff" stroke="#3b82f6" stroke-width="1.5"/>
+                <text x="193" y="49" text-anchor="middle" font-size="12" font-weight="700" fill="#1e293b" font-family="Arial">Course</text>
+                <line x1="86" y1="45" x2="154" y2="45" stroke="#334155" stroke-width="2"/>
+                <text x="90" y="40" font-size="10" fill="#475569" font-family="Arial">0..*</text>
+                <text x="132" y="40" font-size="10" fill="#475569" font-family="Arial">1..*</text>
+              </svg>
+              <div class="when">קו + קרדינליות. <b>מספיק</b> כשאין מה לדעת על הקשר עצמו.</div>
+              <div class="ex">סטודנט לומד בקורס — וזהו.</div>
+            </div>
+
+            <div class="step-c">
+              <span class="sn">2 · מחלקת קשר</span>
+              <svg viewBox="0 0 240 90" direction="ltr" aria-label="Student — Course with Enrollment hanging on the line">
+                <rect x="8" y="10" width="78" height="26" fill="#fff" stroke="#3b82f6" stroke-width="1.5"/>
+                <text x="47" y="27" text-anchor="middle" font-size="12" font-weight="700" fill="#1e293b" font-family="Arial">Student</text>
+                <rect x="154" y="10" width="78" height="26" fill="#fff" stroke="#3b82f6" stroke-width="1.5"/>
+                <text x="193" y="27" text-anchor="middle" font-size="12" font-weight="700" fill="#1e293b" font-family="Arial">Course</text>
+                <line x1="86" y1="23" x2="154" y2="23" stroke="#334155" stroke-width="2"/>
+                <line x1="120" y1="23" x2="120" y2="52" stroke="#334155" stroke-width="1.5" stroke-dasharray="4,3"/>
+                <rect x="76" y="52" width="88" height="32" fill="#fff" stroke="#3b82f6" stroke-width="1.5"/>
+                <text x="120" y="65" text-anchor="middle" font-size="11" font-weight="700" fill="#1e293b" font-family="Arial">Enrollment</text>
+                <text x="120" y="78" text-anchor="middle" font-size="9.5" fill="#475569" font-family="Consolas,monospace">- grade</text>
+              </svg>
+              <div class="when">יש <b>נתונים על הקשר</b> (ציון), והזוג מופיע <b>פעם אחת</b>. המחלקה תלויה על הקו.</div>
+              <div class="ex">נרשמים לקורס פעם אחת.</div>
+            </div>
+
+            <div class="step-c">
+              <span class="sn">3 · מחלקה מתווכת</span>
+              <svg viewBox="0 0 240 90" direction="ltr" aria-label="Student — Enrollment — Course">
+                <rect x="4" y="30" width="62" height="30" fill="#fff" stroke="#3b82f6" stroke-width="1.5"/>
+                <text x="35" y="49" text-anchor="middle" font-size="11" font-weight="700" fill="#1e293b" font-family="Arial">Student</text>
+                <rect x="86" y="24" width="68" height="42" fill="#fff" stroke="#3b82f6" stroke-width="1.5"/>
+                <text x="120" y="39" text-anchor="middle" font-size="11" font-weight="700" fill="#1e293b" font-family="Arial">Enrollment</text>
+                <text x="120" y="52" text-anchor="middle" font-size="9" fill="#475569" font-family="Consolas,monospace">- semester</text>
+                <text x="120" y="62" text-anchor="middle" font-size="9" fill="#475569" font-family="Consolas,monospace">- grade</text>
+                <rect x="174" y="30" width="62" height="30" fill="#fff" stroke="#3b82f6" stroke-width="1.5"/>
+                <text x="205" y="49" text-anchor="middle" font-size="11" font-weight="700" fill="#1e293b" font-family="Arial">Course</text>
+                <line x1="66" y1="45" x2="86" y2="45" stroke="#334155" stroke-width="2"/>
+                <line x1="154" y1="45" x2="174" y2="45" stroke="#334155" stroke-width="2"/>
+                <text x="68" y="40" font-size="8.5" fill="#475569" font-family="Arial">1</text>
+                <text x="76" y="40" font-size="8.5" fill="#475569" font-family="Arial">*</text>
+                <text x="157" y="40" font-size="8.5" fill="#475569" font-family="Arial">*</text>
+                <text x="167" y="40" font-size="8.5" fill="#475569" font-family="Arial">1</text>
+              </svg>
+              <div class="when">הזוג <b>חוזר</b> (אותו סטודנט, אותו קורס, סמסטר אחר). המחלקה <b>מחליפה</b> את הקו בשתי אסוציאציות.</div>
+              <div class="ex">מותר לחזור על קורס.</div>
+            </div>
+
+            <div class="step-c">
+              <span class="sn">4 · קשר <span class="en">n-ary</span></span>
+              <svg viewBox="0 0 240 90" direction="ltr" aria-label="diamond in the centre, three lines to Supplier, Product, Warehouse">
+                <rect x="4" y="6" width="66" height="24" fill="#fff" stroke="#3b82f6" stroke-width="1.5"/>
+                <text x="37" y="22" text-anchor="middle" font-size="10.5" font-weight="700" fill="#1e293b" font-family="Arial">Supplier</text>
+                <rect x="170" y="6" width="66" height="24" fill="#fff" stroke="#3b82f6" stroke-width="1.5"/>
+                <text x="203" y="22" text-anchor="middle" font-size="10.5" font-weight="700" fill="#1e293b" font-family="Arial">Product</text>
+                <rect x="87" y="62" width="66" height="24" fill="#fff" stroke="#3b82f6" stroke-width="1.5"/>
+                <text x="120" y="78" text-anchor="middle" font-size="10.5" font-weight="700" fill="#1e293b" font-family="Arial">Warehouse</text>
+                <polygon points="120,30 134,42 120,54 106,42" fill="#fff" stroke="#334155" stroke-width="2"/>
+                <line x1="70" y1="18" x2="106" y2="42" stroke="#334155" stroke-width="2"/>
+                <line x1="170" y1="18" x2="134" y2="42" stroke="#334155" stroke-width="2"/>
+                <line x1="120" y1="54" x2="120" y2="62" stroke="#334155" stroke-width="2"/>
+              </svg>
+              <div class="when">מעוין <b>במרכז</b>, קו לכל משתתף. קיים בתקן — <b>לא שימושי</b>: אין לאן לתלות נתונים ואיש לא קורא נכון את הקרדינליות.</div>
+              <div class="ex">← מפרקים למחלקה מתווכת (דרגה 3).</div>
+            </div>
+
+          </div>
+          <p class="rq-cap">
+            <b>שימו לב:</b> מחלקה מתווכת אינה סימון <i>על</i> הקשר — היא <b>מחליפה</b> אותו בשתי אסוציאציות ומחלקה באמצע.
+            <br><span class="warn-line">⚠️ המעוין של דרגה 4 יושב במרכז ואינו ה-◇/◆ של שלם–חלק, שיושבים בקצה קו.</span>
+          </p>
+        </div>
+      </div>
+
+      <!-- ── overlay 2: whole–part — ◇ vs ◆ ─────────────────────────────────── -->
+      <div class="rq" id="rm-part" hidden onclick="this.hidden=true">
+        <div class="rq-box" onclick="event.stopPropagation()">
+          <button class="rq-x" onclick="this.closest('.rq').hidden=true">✕</button>
+          <div class="rq-h">שלם–חלק: צבירה ◇ מול הרכבה ◆</div>
+          <div class="rq-sub">אותו מעוין, בקצה השלם. ההבדל: האם החלק ממשיך להתקיים — ולמי הוא שייך.</div>
+          <div class="wp">
+
+            <div class="wp-c ag">
+              <div class="wt">צבירה ◇ <span class="en">Aggregation</span></div>
+              <svg viewBox="0 0 300 60" direction="ltr" aria-label="Gym ◇— Member">
+                <rect x="8" y="16" width="90" height="28" fill="#fff" stroke="#3b82f6" stroke-width="1.5"/>
+                <text x="53" y="34" text-anchor="middle" font-size="12" font-weight="700" fill="#1e293b" font-family="Arial">Gym</text>
+                <rect x="202" y="16" width="90" height="28" fill="#fff" stroke="#3b82f6" stroke-width="1.5"/>
+                <text x="247" y="34" text-anchor="middle" font-size="12" font-weight="700" fill="#1e293b" font-family="Arial">Member</text>
+                <polygon points="98,30 110,23 122,30 110,37" fill="#fff" stroke="#334155" stroke-width="2"/>
+                <line x1="122" y1="30" x2="202" y2="30" stroke="#334155" stroke-width="2"/>
+              </svg>
+              <ul>
+                <li>החלק <b>קיים גם בלי השלם</b>, ויכול להיות משותף לכמה שלמים</li>
+                <li>מכונית–גלגל, מועדון כושר–מתאמן, מחלקה–עובד</li>
+                <li>בשטח <b>אין לזה השלכה</b>: לא במסד הנתונים, לא בקוד — זה קו רגיל עם שם יפה</li>
+              </ul>
+              <div class="pol">המדיניות שלנו: לזהות — ולצייר <b>קו רגיל</b>. ◇ אינו תשובה על הנייר.</div>
+            </div>
+
+            <div class="wp-c co">
+              <div class="wt">הרכבה ◆ <span class="en">Composition</span></div>
+              <svg viewBox="0 0 300 60" direction="ltr" aria-label="Order ◆— OrderLine">
+                <rect x="8" y="16" width="90" height="28" fill="#fff" stroke="#3b82f6" stroke-width="1.5"/>
+                <text x="53" y="34" text-anchor="middle" font-size="12" font-weight="700" fill="#1e293b" font-family="Arial">Order</text>
+                <rect x="202" y="16" width="90" height="28" fill="#fff" stroke="#3b82f6" stroke-width="1.5"/>
+                <text x="247" y="34" text-anchor="middle" font-size="12" font-weight="700" fill="#1e293b" font-family="Arial">OrderLine</text>
+                <polygon points="98,30 110,23 122,30 110,37" fill="#334155" stroke="#334155" stroke-width="2"/>
+                <line x1="122" y1="30" x2="202" y2="30" stroke="#334155" stroke-width="2"/>
+                <text x="126" y="25" font-size="10" fill="#475569" font-family="Arial">1</text>
+                <text x="186" y="25" font-size="10" fill="#475569" font-family="Arial">1..*</text>
+              </svg>
+              <ul>
+                <li>שני מבחנים, <b>שניהם</b> חייבים לעבור: ① מוחקים את השלם ⇒ החלק נעלם &nbsp;② <b>בעלים אחד בלבד</b> — שיתוף הורג הרכבה</li>
+                <li>הזמנה–שורת הזמנה, חשבונית–שורה, בניין–חדר · ✗ הזמנה–פריט תפריט (משותף לאלפי הזמנות)</li>
+                <li>במימוש זו <b>טענה עם מחיר</b>: <span class="en" dir="ltr">FK NOT NULL</span>, מחיקה מדורגת, אין מסך CRUD משלו</li>
+              </ul>
+              <div class="pol">◆ שגוי אינו שגיאת ציור — הוא <b>מחיקת נתונים</b>.</div>
+            </div>
+
+          </div>
+          <p class="rq-cap">שלם–חלק הוא אסוציאציה עם <b>עוד טענה</b> על הקצה — לא סוג קשר נפרד. כשאף מבחן לא עובר, זה פשוט קו רגיל.</p>
+        </div>
+      </div>
+
       <aside class="notes">
-        מפת הקשרים לסעיף. חמישה סוגים: אסוציאציה (קו מלא בלי חץ), צבירה (מעוין חלול על השלם),
-        הרכבה (מעוין מלא על השלם), הכללה (משולש חלול אל ההורה), תלות (מקווקו + חץ פתוח — למערכות
-        חיצוניות שאנחנו קוראים להן; המערכת החיצונית מצוירת כתיבה עם הסטריאוטיפ «external system»,
-        כלומר אינה אחת ממחלקות התחום שלנו). סולם העדיפות: תמיד להתחיל מקשר רגיל; להסלים למחלקת
-        קשר / מחלקה מתווכת רק כשצריך לאחסן נתונים על הקשר; קשר n-ary תמיד לפרק למחלקה מתווכת.
-      
-        ⚠️ <b>הבהרה שחייבים לומר (David, 2026-08-11):</b> הרצועה התחתונה אינה סוג קשר חמישי-שישי — <b>כל
-        ארבעת הפריטים בה הם Association</b>, כלומר ארבע דרגות של הכרטיס הראשון בלבד. אגרגציה, הרכבה, הכללה
-        ותלות אינן חלק מהסולם הזה. הדרך הנוחה להגיד את זה: ״למעלה — <b>איזה סוג קשר</b>; למטה — <b>כמה מסובך
-        הקשר הרגיל שלנו</b>״.
+        מפת הקשרים לסעיף. ארבעה סוגים על השקופית: אסוציאציה (קו מלא בלי חץ), שלם–חלק (מעוין על השלם — חלול
+        ◇ לצבירה, מלא ◆ להרכבה; כרטיס אחד משותף מאז 2026-08-30), הכללה (משולש חלול אל ההורה), תלות (מקווקו
+        + חץ פתוח — למערכות חיצוניות שאנחנו קוראים להן; המערכת החיצונית מצוירת כתיבה עם הסטריאוטיפ
+        «external system», כלומר אינה אחת ממחלקות התחום שלנו).
+        <b>שני כרטיסים נפתחים בלחיצה.</b> הכרטיס הראשון — ארבע הדרגות של אסוציאציה, עם ציור לכל דרגה
+        (רגיל / מחלקת קשר / מחלקה מתווכת / n-ary); הכרטיס השני — ◇ מול ◆ עם המבחנים והמדיניות. פותחים את הראשון
+        בשקופית הזו, ואת השני אפשר לפתוח כאן בקצרה או להשאיר לשקופיות ההרכבה והצבירה (C10–C11).
+
+        ⚠️ <b>הבהרה שחייבים לומר (David, 2026-08-11; זו הסיבה שהסולם עבר לתוך הכרטיס ב-2026-08-30):</b>
+        ארבע הדרגות אינן סוגי קשר נוספים — <b>כולן Association</b>, כלומר ארבע דרגות של הכרטיס הראשון בלבד.
+        שלם–חלק, הכללה ותלות אינם חלק מהסולם הזה. הדרך הנוחה להגיד את זה: ״למעלה — <b>איזה סוג קשר</b>;
+        בתוך הכרטיס — <b>כמה מסובך הקשר הרגיל שלנו</b>״. הסולם ישב פעם כרצועה מתחת לכל הכרטיסים וסטודנטים קראו
+        אותו כסוג חמישי-שישי; עכשיו הוא פיזית בתוך הכרטיס.
         ודיוק נוסף: <b>מחלקה מתווכת</b> אינה סימון על הקשר אלא <b>מחליפה</b> אותו — מוחקים את קשר הרבים-לרבים ובמקומו
-        שתי אסוציאציות ומחלקה באמצע. מחלקת קשר, לעומת זאת, נשארת תלויה על הקשר הקיים.
-      
-        ℹ️ <b>אם סטודנט שואל על ממשק / API (2026-08-17).</b> עד 2026-08-17 היה כאן כרטיס שישי — ממשק, עם סמל
-        ה״כפתור והשקע״. הוא <b>הוסר</b>: שקפי הממשק הוצאו מהקורס (2026-08-15, ״מושג בלבד״), ולכן המפה הבטיחה
-        סימון שאיש אינו מלמד. התשובה בעל-פה, אם עולה: מה ש<b>מציירים</b> הוא <b>תלות</b> — קו מקווקו אל
+        שתי אסוציאציות ומחלקה באמצע. מחלקת קשר, לעומת זאת, נשארת תלויה על הקשר הקיים. קשר n-ary — תמיד לפרק
+        למחלקה מתווכת; ולהזהיר שהמעוין שלו יושב במרכז ואינו ה-◇/◆ שיושבים בקצה קו.
+
+        ℹ️ <b>אם סטודנט שואל על ממשק / API (2026-08-17, אושר שוב 2026-08-30).</b> עד 2026-08-17 היה כאן כרטיס
+        ממשק, עם סמל ה״כפתור והשקע״. הוא <b>הוסר</b>: שקפי הממשק הוצאו מהקורס (2026-08-15, ״מושג בלבד״), ולכן המפה
+        הבטיחה סימון שאיש אינו מלמד. התשובה בעל-פה, אם עולה: מה ש<b>מציירים</b> הוא <b>תלות</b> — קו מקווקו אל
         <span class="en">«external system»</span>; ה״ממשק״ הוא ה-<span class="en">API</span> שדרכו קוראים,
         כלומר קופסה שחורה עם חוזה מוגדר. קו התלות אומר <b>ש</b>אנחנו תלויים; שם ה-API אומר <b>במה בדיוק</b>.
         זה לא סוג קשר נוסף ואינו נדרש בתרשים.
@@ -3215,13 +3487,13 @@
         משולש חלול, ממחלקה אל <span class="en">«interface»</span>. הוא <b>לא נלמד בקורס</b> (כך גם ב-NOTATION.md
         של הכלי: ״Realization — ❌ not in lectures״), וה״ממשק״ שאנחנו מלמדים בשקופית התלות הוא <b>מושג</b> —
         ה-API של מערכת חיצונית כקופסה שחורה — ולא מחלקה מסוג interface שמציירים. לכן הוא לא מופיע במפה, ולכן
-        גם כתוב ״חמישה סוגי הקשר שבהם נשתמש״ ולא ״חמישה סוגי קשר״.
+        גם כתוב ״ארבעה סוגי הקשר שבהם נשתמש״ ולא ״כל סוגי הקשר״.
         אם סטודנט ראה משולש חלול מקווקו בכלי או בפלט של AI — זו הריאליזציה, וזו התשובה: קיים בתקן, שייך
         לתרשים מימוש ולא למודל תחום, ואצלנו לא משתמשים בו.
         שאר מה שקיים בתקן ואינו כאן הוא שולי לקורס: association מכוונת עם חץ (נאסרה במפורש בשקופית
         האסוציאציה), qualified association, ושמות תפקיד על קצות הקשר.
       </aside>
-    <div class="acro-footer"><span class="acro"><span class="en">AI</span> = <span class="en">Artificial Intelligence</span> · בינה מלאכותית</span></div>
+    <div class="acro-footer"><span class="acro"><span class="en">CRUD</span> = <span class="en">Create, Read, Update, Delete</span> · יצירה, קריאה, עדכון, מחיקה</span> &nbsp;·&nbsp; <span class="acro"><span class="en">AI</span> = <span class="en">Artificial Intelligence</span> · בינה מלאכותית</span></div>
     </section>
     <!-- C (Section ג) — Association + Multiplicity. The core line, on campus data.
          SVG: סטודנט 1 ——— 0..* הזמנה — SOLID line, NO arrowhead, multiplicity at BOTH ends.
@@ -3235,17 +3507,26 @@
       <style>
         /* LTR code + multiplicity text must not inherit the deck's RTL (fixes 0..*→*..0 + member clip) */
         section[data-slug="association-multiplicity"] svg text:not([direction="rtl"]) { direction: ltr; }
-        section[data-slug="association-multiplicity"] .assoc-svg { display:block; width:100%; height:auto; }
+        section[data-slug="association-multiplicity"] .assoc-svg { display:block; width:100%; max-height:118px; height:auto; margin:0 auto; }
         section[data-slug="association-multiplicity"] .top-cols { flex:1; align-items:stretch; }
-        section[data-slug="association-multiplicity"] .top-cols > .card { display:flex; flex-direction:column; gap:8px; justify-content:center; }
-        section[data-slug="association-multiplicity"] .cap { font-size:16px; line-height:1.45; color:var(--muted); margin:0; }
+        section[data-slug="association-multiplicity"] .top-cols > .card { display:flex; flex-direction:column; gap:6px; justify-content:center; }
+        section[data-slug="association-multiplicity"] .cap { font-size:15px; line-height:1.4; color:var(--muted); margin:0; }
         section[data-slug="association-multiplicity"] ul.bullets > li { font-size:18px !important; line-height:1.4; }
         section[data-slug="association-multiplicity"] ul.bullets ul > li { font-size:15.5px !important; }
-        section[data-slug="association-multiplicity"] .mini-cols > .card { padding:8px 16px; }
+        section[data-slug="association-multiplicity"] .mini-cols > .card { padding:6px 16px; }
         section[data-slug="association-multiplicity"] .mini-cols .panel-title { font-size:16px; margin-bottom:4px; }
-        section[data-slug="association-multiplicity"] .mini-cols p { font-size:14.5px; line-height:1.35; margin:0; color:var(--body); }
-        section[data-slug="association-multiplicity"] .self-svg { display:block; width:100%; max-width:280px; max-height:112px; height:auto; margin:0 auto; }
+        section[data-slug="association-multiplicity"] .mini-cols p { font-size:14px; line-height:1.3; margin:0; color:var(--body); }
+        section[data-slug="association-multiplicity"] .self-svg { display:block; width:100%; max-width:280px; max-height:88px; height:auto; margin:0 auto; }
         section[data-slug="association-multiplicity"] .callout.warn { font-size:16px; padding-inline-end:150px; }
+        section[data-slug="association-multiplicity"] .nowrite{ margin-top:4px; text-align:start; line-height:1.35; background:#FBEAEA; border:1.5px solid var(--red);
+          border-radius:10px; padding:5px 11px 6px; font-size:13.5px; color:var(--body); }
+        section[data-slug="association-multiplicity"] .nowrite .nw-t{ font-weight:800; color:#8b1f1f; font-size:15px; margin-bottom:2px; }
+        section[data-slug="association-multiplicity"] .nowrite ul{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:3px; }
+        section[data-slug="association-multiplicity"] .nowrite li{ position:relative; padding-inline-start:14px; }
+        section[data-slug="association-multiplicity"] .nowrite li::before{ content:"·"; position:absolute; inset-inline-start:2px; color:var(--red); font-weight:800; }
+        section[data-slug="association-multiplicity"] .nowrite b{ color:#8b1f1f; }
+        section[data-slug="association-multiplicity"] .nowrite .nw-conv{ margin-top:5px; padding-top:5px; border-top:1px dashed #e0a3a3; color:var(--body); }
+        section[data-slug="association-multiplicity"] .nowrite .nw-conv b{ color:var(--dark-blue); }
       </style>
       <h1><span class="en">Association</span> + קרדינליות</h1>
       <div class="subtitle">הקו שמחבר שתי מחלקות — וכמה מכל צד</div>
@@ -3282,6 +3563,14 @@
               </g>
             </svg>
             <p class="cap">סטודנט אחד מבצע אפס או יותר הזמנות; כל הזמנה שייכת לסטודנט אחד בדיוק. קו מלא, בלי חץ.</p>
+            <div class="nowrite">
+              <div class="nw-t">✗ לא כותבים</div>
+              <ul>
+                <li><span class="en" dir="ltr">0..3</span>, <span class="en" dir="ltr">2</span>, <span class="en" dir="ltr">1..20</span> — <b>אין קרדינליות מספרית.</b> מספר ספציפי הוא כלל עסקי שמשתנה ⇐ <span class="en" dir="ltr">{אילוץ}</span> (שקף 32)</li>
+                <li><span class="en" dir="ltr">M</span>, <span class="en" dir="ltr">N</span>, <span class="en" dir="ltr">M:N</span> — סימון של <b>מסדי נתונים</b>, לא <span class="en">UML</span>. כותבים <span class="en" dir="ltr">0..*</span> / <span class="en" dir="ltr">1..*</span></li>
+              </ul>
+              <div class="nw-conv"><b>מוסכמה של הקורס</b> (לא של <span class="en">UML</span>): קצה <b>בלי</b> קרדינליות נקרא כ-<span class="en" dir="ltr">*</span>. אז אם התכוונתם ל-<span class="en">1</span> — חובה לכתוב. ⚠️ ה-<span class="en">AI</span> נוטה להשאיר קצה ריק או לנחש <span class="en">1</span> — לבדוק <b>שני</b> קצוות מול המקור.</div>
+            </div>
           </div>
 
           <div class="card">
@@ -3289,7 +3578,7 @@
             <ul class="bullets">
               <li>קו <b>מלא</b> — בלי חץ (חץ מכוון לא בשימוש על מודל התחום)</li>
               <li><b>קרדינליות בשני הקצוות — תמיד</b></li>
-              <li>המשמעויות:
+              <li>המשמעויות — <b>וזה כל אוצר המילים</b>:
                 <ul>
                   <li><span class="en">1</span> = בדיוק אחד</li>
                   <li><span class="en">0..1</span> = אפס או אחד (אופציונלי)</li>
@@ -3334,14 +3623,17 @@
           </div>
         </div>
 
-        <div class="callout warn">
-          <span class="label">⚠️ הטעות הנפוצה של ה-<span class="en">AI</span></span>
-          משאיר קצה אחד ריק, או מנחש <span class="en">1</span> בלי לבדוק. תמיד לוודא קרדינליות
-          <b>בשני</b> הקצוות — ולשאול מול המקור: כמה מכל צד באמת?
-        </div>
 
       </div>
       <aside class="notes">
+        <b>שלושה דברים שנוספו לכרטיס הכללים (David, 2026-08-30):</b>
+        (1) <b>אין קרדינליות מספרית</b> — לא <code>0..3</code>, לא <code>2</code>, לא <code>1..20</code>. ארבע הצורות הן כל אוצר
+        המילים; מספר ספציפי הוא כלל עסקי שישתנה, ומקומו ב-<code>{אילוץ}</code> — שקף 32 מרחיב (ושם גם החריג היחיד: מספר הגדרתי).
+        (2) <b>לא M ו-N</b> — זה סימון של ERD/מסדי נתונים, וסטודנטים גוררים אותו מקורס מסדי נתונים. ב-UML כותבים
+        <code>0..*</code> / <code>1..*</code>; ״M:N״ נאמר בעל-פה כשמדברים על קשר רבים-לרבים, אבל לא נכתב על הקו.
+        (3) <b>מוסכמת הקורס לקצה ריק:</b> קצה בלי קרדינליות נקרא כ-<code>*</code>. להדגיש שזו מוסכמה <b>שלנו</b> — ב-UML
+        קצה ריק פירושו ״לא צוין״, לא ״רבים״. המשמעות המעשית: השמטה אף פעם לא מבטאת 1; מי שמתכוון ל-1 חייב לכתוב.
+        זה לא סותר את ״קרדינליות בשני הקצוות — תמיד״: הכלל לכתיבה נשאר, המוסכמה היא לקריאה של מה שכבר צויר (ובבדיקה).
         הקו הבסיסי: אסוציאציה = קו מלא בלי חץ, קרדינליות בשני הקצוות תמיד. סטודנט 1 — 0..* הזמנה.
         ארבע המשמעויות: 1, 0..1, 1..*, 0..*.
         <b>אם שואלים על כוכבית לבדה (וישאלו — כלים וטיוטות AI פולטים אותה):</b> <code>*</code> ו-<code>0..*</code>
@@ -3415,6 +3707,8 @@
         section[data-slug="cardinality-critique"] .qc.s2 .txt{ display:none; }
         section[data-slug="cardinality-critique"] .qc:not(.s2) .d-good,
         section[data-slug="cardinality-critique"] .qc.s2 .d-bad{ display:none; }
+        /* the suspect multiplicity is neutral in state 0 (it gave the answer away — David, 2026-08-30) and turns red only once the problems are shown */
+        section[data-slug="cardinality-critique"] .qc.s1 .d-bad .hl{ fill:#e11d48; font-weight:700; }
         section[data-slug="cardinality-critique"] .qc .h1x,
         section[data-slug="cardinality-critique"] .qc .h2x{ display:none; }
         section[data-slug="cardinality-critique"] .qc.s1 .h0x,
@@ -3483,7 +3777,7 @@
                 <rect x="60" y="10" width="140" height="32" fill="#1e40af" stroke="#3b82f6" stroke-width="1.5"/>
                 <text x="130" y="32" text-anchor="middle" direction="ltr" font-size="14" font-weight="700" fill="#fff" font-family="'Segoe UI',Arial,sans-serif">Teacher</text>
                 <line x1="130" y1="42" x2="130" y2="100" stroke="#334155" stroke-width="1.6"/>
-                <text x="140" y="60" direction="ltr" font-size="13" font-weight="700" fill="#e11d48" font-family="Consolas,monospace">1</text>
+                <text x="140" y="60" direction="ltr" font-size="13" font-weight="700" class="hl" fill="#334155" font-family="Consolas,monospace">1</text>
                 <text x="140" y="96" direction="ltr" font-size="13" font-weight="700" fill="#334155" font-family="Consolas,monospace">*</text>
                 <rect x="60" y="100" width="140" height="32" fill="#1e40af" stroke="#3b82f6" stroke-width="1.5"/>
                 <text x="130" y="122" text-anchor="middle" direction="ltr" font-size="14" font-weight="700" fill="#fff" font-family="'Segoe UI',Arial,sans-serif">Student</text>
@@ -3518,7 +3812,7 @@
                 <text x="130" y="32" text-anchor="middle" direction="ltr" font-size="14" font-weight="700" fill="#fff" font-family="'Segoe UI',Arial,sans-serif">EggBox</text>
                 <line x1="130" y1="42" x2="130" y2="100" stroke="#334155" stroke-width="1.6"/>
                 <text x="140" y="60" direction="ltr" font-size="13" font-weight="700" fill="#334155" font-family="Consolas,monospace">1</text>
-                <text x="140" y="96" direction="ltr" font-size="13" font-weight="700" fill="#E86C00" font-family="Consolas,monospace">12,24</text>
+                <text x="140" y="96" direction="ltr" font-size="13" font-weight="700" class="hl" fill="#334155" font-family="Consolas,monospace">12,24</text>
                 <rect x="60" y="100" width="140" height="32" fill="#1e40af" stroke="#3b82f6" stroke-width="1.5"/>
                 <text x="130" y="122" text-anchor="middle" direction="ltr" font-size="14" font-weight="700" fill="#fff" font-family="'Segoe UI',Arial,sans-serif">Egg</text>
               </svg>
@@ -3551,7 +3845,7 @@
                 <text x="130" y="31" text-anchor="middle" direction="ltr" font-size="12.5" font-weight="700" fill="#fff" font-family="'Segoe UI',Arial,sans-serif">FullTimeStudent</text>
                 <line x1="130" y1="42" x2="130" y2="100" stroke="#334155" stroke-width="1.6"/>
                 <text x="140" y="60" direction="ltr" font-size="13" font-weight="700" fill="#334155" font-family="Consolas,monospace">1</text>
-                <text x="140" y="96" direction="ltr" font-size="13" font-weight="700" fill="#e11d48" font-family="Consolas,monospace">12..18</text>
+                <text x="140" y="96" direction="ltr" font-size="13" font-weight="700" class="hl" fill="#334155" font-family="Consolas,monospace">12..18</text>
                 <rect x="45" y="100" width="170" height="32" fill="#1e40af" stroke="#3b82f6" stroke-width="1.5"/>
                 <text x="130" y="121" text-anchor="middle" direction="ltr" font-size="13" font-weight="700" fill="#fff" font-family="'Segoe UI',Arial,sans-serif">CreditHour</text>
               </svg>
@@ -3684,6 +3978,13 @@
         section[data-slug="cardinality-vs-rules"] .sh small{ display:block; font-size:13.5px; font-weight:600; color:var(--muted); }
         section[data-slug="cardinality-vs-rules"] .st svg{ display:block; width:100%; height:auto;
           flex:1 1 auto; min-height:0; }
+        section[data-slug="cardinality-vs-rules"] pre.code{ flex:1 1 auto; min-height:0; margin:0; direction:ltr; text-align:left;
+          background:#0f172a; color:#e2e8f0; border-radius:10px; padding:9px 13px; font-family:Consolas,'Courier New',monospace;
+          font-size:13px; line-height:1.45; overflow:hidden; white-space:pre; }
+        section[data-slug="cardinality-vs-rules"] pre.code .kw{ color:#93c5fd; }
+        section[data-slug="cardinality-vs-rules"] pre.code .ty{ color:#fde68a; }
+        section[data-slug="cardinality-vs-rules"] pre.code .fn{ color:#86efac; }
+        section[data-slug="cardinality-vs-rules"] pre.code .cm{ color:#fb923c; font-weight:700; direction:ltr; unicode-bidi:isolate; }
         section[data-slug="cardinality-vs-rules"] .scap{ flex:0 0 auto; background:#fff; border-radius:8px;
           padding:5px 10px; font-size:13.5px; line-height:1.4; color:var(--body); }
         section[data-slug="cardinality-vs-rules"] .st.design .scap{ border-right:4px solid var(--blue); }
@@ -3725,56 +4026,64 @@
 
           <!-- RIGHT (RTL-first): the design diagram — what students hand over -->
           <div class="st design">
-            <div class="sh">תרשים עיצוב — <span class="en">Design</span><small>מה שאתם מייצרים ומוסרים</small></div>
-            <svg viewBox="0 0 400 190" xmlns="http://www.w3.org/2000/svg" role="img"
-                 aria-label="Design: Order 1 to 0..* OrderLine with a constraint note">
-              <rect x="20" y="24" width="150" height="34" fill="#1e40af" stroke="#3b82f6" stroke-width="1.6"/>
-              <text x="95" y="46" text-anchor="middle" font-size="14" font-weight="700" fill="#fff" font-family="'Segoe UI',Arial,sans-serif">Order</text>
-              <line x1="170" y1="41" x2="230" y2="41" stroke="#334155" stroke-width="1.6"/>
-              <text x="176" y="34" font-size="12" font-weight="700" fill="#334155" font-family="Consolas,monospace">1</text>
-              <text x="224" y="34" text-anchor="end" font-size="12" font-weight="700" fill="#334155" font-family="Consolas,monospace">0..*</text>
-              <rect x="230" y="24" width="150" height="34" fill="#1e40af" stroke="#3b82f6" stroke-width="1.6"/>
-              <text x="305" y="46" text-anchor="middle" font-size="13.5" font-weight="700" fill="#fff" font-family="'Segoe UI',Arial,sans-serif">OrderLine</text>
-              <!-- the constraint hangs on a NOTE (פתק) — the same folded-corner symbol taught on B7,
-                   attached by a dashed line to the ASSOCIATION, because the rule is about the relationship -->
-              <line x1="200" y1="41" x2="200" y2="86" stroke="#d1a441" stroke-width="1.4" stroke-dasharray="5 3"/>
-              <path d="M40 86 L330 86 L360 116 L360 156 L40 156 Z" fill="#fffbeb" stroke="#d1a441" stroke-width="1.6"/>
-              <path d="M330 86 L330 116 L360 116" fill="none" stroke="#d1a441" stroke-width="1.6"/>
-              <text x="196" y="108" text-anchor="middle" font-size="13" font-weight="700" fill="#7c5c11" font-family="Consolas,monospace">{ lines &#8804; cafeteria.maxOrderLines }</text>
-              <text x="196" y="128" text-anchor="middle" font-size="11.5" fill="#7c5c11" font-family="Consolas,monospace">Cafeteria { maxOrderLines : int }</text>
-              <text x="196" y="147" text-anchor="middle" font-size="11.5" font-weight="700" fill="#8a6d1f" font-family="Consolas,monospace">BR-7</text>
+            <div class="sh">תרשים העיצוב — <span class="en">Design</span><small>התרשים היחיד שאתם מציירים ומוסרים</small></div>
+            <svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg" role="img"
+                 aria-label="Design: Cafeteria 1 to 0..* Order, Order 1 to 0..* OrderLine, with a constraint note referencing cafeteria.maxOrderLines">
+              <!-- Cafeteria IS in the diagram (David, 2026-08-30: the code referenced a class the diagram never
+                   showed). The limit is its attribute — that is where a business number lives. -->
+              <rect x="4" y="14" width="108" height="54" fill="#fff" stroke="#3b82f6" stroke-width="1.6"/>
+              <rect x="4" y="14" width="108" height="26" fill="#1e40af"/>
+              <text x="58" y="32" text-anchor="middle" font-size="13" font-weight="700" fill="#fff" font-family="'Segoe UI',Arial,sans-serif">Cafeteria</text>
+              <text x="9" y="58" font-size="10" fill="#1e293b" font-family="Consolas,monospace">- maxOrderLines : int</text>
+
+              <line x1="112" y1="41" x2="174" y2="41" stroke="#334155" stroke-width="1.6"/>
+              <text x="116" y="35" font-size="11.5" font-weight="700" fill="#334155" font-family="Consolas,monospace">1</text>
+              <text x="171" y="35" text-anchor="end" font-size="11.5" font-weight="700" fill="#334155" font-family="Consolas,monospace">0..*</text>
+
+              <rect x="174" y="24" width="82" height="34" fill="#1e40af" stroke="#3b82f6" stroke-width="1.6"/>
+              <text x="215" y="46" text-anchor="middle" font-size="14" font-weight="700" fill="#fff" font-family="'Segoe UI',Arial,sans-serif">Order</text>
+
+              <line x1="256" y1="41" x2="316" y2="41" stroke="#334155" stroke-width="1.6"/>
+              <text x="260" y="35" font-size="11.5" font-weight="700" fill="#334155" font-family="Consolas,monospace">1</text>
+              <text x="313" y="35" text-anchor="end" font-size="11.5" font-weight="700" fill="#334155" font-family="Consolas,monospace">0..*</text>
+
+              <rect x="316" y="24" width="80" height="34" fill="#1e40af" stroke="#3b82f6" stroke-width="1.6"/>
+              <text x="356" y="46" text-anchor="middle" font-size="12.5" font-weight="700" fill="#fff" font-family="'Segoe UI',Arial,sans-serif">OrderLine</text>
+
+              <!-- the constraint hangs on a NOTE attached by a dashed line to the Order–OrderLine ASSOCIATION -->
+              <line x1="286" y1="41" x2="286" y2="98" stroke="#d1a441" stroke-width="1.4" stroke-dasharray="5 3"/>
+              <path d="M60 98 L340 98 L368 126 L368 172 L60 172 Z" fill="#fffbeb" stroke="#d1a441" stroke-width="1.6"/>
+              <path d="M340 98 L340 126 L368 126" fill="none" stroke="#d1a441" stroke-width="1.6"/>
+              <text x="212" y="122" text-anchor="middle" font-size="13" font-weight="700" fill="#7c5c11" font-family="Consolas,monospace">{ lines &#8804; cafeteria.maxOrderLines }</text>
+              <text x="212" y="142" text-anchor="middle" font-size="11" fill="#7c5c11" font-family="Consolas,monospace">the number is DATA on Cafeteria, not on the line</text>
+              <text x="212" y="162" text-anchor="middle" font-size="11.5" font-weight="700" fill="#8a6d1f" font-family="Consolas,monospace">BR-7</text>
             </svg>
-            <div class="scap"><b>איפה כותבים את החוק?</b> ב<b>פתק</b> (<span class="en">Note</span>) שמחובר לקו הקשר, ובתוכו האילוץ ב<b>סוגריים מסולסלים</b>.
+            <div class="scap"><b>איפה כותבים את החוק?</b> ב<b>פתק</b> (<span class="en">Note</span>) שמחובר לקו הקשר, ובתוכו האילוץ ב<b>סוגריים מסולסלים</b>. ה<b>מספר עצמו</b> הוא תכונה של <span class="en">Cafeteria</span> — נתון שמנהל משנה, לא קרדינליות.
               והחוק עצמו כבר קיים ב<b>קטלוג</b> מהרצאה 3 — לכן מפנים אליו (<span class="en" dir="ltr">BR-7</span>) במקום לשכתב אותו.</div>
           </div>
 
-          <!-- LEFT: the implementation diagram — what the AI derives -->
+          <!-- LEFT: the CODE the AI derives from the design diagram. Until 2026-08-30 this was a second
+               class diagram ("implementation diagram") — David: showing students two class diagrams and
+               telling them to draw only one is confusing. Now: one diagram (theirs) → the code (the AI's). -->
           <div class="st impl">
-            <div class="sh">תרשים מימוש — <span class="en">Implementation</span><small>מה שנגזר מזה בקוד</small></div>
-            <svg viewBox="0 0 400 110" xmlns="http://www.w3.org/2000/svg" role="img"
-                 aria-label="Implementation: Order holds a List of OrderLine and a check method; OrderLine holds a reference back">
-              <rect x="12" y="8" width="196" height="94" fill="#fff" stroke="#64748b" stroke-width="1.6"/>
-              <rect x="12" y="8" width="196" height="26" fill="#64748b"/>
-              <text x="110" y="27" text-anchor="middle" font-size="13.5" font-weight="700" fill="#fff" font-family="'Segoe UI',Arial,sans-serif">Order</text>
-              <text x="19" y="50" font-size="11" fill="#1e293b" font-family="Consolas,monospace">- lines : List&lt;OrderLine&gt;</text>
-              <text x="19" y="65" font-size="11" fill="#1e293b" font-family="Consolas,monospace">- cafeteria : Cafeteria</text>
-              <line x1="12" y1="72" x2="208" y2="72" stroke="#64748b" stroke-width="1"/>
-              <text x="19" y="87" font-size="11" font-style="italic" fill="#2563eb" font-family="Consolas,monospace">+ canAddLine() : bool</text>
-              <line x1="208" y1="55" x2="248" y2="55" stroke="#334155" stroke-width="1.4"/>
-              <rect x="248" y="26" width="140" height="58" fill="#fff" stroke="#64748b" stroke-width="1.6"/>
-              <rect x="248" y="26" width="140" height="26" fill="#64748b"/>
-              <text x="318" y="45" text-anchor="middle" font-size="13" font-weight="700" fill="#fff" font-family="'Segoe UI',Arial,sans-serif">OrderLine</text>
-              <text x="255" y="68" font-size="11" fill="#1e293b" font-family="Consolas,monospace">- order : Order</text>
-            </svg>
+            <div class="sh">הקוד — <span class="en">Code</span><small>מה שה-<span class="en">AI</span> גוזר מהתרשים שלכם. אתם לא כותבים אותו ולא מציירים אותו</small></div>
+            <pre class="code"><span class="kw">class</span> <span class="ty">Order</span> {
+        <span class="ty">Cafeteria</span> cafeteria;              <span class="cm">// 1    → שדה חובה</span>
+        <span class="ty">List</span>&lt;<span class="ty">OrderLine</span>&gt; lines = <span class="kw">new</span>();  <span class="cm">// 0..* → רשימה</span>
 
-            <!-- the mapping lives in HTML: Hebrew inside SVG bidi-breaks (SLIDE_AUTHORING.md) -->
+        <span class="kw">bool</span> <span class="fn">CanAddLine</span>() =&gt;                <span class="cm">// { }  → בדיקה</span>
+            lines.Count &lt; cafeteria.MaxOrderLines;
+    }
+    <span class="kw">class</span> <span class="ty">OrderLine</span> {
+        <span class="ty">Order</span> order;                      <span class="cm">// 1    → הפניה חזרה</span>
+    }</pre>
             <table class="map">
-              <tr><th>בעיצוב</th><th>במימוש</th></tr>
+              <tr><th>בעיצוב (שלכם)</th><th>בקוד (של ה-AI)</th></tr>
               <tr><td class="c">0..*</td><td class="c">List&lt;OrderLine&gt;</td></tr>
-              <tr><td class="c">1</td><td>שדה חובה, לא ניתן ליצור בלעדיו</td></tr>
-              <tr><td class="c">{ }</td><td class="c">canAddLine()</td></tr>
+              <tr><td class="c">1</td><td>שדה חובה — אי אפשר ליצור בלעדיו</td></tr>
+              <tr><td class="c">{ }</td><td class="c">CanAddLine()</td></tr>
             </table>
-            <div class="scap"><b>הקשר נעלם והופך לשדות</b>, הריבוי הופך ל<span class="en" dir="ltr">List</span>, והאילוץ הופך ל<b>פעולה</b>. כאן מותר מחלקה כתכונה — בעיצוב לא.</div>
+            <div class="scap"><b>הקו נעלם והופך לשדות</b> — בשני הכיוונים; הריבוי הופך ל-<span class="en" dir="ltr">List</span>; האילוץ הופך ל<b>פעולה</b>. הכול נגזר מהתרשים היחיד שציירתם.</div>
           </div>
 
         </div>
@@ -3783,6 +4092,11 @@
 
       </div>
       <aside class="notes">
+        <b>למה אין כאן תרשים מימוש (David, 2026-08-30):</b> עד היום השקופית הראתה <i>שני</i> תרשימי מחלקות ואמרה
+        ״ציירו רק את הימני״ — וזה בלבל: סטודנטים ראו שני תרשימים ולא ידעו איזה נדרש. עכשיו יש תרשים אחד (שלהם)
+        ומולו <b>הקוד</b> שה-AI גוזר ממנו. המסר: אתם מציירים תרשים אחד; מה שמימין הופך לשדות, רשימה ופעולה —
+        ואת זה אף אחד לא מבקש מכם לצייר. אם סטודנט ראה בכלי או בפרויקט הדוגמה מחלקות עם <code>List&lt;…&gt;</code>
+        ושדות של מחלקות אחרות — זה הקוד/המימוש שצויר כתרשים, לא מה שמוסרים בקורס.
         <b>הפוקוס של השקף:</b> איזו קרדינליות כותבים, ואיפה עובר הגבול בין עיצוב למימוש. אנחנו בשלב העיצוב —
         ולכן התרשים אומר <b>מה</b> נכון, לא <b>איך</b> מממשים.
         <b>(1) ארבע צורות, וזה הכול.</b> הן אינן רשימה לשינון אלא התשובות לשתי שאלות: האם זה יכול להיות אפס
@@ -4267,7 +4581,7 @@
         <b>ולמה אין מזהה מצויר על הגרסה המתווכת</b> (שאלה צפויה): לפי כלל המזהים — מזהה נכנס לתרשים רק אם
         <b>העסק</b> קורא אותו בקול. מספר הרשמה בדרך כלל אינו כזה. מה שכן: ברגע שהיא מחלקה בפני עצמה, <b>המסד
         יידרש למפתח</b> — או הצירוף (סטודנט, קורס, סמסטר), או מפתח שהמסד ממציא. זו החלטת אחסון, והיא נשארת
-        מחוץ לתרשים (בדיוק כמו <code>lineId</code> בשקף המזהים).
+        מחוץ לתרשים (בדיוק כמו <code>OrderLines</code> בשקף המזהים, שמזוהה לפי הצירוף הזמנה + פריט).
         <b>מלכודת שכדאי להקדים:</b> סטודנט ישאל ״אז אולי פשוט <code>grades : List</code> על ההרשמה?״ — לא.
         שני הציונים אינם רשימה של מספרים אלא <b>שתי הרשמות שונות</b>, כל אחת עם סמסטר, תאריכים ואולי מרצה
         אחר. ושווה להעמיד את שני המקרים זה מול זה: <b>אותה הרשמה, שני מועדי בחינה</b> ⇐ מחלקה מחוברת
@@ -4706,9 +5020,9 @@
               <li class="y"><b>הזמנה ◆ שורת הזמנה</b> <span class="why">— לשורה אין משמעות מחוץ להזמנה שלה</span></li>
               <li class="y"><b>בניין ◆ חדר</b> <span class="why">— חדר לא ״עובר״ לבניין אחר</span></li>
               <li class="y"><b>חשבונית ◆ שורת חשבונית</b> <span class="why">— אותו דפוס בדיוק</span></li>
+              <li class="y"><b>קפיטריה ◆ עמדה</b> <span class="why">— ״העמדה החמה״ היא <b>מושג</b> בתוך הקפיטריה, לא ציוד: נסגרת הקפיטריה — העמדה בצורתה הזו לא קיימת</span></li>
               <li class="n"><b>הזמנה ◆ פריט תפריט</b> <span class="why">— הפריט <b>משותף</b> להזמנות רבות וקיים בלעדיהן. זו אסוציאציה רגילה</span></li>
               <li class="n"><b>מחלקה ◆ עובד</b> <span class="why">— סוגרים מחלקה, העובד <b>עובר</b>. לא נמחק</span></li>
-              <li class="n"><b>קפיטריה ◆ עמדה</b> <span class="why">— העמדה שורדת ועוברת. זו כבר צבירה — השקף הבא</span></li>
             </ul>
           </div>
 
@@ -4731,6 +5045,10 @@
 
       </div>
       <aside class="notes">
+        <b>קפיטריה ◆ עמדה — הוחלט מחדש 2026-08-30 (David):</b> עד היום זו הייתה הדוגמה של <i>צבירה</i>, בטענה ש״העמדה
+        עוברת לקפיטריה אחרת״. הטענה הזו מדברת על <b>הדלפק הפיזי</b>, והמערכת לא מנהלת ציוד. מה שהמערכת מנהלת הוא
+        ״העמדה החמה של קפיטריה X״ — מושג וירטואלי, שמזוהה רק דרך הקפיטריה (שקף המזהים), ונסגר איתה. שני המבחנים
+        עוברים: בעלים אחד, ונמחקת עם השלם. אם פותחים את הציוד בקפיטריה אחרת — נוצרת שם <b>עמדה חדשה</b>.
         <b>הפוקוס:</b> הרכבה היא הסימון היחיד בשלם–חלק שבאמת <b>משנה משהו</b>. לכן היא מקבלת שקף לעצמה,
         ולכן היא נלמדת <b>לפני</b> הצבירה: מי שמבין ◆ מבין מיד למה ◇ כמעט לא נחוץ.
         <b>שני המבחנים, ולמה השני חשוב יותר:</b> תלות קיומית היא המבחן שמלמדים בכל מקום — ״מחק את השלם, החלק
@@ -4763,8 +5081,10 @@
          line. Read it, don't argue about it.
          Same design/implementation device as C10 and C4 — but here BOTH cells say "nothing happens", which
          is exactly the contrast that makes ◆ meaningful in retrospect.
-         ⚠️ Kept: the campus model DOES use Cafeteria ◇ Station (verified in the marquee, dossier 2026-08-10),
-         so the example is real and students will meet it again on the marquee slide.
+         ⚠️ 2026-08-30 (David): Cafeteria–Station is NO LONGER the aggregation instance — a station is a virtual
+         concept inside its cafeteria and dies with it, so it moved to C10 as composition (and the marquee now
+         draws it ◆). The teaching instance here is Gym ◇ Member (the textbook shared aggregation, also the ◇
+         card of the C12 quiz); Cafeteria–Station appears in the ✗ list as the trap it turned out to be.
          SVG: English identifiers only + the LTR text guard. -->
     <section data-slug="aggregation" class="has-acro-footer">
       <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
@@ -4825,31 +5145,31 @@
           <div class="what">
             <div class="panel-title" style="color:var(--dark-blue);">מה הסימון אומר</div>
             <svg viewBox="0 0 320 250" xmlns="http://www.w3.org/2000/svg" role="img"
-                 aria-label="Cafeteria aggregating Station, hollow diamond at the Cafeteria end">
+                 aria-label="Gym aggregating Member, hollow diamond at the Gym end">
               <line x1="160" y1="86" x2="160" y2="160" stroke="#334155" stroke-width="1.8"/>
               <polygon points="160,50 174,68 160,86 146,68" fill="#fff" stroke="#334155" stroke-width="1.7"/>
-              <text x="180" y="84" font-size="13" font-weight="700" fill="#334155" font-family="Consolas,monospace">0..1</text>
+              <text x="180" y="84" font-size="13" font-weight="700" fill="#334155" font-family="Consolas,monospace">0..*</text>
               <text x="180" y="152" font-size="13" font-weight="700" fill="#334155" font-family="Consolas,monospace">0..*</text>
               <rect x="85" y="12" width="150" height="38" fill="#1e40af" stroke="#3b82f6" stroke-width="1.6"/>
-              <text x="160" y="37" text-anchor="middle" font-size="15" font-weight="700" fill="#fff" font-family="'Segoe UI',Arial,sans-serif">Cafeteria</text>
+              <text x="160" y="37" text-anchor="middle" font-size="15" font-weight="700" fill="#fff" font-family="'Segoe UI',Arial,sans-serif">Gym</text>
               <rect x="60" y="160" width="200" height="72" fill="#fff" stroke="#3b82f6" stroke-width="1.8"/>
               <rect x="60" y="160" width="200" height="30" fill="#1e40af"/>
-              <text x="160" y="182" text-anchor="middle" font-size="14.5" font-weight="700" fill="#fff" font-family="'Segoe UI',Arial,sans-serif">Station</text>
-              <text x="70" y="214" font-size="12.5" fill="#1e293b" font-family="Consolas,monospace">- type : StationType</text>
+              <text x="160" y="182" text-anchor="middle" font-size="14.5" font-weight="700" fill="#fff" font-family="'Segoe UI',Arial,sans-serif">Member</text>
+              <text x="70" y="214" font-size="12.5" fill="#1e293b" font-family="Consolas,monospace">- joinedAt : Date</text>
             </svg>
-            <div class="tests"><b>העמדה שייכת לקפיטריה — אבל חיה בלעדיה.</b> נסגרת הקפיטריה, העמדה עוברת למקום אחר.<br>
-              <b>ומה שמתיר או אוסר יצירה הוא המספר, לא היהלום:</b> <span class="en" dir="ltr">0..1</span> ⇐ אפשר לייצר עמדה
-              לפני שיש קפיטריה · <span class="en" dir="ltr">0..*</span> ⇐ קפיטריה יכולה להיפתח בלי אף עמדה.</div>
+            <div class="tests"><b>המתאמן שייך למועדון — אבל חי בלעדיו.</b> נסגר המועדון, המתאמן ממשיך להתקיים ונרשם במקום אחר.<br>
+              <b>ומה שמתיר או אוסר יצירה הוא המספר, לא היהלום:</b> <span class="en" dir="ltr">0..*</span> ⇐ אדם קיים לפני שנרשם
+              למועדון (ויכול להיות בכמה) · <span class="en" dir="ltr">0..*</span> ⇐ מועדון יכול להיפתח בלי אף מתאמן.</div>
           </div>
 
           <!-- LEFT: when / when not -->
           <div class="ex">
             <div class="panel-title" style="color:var(--dark-blue);">איפה תפגשו אותו — ואיפה זו סתם טעות</div>
             <ul class="list">
-              <li class="y"><b>קפיטריה ◇ עמדה</b> <span class="why">— העמדה מיטלטלת ושורדת את הסגירה</span></li>
-              <li class="y"><b>צוות ◇ עובד</b> · <b>מועדון ◇ חבר</b> <span class="why">— חברות, לא בעלות</span></li>
+              <li class="y"><b>מועדון ◇ מתאמן</b> · <b>צוות ◇ עובד</b> <span class="why">— חברות, לא בעלות; החבר שורד את הסגירה</span></li>
+              <li class="y"><b>מכונית ◇ גלגל</b> <span class="why">— הגלגל מוחלף, מאוחסן, עובר לרכב אחר</span></li>
               <li class="n"><b>סתם ״יש לו״</b> <span class="why">— <b>כל</b> אסוציאציה היא ״יש לו״ במובן כלשהו. ◇ אינו תחליף לשאלה מה באמת הקשר</span></li>
-              <li class="n"><b>כשהחלק נמחק עם השלם</b> <span class="why">— זו הרכבה ◆, לא צבירה</span></li>
+              <li class="n"><b>קפיטריה ◇ עמדה</b> <span class="why">— נשמע ״ניתן להעביר״, אבל העמדה היא <b>מושג</b> בתוך הקפיטריה ונסגרת איתה. הרכבה ◆ (השקף הקודם)</span></li>
               <li class="n"><b>כשזה בסך הכול קטלוג</b> <span class="why">— תפריט ״מכיל״ פריטים, אבל זו רשימה, לא שלם–חלק</span></li>
             </ul>
           </div>
@@ -4865,7 +5185,7 @@
           <div class="st i">
             <div class="h">במימוש — <b>שום דבר</b></div>
             <div class="t">אין מילת מפתח בשום שפה · במסד: מפתח זר רגיל, <b>שמותר שיהיה ריק</b> ·
-              מחיקת השלם <b>לא נוגעת</b> בחלק · בקוד: אותו <code>List&lt;Station&gt;</code> בדיוק כמו באסוציאציה רגילה.</div>
+              מחיקת השלם <b>לא נוגעת</b> בחלק · בקוד: אותו <code>List&lt;Member&gt;</code> בדיוק כמו באסוציאציה רגילה.</div>
           </div>
         </div>
 
@@ -4910,9 +5230,13 @@
         בדיוק כמו תכונה נגזרת והמעוין של קשר בין שלושה.
         <b>ומה עושים עם תרשים של AI שמלא ב-◇:</b> לא פוסלים. בודקים רק את ה-◆: כל מעוין <b>מלא</b> חייב לעבור
         את שני המבחנים, כי לו יש תוצאות. את ה-◇ אפשר להשאיר או למחוק — הקוד ייצא זהה.
-        <b>קישור קדימה:</b> במודל הקמפוס המלא (שקף המרקיזה) יופיעו שניהם — <code>Order ◆ OrderLine</code>
-        ו-<code>Cafeteria ◇ Station</code>; ובשקף ״תרשים מחלקות מול מסד הנתונים״ נראה את אותה הבחנה
-        כ״מחיקה מדורגת מול מפתח זר שמותר שיהיה ריק״.
+        <b>למה הדוגמה כאן היא מועדון–מתאמן ולא קפיטריה–עמדה (2026-08-30):</b> קפיטריה–עמדה שימשה כאן כדוגמת
+        הצבירה עד היום, בטענה ש״העמדה עוברת לקפיטריה אחרת״. דוד פסל: העמדה היא <b>מושג וירטואלי</b> — ״העמדה
+        החמה של קפיטריה X״ — ולא ציוד; כשהקפיטריה נסגרת, העמדה בצורתה הזו לא קיימת. לכן היא הרכבה ◆ (השקף
+        הקודם, וכך גם במרקיזה), וכאן היא ברשימת ה-✗ כמלכודת. הדוגמה הנקייה של צבירה משותפת היא מועדון–מתאמן:
+        המתאמן קיים לפני, אחרי, ובכמה מועדונים במקביל — וזו בדיוק ההגדרה של ״שיתוף״.
+        <b>קישור קדימה:</b> במודל הקמפוס המלא (שקף המרקיזה) אין ◇ בכלל — יש שתי הרכבות (<code>Order ◆ OrderLine</code>,
+        <code>Cafeteria ◆ Station</code>), וזה עקבי עם המדיניות: ◇ מזהים, לא מייצרים.
       </aside>
     <div class="acro-footer"><span class="acro"><span class="en">UML</span> = <span class="en">Unified Modeling Language</span> · שפת מידול אחידה</span> &nbsp;·&nbsp; <span class="acro"><span class="en">AI</span> = <span class="en">Artificial Intelligence</span> · בינה מלאכותית</span></div>
     </section>
@@ -5516,8 +5840,11 @@
            1 הזמנה ↔ שורת הזמנה → א COMPOSITION (יהלום מלא בצד ההזמנה). שורת הזמנה לא קיימת
                                   בלי ההזמנה שלה — מוחקים הזמנה, נמחקות השורות. (ב = צירוף/aggregation,
                                   יהלום חלול — מתאים למקרה 2, לא כאן.)
-           2 קפיטריה ↔ עמדה     → ב AGGREGATION (יהלום חלול בצד הקפיטריה). עמדה מתקיימת בעצמה
-                                  וניתן לשייך אותה מחדש — צירוף, לא הרכבה. המראָה של מקרה 1.
+           2 קפיטריה ↔ עמדה     → א COMPOSITION (יהלום מלא בצד הקפיטריה). FLIPPED 2026-08-30 (David):
+                                  a station is a VIRTUAL concept inside its cafeteria and does not exist in
+                                  that form once the cafeteria closes; the "equipment moves" argument was
+                                  about furniture the system does not track. Same answer as case 1 — the
+                                  case now drills the trap (physical counter vs modelled concept).
            3 תשלום-אונ׳/אשראי   → א GENERALIZATION. לכל תת-סוג תכונות משלו (universityId מול
                                   last4/gatewayRef) ⇒ הורשה מוצדקת. (ב enum שגוי — יש הבדל תכונות.)
                                   המראָה של מקרה 5.
@@ -5529,7 +5856,7 @@
                                   היא מחשבת אותו מההזמנות בזמן אמת. פלט מחושב, לא מחלקה שנשמרת.
          איזון החדר: 1 הרכבה · 2 צירוף · 3 הורשה · 4 מחלקה מתווכת · 5 enum (לא הורשה!) · 6 לא מחלקה.
          שלושה מהשישה אינם ״קשר רגיל״ (5 enum, 6 לא-מחלקה, 4 דורש מחלקה מתווכת) — וזה הלקח. -->
-    <section data-slug="relationship-or-not" class="has-acro-footer">
+    <section data-slug="relationship-or-not">
       <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
       <style>
         /* LTR code + multiplicity text must not inherit the deck's RTL (fixes 0..*→*..0).
@@ -5663,9 +5990,9 @@
         <div class="rq-box" data-a="0" onclick="event.stopPropagation(); this.dataset.a='1'">
           <button class="rq-x" onclick="this.closest('.rq').hidden=true">✕</button>
           <div class="rq-h">2 · קפיטריה והעמדות שבתוכה</div>
-          <div class="rq-sit">לקפיטריה יש עמדות חמות וקרות. אם סוגרים קפיטריה — העמדה נעלמת, או אפשר לשייך אותה למקום אחר?</div>
+          <div class="rq-sit">לקפיטריה יש עמדות חמות וקרות. אם סוגרים קפיטריה — ״העמדה החמה״ נעלמת, או שאפשר לשייך אותה לקפיטריה אחרת?</div>
           <div class="rq-opts">
-            <div class="rq-opt wrong">
+            <div class="rq-opt right">
               <div class="rq-t">א <span>— יהלום מלא ◆</span></div>
               <svg viewBox="0 0 300 90" xmlns="http://www.w3.org/2000/svg">
                 <rect x="18" y="34" width="100" height="40" rx="6" fill="#fff" stroke="#2980b9" stroke-width="1.4"/>
@@ -5675,11 +6002,11 @@
                 <line x1="168" y1="54" x2="118" y2="54" stroke="#334155" stroke-width="1.5"/>
                 <polygon points="182,54 168,47 154,54 168,61" fill="#334155" stroke="#334155" stroke-width="1"/>
                 <text x="176" y="28" text-anchor="middle" font-size="10" fill="#64748b" font-family="Consolas,monospace">1</text>
-                <text x="124" y="28" text-anchor="middle" font-size="10" fill="#64748b" font-family="Consolas,monospace">1..*</text>
+                <text x="124" y="28" text-anchor="middle" font-size="10" fill="#64748b" font-family="Consolas,monospace">0..*</text>
               </svg>
-              <p class="rq-cap">העמדה לא קיימת בלי הקפיטריה — נמחקת יחד איתה.</p>
+              <p class="rq-cap">העמדה היא מושג בתוך הקפיטריה — נסגרת יחד איתה.</p>
             </div>
-            <div class="rq-opt right">
+            <div class="rq-opt wrong">
               <div class="rq-t">ב <span>— יהלום חלול ◇</span></div>
               <svg viewBox="0 0 300 90" xmlns="http://www.w3.org/2000/svg">
                 <rect x="18" y="34" width="100" height="40" rx="6" fill="#fff" stroke="#2980b9" stroke-width="1.4"/>
@@ -5688,20 +6015,21 @@
                 <text x="232" y="58" text-anchor="middle" direction="ltr" font-size="11" fill="#1a1a2e" font-family="'Segoe UI',Arial,sans-serif">Cafeteria</text>
                 <line x1="168" y1="54" x2="118" y2="54" stroke="#334155" stroke-width="1.5"/>
                 <polygon points="182,54 168,47 154,54 168,61" fill="#fff" stroke="#334155" stroke-width="1.4"/>
-                <text x="176" y="28" text-anchor="middle" font-size="10" fill="#64748b" font-family="Consolas,monospace">1</text>
-                <text x="124" y="28" text-anchor="middle" font-size="10" fill="#64748b" font-family="Consolas,monospace">1..*</text>
+                <text x="176" y="28" text-anchor="middle" font-size="10" fill="#64748b" font-family="Consolas,monospace">0..1</text>
+                <text x="124" y="28" text-anchor="middle" font-size="10" fill="#64748b" font-family="Consolas,monospace">0..*</text>
               </svg>
               <p class="rq-cap">העמדה עצמאית — אפשר לשייך אותה מחדש לקפיטריה אחרת.</p>
             </div>
           </div>
-          <p class="rq-q">נראה בדיוק כמו מקרה 1 — אז למה התשובה אחרת? מה קורה לעמדה כשהשלם נמחק?<br><span style="font-weight:600;font-size:0.85em;color:var(--muted);">ובקורס: כיוון שזו <b>אינה</b> הרכבה — מציירים <b>קו רגיל</b>. ◇ חוקי ב-<span class="en">UML</span>, ואנחנו לא מייצרים אותו.</span></p>
+          <p class="rq-q">נראה בדיוק כמו מקרה 1 — וזה בדיוק העניין. השאלה: העמדה היא <b>ציוד</b> שמעבירים, או <b>מושג</b> בתוך הקפיטריה?<br><span style="font-weight:600;font-size:0.85em;color:var(--muted);">המלכודת: לחשוב על הדלפק הפיזי. המערכת לא מנהלת ציוד — היא מנהלת ״העמדה החמה של קפיטריה X״.</span></p>
           <p class="rq-hint">👆 לחצו שוב על הכרטיס — תשובה ושיקולים</p>
           <div class="rq-ans">
-            <div class="av">✓ ב — שלם–חלק, אבל <u>לא</u> הרכבה</div>
+            <div class="av">✓ א — הרכבה ◆, בדיוק כמו מקרה 1</div>
             <ul>
-              <li>העמדה שורדת את סגירת הקפיטריה ואפשר לשייך אותה מחדש ⇒ אין תלות קיומית.</li>
-              <li>סמנטית זו <b>צבירה ◇</b> — ובתרשים שלנו מציירים <b>קו רגיל</b>: ◇ לא מייצר כלום, ואנחנו לא מייצרים אותו.</li>
-              <li>המראָה של מקרה 1: אותה שאלה בדיוק, תשובה הפוכה.</li>
+              <li>העמדה היא <b>מושג וירטואלי</b> — ״העמדה החמה של הקפיטריה״. נסגרת הקפיטריה, העמדה בצורתה הזו לא קיימת יותר.</li>
+              <li>שני המבחנים עוברים: <b>בעלים אחד</b> (<span class="en" dir="ltr">1</span> בקצה הקפיטריה) ו<b>נמחקת עם השלם</b>. הציוד? אולי עובר — אבל המערכת לא מנהלת ציוד; בקפיטריה החדשה נוצרת עמדה חדשה.</li>
+              <li>עקבי עם שקף המזהים: לעמדה אין מזהה משלה — היא מזוהה דרך הקפיטריה, כמו שורת הזמנה דרך ההזמנה.</li>
+              <li><span class="en" dir="ltr">0..*</span> בקצה העמדה: קפיטריה יכולה להיפתח בלי אף עמדה — הגבול התחתון 1 נשאר רק בצד השלם.</li>
             </ul>
           </div>
         </div>
@@ -5934,14 +6262,13 @@
       <aside class="notes">
         לוחצים על מקרה ← נפתחות שתי דרכים למדל. לא מסמנים תשובה — מתווכחים. מפתח:
         1 א׳ הרכבה (יהלום מלא — שורת הזמנה לא קיימת בלי ההזמנה) ·
-        2 ב׳ צירוף (יהלום חלול — העמדה עצמאית וניתנת לשיוך מחדש; המראָה של 1). ⚠️ ולפי מדיניות הקורס (דוד, 2026-08-15): מכיוון שזו אינה הרכבה — בתרשים שלנו יופיע <b>קו רגיל</b>; ◇ נלמד לזיהוי בלבד ·
+        2 א׳ הרכבה (יהלום מלא — העמדה היא מושג בתוך הקפיטריה ונסגרת איתה; אותה תשובה כמו 1. הוחלט מחדש 2026-08-30, דוד: ״עמדה היא מושג וירטואלי שלא יתקיים בצורתו כשהקפיטריה נסגרת״. המלכודת שהכרטיס מלמד: לחשוב על הדלפק הפיזי במקום על המושג שהמערכת מנהלת) ·
         3 א׳ הורשה — <b>לא</b> בגלל ״שדות שונים״ אלא כי התכונות סותרות (universityId מול last4) ורק לאשראי יש קשר לשער התשלום ·
         4 ב׳ מחלקה מתווכת שורת הזמנה (קשר רבים-לרבים + צורך לשמור כמות — אין איפה לתלות אותה בקשר רגיל) ·
         5 ב׳ enum «OrderStatus» — לא הורשה! אותן תכונות בדיוק, רק תווית שונה — הטעות הקלאסית, המראָה של 3 ·
         6 ב׳ לא מחלקה — מבחן ההימצאוּת: הדוח מחושב מההזמנות בזמן אמת, לא נשמר. פלט, לא מחלקה.
         שלושה מהשישה אינם ״קשר רגיל״ (4 מתווכת, 5 enum, 6 לא-מחלקה) — וזה בדיוק הלקח.
       </aside>
-    <div class="acro-footer"><span class="acro"><span class="en">UML</span> = <span class="en">Unified Modeling Language</span> · שפת מידול אחידה</span></div>
     </section>
     <!-- C16 — תלות (Dependency): למי אנחנו קוראים. SPLIT out of the old slide-dependency-interface
          2026-08-15 (David: "for Dependency ו-Interface I need better examples... maybe create a separate
@@ -6000,7 +6327,8 @@
       <div class="subtitle">קו <b>מקווקו</b> + חץ <b>פתוח</b>. אנחנו משתמשים במשהו — ולא שומרים אותו אצלנו</div>
       <div class="body">
 
-        <div class="rule"><p>המטרה בקורס אחת: לסמן <b>מערכת חיצונית שאנחנו קוראים לה</b>. אין קרדינליות על הקו, ולעולם לא בין שתי מחלקות תחום.</p></div>
+        <div class="rule"><p>המטרה בקורס אחת: לסמן <b>כל מערכת שאנחנו קוראים לה דרך <span class="en">API</span></b> — של ספק חיצוני <b>או של הארגון עצמו</b>.
+          ״חיצונית״ = מחוץ <b>למערכת שלנו</b>, לא מחוץ לארגון. אין קרדינליות על הקו, ולעולם לא בין שתי מחלקות תחום.</p></div>
 
         <div class="row">
 
@@ -6028,7 +6356,9 @@
               <text x="105" y="97" text-anchor="middle" font-size="10" font-style="italic" fill="#7c3aed" font-family="Consolas,monospace">no records on our side</text>
             </svg>
             <div class="cap">הקופסה החיצונית <b>בלי תכונות ובלי פעולות</b> — היא לא מחלקת תחום, ואין לנו רשומות שלה.
-              מדברים איתה דרך <b><span class="en">API</span> מוגדר</b> — קופסה שחורה: שולחים בקשה, מקבלים תשובה, בלי לדעת מה בפנים.</div>
+              מדברים איתה דרך <b><span class="en">API</span> מוגדר</b> — קופסה שחורה: שולחים בקשה, מקבלים תשובה, בלי לדעת מה בפנים.
+              <br><b>הממשק (<span class="en">Interface</span>)</b> הוא <b>החוזה</b> שדרכו קוראים: הקו אומר <i>ש</i>אנחנו תלויים, החוזה אומר <i>במה</i>.
+              כל עוד החוזה נשמר, מחליפים את מי שמאחוריו בלי לגעת במחלקות שלנו. לא מציירים אותו — הוא שם על הקו, לא תיבה.</div>
           </div>
 
           <!-- LEFT: when yes / when not -->
@@ -6036,6 +6366,8 @@
             <div class="panel-title" style="color:var(--dark-blue);">מתי מציירים תלות — ומתי בכלל לא</div>
             <ul class="lst">
               <li class="y"><b>שער תשלום</b> · <b>מערכת הזיהוי של האוניברסיטה</b> <span class="why">— הקלאסיקה של המודל שלנו</span></li>
+              <li class="y"><b>מערכת פנימית של הארגון</b> שאנחנו קוראים לה — <span class="en">HR</span>, <span class="en">ERP</span>, מערכת הסטודנטים
+                <span class="why">— <span class="en" dir="ltr">«external system»</span> גם אם היא באותו בניין: הנתונים אצלה, אנחנו רק קוראים</span></li>
               <li class="y"><b><span class="en">Google Maps</span></b> להצגת מיקום העמדה · <b>שירות <span class="en">AI</span></b> שמסכם ביקורות
                 <span class="why">— אנחנו קוראים, לא מנהלים</span></li>
               <li class="n"><b>מחלקה שאנחנו שומרים</b> <span class="why">— זה קשר רגיל, לא תלות. תלות היא ״משתמש ולא מחזיק״</span></li>
@@ -6054,6 +6386,12 @@
 
       </div>
       <aside class="notes">
+        <b>הכלל המעודכן (David, 2026-08-30):</b> תלות היא הסימון היחיד לכל קריאת API — ספק חיצוני <b>וגם</b> מערכת אחרת
+        של הארגון (HR, ERP, מערכת הסטודנטים, SSO). ״חיצוני״ פירושו מחוץ לגבול <b>המערכת שלנו</b>, לא מחוץ לארגון: המבחן הוא
+        ״מי מחזיק את הנתונים״ — אם הם אצל המערכת האחרת ואנחנו רק קוראים, זו «external system» ותלות. לא לבלבל עם <b>חבילת
+        קוד</b> פנימית שמקומפלת לתוכנו — היא הקוד שלנו, והמחלקות שבה הן מחלקות רגילות (הפריט ⚖️ ברשימה).
+        ממשק/Interface נשאר <b>מושג</b> על הקו — החוזה שדרכו קוראים ומה שמאפשר להחליף את מי שמאחוריו — ולא תיבה או משולש
+        מימוש (שקפי הממשק נשארים ב-_parked; הוחלט שוב 2026-08-30).
         <b>הפוקוס:</b> תלות היא הקשר החלש ביותר, והשימוש שלה בקורס צר ומוגדר — <b>מערכת חיצונית שאנחנו קוראים
         לה</b>. אם מציירים תלות בין שתי מחלקות תחום, כמעט תמיד התכוונו לאסוציאציה.
         <b>ההגדרה הכללית, אם עולה שאלה:</b> ״הלקוח זקוק לספק״ — ובמחלקות זה בדרך כלל <b>שימוש בלי החזקה</b>:
@@ -6407,6 +6745,19 @@
         section[data-slug="onf-1"] .hurt li::before{ content:"✗"; position:absolute; inset-inline-start:0;
           color:var(--red); font-weight:800; }
         section[data-slug="onf-1"] .hurt li b{ color:var(--dark-blue); }
+        section[data-slug="onf-1"] .ex2{ flex:0 0 auto; display:grid; grid-template-columns:1fr 1.15fr; gap:12px; }
+        section[data-slug="onf-1"] .e2{ border-radius:10px; padding:4px 10px 5px; display:flex; flex-direction:column; gap:2px; }
+        section[data-slug="onf-1"] .e2.bad{ background:#FBEAEA; border:1.5px solid var(--red); }
+        section[data-slug="onf-1"] .e2.good{ background:#EAF6EC; border:1.5px solid var(--green); }
+        section[data-slug="onf-1"] .e2 .eh{ font-size:13px; font-weight:800; }
+        section[data-slug="onf-1"] .e2.bad .eh{ color:var(--red); }
+        section[data-slug="onf-1"] .e2.good .eh{ color:var(--green); }
+        section[data-slug="onf-1"] .e2 .eh small{ font-weight:600; color:var(--muted); font-size:12px; }
+        section[data-slug="onf-1"] .e2 svg{ display:block; width:100%; max-width:400px; height:auto; margin:0 auto; }
+        section[data-slug="onf-1"] .e2 .ec{ font-size:12px; line-height:1.35; color:var(--body); }
+        section[data-slug="onf-1"] .e2 .ec b{ color:var(--dark-blue); }
+        section[data-slug="onf-1"] .hurt ul{ margin-top:2px; }
+        section[data-slug="onf-1"] .hurt li{ font-size:12.5px; line-height:1.3; }
       </style>
       <h1><span class="en">1ONF</span> — אין רשימה בתוך תכונה</h1>
       <div class="subtitle">תכונה מחזיקה <b>ערך אחד</b>. רשימה חוזרת היא תמיד <b>מחלקה</b>, לא מחרוזת</div>
@@ -6457,6 +6808,39 @@
 
         </div>
 
+        <!-- second example (David, 2026-08-30: at least two examples per ONF) — operations flavour -->
+        <div class="ex2">
+          <div class="e2 bad">
+            <div class="eh">✗ דוגמה 2 <small>— עובד וכישוריו</small></div>
+            <svg viewBox="0 0 360 58" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Employee with a delimited skills list">
+    <rect x="6" y="2" width="348" height="54" fill="#fff" stroke="#3b82f6" stroke-width="1.5"/>
+    <rect x="6" y="2" width="348" height="22" fill="#1e40af"/>
+    <text x="180.0" y="17.5" text-anchor="middle" font-size="11.5" font-weight="700" fill="#fff" font-family="'Segoe UI',Arial,sans-serif">Employee</text>
+    <text x="14" y="36" font-size="10" fill="#1e293b" font-family="Consolas,monospace">- employeeId : String</text>
+    <rect x="10" y="39" width="340" height="13" fill="#FBEAEA" stroke="#C62828" stroke-width="1"/>
+    <text x="14" y="49" font-size="10" font-weight="700" fill="#C62828" font-family="Consolas,monospace">- skills : String = "Welding; Forklift; CNC"</text>
+    </svg>
+            <div class="ec">שלושה כישורים בערך אחד. ״מי מוסמך למלגזה?״ — חיפוש טקסט, ולא שאלה למודל.</div>
+          </div>
+          <div class="e2 good">
+            <div class="eh">✓ אחרי הנירמול <small>— כישור הוא מחלקה, והקשר רבים-לרבים</small></div>
+            <svg viewBox="0 0 460 45" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Employee many-to-many Skill">
+    <rect x="300" y="2" width="156" height="41" fill="#fff" stroke="#3b82f6" stroke-width="1.5"/>
+    <rect x="300" y="2" width="156" height="22" fill="#1e40af"/>
+    <text x="378.0" y="17.5" text-anchor="middle" font-size="11.5" font-weight="700" fill="#fff" font-family="'Segoe UI',Arial,sans-serif">Employee</text>
+    <text x="308" y="36" font-size="10" fill="#1e293b" font-family="Consolas,monospace">- employeeId : String</text>
+    <rect x="4" y="2" width="156" height="41" fill="#fff" stroke="#3b82f6" stroke-width="1.5"/>
+    <rect x="4" y="2" width="156" height="22" fill="#1e40af"/>
+    <text x="82.0" y="17.5" text-anchor="middle" font-size="11.5" font-weight="700" fill="#fff" font-family="'Segoe UI',Arial,sans-serif">Skill</text>
+    <text x="12" y="36" font-size="10" fill="#1e293b" font-family="Consolas,monospace">- name : String</text>
+    <line x1="160" y1="22.5" x2="300" y2="22.5" stroke="#334155" stroke-width="1.5"/>
+    <text x="164" y="19.5" font-size="10" font-weight="700" fill="#334155" font-family="Consolas,monospace">0..*</text>
+    <text x="296" y="19.5" text-anchor="end" font-size="10" font-weight="700" fill="#334155" font-family="Consolas,monospace">0..*</text>
+    </svg>
+            <div class="ec">ואם צריך <b>רמה</b> או <b>תאריך הסמכה</b> לכל צמד — זו מחלקה מתווכת <span class="en">Certification</span>, בדיוק כמו שורת הזמנה.</div>
+          </div>
+        </div>
+
         <div class="hurt"><span class="lbl">ומה נשבר בלי הכלל:</span>
           <ul>
             <li>אין איפה לרשום <b>כמות</b> — ״שני המבורגרים״ הופך ל״המבורגר; המבורגר״</li>
@@ -6469,6 +6853,7 @@
 
       </div>
       <aside class="notes">
+        <b>דוגמה 2 (2026-08-30):</b> עובד–כישורים. אותו כלל, מסביבת תפעול: ״ריתוך; מלגזה; CNC״ במחרוזת אחת פירושו שאי אפשר לשאול מי מוסמך למלגזה בלי לפרק טקסט. התיקון הוא קשר רבים-לרבים, ואם לצמד יש נתונים (רמה, תוקף הסמכה) — מחלקה מתווכת. שווה להראות שהמחלקה המתווכת של חלק ג׳ חוזרת גם כאן.
         <b>אלה 1ONF/2ONF/3ONF — נירמול של מודל מחלקות, לא של טבלאות.</b> לסטודנטים יש קורס בסיסי נתונים
         במקביל, ושם 2NF ו-3NF פירושם דברים אחרים לגמרי (תלות חלקית במפתח, תלות טרנזיטיבית). הרעיון זהה —
         <b>כל עובדה במקום אחד</b> — אבל הכללים מנוסחים על מחלקות ותכונות. אל תשמיטו את ה-O.
@@ -6525,6 +6910,19 @@
         section[data-slug="onf-2"] .hurt li::before{ content:"✗"; position:absolute; inset-inline-start:0;
           color:var(--red); font-weight:800; }
         section[data-slug="onf-2"] .hurt li b{ color:var(--dark-blue); }
+        section[data-slug="onf-2"] .ex2{ flex:0 0 auto; display:grid; grid-template-columns:1fr 1.15fr; gap:12px; }
+        section[data-slug="onf-2"] .e2{ border-radius:10px; padding:4px 10px 5px; display:flex; flex-direction:column; gap:2px; }
+        section[data-slug="onf-2"] .e2.bad{ background:#FBEAEA; border:1.5px solid var(--red); }
+        section[data-slug="onf-2"] .e2.good{ background:#EAF6EC; border:1.5px solid var(--green); }
+        section[data-slug="onf-2"] .e2 .eh{ font-size:13px; font-weight:800; }
+        section[data-slug="onf-2"] .e2.bad .eh{ color:var(--red); }
+        section[data-slug="onf-2"] .e2.good .eh{ color:var(--green); }
+        section[data-slug="onf-2"] .e2 .eh small{ font-weight:600; color:var(--muted); font-size:12px; }
+        section[data-slug="onf-2"] .e2 svg{ display:block; width:100%; max-width:400px; height:auto; margin:0 auto; }
+        section[data-slug="onf-2"] .e2 .ec{ font-size:12px; line-height:1.35; color:var(--body); }
+        section[data-slug="onf-2"] .e2 .ec b{ color:var(--dark-blue); }
+        section[data-slug="onf-2"] .hurt ul{ margin-top:2px; }
+        section[data-slug="onf-2"] .hurt li{ font-size:12.5px; line-height:1.3; }
       </style>
       <h1><span class="en">2ONF</span> — אין אובייקט כתכונה</h1>
       <div class="subtitle">אם התכונה היא בעצם <b>דבר</b> — היא לא תכונה. יוצרים לה <b>מחלקה</b>, ומגיעים אליה בקשר</div>
@@ -6572,6 +6970,43 @@
 
         </div>
 
+        <!-- second example (David, 2026-08-30: at least two examples per ONF) — operations flavour -->
+        <div class="ex2">
+          <div class="e2 bad">
+            <div class="eh">✗ דוגמה 2 <small>— משלוח והספק שלו</small></div>
+            <svg viewBox="0 0 360 71" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Shipment holding the supplier as a name string">
+    <rect x="6" y="2" width="348" height="67" fill="#fff" stroke="#3b82f6" stroke-width="1.5"/>
+    <rect x="6" y="2" width="348" height="22" fill="#1e40af"/>
+    <text x="180.0" y="17.5" text-anchor="middle" font-size="11.5" font-weight="700" fill="#fff" font-family="'Segoe UI',Arial,sans-serif">Shipment</text>
+    <text x="14" y="36" font-size="10" fill="#1e293b" font-family="Consolas,monospace">- shipmentId : String</text>
+    <rect x="10" y="39" width="340" height="13" fill="#FBEAEA" stroke="#C62828" stroke-width="1"/>
+    <text x="14" y="49" font-size="10" font-weight="700" fill="#C62828" font-family="Consolas,monospace">- supplier : String = "Tnuva Ltd."</text>
+    <text x="14" y="62" font-size="10" fill="#1e293b" font-family="Consolas,monospace">- arrivedAt : DateTime</text>
+    </svg>
+            <div class="ec">הספק הוא <b>דבר</b> עם טלפון, תנאי תשלום ודירוג — לא שם. ו-<span class="en" dir="ltr">supplierId : String</span> זו אותה שגיאה במסווה.</div>
+          </div>
+          <div class="e2 good">
+            <div class="eh">✓ אחרי הנירמול <small>— הספק מחלקה, המשלוח מפנה אליו</small></div>
+            <svg viewBox="0 0 460 71" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Shipment associated with one Supplier">
+    <rect x="300" y="2" width="156" height="54" fill="#fff" stroke="#3b82f6" stroke-width="1.5"/>
+    <rect x="300" y="2" width="156" height="22" fill="#1e40af"/>
+    <text x="378.0" y="17.5" text-anchor="middle" font-size="11.5" font-weight="700" fill="#fff" font-family="'Segoe UI',Arial,sans-serif">Shipment</text>
+    <text x="308" y="36" font-size="10" fill="#1e293b" font-family="Consolas,monospace">- shipmentId : String</text>
+    <text x="308" y="49" font-size="10" fill="#1e293b" font-family="Consolas,monospace">- arrivedAt : DateTime</text>
+    <rect x="4" y="2" width="156" height="67" fill="#fff" stroke="#3b82f6" stroke-width="1.5"/>
+    <rect x="4" y="2" width="156" height="22" fill="#1e40af"/>
+    <text x="82.0" y="17.5" text-anchor="middle" font-size="11.5" font-weight="700" fill="#fff" font-family="'Segoe UI',Arial,sans-serif">Supplier</text>
+    <text x="12" y="36" font-size="10" fill="#1e293b" font-family="Consolas,monospace">- supplierId : String</text>
+    <text x="12" y="49" font-size="10" fill="#1e293b" font-family="Consolas,monospace">- name : String</text>
+    <text x="12" y="62" font-size="10" fill="#1e293b" font-family="Consolas,monospace">- phone : String</text>
+    <line x1="160" y1="35.5" x2="300" y2="35.5" stroke="#334155" stroke-width="1.5"/>
+    <text x="164" y="32.5" font-size="10" font-weight="700" fill="#334155" font-family="Consolas,monospace">1</text>
+    <text x="296" y="32.5" text-anchor="end" font-size="10" font-weight="700" fill="#334155" font-family="Consolas,monospace">0..*</text>
+    </svg>
+            <div class="ec">הספק קיים פעם אחת; ״כמה משלוחים איחרו מתנובה?״ הופך לשאלה שהמודל יודע לענות עליה.</div>
+          </div>
+        </div>
+
         <div class="hurt"><span class="lbl">ומה נשבר בלי הכלל:</span>
           <ul>
             <li><b>אין איפה לשמור את שאר העובדות</b> — מייל, טלפון, מספר סטודנט. הן ייעלמו או יידחסו לעוד מחרוזות</li>
@@ -6584,6 +7019,7 @@
 
       </div>
       <aside class="notes">
+        <b>דוגמה 2 (2026-08-30):</b> משלוח–ספק. אותו מבחן כמו הזמנה–סטודנט: ברגע שיש עוד עובדה אחת על הספק (טלפון, תנאי תשלום, דירוג איכות) — הוא מחלקה. ולהזכיר שוב: <code>supplierId</code> כתכונה על Shipment הוא מפתח זר, לא תכונה (B5).
         <b>הכלל בשורה אחת:</b> תכונה מחזיקה טיפוס פשוט (מספר, טקסט, תאריך, ערך מרשימה). מחלקה אחרת —
         מגיעים אליה ב<b>קשר</b>, לא מטמיעים אותה פנימה.
         <b>שימו לב איזו גרסה של השגיאה מציגים כאן (תיקון של דוד, 2026-08-17), כי היא הנפוצה:</b> לא
@@ -6645,6 +7081,19 @@
         section[data-slug="onf-3"] .hurt li::before{ content:"✗"; position:absolute; inset-inline-start:0;
           color:var(--red); font-weight:800; }
         section[data-slug="onf-3"] .hurt li b{ color:var(--dark-blue); }
+        section[data-slug="onf-3"] .ex2{ flex:0 0 auto; display:grid; grid-template-columns:1fr 1.15fr; gap:12px; }
+        section[data-slug="onf-3"] .e2{ border-radius:10px; padding:4px 10px 5px; display:flex; flex-direction:column; gap:2px; }
+        section[data-slug="onf-3"] .e2.bad{ background:#FBEAEA; border:1.5px solid var(--red); }
+        section[data-slug="onf-3"] .e2.good{ background:#EAF6EC; border:1.5px solid var(--green); }
+        section[data-slug="onf-3"] .e2 .eh{ font-size:13px; font-weight:800; }
+        section[data-slug="onf-3"] .e2.bad .eh{ color:var(--red); }
+        section[data-slug="onf-3"] .e2.good .eh{ color:var(--green); }
+        section[data-slug="onf-3"] .e2 .eh small{ font-weight:600; color:var(--muted); font-size:12px; }
+        section[data-slug="onf-3"] .e2 svg{ display:block; width:100%; max-width:400px; height:auto; margin:0 auto; }
+        section[data-slug="onf-3"] .e2 .ec{ font-size:12px; line-height:1.35; color:var(--body); }
+        section[data-slug="onf-3"] .e2 .ec b{ color:var(--dark-blue); }
+        section[data-slug="onf-3"] .hurt ul{ margin-top:2px; }
+        section[data-slug="onf-3"] .hurt li{ font-size:12.5px; line-height:1.3; }
       </style>
       <h1><span class="en">3ONF</span> — פרק תכונה מורכבת</h1>
       <div class="subtitle">ערך אחד שמכיל <b>כמה עובדות</b> — מפרקים לרכיבים, <b>על המחלקה שהם באמת מתארים</b></div>
@@ -6692,6 +7141,34 @@
 
         </div>
 
+        <!-- second example (David, 2026-08-30: at least two examples per ONF) — operations flavour -->
+        <div class="ex2">
+          <div class="e2 bad">
+            <div class="eh">✗ דוגמה 2 <small>— משמרת</small></div>
+            <svg viewBox="0 0 360 58" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Shift packing day, start and end into one string">
+    <rect x="6" y="2" width="348" height="54" fill="#fff" stroke="#3b82f6" stroke-width="1.5"/>
+    <rect x="6" y="2" width="348" height="22" fill="#1e40af"/>
+    <text x="180.0" y="17.5" text-anchor="middle" font-size="11.5" font-weight="700" fill="#fff" font-family="'Segoe UI',Arial,sans-serif">Shift</text>
+    <text x="14" y="36" font-size="10" fill="#1e293b" font-family="Consolas,monospace">- employeeId : String</text>
+    <rect x="10" y="39" width="340" height="13" fill="#FBEAEA" stroke="#C62828" stroke-width="1"/>
+    <text x="14" y="49" font-size="10" font-weight="700" fill="#C62828" font-family="Consolas,monospace">- when : String = "Sunday 08:00-16:00"</text>
+    </svg>
+            <div class="ec">שלוש עובדות בערך אחד: יום, שעת התחלה, שעת סיום. ״כמה שעות עבד השבוע?״ — פירוק מחרוזת.</div>
+          </div>
+          <div class="e2 good">
+            <div class="eh">✓ אחרי הנירמול <small>— יום, התחלה, סיום — כל אחד בטיפוס שלו</small></div>
+            <svg viewBox="0 0 460 71" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Shift with day, start and end as typed attributes">
+    <rect x="120" y="2" width="220" height="67" fill="#fff" stroke="#3b82f6" stroke-width="1.5"/>
+    <rect x="120" y="2" width="220" height="22" fill="#1e40af"/>
+    <text x="230.0" y="17.5" text-anchor="middle" font-size="11.5" font-weight="700" fill="#fff" font-family="'Segoe UI',Arial,sans-serif">Shift</text>
+    <text x="128" y="36" font-size="10" fill="#1e293b" font-family="Consolas,monospace">- day : DayOfWeek</text>
+    <text x="128" y="49" font-size="10" fill="#1e293b" font-family="Consolas,monospace">- start : Time</text>
+    <text x="128" y="62" font-size="10" fill="#1e293b" font-family="Consolas,monospace">- end : Time  {end > start}</text>
+    </svg>
+            <div class="ec">עכשיו <span class="en">day</span> הוא ה-<span class="en">enum</span> משקף 16, על השעות אפשר לחשב, ואת <span class="en" dir="ltr">{end &gt; start}</span> אפשר בכלל לכתוב.</div>
+          </div>
+        </div>
+
         <div class="hurt"><span class="lbl">ומה נשבר בלי הכלל:</span>
           <ul>
             <li>אי אפשר לשאול <b>״אילו עמדות בבניין 72?״</b> בלי לפרק מחרוזת</li>
@@ -6710,6 +7187,7 @@
 
       </div>
       <aside class="notes">
+        <b>דוגמה 2 (2026-08-30):</b> משמרת. ״ראשון 08:00-16:00״ במחרוזת אחת — שלוש עובדות. הפירוק נותן לכל אחת טיפוס: יום = ה-enum DayOfWeek משקף 16 (קישור לאחור!), שעות = Time שאפשר לחשב איתו, ואילוץ {end > start} שעל מחרוזת אי אפשר להביע. גם כאן: מפרקים עד הרמה שהעסק שואל בה — ״כמה שעות״, ״מי במשמרת ביום ראשון״.
         <b>הכלל בשורה אחת:</b> ערך אחד שמכיל כמה עובדות — מפרקים. המבחן הוא לא ״כמה חלקים יש״ אלא
         <b>האם העסק שואל על חלק בנפרד</b>.
         ⚠️ <b>ולפני הפירוק — שאלה שקודמת לו, וזו הערה של דוד על גרסה קודמת של השקף (2026-08-17):</b>
@@ -6768,9 +7246,9 @@
           <div class="rail">
             <div class="panel-title">מה לראות בתרשים</div>
             <ul class="look">
-              <li><span class="g">◆</span><span><b>הרכבה</b> — הזמנה ◆ שורת הזמנה: שורה לא קיימת בלי ההזמנה שלה</span></li>
+              <li><span class="g">◆</span><span><b>הרכבה</b> — הזמנה ◆ שורת הזמנה, וגם קפיטריה ◆ עמדה: החלק הוא מושג בתוך השלם ולא קיים בלעדיו</span></li>
               <li><span class="g purple">▭</span><span><b>מחלקה מתווכת</b> — שורת הזמנה שמחליפה את קשר הרבים-לרבים שבין הזמנה לפריט תפריט (נושאת <span class="en">quantity</span>)</span></li>
-              <li><span class="g">◇</span><span><b>צבירה</b> — קפיטריה ◇ עמדה: עמדה קיימת גם בנפרד. כאן <b>כדי שתזהו אותה</b> — בתרשימים שלכם: קו רגיל</span></li>
+              <li><span class="g">◇</span><span><b>צבירה</b> — <b>אין</b> בתרשים, בכוונה: מזהים אותה אצל אחרים, לא מייצרים</span></li>
               <li><span class="g">▷</span><span><b>הורשה</b> — תשלום עם שני תת-סוגים: מוצדקת כי רק לאשראי יש <b>קשר</b> לשער התשלום</span></li>
               <li><span class="g purple">⇢</span><span><b>תלות</b> — אל <span class="en">«external system»</span> (שער תשלום, זיהוי אוניברסיטה): מצוירת, אך אינה מחלקת תחום</span></li>
               <li><span class="g gray">«enum»</span><span><b><span class="en">OrderStatus</span></b> — קופסה לא מחוברת ליד הזמנה (סוג התכונה <span class="en">status</span>)</span></li>
@@ -6849,7 +7327,7 @@
               <tr><td class="l"><b>אובייקט</b></td><td class="r">שורה</td></tr>
               <tr><td class="l"><b>תכונה</b></td><td class="r">עמודה</td></tr>
               <tr><td class="l"><b>מזהה עסקי</b> (<span class="en" dir="ltr">orderId</span>)</td><td class="r">מפתח ראשי</td></tr>
-              <tr class="gap"><td class="l"><b>אין מזהה</b> (<span class="en" dir="ltr">OrderLine</span>)</td><td class="r">מפתח שהמסד <b>ממציא</b></td></tr>
+              <tr class="gap"><td class="l"><b>אין מזהה</b> (<span class="en" dir="ltr">OrderLine</span>)</td><td class="r">מפתח שהמסד <b>מוצא</b> — הצירוף של הקשרים, או מפתח שהוא ממציא</td></tr>
               <tr class="gap"><td class="l"><b>קשר</b> ‎1 — 1..*‎</td><td class="r">מפתח זר בצד ה״רבים״</td></tr>
               <tr><td class="l"><b>הרכבה ◆</b></td><td class="r">מחיקה מדורגת · <span class="en" dir="ltr">NOT NULL</span></td></tr>
               <tr><td class="l"><b>צבירה ◇</b></td><td class="r">מפתח זר שמותר שיהיה ריק</td></tr>
@@ -6883,8 +7361,9 @@
         <b>המסר האחד:</b> אלה לא שני מודלים מתחרים אלא <b>אותן החלטות בשתי שפות</b>. כל שורה בטבלה השמאלית היא
         תרגום, וכמעט כל תרגום הוא גם <b>החלטה</b> — במיוחד ההורשה (טבלה אחת עם עמודת סוג, או טבלה לכל בן?)
         ו-enum (אילוץ CHECK או טבלת ערכים — ראו את שקופית ה-enum).
-        <b>שלוש השורות המודגשות הן הלב:</b> (1) מחלקה בלי מזהה עסקי מקבלת מפתח שהמסד ממציא — הוא נשאר שם ולא
-        חוזר לתרשים; (2) קשר הופך למפתח זר, ולכן מפתח זר <b>אינו</b> תכונה בתרשים; (3) פעולה לא עוברת בכלל.
+        <b>שלוש השורות המודגשות הן הלב:</b> (1) מחלקה בלי מזהה עסקי מקבלת מפתח שהמסד מוצא — לרוב הצירוף של הקשרים שלה
+        (<code>orderId + itemId</code>, כמו <code>OrderItems</code> בפרויקט הדוגמה), ולפעמים מפתח שהוא ממציא —
+        והוא נשאר שם ולא חוזר לתרשים; (2) קשר הופך למפתח זר, ולכן מפתח זר <b>אינו</b> תכונה בתרשים; (3) פעולה לא עוברת בכלל.
         <b>◆ מול ◇ זה המקום שבו ההבדל נהיה מוחשי:</b> הרכבה אומרת ״החלק לא קיים בלי השלם״, ובמסד זה נהיה מחיקה
         מדורגת ועמודה שלא יכולה להיות ריקה. צבירה אומרת ההפך. כלומר החלטה שנראתה סמנטית בתרשים הופכת לכלל
         אכיפה אמיתי — וזו התשובה הטובה ביותר לשאלה ״למה חשוב איזה מעוין ציירתי״.
@@ -7091,10 +7570,17 @@
           מצב קריאת תחזוקה = <span class="en">enum</span>, <b>לא</b> הורשה · ״דוח תפוסה״ הוא פלט מחושב — <b>לא מחלקה</b>.
         </div>
 
-        <p class="bottom-line fragment">לא מדרגים כמה מהר ה-<span class="en">AI</span> צייר — מדרגים <b>כמה חדה הביקורת שלכם</b>.</p>
+        <p class="bottom-line fragment">לא מדרגים כמה מהר ה-<span class="en">AI</span> צייר — מדרגים <b>כמה חדה הביקורת שלכם</b>.
+          <br><span style="font-size:0.72em; font-weight:600; color:var(--muted);">📄 המסמך המלא (ארגון, ראיונות, מילון נתונים, כללים, שאלות פתוחות) באתר הקורס: <span class="en" dir="ltr">materials/5-עיצוב/תרגול-בכיתה</span> — אותו מסמך לכל הכיתה, כדי שיהיה על מה להתווכח.</span></p>
 
       </div>
       <aside class="notes">
+        <b>המסמך המלא (2026-08-30):</b> הפסקה שעל השקף היא רק התקציר. באתר הקורס, תחת
+        <code>materials/5-עיצוב/תרגול-בכיתה</code>, יש מסמך אפיון מלא של המעונות — תיאור הארגון, ראיונות, מילון
+        נתונים, כללים עסקיים ושאלות פתוחות — בדיוק במתכונת של הספרייה מהרצאה 4-5. זה מה שמזינים ל-sad-mcp,
+        וזה הסיפור <b>המשותף</b> לכל הכיתה: הפרויקטים הקבוצתיים שונים זה מזה, ולכן אין תרשים אחד להתווכח עליו —
+        זה התרשים. השאלות הפתוחות בסוף המסמך הן נקודות הוויכוח המתוכננות: דייר מול סטודנט, האם ״מיטה״ קיימת
+        במודל, קריאה על חדר <i>או</i> בניין, ומה צריך להתקיים כדי להפיק דוח תפוסה.
         תרגול בכיתה על תרחיש טרי (מעונות) — מכוון כדי שהסטודנטים יעבירו את הדוקטרינה מהקמפוס לתחום חדש. מזינים
         ל-Claude, מקבלים מודל מחלקות, ומבקרים: (1) ״דוח תפוסה״ נכשל במבחן הקיימות — פלט מחושב, לא מחלקה; (2)
         חדר↔דייר עם דמי שכירות ותקופה דורש מחלקה מתווכת (חוזה שכירות), לא קשר רבים-לרבים פשוט; (3) בניין◆חדר קומפוזיציה
@@ -7342,8 +7828,8 @@
         section[data-slug="homework"] .hero p { font-size:17px; }
         section[data-slug="homework"] .hero b.hl { color:var(--dark-blue); }
       </style>
-      <h1>מטלת בית 🏠</h1>
-      <div class="subtitle">אותו תהליך שעשינו בכיתה — על התרחיש שלא הרצנו</div>
+      <h1>תרגיל בית (רשות) 🏠</h1>
+      <div class="subtitle">אותו תהליך שעשינו בכיתה — על התרחיש שלא הרצנו. לא לציון — אבל זה הסיפור המשותף שנדון בו בשיעור הבא</div>
       <div class="body">
 
         <div class="hero fragment">
@@ -7371,10 +7857,17 @@
           </ul>
         </div>
 
-        <p class="bottom-line fragment">לא מדרגים כמה יפה ה-<span class="en">AI</span> צייר — מדרגים <b>כמה חדה הייתה הביקורת שלכם</b>.</p>
+        <p class="bottom-line fragment">לא מודדים כמה יפה ה-<span class="en">AI</span> צייר — אלא <b>כמה חדה הייתה הביקורת שלכם</b>.
+          <br><span style="font-size:0.72em; font-weight:600; color:var(--muted);">📄 המסמך המלא וההנחיות באתר הקורס: <span class="en" dir="ltr">materials/5-עיצוב/תרגיל-בית</span> (README שם). מי שמביא ביקורת — נדון בה בכיתה.</span></p>
 
       </div>
       <aside class="notes">
+        <b>רשות, ולמה בכל זאת (David, 2026-08-30):</b> התרגיל לא מוגש לציון. הוא קיים כי הפרויקט של כל קבוצה שונה
+        ולכן אין לכיתה תרשים משותף להתווכח עליו — זה הסיפור המשותף, כמו החניון בהרצאה 4-5. המסמך המלא
+        (ארגון, ראיונות, מילון נתונים, כללים, שאלות פתוחות) נמצא באתר הקורס תחת
+        <code>materials/5-עיצוב/תרגיל-בית</code> עם README של הנחיות. מי שמביא ביקורת לשיעור הבא — פותחים איתה.
+        נקודות הוויכוח המתוכננות (השאלות הפתוחות במסמך): תחנת הכנה — enum או מחלקה; איפה חי מחיר של מנה
+        בתפריט מסוים; האם צריך ״ביקור״ בין שולחן להזמנה; מצב להזמנה וגם לשורה; ודוח המכירות שאינו מחלקה.
         מטלת הבית = מראה של התרגיל בכיתה, על התרחיש השני (מלצר אוטומטי) — מכוון להיות מקביל לקמפוס כדי שהדוקטרינה
         תעבור. התוצר המדורג הוא הביקורת, לא ציור ה-AI — אותו חוט של כל ההרצאה. לוודא שהסטודנטים תופסים: הזמנה↔מנה
         עם כמות/הערות דורש מחלקה מתווכת (שורת הזמנה); הזמנה◆שורת-הזמנה קומפוזיציה; מצב הזמנה וסוג תחנה הם enum ולא

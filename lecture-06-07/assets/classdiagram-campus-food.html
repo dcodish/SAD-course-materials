@@ -149,7 +149,7 @@
       attrs: ['- name : String', '- location : String'],
       ops: [],
       x: 1036, y: 90,
-      desc: '<b>צבירה (◇ יהלום ריק)</b>: הקפיטריה מכילה עמדות, אבל העמדה יכולה להתקיים בלעדיה — אם סוגרים קפיטריה אפשר להעביר את העמדה לקפיטריה אחרת. זה ההבדל מהרכבה: שם המחיקה מוחקת גם את החלק. <b>שימו לב:</b> הסימון מופיע כאן כדי שתדעו לזהות אותו — בקורס <b>לא מייצרים ◇</b>, אלא קו רגיל.'
+      desc: '<b>הרכבה (◆ יהלום מלא)</b>: הקפיטריה מורכבת מעמדות — ״העמדה החמה״ היא <b>מושג</b> בתוך הקפיטריה, לא ציוד. נסגרת הקפיטריה — העמדה בצורתה הזו לא קיימת יותר; אם פותחים את הציוד במקום אחר, שם נוצרת עמדה חדשה. שני המבחנים של ההרכבה עוברים: בעלים אחד (1), ונמחקת עם השלם. <b>שימו לב:</b> אין ◇ בתרשים הזה בכוונה — בקורס לא מייצרים צבירה.'
     },
     {
       id: 'Payment', name: 'Payment', stereotype: null, isEnum: false, isAbstract: false, isExternal: false,
@@ -217,9 +217,10 @@
       fromMult: '0..*', toMult: '1', fromRole: null, toRole: null, label: null,
       points: [[949, 270], [1033, 270]] },
 
-    // קפיטריה (0..1) ◇—— (0..*) עמדה  (aggregation — HOLLOW diamond at קפיטריה)
-    { type: 'agg', from: 'Cafeteria', to: 'Station',
-      fromMult: '0..1', toMult: '0..*', fromRole: null, toRole: null, label: null,
+    // קפיטריה (1) ◆—— (0..*) עמדה  (composition — FILLED diamond at קפיטריה; flipped from ◇ 2026-08-30, David:
+    // a station is a virtual concept inside its cafeteria and does not exist in that form once it closes)
+    { type: 'comp', from: 'Cafeteria', to: 'Station',
+      fromMult: '1', toMult: '0..*', fromRole: null, toRole: null, label: null,
       points: [[1106, 158], [1106, 230]] },
 
     // הזמנה (1) —— (0..1) תשלום
@@ -358,7 +359,6 @@
     const yL = totalHeight - 44, yT = yL + 4;
     const items = [
       { label: 'Association',    attrs: '' },
-      { label: 'Aggregation',    attrs: 'marker-start="url(#aggHollow)"' },
       { label: 'Composition',    attrs: 'marker-start="url(#compFill)"' },
       { label: 'Generalization', attrs: 'marker-end="url(#genHollow)"' },
       { label: 'Dependency',     attrs: 'marker-end="url(#arrOpen)" stroke-dasharray="6 3"' }
@@ -682,9 +682,9 @@ ${body}
           { kind: 'association', id: 'assoc_menuitem_station', from: 'MenuItem', to: 'Station',
             multFrom: '0..*', multTo: '1', roleFrom: null, roleTo: null,
             directed: false, aggregation: false, composition: false },
-          { kind: 'association', id: 'agg_cafeteria_station', from: 'Cafeteria', to: 'Station',
-            multFrom: '0..1', multTo: '0..*', roleFrom: null, roleTo: null,
-            directed: false, aggregation: true, composition: false },
+          { kind: 'association', id: 'comp_cafeteria_station', from: 'Cafeteria', to: 'Station',
+            multFrom: '1', multTo: '0..*', roleFrom: null, roleTo: null,
+            directed: false, aggregation: false, composition: true },
           { kind: 'association', id: 'assoc_order_payment', from: 'Order', to: 'Payment',
             multFrom: '1', multTo: '0..1', roleFrom: null, roleTo: null,
             directed: false, aggregation: false, composition: false },
