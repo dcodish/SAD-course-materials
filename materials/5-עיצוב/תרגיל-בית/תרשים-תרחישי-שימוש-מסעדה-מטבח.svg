@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="diagram-svg-1" viewBox="0 0 1100 390" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1100" height="390">
+
+<style>
+  text { font-family: 'Noto Sans Hebrew', 'Segoe UI', 'Arial Hebrew', Arial, sans-serif; }
+  .conn-hitbox { pointer-events: none; }
+</style>
+<defs><pattern id="dot-grid-1" width="24" height="24" patternUnits="userSpaceOnUse"><circle cx="12" cy="12" r="0.8" fill="#cbd5e1"></circle></pattern></defs>
+<rect x="0" y="0" width="100%" height="100%" fill="#f8fafc"></rect>
+<rect x="0" y="0" width="100%" height="100%" fill="url(#dot-grid-1)"></rect>
+<rect class="system-boundary" x="240" y="50" width="620" height="312" rx="12" fill="#fff" stroke="#3b82f6" stroke-width="2.5"></rect>
+<path d="M240,94 v-32 a12,12 0 0 1 12,-12 h596 a12,12 0 0 1 12,12 v32 z" fill="#1e40af" class="system-title-bar" data-boundary-header="1"></path>
+<text x="550.0" y="78" text-anchor="middle" font-size="14" font-weight="700" fill="#fff" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl" data-boundary-title="1">מערכת ההזמנות של מסעדת 'המלצר האוטומטי'</text>
+<line data-conn-from="cook" data-conn-to="uc-dish-avail" x1="160" y1="228" x2="275.7215937192416" y2="163.72301109116367" stroke="#334155" stroke-width="1.8"></line>
+
+<line data-conn-from="cook" data-conn-to="uc-station-queue" x1="160" y1="228" x2="295" y2="228" stroke="#334155" stroke-width="1.8"></line>
+
+<line data-conn-from="cook" data-conn-to="uc-cancel-line" x1="160" y1="228" x2="299.37216123828836" y2="292.2769889088363" stroke="#334155" stroke-width="1.8"></line>
+
+<line data-conn-from="shift_mgr" data-conn-to="uc-cancel-order" x1="940" y1="191" x2="817.6744621441337" y2="159.4051248612632" stroke="#334155" stroke-width="1.8"></line>
+
+<line data-conn-from="shift_mgr" data-conn-to="uc-tables" x1="940" y1="191" x2="828.494450830374" y2="222.5948751387368" stroke="#334155" stroke-width="1.8"></line>
+
+<g id="uc-group-uc-dish-avail" data-uc-id="uc-dish-avail">
+  <ellipse cx="376" cy="154" rx="106" ry="30" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"></ellipse>
+  <text x="376" y="158" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">סימון מנה כאזלה / זמינה</text>
+</g>
+<g id="uc-group-uc-station-queue" data-uc-id="uc-station-queue">
+  <ellipse cx="376" cy="228" rx="81" ry="30" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"></ellipse>
+  <text x="376" y="232" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">טיפול בתור התחנה</text>
+</g>
+<g id="uc-group-uc-cancel-line" data-uc-id="uc-cancel-line">
+  <ellipse cx="376" cy="302" rx="81" ry="30" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"></ellipse>
+  <text x="376" y="306" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">ביטול שורת הזמנה</text>
+</g>
+<g id="uc-group-uc-cancel-order" data-uc-id="uc-cancel-order">
+  <ellipse cx="738" cy="154" rx="81" ry="30" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"></ellipse>
+  <text x="738" y="158" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">ביטול הזמנה שלמה</text>
+</g>
+<g id="uc-group-uc-tables" data-uc-id="uc-tables">
+  <ellipse cx="738" cy="228" rx="92" ry="30" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"></ellipse>
+  <text x="738" y="232" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">צפייה במצב השולחנות</text>
+</g>
+<g id="actor-group-cook" data-actor-id="cook" transform="translate(160,228)">
+  <circle cx="0" cy="-60" r="14" fill="#e0f0ff" stroke="#334155" stroke-width="2"></circle>
+  <line x1="0" y1="-46" x2="0" y2="-10" stroke="#334155" stroke-width="2"></line>
+  <line x1="-18" y1="-36" x2="18" y2="-36" stroke="#334155" stroke-width="2"></line>
+  <line x1="0" y1="-10" x2="-14" y2="14" stroke="#334155" stroke-width="2"></line>
+  <line x1="0" y1="-10" x2="14" y2="14" stroke="#334155" stroke-width="2"></line>
+  <text x="0" y="32" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">טבח</text>
+</g>
+<g id="actor-group-shift_mgr" data-actor-id="shift_mgr" transform="translate(940,191)">
+  <circle cx="0" cy="-60" r="14" fill="#e0f0ff" stroke="#334155" stroke-width="2"></circle>
+  <line x1="0" y1="-46" x2="0" y2="-10" stroke="#334155" stroke-width="2"></line>
+  <line x1="-18" y1="-36" x2="18" y2="-36" stroke="#334155" stroke-width="2"></line>
+  <line x1="0" y1="-10" x2="-14" y2="14" stroke="#334155" stroke-width="2"></line>
+  <line x1="0" y1="-10" x2="14" y2="14" stroke="#334155" stroke-width="2"></line>
+  <text x="0" y="32" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">מנהל משמרת</text>
+</g>
+</svg>

@@ -1,0 +1,5288 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>מערכת מידע למעונות הסטודנטים 'הר הצופים' — Use Case Diagram</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Hebrew:wght@400;600&family=IBM+Plex+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://themathbible.com/sad-mcp/uc-diagram-common.css" rel="stylesheet">
+  <!-- REQUIRED: uc-diagram-common.css sets display:flex on .diagram-part, which overrides
+       the browser's [hidden]{display:none}. This one-liner restores correct tab switching. -->
+  <style>[hidden] { display: none !important; }</style>
+</head>
+<body>
+  <h1 class="page-title">מערכת מידע למעונות הסטודנטים 'הר הצופים' — תרשים תרחישי שימוש</h1>
+
+  <div class="tab-bar">
+<button class="tab active" onclick="showDiagram(0)">מגורים, חוזים ותשלומים</button>
+<button class="tab" onclick="showDiagram(1)">תחזוקה</button>
+<button class="tab" onclick="showDiagram(2)">ניהול מערכת ודוחות</button>
+<button class="tab" onclick="showDiagram(3)">תהליכים אוטומטיים</button>
+  </div>
+
+  <div class="split-rationale">Split by UC count: 17 UCs > 8 threshold — לשונית זו: מחזור המגורים (בקשה → המתנה → חוזה → כניסה → יציאה) ותשלומים · Split by actor groups: תחזוקה (דייר / מנהל אחזקה / טכנאי) — אחריות נפרדת ממחזור המגורים · Admin master-data block in its own tab (trigger #3): ניהול בניינים / חדרים / תעריפים + דוחות הנהלה · Time-actor triggers in their own tab (trigger #3): הפקת חיובים אוטומטית, נפרדת מניהול נתוני האב</div>
+
+  <div style="text-align:center;margin:8px 0;">
+    <button onclick="fixLayout(currentLayout())" class="fix-btn">Fix Layout</button>
+  </div>
+
+<div class="diagram-part" id="diagram-0">
+<svg id="diagram-svg-0" viewBox="0 0 1100 560" width="1100" height="560" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<pattern id="dots-0" width="24" height="24" patternUnits="userSpaceOnUse"><circle cx="12" cy="12" r="0.8" fill="#cbd5e1"/></pattern>
+<marker id="arrow-include-0" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polyline points="0 0, 9 3.5, 0 7" fill="none" stroke="#7c3aed" stroke-width="1.2"/></marker>
+</defs>
+<rect x="0" y="0" width="100%" height="100%" fill="#f8fafc"/>
+<rect x="0" y="0" width="100%" height="100%" fill="url(#dots-0)"/>
+<rect class="system-boundary" x="200" y="60" width="640" height="380" rx="12" fill="#ffffff" stroke="#3b82f6" stroke-width="2.5"/>
+<rect x="200" y="60" width="640" height="44" rx="12" fill="#1e40af"/>
+<rect x="200" y="82" width="640" height="22" fill="#1e40af"/>
+<text x="520.0" y="88" text-anchor="middle" font-size="14" font-weight="700" fill="#ffffff" direction="rtl" font-family="'Noto Sans Hebrew',sans-serif">מערכת מידע למעונות הסטודנטים 'הר הצופים' — מגורים, חוזים ותשלומים</text>
+<line data-conn-from="student" data-conn-to="uc-apply" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+<line class="conn-hitbox" data-conn-id="a1" data-hitbox-from="student" data-hitbox-to="uc-apply" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('a1','assoc',event)"/>
+<line data-conn-from="assign-mgr" data-conn-to="uc-waitlist" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+<line class="conn-hitbox" data-conn-id="a2" data-hitbox-from="assign-mgr" data-hitbox-to="uc-waitlist" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('a2','assoc',event)"/>
+<line data-conn-from="assign-mgr" data-conn-to="uc-assign" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+<line class="conn-hitbox" data-conn-id="a3" data-hitbox-from="assign-mgr" data-hitbox-to="uc-assign" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('a3','assoc',event)"/>
+<line data-conn-from="reception" data-conn-to="uc-checkin" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+<line class="conn-hitbox" data-conn-id="a4" data-hitbox-from="reception" data-hitbox-to="uc-checkin" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('a4','assoc',event)"/>
+<line data-conn-from="reception" data-conn-to="uc-checkout" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+<line class="conn-hitbox" data-conn-id="a5" data-hitbox-from="reception" data-hitbox-to="uc-checkout" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('a5','assoc',event)"/>
+<line data-conn-from="tenant" data-conn-to="uc-view-my" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+<line class="conn-hitbox" data-conn-id="a6" data-hitbox-from="tenant" data-hitbox-to="uc-view-my" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('a6','assoc',event)"/>
+<line data-conn-from="tenant" data-conn-to="uc-pay" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+<line class="conn-hitbox" data-conn-id="a7" data-hitbox-from="tenant" data-hitbox-to="uc-pay" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('a7','assoc',event)"/>
+<line data-conn-from="uc-apply" data-conn-to="uc-verify" x1="0" y1="0" x2="0" y2="0" stroke="#7c3aed" stroke-width="1.6" stroke-dasharray="6 4" marker-end="url(#arrow-include-0)"/>
+<line class="conn-hitbox" data-hitbox-from="uc-apply" data-hitbox-to="uc-verify" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14"/>
+<text data-label-for="uc-apply uc-verify" x="0" y="0" text-anchor="middle" font-size="9.5" fill="#7c3aed" font-family="'IBM Plex Mono',monospace">«include»</text>
+<line data-conn-from="uc-assign" data-conn-to="uc-verify" x1="0" y1="0" x2="0" y2="0" stroke="#7c3aed" stroke-width="1.6" stroke-dasharray="6 4" marker-end="url(#arrow-include-0)"/>
+<line class="conn-hitbox" data-hitbox-from="uc-assign" data-hitbox-to="uc-verify" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14"/>
+<text data-label-for="uc-assign uc-verify" x="0" y="0" text-anchor="middle" font-size="9.5" fill="#7c3aed" font-family="'IBM Plex Mono',monospace">«include»</text>
+<g id="uc-group-uc-apply" data-uc-id="uc-apply" onclick="showDesc('uc-apply','uc',event)" style="cursor:pointer">
+<ellipse cx="314" cy="164" rx="70" ry="30" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+<text x="314" y="161" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" direction="rtl" font-family="'Noto Sans Hebrew',sans-serif">הגשת בקשת</text>
+<text x="314" y="175" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" direction="rtl" font-family="'Noto Sans Hebrew',sans-serif">מגורים והעדפות</text>
+</g>
+<g id="uc-group-uc-verify" data-uc-id="uc-verify" onclick="showDesc('uc-verify','uc',event)" style="cursor:pointer">
+<ellipse cx="525.0" cy="161" rx="74" ry="27" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+<text x="525.0" y="165" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" direction="rtl" font-family="'Noto Sans Hebrew',sans-serif">אימות סטודנט פעיל</text>
+</g>
+<g id="uc-group-uc-waitlist" data-uc-id="uc-waitlist" onclick="showDesc('uc-waitlist','uc',event)" style="cursor:pointer">
+<ellipse cx="736" cy="161" rx="74" ry="27" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+<text x="736" y="165" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" direction="rtl" font-family="'Noto Sans Hebrew',sans-serif">ניהול רשימת המתנה</text>
+</g>
+<g id="uc-group-uc-assign" data-uc-id="uc-assign" onclick="showDesc('uc-assign','uc',event)" style="cursor:pointer">
+<ellipse cx="736" cy="232" rx="70" ry="30" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+<text x="736" y="229" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" direction="rtl" font-family="'Noto Sans Hebrew',sans-serif">שיבוץ חדר</text>
+<text x="736" y="243" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" direction="rtl" font-family="'Noto Sans Hebrew',sans-serif">וחתימת חוזה</text>
+</g>
+<g id="uc-group-uc-checkin" data-uc-id="uc-checkin" onclick="showDesc('uc-checkin','uc',event)" style="cursor:pointer">
+<ellipse cx="736" cy="306" rx="70" ry="30" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+<text x="736" y="303" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" direction="rtl" font-family="'Noto Sans Hebrew',sans-serif">רישום כניסת דייר</text>
+<text x="736" y="317" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" direction="rtl" font-family="'Noto Sans Hebrew',sans-serif">ומסירת מפתחות</text>
+</g>
+<g id="uc-group-uc-checkout" data-uc-id="uc-checkout" onclick="showDesc('uc-checkout','uc',event)" style="cursor:pointer">
+<ellipse cx="736" cy="380" rx="70" ry="30" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+<text x="736" y="377" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" direction="rtl" font-family="'Noto Sans Hebrew',sans-serif">רישום סיום חוזה</text>
+<text x="736" y="391" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" direction="rtl" font-family="'Noto Sans Hebrew',sans-serif">ויציאת דייר</text>
+</g>
+<g id="uc-group-uc-view-my" data-uc-id="uc-view-my" onclick="showDesc('uc-view-my','uc',event)" style="cursor:pointer">
+<ellipse cx="314" cy="238" rx="84" ry="30" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+<text x="314" y="235" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" direction="rtl" font-family="'Noto Sans Hebrew',sans-serif">צפייה בחוזה,</text>
+<text x="314" y="249" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" direction="rtl" font-family="'Noto Sans Hebrew',sans-serif">בחיובים ובקריאות שלי</text>
+</g>
+<g id="uc-group-uc-pay" data-uc-id="uc-pay" onclick="showDesc('uc-pay','uc',event)" style="cursor:pointer">
+<ellipse cx="314" cy="309" rx="70" ry="27" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+<text x="314" y="313" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" direction="rtl" font-family="'Noto Sans Hebrew',sans-serif">תשלום חיוב</text>
+</g>
+<g id="actor-group-student" data-actor-id="student" onclick="showDesc('student','actor',event)" style="cursor:pointer" transform="translate(120,164.0)">
+<circle cx="0" cy="-60" r="14" fill="#e0f0ff" stroke="#334155" stroke-width="2"/>
+<line x1="0" y1="-46" x2="0" y2="-10" stroke="#334155" stroke-width="2"/>
+<line x1="-18" y1="-36" x2="18" y2="-36" stroke="#334155" stroke-width="2"/>
+<line x1="0" y1="-10" x2="-14" y2="14" stroke="#334155" stroke-width="2"/>
+<line x1="0" y1="-10" x2="14" y2="14" stroke="#334155" stroke-width="2"/>
+<text x="0" y="30" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b" direction="rtl" font-family="'Noto Sans Hebrew',sans-serif">סטודנט</text>
+</g>
+<g id="actor-group-tenant" data-actor-id="tenant" onclick="showDesc('tenant','actor',event)" style="cursor:pointer" transform="translate(120,314.0)">
+<circle cx="0" cy="-60" r="14" fill="#e0f0ff" stroke="#334155" stroke-width="2"/>
+<line x1="0" y1="-46" x2="0" y2="-10" stroke="#334155" stroke-width="2"/>
+<line x1="-18" y1="-36" x2="18" y2="-36" stroke="#334155" stroke-width="2"/>
+<line x1="0" y1="-10" x2="-14" y2="14" stroke="#334155" stroke-width="2"/>
+<line x1="0" y1="-10" x2="14" y2="14" stroke="#334155" stroke-width="2"/>
+<text x="0" y="30" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b" direction="rtl" font-family="'Noto Sans Hebrew',sans-serif">דייר</text>
+</g>
+<g id="actor-group-assign-mgr" data-actor-id="assign-mgr" onclick="showDesc('assign-mgr','actor',event)" style="cursor:pointer" transform="translate(920,196.5)">
+<circle cx="0" cy="-60" r="14" fill="#e0f0ff" stroke="#334155" stroke-width="2"/>
+<line x1="0" y1="-46" x2="0" y2="-10" stroke="#334155" stroke-width="2"/>
+<line x1="-18" y1="-36" x2="18" y2="-36" stroke="#334155" stroke-width="2"/>
+<line x1="0" y1="-10" x2="-14" y2="14" stroke="#334155" stroke-width="2"/>
+<line x1="0" y1="-10" x2="14" y2="14" stroke="#334155" stroke-width="2"/>
+<text x="0" y="30" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b" direction="rtl" font-family="'Noto Sans Hebrew',sans-serif">מנהל שיבוץ</text>
+</g>
+<g id="actor-group-reception" data-actor-id="reception" onclick="showDesc('reception','actor',event)" style="cursor:pointer" transform="translate(920,346.5)">
+<circle cx="0" cy="-60" r="14" fill="#e0f0ff" stroke="#334155" stroke-width="2"/>
+<line x1="0" y1="-46" x2="0" y2="-10" stroke="#334155" stroke-width="2"/>
+<line x1="-18" y1="-36" x2="18" y2="-36" stroke="#334155" stroke-width="2"/>
+<line x1="0" y1="-10" x2="-14" y2="14" stroke="#334155" stroke-width="2"/>
+<line x1="0" y1="-10" x2="14" y2="14" stroke="#334155" stroke-width="2"/>
+<text x="0" y="30" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b" direction="rtl" font-family="'Noto Sans Hebrew',sans-serif">צוות קבלה</text>
+</g>
+</svg>
+</div>
+<div class="diagram-part" id="diagram-1" hidden>
+<svg id="diagram-svg-1" viewBox="0 0 1100 412" width="1100" height="412" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<pattern id="dots-1" width="24" height="24" patternUnits="userSpaceOnUse"><circle cx="12" cy="12" r="0.8" fill="#cbd5e1"/></pattern>
+<marker id="arrow-include-1" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polyline points="0 0, 9 3.5, 0 7" fill="none" stroke="#7c3aed" stroke-width="1.2"/></marker>
+</defs>
+<rect x="0" y="0" width="100%" height="100%" fill="#f8fafc"/>
+<rect x="0" y="0" width="100%" height="100%" fill="url(#dots-1)"/>
+<rect class="system-boundary" x="200" y="60" width="640" height="232" rx="12" fill="#ffffff" stroke="#3b82f6" stroke-width="2.5"/>
+<rect x="200" y="60" width="640" height="44" rx="12" fill="#1e40af"/>
+<rect x="200" y="82" width="640" height="22" fill="#1e40af"/>
+<text x="520.0" y="88" text-anchor="middle" font-size="14" font-weight="700" fill="#ffffff" direction="rtl" font-family="'Noto Sans Hebrew',sans-serif">מערכת מידע למעונות הסטודנטים 'הר הצופים' — תחזוקה</text>
+<line data-conn-from="tenant" data-conn-to="uc-open-call" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+<line class="conn-hitbox" data-conn-id="a8" data-hitbox-from="tenant" data-hitbox-to="uc-open-call" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('a8','assoc',event)"/>
+<line data-conn-from="maint-mgr" data-conn-to="uc-open-call" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+<line class="conn-hitbox" data-conn-id="a9" data-hitbox-from="maint-mgr" data-hitbox-to="uc-open-call" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('a9','assoc',event)"/>
+<line data-conn-from="maint-mgr" data-conn-to="uc-assign-tech" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+<line class="conn-hitbox" data-conn-id="a10" data-hitbox-from="maint-mgr" data-hitbox-to="uc-assign-tech" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('a10','assoc',event)"/>
+<line data-conn-from="technician" data-conn-to="uc-handle-call" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+<line class="conn-hitbox" data-conn-id="a11" data-hitbox-from="technician" data-hitbox-to="uc-handle-call" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('a11','assoc',event)"/>
+<g id="uc-group-uc-open-call" data-uc-id="uc-open-call" onclick="showDesc('uc-open-call','uc',event)" style="cursor:pointer">
+<ellipse cx="304" cy="232" rx="70" ry="30" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+<text x="304" y="229" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" direction="rtl" font-family="'Noto Sans Hebrew',sans-serif">פתיחת קריאת</text>
+<text x="304" y="243" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" direction="rtl" font-family="'Noto Sans Hebrew',sans-serif">תחזוקה</text>
+</g>
+<g id="uc-group-uc-assign-tech" data-uc-id="uc-assign-tech" onclick="showDesc('uc-assign-tech','uc',event)" style="cursor:pointer">
+<ellipse cx="304" cy="161" rx="74" ry="27" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+<text x="304" y="165" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" direction="rtl" font-family="'Noto Sans Hebrew',sans-serif">שיוך טכנאי לקריאה</text>
+</g>
+<g id="uc-group-uc-handle-call" data-uc-id="uc-handle-call" onclick="showDesc('uc-handle-call','uc',event)" style="cursor:pointer">
+<ellipse cx="733" cy="164" rx="77" ry="30" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+<text x="733" y="161" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" direction="rtl" font-family="'Noto Sans Hebrew',sans-serif">עדכון טיפול וסגירת</text>
+<text x="733" y="175" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" direction="rtl" font-family="'Noto Sans Hebrew',sans-serif">קריאה או דחייתה</text>
+</g>
+<g id="actor-group-maint-mgr" data-actor-id="maint-mgr" onclick="showDesc('maint-mgr','actor',event)" style="cursor:pointer" transform="translate(120,196.5)">
+<circle cx="0" cy="-60" r="14" fill="#e0f0ff" stroke="#334155" stroke-width="2"/>
+<line x1="0" y1="-46" x2="0" y2="-10" stroke="#334155" stroke-width="2"/>
+<line x1="-18" y1="-36" x2="18" y2="-36" stroke="#334155" stroke-width="2"/>
+<line x1="0" y1="-10" x2="-14" y2="14" stroke="#334155" stroke-width="2"/>
+<line x1="0" y1="-10" x2="14" y2="14" stroke="#334155" stroke-width="2"/>
+<text x="0" y="30" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b" direction="rtl" font-family="'Noto Sans Hebrew',sans-serif">מנהל אחזקה</text>
+</g>
+<g id="actor-group-tenant" data-actor-id="tenant" onclick="showDesc('tenant','actor',event)" style="cursor:pointer" transform="translate(120,346.5)">
+<circle cx="0" cy="-60" r="14" fill="#e0f0ff" stroke="#334155" stroke-width="2"/>
+<line x1="0" y1="-46" x2="0" y2="-10" stroke="#334155" stroke-width="2"/>
+<line x1="-18" y1="-36" x2="18" y2="-36" stroke="#334155" stroke-width="2"/>
+<line x1="0" y1="-10" x2="-14" y2="14" stroke="#334155" stroke-width="2"/>
+<line x1="0" y1="-10" x2="14" y2="14" stroke="#334155" stroke-width="2"/>
+<text x="0" y="30" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b" direction="rtl" font-family="'Noto Sans Hebrew',sans-serif">דייר</text>
+</g>
+<g id="actor-group-technician" data-actor-id="technician" onclick="showDesc('technician','actor',event)" style="cursor:pointer" transform="translate(920,164.0)">
+<circle cx="0" cy="-60" r="14" fill="#e0f0ff" stroke="#334155" stroke-width="2"/>
+<line x1="0" y1="-46" x2="0" y2="-10" stroke="#334155" stroke-width="2"/>
+<line x1="-18" y1="-36" x2="18" y2="-36" stroke="#334155" stroke-width="2"/>
+<line x1="0" y1="-10" x2="-14" y2="14" stroke="#334155" stroke-width="2"/>
+<line x1="0" y1="-10" x2="14" y2="14" stroke="#334155" stroke-width="2"/>
+<text x="0" y="30" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b" direction="rtl" font-family="'Noto Sans Hebrew',sans-serif">טכנאי</text>
+</g>
+</svg>
+</div>
+<div class="diagram-part" id="diagram-2" hidden>
+<svg id="diagram-svg-2" viewBox="0 0 1100 616" width="1100" height="616" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<pattern id="dots-2" width="24" height="24" patternUnits="userSpaceOnUse"><circle cx="12" cy="12" r="0.8" fill="#cbd5e1"/></pattern>
+<marker id="arrow-include-2" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polyline points="0 0, 9 3.5, 0 7" fill="none" stroke="#7c3aed" stroke-width="1.2"/></marker>
+</defs>
+<rect x="0" y="0" width="100%" height="100%" fill="#f8fafc"/>
+<rect x="0" y="0" width="100%" height="100%" fill="url(#dots-2)"/>
+<rect class="system-boundary" x="200" y="60" width="640" height="436" rx="12" fill="#ffffff" stroke="#3b82f6" stroke-width="2.5"/>
+<rect x="200" y="60" width="640" height="44" rx="12" fill="#1e40af"/>
+<rect x="200" y="82" width="640" height="22" fill="#1e40af"/>
+<text x="520.0" y="88" text-anchor="middle" font-size="14" font-weight="700" fill="#ffffff" direction="rtl" font-family="'Noto Sans Hebrew',sans-serif">מערכת מידע למעונות הסטודנטים 'הר הצופים' — ניהול מערכת ודוחות</text>
+<line data-conn-from="dorm-mgr" data-conn-to="uc-occupancy-report" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+<line class="conn-hitbox" data-conn-id="a12" data-hitbox-from="dorm-mgr" data-hitbox-to="uc-occupancy-report" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('a12','assoc',event)"/>
+<line data-conn-from="dorm-mgr" data-conn-to="uc-maint-report" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+<line class="conn-hitbox" data-conn-id="a13" data-hitbox-from="dorm-mgr" data-hitbox-to="uc-maint-report" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('a13','assoc',event)"/>
+<line data-conn-from="maint-mgr" data-conn-to="uc-maint-report" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+<line class="conn-hitbox" data-conn-id="a14" data-hitbox-from="maint-mgr" data-hitbox-to="uc-maint-report" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('a14','assoc',event)"/>
+<line data-conn-from="dorm-mgr" data-conn-to="uc-manage-buildings" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+<line class="conn-hitbox" data-conn-id="a15" data-hitbox-from="dorm-mgr" data-hitbox-to="uc-manage-buildings" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('a15','assoc',event)"/>
+<line data-conn-from="dorm-mgr" data-conn-to="uc-manage-rooms" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+<line class="conn-hitbox" data-conn-id="a16" data-hitbox-from="dorm-mgr" data-hitbox-to="uc-manage-rooms" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('a16','assoc',event)"/>
+<line data-conn-from="dorm-mgr" data-conn-to="uc-manage-rates" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+<line class="conn-hitbox" data-conn-id="a17" data-hitbox-from="dorm-mgr" data-hitbox-to="uc-manage-rates" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('a17','assoc',event)"/>
+<g id="uc-group-uc-occupancy-report" data-uc-id="uc-occupancy-report" onclick="showDesc('uc-occupancy-report','uc',event)" style="cursor:pointer">
+<ellipse cx="740" cy="164" rx="70" ry="30" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+<text x="740" y="161" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" direction="rtl" font-family="'Noto Sans Hebrew',sans-serif">הפקת דוח</text>
+<text x="740" y="175" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" direction="rtl" font-family="'Noto Sans Hebrew',sans-serif">תפוסה חודשי</text>
+</g>
+<g id="uc-group-uc-maint-report" data-uc-id="uc-maint-report" onclick="showDesc('uc-maint-report','uc',event)" style="cursor:pointer">
+<ellipse cx="740" cy="235" rx="70" ry="27" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+<text x="740" y="239" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" direction="rtl" font-family="'Noto Sans Hebrew',sans-serif">הפקת דוח תחזוקה</text>
+</g>
+<g id="uc-group-uc-manage-buildings" data-uc-id="uc-manage-buildings" onclick="showDesc('uc-manage-buildings','uc',event)" style="cursor:pointer">
+<ellipse cx="740" cy="303" rx="70" ry="27" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+<text x="740" y="307" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" direction="rtl" font-family="'Noto Sans Hebrew',sans-serif">ניהול בניינים</text>
+</g>
+<g id="uc-group-uc-manage-rooms" data-uc-id="uc-manage-rooms" onclick="showDesc('uc-manage-rooms','uc',event)" style="cursor:pointer">
+<ellipse cx="740" cy="371" rx="70" ry="27" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+<text x="740" y="375" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" direction="rtl" font-family="'Noto Sans Hebrew',sans-serif">ניהול חדרים</text>
+</g>
+<g id="uc-group-uc-manage-rates" data-uc-id="uc-manage-rates" onclick="showDesc('uc-manage-rates','uc',event)" style="cursor:pointer">
+<ellipse cx="740" cy="439" rx="70" ry="27" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+<text x="740" y="443" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" direction="rtl" font-family="'Noto Sans Hebrew',sans-serif">ניהול תעריפים</text>
+</g>
+<g id="actor-group-maint-mgr" data-actor-id="maint-mgr" onclick="showDesc('maint-mgr','actor',event)" style="cursor:pointer" transform="translate(920,235.0)">
+<circle cx="0" cy="-60" r="14" fill="#e0f0ff" stroke="#334155" stroke-width="2"/>
+<line x1="0" y1="-46" x2="0" y2="-10" stroke="#334155" stroke-width="2"/>
+<line x1="-18" y1="-36" x2="18" y2="-36" stroke="#334155" stroke-width="2"/>
+<line x1="0" y1="-10" x2="-14" y2="14" stroke="#334155" stroke-width="2"/>
+<line x1="0" y1="-10" x2="14" y2="14" stroke="#334155" stroke-width="2"/>
+<text x="0" y="30" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b" direction="rtl" font-family="'Noto Sans Hebrew',sans-serif">מנהל אחזקה</text>
+</g>
+<g id="actor-group-dorm-mgr" data-actor-id="dorm-mgr" onclick="showDesc('dorm-mgr','actor',event)" style="cursor:pointer" transform="translate(920,385.0)">
+<circle cx="0" cy="-60" r="14" fill="#e0f0ff" stroke="#334155" stroke-width="2"/>
+<line x1="0" y1="-46" x2="0" y2="-10" stroke="#334155" stroke-width="2"/>
+<line x1="-18" y1="-36" x2="18" y2="-36" stroke="#334155" stroke-width="2"/>
+<line x1="0" y1="-10" x2="-14" y2="14" stroke="#334155" stroke-width="2"/>
+<line x1="0" y1="-10" x2="14" y2="14" stroke="#334155" stroke-width="2"/>
+<text x="0" y="30" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b" direction="rtl" font-family="'Noto Sans Hebrew',sans-serif">מנהל המעונות</text>
+</g>
+</svg>
+</div>
+<div class="diagram-part" id="diagram-3" hidden>
+<svg id="diagram-svg-3" viewBox="0 0 1100 344" width="1100" height="344" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<pattern id="dots-3" width="24" height="24" patternUnits="userSpaceOnUse"><circle cx="12" cy="12" r="0.8" fill="#cbd5e1"/></pattern>
+<marker id="arrow-include-3" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polyline points="0 0, 9 3.5, 0 7" fill="none" stroke="#7c3aed" stroke-width="1.2"/></marker>
+</defs>
+<rect x="0" y="0" width="100%" height="100%" fill="#f8fafc"/>
+<rect x="0" y="0" width="100%" height="100%" fill="url(#dots-3)"/>
+<rect class="system-boundary" x="200" y="60" width="640" height="164" rx="12" fill="#ffffff" stroke="#3b82f6" stroke-width="2.5"/>
+<rect x="200" y="60" width="640" height="44" rx="12" fill="#1e40af"/>
+<rect x="200" y="82" width="640" height="22" fill="#1e40af"/>
+<text x="520.0" y="88" text-anchor="middle" font-size="14" font-weight="700" fill="#ffffff" direction="rtl" font-family="'Noto Sans Hebrew',sans-serif">מערכת מידע למעונות הסטודנטים 'הר הצופים' — תהליכים אוטומטיים</text>
+<line data-conn-from="clock" data-conn-to="uc-rent-charges" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+<line class="conn-hitbox" data-conn-id="a18" data-hitbox-from="clock" data-hitbox-to="uc-rent-charges" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('a18','assoc',event)"/>
+<g id="uc-group-uc-rent-charges" data-uc-id="uc-rent-charges" onclick="showDesc('uc-rent-charges','uc',event)" style="cursor:pointer">
+<ellipse cx="300" cy="164" rx="70" ry="30" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+<text x="300" y="161" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" direction="rtl" font-family="'Noto Sans Hebrew',sans-serif">הפקת חיובי</text>
+<text x="300" y="175" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" direction="rtl" font-family="'Noto Sans Hebrew',sans-serif">שכירות חודשיים</text>
+</g>
+<g id="actor-group-clock" data-actor-id="clock" onclick="showDesc('clock','actor',event)" style="cursor:pointer" transform="translate(120,164.0)">
+<circle cx="0" cy="-60" r="14" fill="#fef3c7" stroke="#334155" stroke-width="2"/>
+<line x1="0" y1="-46" x2="0" y2="-10" stroke="#334155" stroke-width="2"/>
+<line x1="-18" y1="-36" x2="18" y2="-36" stroke="#334155" stroke-width="2"/>
+<line x1="0" y1="-10" x2="-14" y2="14" stroke="#334155" stroke-width="2"/>
+<line x1="0" y1="-10" x2="14" y2="14" stroke="#334155" stroke-width="2"/>
+<text x="0" y="30" text-anchor="middle" font-size="9" font-style="italic" fill="#64748b" font-family="'IBM Plex Mono',monospace">«system»</text>
+<text x="0" y="44" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b" direction="rtl" font-family="'Noto Sans Hebrew',sans-serif">תזמון</text>
+</g>
+</svg>
+</div>
+
+  <div id="assumptions-panel" class="assumptions-panel" hidden>
+    <div class="assumptions-col" id="assumptions-col">
+      <h3>הנחות</h3><ul id="assumptions-list"></ul>
+    </div>
+    <div class="assumptions-col" id="open-questions-col">
+      <h3>שאלות פתוחות</h3><ul id="open-questions-list"></ul>
+    </div>
+  </div>
+
+  <div id="user-stories-panel" class="user-stories-panel" hidden>
+    <h3>סיפורי משתמש</h3>
+    <ul id="user-stories-list"></ul>
+  </div>
+
+  <div id="uc-modal" class="uc-modal" hidden role="dialog" aria-modal="true">
+    <div class="uc-modal-backdrop" onclick="closeUcModal()"></div>
+    <div class="uc-modal-body"></div>
+  </div>
+
+  <button class="vp-export-btn" onclick="exportXMI()">Download .xmi (Visual Paradigm)</button>
+
+  <!-- DIAGRAM DATA ONLY — all functions are in uc-diagram-common.js. -->
+  <script>
+    var diagramLayouts      = [
+ {
+  "svgId": "diagram-svg-0",
+  "boundary": {
+   "x": 200,
+   "y": 60,
+   "width": 640,
+   "height": 380
+  },
+  "actors": [
+   {
+    "id": "student",
+    "label": "סטודנט",
+    "side": "left",
+    "x": 120,
+    "y": 164.0,
+    "ucIds": [
+     "uc-apply"
+    ]
+   },
+   {
+    "id": "tenant",
+    "label": "דייר",
+    "side": "left",
+    "x": 120,
+    "y": 314.0,
+    "ucIds": [
+     "uc-view-my",
+     "uc-pay"
+    ]
+   },
+   {
+    "id": "assign-mgr",
+    "label": "מנהל שיבוץ",
+    "side": "right",
+    "x": 920,
+    "y": 196.5,
+    "ucIds": [
+     "uc-waitlist",
+     "uc-assign"
+    ]
+   },
+   {
+    "id": "reception",
+    "label": "צוות קבלה",
+    "side": "right",
+    "x": 920,
+    "y": 346.5,
+    "ucIds": [
+     "uc-checkin",
+     "uc-checkout"
+    ]
+   }
+  ],
+  "useCases": [
+   {
+    "id": "uc-apply",
+    "cx": 314,
+    "cy": 164,
+    "rx": 70,
+    "ry": 30
+   },
+   {
+    "id": "uc-verify",
+    "cx": 525.0,
+    "cy": 161,
+    "rx": 74,
+    "ry": 27
+   },
+   {
+    "id": "uc-waitlist",
+    "cx": 736,
+    "cy": 161,
+    "rx": 74,
+    "ry": 27
+   },
+   {
+    "id": "uc-assign",
+    "cx": 736,
+    "cy": 232,
+    "rx": 70,
+    "ry": 30
+   },
+   {
+    "id": "uc-checkin",
+    "cx": 736,
+    "cy": 306,
+    "rx": 70,
+    "ry": 30
+   },
+   {
+    "id": "uc-checkout",
+    "cx": 736,
+    "cy": 380,
+    "rx": 70,
+    "ry": 30
+   },
+   {
+    "id": "uc-view-my",
+    "cx": 314,
+    "cy": 238,
+    "rx": 84,
+    "ry": 30
+   },
+   {
+    "id": "uc-pay",
+    "cx": 314,
+    "cy": 309,
+    "rx": 70,
+    "ry": 27
+   }
+  ],
+  "connections": [
+   {
+    "id": "a1",
+    "from": "student",
+    "to": "uc-apply",
+    "type": "association"
+   },
+   {
+    "id": "a2",
+    "from": "assign-mgr",
+    "to": "uc-waitlist",
+    "type": "association"
+   },
+   {
+    "id": "a3",
+    "from": "assign-mgr",
+    "to": "uc-assign",
+    "type": "association"
+   },
+   {
+    "id": "a4",
+    "from": "reception",
+    "to": "uc-checkin",
+    "type": "association"
+   },
+   {
+    "id": "a5",
+    "from": "reception",
+    "to": "uc-checkout",
+    "type": "association"
+   },
+   {
+    "id": "a6",
+    "from": "tenant",
+    "to": "uc-view-my",
+    "type": "association"
+   },
+   {
+    "id": "a7",
+    "from": "tenant",
+    "to": "uc-pay",
+    "type": "association"
+   },
+   {
+    "from": "uc-apply",
+    "to": "uc-verify",
+    "type": "include"
+   },
+   {
+    "from": "uc-assign",
+    "to": "uc-verify",
+    "type": "include"
+   }
+  ],
+  "assumptions": [
+   "מערכת הסטודנטים של האוניברסיטה ושער התשלום אינם שחקנים: המערכת פונה אליהם (קריאת API) והם אינם יוזמים דבר. הם מופיעים כצעדי מערכת בתרחישים (אימות סטודנט פעיל; סליקה בתשלום חיוב).",
+   "\"דייר\" הוא סטודנט בעל חוזה חתום או פעיל. שני התפקידים מוצגים כשחקנים נפרדים לפי מה שכל אחד יוזם: סטודנט — בקשת מגורים; דייר — קריאות, צפייה ותשלום.",
+   "להנהלת החשבונות של האוניברסיטה אין גישה ישירה למערכת; מנהל המעונות מייצא אליה דוחות והחזרי פיקדון. אחרת היה נדרש שחקן \"הנהלת חשבונות\".",
+   "לטכנאים יש גישה למערכת (ממשק נייד) לעדכון הקריאות המשויכות אליהם; אחרת מנהל האחזקה היה מעדכן בשמם.",
+   "החזר הפיקדון וחיובי הנזק נרשמים במערכת; ההעברה הכספית עצמה מבוצעת מחוץ למערכת על ידי הנהלת החשבונות.",
+   "קריאת תחזוקה נפתחת על חדר או על בניין, לעולם לא על דייר; חדר יחיד = חוזה פעיל אחד, חדר זוגי = עד שני חוזים פעילים; לדייר חוזה פעיל אחד בכל עת."
+  ],
+  "openQuestions": [
+   "האם דייר רשאי לסיים חוזה לפני מועד הסיום, ומהו הקנס? (כיום מטופל כסיום חוזה רגיל.)",
+   "האם צוות הקבלה רשאי לפתוח קריאת תחזוקה בשם דייר שפונה בדלפק? (כיום לא — רק דייר או מנהל אחזקה.)"
+  ]
+ },
+ {
+  "svgId": "diagram-svg-1",
+  "boundary": {
+   "x": 200,
+   "y": 60,
+   "width": 640,
+   "height": 232
+  },
+  "actors": [
+   {
+    "id": "maint-mgr",
+    "label": "מנהל אחזקה",
+    "side": "left",
+    "x": 120,
+    "y": 196.5,
+    "ucIds": [
+     "uc-open-call",
+     "uc-assign-tech"
+    ]
+   },
+   {
+    "id": "tenant",
+    "label": "דייר",
+    "side": "left",
+    "x": 120,
+    "y": 346.5,
+    "ucIds": [
+     "uc-open-call"
+    ]
+   },
+   {
+    "id": "technician",
+    "label": "טכנאי",
+    "side": "right",
+    "x": 920,
+    "y": 164.0,
+    "ucIds": [
+     "uc-handle-call"
+    ]
+   }
+  ],
+  "useCases": [
+   {
+    "id": "uc-open-call",
+    "cx": 304,
+    "cy": 232,
+    "rx": 70,
+    "ry": 30
+   },
+   {
+    "id": "uc-assign-tech",
+    "cx": 304,
+    "cy": 161,
+    "rx": 74,
+    "ry": 27
+   },
+   {
+    "id": "uc-handle-call",
+    "cx": 733,
+    "cy": 164,
+    "rx": 77,
+    "ry": 30
+   }
+  ],
+  "connections": [
+   {
+    "id": "a8",
+    "from": "tenant",
+    "to": "uc-open-call",
+    "type": "association"
+   },
+   {
+    "id": "a9",
+    "from": "maint-mgr",
+    "to": "uc-open-call",
+    "type": "association"
+   },
+   {
+    "id": "a10",
+    "from": "maint-mgr",
+    "to": "uc-assign-tech",
+    "type": "association"
+   },
+   {
+    "id": "a11",
+    "from": "technician",
+    "to": "uc-handle-call",
+    "type": "association"
+   }
+  ],
+  "assumptions": [
+   "מערכת הסטודנטים של האוניברסיטה ושער התשלום אינם שחקנים: המערכת פונה אליהם (קריאת API) והם אינם יוזמים דבר. הם מופיעים כצעדי מערכת בתרחישים (אימות סטודנט פעיל; סליקה בתשלום חיוב).",
+   "\"דייר\" הוא סטודנט בעל חוזה חתום או פעיל. שני התפקידים מוצגים כשחקנים נפרדים לפי מה שכל אחד יוזם: סטודנט — בקשת מגורים; דייר — קריאות, צפייה ותשלום.",
+   "להנהלת החשבונות של האוניברסיטה אין גישה ישירה למערכת; מנהל המעונות מייצא אליה דוחות והחזרי פיקדון. אחרת היה נדרש שחקן \"הנהלת חשבונות\".",
+   "לטכנאים יש גישה למערכת (ממשק נייד) לעדכון הקריאות המשויכות אליהם; אחרת מנהל האחזקה היה מעדכן בשמם.",
+   "החזר הפיקדון וחיובי הנזק נרשמים במערכת; ההעברה הכספית עצמה מבוצעת מחוץ למערכת על ידי הנהלת החשבונות.",
+   "קריאת תחזוקה נפתחת על חדר או על בניין, לעולם לא על דייר; חדר יחיד = חוזה פעיל אחד, חדר זוגי = עד שני חוזים פעילים; לדייר חוזה פעיל אחד בכל עת."
+  ],
+  "openQuestions": [
+   "האם דייר רשאי לסיים חוזה לפני מועד הסיום, ומהו הקנס? (כיום מטופל כסיום חוזה רגיל.)",
+   "האם צוות הקבלה רשאי לפתוח קריאת תחזוקה בשם דייר שפונה בדלפק? (כיום לא — רק דייר או מנהל אחזקה.)"
+  ]
+ },
+ {
+  "svgId": "diagram-svg-2",
+  "boundary": {
+   "x": 200,
+   "y": 60,
+   "width": 640,
+   "height": 436
+  },
+  "actors": [
+   {
+    "id": "maint-mgr",
+    "label": "מנהל אחזקה",
+    "side": "right",
+    "x": 920,
+    "y": 235.0,
+    "ucIds": [
+     "uc-maint-report"
+    ]
+   },
+   {
+    "id": "dorm-mgr",
+    "label": "מנהל המעונות",
+    "side": "right",
+    "x": 920,
+    "y": 385.0,
+    "ucIds": [
+     "uc-occupancy-report",
+     "uc-maint-report",
+     "uc-manage-buildings",
+     "uc-manage-rooms",
+     "uc-manage-rates"
+    ]
+   }
+  ],
+  "useCases": [
+   {
+    "id": "uc-occupancy-report",
+    "cx": 740,
+    "cy": 164,
+    "rx": 70,
+    "ry": 30
+   },
+   {
+    "id": "uc-maint-report",
+    "cx": 740,
+    "cy": 235,
+    "rx": 70,
+    "ry": 27
+   },
+   {
+    "id": "uc-manage-buildings",
+    "cx": 740,
+    "cy": 303,
+    "rx": 70,
+    "ry": 27
+   },
+   {
+    "id": "uc-manage-rooms",
+    "cx": 740,
+    "cy": 371,
+    "rx": 70,
+    "ry": 27
+   },
+   {
+    "id": "uc-manage-rates",
+    "cx": 740,
+    "cy": 439,
+    "rx": 70,
+    "ry": 27
+   }
+  ],
+  "connections": [
+   {
+    "id": "a12",
+    "from": "dorm-mgr",
+    "to": "uc-occupancy-report",
+    "type": "association"
+   },
+   {
+    "id": "a13",
+    "from": "dorm-mgr",
+    "to": "uc-maint-report",
+    "type": "association"
+   },
+   {
+    "id": "a14",
+    "from": "maint-mgr",
+    "to": "uc-maint-report",
+    "type": "association"
+   },
+   {
+    "id": "a15",
+    "from": "dorm-mgr",
+    "to": "uc-manage-buildings",
+    "type": "association"
+   },
+   {
+    "id": "a16",
+    "from": "dorm-mgr",
+    "to": "uc-manage-rooms",
+    "type": "association"
+   },
+   {
+    "id": "a17",
+    "from": "dorm-mgr",
+    "to": "uc-manage-rates",
+    "type": "association"
+   }
+  ],
+  "assumptions": [
+   "מערכת הסטודנטים של האוניברסיטה ושער התשלום אינם שחקנים: המערכת פונה אליהם (קריאת API) והם אינם יוזמים דבר. הם מופיעים כצעדי מערכת בתרחישים (אימות סטודנט פעיל; סליקה בתשלום חיוב).",
+   "\"דייר\" הוא סטודנט בעל חוזה חתום או פעיל. שני התפקידים מוצגים כשחקנים נפרדים לפי מה שכל אחד יוזם: סטודנט — בקשת מגורים; דייר — קריאות, צפייה ותשלום.",
+   "להנהלת החשבונות של האוניברסיטה אין גישה ישירה למערכת; מנהל המעונות מייצא אליה דוחות והחזרי פיקדון. אחרת היה נדרש שחקן \"הנהלת חשבונות\".",
+   "לטכנאים יש גישה למערכת (ממשק נייד) לעדכון הקריאות המשויכות אליהם; אחרת מנהל האחזקה היה מעדכן בשמם.",
+   "החזר הפיקדון וחיובי הנזק נרשמים במערכת; ההעברה הכספית עצמה מבוצעת מחוץ למערכת על ידי הנהלת החשבונות.",
+   "קריאת תחזוקה נפתחת על חדר או על בניין, לעולם לא על דייר; חדר יחיד = חוזה פעיל אחד, חדר זוגי = עד שני חוזים פעילים; לדייר חוזה פעיל אחד בכל עת."
+  ],
+  "openQuestions": [
+   "האם דייר רשאי לסיים חוזה לפני מועד הסיום, ומהו הקנס? (כיום מטופל כסיום חוזה רגיל.)",
+   "האם צוות הקבלה רשאי לפתוח קריאת תחזוקה בשם דייר שפונה בדלפק? (כיום לא — רק דייר או מנהל אחזקה.)"
+  ]
+ },
+ {
+  "svgId": "diagram-svg-3",
+  "boundary": {
+   "x": 200,
+   "y": 60,
+   "width": 640,
+   "height": 164
+  },
+  "actors": [
+   {
+    "id": "clock",
+    "label": "תזמון",
+    "side": "left",
+    "x": 120,
+    "y": 164.0,
+    "ucIds": [
+     "uc-rent-charges"
+    ]
+   }
+  ],
+  "useCases": [
+   {
+    "id": "uc-rent-charges",
+    "cx": 300,
+    "cy": 164,
+    "rx": 70,
+    "ry": 30
+   }
+  ],
+  "connections": [
+   {
+    "id": "a18",
+    "from": "clock",
+    "to": "uc-rent-charges",
+    "type": "association",
+    "timing": "1 לחודש"
+   }
+  ],
+  "assumptions": [
+   "מערכת הסטודנטים של האוניברסיטה ושער התשלום אינם שחקנים: המערכת פונה אליהם (קריאת API) והם אינם יוזמים דבר. הם מופיעים כצעדי מערכת בתרחישים (אימות סטודנט פעיל; סליקה בתשלום חיוב).",
+   "\"דייר\" הוא סטודנט בעל חוזה חתום או פעיל. שני התפקידים מוצגים כשחקנים נפרדים לפי מה שכל אחד יוזם: סטודנט — בקשת מגורים; דייר — קריאות, צפייה ותשלום.",
+   "להנהלת החשבונות של האוניברסיטה אין גישה ישירה למערכת; מנהל המעונות מייצא אליה דוחות והחזרי פיקדון. אחרת היה נדרש שחקן \"הנהלת חשבונות\".",
+   "לטכנאים יש גישה למערכת (ממשק נייד) לעדכון הקריאות המשויכות אליהם; אחרת מנהל האחזקה היה מעדכן בשמם.",
+   "החזר הפיקדון וחיובי הנזק נרשמים במערכת; ההעברה הכספית עצמה מבוצעת מחוץ למערכת על ידי הנהלת החשבונות.",
+   "קריאת תחזוקה נפתחת על חדר או על בניין, לעולם לא על דייר; חדר יחיד = חוזה פעיל אחד, חדר זוגי = עד שני חוזים פעילים; לדייר חוזה פעיל אחד בכל עת."
+  ],
+  "openQuestions": [
+   "האם דייר רשאי לסיים חוזה לפני מועד הסיום, ומהו הקנס? (כיום מטופל כסיום חוזה רגיל.)",
+   "האם צוות הקבלה רשאי לפתוח קריאת תחזוקה בשם דייר שפונה בדלפק? (כיום לא — רק דייר או מנהל אחזקה.)"
+  ]
+ }
+];
+    var actorDescriptions   = {
+ "student": {
+  "name": "סטודנט",
+  "desc": "סטודנט פעיל באוניברסיטה המבקש מגורים במעונות. יוזם את הגשת הבקשה והעדפות המגורים."
+ },
+ "tenant": {
+  "name": "דייר",
+  "desc": "סטודנט בעל חוזה חתום או פעיל במעונות. יוזם קריאות תחזוקה, צפייה בחוזה ובחיובים ותשלום חיובים."
+ },
+ "assign-mgr": {
+  "name": "מנהל שיבוץ",
+  "desc": "אחראי על הקצאת חדרים, ניהול רשימת ההמתנה וחתימת חוזים."
+ },
+ "reception": {
+  "name": "צוות קבלה",
+  "desc": "עמדות הקבלה במעונות: רושמים כניסה ויציאה של דיירים ומסירת מפתחות."
+ },
+ "maint-mgr": {
+  "name": "מנהל אחזקה",
+  "desc": "אחראי על תור קריאות התחזוקה, שיוך טכנאים ומעקב אחר זמני טיפול."
+ },
+ "technician": {
+  "name": "טכנאי",
+  "desc": "אחד משישה טכנאים (חשמל, אינסטלציה, מיזוג, כללי). מעדכן את הטיפול בקריאות המשויכות אליו."
+ },
+ "dorm-mgr": {
+  "name": "מנהל המעונות",
+  "desc": "עומד בראש חברת המעונות: מדיניות, תעריפים, נתוני אב (בניינים וחדרים) ודוחות להנהלת האוניברסיטה."
+ },
+ "clock": {
+  "name": "תזמון",
+  "desc": "שחקן זמן: מפעיל את הפקת חיובי השכירות ב-1 בכל חודש."
+ }
+};
+    var assocDescriptions   = {
+ "a1": {
+  "name": "סטודנט ↔ הגשת בקשת מגורים והעדפות",
+  "desc": "הסטודנט יוזם הגשת בקשת מגורים עם העדפות. תפקיד: Initiator."
+ },
+ "a2": {
+  "name": "מנהל שיבוץ ↔ ניהול רשימת המתנה",
+  "desc": "מנהל השיבוץ יוזם צפייה, הוספה, שינוי עדיפות והסרה ברשימת ההמתנה. תפקיד: Initiator."
+ },
+ "a3": {
+  "name": "מנהל שיבוץ ↔ שיבוץ חדר וחתימת חוזה",
+  "desc": "מנהל השיבוץ יוזם שיבוץ סטודנט לחדר ורישום חוזה חתום. תפקיד: Initiator."
+ },
+ "a4": {
+  "name": "צוות קבלה ↔ רישום כניסת דייר ומסירת מפתחות",
+  "desc": "צוות הקבלה יוזם רישום כניסה ומסירת מפתח כשהדייר מגיע לדלפק. תפקיד: Initiator."
+ },
+ "a5": {
+  "name": "צוות קבלה ↔ רישום סיום חוזה ויציאת דייר",
+  "desc": "צוות הקבלה יוזם רישום יציאה וסיום חוזה כשהדייר מחזיר מפתח. תפקיד: Initiator."
+ },
+ "a6": {
+  "name": "דייר ↔ צפייה בחוזה, בחיובים ובקריאות שלי",
+  "desc": "הדייר יוזם צפייה בחוזה, בחיובים ובקריאות שלו. תפקיד: Initiator."
+ },
+ "a7": {
+  "name": "דייר ↔ תשלום חיוב",
+  "desc": "הדייר יוזם תשלום חיוב פתוח בכרטיס אשראי. תפקיד: Initiator."
+ },
+ "a8": {
+  "name": "דייר ↔ פתיחת קריאת תחזוקה",
+  "desc": "הדייר יוזם קריאת תחזוקה על חדרו או על הבניין. תפקיד: Initiator."
+ },
+ "a9": {
+  "name": "מנהל אחזקה ↔ פתיחת קריאת תחזוקה",
+  "desc": "מנהל האחזקה יוזם קריאה בעצמו, למשל לאחר סיור בבניין. תפקיד: Initiator."
+ },
+ "a10": {
+  "name": "מנהל אחזקה ↔ שיוך טכנאי לקריאה",
+  "desc": "מנהל האחזקה יוזם שיוך טכנאי לקריאה פתוחה. תפקיד: Initiator."
+ },
+ "a11": {
+  "name": "טכנאי ↔ עדכון טיפול וסגירת קריאה או דחייתה",
+  "desc": "הטכנאי יוזם עדכון הטיפול וסגירה או דחייה של הקריאה המשויכת אליו. תפקיד: Initiator."
+ },
+ "a12": {
+  "name": "מנהל המעונות ↔ הפקת דוח תפוסה חודשי",
+  "desc": "מנהל המעונות יוזם הפקת דוח תפוסה חודשי. תפקיד: Initiator."
+ },
+ "a13": {
+  "name": "מנהל המעונות ↔ הפקת דוח תחזוקה",
+  "desc": "מנהל המעונות יוזם דוח תחזוקה לפי בניין. תפקיד: Initiator."
+ },
+ "a14": {
+  "name": "מנהל אחזקה ↔ הפקת דוח תחזוקה",
+  "desc": "מנהל האחזקה יוזם דוח עומס טכנאים. תפקיד: Initiator."
+ },
+ "a15": {
+  "name": "מנהל המעונות ↔ ניהול בניינים",
+  "desc": "מנהל המעונות מנהל את נתוני האב של הבניינים. תפקיד: Initiator."
+ },
+ "a16": {
+  "name": "מנהל המעונות ↔ ניהול חדרים",
+  "desc": "מנהל המעונות מנהל את נתוני האב של החדרים. תפקיד: Initiator."
+ },
+ "a17": {
+  "name": "מנהל המעונות ↔ ניהול תעריפים",
+  "desc": "מנהל המעונות מנהל את התעריפים ותוקפם. תפקיד: Initiator."
+ },
+ "a18": {
+  "name": "תזמון ↔ הפקת חיובי שכירות חודשיים",
+  "desc": "שחקן הזמן מפעיל את הפקת חיובי השכירות ב-1 בכל חודש. תפקיד: Initiator."
+ }
+};
+    var useCaseDocs         = {
+ "uc-apply": {
+  "id": "uc-apply",
+  "name": "הגשת בקשת מגורים והעדפות",
+  "primaryActor": "student",
+  "description": "סטודנט מגיש בקשה למגורים לשנת מגורים, מדרג עד שלוש העדפות (בניין וסוג חדר) ומציין זכאות.",
+  "preconditions": [
+   "הסטודנט מזוהה במערכת באמצעות מספר סטודנט.",
+   "תקופת ההרשמה למגורים לשנה המבוקשת פתוחה."
+  ],
+  "postconditions": [
+   "הבקשה נשמרה בסטטוס \"הוגשה\" עם מספר בקשה, העדפות מדורגות וזכאות.",
+   "הסטודנט סומן כ\"מאומת\" מול מערכת הסטודנטים."
+  ],
+  "scenarios": [
+   {
+    "id": "sc-apply",
+    "name": "מסלול מרכזי",
+    "flow": [
+     {
+      "kind": "actor",
+      "actor": "student",
+      "text": "מזין מספר סטודנט, שנת מגורים מבוקשת (שנה אקדמית / קיץ) ופרטי קשר"
+     },
+     {
+      "kind": "include",
+      "uc": "uc-verify",
+      "text": ""
+     },
+     {
+      "kind": "system",
+      "text": "מציגה את הבניינים וסוגי החדרים (יחיד / זוגי) הפתוחים להרשמה לשנה המבוקשת"
+     },
+     {
+      "kind": "loop",
+      "condition": "הסטודנט רוצה להוסיף העדפה (עד שלוש העדפות)",
+      "steps": [
+       {
+        "kind": "actor",
+        "actor": "student",
+        "text": "בוחר בניין וסוג חדר ומדרג את ההעדפה (1–3)"
+       },
+       {
+        "kind": "system",
+        "text": "מוסיפה את ההעדפה לרשימה ומציגה את הדירוג המעודכן"
+       }
+      ]
+     },
+     {
+      "kind": "actor",
+      "actor": "student",
+      "text": "מסמן זכאות (פריפריה / סטודנט בינלאומי / זכאי סיוע) ומצרף אסמכתא"
+     },
+     {
+      "kind": "actor",
+      "actor": "student",
+      "text": "מאשר את הגשת הבקשה"
+     },
+     {
+      "kind": "system",
+      "text": "שומרת את הבקשה בסטטוס \"הוגשה\", מקצה מספר בקשה ומציגה אישור הגשה"
+     }
+    ],
+    "extensions": [
+     {
+      "at": "1",
+      "text": "לסטודנט כבר קיימת בקשה פתוחה לאותה שנת מגורים",
+      "steps": [
+       "המערכת מציגה את הבקשה הקיימת ומספרה"
+      ],
+      "outcome": {
+       "kind": "terminate",
+       "text": "לא נוצרה בקשה חדשה; הבקשה הקיימת נותרת ללא שינוי."
+      }
+     },
+     {
+      "at": "2",
+      "text": "האימות מול מערכת הסטודנטים נכשל (הסטודנט אינו פעיל או המערכת אינה זמינה)",
+      "steps": [
+       "המערכת מציגה את סיבת הכישלון"
+      ],
+      "outcome": {
+       "kind": "terminate",
+       "text": "הבקשה לא הוגשה."
+      }
+     },
+     {
+      "at": "4.1",
+      "text": "ההעדפה שנבחרה כבר קיימת ברשימת ההעדפות",
+      "steps": [
+       "המערכת מציגה \"העדפה זו כבר קיימת\""
+      ],
+      "outcome": {
+       "kind": "resume",
+       "at": "4.1"
+      }
+     }
+    ]
+   }
+  ],
+  "userStories": [
+   {
+    "role": "סטודנט",
+    "want": "להגיש בקשה למגורים ולדרג את הבניין וסוג החדר שאני מעדיף",
+    "so": "השיבוץ יתחשב בהעדפותיי"
+   },
+   {
+    "role": "סטודנט",
+    "want": "לציין זכאות (פריפריה / בינלאומי / סיוע) ולצרף אסמכתא",
+    "so": "אקבל עדיפות ברשימת ההמתנה"
+   },
+   {
+    "role": "מנהל שיבוץ",
+    "want": "לקבל בקשות מסודרות עם העדפות מדורגות וזכאות מאומתת",
+    "so": "אוכל לשבץ מהר ובלי לאסוף פרטים בטלפון"
+   }
+  ],
+  "wireframe": "<div class=\"wf-screen\"><h3 class=\"wf-heading\">בקשת מגורים — שנת מגורים תשפ\"ז</h3><div class=\"wf-row\"><label class=\"wf-label\">מספר סטודנט</label><input class=\"wf-input\" disabled /></div><div class=\"wf-row\"><label class=\"wf-label\">שנת מגורים</label><select class=\"wf-select\" disabled></select></div><div class=\"wf-row\"><label class=\"wf-label\">טלפון / דוא\"ל</label><input class=\"wf-input\" disabled /></div><div class=\"wf-row\"><label class=\"wf-label\">זכאות</label><select class=\"wf-select\" disabled></select></div><table class=\"wf-table\"><thead><tr><th>דירוג</th><th>בניין</th><th>סוג חדר</th></tr></thead><tbody><tr><td>1</td><td>בניין ג'</td><td>יחיד</td></tr><tr><td>2</td><td>בניין א'</td><td>זוגי</td></tr><tr><td>3</td><td>—</td><td>—</td></tr></tbody></table><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">הגשת בקשה</button><button class=\"wf-button\">הוספת העדפה</button><button class=\"wf-button\">ביטול</button></div><p class=\"wf-hint\">לאחר ההגשה מוצג מספר הבקשה; ניתן לעקוב אחר מצבה באזור האישי.</p></div>"
+ },
+ "uc-verify": {
+  "id": "uc-verify",
+  "name": "אימות סטודנט פעיל",
+  "description": "המערכת פונה למערכת הסטודנטים של האוניברסיטה ומוודאת שהסטודנט פעיל, לפני קבלת בקשה ולפני חתימת חוזה.",
+  "preconditions": [
+   "מספר הסטודנט הוזן.",
+   "קיים ממשק תקין למערכת הסטודנטים של האוניברסיטה."
+  ],
+  "postconditions": [
+   "מעמד הסטודנט (פעיל / לא פעיל) ומועד האימות נרשמו ברשומת הסטודנט."
+  ],
+  "scenarios": [
+   {
+    "id": "sc-verify",
+    "name": "מסלול מרכזי",
+    "flow": [
+     {
+      "kind": "system",
+      "text": "שולחת למערכת הסטודנטים של האוניברסיטה שאילתה עם מספר הסטודנט"
+     },
+     {
+      "kind": "system",
+      "text": "מקבלת ממערכת הסטודנטים את מעמד הסטודנט (פעיל / לא פעיל), שם מלא ופקולטה"
+     },
+     {
+      "kind": "system",
+      "text": "משווה את השם והפרטים לרשומת הסטודנט במערכת המעונות ומעדכנת פערים"
+     },
+     {
+      "kind": "system",
+      "text": "מסמנת את הסטודנט כ\"מאומת\" ורושמת את מועד האימות"
+     }
+    ],
+    "extensions": [
+     {
+      "at": "1",
+      "text": "מערכת הסטודנטים אינה זמינה (אין תשובה תוך 10 שניות)",
+      "steps": [
+       "המערכת רושמת את הכישלון ביומן"
+      ],
+      "outcome": {
+       "kind": "terminate",
+       "text": "האימות לא הושלם; תרחיש השימוש הקורא נעצר ומציג הודעה."
+      }
+     },
+     {
+      "at": "2",
+      "text": "מערכת הסטודנטים מחזירה שהסטודנט אינו פעיל או אינו קיים",
+      "steps": [
+       "המערכת מסמנת את הסטודנט כ\"לא פעיל\""
+      ],
+      "outcome": {
+       "kind": "terminate",
+       "text": "האימות נכשל; תרחיש השימוש הקורא נעצר."
+      }
+     }
+    ]
+   }
+  ],
+  "userStories": [
+   {
+    "role": "מנהל שיבוץ",
+    "want": "שהמערכת תוודא אוטומטית מול האוניברסיטה שהסטודנט פעיל",
+    "so": "לא ייחתם חוזה עם מי שאינו סטודנט"
+   },
+   {
+    "role": "מנהל המעונות",
+    "want": "שכל בקשה וכל חוזה יישענו על אימות אחיד מול מערכת הסטודנטים",
+    "so": "המעונות לא ינהלו רישום סטודנטים כפול"
+   }
+  ],
+  "wireframe": ""
+ },
+ "uc-waitlist": {
+  "id": "uc-waitlist",
+  "name": "ניהול רשימת המתנה",
+  "primaryActor": "assign-mgr",
+  "description": "מנהל השיבוץ צופה ברשימת ההמתנה לשנת מגורים, מוסיף אליה בקשות, משנה עדיפויות ומסיר בקשות.",
+  "preconditions": [
+   "מנהל השיבוץ מזוהה במערכת.",
+   "קיימות בקשות בסטטוס \"הוגשה\" לשנת המגורים."
+  ],
+  "postconditions": [
+   "רשימת ההמתנה מעודכנת, וכל שינוי עדיפות או הסרה נרשם ביומן השינויים."
+  ],
+  "scenarios": [
+   {
+    "id": "sc-wl-view",
+    "name": "צפייה ברשימת ההמתנה",
+    "flow": [
+     {
+      "kind": "actor",
+      "actor": "assign-mgr",
+      "text": "בוחר שנת מגורים ומסנן לפי סוג חדר, בניין מועדף או זכאות"
+     },
+     {
+      "kind": "system",
+      "text": "מציגה את הבקשות הממתינות לפי סדר עדיפות, עם תאריך הגשה, זכאות והעדפות"
+     },
+     {
+      "kind": "actor",
+      "actor": "assign-mgr",
+      "text": "בוחר בקשה מהרשימה"
+     },
+     {
+      "kind": "system",
+      "text": "מציגה את פרטי הבקשה, האסמכתאות ומצב האימות של הסטודנט"
+     }
+    ],
+    "extensions": [
+     {
+      "at": "2",
+      "text": "אין בקשות ממתינות התואמות לסינון",
+      "steps": [
+       "המערכת מציגה \"לא נמצאו בקשות\""
+      ],
+      "outcome": {
+       "kind": "terminate",
+       "text": "הרשימה ריקה; לא נבחרה בקשה."
+      }
+     }
+    ]
+   },
+   {
+    "id": "sc-wl-add",
+    "name": "הוספת בקשה לרשימת ההמתנה",
+    "flow": [
+     {
+      "kind": "actor",
+      "actor": "assign-mgr",
+      "text": "בוחר בקשה בסטטוס \"הוגשה\" שטרם שובצה"
+     },
+     {
+      "kind": "system",
+      "text": "מחשבת ניקוד עדיפות לפי זכאות ותאריך הגשה ומציגה את המיקום הצפוי ברשימה"
+     },
+     {
+      "kind": "actor",
+      "actor": "assign-mgr",
+      "text": "מאשר את ההוספה"
+     },
+     {
+      "kind": "system",
+      "text": "מוסיפה את הבקשה לרשימה בסטטוס \"ממתינה\" ומציגה את מיקומה"
+     }
+    ],
+    "extensions": [
+     {
+      "at": "1",
+      "text": "הבקשה כבר נמצאת ברשימת ההמתנה",
+      "steps": [
+       "המערכת מציגה את מיקומה הנוכחי"
+      ],
+      "outcome": {
+       "kind": "resume",
+       "at": "1"
+      }
+     }
+    ]
+   },
+   {
+    "id": "sc-wl-update",
+    "name": "עדכון עדיפות של בקשה",
+    "flow": [
+     {
+      "kind": "actor",
+      "actor": "assign-mgr",
+      "text": "בוחר בקשה ברשימת ההמתנה"
+     },
+     {
+      "kind": "actor",
+      "actor": "assign-mgr",
+      "text": "מזין עדיפות חדשה ונימוק לשינוי"
+     },
+     {
+      "kind": "system",
+      "text": "מוודאת שהנימוק מולא ושהעדיפות בטווח התקין"
+     },
+     {
+      "kind": "system",
+      "text": "מעדכנת את סדר הרשימה ורושמת את השינוי, הנימוק והמועד ביומן השינויים"
+     }
+    ],
+    "extensions": [
+     {
+      "at": "3",
+      "text": "הנימוק ריק",
+      "steps": [
+       "המערכת מציגה \"חובה לנמק שינוי עדיפות\""
+      ],
+      "outcome": {
+       "kind": "resume",
+       "at": "2"
+      }
+     }
+    ]
+   },
+   {
+    "id": "sc-wl-remove",
+    "name": "הסרת בקשה מרשימת ההמתנה",
+    "flow": [
+     {
+      "kind": "actor",
+      "actor": "assign-mgr",
+      "text": "בוחר בקשה ברשימת ההמתנה"
+     },
+     {
+      "kind": "actor",
+      "actor": "assign-mgr",
+      "text": "בוחר סיבת הסרה (ויתור הסטודנט / שובץ במקום אחר / אינו זכאי)"
+     },
+     {
+      "kind": "system",
+      "text": "מציגה בקשת אישור עם פרטי הבקשה"
+     },
+     {
+      "kind": "actor",
+      "actor": "assign-mgr",
+      "text": "מאשר את ההסרה"
+     },
+     {
+      "kind": "system",
+      "text": "מסמנת את הבקשה \"הוסרה\", שומרת את הסיבה ומעדכנת את מיקומי שאר הבקשות"
+     }
+    ],
+    "extensions": [
+     {
+      "at": "4",
+      "text": "מנהל השיבוץ מבטל את האישור",
+      "steps": [],
+      "outcome": {
+       "kind": "terminate",
+       "text": "הבקשה נותרת ברשימת ההמתנה ללא שינוי."
+      }
+     }
+    ]
+   }
+  ],
+  "userStories": [
+   {
+    "role": "מנהל שיבוץ",
+    "want": "לראות את רשימת ההמתנה מסודרת לפי עדיפות וזכאות",
+    "so": "אשבץ קודם את מי שזכאי"
+   },
+   {
+    "role": "מנהל שיבוץ",
+    "want": "לשנות עדיפות של בקשה עם נימוק מתועד",
+    "so": "יהיה ניתן להסביר כל חריגה מהסדר"
+   },
+   {
+    "role": "סטודנט",
+    "want": "שהבקשה שלי תישמר ברשימת המתנה מסודרת",
+    "so": "אדע שלא \"נפלתי בין הכיסאות\""
+   }
+  ],
+  "wireframe": "<div class=\"wf-screen\"><h3 class=\"wf-heading\">רשימת המתנה — תשפ\"ז</h3><div class=\"wf-row\"><label class=\"wf-label\">שנת מגורים</label><select class=\"wf-select\" disabled></select></div><div class=\"wf-row\"><label class=\"wf-label\">סוג חדר</label><select class=\"wf-select\" disabled></select></div><div class=\"wf-row\"><label class=\"wf-label\">בניין</label><select class=\"wf-select\" disabled></select></div><table class=\"wf-table\"><thead><tr><th>#</th><th>סטודנט</th><th>זכאות</th><th>תאריך הגשה</th><th>עדיפות</th></tr></thead><tbody><tr><td>1</td><td>123456789</td><td>פריפריה</td><td>12.06</td><td>1</td></tr><tr><td>2</td><td>234567890</td><td>בינלאומי</td><td>15.06</td><td>2</td></tr><tr><td>3</td><td>345678901</td><td>—</td><td>20.06</td><td>3</td></tr></tbody></table><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">הוספת בקשה</button><button class=\"wf-button\">שינוי עדיפות</button><button class=\"wf-button\">הסרה</button></div><p class=\"wf-hint\">שינוי עדיפות פותח חלון עם שדה נימוק חובה.</p></div>"
+ },
+ "uc-assign": {
+  "id": "uc-assign",
+  "name": "שיבוץ חדר וחתימת חוזה",
+  "primaryActor": "assign-mgr",
+  "description": "מנהל השיבוץ משבץ סטודנט מרשימת ההמתנה לחדר פנוי ורושם חוזה חתום, לאחר אימות שהסטודנט פעיל.",
+  "preconditions": [
+   "הבקשה נמצאת ברשימת ההמתנה בסטטוס \"ממתינה\".",
+   "קיים חדר פנוי מהסוג המבוקש.",
+   "קיים תעריף תקף לסוג החדר."
+  ],
+  "postconditions": [
+   "נוצר חוזה בסטטוס \"חתום\" עם תאריכים, שכר דירה חודשי ופיקדון.",
+   "הבקשה הוסרה מרשימת ההמתנה ומספר החוזים הפעילים בחדר עודכן."
+  ],
+  "scenarios": [
+   {
+    "id": "sc-assign",
+    "name": "מסלול מרכזי",
+    "flow": [
+     {
+      "kind": "actor",
+      "actor": "assign-mgr",
+      "text": "בוחר בקשה מרשימת ההמתנה"
+     },
+     {
+      "kind": "include",
+      "uc": "uc-verify",
+      "text": ""
+     },
+     {
+      "kind": "system",
+      "text": "מציגה חדרים פנויים התואמים להעדפות: חדר יחיד ללא חוזה פעיל, חדר זוגי עם לכל היותר חוזה פעיל אחד"
+     },
+     {
+      "kind": "actor",
+      "actor": "assign-mgr",
+      "text": "בוחר חדר ומזין תאריך התחלה ותאריך סיום לחוזה"
+     },
+     {
+      "kind": "system",
+      "text": "מחשבת שכר דירה חודשי לפי התעריף התקף לסוג החדר ואת סכום הפיקדון, ומציגה טיוטת חוזה"
+     },
+     {
+      "kind": "actor",
+      "actor": "assign-mgr",
+      "text": "מסמן שהסטודנט חתם על החוזה ומזין את תאריך החתימה"
+     },
+     {
+      "kind": "system",
+      "text": "שומרת את החוזה בסטטוס \"חתום\", מסירה את הבקשה מרשימת ההמתנה ומעדכנת את תפוסת החדר"
+     }
+    ],
+    "extensions": [
+     {
+      "at": "2",
+      "text": "האימות נכשל — הסטודנט אינו פעיל או מערכת הסטודנטים אינה זמינה",
+      "steps": [
+       "המערכת מציגה את סיבת הכישלון"
+      ],
+      "outcome": {
+       "kind": "terminate",
+       "text": "לא נחתם חוזה; הבקשה נותרת ברשימת ההמתנה."
+      }
+     },
+     {
+      "at": "3",
+      "text": "אין חדר פנוי התואם להעדפות",
+      "steps": [
+       "המערכת מציעה חדרים פנויים מסוג אחר"
+      ],
+      "outcome": {
+       "kind": "resume",
+       "at": "4"
+      }
+     },
+     {
+      "at": "4",
+      "text": "לסטודנט כבר קיים חוזה פעיל לתקופה חופפת",
+      "steps": [
+       "המערכת מציגה את החוזה הקיים"
+      ],
+      "outcome": {
+       "kind": "terminate",
+       "text": "לא נחתם חוזה נוסף; לדייר חוזה פעיל אחד בלבד."
+      }
+     }
+    ]
+   }
+  ],
+  "userStories": [
+   {
+    "role": "מנהל שיבוץ",
+    "want": "לראות רק חדרים שבאמת פנויים לפי סוג החדר",
+    "so": "לא אשבץ שני דיירים לחדר יחיד"
+   },
+   {
+    "role": "מנהל שיבוץ",
+    "want": "שהחוזה יחושב אוטומטית לפי התעריף התקף",
+    "so": "לא אטעה בסכום שכר הדירה או הפיקדון"
+   },
+   {
+    "role": "סטודנט",
+    "want": "לקבל חוזה מסודר עם תאריכים וסכומים",
+    "so": "אדע בדיוק מה מחויבותי"
+   }
+  ],
+  "wireframe": "<div class=\"wf-screen\"><h3 class=\"wf-heading\">שיבוץ חדר וחוזה — בקשה #1042</h3><div class=\"wf-row\"><label class=\"wf-label\">סטודנט</label><input class=\"wf-input\" disabled /></div><div class=\"wf-row\"><label class=\"wf-label\">מעמד באוניברסיטה</label><input class=\"wf-input\" disabled /></div><div class=\"wf-row\"><label class=\"wf-label\">בניין / חדר</label><select class=\"wf-select\" disabled></select></div><div class=\"wf-row\"><label class=\"wf-label\">תאריך התחלה</label><input class=\"wf-input\" disabled /></div><div class=\"wf-row\"><label class=\"wf-label\">תאריך סיום</label><input class=\"wf-input\" disabled /></div><table class=\"wf-table\"><thead><tr><th>פריט</th><th>סכום</th></tr></thead><tbody><tr><td>שכר דירה חודשי</td><td>1,450 ₪</td></tr><tr><td>פיקדון</td><td>2,000 ₪</td></tr></tbody></table><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">שמירת חוזה חתום</button><button class=\"wf-button\">הפקת טיוטה</button><button class=\"wf-button\">ביטול</button></div><p class=\"wf-hint\">השדה \"מעמד באוניברסיטה\" מתמלא אוטומטית מהאימות מול מערכת הסטודנטים.</p></div>"
+ },
+ "uc-checkin": {
+  "id": "uc-checkin",
+  "name": "רישום כניסת דייר ומסירת מפתחות",
+  "primaryActor": "reception",
+  "description": "צוות הקבלה רושם את כניסת הדייר לחדר, את מצב החדר בכניסה ואת מסירת המפתח, והחוזה הופך לפעיל.",
+  "preconditions": [
+   "קיים חוזה בסטטוס \"חתום\" שתאריך תחילתו הגיע.",
+   "הפיקדון שולם."
+  ],
+  "postconditions": [
+   "החוזה בסטטוס \"פעיל\".",
+   "מסירת המפתח, תאריך הכניסה ופרוטוקול מצב החדר נרשמו."
+  ],
+  "scenarios": [
+   {
+    "id": "sc-checkin",
+    "name": "מסלול מרכזי",
+    "flow": [
+     {
+      "kind": "actor",
+      "actor": "reception",
+      "text": "מזין מספר סטודנט או מספר חוזה"
+     },
+     {
+      "kind": "system",
+      "text": "מציגה את החוזה החתום, הבניין, החדר ומצב תשלום הפיקדון"
+     },
+     {
+      "kind": "actor",
+      "actor": "reception",
+      "text": "מזין את מספר המפתח הנמסר ומסמן את מצב החדר והציוד בכניסה (פרוטוקול)"
+     },
+     {
+      "kind": "system",
+      "text": "מוודאת שהפיקדון שולם ושהחדר אינו מלא (חדר יחיד: 0 דיירים; חדר זוגי: לכל היותר דייר אחד)"
+     },
+     {
+      "kind": "actor",
+      "actor": "reception",
+      "text": "מאשר את הכניסה"
+     },
+     {
+      "kind": "system",
+      "text": "מעדכנת את החוזה ל\"פעיל\", רושמת את מסירת המפתח ותאריך הכניסה ומציגה אישור להדפסה"
+     }
+    ],
+    "extensions": [
+     {
+      "at": "2",
+      "text": "לא נמצא חוזה חתום לסטודנט",
+      "steps": [
+       "המערכת מציגה \"אין חוזה חתום\" ומפנה למנהל השיבוץ"
+      ],
+      "outcome": {
+       "kind": "terminate",
+       "text": "הכניסה לא נרשמה."
+      }
+     },
+     {
+      "at": "4",
+      "text": "הפיקדון טרם שולם",
+      "steps": [
+       "המערכת מציגה את היתרה לתשלום"
+      ],
+      "outcome": {
+       "kind": "terminate",
+       "text": "הכניסה לא נרשמה עד לתשלום הפיקדון."
+      }
+     }
+    ]
+   }
+  ],
+  "userStories": [
+   {
+    "role": "צוות קבלה",
+    "want": "לרשום כניסה ומסירת מפתח בכמה לחיצות",
+    "so": "התור בדלפק בתחילת השנה יזרום"
+   },
+   {
+    "role": "מנהל המעונות",
+    "want": "שמצב החדר בכניסה יתועד",
+    "so": "ניתן יהיה לחייב על נזקים ביציאה"
+   },
+   {
+    "role": "דייר",
+    "want": "לקבל אישור כניסה עם מספר המפתח שלי",
+    "so": "יהיה ברור מה נמסר לי"
+   }
+  ],
+  "wireframe": "<div class=\"wf-screen\"><h3 class=\"wf-heading\">כניסת דייר — דלפק קבלה</h3><div class=\"wf-row\"><label class=\"wf-label\">מספר סטודנט / חוזה</label><input class=\"wf-input\" disabled /></div><div class=\"wf-row\"><label class=\"wf-label\">בניין / חדר</label><input class=\"wf-input\" disabled /></div><div class=\"wf-row\"><label class=\"wf-label\">מספר מפתח</label><input class=\"wf-input\" disabled /></div><div class=\"wf-row\"><label class=\"wf-label\">מצב החדר בכניסה</label><textarea class=\"wf-textarea\" disabled></textarea></div><table class=\"wf-table\"><thead><tr><th>פריט ציוד</th><th>תקין</th></tr></thead><tbody><tr><td>מיטה</td><td>כן</td></tr><tr><td>שולחן</td><td>כן</td></tr><tr><td>מיזוג</td><td>כן</td></tr></tbody></table><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">אישור כניסה</button><button class=\"wf-button\">הדפסת פרוטוקול</button><button class=\"wf-button\">ביטול</button></div><p class=\"wf-hint\">כפתור האישור פעיל רק כאשר הפיקדון מסומן כשולם.</p></div>"
+ },
+ "uc-checkout": {
+  "id": "uc-checkout",
+  "name": "רישום סיום חוזה ויציאת דייר",
+  "primaryActor": "reception",
+  "description": "צוות הקבלה רושם את יציאת הדייר, את מצב החדר ביציאה ואת החזרת המפתח; המערכת מחשבת החזר פיקדון בניכוי חיובי נזק.",
+  "preconditions": [
+   "קיים חוזה בסטטוס \"פעיל\" לדייר.",
+   "כל החיובים הפתוחים של הדייר שולמו."
+  ],
+  "postconditions": [
+   "החוזה בסטטוס \"הסתיים\" והחדר שוחרר.",
+   "סכום החזר הפיקדון נטו נרשם להעברה, וחיובי נזק (אם יש) נשמרו."
+  ],
+  "scenarios": [
+   {
+    "id": "sc-checkout",
+    "name": "מסלול מרכזי",
+    "flow": [
+     {
+      "kind": "actor",
+      "actor": "reception",
+      "text": "מזין מספר חוזה"
+     },
+     {
+      "kind": "system",
+      "text": "מציגה את החוזה, סכום הפיקדון ורשימת החיובים הפתוחים"
+     },
+     {
+      "kind": "actor",
+      "actor": "reception",
+      "text": "מזין את מצב החדר ביציאה ומסמן שהמפתח הוחזר"
+     },
+     {
+      "kind": "alt",
+      "condition": "ממצאי בדיקת החדר",
+      "branches": [
+       {
+        "label": "ללא נזק",
+        "steps": [
+         {
+          "kind": "system",
+          "text": "מחשבת החזר פיקדון מלא"
+         }
+        ]
+       },
+       {
+        "label": "נמצא נזק",
+        "steps": [
+         {
+          "kind": "actor",
+          "actor": "reception",
+          "text": "מזין תיאור הנזק ועלות התיקון המוערכת"
+         },
+         {
+          "kind": "system",
+          "text": "יוצרת חיוב נזק ומקזזת אותו מהפיקדון"
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "kind": "system",
+      "text": "מציגה את סכום ההחזר נטו לאישור"
+     },
+     {
+      "kind": "actor",
+      "actor": "reception",
+      "text": "מאשר את סיום החוזה"
+     },
+     {
+      "kind": "system",
+      "text": "מעדכנת את החוזה ל\"הסתיים\", רושמת את ההחזר להעברה ומשחררת את החדר"
+     }
+    ],
+    "extensions": [
+     {
+      "at": "2",
+      "text": "קיימים חיובים פתוחים שלא שולמו",
+      "steps": [
+       "המערכת מציגה את החיובים הפתוחים"
+      ],
+      "outcome": {
+       "kind": "terminate",
+       "text": "סיום החוזה נדחה עד לתשלום החיובים."
+      }
+     },
+     {
+      "at": "4.2.2",
+      "text": "עלות הנזק גבוהה מסכום הפיקדון",
+      "steps": [
+       "המערכת יוצרת חיוב נוסף על ההפרש"
+      ],
+      "outcome": {
+       "kind": "resume",
+       "at": "5"
+      }
+     }
+    ]
+   }
+  ],
+  "userStories": [
+   {
+    "role": "צוות קבלה",
+    "want": "לרשום יציאה ולסגור חוזה בעמדה אחת",
+    "so": "לא אצטרך לעדכן גם את הנהלת החשבונות בנפרד"
+   },
+   {
+    "role": "מנהל המעונות",
+    "want": "שהחזר הפיקדון יחושב אוטומטית בניכוי נזקים",
+    "so": "לא יוחזרו פיקדונות בטעות"
+   },
+   {
+    "role": "דייר",
+    "want": "לראות כמה מהפיקדון מוחזר לי ולמה",
+    "so": "אוכל לערער אם נזק חויב שלא בצדק"
+   }
+  ],
+  "wireframe": "<div class=\"wf-screen\"><h3 class=\"wf-heading\">סיום חוזה ויציאה — חוזה #2231</h3><div class=\"wf-row\"><label class=\"wf-label\">מספר חוזה</label><input class=\"wf-input\" disabled /></div><div class=\"wf-row\"><label class=\"wf-label\">מצב החדר ביציאה</label><textarea class=\"wf-textarea\" disabled></textarea></div><div class=\"wf-row\"><label class=\"wf-label\">מפתח הוחזר</label><select class=\"wf-select\" disabled></select></div><div class=\"wf-row\"><label class=\"wf-label\">תיאור נזק</label><input class=\"wf-input\" disabled /></div><div class=\"wf-row\"><label class=\"wf-label\">עלות תיקון</label><input class=\"wf-input\" disabled /></div><table class=\"wf-table\"><thead><tr><th>פריט</th><th>סכום</th></tr></thead><tbody><tr><td>פיקדון</td><td>2,000 ₪</td></tr><tr><td>חיוב נזק</td><td>-350 ₪</td></tr><tr><td>החזר נטו</td><td>1,650 ₪</td></tr></tbody></table><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">אישור סיום חוזה</button><button class=\"wf-button\">ביטול</button></div><p class=\"wf-hint\">שורת \"החזר נטו\" מתעדכנת אוטומטית עם הזנת עלות התיקון.</p></div>"
+ },
+ "uc-view-my": {
+  "id": "uc-view-my",
+  "name": "צפייה בחוזה, בחיובים ובקריאות שלי",
+  "primaryActor": "tenant",
+  "description": "דייר צופה באזור האישי בחוזה הפעיל שלו, בחיובים ובמצבם ובקריאות התחזוקה שפתח.",
+  "preconditions": [
+   "הדייר מזוהה במערכת.",
+   "לדייר קיים חוזה חתום, פעיל או היסטורי."
+  ],
+  "postconditions": [
+   "לא השתנה דבר במערכת; הצפייה נרשמה ביומן הגישה."
+  ],
+  "scenarios": [
+   {
+    "id": "sc-view",
+    "name": "מסלול מרכזי",
+    "flow": [
+     {
+      "kind": "actor",
+      "actor": "tenant",
+      "text": "נכנס לאזור האישי ובוחר \"החוזה שלי\""
+     },
+     {
+      "kind": "system",
+      "text": "מציגה את החוזה הפעיל: בניין, חדר, תאריכי התחלה וסיום, שכר דירה ופיקדון"
+     },
+     {
+      "kind": "system",
+      "text": "מציגה את רשימת החיובים עם סכום, תאריך יעד וסטטוס (פתוח / שולם)"
+     },
+     {
+      "kind": "system",
+      "text": "מציגה את קריאות התחזוקה שהדייר פתח עם סטטוס (פתוחה / משויכת / סגורה / נדחתה)"
+     },
+     {
+      "kind": "actor",
+      "actor": "tenant",
+      "text": "בוחר חיוב או קריאה לפרטים"
+     },
+     {
+      "kind": "system",
+      "text": "מציגה את פרטי הפריט שנבחר (קבלה, טכנאי מטפל, מועד סגירה)"
+     }
+    ],
+    "extensions": [
+     {
+      "at": "2",
+      "text": "לדייר אין חוזה פעיל",
+      "steps": [
+       "המערכת מציגה את החוזים ההיסטוריים בלבד"
+      ],
+      "outcome": {
+       "kind": "resume",
+       "at": "3"
+      }
+     },
+     {
+      "at": "5",
+      "text": "הפריט שנבחר אינו שייך לדייר",
+      "steps": [
+       "המערכת מציגה \"אין הרשאה\""
+      ],
+      "outcome": {
+       "kind": "terminate",
+       "text": "הפרטים לא הוצגו."
+      }
+     }
+    ]
+   }
+  ],
+  "userStories": [
+   {
+    "role": "דייר",
+    "want": "לראות מתי נגמר החוזה שלי ומה שילמתי",
+    "so": "אתכנן את התשלומים והמעבר"
+   },
+   {
+    "role": "דייר",
+    "want": "לעקוב אחרי מצב הקריאה שפתחתי",
+    "so": "לא אצטרך לשאול בקבוצת WhatsApp"
+   },
+   {
+    "role": "צוות קבלה",
+    "want": "שדיירים יראו את המידע שלהם לבד",
+    "so": "פחות פניות לדלפק"
+   }
+  ],
+  "wireframe": "<div class=\"wf-screen\"><h3 class=\"wf-heading\">האזור האישי — החוזה שלי</h3><div class=\"wf-row\"><label class=\"wf-label\">בניין / חדר</label><input class=\"wf-input\" disabled /></div><div class=\"wf-row\"><label class=\"wf-label\">תקופת החוזה</label><input class=\"wf-input\" disabled /></div><div class=\"wf-row\"><label class=\"wf-label\">שכר דירה חודשי</label><input class=\"wf-input\" disabled /></div><table class=\"wf-table\"><thead><tr><th>חיוב</th><th>סכום</th><th>תאריך יעד</th><th>סטטוס</th></tr></thead><tbody><tr><td>שכירות 10/2026</td><td>1,450 ₪</td><td>10.10</td><td>פתוח</td></tr><tr><td>פיקדון</td><td>2,000 ₪</td><td>01.09</td><td>שולם</td></tr></tbody></table><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">תשלום חיוב פתוח</button><button class=\"wf-button\">הקריאות שלי</button></div><p class=\"wf-hint\">לחיצה על שורת חיוב פתוח מעבירה למסך התשלום.</p></div>"
+ },
+ "uc-pay": {
+  "id": "uc-pay",
+  "name": "תשלום חיוב",
+  "primaryActor": "tenant",
+  "description": "דייר משלם חיוב פתוח (שכירות, פיקדון או נזק) בכרטיס אשראי; המערכת סולקת דרך שער התשלום ומסמנת את החיוב כשולם.",
+  "preconditions": [
+   "לדייר קיים חיוב בסטטוס \"פתוח\".",
+   "שער התשלום זמין."
+  ],
+  "postconditions": [
+   "החיוב בסטטוס \"שולם\" עם אסמכתת סליקה ותאריך תשלום.",
+   "הקבלה זמינה לדייר באזור האישי."
+  ],
+  "scenarios": [
+   {
+    "id": "sc-pay",
+    "name": "מסלול מרכזי",
+    "flow": [
+     {
+      "kind": "actor",
+      "actor": "tenant",
+      "text": "בוחר חיוב פתוח לתשלום"
+     },
+     {
+      "kind": "system",
+      "text": "מציגה את סכום החיוב, תיאורו ותאריך היעד"
+     },
+     {
+      "kind": "actor",
+      "actor": "tenant",
+      "text": "מזין מספר כרטיס, תוקף ו-CVV ומאשר את התשלום"
+     },
+     {
+      "kind": "system",
+      "text": "שולחת בקשת סליקה לשער התשלום ומקבלת אישור עסקה"
+     },
+     {
+      "kind": "system",
+      "text": "מסמנת את החיוב \"שולם\", שומרת את מספר האישור ומציגה קבלה"
+     }
+    ],
+    "extensions": [
+     {
+      "at": "4",
+      "text": "שער התשלום דוחה את העסקה",
+      "steps": [
+       "המערכת מציגה את סיבת הדחייה"
+      ],
+      "outcome": {
+       "kind": "resume",
+       "at": "3"
+      }
+     },
+     {
+      "at": "4",
+      "text": "שער התשלום אינו מגיב",
+      "steps": [
+       "המערכת מציגה \"התשלום לא הושלם, נסה שוב מאוחר יותר\""
+      ],
+      "outcome": {
+       "kind": "terminate",
+       "text": "החיוב נותר בסטטוס \"פתוח\"."
+      }
+     }
+    ]
+   }
+  ],
+  "userStories": [
+   {
+    "role": "דייר",
+    "want": "לשלם את שכר הדירה בכרטיס מהטלפון",
+    "so": "לא אצטרך להגיע לדלפק"
+   },
+   {
+    "role": "מנהל המעונות",
+    "want": "שכל תשלום יירשם אוטומטית מול החיוב",
+    "so": "לא תידרש התאמה ידנית מול הנהלת החשבונות"
+   }
+  ],
+  "wireframe": "<div class=\"wf-screen\"><h3 class=\"wf-heading\">תשלום חיוב — שכירות 10/2026</h3><div class=\"wf-row\"><label class=\"wf-label\">סכום לתשלום</label><input class=\"wf-input\" disabled /></div><div class=\"wf-row\"><label class=\"wf-label\">מספר כרטיס</label><input class=\"wf-input\" disabled /></div><div class=\"wf-row\"><label class=\"wf-label\">תוקף</label><input class=\"wf-input\" disabled /></div><div class=\"wf-row\"><label class=\"wf-label\">CVV</label><input class=\"wf-input\" disabled /></div><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">תשלום</button><button class=\"wf-button\">ביטול</button></div><p class=\"wf-hint\">לאחר אישור שער התשלום מוצגת קבלה עם מספר אישור.</p></div>"
+ },
+ "uc-open-call": {
+  "id": "uc-open-call",
+  "name": "פתיחת קריאת תחזוקה",
+  "primaryActor": "tenant",
+  "description": "דייר או מנהל אחזקה פותח קריאת תחזוקה על חדר או על בניין (לעולם לא על דייר), עם תחום, תיאור ודחיפות.",
+  "preconditions": [
+   "הפותח מזוהה במערכת.",
+   "החדר או הבניין קיימים במערכת."
+  ],
+  "postconditions": [
+   "הקריאה נשמרה בסטטוס \"פתוחה\" עם מספר קריאה, מושא (חדר או בניין), תחום ודחיפות."
+  ],
+  "scenarios": [
+   {
+    "id": "sc-open-tenant",
+    "name": "פתיחת קריאה על ידי דייר",
+    "flow": [
+     {
+      "kind": "actor",
+      "actor": "tenant",
+      "text": "בוחר \"קריאה חדשה\" באזור האישי"
+     },
+     {
+      "kind": "alt",
+      "condition": "מושא הקריאה",
+      "branches": [
+       {
+        "label": "החדר שלי",
+        "steps": [
+         {
+          "kind": "system",
+          "text": "מציעה את החדר של הדייר לפי חוזהו הפעיל"
+         },
+         {
+          "kind": "actor",
+          "actor": "tenant",
+          "text": "מאשר את החדר"
+         }
+        ]
+       },
+       {
+        "label": "הבניין",
+        "steps": [
+         {
+          "kind": "actor",
+          "actor": "tenant",
+          "text": "בוחר את הבניין והמיקום (קומה / אזור משותף)"
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "kind": "actor",
+      "actor": "tenant",
+      "text": "בוחר תחום (חשמל / אינסטלציה / מיזוג / כללי) ומזין תיאור התקלה"
+     },
+     {
+      "kind": "actor",
+      "actor": "tenant",
+      "text": "מסמן דחיפות (רגילה / דחופה)"
+     },
+     {
+      "kind": "system",
+      "text": "שומרת את הקריאה בסטטוס \"פתוחה\", מקצה מספר קריאה ומציגה אותו לדייר"
+     }
+    ],
+    "extensions": [
+     {
+      "at": "2.1.1",
+      "text": "לדייר אין חוזה פעיל",
+      "steps": [
+       "המערכת מציגה \"ניתן לפתוח קריאה רק על בניין\""
+      ],
+      "outcome": {
+       "kind": "resume",
+       "at": "2"
+      }
+     },
+     {
+      "at": "3",
+      "text": "תיאור התקלה ריק",
+      "steps": [
+       "המערכת מציגה \"חובה לתאר את התקלה\""
+      ],
+      "outcome": {
+       "kind": "resume",
+       "at": "3"
+      }
+     }
+    ]
+   },
+   {
+    "id": "sc-open-mgr",
+    "name": "פתיחת קריאה על ידי מנהל אחזקה (למשל לאחר סיור בבניין)",
+    "flow": [
+     {
+      "kind": "actor",
+      "actor": "maint-mgr",
+      "text": "בוחר \"קריאה חדשה\" בתור הקריאות"
+     },
+     {
+      "kind": "actor",
+      "actor": "maint-mgr",
+      "text": "בוחר בניין, ואם נדרש גם חדר"
+     },
+     {
+      "kind": "actor",
+      "actor": "maint-mgr",
+      "text": "בוחר תחום, מזין תיאור ומסמן דחיפות"
+     },
+     {
+      "kind": "system",
+      "text": "שומרת את הקריאה בסטטוס \"פתוחה\" ומקצה מספר קריאה"
+     }
+    ],
+    "extensions": [
+     {
+      "at": "2",
+      "text": "קיימת כבר קריאה פתוחה על אותו חדר באותו תחום",
+      "steps": [
+       "המערכת מציגה את הקריאה הקיימת"
+      ],
+      "outcome": {
+       "kind": "terminate",
+       "text": "לא נפתחה קריאה כפולה."
+      }
+     }
+    ]
+   }
+  ],
+  "userStories": [
+   {
+    "role": "דייר",
+    "want": "לדווח על תקלה בחדר שלי מהטלפון ולקבל מספר קריאה",
+    "so": "אדע שהקריאה נרשמה ולא אבדה"
+   },
+   {
+    "role": "דייר",
+    "want": "לדווח על תקלה במעלית או בכביסה של הבניין",
+    "so": "גם תקלות במרחבים המשותפים יטופלו"
+   },
+   {
+    "role": "מנהל אחזקה",
+    "want": "לפתוח קריאות בעצמי אחרי סיור",
+    "so": "כל התקלות ינוהלו בתור אחד"
+   }
+  ],
+  "wireframe": "<div class=\"wf-screen\"><h3 class=\"wf-heading\">קריאת תחזוקה חדשה</h3><div class=\"wf-row\"><label class=\"wf-label\">מושא הקריאה</label><select class=\"wf-select\" disabled></select></div><div class=\"wf-row\"><label class=\"wf-label\">בניין</label><select class=\"wf-select\" disabled></select></div><div class=\"wf-row\"><label class=\"wf-label\">חדר</label><input class=\"wf-input\" disabled /></div><div class=\"wf-row\"><label class=\"wf-label\">תחום</label><select class=\"wf-select\" disabled></select></div><div class=\"wf-row\"><label class=\"wf-label\">תיאור התקלה</label><textarea class=\"wf-textarea\" disabled></textarea></div><div class=\"wf-row\"><label class=\"wf-label\">דחיפות</label><select class=\"wf-select\" disabled></select></div><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">פתיחת קריאה</button><button class=\"wf-button\">ביטול</button></div><p class=\"wf-hint\">בבחירת \"החדר שלי\" השדות בניין וחדר מתמלאים אוטומטית מהחוזה הפעיל.</p></div>"
+ },
+ "uc-assign-tech": {
+  "id": "uc-assign-tech",
+  "name": "שיוך טכנאי לקריאה",
+  "primaryActor": "maint-mgr",
+  "description": "מנהל האחזקה בוחר קריאה פתוחה ומשייך אליה טכנאי לפי תחום ועומס, עם מועד יעד לטיפול.",
+  "preconditions": [
+   "קיימת קריאה בסטטוס \"פתוחה\".",
+   "קיים לפחות טכנאי אחד בתחום הקריאה."
+  ],
+  "postconditions": [
+   "הקריאה בסטטוס \"משויכת\" עם טכנאי ומועד יעד.",
+   "הטכנאי קיבל הודעה על הקריאה."
+  ],
+  "scenarios": [
+   {
+    "id": "sc-assign-tech",
+    "name": "מסלול מרכזי",
+    "flow": [
+     {
+      "kind": "actor",
+      "actor": "maint-mgr",
+      "text": "מסנן את תור הקריאות הפתוחות לפי בניין, תחום ודחיפות"
+     },
+     {
+      "kind": "system",
+      "text": "מציגה את הקריאות הפתוחות לפי דחיפות ותאריך פתיחה"
+     },
+     {
+      "kind": "actor",
+      "actor": "maint-mgr",
+      "text": "בוחר קריאה"
+     },
+     {
+      "kind": "system",
+      "text": "מציגה את הטכנאים בתחום הקריאה עם מספר הקריאות הפתוחות של כל אחד"
+     },
+     {
+      "kind": "actor",
+      "actor": "maint-mgr",
+      "text": "בוחר טכנאי ומזין מועד יעד לטיפול"
+     },
+     {
+      "kind": "system",
+      "text": "מעדכנת את הקריאה ל\"משויכת\", רושמת את הטכנאי והמועד ושולחת לטכנאי הודעה"
+     }
+    ],
+    "extensions": [
+     {
+      "at": "4",
+      "text": "אין טכנאי בתחום הקריאה",
+      "steps": [
+       "המערכת מציעה טכנאי מתחום \"כללי\""
+      ],
+      "outcome": {
+       "kind": "resume",
+       "at": "5"
+      }
+     },
+     {
+      "at": "5",
+      "text": "לטכנאי שנבחר יותר מ-10 קריאות פתוחות",
+      "steps": [
+       "המערכת מציגה אזהרת עומס ומבקשת אישור"
+      ],
+      "outcome": {
+       "kind": "resume",
+       "at": "5"
+      }
+     }
+    ]
+   }
+  ],
+  "userStories": [
+   {
+    "role": "מנהל אחזקה",
+    "want": "לראות את כל הקריאות הפתוחות בתור אחד לפי דחיפות",
+    "so": "אשייך קודם את הדחופות"
+   },
+   {
+    "role": "מנהל אחזקה",
+    "want": "לראות את העומס של כל טכנאי לפני השיוך",
+    "so": "העבודה תתחלק באופן הוגן"
+   },
+   {
+    "role": "טכנאי",
+    "want": "לקבל הודעה ברגע ששויכה אליי קריאה",
+    "so": "אתכנן את יום העבודה"
+   }
+  ],
+  "wireframe": "<div class=\"wf-screen\"><h3 class=\"wf-heading\">תור קריאות — שיוך טכנאי</h3><div class=\"wf-row\"><label class=\"wf-label\">בניין</label><select class=\"wf-select\" disabled></select></div><div class=\"wf-row\"><label class=\"wf-label\">תחום</label><select class=\"wf-select\" disabled></select></div><div class=\"wf-row\"><label class=\"wf-label\">דחיפות</label><select class=\"wf-select\" disabled></select></div><table class=\"wf-table\"><thead><tr><th>#</th><th>בניין / חדר</th><th>תחום</th><th>דחיפות</th><th>נפתחה</th></tr></thead><tbody><tr><td>7781</td><td>ב' / 214</td><td>מיזוג</td><td>דחופה</td><td>אתמול</td></tr><tr><td>7782</td><td>ד' / כניסה</td><td>חשמל</td><td>רגילה</td><td>היום</td></tr></tbody></table><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">שיוך טכנאי</button><button class=\"wf-button\">פרטי קריאה</button></div><p class=\"wf-hint\">לחיצה על \"שיוך טכנאי\" פותחת רשימת טכנאים עם מספר הקריאות הפתוחות שלהם ושדה מועד יעד.</p></div>"
+ },
+ "uc-handle-call": {
+  "id": "uc-handle-call",
+  "name": "עדכון טיפול וסגירת קריאה או דחייתה",
+  "primaryActor": "technician",
+  "description": "הטכנאי מתעד את הטיפול בקריאה המשויכת אליו וסוגר אותה, או דוחה אותה עם סיבה.",
+  "preconditions": [
+   "הקריאה בסטטוס \"משויכת\" לטכנאי המזוהה."
+  ],
+  "postconditions": [
+   "הקריאה בסטטוס \"סגורה\" או \"נדחתה\", עם תיעוד הפעולות, שעות העבודה ותאריך הסיום.",
+   "הדייר שפתח את הקריאה עודכן במצבה."
+  ],
+  "scenarios": [
+   {
+    "id": "sc-handle",
+    "name": "מסלול מרכזי",
+    "flow": [
+     {
+      "kind": "actor",
+      "actor": "technician",
+      "text": "בוחר קריאה מרשימת הקריאות המשויכות אליו"
+     },
+     {
+      "kind": "system",
+      "text": "מציגה את פרטי הקריאה: בניין / חדר, תחום, תיאור התקלה ודחיפות"
+     },
+     {
+      "kind": "actor",
+      "actor": "technician",
+      "text": "מזין תיאור הפעולות שבוצעו, חלקים שהוחלפו ושעות עבודה"
+     },
+     {
+      "kind": "alt",
+      "condition": "תוצאת הטיפול",
+      "branches": [
+       {
+        "label": "התקלה תוקנה",
+        "steps": [
+         {
+          "kind": "actor",
+          "actor": "technician",
+          "text": "מסמן \"סגירת קריאה\""
+         },
+         {
+          "kind": "system",
+          "text": "מעדכנת את הקריאה ל\"סגורה\" ורושמת תאריך סגירה"
+         }
+        ]
+       },
+       {
+        "label": "לא ניתן לטפל",
+        "steps": [
+         {
+          "kind": "actor",
+          "actor": "technician",
+          "text": "מסמן \"דחייה\" ובוחר סיבה (לא באחריות המעונות / נדרש קבלן חיצוני / התקלה לא אותרה)"
+         },
+         {
+          "kind": "system",
+          "text": "מעדכנת את הקריאה ל\"נדחתה\" ומחזירה אותה לתור של מנהל האחזקה"
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "kind": "system",
+      "text": "מציגה סיכום ומעדכנת את הדייר שפתח את הקריאה במצבה החדש"
+     }
+    ],
+    "extensions": [
+     {
+      "at": "3",
+      "text": "תיאור הפעולות ריק",
+      "steps": [
+       "המערכת מציגה \"חובה לתעד את הטיפול\""
+      ],
+      "outcome": {
+       "kind": "resume",
+       "at": "3"
+      }
+     },
+     {
+      "at": "1",
+      "text": "לטכנאי אין קריאות משויכות",
+      "steps": [
+       "המערכת מציגה \"אין קריאות בטיפולך\""
+      ],
+      "outcome": {
+       "kind": "terminate",
+       "text": "לא עודכנה קריאה."
+      }
+     }
+    ]
+   }
+  ],
+  "userStories": [
+   {
+    "role": "טכנאי",
+    "want": "לסגור קריאה מהטלפון מיד בסיום העבודה",
+    "so": "לא אצטרך לחזור למשרד לדווח"
+   },
+   {
+    "role": "מנהל אחזקה",
+    "want": "לדעת כמה זמן לקח לסגור כל קריאה ומי טיפל",
+    "so": "אוכל למדוד זמני טיפול"
+   },
+   {
+    "role": "דייר",
+    "want": "לקבל עדכון כשהקריאה שלי נסגרה או נדחתה",
+    "so": "אדע אם התקלה טופלה"
+   }
+  ],
+  "wireframe": "<div class=\"wf-screen\"><h3 class=\"wf-heading\">הקריאות שלי — קריאה #7781</h3><div class=\"wf-row\"><label class=\"wf-label\">בניין / חדר</label><input class=\"wf-input\" disabled /></div><div class=\"wf-row\"><label class=\"wf-label\">תחום</label><input class=\"wf-input\" disabled /></div><div class=\"wf-row\"><label class=\"wf-label\">תיאור התקלה</label><input class=\"wf-input\" disabled /></div><div class=\"wf-row\"><label class=\"wf-label\">פעולות שבוצעו</label><textarea class=\"wf-textarea\" disabled></textarea></div><div class=\"wf-row\"><label class=\"wf-label\">שעות עבודה</label><input class=\"wf-input\" disabled /></div><div class=\"wf-row\"><label class=\"wf-label\">סיבת דחייה</label><select class=\"wf-select\" disabled></select></div><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">סגירת קריאה</button><button class=\"wf-button\">דחייה</button><button class=\"wf-button\">שמירת טיוטה</button></div><p class=\"wf-hint\">שדה \"סיבת דחייה\" הופך לחובה רק בלחיצה על \"דחייה\".</p></div>"
+ },
+ "uc-occupancy-report": {
+  "id": "uc-occupancy-report",
+  "name": "הפקת דוח תפוסה חודשי",
+  "primaryActor": "dorm-mgr",
+  "description": "מנהל המעונות מפיק דוח תפוסה לחודש נבחר: חדרים, מיטות, חוזים פעילים ואחוז תפוסה לפי בניין.",
+  "preconditions": [
+   "מנהל המעונות מזוהה במערכת.",
+   "קיימים נתוני חוזים לחודש המבוקש."
+  ],
+  "postconditions": [
+   "הדוח הופק, נשמר בארכיון הדוחות וזמין לייצוא."
+  ],
+  "scenarios": [
+   {
+    "id": "sc-occ",
+    "name": "מסלול מרכזי",
+    "flow": [
+     {
+      "kind": "actor",
+      "actor": "dorm-mgr",
+      "text": "בוחר חודש ובניינים (אחד, כמה או כולם)"
+     },
+     {
+      "kind": "system",
+      "text": "מחשבת לכל בניין את מספר החדרים, המיטות (יחיד = 1, זוגי = 2), החוזים הפעילים ואחוז התפוסה"
+     },
+     {
+      "kind": "system",
+      "text": "מציגה טבלה לפי בניין ותרשים מגמת תפוסה ל-12 החודשים האחרונים"
+     },
+     {
+      "kind": "actor",
+      "actor": "dorm-mgr",
+      "text": "בוחר פורמט ייצוא (PDF / Excel)"
+     },
+     {
+      "kind": "system",
+      "text": "מפיקה את הקובץ ושומרת עותק בארכיון הדוחות עם תאריך ההפקה"
+     }
+    ],
+    "extensions": [
+     {
+      "at": "2",
+      "text": "אין נתוני חוזים לחודש המבוקש",
+      "steps": [
+       "המערכת מציגה \"אין נתונים לחודש זה\""
+      ],
+      "outcome": {
+       "kind": "terminate",
+       "text": "הדוח לא הופק."
+      }
+     }
+    ]
+   }
+  ],
+  "userStories": [
+   {
+    "role": "מנהל המעונות",
+    "want": "לקבל דוח תפוסה לפי בניין בלחיצה",
+    "so": "לא ייספרו חדרים ידנית יום שלם בסוף כל חודש"
+   },
+   {
+    "role": "מנהל המעונות",
+    "want": "לראות מגמת תפוסה לאורך השנה",
+    "so": "אציג להנהלת האוניברסיטה נתונים מבוססים"
+   }
+  ],
+  "wireframe": "<div class=\"wf-screen\"><h3 class=\"wf-heading\">דוח תפוסה חודשי</h3><div class=\"wf-row\"><label class=\"wf-label\">חודש</label><select class=\"wf-select\" disabled></select></div><div class=\"wf-row\"><label class=\"wf-label\">בניינים</label><select class=\"wf-select\" disabled></select></div><table class=\"wf-table\"><thead><tr><th>בניין</th><th>חדרים</th><th>מיטות</th><th>חוזים פעילים</th><th>תפוסה</th></tr></thead><tbody><tr><td>א'</td><td>60</td><td>95</td><td>91</td><td>96%</td></tr><tr><td>ב'</td><td>48</td><td>70</td><td>58</td><td>83%</td></tr></tbody></table><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">ייצוא PDF</button><button class=\"wf-button\">ייצוא Excel</button></div><p class=\"wf-hint\">תחת הטבלה מוצג תרשים מגמת תפוסה ל-12 החודשים האחרונים.</p></div>"
+ },
+ "uc-maint-report": {
+  "id": "uc-maint-report",
+  "name": "הפקת דוח תחזוקה",
+  "primaryActor": "dorm-mgr",
+  "description": "מנהל המעונות או מנהל האחזקה מפיק דוח קריאות תחזוקה לתקופה: נפתחו, נסגרו, נדחו, זמן טיפול ממוצע ופילוח לפי בניין, תחום וטכנאי.",
+  "preconditions": [
+   "המשתמש מזוהה במערכת כמנהל המעונות או כמנהל אחזקה."
+  ],
+  "postconditions": [
+   "הדוח הופק ונשמר בארכיון הדוחות."
+  ],
+  "scenarios": [
+   {
+    "id": "sc-mr-mgmt",
+    "name": "דוח הנהלה לפי בניין",
+    "flow": [
+     {
+      "kind": "actor",
+      "actor": "dorm-mgr",
+      "text": "בוחר טווח תאריכים ובניין"
+     },
+     {
+      "kind": "system",
+      "text": "מחשבת את מספר הקריאות שנפתחו, נסגרו ונדחו, ואת זמן הטיפול הממוצע לפי תחום"
+     },
+     {
+      "kind": "system",
+      "text": "מציגה את הדוח עם השוואה לתקופה הקודמת"
+     },
+     {
+      "kind": "actor",
+      "actor": "dorm-mgr",
+      "text": "בוחר פורמט ייצוא"
+     },
+     {
+      "kind": "system",
+      "text": "מפיקה את הקובץ ושומרת אותו בארכיון הדוחות"
+     }
+    ],
+    "extensions": [
+     {
+      "at": "2",
+      "text": "אין קריאות בתקופה שנבחרה",
+      "steps": [
+       "המערכת מציגה \"אין קריאות בתקופה זו\""
+      ],
+      "outcome": {
+       "kind": "terminate",
+       "text": "הדוח לא הופק."
+      }
+     }
+    ]
+   },
+   {
+    "id": "sc-mr-load",
+    "name": "דוח עומס טכנאים",
+    "flow": [
+     {
+      "kind": "actor",
+      "actor": "maint-mgr",
+      "text": "בוחר טווח תאריכים ותחום"
+     },
+     {
+      "kind": "system",
+      "text": "מחשבת לכל טכנאי את מספר הקריאות שטיפל בהן, שעות העבודה וזמן הטיפול הממוצע"
+     },
+     {
+      "kind": "system",
+      "text": "מציגה טבלה לפי טכנאי ומסמנת קריאות שחרגו ממועד היעד"
+     },
+     {
+      "kind": "actor",
+      "actor": "maint-mgr",
+      "text": "מייצא את הדוח"
+     }
+    ],
+    "extensions": [
+     {
+      "at": "2",
+      "text": "לא היו קריאות משויכות בתקופה",
+      "steps": [
+       "המערכת מציגה \"אין נתונים\""
+      ],
+      "outcome": {
+       "kind": "terminate",
+       "text": "הדוח לא הופק."
+      }
+     }
+    ]
+   }
+  ],
+  "userStories": [
+   {
+    "role": "מנהל המעונות",
+    "want": "לדעת כמה קריאות פתוחות יש בכל בניין וכמה זמן לוקח לסגור אותן",
+    "so": "אתקצב אחזקה לפי נתונים"
+   },
+   {
+    "role": "מנהל אחזקה",
+    "want": "לראות את העומס וזמני הטיפול של כל טכנאי",
+    "so": "אאזן את חלוקת העבודה"
+   }
+  ],
+  "wireframe": "<div class=\"wf-screen\"><h3 class=\"wf-heading\">דוח תחזוקה</h3><div class=\"wf-row\"><label class=\"wf-label\">מתאריך</label><input class=\"wf-input\" disabled /></div><div class=\"wf-row\"><label class=\"wf-label\">עד תאריך</label><input class=\"wf-input\" disabled /></div><div class=\"wf-row\"><label class=\"wf-label\">בניין</label><select class=\"wf-select\" disabled></select></div><div class=\"wf-row\"><label class=\"wf-label\">תחום</label><select class=\"wf-select\" disabled></select></div><table class=\"wf-table\"><thead><tr><th>בניין</th><th>נפתחו</th><th>נסגרו</th><th>נדחו</th><th>זמן טיפול ממוצע</th></tr></thead><tbody><tr><td>ב'</td><td>42</td><td>38</td><td>2</td><td>1.8 ימים</td></tr><tr><td>ד'</td><td>27</td><td>27</td><td>0</td><td>1.1 ימים</td></tr></tbody></table><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">הפקת דוח</button><button class=\"wf-button\">ייצוא Excel</button></div><p class=\"wf-hint\">מנהל אחזקה רואה בנוסף לשונית \"עומס טכנאים\".</p></div>"
+ },
+ "uc-manage-buildings": {
+  "id": "uc-manage-buildings",
+  "name": "ניהול בניינים",
+  "primaryActor": "dorm-mgr",
+  "description": "מנהל המעונות מוסיף, צופה, מעדכן ומסיר בניינים (נתוני אב).",
+  "preconditions": [
+   "מנהל המעונות מזוהה במערכת."
+  ],
+  "postconditions": [
+   "רשומות הבניינים מעודכנות, וכל שינוי נרשם ביומן השינויים עם המועד והמבצע."
+  ],
+  "scenarios": [
+   {
+    "id": "bld-add",
+    "name": "הוספה",
+    "flow": [
+     {
+      "kind": "actor",
+      "actor": "dorm-mgr",
+      "text": "בוחר \"הוספה\" ברשימת הבניינים"
+     },
+     {
+      "kind": "actor",
+      "actor": "dorm-mgr",
+      "text": "מזין שם הבניין (א'–ו'), כתובת, מספר קומות והערות"
+     },
+     {
+      "kind": "system",
+      "text": "מוודאת שכל שדות החובה מולאו ושהרשומה אינה כפולה"
+     },
+     {
+      "kind": "system",
+      "text": "שומרת את הרשומה החדשה ומציגה אותה ברשימה"
+     }
+    ],
+    "extensions": [
+     {
+      "at": "3",
+      "text": "כבר קיים בניין בשם זה",
+      "steps": [
+       "המערכת מציגה הודעת שגיאה ליד השדה"
+      ],
+      "outcome": {
+       "kind": "resume",
+       "at": "2"
+      }
+     }
+    ]
+   },
+   {
+    "id": "bld-view",
+    "name": "צפייה",
+    "flow": [
+     {
+      "kind": "actor",
+      "actor": "dorm-mgr",
+      "text": "פותח את רשימת הבניינים ומסנן או מחפש"
+     },
+     {
+      "kind": "system",
+      "text": "מציגה את הרשומות התואמות עם הפרטים העיקריים"
+     },
+     {
+      "kind": "actor",
+      "actor": "dorm-mgr",
+      "text": "בוחר רשומה"
+     },
+     {
+      "kind": "system",
+      "text": "מציגה את פרטי הרשומה המלאים והיסטוריית השינויים שלה"
+     }
+    ],
+    "extensions": [
+     {
+      "at": "2",
+      "text": "לא נמצאו רשומות התואמות לחיפוש",
+      "steps": [
+       "המערכת מציגה \"לא נמצאו תוצאות\""
+      ],
+      "outcome": {
+       "kind": "resume",
+       "at": "1"
+      }
+     }
+    ]
+   },
+   {
+    "id": "bld-update",
+    "name": "עדכון",
+    "flow": [
+     {
+      "kind": "actor",
+      "actor": "dorm-mgr",
+      "text": "בוחר רשומה ולוחץ \"עריכה\""
+     },
+     {
+      "kind": "actor",
+      "actor": "dorm-mgr",
+      "text": "משנה את השדות הנדרשים"
+     },
+     {
+      "kind": "system",
+      "text": "מוודאת את תקינות הערכים החדשים"
+     },
+     {
+      "kind": "system",
+      "text": "שומרת את השינוי ורושמת אותו ביומן השינויים"
+     }
+    ],
+    "extensions": [
+     {
+      "at": "3",
+      "text": "ערך שהוזן אינו תקין",
+      "steps": [
+       "המערכת מציגה את השדה השגוי"
+      ],
+      "outcome": {
+       "kind": "resume",
+       "at": "2"
+      }
+     }
+    ]
+   },
+   {
+    "id": "bld-delete",
+    "name": "מחיקה",
+    "flow": [
+     {
+      "kind": "actor",
+      "actor": "dorm-mgr",
+      "text": "בוחר רשומה ולוחץ \"מחיקה\""
+     },
+     {
+      "kind": "system",
+      "text": "מוודאת שאין בבניין חדרים פעילים ומציגה בקשת אישור"
+     },
+     {
+      "kind": "actor",
+      "actor": "dorm-mgr",
+      "text": "מאשר את המחיקה"
+     },
+     {
+      "kind": "system",
+      "text": "מסמנת את הרשומה כ\"לא פעילה\" ומסירה אותה מהרשימות התפעוליות"
+     }
+    ],
+    "extensions": [
+     {
+      "at": "2",
+      "text": "אין בבניין חדרים פעילים — התנאי אינו מתקיים",
+      "steps": [
+       "המערכת מציגה את הסיבה לחסימת המחיקה"
+      ],
+      "outcome": {
+       "kind": "terminate",
+       "text": "הרשומה לא נמחקה."
+      }
+     }
+    ]
+   }
+  ],
+  "userStories": [
+   {
+    "role": "מנהל המעונות",
+    "want": "לנהל את רשימת הבניינים במקום אחד",
+    "so": "כל שאר המערכת תסתמך על נתון אב אחד"
+   },
+   {
+    "role": "מנהל שיבוץ",
+    "want": "שרשימת הבניינים תהיה מעודכנת",
+    "so": "השיבוץ והחוזים יתבססו על נתונים נכונים"
+   }
+  ],
+  "wireframe": "<div class=\"wf-screen\"><h3 class=\"wf-heading\">ניהול בניינים</h3><div class=\"wf-row\"><label class=\"wf-label\">שם הבניין</label><input class=\"wf-input\" disabled /></div><div class=\"wf-row\"><label class=\"wf-label\">כתובת</label><input class=\"wf-input\" disabled /></div><div class=\"wf-row\"><label class=\"wf-label\">מספר קומות</label><input class=\"wf-input\" disabled /></div><table class=\"wf-table\"><thead><tr><th>בניין</th><th>קומות</th><th>חדרים</th><th>פעיל</th></tr></thead><tbody><tr><td>א'</td><td>5</td><td>60</td><td>כן</td></tr><tr><td>ב'</td><td>4</td><td>48</td><td>כן</td></tr></tbody></table><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">שמירה</button><button class=\"wf-button\">מחיקה</button><button class=\"wf-button\">ביטול</button></div><p class=\"wf-hint\">מחיקה חסומה כאשר הרשומה עדיין בשימוש.</p></div>"
+ },
+ "uc-manage-rooms": {
+  "id": "uc-manage-rooms",
+  "name": "ניהול חדרים",
+  "primaryActor": "dorm-mgr",
+  "description": "מנהל המעונות מוסיף, צופה, מעדכן ומסיר חדרים (נתוני אב).",
+  "preconditions": [
+   "מנהל המעונות מזוהה במערכת."
+  ],
+  "postconditions": [
+   "רשומות החדרים מעודכנות, וכל שינוי נרשם ביומן השינויים עם המועד והמבצע."
+  ],
+  "scenarios": [
+   {
+    "id": "room-add",
+    "name": "הוספה",
+    "flow": [
+     {
+      "kind": "actor",
+      "actor": "dorm-mgr",
+      "text": "בוחר \"הוספה\" ברשימת החדרים"
+     },
+     {
+      "kind": "actor",
+      "actor": "dorm-mgr",
+      "text": "מזין בניין, מספר חדר, קומה, סוג (יחיד / זוגי) ורשימת ציוד בסיסי"
+     },
+     {
+      "kind": "system",
+      "text": "מוודאת שכל שדות החובה מולאו ושהרשומה אינה כפולה"
+     },
+     {
+      "kind": "system",
+      "text": "שומרת את הרשומה החדשה ומציגה אותה ברשימה"
+     }
+    ],
+    "extensions": [
+     {
+      "at": "3",
+      "text": "כבר קיים חדר במספר זה בבניין",
+      "steps": [
+       "המערכת מציגה הודעת שגיאה ליד השדה"
+      ],
+      "outcome": {
+       "kind": "resume",
+       "at": "2"
+      }
+     }
+    ]
+   },
+   {
+    "id": "room-view",
+    "name": "צפייה",
+    "flow": [
+     {
+      "kind": "actor",
+      "actor": "dorm-mgr",
+      "text": "פותח את רשימת החדרים ומסנן או מחפש"
+     },
+     {
+      "kind": "system",
+      "text": "מציגה את הרשומות התואמות עם הפרטים העיקריים"
+     },
+     {
+      "kind": "actor",
+      "actor": "dorm-mgr",
+      "text": "בוחר רשומה"
+     },
+     {
+      "kind": "system",
+      "text": "מציגה את פרטי הרשומה המלאים והיסטוריית השינויים שלה"
+     }
+    ],
+    "extensions": [
+     {
+      "at": "2",
+      "text": "לא נמצאו רשומות התואמות לחיפוש",
+      "steps": [
+       "המערכת מציגה \"לא נמצאו תוצאות\""
+      ],
+      "outcome": {
+       "kind": "resume",
+       "at": "1"
+      }
+     }
+    ]
+   },
+   {
+    "id": "room-update",
+    "name": "עדכון",
+    "flow": [
+     {
+      "kind": "actor",
+      "actor": "dorm-mgr",
+      "text": "בוחר רשומה ולוחץ \"עריכה\""
+     },
+     {
+      "kind": "actor",
+      "actor": "dorm-mgr",
+      "text": "משנה את השדות הנדרשים"
+     },
+     {
+      "kind": "system",
+      "text": "מוודאת את תקינות הערכים החדשים"
+     },
+     {
+      "kind": "system",
+      "text": "שומרת את השינוי ורושמת אותו ביומן השינויים"
+     }
+    ],
+    "extensions": [
+     {
+      "at": "3",
+      "text": "ערך שהוזן אינו תקין",
+      "steps": [
+       "המערכת מציגה את השדה השגוי"
+      ],
+      "outcome": {
+       "kind": "resume",
+       "at": "2"
+      }
+     }
+    ]
+   },
+   {
+    "id": "room-delete",
+    "name": "מחיקה",
+    "flow": [
+     {
+      "kind": "actor",
+      "actor": "dorm-mgr",
+      "text": "בוחר רשומה ולוחץ \"מחיקה\""
+     },
+     {
+      "kind": "system",
+      "text": "מוודאת שאין לחדר חוזה פעיל ומציגה בקשת אישור"
+     },
+     {
+      "kind": "actor",
+      "actor": "dorm-mgr",
+      "text": "מאשר את המחיקה"
+     },
+     {
+      "kind": "system",
+      "text": "מסמנת את הרשומה כ\"לא פעילה\" ומסירה אותה מהרשימות התפעוליות"
+     }
+    ],
+    "extensions": [
+     {
+      "at": "2",
+      "text": "אין לחדר חוזה פעיל — התנאי אינו מתקיים",
+      "steps": [
+       "המערכת מציגה את הסיבה לחסימת המחיקה"
+      ],
+      "outcome": {
+       "kind": "terminate",
+       "text": "הרשומה לא נמחקה."
+      }
+     }
+    ]
+   }
+  ],
+  "userStories": [
+   {
+    "role": "מנהל המעונות",
+    "want": "לנהל את רשימת החדרים במקום אחד",
+    "so": "כל שאר המערכת תסתמך על נתון אב אחד"
+   },
+   {
+    "role": "מנהל שיבוץ",
+    "want": "שרשימת החדרים תהיה מעודכנת",
+    "so": "השיבוץ והחוזים יתבססו על נתונים נכונים"
+   }
+  ],
+  "wireframe": "<div class=\"wf-screen\"><h3 class=\"wf-heading\">ניהול חדרים</h3><div class=\"wf-row\"><label class=\"wf-label\">בניין</label><select class=\"wf-select\" disabled></select></div><div class=\"wf-row\"><label class=\"wf-label\">מספר חדר</label><input class=\"wf-input\" disabled /></div><div class=\"wf-row\"><label class=\"wf-label\">קומה</label><input class=\"wf-input\" disabled /></div><div class=\"wf-row\"><label class=\"wf-label\">סוג חדר</label><select class=\"wf-select\" disabled></select></div><div class=\"wf-row\"><label class=\"wf-label\">ציוד</label><textarea class=\"wf-textarea\" disabled></textarea></div><table class=\"wf-table\"><thead><tr><th>בניין</th><th>חדר</th><th>קומה</th><th>סוג</th><th>חוזים פעילים</th></tr></thead><tbody><tr><td>ג'</td><td>214</td><td>2</td><td>זוגי</td><td>1</td></tr><tr><td>ג'</td><td>215</td><td>2</td><td>יחיד</td><td>1</td></tr></tbody></table><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">שמירה</button><button class=\"wf-button\">מחיקה</button><button class=\"wf-button\">ביטול</button></div><p class=\"wf-hint\">מחיקה חסומה כאשר הרשומה עדיין בשימוש.</p></div>"
+ },
+ "uc-manage-rates": {
+  "id": "uc-manage-rates",
+  "name": "ניהול תעריפים",
+  "primaryActor": "dorm-mgr",
+  "description": "מנהל המעונות מוסיף, צופה, מעדכן ומסיר תעריפים (נתוני אב).",
+  "preconditions": [
+   "מנהל המעונות מזוהה במערכת."
+  ],
+  "postconditions": [
+   "רשומות התעריפים מעודכנות, וכל שינוי נרשם ביומן השינויים עם המועד והמבצע."
+  ],
+  "scenarios": [
+   {
+    "id": "rate-add",
+    "name": "הוספה",
+    "flow": [
+     {
+      "kind": "actor",
+      "actor": "dorm-mgr",
+      "text": "בוחר \"הוספה\" ברשימת התעריפים"
+     },
+     {
+      "kind": "actor",
+      "actor": "dorm-mgr",
+      "text": "מזין סוג חדר, סוג חוזה (שנתי / קיץ), שכר דירה חודשי, סכום פיקדון ותאריכי תוקף"
+     },
+     {
+      "kind": "system",
+      "text": "מוודאת שכל שדות החובה מולאו ושהרשומה אינה כפולה"
+     },
+     {
+      "kind": "system",
+      "text": "שומרת את הרשומה החדשה ומציגה אותה ברשימה"
+     }
+    ],
+    "extensions": [
+     {
+      "at": "3",
+      "text": "כבר קיים תעריף לסוג חדר וסוג חוזה זה בטווח תאריכים חופף",
+      "steps": [
+       "המערכת מציגה הודעת שגיאה ליד השדה"
+      ],
+      "outcome": {
+       "kind": "resume",
+       "at": "2"
+      }
+     }
+    ]
+   },
+   {
+    "id": "rate-view",
+    "name": "צפייה",
+    "flow": [
+     {
+      "kind": "actor",
+      "actor": "dorm-mgr",
+      "text": "פותח את רשימת התעריפים ומסנן או מחפש"
+     },
+     {
+      "kind": "system",
+      "text": "מציגה את הרשומות התואמות עם הפרטים העיקריים"
+     },
+     {
+      "kind": "actor",
+      "actor": "dorm-mgr",
+      "text": "בוחר רשומה"
+     },
+     {
+      "kind": "system",
+      "text": "מציגה את פרטי הרשומה המלאים והיסטוריית השינויים שלה"
+     }
+    ],
+    "extensions": [
+     {
+      "at": "2",
+      "text": "לא נמצאו רשומות התואמות לחיפוש",
+      "steps": [
+       "המערכת מציגה \"לא נמצאו תוצאות\""
+      ],
+      "outcome": {
+       "kind": "resume",
+       "at": "1"
+      }
+     }
+    ]
+   },
+   {
+    "id": "rate-update",
+    "name": "עדכון",
+    "flow": [
+     {
+      "kind": "actor",
+      "actor": "dorm-mgr",
+      "text": "בוחר רשומה ולוחץ \"עריכה\""
+     },
+     {
+      "kind": "actor",
+      "actor": "dorm-mgr",
+      "text": "משנה את השדות הנדרשים"
+     },
+     {
+      "kind": "system",
+      "text": "מוודאת את תקינות הערכים החדשים"
+     },
+     {
+      "kind": "system",
+      "text": "שומרת את השינוי ורושמת אותו ביומן השינויים"
+     }
+    ],
+    "extensions": [
+     {
+      "at": "3",
+      "text": "ערך שהוזן אינו תקין",
+      "steps": [
+       "המערכת מציגה את השדה השגוי"
+      ],
+      "outcome": {
+       "kind": "resume",
+       "at": "2"
+      }
+     }
+    ]
+   },
+   {
+    "id": "rate-delete",
+    "name": "מחיקה",
+    "flow": [
+     {
+      "kind": "actor",
+      "actor": "dorm-mgr",
+      "text": "בוחר רשומה ולוחץ \"מחיקה\""
+     },
+     {
+      "kind": "system",
+      "text": "מוודאת שהתעריף אינו משויך לחוזה קיים ומציגה בקשת אישור"
+     },
+     {
+      "kind": "actor",
+      "actor": "dorm-mgr",
+      "text": "מאשר את המחיקה"
+     },
+     {
+      "kind": "system",
+      "text": "מסמנת את הרשומה כ\"לא פעילה\" ומסירה אותה מהרשימות התפעוליות"
+     }
+    ],
+    "extensions": [
+     {
+      "at": "2",
+      "text": "התעריף אינו משויך לחוזה קיים — התנאי אינו מתקיים",
+      "steps": [
+       "המערכת מציגה את הסיבה לחסימת המחיקה"
+      ],
+      "outcome": {
+       "kind": "terminate",
+       "text": "הרשומה לא נמחקה."
+      }
+     }
+    ]
+   }
+  ],
+  "userStories": [
+   {
+    "role": "מנהל המעונות",
+    "want": "לנהל את רשימת התעריפים במקום אחד",
+    "so": "כל שאר המערכת תסתמך על נתון אב אחד"
+   },
+   {
+    "role": "מנהל שיבוץ",
+    "want": "שרשימת התעריפים תהיה מעודכנת",
+    "so": "השיבוץ והחוזים יתבססו על נתונים נכונים"
+   }
+  ],
+  "wireframe": "<div class=\"wf-screen\"><h3 class=\"wf-heading\">ניהול תעריפים</h3><div class=\"wf-row\"><label class=\"wf-label\">סוג חדר</label><select class=\"wf-select\" disabled></select></div><div class=\"wf-row\"><label class=\"wf-label\">סוג חוזה</label><select class=\"wf-select\" disabled></select></div><div class=\"wf-row\"><label class=\"wf-label\">שכר דירה חודשי</label><input class=\"wf-input\" disabled /></div><div class=\"wf-row\"><label class=\"wf-label\">פיקדון</label><input class=\"wf-input\" disabled /></div><div class=\"wf-row\"><label class=\"wf-label\">בתוקף מ</label><input class=\"wf-input\" disabled /></div><div class=\"wf-row\"><label class=\"wf-label\">בתוקף עד</label><input class=\"wf-input\" disabled /></div><table class=\"wf-table\"><thead><tr><th>סוג חדר</th><th>סוג חוזה</th><th>שכ\"ד חודשי</th><th>פיקדון</th><th>בתוקף מ</th></tr></thead><tbody><tr><td>יחיד</td><td>שנתי</td><td>1,450 ₪</td><td>2,000 ₪</td><td>01.10.2026</td></tr><tr><td>זוגי</td><td>שנתי</td><td>980 ₪</td><td>1,500 ₪</td><td>01.10.2026</td></tr></tbody></table><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">שמירה</button><button class=\"wf-button\">מחיקה</button><button class=\"wf-button\">ביטול</button></div><p class=\"wf-hint\">מחיקה חסומה כאשר הרשומה עדיין בשימוש.</p></div>"
+ },
+ "uc-rent-charges": {
+  "id": "uc-rent-charges",
+  "name": "הפקת חיובי שכירות חודשיים",
+  "primaryActor": "clock",
+  "description": "ב-1 בכל חודש המערכת מפיקה אוטומטית חיוב שכירות לכל חוזה פעיל לפי התעריף הקבוע בחוזה.",
+  "preconditions": [
+   "קיימים חוזים בסטטוס \"פעיל\".",
+   "ההרצה לחודש הנוכחי טרם בוצעה."
+  ],
+  "postconditions": [
+   "לכל חוזה פעיל נוצר חיוב שכירות בסטטוס \"פתוח\" עם תאריך יעד.",
+   "סיכום ההרצה נשמר ומוצג בלוח הבקרה של מנהל המעונות."
+  ],
+  "scenarios": [
+   {
+    "id": "sc-rent",
+    "name": "מסלול מרכזי",
+    "flow": [
+     {
+      "kind": "actor",
+      "actor": "clock",
+      "text": "מפעיל את תהליך החיוב החודשי ב-1 בחודש בשעה 02:00"
+     },
+     {
+      "kind": "system",
+      "text": "שולפת את כל החוזים הפעילים בחודש הנוכחי"
+     },
+     {
+      "kind": "loop",
+      "condition": "נותרו חוזים פעילים שטרם חויבו",
+      "steps": [
+       {
+        "kind": "system",
+        "text": "מחשבת את שכר הדירה לחודש לפי תעריף החוזה (חלק יחסי בחודש התחלה או סיום)"
+       },
+       {
+        "kind": "system",
+        "text": "יוצרת חיוב שכירות בסטטוס \"פתוח\" עם תאריך יעד ה-10 בחודש"
+       }
+      ]
+     },
+     {
+      "kind": "system",
+      "text": "שומרת סיכום הרצה (מספר חיובים, סכום כולל, חריגים) ומציגה אותו בלוח הבקרה"
+     }
+    ],
+    "extensions": [
+     {
+      "at": "2",
+      "text": "ההרצה לחודש זה כבר בוצעה",
+      "steps": [
+       "המערכת רושמת ביומן \"הרצה כפולה נמנעה\""
+      ],
+      "outcome": {
+       "kind": "terminate",
+       "text": "לא נוצרו חיובים חדשים."
+      }
+     },
+     {
+      "at": "3.2",
+      "text": "כבר קיים חיוב שכירות לחוזה זה לחודש זה",
+      "steps": [
+       "המערכת מדלגת על החוזה ומסמנת אותו כחריג בסיכום"
+      ],
+      "outcome": {
+       "kind": "resume",
+       "at": "3.1"
+      }
+     }
+    ]
+   }
+  ],
+  "userStories": [
+   {
+    "role": "מנהל המעונות",
+    "want": "שחיובי השכירות ייווצרו אוטומטית בתחילת כל חודש",
+    "so": "לא יישכחו חיובים ולא יידרש קלט ידני"
+   },
+   {
+    "role": "דייר",
+    "want": "לראות את חיוב השכירות שלי בתחילת החודש",
+    "so": "אשלם בזמן"
+   }
+  ],
+  "wireframe": ""
+ }
+};
+    var diagramModel        = {
+ "kind": "use-case",
+ "title": "מערכת מידע למעונות הסטודנטים 'הר הצופים'",
+ "parts": [
+  {
+   "id": "part-1",
+   "label": "מגורים, חוזים ותשלומים",
+   "splitRationale": "Split by UC count: 17 UCs > 8 threshold — לשונית זו: מחזור המגורים (בקשה → המתנה → חוזה → כניסה → יציאה) ותשלומים",
+   "elements": [
+    {
+     "kind": "actor",
+     "id": "student",
+     "name": "סטודנט",
+     "actorType": "human",
+     "side": "left",
+     "x": 120,
+     "y": 164.0
+    },
+    {
+     "kind": "actor",
+     "id": "tenant",
+     "name": "דייר",
+     "actorType": "human",
+     "side": "left",
+     "x": 120,
+     "y": 314.0
+    },
+    {
+     "kind": "actor",
+     "id": "assign-mgr",
+     "name": "מנהל שיבוץ",
+     "actorType": "human",
+     "side": "right",
+     "x": 920,
+     "y": 196.5
+    },
+    {
+     "kind": "actor",
+     "id": "reception",
+     "name": "צוות קבלה",
+     "actorType": "human",
+     "side": "right",
+     "x": 920,
+     "y": 346.5
+    },
+    {
+     "kind": "useCase",
+     "id": "uc-apply",
+     "name": "הגשת בקשת מגורים והעדפות",
+     "description": "סטודנט מגיש בקשה למגורים לשנת מגורים, מדרג עד שלוש העדפות (בניין וסוג חדר) ומציין זכאות.",
+     "primaryActor": "student",
+     "preconditions": [
+      "הסטודנט מזוהה במערכת באמצעות מספר סטודנט.",
+      "תקופת ההרשמה למגורים לשנה המבוקשת פתוחה."
+     ],
+     "postconditions": [
+      "הבקשה נשמרה בסטטוס \"הוגשה\" עם מספר בקשה, העדפות מדורגות וזכאות.",
+      "הסטודנט סומן כ\"מאומת\" מול מערכת הסטודנטים."
+     ],
+     "scenarios": [
+      {
+       "id": "sc-apply",
+       "name": "מסלול מרכזי",
+       "flow": [
+        {
+         "kind": "actor",
+         "actor": "student",
+         "text": "מזין מספר סטודנט, שנת מגורים מבוקשת (שנה אקדמית / קיץ) ופרטי קשר"
+        },
+        {
+         "kind": "include",
+         "uc": "uc-verify",
+         "text": ""
+        },
+        {
+         "kind": "system",
+         "text": "מציגה את הבניינים וסוגי החדרים (יחיד / זוגי) הפתוחים להרשמה לשנה המבוקשת"
+        },
+        {
+         "kind": "loop",
+         "condition": "הסטודנט רוצה להוסיף העדפה (עד שלוש העדפות)",
+         "steps": [
+          {
+           "kind": "actor",
+           "actor": "student",
+           "text": "בוחר בניין וסוג חדר ומדרג את ההעדפה (1–3)"
+          },
+          {
+           "kind": "system",
+           "text": "מוסיפה את ההעדפה לרשימה ומציגה את הדירוג המעודכן"
+          }
+         ]
+        },
+        {
+         "kind": "actor",
+         "actor": "student",
+         "text": "מסמן זכאות (פריפריה / סטודנט בינלאומי / זכאי סיוע) ומצרף אסמכתא"
+        },
+        {
+         "kind": "actor",
+         "actor": "student",
+         "text": "מאשר את הגשת הבקשה"
+        },
+        {
+         "kind": "system",
+         "text": "שומרת את הבקשה בסטטוס \"הוגשה\", מקצה מספר בקשה ומציגה אישור הגשה"
+        }
+       ],
+       "extensions": [
+        {
+         "at": "1",
+         "text": "לסטודנט כבר קיימת בקשה פתוחה לאותה שנת מגורים",
+         "steps": [
+          "המערכת מציגה את הבקשה הקיימת ומספרה"
+         ],
+         "outcome": {
+          "kind": "terminate",
+          "text": "לא נוצרה בקשה חדשה; הבקשה הקיימת נותרת ללא שינוי."
+         }
+        },
+        {
+         "at": "2",
+         "text": "האימות מול מערכת הסטודנטים נכשל (הסטודנט אינו פעיל או המערכת אינה זמינה)",
+         "steps": [
+          "המערכת מציגה את סיבת הכישלון"
+         ],
+         "outcome": {
+          "kind": "terminate",
+          "text": "הבקשה לא הוגשה."
+         }
+        },
+        {
+         "at": "4.1",
+         "text": "ההעדפה שנבחרה כבר קיימת ברשימת ההעדפות",
+         "steps": [
+          "המערכת מציגה \"העדפה זו כבר קיימת\""
+         ],
+         "outcome": {
+          "kind": "resume",
+          "at": "4.1"
+         }
+        }
+       ]
+      }
+     ],
+     "userStories": [
+      {
+       "role": "סטודנט",
+       "want": "להגיש בקשה למגורים ולדרג את הבניין וסוג החדר שאני מעדיף",
+       "so": "השיבוץ יתחשב בהעדפותיי"
+      },
+      {
+       "role": "סטודנט",
+       "want": "לציין זכאות (פריפריה / בינלאומי / סיוע) ולצרף אסמכתא",
+       "so": "אקבל עדיפות ברשימת ההמתנה"
+      },
+      {
+       "role": "מנהל שיבוץ",
+       "want": "לקבל בקשות מסודרות עם העדפות מדורגות וזכאות מאומתת",
+       "so": "אוכל לשבץ מהר ובלי לאסוף פרטים בטלפון"
+      }
+     ],
+     "wireframe": "<div class=\"wf-screen\"><h3 class=\"wf-heading\">בקשת מגורים — שנת מגורים תשפ\"ז</h3><div class=\"wf-row\"><label class=\"wf-label\">מספר סטודנט</label><input class=\"wf-input\" disabled /></div><div class=\"wf-row\"><label class=\"wf-label\">שנת מגורים</label><select class=\"wf-select\" disabled></select></div><div class=\"wf-row\"><label class=\"wf-label\">טלפון / דוא\"ל</label><input class=\"wf-input\" disabled /></div><div class=\"wf-row\"><label class=\"wf-label\">זכאות</label><select class=\"wf-select\" disabled></select></div><table class=\"wf-table\"><thead><tr><th>דירוג</th><th>בניין</th><th>סוג חדר</th></tr></thead><tbody><tr><td>1</td><td>בניין ג'</td><td>יחיד</td></tr><tr><td>2</td><td>בניין א'</td><td>זוגי</td></tr><tr><td>3</td><td>—</td><td>—</td></tr></tbody></table><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">הגשת בקשה</button><button class=\"wf-button\">הוספת העדפה</button><button class=\"wf-button\">ביטול</button></div><p class=\"wf-hint\">לאחר ההגשה מוצג מספר הבקשה; ניתן לעקוב אחר מצבה באזור האישי.</p></div>",
+     "x": 314,
+     "y": 164,
+     "rx": 70,
+     "ry": 30
+    },
+    {
+     "kind": "useCase",
+     "id": "uc-verify",
+     "name": "אימות סטודנט פעיל",
+     "description": "המערכת פונה למערכת הסטודנטים של האוניברסיטה ומוודאת שהסטודנט פעיל, לפני קבלת בקשה ולפני חתימת חוזה.",
+     "preconditions": [
+      "מספר הסטודנט הוזן.",
+      "קיים ממשק תקין למערכת הסטודנטים של האוניברסיטה."
+     ],
+     "postconditions": [
+      "מעמד הסטודנט (פעיל / לא פעיל) ומועד האימות נרשמו ברשומת הסטודנט."
+     ],
+     "scenarios": [
+      {
+       "id": "sc-verify",
+       "name": "מסלול מרכזי",
+       "flow": [
+        {
+         "kind": "system",
+         "text": "שולחת למערכת הסטודנטים של האוניברסיטה שאילתה עם מספר הסטודנט"
+        },
+        {
+         "kind": "system",
+         "text": "מקבלת ממערכת הסטודנטים את מעמד הסטודנט (פעיל / לא פעיל), שם מלא ופקולטה"
+        },
+        {
+         "kind": "system",
+         "text": "משווה את השם והפרטים לרשומת הסטודנט במערכת המעונות ומעדכנת פערים"
+        },
+        {
+         "kind": "system",
+         "text": "מסמנת את הסטודנט כ\"מאומת\" ורושמת את מועד האימות"
+        }
+       ],
+       "extensions": [
+        {
+         "at": "1",
+         "text": "מערכת הסטודנטים אינה זמינה (אין תשובה תוך 10 שניות)",
+         "steps": [
+          "המערכת רושמת את הכישלון ביומן"
+         ],
+         "outcome": {
+          "kind": "terminate",
+          "text": "האימות לא הושלם; תרחיש השימוש הקורא נעצר ומציג הודעה."
+         }
+        },
+        {
+         "at": "2",
+         "text": "מערכת הסטודנטים מחזירה שהסטודנט אינו פעיל או אינו קיים",
+         "steps": [
+          "המערכת מסמנת את הסטודנט כ\"לא פעיל\""
+         ],
+         "outcome": {
+          "kind": "terminate",
+          "text": "האימות נכשל; תרחיש השימוש הקורא נעצר."
+         }
+        }
+       ]
+      }
+     ],
+     "userStories": [
+      {
+       "role": "מנהל שיבוץ",
+       "want": "שהמערכת תוודא אוטומטית מול האוניברסיטה שהסטודנט פעיל",
+       "so": "לא ייחתם חוזה עם מי שאינו סטודנט"
+      },
+      {
+       "role": "מנהל המעונות",
+       "want": "שכל בקשה וכל חוזה יישענו על אימות אחיד מול מערכת הסטודנטים",
+       "so": "המעונות לא ינהלו רישום סטודנטים כפול"
+      }
+     ],
+     "x": 525.0,
+     "y": 161,
+     "rx": 74,
+     "ry": 27
+    },
+    {
+     "kind": "useCase",
+     "id": "uc-waitlist",
+     "name": "ניהול רשימת המתנה",
+     "description": "מנהל השיבוץ צופה ברשימת ההמתנה לשנת מגורים, מוסיף אליה בקשות, משנה עדיפויות ומסיר בקשות.",
+     "primaryActor": "assign-mgr",
+     "preconditions": [
+      "מנהל השיבוץ מזוהה במערכת.",
+      "קיימות בקשות בסטטוס \"הוגשה\" לשנת המגורים."
+     ],
+     "postconditions": [
+      "רשימת ההמתנה מעודכנת, וכל שינוי עדיפות או הסרה נרשם ביומן השינויים."
+     ],
+     "scenarios": [
+      {
+       "id": "sc-wl-view",
+       "name": "צפייה ברשימת ההמתנה",
+       "flow": [
+        {
+         "kind": "actor",
+         "actor": "assign-mgr",
+         "text": "בוחר שנת מגורים ומסנן לפי סוג חדר, בניין מועדף או זכאות"
+        },
+        {
+         "kind": "system",
+         "text": "מציגה את הבקשות הממתינות לפי סדר עדיפות, עם תאריך הגשה, זכאות והעדפות"
+        },
+        {
+         "kind": "actor",
+         "actor": "assign-mgr",
+         "text": "בוחר בקשה מהרשימה"
+        },
+        {
+         "kind": "system",
+         "text": "מציגה את פרטי הבקשה, האסמכתאות ומצב האימות של הסטודנט"
+        }
+       ],
+       "extensions": [
+        {
+         "at": "2",
+         "text": "אין בקשות ממתינות התואמות לסינון",
+         "steps": [
+          "המערכת מציגה \"לא נמצאו בקשות\""
+         ],
+         "outcome": {
+          "kind": "terminate",
+          "text": "הרשימה ריקה; לא נבחרה בקשה."
+         }
+        }
+       ]
+      },
+      {
+       "id": "sc-wl-add",
+       "name": "הוספת בקשה לרשימת ההמתנה",
+       "flow": [
+        {
+         "kind": "actor",
+         "actor": "assign-mgr",
+         "text": "בוחר בקשה בסטטוס \"הוגשה\" שטרם שובצה"
+        },
+        {
+         "kind": "system",
+         "text": "מחשבת ניקוד עדיפות לפי זכאות ותאריך הגשה ומציגה את המיקום הצפוי ברשימה"
+        },
+        {
+         "kind": "actor",
+         "actor": "assign-mgr",
+         "text": "מאשר את ההוספה"
+        },
+        {
+         "kind": "system",
+         "text": "מוסיפה את הבקשה לרשימה בסטטוס \"ממתינה\" ומציגה את מיקומה"
+        }
+       ],
+       "extensions": [
+        {
+         "at": "1",
+         "text": "הבקשה כבר נמצאת ברשימת ההמתנה",
+         "steps": [
+          "המערכת מציגה את מיקומה הנוכחי"
+         ],
+         "outcome": {
+          "kind": "resume",
+          "at": "1"
+         }
+        }
+       ]
+      },
+      {
+       "id": "sc-wl-update",
+       "name": "עדכון עדיפות של בקשה",
+       "flow": [
+        {
+         "kind": "actor",
+         "actor": "assign-mgr",
+         "text": "בוחר בקשה ברשימת ההמתנה"
+        },
+        {
+         "kind": "actor",
+         "actor": "assign-mgr",
+         "text": "מזין עדיפות חדשה ונימוק לשינוי"
+        },
+        {
+         "kind": "system",
+         "text": "מוודאת שהנימוק מולא ושהעדיפות בטווח התקין"
+        },
+        {
+         "kind": "system",
+         "text": "מעדכנת את סדר הרשימה ורושמת את השינוי, הנימוק והמועד ביומן השינויים"
+        }
+       ],
+       "extensions": [
+        {
+         "at": "3",
+         "text": "הנימוק ריק",
+         "steps": [
+          "המערכת מציגה \"חובה לנמק שינוי עדיפות\""
+         ],
+         "outcome": {
+          "kind": "resume",
+          "at": "2"
+         }
+        }
+       ]
+      },
+      {
+       "id": "sc-wl-remove",
+       "name": "הסרת בקשה מרשימת ההמתנה",
+       "flow": [
+        {
+         "kind": "actor",
+         "actor": "assign-mgr",
+         "text": "בוחר בקשה ברשימת ההמתנה"
+        },
+        {
+         "kind": "actor",
+         "actor": "assign-mgr",
+         "text": "בוחר סיבת הסרה (ויתור הסטודנט / שובץ במקום אחר / אינו זכאי)"
+        },
+        {
+         "kind": "system",
+         "text": "מציגה בקשת אישור עם פרטי הבקשה"
+        },
+        {
+         "kind": "actor",
+         "actor": "assign-mgr",
+         "text": "מאשר את ההסרה"
+        },
+        {
+         "kind": "system",
+         "text": "מסמנת את הבקשה \"הוסרה\", שומרת את הסיבה ומעדכנת את מיקומי שאר הבקשות"
+        }
+       ],
+       "extensions": [
+        {
+         "at": "4",
+         "text": "מנהל השיבוץ מבטל את האישור",
+         "steps": [],
+         "outcome": {
+          "kind": "terminate",
+          "text": "הבקשה נותרת ברשימת ההמתנה ללא שינוי."
+         }
+        }
+       ]
+      }
+     ],
+     "userStories": [
+      {
+       "role": "מנהל שיבוץ",
+       "want": "לראות את רשימת ההמתנה מסודרת לפי עדיפות וזכאות",
+       "so": "אשבץ קודם את מי שזכאי"
+      },
+      {
+       "role": "מנהל שיבוץ",
+       "want": "לשנות עדיפות של בקשה עם נימוק מתועד",
+       "so": "יהיה ניתן להסביר כל חריגה מהסדר"
+      },
+      {
+       "role": "סטודנט",
+       "want": "שהבקשה שלי תישמר ברשימת המתנה מסודרת",
+       "so": "אדע שלא \"נפלתי בין הכיסאות\""
+      }
+     ],
+     "wireframe": "<div class=\"wf-screen\"><h3 class=\"wf-heading\">רשימת המתנה — תשפ\"ז</h3><div class=\"wf-row\"><label class=\"wf-label\">שנת מגורים</label><select class=\"wf-select\" disabled></select></div><div class=\"wf-row\"><label class=\"wf-label\">סוג חדר</label><select class=\"wf-select\" disabled></select></div><div class=\"wf-row\"><label class=\"wf-label\">בניין</label><select class=\"wf-select\" disabled></select></div><table class=\"wf-table\"><thead><tr><th>#</th><th>סטודנט</th><th>זכאות</th><th>תאריך הגשה</th><th>עדיפות</th></tr></thead><tbody><tr><td>1</td><td>123456789</td><td>פריפריה</td><td>12.06</td><td>1</td></tr><tr><td>2</td><td>234567890</td><td>בינלאומי</td><td>15.06</td><td>2</td></tr><tr><td>3</td><td>345678901</td><td>—</td><td>20.06</td><td>3</td></tr></tbody></table><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">הוספת בקשה</button><button class=\"wf-button\">שינוי עדיפות</button><button class=\"wf-button\">הסרה</button></div><p class=\"wf-hint\">שינוי עדיפות פותח חלון עם שדה נימוק חובה.</p></div>",
+     "x": 736,
+     "y": 161,
+     "rx": 74,
+     "ry": 27
+    },
+    {
+     "kind": "useCase",
+     "id": "uc-assign",
+     "name": "שיבוץ חדר וחתימת חוזה",
+     "description": "מנהל השיבוץ משבץ סטודנט מרשימת ההמתנה לחדר פנוי ורושם חוזה חתום, לאחר אימות שהסטודנט פעיל.",
+     "primaryActor": "assign-mgr",
+     "preconditions": [
+      "הבקשה נמצאת ברשימת ההמתנה בסטטוס \"ממתינה\".",
+      "קיים חדר פנוי מהסוג המבוקש.",
+      "קיים תעריף תקף לסוג החדר."
+     ],
+     "postconditions": [
+      "נוצר חוזה בסטטוס \"חתום\" עם תאריכים, שכר דירה חודשי ופיקדון.",
+      "הבקשה הוסרה מרשימת ההמתנה ומספר החוזים הפעילים בחדר עודכן."
+     ],
+     "scenarios": [
+      {
+       "id": "sc-assign",
+       "name": "מסלול מרכזי",
+       "flow": [
+        {
+         "kind": "actor",
+         "actor": "assign-mgr",
+         "text": "בוחר בקשה מרשימת ההמתנה"
+        },
+        {
+         "kind": "include",
+         "uc": "uc-verify",
+         "text": ""
+        },
+        {
+         "kind": "system",
+         "text": "מציגה חדרים פנויים התואמים להעדפות: חדר יחיד ללא חוזה פעיל, חדר זוגי עם לכל היותר חוזה פעיל אחד"
+        },
+        {
+         "kind": "actor",
+         "actor": "assign-mgr",
+         "text": "בוחר חדר ומזין תאריך התחלה ותאריך סיום לחוזה"
+        },
+        {
+         "kind": "system",
+         "text": "מחשבת שכר דירה חודשי לפי התעריף התקף לסוג החדר ואת סכום הפיקדון, ומציגה טיוטת חוזה"
+        },
+        {
+         "kind": "actor",
+         "actor": "assign-mgr",
+         "text": "מסמן שהסטודנט חתם על החוזה ומזין את תאריך החתימה"
+        },
+        {
+         "kind": "system",
+         "text": "שומרת את החוזה בסטטוס \"חתום\", מסירה את הבקשה מרשימת ההמתנה ומעדכנת את תפוסת החדר"
+        }
+       ],
+       "extensions": [
+        {
+         "at": "2",
+         "text": "האימות נכשל — הסטודנט אינו פעיל או מערכת הסטודנטים אינה זמינה",
+         "steps": [
+          "המערכת מציגה את סיבת הכישלון"
+         ],
+         "outcome": {
+          "kind": "terminate",
+          "text": "לא נחתם חוזה; הבקשה נותרת ברשימת ההמתנה."
+         }
+        },
+        {
+         "at": "3",
+         "text": "אין חדר פנוי התואם להעדפות",
+         "steps": [
+          "המערכת מציעה חדרים פנויים מסוג אחר"
+         ],
+         "outcome": {
+          "kind": "resume",
+          "at": "4"
+         }
+        },
+        {
+         "at": "4",
+         "text": "לסטודנט כבר קיים חוזה פעיל לתקופה חופפת",
+         "steps": [
+          "המערכת מציגה את החוזה הקיים"
+         ],
+         "outcome": {
+          "kind": "terminate",
+          "text": "לא נחתם חוזה נוסף; לדייר חוזה פעיל אחד בלבד."
+         }
+        }
+       ]
+      }
+     ],
+     "userStories": [
+      {
+       "role": "מנהל שיבוץ",
+       "want": "לראות רק חדרים שבאמת פנויים לפי סוג החדר",
+       "so": "לא אשבץ שני דיירים לחדר יחיד"
+      },
+      {
+       "role": "מנהל שיבוץ",
+       "want": "שהחוזה יחושב אוטומטית לפי התעריף התקף",
+       "so": "לא אטעה בסכום שכר הדירה או הפיקדון"
+      },
+      {
+       "role": "סטודנט",
+       "want": "לקבל חוזה מסודר עם תאריכים וסכומים",
+       "so": "אדע בדיוק מה מחויבותי"
+      }
+     ],
+     "wireframe": "<div class=\"wf-screen\"><h3 class=\"wf-heading\">שיבוץ חדר וחוזה — בקשה #1042</h3><div class=\"wf-row\"><label class=\"wf-label\">סטודנט</label><input class=\"wf-input\" disabled /></div><div class=\"wf-row\"><label class=\"wf-label\">מעמד באוניברסיטה</label><input class=\"wf-input\" disabled /></div><div class=\"wf-row\"><label class=\"wf-label\">בניין / חדר</label><select class=\"wf-select\" disabled></select></div><div class=\"wf-row\"><label class=\"wf-label\">תאריך התחלה</label><input class=\"wf-input\" disabled /></div><div class=\"wf-row\"><label class=\"wf-label\">תאריך סיום</label><input class=\"wf-input\" disabled /></div><table class=\"wf-table\"><thead><tr><th>פריט</th><th>סכום</th></tr></thead><tbody><tr><td>שכר דירה חודשי</td><td>1,450 ₪</td></tr><tr><td>פיקדון</td><td>2,000 ₪</td></tr></tbody></table><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">שמירת חוזה חתום</button><button class=\"wf-button\">הפקת טיוטה</button><button class=\"wf-button\">ביטול</button></div><p class=\"wf-hint\">השדה \"מעמד באוניברסיטה\" מתמלא אוטומטית מהאימות מול מערכת הסטודנטים.</p></div>",
+     "x": 736,
+     "y": 232,
+     "rx": 70,
+     "ry": 30
+    },
+    {
+     "kind": "useCase",
+     "id": "uc-checkin",
+     "name": "רישום כניסת דייר ומסירת מפתחות",
+     "description": "צוות הקבלה רושם את כניסת הדייר לחדר, את מצב החדר בכניסה ואת מסירת המפתח, והחוזה הופך לפעיל.",
+     "primaryActor": "reception",
+     "preconditions": [
+      "קיים חוזה בסטטוס \"חתום\" שתאריך תחילתו הגיע.",
+      "הפיקדון שולם."
+     ],
+     "postconditions": [
+      "החוזה בסטטוס \"פעיל\".",
+      "מסירת המפתח, תאריך הכניסה ופרוטוקול מצב החדר נרשמו."
+     ],
+     "scenarios": [
+      {
+       "id": "sc-checkin",
+       "name": "מסלול מרכזי",
+       "flow": [
+        {
+         "kind": "actor",
+         "actor": "reception",
+         "text": "מזין מספר סטודנט או מספר חוזה"
+        },
+        {
+         "kind": "system",
+         "text": "מציגה את החוזה החתום, הבניין, החדר ומצב תשלום הפיקדון"
+        },
+        {
+         "kind": "actor",
+         "actor": "reception",
+         "text": "מזין את מספר המפתח הנמסר ומסמן את מצב החדר והציוד בכניסה (פרוטוקול)"
+        },
+        {
+         "kind": "system",
+         "text": "מוודאת שהפיקדון שולם ושהחדר אינו מלא (חדר יחיד: 0 דיירים; חדר זוגי: לכל היותר דייר אחד)"
+        },
+        {
+         "kind": "actor",
+         "actor": "reception",
+         "text": "מאשר את הכניסה"
+        },
+        {
+         "kind": "system",
+         "text": "מעדכנת את החוזה ל\"פעיל\", רושמת את מסירת המפתח ותאריך הכניסה ומציגה אישור להדפסה"
+        }
+       ],
+       "extensions": [
+        {
+         "at": "2",
+         "text": "לא נמצא חוזה חתום לסטודנט",
+         "steps": [
+          "המערכת מציגה \"אין חוזה חתום\" ומפנה למנהל השיבוץ"
+         ],
+         "outcome": {
+          "kind": "terminate",
+          "text": "הכניסה לא נרשמה."
+         }
+        },
+        {
+         "at": "4",
+         "text": "הפיקדון טרם שולם",
+         "steps": [
+          "המערכת מציגה את היתרה לתשלום"
+         ],
+         "outcome": {
+          "kind": "terminate",
+          "text": "הכניסה לא נרשמה עד לתשלום הפיקדון."
+         }
+        }
+       ]
+      }
+     ],
+     "userStories": [
+      {
+       "role": "צוות קבלה",
+       "want": "לרשום כניסה ומסירת מפתח בכמה לחיצות",
+       "so": "התור בדלפק בתחילת השנה יזרום"
+      },
+      {
+       "role": "מנהל המעונות",
+       "want": "שמצב החדר בכניסה יתועד",
+       "so": "ניתן יהיה לחייב על נזקים ביציאה"
+      },
+      {
+       "role": "דייר",
+       "want": "לקבל אישור כניסה עם מספר המפתח שלי",
+       "so": "יהיה ברור מה נמסר לי"
+      }
+     ],
+     "wireframe": "<div class=\"wf-screen\"><h3 class=\"wf-heading\">כניסת דייר — דלפק קבלה</h3><div class=\"wf-row\"><label class=\"wf-label\">מספר סטודנט / חוזה</label><input class=\"wf-input\" disabled /></div><div class=\"wf-row\"><label class=\"wf-label\">בניין / חדר</label><input class=\"wf-input\" disabled /></div><div class=\"wf-row\"><label class=\"wf-label\">מספר מפתח</label><input class=\"wf-input\" disabled /></div><div class=\"wf-row\"><label class=\"wf-label\">מצב החדר בכניסה</label><textarea class=\"wf-textarea\" disabled></textarea></div><table class=\"wf-table\"><thead><tr><th>פריט ציוד</th><th>תקין</th></tr></thead><tbody><tr><td>מיטה</td><td>כן</td></tr><tr><td>שולחן</td><td>כן</td></tr><tr><td>מיזוג</td><td>כן</td></tr></tbody></table><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">אישור כניסה</button><button class=\"wf-button\">הדפסת פרוטוקול</button><button class=\"wf-button\">ביטול</button></div><p class=\"wf-hint\">כפתור האישור פעיל רק כאשר הפיקדון מסומן כשולם.</p></div>",
+     "x": 736,
+     "y": 306,
+     "rx": 70,
+     "ry": 30
+    },
+    {
+     "kind": "useCase",
+     "id": "uc-checkout",
+     "name": "רישום סיום חוזה ויציאת דייר",
+     "description": "צוות הקבלה רושם את יציאת הדייר, את מצב החדר ביציאה ואת החזרת המפתח; המערכת מחשבת החזר פיקדון בניכוי חיובי נזק.",
+     "primaryActor": "reception",
+     "preconditions": [
+      "קיים חוזה בסטטוס \"פעיל\" לדייר.",
+      "כל החיובים הפתוחים של הדייר שולמו."
+     ],
+     "postconditions": [
+      "החוזה בסטטוס \"הסתיים\" והחדר שוחרר.",
+      "סכום החזר הפיקדון נטו נרשם להעברה, וחיובי נזק (אם יש) נשמרו."
+     ],
+     "scenarios": [
+      {
+       "id": "sc-checkout",
+       "name": "מסלול מרכזי",
+       "flow": [
+        {
+         "kind": "actor",
+         "actor": "reception",
+         "text": "מזין מספר חוזה"
+        },
+        {
+         "kind": "system",
+         "text": "מציגה את החוזה, סכום הפיקדון ורשימת החיובים הפתוחים"
+        },
+        {
+         "kind": "actor",
+         "actor": "reception",
+         "text": "מזין את מצב החדר ביציאה ומסמן שהמפתח הוחזר"
+        },
+        {
+         "kind": "alt",
+         "condition": "ממצאי בדיקת החדר",
+         "branches": [
+          {
+           "label": "ללא נזק",
+           "steps": [
+            {
+             "kind": "system",
+             "text": "מחשבת החזר פיקדון מלא"
+            }
+           ]
+          },
+          {
+           "label": "נמצא נזק",
+           "steps": [
+            {
+             "kind": "actor",
+             "actor": "reception",
+             "text": "מזין תיאור הנזק ועלות התיקון המוערכת"
+            },
+            {
+             "kind": "system",
+             "text": "יוצרת חיוב נזק ומקזזת אותו מהפיקדון"
+            }
+           ]
+          }
+         ]
+        },
+        {
+         "kind": "system",
+         "text": "מציגה את סכום ההחזר נטו לאישור"
+        },
+        {
+         "kind": "actor",
+         "actor": "reception",
+         "text": "מאשר את סיום החוזה"
+        },
+        {
+         "kind": "system",
+         "text": "מעדכנת את החוזה ל\"הסתיים\", רושמת את ההחזר להעברה ומשחררת את החדר"
+        }
+       ],
+       "extensions": [
+        {
+         "at": "2",
+         "text": "קיימים חיובים פתוחים שלא שולמו",
+         "steps": [
+          "המערכת מציגה את החיובים הפתוחים"
+         ],
+         "outcome": {
+          "kind": "terminate",
+          "text": "סיום החוזה נדחה עד לתשלום החיובים."
+         }
+        },
+        {
+         "at": "4.2.2",
+         "text": "עלות הנזק גבוהה מסכום הפיקדון",
+         "steps": [
+          "המערכת יוצרת חיוב נוסף על ההפרש"
+         ],
+         "outcome": {
+          "kind": "resume",
+          "at": "5"
+         }
+        }
+       ]
+      }
+     ],
+     "userStories": [
+      {
+       "role": "צוות קבלה",
+       "want": "לרשום יציאה ולסגור חוזה בעמדה אחת",
+       "so": "לא אצטרך לעדכן גם את הנהלת החשבונות בנפרד"
+      },
+      {
+       "role": "מנהל המעונות",
+       "want": "שהחזר הפיקדון יחושב אוטומטית בניכוי נזקים",
+       "so": "לא יוחזרו פיקדונות בטעות"
+      },
+      {
+       "role": "דייר",
+       "want": "לראות כמה מהפיקדון מוחזר לי ולמה",
+       "so": "אוכל לערער אם נזק חויב שלא בצדק"
+      }
+     ],
+     "wireframe": "<div class=\"wf-screen\"><h3 class=\"wf-heading\">סיום חוזה ויציאה — חוזה #2231</h3><div class=\"wf-row\"><label class=\"wf-label\">מספר חוזה</label><input class=\"wf-input\" disabled /></div><div class=\"wf-row\"><label class=\"wf-label\">מצב החדר ביציאה</label><textarea class=\"wf-textarea\" disabled></textarea></div><div class=\"wf-row\"><label class=\"wf-label\">מפתח הוחזר</label><select class=\"wf-select\" disabled></select></div><div class=\"wf-row\"><label class=\"wf-label\">תיאור נזק</label><input class=\"wf-input\" disabled /></div><div class=\"wf-row\"><label class=\"wf-label\">עלות תיקון</label><input class=\"wf-input\" disabled /></div><table class=\"wf-table\"><thead><tr><th>פריט</th><th>סכום</th></tr></thead><tbody><tr><td>פיקדון</td><td>2,000 ₪</td></tr><tr><td>חיוב נזק</td><td>-350 ₪</td></tr><tr><td>החזר נטו</td><td>1,650 ₪</td></tr></tbody></table><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">אישור סיום חוזה</button><button class=\"wf-button\">ביטול</button></div><p class=\"wf-hint\">שורת \"החזר נטו\" מתעדכנת אוטומטית עם הזנת עלות התיקון.</p></div>",
+     "x": 736,
+     "y": 380,
+     "rx": 70,
+     "ry": 30
+    },
+    {
+     "kind": "useCase",
+     "id": "uc-view-my",
+     "name": "צפייה בחוזה, בחיובים ובקריאות שלי",
+     "description": "דייר צופה באזור האישי בחוזה הפעיל שלו, בחיובים ובמצבם ובקריאות התחזוקה שפתח.",
+     "primaryActor": "tenant",
+     "preconditions": [
+      "הדייר מזוהה במערכת.",
+      "לדייר קיים חוזה חתום, פעיל או היסטורי."
+     ],
+     "postconditions": [
+      "לא השתנה דבר במערכת; הצפייה נרשמה ביומן הגישה."
+     ],
+     "scenarios": [
+      {
+       "id": "sc-view",
+       "name": "מסלול מרכזי",
+       "flow": [
+        {
+         "kind": "actor",
+         "actor": "tenant",
+         "text": "נכנס לאזור האישי ובוחר \"החוזה שלי\""
+        },
+        {
+         "kind": "system",
+         "text": "מציגה את החוזה הפעיל: בניין, חדר, תאריכי התחלה וסיום, שכר דירה ופיקדון"
+        },
+        {
+         "kind": "system",
+         "text": "מציגה את רשימת החיובים עם סכום, תאריך יעד וסטטוס (פתוח / שולם)"
+        },
+        {
+         "kind": "system",
+         "text": "מציגה את קריאות התחזוקה שהדייר פתח עם סטטוס (פתוחה / משויכת / סגורה / נדחתה)"
+        },
+        {
+         "kind": "actor",
+         "actor": "tenant",
+         "text": "בוחר חיוב או קריאה לפרטים"
+        },
+        {
+         "kind": "system",
+         "text": "מציגה את פרטי הפריט שנבחר (קבלה, טכנאי מטפל, מועד סגירה)"
+        }
+       ],
+       "extensions": [
+        {
+         "at": "2",
+         "text": "לדייר אין חוזה פעיל",
+         "steps": [
+          "המערכת מציגה את החוזים ההיסטוריים בלבד"
+         ],
+         "outcome": {
+          "kind": "resume",
+          "at": "3"
+         }
+        },
+        {
+         "at": "5",
+         "text": "הפריט שנבחר אינו שייך לדייר",
+         "steps": [
+          "המערכת מציגה \"אין הרשאה\""
+         ],
+         "outcome": {
+          "kind": "terminate",
+          "text": "הפרטים לא הוצגו."
+         }
+        }
+       ]
+      }
+     ],
+     "userStories": [
+      {
+       "role": "דייר",
+       "want": "לראות מתי נגמר החוזה שלי ומה שילמתי",
+       "so": "אתכנן את התשלומים והמעבר"
+      },
+      {
+       "role": "דייר",
+       "want": "לעקוב אחרי מצב הקריאה שפתחתי",
+       "so": "לא אצטרך לשאול בקבוצת WhatsApp"
+      },
+      {
+       "role": "צוות קבלה",
+       "want": "שדיירים יראו את המידע שלהם לבד",
+       "so": "פחות פניות לדלפק"
+      }
+     ],
+     "wireframe": "<div class=\"wf-screen\"><h3 class=\"wf-heading\">האזור האישי — החוזה שלי</h3><div class=\"wf-row\"><label class=\"wf-label\">בניין / חדר</label><input class=\"wf-input\" disabled /></div><div class=\"wf-row\"><label class=\"wf-label\">תקופת החוזה</label><input class=\"wf-input\" disabled /></div><div class=\"wf-row\"><label class=\"wf-label\">שכר דירה חודשי</label><input class=\"wf-input\" disabled /></div><table class=\"wf-table\"><thead><tr><th>חיוב</th><th>סכום</th><th>תאריך יעד</th><th>סטטוס</th></tr></thead><tbody><tr><td>שכירות 10/2026</td><td>1,450 ₪</td><td>10.10</td><td>פתוח</td></tr><tr><td>פיקדון</td><td>2,000 ₪</td><td>01.09</td><td>שולם</td></tr></tbody></table><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">תשלום חיוב פתוח</button><button class=\"wf-button\">הקריאות שלי</button></div><p class=\"wf-hint\">לחיצה על שורת חיוב פתוח מעבירה למסך התשלום.</p></div>",
+     "x": 314,
+     "y": 238,
+     "rx": 84,
+     "ry": 30
+    },
+    {
+     "kind": "useCase",
+     "id": "uc-pay",
+     "name": "תשלום חיוב",
+     "description": "דייר משלם חיוב פתוח (שכירות, פיקדון או נזק) בכרטיס אשראי; המערכת סולקת דרך שער התשלום ומסמנת את החיוב כשולם.",
+     "primaryActor": "tenant",
+     "preconditions": [
+      "לדייר קיים חיוב בסטטוס \"פתוח\".",
+      "שער התשלום זמין."
+     ],
+     "postconditions": [
+      "החיוב בסטטוס \"שולם\" עם אסמכתת סליקה ותאריך תשלום.",
+      "הקבלה זמינה לדייר באזור האישי."
+     ],
+     "scenarios": [
+      {
+       "id": "sc-pay",
+       "name": "מסלול מרכזי",
+       "flow": [
+        {
+         "kind": "actor",
+         "actor": "tenant",
+         "text": "בוחר חיוב פתוח לתשלום"
+        },
+        {
+         "kind": "system",
+         "text": "מציגה את סכום החיוב, תיאורו ותאריך היעד"
+        },
+        {
+         "kind": "actor",
+         "actor": "tenant",
+         "text": "מזין מספר כרטיס, תוקף ו-CVV ומאשר את התשלום"
+        },
+        {
+         "kind": "system",
+         "text": "שולחת בקשת סליקה לשער התשלום ומקבלת אישור עסקה"
+        },
+        {
+         "kind": "system",
+         "text": "מסמנת את החיוב \"שולם\", שומרת את מספר האישור ומציגה קבלה"
+        }
+       ],
+       "extensions": [
+        {
+         "at": "4",
+         "text": "שער התשלום דוחה את העסקה",
+         "steps": [
+          "המערכת מציגה את סיבת הדחייה"
+         ],
+         "outcome": {
+          "kind": "resume",
+          "at": "3"
+         }
+        },
+        {
+         "at": "4",
+         "text": "שער התשלום אינו מגיב",
+         "steps": [
+          "המערכת מציגה \"התשלום לא הושלם, נסה שוב מאוחר יותר\""
+         ],
+         "outcome": {
+          "kind": "terminate",
+          "text": "החיוב נותר בסטטוס \"פתוח\"."
+         }
+        }
+       ]
+      }
+     ],
+     "userStories": [
+      {
+       "role": "דייר",
+       "want": "לשלם את שכר הדירה בכרטיס מהטלפון",
+       "so": "לא אצטרך להגיע לדלפק"
+      },
+      {
+       "role": "מנהל המעונות",
+       "want": "שכל תשלום יירשם אוטומטית מול החיוב",
+       "so": "לא תידרש התאמה ידנית מול הנהלת החשבונות"
+      }
+     ],
+     "wireframe": "<div class=\"wf-screen\"><h3 class=\"wf-heading\">תשלום חיוב — שכירות 10/2026</h3><div class=\"wf-row\"><label class=\"wf-label\">סכום לתשלום</label><input class=\"wf-input\" disabled /></div><div class=\"wf-row\"><label class=\"wf-label\">מספר כרטיס</label><input class=\"wf-input\" disabled /></div><div class=\"wf-row\"><label class=\"wf-label\">תוקף</label><input class=\"wf-input\" disabled /></div><div class=\"wf-row\"><label class=\"wf-label\">CVV</label><input class=\"wf-input\" disabled /></div><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">תשלום</button><button class=\"wf-button\">ביטול</button></div><p class=\"wf-hint\">לאחר אישור שער התשלום מוצגת קבלה עם מספר אישור.</p></div>",
+     "x": 314,
+     "y": 309,
+     "rx": 70,
+     "ry": 27
+    },
+    {
+     "kind": "system",
+     "id": "sys-0",
+     "name": "מערכת מידע למעונות הסטודנטים 'הר הצופים'",
+     "x": 200,
+     "y": 60,
+     "w": 640,
+     "h": 380
+    }
+   ],
+   "relationships": [
+    {
+     "kind": "actorAssoc",
+     "id": "a1",
+     "actorId": "student",
+     "ucId": "uc-apply",
+     "role": "initiator",
+     "description": "הסטודנט יוזם הגשת בקשת מגורים עם העדפות. תפקיד: Initiator."
+    },
+    {
+     "kind": "actorAssoc",
+     "id": "a2",
+     "actorId": "assign-mgr",
+     "ucId": "uc-waitlist",
+     "role": "initiator",
+     "description": "מנהל השיבוץ יוזם צפייה, הוספה, שינוי עדיפות והסרה ברשימת ההמתנה. תפקיד: Initiator."
+    },
+    {
+     "kind": "actorAssoc",
+     "id": "a3",
+     "actorId": "assign-mgr",
+     "ucId": "uc-assign",
+     "role": "initiator",
+     "description": "מנהל השיבוץ יוזם שיבוץ סטודנט לחדר ורישום חוזה חתום. תפקיד: Initiator."
+    },
+    {
+     "kind": "actorAssoc",
+     "id": "a4",
+     "actorId": "reception",
+     "ucId": "uc-checkin",
+     "role": "initiator",
+     "description": "צוות הקבלה יוזם רישום כניסה ומסירת מפתח כשהדייר מגיע לדלפק. תפקיד: Initiator."
+    },
+    {
+     "kind": "actorAssoc",
+     "id": "a5",
+     "actorId": "reception",
+     "ucId": "uc-checkout",
+     "role": "initiator",
+     "description": "צוות הקבלה יוזם רישום יציאה וסיום חוזה כשהדייר מחזיר מפתח. תפקיד: Initiator."
+    },
+    {
+     "kind": "actorAssoc",
+     "id": "a6",
+     "actorId": "tenant",
+     "ucId": "uc-view-my",
+     "role": "initiator",
+     "description": "הדייר יוזם צפייה בחוזה, בחיובים ובקריאות שלו. תפקיד: Initiator."
+    },
+    {
+     "kind": "actorAssoc",
+     "id": "a7",
+     "actorId": "tenant",
+     "ucId": "uc-pay",
+     "role": "initiator",
+     "description": "הדייר יוזם תשלום חיוב פתוח בכרטיס אשראי. תפקיד: Initiator."
+    },
+    {
+     "kind": "include",
+     "id": "inc-0-0",
+     "from": "uc-apply",
+     "to": "uc-verify"
+    },
+    {
+     "kind": "include",
+     "id": "inc-0-1",
+     "from": "uc-assign",
+     "to": "uc-verify"
+    }
+   ]
+  },
+  {
+   "id": "part-2",
+   "label": "תחזוקה",
+   "splitRationale": "Split by actor groups: תחזוקה (דייר / מנהל אחזקה / טכנאי) — אחריות נפרדת ממחזור המגורים",
+   "elements": [
+    {
+     "kind": "actor",
+     "id": "maint-mgr",
+     "name": "מנהל אחזקה",
+     "actorType": "human",
+     "side": "left",
+     "x": 120,
+     "y": 196.5
+    },
+    {
+     "kind": "actor",
+     "id": "technician",
+     "name": "טכנאי",
+     "actorType": "human",
+     "side": "right",
+     "x": 920,
+     "y": 164.0
+    },
+    {
+     "kind": "useCase",
+     "id": "uc-open-call",
+     "name": "פתיחת קריאת תחזוקה",
+     "description": "דייר או מנהל אחזקה פותח קריאת תחזוקה על חדר או על בניין (לעולם לא על דייר), עם תחום, תיאור ודחיפות.",
+     "primaryActor": "tenant",
+     "preconditions": [
+      "הפותח מזוהה במערכת.",
+      "החדר או הבניין קיימים במערכת."
+     ],
+     "postconditions": [
+      "הקריאה נשמרה בסטטוס \"פתוחה\" עם מספר קריאה, מושא (חדר או בניין), תחום ודחיפות."
+     ],
+     "scenarios": [
+      {
+       "id": "sc-open-tenant",
+       "name": "פתיחת קריאה על ידי דייר",
+       "flow": [
+        {
+         "kind": "actor",
+         "actor": "tenant",
+         "text": "בוחר \"קריאה חדשה\" באזור האישי"
+        },
+        {
+         "kind": "alt",
+         "condition": "מושא הקריאה",
+         "branches": [
+          {
+           "label": "החדר שלי",
+           "steps": [
+            {
+             "kind": "system",
+             "text": "מציעה את החדר של הדייר לפי חוזהו הפעיל"
+            },
+            {
+             "kind": "actor",
+             "actor": "tenant",
+             "text": "מאשר את החדר"
+            }
+           ]
+          },
+          {
+           "label": "הבניין",
+           "steps": [
+            {
+             "kind": "actor",
+             "actor": "tenant",
+             "text": "בוחר את הבניין והמיקום (קומה / אזור משותף)"
+            }
+           ]
+          }
+         ]
+        },
+        {
+         "kind": "actor",
+         "actor": "tenant",
+         "text": "בוחר תחום (חשמל / אינסטלציה / מיזוג / כללי) ומזין תיאור התקלה"
+        },
+        {
+         "kind": "actor",
+         "actor": "tenant",
+         "text": "מסמן דחיפות (רגילה / דחופה)"
+        },
+        {
+         "kind": "system",
+         "text": "שומרת את הקריאה בסטטוס \"פתוחה\", מקצה מספר קריאה ומציגה אותו לדייר"
+        }
+       ],
+       "extensions": [
+        {
+         "at": "2.1.1",
+         "text": "לדייר אין חוזה פעיל",
+         "steps": [
+          "המערכת מציגה \"ניתן לפתוח קריאה רק על בניין\""
+         ],
+         "outcome": {
+          "kind": "resume",
+          "at": "2"
+         }
+        },
+        {
+         "at": "3",
+         "text": "תיאור התקלה ריק",
+         "steps": [
+          "המערכת מציגה \"חובה לתאר את התקלה\""
+         ],
+         "outcome": {
+          "kind": "resume",
+          "at": "3"
+         }
+        }
+       ]
+      },
+      {
+       "id": "sc-open-mgr",
+       "name": "פתיחת קריאה על ידי מנהל אחזקה (למשל לאחר סיור בבניין)",
+       "flow": [
+        {
+         "kind": "actor",
+         "actor": "maint-mgr",
+         "text": "בוחר \"קריאה חדשה\" בתור הקריאות"
+        },
+        {
+         "kind": "actor",
+         "actor": "maint-mgr",
+         "text": "בוחר בניין, ואם נדרש גם חדר"
+        },
+        {
+         "kind": "actor",
+         "actor": "maint-mgr",
+         "text": "בוחר תחום, מזין תיאור ומסמן דחיפות"
+        },
+        {
+         "kind": "system",
+         "text": "שומרת את הקריאה בסטטוס \"פתוחה\" ומקצה מספר קריאה"
+        }
+       ],
+       "extensions": [
+        {
+         "at": "2",
+         "text": "קיימת כבר קריאה פתוחה על אותו חדר באותו תחום",
+         "steps": [
+          "המערכת מציגה את הקריאה הקיימת"
+         ],
+         "outcome": {
+          "kind": "terminate",
+          "text": "לא נפתחה קריאה כפולה."
+         }
+        }
+       ]
+      }
+     ],
+     "userStories": [
+      {
+       "role": "דייר",
+       "want": "לדווח על תקלה בחדר שלי מהטלפון ולקבל מספר קריאה",
+       "so": "אדע שהקריאה נרשמה ולא אבדה"
+      },
+      {
+       "role": "דייר",
+       "want": "לדווח על תקלה במעלית או בכביסה של הבניין",
+       "so": "גם תקלות במרחבים המשותפים יטופלו"
+      },
+      {
+       "role": "מנהל אחזקה",
+       "want": "לפתוח קריאות בעצמי אחרי סיור",
+       "so": "כל התקלות ינוהלו בתור אחד"
+      }
+     ],
+     "wireframe": "<div class=\"wf-screen\"><h3 class=\"wf-heading\">קריאת תחזוקה חדשה</h3><div class=\"wf-row\"><label class=\"wf-label\">מושא הקריאה</label><select class=\"wf-select\" disabled></select></div><div class=\"wf-row\"><label class=\"wf-label\">בניין</label><select class=\"wf-select\" disabled></select></div><div class=\"wf-row\"><label class=\"wf-label\">חדר</label><input class=\"wf-input\" disabled /></div><div class=\"wf-row\"><label class=\"wf-label\">תחום</label><select class=\"wf-select\" disabled></select></div><div class=\"wf-row\"><label class=\"wf-label\">תיאור התקלה</label><textarea class=\"wf-textarea\" disabled></textarea></div><div class=\"wf-row\"><label class=\"wf-label\">דחיפות</label><select class=\"wf-select\" disabled></select></div><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">פתיחת קריאה</button><button class=\"wf-button\">ביטול</button></div><p class=\"wf-hint\">בבחירת \"החדר שלי\" השדות בניין וחדר מתמלאים אוטומטית מהחוזה הפעיל.</p></div>",
+     "x": 304,
+     "y": 232,
+     "rx": 70,
+     "ry": 30
+    },
+    {
+     "kind": "useCase",
+     "id": "uc-assign-tech",
+     "name": "שיוך טכנאי לקריאה",
+     "description": "מנהל האחזקה בוחר קריאה פתוחה ומשייך אליה טכנאי לפי תחום ועומס, עם מועד יעד לטיפול.",
+     "primaryActor": "maint-mgr",
+     "preconditions": [
+      "קיימת קריאה בסטטוס \"פתוחה\".",
+      "קיים לפחות טכנאי אחד בתחום הקריאה."
+     ],
+     "postconditions": [
+      "הקריאה בסטטוס \"משויכת\" עם טכנאי ומועד יעד.",
+      "הטכנאי קיבל הודעה על הקריאה."
+     ],
+     "scenarios": [
+      {
+       "id": "sc-assign-tech",
+       "name": "מסלול מרכזי",
+       "flow": [
+        {
+         "kind": "actor",
+         "actor": "maint-mgr",
+         "text": "מסנן את תור הקריאות הפתוחות לפי בניין, תחום ודחיפות"
+        },
+        {
+         "kind": "system",
+         "text": "מציגה את הקריאות הפתוחות לפי דחיפות ותאריך פתיחה"
+        },
+        {
+         "kind": "actor",
+         "actor": "maint-mgr",
+         "text": "בוחר קריאה"
+        },
+        {
+         "kind": "system",
+         "text": "מציגה את הטכנאים בתחום הקריאה עם מספר הקריאות הפתוחות של כל אחד"
+        },
+        {
+         "kind": "actor",
+         "actor": "maint-mgr",
+         "text": "בוחר טכנאי ומזין מועד יעד לטיפול"
+        },
+        {
+         "kind": "system",
+         "text": "מעדכנת את הקריאה ל\"משויכת\", רושמת את הטכנאי והמועד ושולחת לטכנאי הודעה"
+        }
+       ],
+       "extensions": [
+        {
+         "at": "4",
+         "text": "אין טכנאי בתחום הקריאה",
+         "steps": [
+          "המערכת מציעה טכנאי מתחום \"כללי\""
+         ],
+         "outcome": {
+          "kind": "resume",
+          "at": "5"
+         }
+        },
+        {
+         "at": "5",
+         "text": "לטכנאי שנבחר יותר מ-10 קריאות פתוחות",
+         "steps": [
+          "המערכת מציגה אזהרת עומס ומבקשת אישור"
+         ],
+         "outcome": {
+          "kind": "resume",
+          "at": "5"
+         }
+        }
+       ]
+      }
+     ],
+     "userStories": [
+      {
+       "role": "מנהל אחזקה",
+       "want": "לראות את כל הקריאות הפתוחות בתור אחד לפי דחיפות",
+       "so": "אשייך קודם את הדחופות"
+      },
+      {
+       "role": "מנהל אחזקה",
+       "want": "לראות את העומס של כל טכנאי לפני השיוך",
+       "so": "העבודה תתחלק באופן הוגן"
+      },
+      {
+       "role": "טכנאי",
+       "want": "לקבל הודעה ברגע ששויכה אליי קריאה",
+       "so": "אתכנן את יום העבודה"
+      }
+     ],
+     "wireframe": "<div class=\"wf-screen\"><h3 class=\"wf-heading\">תור קריאות — שיוך טכנאי</h3><div class=\"wf-row\"><label class=\"wf-label\">בניין</label><select class=\"wf-select\" disabled></select></div><div class=\"wf-row\"><label class=\"wf-label\">תחום</label><select class=\"wf-select\" disabled></select></div><div class=\"wf-row\"><label class=\"wf-label\">דחיפות</label><select class=\"wf-select\" disabled></select></div><table class=\"wf-table\"><thead><tr><th>#</th><th>בניין / חדר</th><th>תחום</th><th>דחיפות</th><th>נפתחה</th></tr></thead><tbody><tr><td>7781</td><td>ב' / 214</td><td>מיזוג</td><td>דחופה</td><td>אתמול</td></tr><tr><td>7782</td><td>ד' / כניסה</td><td>חשמל</td><td>רגילה</td><td>היום</td></tr></tbody></table><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">שיוך טכנאי</button><button class=\"wf-button\">פרטי קריאה</button></div><p class=\"wf-hint\">לחיצה על \"שיוך טכנאי\" פותחת רשימת טכנאים עם מספר הקריאות הפתוחות שלהם ושדה מועד יעד.</p></div>",
+     "x": 304,
+     "y": 161,
+     "rx": 74,
+     "ry": 27
+    },
+    {
+     "kind": "useCase",
+     "id": "uc-handle-call",
+     "name": "עדכון טיפול וסגירת קריאה או דחייתה",
+     "description": "הטכנאי מתעד את הטיפול בקריאה המשויכת אליו וסוגר אותה, או דוחה אותה עם סיבה.",
+     "primaryActor": "technician",
+     "preconditions": [
+      "הקריאה בסטטוס \"משויכת\" לטכנאי המזוהה."
+     ],
+     "postconditions": [
+      "הקריאה בסטטוס \"סגורה\" או \"נדחתה\", עם תיעוד הפעולות, שעות העבודה ותאריך הסיום.",
+      "הדייר שפתח את הקריאה עודכן במצבה."
+     ],
+     "scenarios": [
+      {
+       "id": "sc-handle",
+       "name": "מסלול מרכזי",
+       "flow": [
+        {
+         "kind": "actor",
+         "actor": "technician",
+         "text": "בוחר קריאה מרשימת הקריאות המשויכות אליו"
+        },
+        {
+         "kind": "system",
+         "text": "מציגה את פרטי הקריאה: בניין / חדר, תחום, תיאור התקלה ודחיפות"
+        },
+        {
+         "kind": "actor",
+         "actor": "technician",
+         "text": "מזין תיאור הפעולות שבוצעו, חלקים שהוחלפו ושעות עבודה"
+        },
+        {
+         "kind": "alt",
+         "condition": "תוצאת הטיפול",
+         "branches": [
+          {
+           "label": "התקלה תוקנה",
+           "steps": [
+            {
+             "kind": "actor",
+             "actor": "technician",
+             "text": "מסמן \"סגירת קריאה\""
+            },
+            {
+             "kind": "system",
+             "text": "מעדכנת את הקריאה ל\"סגורה\" ורושמת תאריך סגירה"
+            }
+           ]
+          },
+          {
+           "label": "לא ניתן לטפל",
+           "steps": [
+            {
+             "kind": "actor",
+             "actor": "technician",
+             "text": "מסמן \"דחייה\" ובוחר סיבה (לא באחריות המעונות / נדרש קבלן חיצוני / התקלה לא אותרה)"
+            },
+            {
+             "kind": "system",
+             "text": "מעדכנת את הקריאה ל\"נדחתה\" ומחזירה אותה לתור של מנהל האחזקה"
+            }
+           ]
+          }
+         ]
+        },
+        {
+         "kind": "system",
+         "text": "מציגה סיכום ומעדכנת את הדייר שפתח את הקריאה במצבה החדש"
+        }
+       ],
+       "extensions": [
+        {
+         "at": "3",
+         "text": "תיאור הפעולות ריק",
+         "steps": [
+          "המערכת מציגה \"חובה לתעד את הטיפול\""
+         ],
+         "outcome": {
+          "kind": "resume",
+          "at": "3"
+         }
+        },
+        {
+         "at": "1",
+         "text": "לטכנאי אין קריאות משויכות",
+         "steps": [
+          "המערכת מציגה \"אין קריאות בטיפולך\""
+         ],
+         "outcome": {
+          "kind": "terminate",
+          "text": "לא עודכנה קריאה."
+         }
+        }
+       ]
+      }
+     ],
+     "userStories": [
+      {
+       "role": "טכנאי",
+       "want": "לסגור קריאה מהטלפון מיד בסיום העבודה",
+       "so": "לא אצטרך לחזור למשרד לדווח"
+      },
+      {
+       "role": "מנהל אחזקה",
+       "want": "לדעת כמה זמן לקח לסגור כל קריאה ומי טיפל",
+       "so": "אוכל למדוד זמני טיפול"
+      },
+      {
+       "role": "דייר",
+       "want": "לקבל עדכון כשהקריאה שלי נסגרה או נדחתה",
+       "so": "אדע אם התקלה טופלה"
+      }
+     ],
+     "wireframe": "<div class=\"wf-screen\"><h3 class=\"wf-heading\">הקריאות שלי — קריאה #7781</h3><div class=\"wf-row\"><label class=\"wf-label\">בניין / חדר</label><input class=\"wf-input\" disabled /></div><div class=\"wf-row\"><label class=\"wf-label\">תחום</label><input class=\"wf-input\" disabled /></div><div class=\"wf-row\"><label class=\"wf-label\">תיאור התקלה</label><input class=\"wf-input\" disabled /></div><div class=\"wf-row\"><label class=\"wf-label\">פעולות שבוצעו</label><textarea class=\"wf-textarea\" disabled></textarea></div><div class=\"wf-row\"><label class=\"wf-label\">שעות עבודה</label><input class=\"wf-input\" disabled /></div><div class=\"wf-row\"><label class=\"wf-label\">סיבת דחייה</label><select class=\"wf-select\" disabled></select></div><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">סגירת קריאה</button><button class=\"wf-button\">דחייה</button><button class=\"wf-button\">שמירת טיוטה</button></div><p class=\"wf-hint\">שדה \"סיבת דחייה\" הופך לחובה רק בלחיצה על \"דחייה\".</p></div>",
+     "x": 733,
+     "y": 164,
+     "rx": 77,
+     "ry": 30
+    },
+    {
+     "kind": "system",
+     "id": "sys-1",
+     "name": "מערכת מידע למעונות הסטודנטים 'הר הצופים'",
+     "x": 200,
+     "y": 60,
+     "w": 640,
+     "h": 232
+    }
+   ],
+   "relationships": [
+    {
+     "kind": "actorAssoc",
+     "id": "a8",
+     "actorId": "tenant",
+     "ucId": "uc-open-call",
+     "role": "initiator",
+     "description": "הדייר יוזם קריאת תחזוקה על חדרו או על הבניין. תפקיד: Initiator."
+    },
+    {
+     "kind": "actorAssoc",
+     "id": "a9",
+     "actorId": "maint-mgr",
+     "ucId": "uc-open-call",
+     "role": "initiator",
+     "description": "מנהל האחזקה יוזם קריאה בעצמו, למשל לאחר סיור בבניין. תפקיד: Initiator."
+    },
+    {
+     "kind": "actorAssoc",
+     "id": "a10",
+     "actorId": "maint-mgr",
+     "ucId": "uc-assign-tech",
+     "role": "initiator",
+     "description": "מנהל האחזקה יוזם שיוך טכנאי לקריאה פתוחה. תפקיד: Initiator."
+    },
+    {
+     "kind": "actorAssoc",
+     "id": "a11",
+     "actorId": "technician",
+     "ucId": "uc-handle-call",
+     "role": "initiator",
+     "description": "הטכנאי יוזם עדכון הטיפול וסגירה או דחייה של הקריאה המשויכת אליו. תפקיד: Initiator."
+    }
+   ]
+  },
+  {
+   "id": "part-3",
+   "label": "ניהול מערכת ודוחות",
+   "splitRationale": "Admin master-data block in its own tab (trigger #3): ניהול בניינים / חדרים / תעריפים + דוחות הנהלה",
+   "elements": [
+    {
+     "kind": "actor",
+     "id": "dorm-mgr",
+     "name": "מנהל המעונות",
+     "actorType": "human",
+     "side": "right",
+     "x": 920,
+     "y": 385.0
+    },
+    {
+     "kind": "useCase",
+     "id": "uc-occupancy-report",
+     "name": "הפקת דוח תפוסה חודשי",
+     "description": "מנהל המעונות מפיק דוח תפוסה לחודש נבחר: חדרים, מיטות, חוזים פעילים ואחוז תפוסה לפי בניין.",
+     "primaryActor": "dorm-mgr",
+     "preconditions": [
+      "מנהל המעונות מזוהה במערכת.",
+      "קיימים נתוני חוזים לחודש המבוקש."
+     ],
+     "postconditions": [
+      "הדוח הופק, נשמר בארכיון הדוחות וזמין לייצוא."
+     ],
+     "scenarios": [
+      {
+       "id": "sc-occ",
+       "name": "מסלול מרכזי",
+       "flow": [
+        {
+         "kind": "actor",
+         "actor": "dorm-mgr",
+         "text": "בוחר חודש ובניינים (אחד, כמה או כולם)"
+        },
+        {
+         "kind": "system",
+         "text": "מחשבת לכל בניין את מספר החדרים, המיטות (יחיד = 1, זוגי = 2), החוזים הפעילים ואחוז התפוסה"
+        },
+        {
+         "kind": "system",
+         "text": "מציגה טבלה לפי בניין ותרשים מגמת תפוסה ל-12 החודשים האחרונים"
+        },
+        {
+         "kind": "actor",
+         "actor": "dorm-mgr",
+         "text": "בוחר פורמט ייצוא (PDF / Excel)"
+        },
+        {
+         "kind": "system",
+         "text": "מפיקה את הקובץ ושומרת עותק בארכיון הדוחות עם תאריך ההפקה"
+        }
+       ],
+       "extensions": [
+        {
+         "at": "2",
+         "text": "אין נתוני חוזים לחודש המבוקש",
+         "steps": [
+          "המערכת מציגה \"אין נתונים לחודש זה\""
+         ],
+         "outcome": {
+          "kind": "terminate",
+          "text": "הדוח לא הופק."
+         }
+        }
+       ]
+      }
+     ],
+     "userStories": [
+      {
+       "role": "מנהל המעונות",
+       "want": "לקבל דוח תפוסה לפי בניין בלחיצה",
+       "so": "לא ייספרו חדרים ידנית יום שלם בסוף כל חודש"
+      },
+      {
+       "role": "מנהל המעונות",
+       "want": "לראות מגמת תפוסה לאורך השנה",
+       "so": "אציג להנהלת האוניברסיטה נתונים מבוססים"
+      }
+     ],
+     "wireframe": "<div class=\"wf-screen\"><h3 class=\"wf-heading\">דוח תפוסה חודשי</h3><div class=\"wf-row\"><label class=\"wf-label\">חודש</label><select class=\"wf-select\" disabled></select></div><div class=\"wf-row\"><label class=\"wf-label\">בניינים</label><select class=\"wf-select\" disabled></select></div><table class=\"wf-table\"><thead><tr><th>בניין</th><th>חדרים</th><th>מיטות</th><th>חוזים פעילים</th><th>תפוסה</th></tr></thead><tbody><tr><td>א'</td><td>60</td><td>95</td><td>91</td><td>96%</td></tr><tr><td>ב'</td><td>48</td><td>70</td><td>58</td><td>83%</td></tr></tbody></table><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">ייצוא PDF</button><button class=\"wf-button\">ייצוא Excel</button></div><p class=\"wf-hint\">תחת הטבלה מוצג תרשים מגמת תפוסה ל-12 החודשים האחרונים.</p></div>",
+     "x": 740,
+     "y": 164,
+     "rx": 70,
+     "ry": 30
+    },
+    {
+     "kind": "useCase",
+     "id": "uc-maint-report",
+     "name": "הפקת דוח תחזוקה",
+     "description": "מנהל המעונות או מנהל האחזקה מפיק דוח קריאות תחזוקה לתקופה: נפתחו, נסגרו, נדחו, זמן טיפול ממוצע ופילוח לפי בניין, תחום וטכנאי.",
+     "primaryActor": "dorm-mgr",
+     "preconditions": [
+      "המשתמש מזוהה במערכת כמנהל המעונות או כמנהל אחזקה."
+     ],
+     "postconditions": [
+      "הדוח הופק ונשמר בארכיון הדוחות."
+     ],
+     "scenarios": [
+      {
+       "id": "sc-mr-mgmt",
+       "name": "דוח הנהלה לפי בניין",
+       "flow": [
+        {
+         "kind": "actor",
+         "actor": "dorm-mgr",
+         "text": "בוחר טווח תאריכים ובניין"
+        },
+        {
+         "kind": "system",
+         "text": "מחשבת את מספר הקריאות שנפתחו, נסגרו ונדחו, ואת זמן הטיפול הממוצע לפי תחום"
+        },
+        {
+         "kind": "system",
+         "text": "מציגה את הדוח עם השוואה לתקופה הקודמת"
+        },
+        {
+         "kind": "actor",
+         "actor": "dorm-mgr",
+         "text": "בוחר פורמט ייצוא"
+        },
+        {
+         "kind": "system",
+         "text": "מפיקה את הקובץ ושומרת אותו בארכיון הדוחות"
+        }
+       ],
+       "extensions": [
+        {
+         "at": "2",
+         "text": "אין קריאות בתקופה שנבחרה",
+         "steps": [
+          "המערכת מציגה \"אין קריאות בתקופה זו\""
+         ],
+         "outcome": {
+          "kind": "terminate",
+          "text": "הדוח לא הופק."
+         }
+        }
+       ]
+      },
+      {
+       "id": "sc-mr-load",
+       "name": "דוח עומס טכנאים",
+       "flow": [
+        {
+         "kind": "actor",
+         "actor": "maint-mgr",
+         "text": "בוחר טווח תאריכים ותחום"
+        },
+        {
+         "kind": "system",
+         "text": "מחשבת לכל טכנאי את מספר הקריאות שטיפל בהן, שעות העבודה וזמן הטיפול הממוצע"
+        },
+        {
+         "kind": "system",
+         "text": "מציגה טבלה לפי טכנאי ומסמנת קריאות שחרגו ממועד היעד"
+        },
+        {
+         "kind": "actor",
+         "actor": "maint-mgr",
+         "text": "מייצא את הדוח"
+        }
+       ],
+       "extensions": [
+        {
+         "at": "2",
+         "text": "לא היו קריאות משויכות בתקופה",
+         "steps": [
+          "המערכת מציגה \"אין נתונים\""
+         ],
+         "outcome": {
+          "kind": "terminate",
+          "text": "הדוח לא הופק."
+         }
+        }
+       ]
+      }
+     ],
+     "userStories": [
+      {
+       "role": "מנהל המעונות",
+       "want": "לדעת כמה קריאות פתוחות יש בכל בניין וכמה זמן לוקח לסגור אותן",
+       "so": "אתקצב אחזקה לפי נתונים"
+      },
+      {
+       "role": "מנהל אחזקה",
+       "want": "לראות את העומס וזמני הטיפול של כל טכנאי",
+       "so": "אאזן את חלוקת העבודה"
+      }
+     ],
+     "wireframe": "<div class=\"wf-screen\"><h3 class=\"wf-heading\">דוח תחזוקה</h3><div class=\"wf-row\"><label class=\"wf-label\">מתאריך</label><input class=\"wf-input\" disabled /></div><div class=\"wf-row\"><label class=\"wf-label\">עד תאריך</label><input class=\"wf-input\" disabled /></div><div class=\"wf-row\"><label class=\"wf-label\">בניין</label><select class=\"wf-select\" disabled></select></div><div class=\"wf-row\"><label class=\"wf-label\">תחום</label><select class=\"wf-select\" disabled></select></div><table class=\"wf-table\"><thead><tr><th>בניין</th><th>נפתחו</th><th>נסגרו</th><th>נדחו</th><th>זמן טיפול ממוצע</th></tr></thead><tbody><tr><td>ב'</td><td>42</td><td>38</td><td>2</td><td>1.8 ימים</td></tr><tr><td>ד'</td><td>27</td><td>27</td><td>0</td><td>1.1 ימים</td></tr></tbody></table><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">הפקת דוח</button><button class=\"wf-button\">ייצוא Excel</button></div><p class=\"wf-hint\">מנהל אחזקה רואה בנוסף לשונית \"עומס טכנאים\".</p></div>",
+     "x": 740,
+     "y": 235,
+     "rx": 70,
+     "ry": 27
+    },
+    {
+     "kind": "useCase",
+     "id": "uc-manage-buildings",
+     "name": "ניהול בניינים",
+     "description": "מנהל המעונות מוסיף, צופה, מעדכן ומסיר בניינים (נתוני אב).",
+     "primaryActor": "dorm-mgr",
+     "preconditions": [
+      "מנהל המעונות מזוהה במערכת."
+     ],
+     "postconditions": [
+      "רשומות הבניינים מעודכנות, וכל שינוי נרשם ביומן השינויים עם המועד והמבצע."
+     ],
+     "scenarios": [
+      {
+       "id": "bld-add",
+       "name": "הוספה",
+       "flow": [
+        {
+         "kind": "actor",
+         "actor": "dorm-mgr",
+         "text": "בוחר \"הוספה\" ברשימת הבניינים"
+        },
+        {
+         "kind": "actor",
+         "actor": "dorm-mgr",
+         "text": "מזין שם הבניין (א'–ו'), כתובת, מספר קומות והערות"
+        },
+        {
+         "kind": "system",
+         "text": "מוודאת שכל שדות החובה מולאו ושהרשומה אינה כפולה"
+        },
+        {
+         "kind": "system",
+         "text": "שומרת את הרשומה החדשה ומציגה אותה ברשימה"
+        }
+       ],
+       "extensions": [
+        {
+         "at": "3",
+         "text": "כבר קיים בניין בשם זה",
+         "steps": [
+          "המערכת מציגה הודעת שגיאה ליד השדה"
+         ],
+         "outcome": {
+          "kind": "resume",
+          "at": "2"
+         }
+        }
+       ]
+      },
+      {
+       "id": "bld-view",
+       "name": "צפייה",
+       "flow": [
+        {
+         "kind": "actor",
+         "actor": "dorm-mgr",
+         "text": "פותח את רשימת הבניינים ומסנן או מחפש"
+        },
+        {
+         "kind": "system",
+         "text": "מציגה את הרשומות התואמות עם הפרטים העיקריים"
+        },
+        {
+         "kind": "actor",
+         "actor": "dorm-mgr",
+         "text": "בוחר רשומה"
+        },
+        {
+         "kind": "system",
+         "text": "מציגה את פרטי הרשומה המלאים והיסטוריית השינויים שלה"
+        }
+       ],
+       "extensions": [
+        {
+         "at": "2",
+         "text": "לא נמצאו רשומות התואמות לחיפוש",
+         "steps": [
+          "המערכת מציגה \"לא נמצאו תוצאות\""
+         ],
+         "outcome": {
+          "kind": "resume",
+          "at": "1"
+         }
+        }
+       ]
+      },
+      {
+       "id": "bld-update",
+       "name": "עדכון",
+       "flow": [
+        {
+         "kind": "actor",
+         "actor": "dorm-mgr",
+         "text": "בוחר רשומה ולוחץ \"עריכה\""
+        },
+        {
+         "kind": "actor",
+         "actor": "dorm-mgr",
+         "text": "משנה את השדות הנדרשים"
+        },
+        {
+         "kind": "system",
+         "text": "מוודאת את תקינות הערכים החדשים"
+        },
+        {
+         "kind": "system",
+         "text": "שומרת את השינוי ורושמת אותו ביומן השינויים"
+        }
+       ],
+       "extensions": [
+        {
+         "at": "3",
+         "text": "ערך שהוזן אינו תקין",
+         "steps": [
+          "המערכת מציגה את השדה השגוי"
+         ],
+         "outcome": {
+          "kind": "resume",
+          "at": "2"
+         }
+        }
+       ]
+      },
+      {
+       "id": "bld-delete",
+       "name": "מחיקה",
+       "flow": [
+        {
+         "kind": "actor",
+         "actor": "dorm-mgr",
+         "text": "בוחר רשומה ולוחץ \"מחיקה\""
+        },
+        {
+         "kind": "system",
+         "text": "מוודאת שאין בבניין חדרים פעילים ומציגה בקשת אישור"
+        },
+        {
+         "kind": "actor",
+         "actor": "dorm-mgr",
+         "text": "מאשר את המחיקה"
+        },
+        {
+         "kind": "system",
+         "text": "מסמנת את הרשומה כ\"לא פעילה\" ומסירה אותה מהרשימות התפעוליות"
+        }
+       ],
+       "extensions": [
+        {
+         "at": "2",
+         "text": "אין בבניין חדרים פעילים — התנאי אינו מתקיים",
+         "steps": [
+          "המערכת מציגה את הסיבה לחסימת המחיקה"
+         ],
+         "outcome": {
+          "kind": "terminate",
+          "text": "הרשומה לא נמחקה."
+         }
+        }
+       ]
+      }
+     ],
+     "userStories": [
+      {
+       "role": "מנהל המעונות",
+       "want": "לנהל את רשימת הבניינים במקום אחד",
+       "so": "כל שאר המערכת תסתמך על נתון אב אחד"
+      },
+      {
+       "role": "מנהל שיבוץ",
+       "want": "שרשימת הבניינים תהיה מעודכנת",
+       "so": "השיבוץ והחוזים יתבססו על נתונים נכונים"
+      }
+     ],
+     "wireframe": "<div class=\"wf-screen\"><h3 class=\"wf-heading\">ניהול בניינים</h3><div class=\"wf-row\"><label class=\"wf-label\">שם הבניין</label><input class=\"wf-input\" disabled /></div><div class=\"wf-row\"><label class=\"wf-label\">כתובת</label><input class=\"wf-input\" disabled /></div><div class=\"wf-row\"><label class=\"wf-label\">מספר קומות</label><input class=\"wf-input\" disabled /></div><table class=\"wf-table\"><thead><tr><th>בניין</th><th>קומות</th><th>חדרים</th><th>פעיל</th></tr></thead><tbody><tr><td>א'</td><td>5</td><td>60</td><td>כן</td></tr><tr><td>ב'</td><td>4</td><td>48</td><td>כן</td></tr></tbody></table><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">שמירה</button><button class=\"wf-button\">מחיקה</button><button class=\"wf-button\">ביטול</button></div><p class=\"wf-hint\">מחיקה חסומה כאשר הרשומה עדיין בשימוש.</p></div>",
+     "x": 740,
+     "y": 303,
+     "rx": 70,
+     "ry": 27
+    },
+    {
+     "kind": "useCase",
+     "id": "uc-manage-rooms",
+     "name": "ניהול חדרים",
+     "description": "מנהל המעונות מוסיף, צופה, מעדכן ומסיר חדרים (נתוני אב).",
+     "primaryActor": "dorm-mgr",
+     "preconditions": [
+      "מנהל המעונות מזוהה במערכת."
+     ],
+     "postconditions": [
+      "רשומות החדרים מעודכנות, וכל שינוי נרשם ביומן השינויים עם המועד והמבצע."
+     ],
+     "scenarios": [
+      {
+       "id": "room-add",
+       "name": "הוספה",
+       "flow": [
+        {
+         "kind": "actor",
+         "actor": "dorm-mgr",
+         "text": "בוחר \"הוספה\" ברשימת החדרים"
+        },
+        {
+         "kind": "actor",
+         "actor": "dorm-mgr",
+         "text": "מזין בניין, מספר חדר, קומה, סוג (יחיד / זוגי) ורשימת ציוד בסיסי"
+        },
+        {
+         "kind": "system",
+         "text": "מוודאת שכל שדות החובה מולאו ושהרשומה אינה כפולה"
+        },
+        {
+         "kind": "system",
+         "text": "שומרת את הרשומה החדשה ומציגה אותה ברשימה"
+        }
+       ],
+       "extensions": [
+        {
+         "at": "3",
+         "text": "כבר קיים חדר במספר זה בבניין",
+         "steps": [
+          "המערכת מציגה הודעת שגיאה ליד השדה"
+         ],
+         "outcome": {
+          "kind": "resume",
+          "at": "2"
+         }
+        }
+       ]
+      },
+      {
+       "id": "room-view",
+       "name": "צפייה",
+       "flow": [
+        {
+         "kind": "actor",
+         "actor": "dorm-mgr",
+         "text": "פותח את רשימת החדרים ומסנן או מחפש"
+        },
+        {
+         "kind": "system",
+         "text": "מציגה את הרשומות התואמות עם הפרטים העיקריים"
+        },
+        {
+         "kind": "actor",
+         "actor": "dorm-mgr",
+         "text": "בוחר רשומה"
+        },
+        {
+         "kind": "system",
+         "text": "מציגה את פרטי הרשומה המלאים והיסטוריית השינויים שלה"
+        }
+       ],
+       "extensions": [
+        {
+         "at": "2",
+         "text": "לא נמצאו רשומות התואמות לחיפוש",
+         "steps": [
+          "המערכת מציגה \"לא נמצאו תוצאות\""
+         ],
+         "outcome": {
+          "kind": "resume",
+          "at": "1"
+         }
+        }
+       ]
+      },
+      {
+       "id": "room-update",
+       "name": "עדכון",
+       "flow": [
+        {
+         "kind": "actor",
+         "actor": "dorm-mgr",
+         "text": "בוחר רשומה ולוחץ \"עריכה\""
+        },
+        {
+         "kind": "actor",
+         "actor": "dorm-mgr",
+         "text": "משנה את השדות הנדרשים"
+        },
+        {
+         "kind": "system",
+         "text": "מוודאת את תקינות הערכים החדשים"
+        },
+        {
+         "kind": "system",
+         "text": "שומרת את השינוי ורושמת אותו ביומן השינויים"
+        }
+       ],
+       "extensions": [
+        {
+         "at": "3",
+         "text": "ערך שהוזן אינו תקין",
+         "steps": [
+          "המערכת מציגה את השדה השגוי"
+         ],
+         "outcome": {
+          "kind": "resume",
+          "at": "2"
+         }
+        }
+       ]
+      },
+      {
+       "id": "room-delete",
+       "name": "מחיקה",
+       "flow": [
+        {
+         "kind": "actor",
+         "actor": "dorm-mgr",
+         "text": "בוחר רשומה ולוחץ \"מחיקה\""
+        },
+        {
+         "kind": "system",
+         "text": "מוודאת שאין לחדר חוזה פעיל ומציגה בקשת אישור"
+        },
+        {
+         "kind": "actor",
+         "actor": "dorm-mgr",
+         "text": "מאשר את המחיקה"
+        },
+        {
+         "kind": "system",
+         "text": "מסמנת את הרשומה כ\"לא פעילה\" ומסירה אותה מהרשימות התפעוליות"
+        }
+       ],
+       "extensions": [
+        {
+         "at": "2",
+         "text": "אין לחדר חוזה פעיל — התנאי אינו מתקיים",
+         "steps": [
+          "המערכת מציגה את הסיבה לחסימת המחיקה"
+         ],
+         "outcome": {
+          "kind": "terminate",
+          "text": "הרשומה לא נמחקה."
+         }
+        }
+       ]
+      }
+     ],
+     "userStories": [
+      {
+       "role": "מנהל המעונות",
+       "want": "לנהל את רשימת החדרים במקום אחד",
+       "so": "כל שאר המערכת תסתמך על נתון אב אחד"
+      },
+      {
+       "role": "מנהל שיבוץ",
+       "want": "שרשימת החדרים תהיה מעודכנת",
+       "so": "השיבוץ והחוזים יתבססו על נתונים נכונים"
+      }
+     ],
+     "wireframe": "<div class=\"wf-screen\"><h3 class=\"wf-heading\">ניהול חדרים</h3><div class=\"wf-row\"><label class=\"wf-label\">בניין</label><select class=\"wf-select\" disabled></select></div><div class=\"wf-row\"><label class=\"wf-label\">מספר חדר</label><input class=\"wf-input\" disabled /></div><div class=\"wf-row\"><label class=\"wf-label\">קומה</label><input class=\"wf-input\" disabled /></div><div class=\"wf-row\"><label class=\"wf-label\">סוג חדר</label><select class=\"wf-select\" disabled></select></div><div class=\"wf-row\"><label class=\"wf-label\">ציוד</label><textarea class=\"wf-textarea\" disabled></textarea></div><table class=\"wf-table\"><thead><tr><th>בניין</th><th>חדר</th><th>קומה</th><th>סוג</th><th>חוזים פעילים</th></tr></thead><tbody><tr><td>ג'</td><td>214</td><td>2</td><td>זוגי</td><td>1</td></tr><tr><td>ג'</td><td>215</td><td>2</td><td>יחיד</td><td>1</td></tr></tbody></table><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">שמירה</button><button class=\"wf-button\">מחיקה</button><button class=\"wf-button\">ביטול</button></div><p class=\"wf-hint\">מחיקה חסומה כאשר הרשומה עדיין בשימוש.</p></div>",
+     "x": 740,
+     "y": 371,
+     "rx": 70,
+     "ry": 27
+    },
+    {
+     "kind": "useCase",
+     "id": "uc-manage-rates",
+     "name": "ניהול תעריפים",
+     "description": "מנהל המעונות מוסיף, צופה, מעדכן ומסיר תעריפים (נתוני אב).",
+     "primaryActor": "dorm-mgr",
+     "preconditions": [
+      "מנהל המעונות מזוהה במערכת."
+     ],
+     "postconditions": [
+      "רשומות התעריפים מעודכנות, וכל שינוי נרשם ביומן השינויים עם המועד והמבצע."
+     ],
+     "scenarios": [
+      {
+       "id": "rate-add",
+       "name": "הוספה",
+       "flow": [
+        {
+         "kind": "actor",
+         "actor": "dorm-mgr",
+         "text": "בוחר \"הוספה\" ברשימת התעריפים"
+        },
+        {
+         "kind": "actor",
+         "actor": "dorm-mgr",
+         "text": "מזין סוג חדר, סוג חוזה (שנתי / קיץ), שכר דירה חודשי, סכום פיקדון ותאריכי תוקף"
+        },
+        {
+         "kind": "system",
+         "text": "מוודאת שכל שדות החובה מולאו ושהרשומה אינה כפולה"
+        },
+        {
+         "kind": "system",
+         "text": "שומרת את הרשומה החדשה ומציגה אותה ברשימה"
+        }
+       ],
+       "extensions": [
+        {
+         "at": "3",
+         "text": "כבר קיים תעריף לסוג חדר וסוג חוזה זה בטווח תאריכים חופף",
+         "steps": [
+          "המערכת מציגה הודעת שגיאה ליד השדה"
+         ],
+         "outcome": {
+          "kind": "resume",
+          "at": "2"
+         }
+        }
+       ]
+      },
+      {
+       "id": "rate-view",
+       "name": "צפייה",
+       "flow": [
+        {
+         "kind": "actor",
+         "actor": "dorm-mgr",
+         "text": "פותח את רשימת התעריפים ומסנן או מחפש"
+        },
+        {
+         "kind": "system",
+         "text": "מציגה את הרשומות התואמות עם הפרטים העיקריים"
+        },
+        {
+         "kind": "actor",
+         "actor": "dorm-mgr",
+         "text": "בוחר רשומה"
+        },
+        {
+         "kind": "system",
+         "text": "מציגה את פרטי הרשומה המלאים והיסטוריית השינויים שלה"
+        }
+       ],
+       "extensions": [
+        {
+         "at": "2",
+         "text": "לא נמצאו רשומות התואמות לחיפוש",
+         "steps": [
+          "המערכת מציגה \"לא נמצאו תוצאות\""
+         ],
+         "outcome": {
+          "kind": "resume",
+          "at": "1"
+         }
+        }
+       ]
+      },
+      {
+       "id": "rate-update",
+       "name": "עדכון",
+       "flow": [
+        {
+         "kind": "actor",
+         "actor": "dorm-mgr",
+         "text": "בוחר רשומה ולוחץ \"עריכה\""
+        },
+        {
+         "kind": "actor",
+         "actor": "dorm-mgr",
+         "text": "משנה את השדות הנדרשים"
+        },
+        {
+         "kind": "system",
+         "text": "מוודאת את תקינות הערכים החדשים"
+        },
+        {
+         "kind": "system",
+         "text": "שומרת את השינוי ורושמת אותו ביומן השינויים"
+        }
+       ],
+       "extensions": [
+        {
+         "at": "3",
+         "text": "ערך שהוזן אינו תקין",
+         "steps": [
+          "המערכת מציגה את השדה השגוי"
+         ],
+         "outcome": {
+          "kind": "resume",
+          "at": "2"
+         }
+        }
+       ]
+      },
+      {
+       "id": "rate-delete",
+       "name": "מחיקה",
+       "flow": [
+        {
+         "kind": "actor",
+         "actor": "dorm-mgr",
+         "text": "בוחר רשומה ולוחץ \"מחיקה\""
+        },
+        {
+         "kind": "system",
+         "text": "מוודאת שהתעריף אינו משויך לחוזה קיים ומציגה בקשת אישור"
+        },
+        {
+         "kind": "actor",
+         "actor": "dorm-mgr",
+         "text": "מאשר את המחיקה"
+        },
+        {
+         "kind": "system",
+         "text": "מסמנת את הרשומה כ\"לא פעילה\" ומסירה אותה מהרשימות התפעוליות"
+        }
+       ],
+       "extensions": [
+        {
+         "at": "2",
+         "text": "התעריף אינו משויך לחוזה קיים — התנאי אינו מתקיים",
+         "steps": [
+          "המערכת מציגה את הסיבה לחסימת המחיקה"
+         ],
+         "outcome": {
+          "kind": "terminate",
+          "text": "הרשומה לא נמחקה."
+         }
+        }
+       ]
+      }
+     ],
+     "userStories": [
+      {
+       "role": "מנהל המעונות",
+       "want": "לנהל את רשימת התעריפים במקום אחד",
+       "so": "כל שאר המערכת תסתמך על נתון אב אחד"
+      },
+      {
+       "role": "מנהל שיבוץ",
+       "want": "שרשימת התעריפים תהיה מעודכנת",
+       "so": "השיבוץ והחוזים יתבססו על נתונים נכונים"
+      }
+     ],
+     "wireframe": "<div class=\"wf-screen\"><h3 class=\"wf-heading\">ניהול תעריפים</h3><div class=\"wf-row\"><label class=\"wf-label\">סוג חדר</label><select class=\"wf-select\" disabled></select></div><div class=\"wf-row\"><label class=\"wf-label\">סוג חוזה</label><select class=\"wf-select\" disabled></select></div><div class=\"wf-row\"><label class=\"wf-label\">שכר דירה חודשי</label><input class=\"wf-input\" disabled /></div><div class=\"wf-row\"><label class=\"wf-label\">פיקדון</label><input class=\"wf-input\" disabled /></div><div class=\"wf-row\"><label class=\"wf-label\">בתוקף מ</label><input class=\"wf-input\" disabled /></div><div class=\"wf-row\"><label class=\"wf-label\">בתוקף עד</label><input class=\"wf-input\" disabled /></div><table class=\"wf-table\"><thead><tr><th>סוג חדר</th><th>סוג חוזה</th><th>שכ\"ד חודשי</th><th>פיקדון</th><th>בתוקף מ</th></tr></thead><tbody><tr><td>יחיד</td><td>שנתי</td><td>1,450 ₪</td><td>2,000 ₪</td><td>01.10.2026</td></tr><tr><td>זוגי</td><td>שנתי</td><td>980 ₪</td><td>1,500 ₪</td><td>01.10.2026</td></tr></tbody></table><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">שמירה</button><button class=\"wf-button\">מחיקה</button><button class=\"wf-button\">ביטול</button></div><p class=\"wf-hint\">מחיקה חסומה כאשר הרשומה עדיין בשימוש.</p></div>",
+     "x": 740,
+     "y": 439,
+     "rx": 70,
+     "ry": 27
+    },
+    {
+     "kind": "system",
+     "id": "sys-2",
+     "name": "מערכת מידע למעונות הסטודנטים 'הר הצופים'",
+     "x": 200,
+     "y": 60,
+     "w": 640,
+     "h": 436
+    }
+   ],
+   "relationships": [
+    {
+     "kind": "actorAssoc",
+     "id": "a12",
+     "actorId": "dorm-mgr",
+     "ucId": "uc-occupancy-report",
+     "role": "initiator",
+     "description": "מנהל המעונות יוזם הפקת דוח תפוסה חודשי. תפקיד: Initiator."
+    },
+    {
+     "kind": "actorAssoc",
+     "id": "a13",
+     "actorId": "dorm-mgr",
+     "ucId": "uc-maint-report",
+     "role": "initiator",
+     "description": "מנהל המעונות יוזם דוח תחזוקה לפי בניין. תפקיד: Initiator."
+    },
+    {
+     "kind": "actorAssoc",
+     "id": "a14",
+     "actorId": "maint-mgr",
+     "ucId": "uc-maint-report",
+     "role": "initiator",
+     "description": "מנהל האחזקה יוזם דוח עומס טכנאים. תפקיד: Initiator."
+    },
+    {
+     "kind": "actorAssoc",
+     "id": "a15",
+     "actorId": "dorm-mgr",
+     "ucId": "uc-manage-buildings",
+     "role": "initiator",
+     "description": "מנהל המעונות מנהל את נתוני האב של הבניינים. תפקיד: Initiator."
+    },
+    {
+     "kind": "actorAssoc",
+     "id": "a16",
+     "actorId": "dorm-mgr",
+     "ucId": "uc-manage-rooms",
+     "role": "initiator",
+     "description": "מנהל המעונות מנהל את נתוני האב של החדרים. תפקיד: Initiator."
+    },
+    {
+     "kind": "actorAssoc",
+     "id": "a17",
+     "actorId": "dorm-mgr",
+     "ucId": "uc-manage-rates",
+     "role": "initiator",
+     "description": "מנהל המעונות מנהל את התעריפים ותוקפם. תפקיד: Initiator."
+    }
+   ]
+  },
+  {
+   "id": "part-4",
+   "label": "תהליכים אוטומטיים",
+   "splitRationale": "Time-actor triggers in their own tab (trigger #3): הפקת חיובים אוטומטית, נפרדת מניהול נתוני האב",
+   "elements": [
+    {
+     "kind": "actor",
+     "id": "clock",
+     "name": "תזמון",
+     "actorType": "system",
+     "side": "left",
+     "x": 120,
+     "y": 164.0
+    },
+    {
+     "kind": "useCase",
+     "id": "uc-rent-charges",
+     "name": "הפקת חיובי שכירות חודשיים",
+     "description": "ב-1 בכל חודש המערכת מפיקה אוטומטית חיוב שכירות לכל חוזה פעיל לפי התעריף הקבוע בחוזה.",
+     "primaryActor": "clock",
+     "preconditions": [
+      "קיימים חוזים בסטטוס \"פעיל\".",
+      "ההרצה לחודש הנוכחי טרם בוצעה."
+     ],
+     "postconditions": [
+      "לכל חוזה פעיל נוצר חיוב שכירות בסטטוס \"פתוח\" עם תאריך יעד.",
+      "סיכום ההרצה נשמר ומוצג בלוח הבקרה של מנהל המעונות."
+     ],
+     "scenarios": [
+      {
+       "id": "sc-rent",
+       "name": "מסלול מרכזי",
+       "flow": [
+        {
+         "kind": "actor",
+         "actor": "clock",
+         "text": "מפעיל את תהליך החיוב החודשי ב-1 בחודש בשעה 02:00"
+        },
+        {
+         "kind": "system",
+         "text": "שולפת את כל החוזים הפעילים בחודש הנוכחי"
+        },
+        {
+         "kind": "loop",
+         "condition": "נותרו חוזים פעילים שטרם חויבו",
+         "steps": [
+          {
+           "kind": "system",
+           "text": "מחשבת את שכר הדירה לחודש לפי תעריף החוזה (חלק יחסי בחודש התחלה או סיום)"
+          },
+          {
+           "kind": "system",
+           "text": "יוצרת חיוב שכירות בסטטוס \"פתוח\" עם תאריך יעד ה-10 בחודש"
+          }
+         ]
+        },
+        {
+         "kind": "system",
+         "text": "שומרת סיכום הרצה (מספר חיובים, סכום כולל, חריגים) ומציגה אותו בלוח הבקרה"
+        }
+       ],
+       "extensions": [
+        {
+         "at": "2",
+         "text": "ההרצה לחודש זה כבר בוצעה",
+         "steps": [
+          "המערכת רושמת ביומן \"הרצה כפולה נמנעה\""
+         ],
+         "outcome": {
+          "kind": "terminate",
+          "text": "לא נוצרו חיובים חדשים."
+         }
+        },
+        {
+         "at": "3.2",
+         "text": "כבר קיים חיוב שכירות לחוזה זה לחודש זה",
+         "steps": [
+          "המערכת מדלגת על החוזה ומסמנת אותו כחריג בסיכום"
+         ],
+         "outcome": {
+          "kind": "resume",
+          "at": "3.1"
+         }
+        }
+       ]
+      }
+     ],
+     "userStories": [
+      {
+       "role": "מנהל המעונות",
+       "want": "שחיובי השכירות ייווצרו אוטומטית בתחילת כל חודש",
+       "so": "לא יישכחו חיובים ולא יידרש קלט ידני"
+      },
+      {
+       "role": "דייר",
+       "want": "לראות את חיוב השכירות שלי בתחילת החודש",
+       "so": "אשלם בזמן"
+      }
+     ],
+     "x": 300,
+     "y": 164,
+     "rx": 70,
+     "ry": 30
+    },
+    {
+     "kind": "system",
+     "id": "sys-3",
+     "name": "מערכת מידע למעונות הסטודנטים 'הר הצופים'",
+     "x": 200,
+     "y": 60,
+     "w": 640,
+     "h": 164
+    }
+   ],
+   "relationships": [
+    {
+     "kind": "actorAssoc",
+     "id": "a18",
+     "actorId": "clock",
+     "ucId": "uc-rent-charges",
+     "role": "initiator",
+     "description": "שחקן הזמן מפעיל את הפקת חיובי השכירות ב-1 בכל חודש. תפקיד: Initiator."
+    }
+   ]
+  }
+ ],
+ "assumptions": [
+  "מערכת הסטודנטים של האוניברסיטה ושער התשלום אינם שחקנים: המערכת פונה אליהם (קריאת API) והם אינם יוזמים דבר. הם מופיעים כצעדי מערכת בתרחישים (אימות סטודנט פעיל; סליקה בתשלום חיוב).",
+  "\"דייר\" הוא סטודנט בעל חוזה חתום או פעיל. שני התפקידים מוצגים כשחקנים נפרדים לפי מה שכל אחד יוזם: סטודנט — בקשת מגורים; דייר — קריאות, צפייה ותשלום.",
+  "להנהלת החשבונות של האוניברסיטה אין גישה ישירה למערכת; מנהל המעונות מייצא אליה דוחות והחזרי פיקדון. אחרת היה נדרש שחקן \"הנהלת חשבונות\".",
+  "לטכנאים יש גישה למערכת (ממשק נייד) לעדכון הקריאות המשויכות אליהם; אחרת מנהל האחזקה היה מעדכן בשמם.",
+  "החזר הפיקדון וחיובי הנזק נרשמים במערכת; ההעברה הכספית עצמה מבוצעת מחוץ למערכת על ידי הנהלת החשבונות.",
+  "קריאת תחזוקה נפתחת על חדר או על בניין, לעולם לא על דייר; חדר יחיד = חוזה פעיל אחד, חדר זוגי = עד שני חוזים פעילים; לדייר חוזה פעיל אחד בכל עת."
+ ],
+ "openQuestions": [
+  "האם דייר רשאי לסיים חוזה לפני מועד הסיום, ומהו הקנס? (כיום מטופל כסיום חוזה רגיל.)",
+  "האם צוות הקבלה רשאי לפתוח קריאת תחזוקה בשם דייר שפונה בדלפק? (כיום לא — רק דייר או מנהל אחזקה.)"
+ ]
+};
+  </script>
+  <script src="https://themathbible.com/sad-mcp/uc-diagram-common.js"></script>
+</body>
+</html>

@@ -1,0 +1,5125 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>מערכת ההזמנות של מסעדת 'המלצר האוטומטי' — Use Case Diagram</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Hebrew:wght@400;600&family=IBM+Plex+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://themathbible.com/sad-mcp/uc-diagram-common.css" rel="stylesheet">
+  <!-- REQUIRED: uc-diagram-common.css sets display:flex on .diagram-part, which overrides
+       the browser's [hidden]{display:none}. This one-liner restores correct tab switching. -->
+  <style>[hidden] { display: none !important; }</style>
+</head>
+<body>
+  <h1 class="page-title">מערכת ההזמנות של מסעדת 'המלצר האוטומטי' — תרשים תרחישי שימוש</h1>
+
+  <div class="tab-bar">
+    <button class="tab active" onclick="showDiagram(0)">הזמנה, הגשה ותשלום</button>
+    <button class="tab" onclick="showDiagram(1)">מטבח ומשמרת</button>
+    <button class="tab" onclick="showDiagram(2)">ניהול מערכת</button>
+  </div>
+
+  <div class="split-rationale" data-tab="0">פיצול לפי מספר יוסקייסים: 16 > 8 — לשונית זו: התהליך העסקי מהתפריט ועד התשלום (סועד, מלצר, קופאי)</div>
+  <div class="split-rationale" data-tab="1" hidden>פיצול לפי מספר יוסקייסים: 16 > 8 — לשונית זו: תפעול המטבח (טבח אחראי תחנה) והמשמרת (מנהל משמרת)</div>
+  <div class="split-rationale" data-tab="2" hidden>פיצול לפי בלוק נתוני-אב: מנהל המסעדה מחזיק ≥2 יוסקייסים של &quot;ניהול X&quot; — לשונית משלו, לצד דוח המכירות שהוא יוזם</div>
+
+  <div style="text-align:center;margin:8px 0;">
+    <button onclick="fixLayout(currentLayout())" class="fix-btn">Fix Layout</button>
+  </div>
+
+  <div class="diagram-part" id="diagram-0">
+<svg id="diagram-svg-0" viewBox="0 0 1100 400" xmlns="http://www.w3.org/2000/svg" style="max-width:1100px;width:100%;height:auto;">
+<defs><pattern id="dot-grid-0" width="24" height="24" patternUnits="userSpaceOnUse"><circle cx="12" cy="12" r="0.8" fill="#cbd5e1"/></pattern></defs>
+<rect x="0" y="0" width="100%" height="100%" fill="#f8fafc"/>
+<rect x="0" y="0" width="100%" height="100%" fill="url(#dot-grid-0)"/>
+<rect class="system-boundary" x="240" y="50" width="620" height="200" rx="12" fill="#fff" stroke="#3b82f6" stroke-width="2.5"/>
+<path d="M240,94 v-32 a12,12 0 0 1 12,-12 h596 a12,12 0 0 1 12,12 v32 z" fill="#1e40af" class="system-title-bar" data-boundary-header="1"/>
+<text x="550.0" y="78" text-anchor="middle" font-size="14" font-weight="700" fill="#fff" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl" data-boundary-title="1">מערכת ההזמנות של מסעדת 'המלצר האוטומטי'</text>
+<line data-conn-from="diner" data-conn-to="uc-view-menu" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+<line class="conn-hitbox" data-conn-id="as-diner-menu" data-hitbox-from="diner" data-hitbox-to="uc-view-menu" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('as-diner-menu','assoc',event)"/>
+<line data-conn-from="diner" data-conn-to="uc-place-order" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+<line class="conn-hitbox" data-conn-id="as-diner-order" data-hitbox-from="diner" data-hitbox-to="uc-place-order" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('as-diner-order','assoc',event)"/>
+<line data-conn-from="diner" data-conn-to="uc-add-items" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+<line class="conn-hitbox" data-conn-id="as-diner-add" data-hitbox-from="diner" data-hitbox-to="uc-add-items" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('as-diner-add','assoc',event)"/>
+<line data-conn-from="diner" data-conn-to="uc-order-status" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+<line class="conn-hitbox" data-conn-id="as-diner-status" data-hitbox-from="diner" data-hitbox-to="uc-order-status" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('as-diner-status','assoc',event)"/>
+<line data-conn-from="diner" data-conn-to="uc-pay" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+<line class="conn-hitbox" data-conn-id="as-diner-pay" data-hitbox-from="diner" data-hitbox-to="uc-pay" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('as-diner-pay','assoc',event)"/>
+<line data-conn-from="cashier" data-conn-to="uc-pay" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+<line class="conn-hitbox" data-conn-id="as-cashier-pay" data-hitbox-from="cashier" data-hitbox-to="uc-pay" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('as-cashier-pay','assoc',event)"/>
+<line data-conn-from="cashier" data-conn-to="uc-close-day" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+<line class="conn-hitbox" data-conn-id="as-cashier-close" data-hitbox-from="cashier" data-hitbox-to="uc-close-day" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('as-cashier-close','assoc',event)"/>
+<line data-conn-from="waiter" data-conn-to="uc-serve" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+<line class="conn-hitbox" data-conn-id="as-waiter-serve" data-hitbox-from="waiter" data-hitbox-to="uc-serve" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('as-waiter-serve','assoc',event)"/>
+<g id="uc-group-uc-view-menu" data-uc-id="uc-view-menu" onclick="showDesc('uc-view-menu','uc',event)" style="cursor:pointer">
+  <ellipse cx="550" cy="150" rx="103" ry="30" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+  <text x="550" y="154" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">צפייה בתפריט לפי שולחן</text>
+</g>
+<g id="uc-group-uc-place-order" data-uc-id="uc-place-order" onclick="showDesc('uc-place-order','uc',event)" style="cursor:pointer">
+  <ellipse cx="550" cy="230" rx="70" ry="30" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+  <text x="550" y="234" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">פתיחת הזמנה</text>
+</g>
+<g id="uc-group-uc-add-items" data-uc-id="uc-add-items" onclick="showDesc('uc-add-items','uc',event)" style="cursor:pointer">
+  <ellipse cx="550" cy="310" rx="106" ry="30" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+  <text x="550" y="314" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">הוספת מנות להזמנה פתוחה</text>
+</g>
+<g id="uc-group-uc-order-status" data-uc-id="uc-order-status" onclick="showDesc('uc-order-status','uc',event)" style="cursor:pointer">
+  <ellipse cx="550" cy="390" rx="85" ry="30" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+  <text x="550" y="394" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">צפייה במצב ההזמנה</text>
+</g>
+<g id="uc-group-uc-pay" data-uc-id="uc-pay" onclick="showDesc('uc-pay','uc',event)" style="cursor:pointer">
+  <ellipse cx="550" cy="470" rx="103" ry="30" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+  <text x="550" y="474" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">רישום תשלום עבור הזמנה</text>
+</g>
+<g id="uc-group-uc-close-day" data-uc-id="uc-close-day" onclick="showDesc('uc-close-day','uc',event)" style="cursor:pointer">
+  <ellipse cx="550" cy="550" rx="70" ry="30" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+  <text x="550" y="554" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">סגירת יום</text>
+</g>
+<g id="uc-group-uc-serve" data-uc-id="uc-serve" onclick="showDesc('uc-serve','uc',event)" style="cursor:pointer">
+  <ellipse cx="550" cy="630" rx="81" ry="30" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+  <text x="550" y="634" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">סימון מנה כהוגשה</text>
+</g>
+<g id="actor-group-diner" data-actor-id="diner" onclick="showDesc('diner','actor',event)" style="cursor:pointer" transform="translate(160,150)">
+  <circle cx="0" cy="-60" r="14" fill="#e0f0ff" stroke="#334155" stroke-width="2"/>
+  <line x1="0" y1="-46" x2="0" y2="-10" stroke="#334155" stroke-width="2"/>
+  <line x1="-18" y1="-36" x2="18" y2="-36" stroke="#334155" stroke-width="2"/>
+  <line x1="0" y1="-10" x2="-14" y2="14" stroke="#334155" stroke-width="2"/>
+  <line x1="0" y1="-10" x2="14" y2="14" stroke="#334155" stroke-width="2"/>
+  <text x="0" y="32" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">סועד</text>
+</g>
+<g id="actor-group-cashier" data-actor-id="cashier" onclick="showDesc('cashier','actor',event)" style="cursor:pointer" transform="translate(160,350)">
+  <circle cx="0" cy="-60" r="14" fill="#e0f0ff" stroke="#334155" stroke-width="2"/>
+  <line x1="0" y1="-46" x2="0" y2="-10" stroke="#334155" stroke-width="2"/>
+  <line x1="-18" y1="-36" x2="18" y2="-36" stroke="#334155" stroke-width="2"/>
+  <line x1="0" y1="-10" x2="-14" y2="14" stroke="#334155" stroke-width="2"/>
+  <line x1="0" y1="-10" x2="14" y2="14" stroke="#334155" stroke-width="2"/>
+  <text x="0" y="32" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">קופאי</text>
+</g>
+<g id="actor-group-waiter" data-actor-id="waiter" onclick="showDesc('waiter','actor',event)" style="cursor:pointer" transform="translate(940,150)">
+  <circle cx="0" cy="-60" r="14" fill="#e0f0ff" stroke="#334155" stroke-width="2"/>
+  <line x1="0" y1="-46" x2="0" y2="-10" stroke="#334155" stroke-width="2"/>
+  <line x1="-18" y1="-36" x2="18" y2="-36" stroke="#334155" stroke-width="2"/>
+  <line x1="0" y1="-10" x2="-14" y2="14" stroke="#334155" stroke-width="2"/>
+  <line x1="0" y1="-10" x2="14" y2="14" stroke="#334155" stroke-width="2"/>
+  <text x="0" y="32" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">מלצר</text>
+</g>
+</svg>
+  </div>
+  <div class="diagram-part" id="diagram-1" hidden>
+<svg id="diagram-svg-1" viewBox="0 0 1100 400" xmlns="http://www.w3.org/2000/svg" style="max-width:1100px;width:100%;height:auto;">
+<defs><pattern id="dot-grid-1" width="24" height="24" patternUnits="userSpaceOnUse"><circle cx="12" cy="12" r="0.8" fill="#cbd5e1"/></pattern></defs>
+<rect x="0" y="0" width="100%" height="100%" fill="#f8fafc"/>
+<rect x="0" y="0" width="100%" height="100%" fill="url(#dot-grid-1)"/>
+<rect class="system-boundary" x="240" y="50" width="620" height="200" rx="12" fill="#fff" stroke="#3b82f6" stroke-width="2.5"/>
+<path d="M240,94 v-32 a12,12 0 0 1 12,-12 h596 a12,12 0 0 1 12,12 v32 z" fill="#1e40af" class="system-title-bar" data-boundary-header="1"/>
+<text x="550.0" y="78" text-anchor="middle" font-size="14" font-weight="700" fill="#fff" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl" data-boundary-title="1">מערכת ההזמנות של מסעדת 'המלצר האוטומטי'</text>
+<line data-conn-from="cook" data-conn-to="uc-dish-avail" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+<line class="conn-hitbox" data-conn-id="as-cook-avail" data-hitbox-from="cook" data-hitbox-to="uc-dish-avail" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('as-cook-avail','assoc',event)"/>
+<line data-conn-from="cook" data-conn-to="uc-station-queue" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+<line class="conn-hitbox" data-conn-id="as-cook-queue" data-hitbox-from="cook" data-hitbox-to="uc-station-queue" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('as-cook-queue','assoc',event)"/>
+<line data-conn-from="cook" data-conn-to="uc-cancel-line" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+<line class="conn-hitbox" data-conn-id="as-cook-cancel" data-hitbox-from="cook" data-hitbox-to="uc-cancel-line" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('as-cook-cancel','assoc',event)"/>
+<line data-conn-from="shift_mgr" data-conn-to="uc-cancel-order" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+<line class="conn-hitbox" data-conn-id="as-shift-cancel" data-hitbox-from="shift_mgr" data-hitbox-to="uc-cancel-order" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('as-shift-cancel','assoc',event)"/>
+<line data-conn-from="shift_mgr" data-conn-to="uc-tables" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+<line class="conn-hitbox" data-conn-id="as-shift-tables" data-hitbox-from="shift_mgr" data-hitbox-to="uc-tables" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('as-shift-tables','assoc',event)"/>
+<g id="uc-group-uc-dish-avail" data-uc-id="uc-dish-avail" onclick="showDesc('uc-dish-avail','uc',event)" style="cursor:pointer">
+  <ellipse cx="550" cy="150" rx="106" ry="30" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+  <text x="550" y="154" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">סימון מנה כאזלה / זמינה</text>
+</g>
+<g id="uc-group-uc-station-queue" data-uc-id="uc-station-queue" onclick="showDesc('uc-station-queue','uc',event)" style="cursor:pointer">
+  <ellipse cx="550" cy="230" rx="81" ry="30" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+  <text x="550" y="234" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">טיפול בתור התחנה</text>
+</g>
+<g id="uc-group-uc-cancel-line" data-uc-id="uc-cancel-line" onclick="showDesc('uc-cancel-line','uc',event)" style="cursor:pointer">
+  <ellipse cx="550" cy="310" rx="81" ry="30" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+  <text x="550" y="314" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">ביטול שורת הזמנה</text>
+</g>
+<g id="uc-group-uc-cancel-order" data-uc-id="uc-cancel-order" onclick="showDesc('uc-cancel-order','uc',event)" style="cursor:pointer">
+  <ellipse cx="550" cy="390" rx="81" ry="30" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+  <text x="550" y="394" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">ביטול הזמנה שלמה</text>
+</g>
+<g id="uc-group-uc-tables" data-uc-id="uc-tables" onclick="showDesc('uc-tables','uc',event)" style="cursor:pointer">
+  <ellipse cx="550" cy="470" rx="92" ry="30" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+  <text x="550" y="474" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">צפייה במצב השולחנות</text>
+</g>
+<g id="actor-group-cook" data-actor-id="cook" onclick="showDesc('cook','actor',event)" style="cursor:pointer" transform="translate(160,150)">
+  <circle cx="0" cy="-60" r="14" fill="#e0f0ff" stroke="#334155" stroke-width="2"/>
+  <line x1="0" y1="-46" x2="0" y2="-10" stroke="#334155" stroke-width="2"/>
+  <line x1="-18" y1="-36" x2="18" y2="-36" stroke="#334155" stroke-width="2"/>
+  <line x1="0" y1="-10" x2="-14" y2="14" stroke="#334155" stroke-width="2"/>
+  <line x1="0" y1="-10" x2="14" y2="14" stroke="#334155" stroke-width="2"/>
+  <text x="0" y="32" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">טבח</text>
+</g>
+<g id="actor-group-shift_mgr" data-actor-id="shift_mgr" onclick="showDesc('shift_mgr','actor',event)" style="cursor:pointer" transform="translate(940,150)">
+  <circle cx="0" cy="-60" r="14" fill="#e0f0ff" stroke="#334155" stroke-width="2"/>
+  <line x1="0" y1="-46" x2="0" y2="-10" stroke="#334155" stroke-width="2"/>
+  <line x1="-18" y1="-36" x2="18" y2="-36" stroke="#334155" stroke-width="2"/>
+  <line x1="0" y1="-10" x2="-14" y2="14" stroke="#334155" stroke-width="2"/>
+  <line x1="0" y1="-10" x2="14" y2="14" stroke="#334155" stroke-width="2"/>
+  <text x="0" y="32" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">מנהל משמרת</text>
+</g>
+</svg>
+  </div>
+  <div class="diagram-part" id="diagram-2" hidden>
+<svg id="diagram-svg-2" viewBox="0 0 1100 400" xmlns="http://www.w3.org/2000/svg" style="max-width:1100px;width:100%;height:auto;">
+<defs><pattern id="dot-grid-2" width="24" height="24" patternUnits="userSpaceOnUse"><circle cx="12" cy="12" r="0.8" fill="#cbd5e1"/></pattern></defs>
+<rect x="0" y="0" width="100%" height="100%" fill="#f8fafc"/>
+<rect x="0" y="0" width="100%" height="100%" fill="url(#dot-grid-2)"/>
+<rect class="system-boundary" x="240" y="50" width="330" height="200" rx="12" fill="#fff" stroke="#3b82f6" stroke-width="2.5"/>
+<path d="M240,94 v-32 a12,12 0 0 1 12,-12 h306 a12,12 0 0 1 12,12 v32 z" fill="#1e40af" class="system-title-bar" data-boundary-header="1"/>
+<text x="405.0" y="78" text-anchor="middle" font-size="14" font-weight="700" fill="#fff" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl" data-boundary-title="1">מערכת ההזמנות של מסעדת 'המלצר האוטומטי'</text>
+<line data-conn-from="rest_mgr" data-conn-to="uc-manage-dishes" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+<line class="conn-hitbox" data-conn-id="as-mgr-dishes" data-hitbox-from="rest_mgr" data-hitbox-to="uc-manage-dishes" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('as-mgr-dishes','assoc',event)"/>
+<line data-conn-from="rest_mgr" data-conn-to="uc-manage-menus" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+<line class="conn-hitbox" data-conn-id="as-mgr-menus" data-hitbox-from="rest_mgr" data-hitbox-to="uc-manage-menus" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('as-mgr-menus','assoc',event)"/>
+<line data-conn-from="rest_mgr" data-conn-to="uc-manage-categories" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+<line class="conn-hitbox" data-conn-id="as-mgr-cats" data-hitbox-from="rest_mgr" data-hitbox-to="uc-manage-categories" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('as-mgr-cats','assoc',event)"/>
+<line data-conn-from="rest_mgr" data-conn-to="uc-daily-report" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+<line class="conn-hitbox" data-conn-id="as-mgr-report" data-hitbox-from="rest_mgr" data-hitbox-to="uc-daily-report" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('as-mgr-report','assoc',event)"/>
+<g id="uc-group-uc-manage-dishes" data-uc-id="uc-manage-dishes" onclick="showDesc('uc-manage-dishes','uc',event)" style="cursor:pointer">
+  <ellipse cx="550" cy="150" rx="70" ry="30" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+  <text x="550" y="154" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">ניהול מנות</text>
+</g>
+<g id="uc-group-uc-manage-menus" data-uc-id="uc-manage-menus" onclick="showDesc('uc-manage-menus','uc',event)" style="cursor:pointer">
+  <ellipse cx="550" cy="230" rx="70" ry="30" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+  <text x="550" y="234" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">ניהול תפריטים</text>
+</g>
+<g id="uc-group-uc-manage-categories" data-uc-id="uc-manage-categories" onclick="showDesc('uc-manage-categories','uc',event)" style="cursor:pointer">
+  <ellipse cx="550" cy="310" rx="74" ry="30" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+  <text x="550" y="314" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">ניהול קטגוריות</text>
+</g>
+<g id="uc-group-uc-daily-report" data-uc-id="uc-daily-report" onclick="showDesc('uc-daily-report','uc',event)" style="cursor:pointer">
+  <ellipse cx="550" cy="390" rx="96" ry="30" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+  <text x="550" y="394" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">הפקת דוח מכירות יומי</text>
+</g>
+<g id="actor-group-rest_mgr" data-actor-id="rest_mgr" onclick="showDesc('rest_mgr','actor',event)" style="cursor:pointer" transform="translate(650,150)">
+  <circle cx="0" cy="-60" r="14" fill="#e0f0ff" stroke="#334155" stroke-width="2"/>
+  <line x1="0" y1="-46" x2="0" y2="-10" stroke="#334155" stroke-width="2"/>
+  <line x1="-18" y1="-36" x2="18" y2="-36" stroke="#334155" stroke-width="2"/>
+  <line x1="0" y1="-10" x2="-14" y2="14" stroke="#334155" stroke-width="2"/>
+  <line x1="0" y1="-10" x2="14" y2="14" stroke="#334155" stroke-width="2"/>
+  <text x="0" y="32" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b" font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">מנהל המסעדה</text>
+</g>
+</svg>
+  </div>
+
+  <div id="assumptions-panel" class="assumptions-panel" hidden>
+    <div class="assumptions-col" id="assumptions-col">
+      <h3>הנחות</h3><ul id="assumptions-list"></ul>
+    </div>
+    <div class="assumptions-col" id="open-questions-col">
+      <h3>שאלות פתוחות</h3><ul id="open-questions-list"></ul>
+    </div>
+  </div>
+
+  <div id="user-stories-panel" class="user-stories-panel" hidden>
+    <h3>סיפורי משתמש</h3>
+    <ul id="user-stories-list"></ul>
+  </div>
+
+  <div id="uc-modal" class="uc-modal" hidden role="dialog" aria-modal="true">
+    <div class="uc-modal-backdrop" onclick="closeUcModal()"></div>
+    <div class="uc-modal-body"></div>
+  </div>
+
+  <button class="vp-export-btn" onclick="exportXMI()">Download .xmi (Visual Paradigm)</button>
+
+  <!-- DIAGRAM DATA ONLY — all functions are in uc-diagram-common.js. -->
+  <script>
+    var diagramLayouts      = [
+ {
+  "svgId": "diagram-svg-0",
+  "boundary": {
+   "x": 240,
+   "y": 50,
+   "width": 620,
+   "height": 200
+  },
+  "actors": [
+   {
+    "id": "diner",
+    "label": "סועד",
+    "side": "left",
+    "x": 160,
+    "y": 150,
+    "ucIds": [
+     "uc-view-menu",
+     "uc-place-order",
+     "uc-add-items",
+     "uc-order-status",
+     "uc-pay"
+    ]
+   },
+   {
+    "id": "cashier",
+    "label": "קופאי",
+    "side": "left",
+    "x": 160,
+    "y": 350,
+    "ucIds": [
+     "uc-pay",
+     "uc-close-day"
+    ]
+   },
+   {
+    "id": "waiter",
+    "label": "מלצר",
+    "side": "right",
+    "x": 940,
+    "y": 150,
+    "ucIds": [
+     "uc-serve"
+    ]
+   }
+  ],
+  "useCases": [
+   {
+    "id": "uc-view-menu",
+    "cx": 550,
+    "cy": 150,
+    "rx": 103,
+    "ry": 30
+   },
+   {
+    "id": "uc-place-order",
+    "cx": 550,
+    "cy": 230,
+    "rx": 70,
+    "ry": 30
+   },
+   {
+    "id": "uc-add-items",
+    "cx": 550,
+    "cy": 310,
+    "rx": 106,
+    "ry": 30
+   },
+   {
+    "id": "uc-order-status",
+    "cx": 550,
+    "cy": 390,
+    "rx": 85,
+    "ry": 30
+   },
+   {
+    "id": "uc-pay",
+    "cx": 550,
+    "cy": 470,
+    "rx": 103,
+    "ry": 30
+   },
+   {
+    "id": "uc-close-day",
+    "cx": 550,
+    "cy": 550,
+    "rx": 70,
+    "ry": 30
+   },
+   {
+    "id": "uc-serve",
+    "cx": 550,
+    "cy": 630,
+    "rx": 81,
+    "ry": 30
+   }
+  ],
+  "connections": [
+   {
+    "from": "diner",
+    "to": "uc-view-menu",
+    "type": "association"
+   },
+   {
+    "from": "diner",
+    "to": "uc-place-order",
+    "type": "association"
+   },
+   {
+    "from": "diner",
+    "to": "uc-add-items",
+    "type": "association"
+   },
+   {
+    "from": "diner",
+    "to": "uc-order-status",
+    "type": "association"
+   },
+   {
+    "from": "diner",
+    "to": "uc-pay",
+    "type": "association"
+   },
+   {
+    "from": "cashier",
+    "to": "uc-pay",
+    "type": "association"
+   },
+   {
+    "from": "cashier",
+    "to": "uc-close-day",
+    "type": "association"
+   },
+   {
+    "from": "waiter",
+    "to": "uc-serve",
+    "type": "association"
+   }
+  ],
+  "assumptions": [
+   "חברת הסליקה אינה שחקן: המערכת קוראת לה (בקשת חיוב) והיא אינה יוזמת דבר במערכת — זו תלות עיצובית (API), והיא מופיעה כצעד מערכת בתוך \"רישום תשלום עבור הזמנה\" (BR-9). היא הייתה שחקן רק אילו הייתה מפעילה אותנו בעצמה (למשל webhook של זיכוי).",
+   "למלצר אין תפקיד בהזנת הזמנות — הסועד מזמין בעצמו בסריקת QR; המלצר מסמן הגשה בלבד.",
+   "מחירים אינם יוסקייס נפרד: מחיר הבסיס הוא שדה של המנה ומחיר חריג הוא שדה של המנה-בתפריט, ולכן ניהולם נכלל ב\"ניהול מנות\" וב\"ניהול תפריטים\". הדרישה \"ניהול תפריטים, מנות, מחירים וקטגוריות\" פוצלה ליוסקייס אחד לכל ישות נתוני-אב.",
+   "דוח המכירות היומי מופק לפי דרישה על ידי מנהל המסעדה (הוא היוזם). הנחה חלופית תקפה באותה מידה: שחקן זמן ⏰ שמפיק את הדוח אוטומטית פעם ביום.",
+   "\"הגשת מנה לשולחן\" היא פעולה פיזית; הפעולה מול המערכת היא סימון המנה כהוגשה, ולכן זה שם היוסקייס.",
+   "\"ניהול תור התחנה\" נקרא כאן \"טיפול בתור התחנה\" — זה יוסקייס תפעולי אחד (התחלת הכנה + מוכן להגשה על שורות בתור), לא ניהול ישות נתוני-אב.",
+   "טיפ נרשם כשדה של התשלום ואינו יוסקייס נפרד.",
+   "מצב ההזמנה (התקבלה / בהכנה / הוגשה / שולמה) מחושב על ידי המערכת בתוך היוסקייסים שמשנים שורות ותשלומים — אין יוסקייס \"עדכון מצב הזמנה\"."
+  ],
+  "openQuestions": [
+   "האם הסועד רשאי לבטל בעצמו שורה שטרם החלה הכנתה, או שכל ביטול עובר דרך הטבח / מנהל המשמרת?",
+   "כיצד מזוהה מנהל המשמרת בעת ביטול הזמנה שלמה — קוד אישי במסך, או תחנת עבודה ייעודית?",
+   "מה קורה להזמנה פתוחה כשהסועדים עוזבים בלי לשלם — האם נדרש יוסקייס מופעל-זמן לזיהוי שולחן \"נטוש\"?"
+  ]
+ },
+ {
+  "svgId": "diagram-svg-1",
+  "boundary": {
+   "x": 240,
+   "y": 50,
+   "width": 620,
+   "height": 200
+  },
+  "actors": [
+   {
+    "id": "cook",
+    "label": "טבח",
+    "side": "left",
+    "x": 160,
+    "y": 150,
+    "ucIds": [
+     "uc-dish-avail",
+     "uc-station-queue",
+     "uc-cancel-line"
+    ]
+   },
+   {
+    "id": "shift_mgr",
+    "label": "מנהל משמרת",
+    "side": "right",
+    "x": 940,
+    "y": 150,
+    "ucIds": [
+     "uc-cancel-order",
+     "uc-tables"
+    ]
+   }
+  ],
+  "useCases": [
+   {
+    "id": "uc-dish-avail",
+    "cx": 550,
+    "cy": 150,
+    "rx": 106,
+    "ry": 30
+   },
+   {
+    "id": "uc-station-queue",
+    "cx": 550,
+    "cy": 230,
+    "rx": 81,
+    "ry": 30
+   },
+   {
+    "id": "uc-cancel-line",
+    "cx": 550,
+    "cy": 310,
+    "rx": 81,
+    "ry": 30
+   },
+   {
+    "id": "uc-cancel-order",
+    "cx": 550,
+    "cy": 390,
+    "rx": 81,
+    "ry": 30
+   },
+   {
+    "id": "uc-tables",
+    "cx": 550,
+    "cy": 470,
+    "rx": 92,
+    "ry": 30
+   }
+  ],
+  "connections": [
+   {
+    "from": "cook",
+    "to": "uc-dish-avail",
+    "type": "association"
+   },
+   {
+    "from": "cook",
+    "to": "uc-station-queue",
+    "type": "association"
+   },
+   {
+    "from": "cook",
+    "to": "uc-cancel-line",
+    "type": "association"
+   },
+   {
+    "from": "shift_mgr",
+    "to": "uc-cancel-order",
+    "type": "association"
+   },
+   {
+    "from": "shift_mgr",
+    "to": "uc-tables",
+    "type": "association"
+   }
+  ],
+  "assumptions": [],
+  "openQuestions": []
+ },
+ {
+  "svgId": "diagram-svg-2",
+  "boundary": {
+   "x": 240,
+   "y": 50,
+   "width": 330,
+   "height": 200
+  },
+  "actors": [
+   {
+    "id": "rest_mgr",
+    "label": "מנהל המסעדה",
+    "side": "right",
+    "x": 650,
+    "y": 150,
+    "ucIds": [
+     "uc-manage-dishes",
+     "uc-manage-menus",
+     "uc-manage-categories",
+     "uc-daily-report"
+    ]
+   }
+  ],
+  "useCases": [
+   {
+    "id": "uc-manage-dishes",
+    "cx": 550,
+    "cy": 150,
+    "rx": 70,
+    "ry": 30
+   },
+   {
+    "id": "uc-manage-menus",
+    "cx": 550,
+    "cy": 230,
+    "rx": 70,
+    "ry": 30
+   },
+   {
+    "id": "uc-manage-categories",
+    "cx": 550,
+    "cy": 310,
+    "rx": 74,
+    "ry": 30
+   },
+   {
+    "id": "uc-daily-report",
+    "cx": 550,
+    "cy": 390,
+    "rx": 96,
+    "ry": 30
+   }
+  ],
+  "connections": [
+   {
+    "from": "rest_mgr",
+    "to": "uc-manage-dishes",
+    "type": "association"
+   },
+   {
+    "from": "rest_mgr",
+    "to": "uc-manage-menus",
+    "type": "association"
+   },
+   {
+    "from": "rest_mgr",
+    "to": "uc-manage-categories",
+    "type": "association"
+   },
+   {
+    "from": "rest_mgr",
+    "to": "uc-daily-report",
+    "type": "association"
+   }
+  ],
+  "assumptions": [],
+  "openQuestions": []
+ }
+];
+    var actorDescriptions   = {
+ "diner": {
+  "name": "סועד",
+  "desc": "לקוח היושב ליד שולחן. סורק את קוד ה-QR שעל השולחן, מזמין בעצמו, עוקב אחר ההזמנה ומשלם."
+ },
+ "cook": {
+  "name": "טבח",
+  "desc": "אחראי תחנת הכנה (בשרית / חלבית / קינוחים). עובד מול מסך התחנה: תור, זמינות מנות וביטול שורות."
+ },
+ "waiter": {
+  "name": "מלצר",
+  "desc": "מגיש מנות מוכנות לשולחן ומסמן אותן כהוגשו."
+ },
+ "cashier": {
+  "name": "קופאי",
+  "desc": "רושם תשלומים בקופה (מזומן / כרטיס, כולל פיצול בין סועדים) ומבצע סגירת יום."
+ },
+ "shift_mgr": {
+  "name": "מנהל משמרת",
+  "desc": "אחראי על השולחנות במשמרת: צופה במצבם ומבטל הזמנות שלמות עם סיבה."
+ },
+ "rest_mgr": {
+  "name": "מנהל המסעדה",
+  "desc": "מנהל את נתוני האב — תפריטים, מנות (כולל מחירים) וקטגוריות — ומפיק את דוח המכירות היומי."
+ }
+};
+    var assocDescriptions   = {
+ "as-diner-menu": {
+  "name": "סועד ↔ צפייה בתפריט לפי שולחן",
+  "desc": "הסועד יוזם: סורק QR כדי לראות את התפריט של השולחן."
+ },
+ "as-diner-order": {
+  "name": "סועד ↔ פתיחת הזמנה",
+  "desc": "הסועד יוזם: פותח הזמנה ובוחר מנות בכמויות עם הערות."
+ },
+ "as-diner-add": {
+  "name": "סועד ↔ הוספת מנות להזמנה פתוחה",
+  "desc": "הסועד יוזם: מוסיף שורות להזמנה הפתוחה במהלך הארוחה."
+ },
+ "as-diner-status": {
+  "name": "סועד ↔ צפייה במצב ההזמנה",
+  "desc": "הסועד יוזם: בודק מה מצב המנות שהזמין."
+ },
+ "as-diner-pay": {
+  "name": "סועד ↔ רישום תשלום עבור הזמנה",
+  "desc": "הסועד יוזם תשלום עצמי מהשולחן (על חלקו או על כל החשבון) בכרטיס דרך חברת הסליקה."
+ },
+ "as-cashier-pay": {
+  "name": "קופאי ↔ רישום תשלום עבור הזמנה",
+  "desc": "הקופאי יוזם רישום תשלום בקופה — מזומן או כרטיס, כולל פיצול בין סועדים."
+ },
+ "as-cashier-close": {
+  "name": "קופאי ↔ סגירת יום",
+  "desc": "הקופאי יוזם את סגירת היום בסוף המשמרת האחרונה."
+ },
+ "as-waiter-serve": {
+  "name": "מלצר ↔ סימון מנה כהוגשה",
+  "desc": "המלצר יוזם: מסמן מנה שהגיש לשולחן."
+ },
+ "as-cook-avail": {
+  "name": "טבח ↔ סימון מנה כאזלה / זמינה",
+  "desc": "הטבח יוזם: מסמן מנה של תחנתו כאזלה או מחזיר אותה לזמינה."
+ },
+ "as-cook-queue": {
+  "name": "טבח ↔ טיפול בתור התחנה",
+  "desc": "הטבח יוזם: עובד על תור התחנה — התחלת הכנה וסימון מוכן להגשה."
+ },
+ "as-cook-cancel": {
+  "name": "טבח ↔ ביטול שורת הזמנה",
+  "desc": "הטבח יוזם: מבטל שורה בודדת עם סיבה כשהמנה אזלה אחרי שהוזמנה."
+ },
+ "as-shift-cancel": {
+  "name": "מנהל משמרת ↔ ביטול הזמנה שלמה",
+  "desc": "מנהל המשמרת יוזם: מבטל הזמנה שלמה עם סיבה (BR-7)."
+ },
+ "as-shift-tables": {
+  "name": "מנהל משמרת ↔ צפייה במצב השולחנות",
+  "desc": "מנהל המשמרת יוזם: צופה במצב 32 השולחנות."
+ },
+ "as-mgr-dishes": {
+  "name": "מנהל המסעדה ↔ ניהול מנות",
+  "desc": "מנהל המסעדה יוזם: מוסיף / מעדכן / מוחק מנות, כולל מחיר בסיס ותחנת הכנה."
+ },
+ "as-mgr-menus": {
+  "name": "מנהל המסעדה ↔ ניהול תפריטים",
+  "desc": "מנהל המסעדה יוזם: מגדיר תפריטי צהריים / ערב, שעות תוקף והמנות בכל תפריט."
+ },
+ "as-mgr-cats": {
+  "name": "מנהל המסעדה ↔ ניהול קטגוריות",
+  "desc": "מנהל המסעדה יוזם: מנהל את קטגוריות התצוגה של התפריט."
+ },
+ "as-mgr-report": {
+  "name": "מנהל המסעדה ↔ הפקת דוח מכירות יומי",
+  "desc": "מנהל המסעדה יוזם: מפיק דוח מכירות לתאריך."
+ }
+};
+    var useCaseDocs         = {
+ "uc-view-menu": {
+  "id": "uc-view-menu",
+  "name": "צפייה בתפריט לפי שולחן",
+  "primaryActor": "diner",
+  "description": "הסועד סורק את קוד ה-QR שעל השולחן ורואה את התפריט הפעיל כרגע, ובו רק מנות זמינות.",
+  "preconditions": [
+   "לשולחן מודבק קוד QR תקף.",
+   "קיים תפריט פעיל לשעה הנוכחית (צהריים / ערב)."
+  ],
+  "postconditions": [
+   "התפריט הפעיל הוצג לסועד, משויך למספר השולחן, ללא מנות שסומנו \"אזלה\"."
+  ],
+  "scenarios": [
+   {
+    "id": "sc-main",
+    "name": "מסלול מרכזי",
+    "flow": [
+     {
+      "kind": "actor",
+      "actor": "diner",
+      "text": "סורק את קוד ה-QR שעל השולחן בטלפון"
+     },
+     {
+      "kind": "system",
+      "text": "מפענחת את הקוד, מזהה את מספר השולחן ומוודאת שהוא קיים במערכת"
+     },
+     {
+      "kind": "system",
+      "text": "בוחרת את התפריט הפעיל לפי השעה הנוכחית ומסננת ממנו מנות שסומנו \"אזלה\""
+     },
+     {
+      "kind": "system",
+      "text": "מציגה את התפריט לפי קטגוריות, עם שם, תיאור ומחיר לכל מנה"
+     },
+     {
+      "kind": "actor",
+      "actor": "diner",
+      "text": "בוחר קטגוריה (ראשונות / עיקריות / שתייה / קינוחים)"
+     },
+     {
+      "kind": "system",
+      "text": "מציגה את מנות הקטגוריה כולל סימון אלרגנים"
+     }
+    ],
+    "extensions": [
+     {
+      "at": "2",
+      "text": "הקוד אינו תואם שולחן קיים",
+      "steps": [
+       "המערכת מציגה \"קוד שולחן אינו תקין — פנה למלצר\""
+      ],
+      "outcome": {
+       "kind": "terminate",
+       "text": "התפריט לא הוצג; הסועד פונה לצוות."
+      }
+     },
+     {
+      "at": "3",
+      "text": "אין תפריט פעיל לשעה הנוכחית (המטבח סגור)",
+      "steps": [
+       "המערכת מציגה את שעות הפעילות"
+      ],
+      "outcome": {
+       "kind": "terminate",
+       "text": "התפריט לא הוצג."
+      }
+     },
+     {
+      "at": "6",
+      "text": "כל מנות הקטגוריה אזלו",
+      "steps": [
+       "המערכת מציגה \"אין מנות זמינות בקטגוריה זו כרגע\""
+      ],
+      "outcome": {
+       "kind": "resume",
+       "at": "5"
+      }
+     }
+    ]
+   }
+  ],
+  "userStories": [
+   {
+    "role": "סועד",
+    "want": "לראות את התפריט בטלפון מיד כשאני מתיישב",
+    "so": "שלא אצטרך לחכות למלצר"
+   },
+   {
+    "role": "סועד",
+    "want": "לראות רק מנות שקיימות עכשיו במטבח",
+    "so": "שלא אזמין מנה שאזלה"
+   },
+   {
+    "role": "מנהל המסעדה",
+    "want": "שהתפריט המוצג יהיה תמיד התפריט הפעיל לשעה",
+    "so": "שסועדים לא יזמינו מנות מתפריט הצהריים בערב"
+   }
+  ],
+  "wireframe": "<div class=\"wf-screen\"><h3 class=\"wf-heading\">תפריט — שולחן 12 · תפריט ערב</h3><div class=\"wf-section\"><span class=\"wf-badge\">ראשונות</span> <span class=\"wf-badge\">עיקריות</span> <span class=\"wf-badge\">שתייה</span> <span class=\"wf-badge\">קינוחים</span></div><table class=\"wf-table\"><thead><tr><th>מנה</th><th>תיאור</th><th>מחיר</th><th>אלרגנים</th></tr></thead><tbody><tr><td>המבורגר 220 ג'</td><td>בקר טחון, לחמנייה</td><td>68 ₪</td><td>גלוטן</td></tr><tr><td>סלט יווני</td><td>עגבניות, מלפפון, פטה</td><td>42 ₪</td><td>חלב</td></tr><tr><td>קולה</td><td>330 מ\"ל</td><td>12 ₪</td><td>—</td></tr></tbody></table><p class=\"wf-hint\">מנות שסומנו \"אזלה\" אינן מופיעות ברשימה כלל.</p><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">התחלת הזמנה</button></div></div>"
+ },
+ "uc-place-order": {
+  "id": "uc-place-order",
+  "name": "פתיחת הזמנה",
+  "primaryActor": "diner",
+  "description": "הסועד פותח הזמנה חדשה לשולחן, בוחר מנות בכמויות עם הערה לכל שורה, ומאשר אותה; המערכת מפצלת את השורות לתחנות ההכנה.",
+  "preconditions": [
+   "התפריט הוצג לסועד (צפייה בתפריט לפי שולחן).",
+   "אין לשולחן הזמנה פתוחה (BR-1)."
+  ],
+  "postconditions": [
+   "נשמרה הזמנה במצב \"התקבלה\" המשויכת לשולחן, עם שורותיה ומחיר ליחידה שנקבע בזמן ההזמנה (BR-4).",
+   "כל שורה מופיעה בתור התחנה של המנה שלה (BR-2)."
+  ],
+  "scenarios": [
+   {
+    "id": "sc-main",
+    "name": "מסלול מרכזי",
+    "flow": [
+     {
+      "kind": "actor",
+      "actor": "diner",
+      "text": "בוחר \"התחלת הזמנה\" במסך התפריט"
+     },
+     {
+      "kind": "system",
+      "text": "מוודאת שאין לשולחן הזמנה פתוחה ופותחת הזמנה חדשה (טיוטה) לשולחן"
+     },
+     {
+      "kind": "loop",
+      "condition": "הסועד רוצה להוסיף מנות",
+      "steps": [
+       {
+        "kind": "actor",
+        "actor": "diner",
+        "text": "בוחר מנה מהתפריט ומזין כמות"
+       },
+       {
+        "kind": "actor",
+        "actor": "diner",
+        "text": "מזין הערה לשורה (למשל \"בלי בצל\", \"מדיום\")"
+       },
+       {
+        "kind": "system",
+        "text": "מוודאת שהמנה עדיין זמינה, מוסיפה שורה עם המחיר הנוכחי ומציגה סכום ביניים"
+       }
+      ]
+     },
+     {
+      "kind": "actor",
+      "actor": "diner",
+      "text": "סוקר את סיכום ההזמנה ולוחץ \"שליחת הזמנה\""
+     },
+     {
+      "kind": "system",
+      "text": "שומרת את ההזמנה במצב \"התקבלה\", קובעת מחיר ליחידה לכל שורה ומשייכת כל שורה לתחנת ההכנה של המנה"
+     },
+     {
+      "kind": "system",
+      "text": "מציגה מספר הזמנה, סכום כולל וזמן הכנה משוער"
+     }
+    ],
+    "extensions": [
+     {
+      "at": "2",
+      "text": "לשולחן כבר קיימת הזמנה פתוחה",
+      "steps": [
+       "המערכת מציגה את ההזמנה הפתוחה ומציעה להוסיף לה מנות"
+      ],
+      "outcome": {
+       "kind": "terminate",
+       "text": "לא נפתחה הזמנה חדשה; הסועד ממשיך ב\"הוספת מנות להזמנה פתוחה\"."
+      }
+     },
+     {
+      "at": "3.3",
+      "text": "המנה סומנה \"אזלה\" מאז שהתפריט הוצג",
+      "steps": [
+       "המערכת מציגה \"המנה אזלה זה עתה\" ומרעננת את התפריט"
+      ],
+      "outcome": {
+       "kind": "resume",
+       "at": "3.1"
+      }
+     },
+     {
+      "at": "3.1",
+      "text": "הכמות שהוזנה אינה חיובית",
+      "steps": [
+       "המערכת מציגה \"יש להזין כמות של 1 לפחות\""
+      ],
+      "outcome": {
+       "kind": "resume",
+       "at": "3.1"
+      }
+     },
+     {
+      "at": "4",
+      "text": "ההזמנה ריקה",
+      "steps": [
+       "המערכת מציגה \"לא נבחרו מנות\""
+      ],
+      "outcome": {
+       "kind": "resume",
+       "at": "3.1"
+      }
+     }
+    ]
+   }
+  ],
+  "userStories": [
+   {
+    "role": "סועד",
+    "want": "להזמין כמה מנות בכמויות שונות בבת אחת",
+    "so": "שכל השולחן יזמין מהטלפון שלי"
+   },
+   {
+    "role": "סועד",
+    "want": "לצרף הערה לכל מנה",
+    "so": "שהבקשה שלי (בלי בצל, אלרגיה) תגיע לתחנה הנכונה"
+   },
+   {
+    "role": "טבח",
+    "want": "שכל שורה תגיע ישירות לתור התחנה שלי",
+    "so": "שלא אפספס הזמנות ולא אראה מנות של תחנות אחרות"
+   },
+   {
+    "role": "מנהל המסעדה",
+    "want": "שמחיר השורה יינעל בזמן ההזמנה",
+    "so": "ששינוי מחיר בתפריט לא ישנה חשבון פתוח"
+   }
+  ],
+  "wireframe": "<div class=\"wf-screen\"><h3 class=\"wf-heading\">הזמנה חדשה — שולחן 12</h3><table class=\"wf-table\"><thead><tr><th>מנה</th><th>כמות</th><th>הערה</th><th>סכום</th></tr></thead><tbody><tr><td>המבורגר 220 ג'</td><td>2</td><td>אחד מדיום, אחד well</td><td>136 ₪</td></tr><tr><td>סלט יווני</td><td>1</td><td>בלי בצל</td><td>42 ₪</td></tr><tr><td>קולה</td><td>3</td><td></td><td>36 ₪</td></tr></tbody></table><div class=\"wf-row\"><label class=\"wf-label\">הוספת מנה</label><select class=\"wf-select\" disabled><option>בחר מנה מהתפריט…</option></select></div><div class=\"wf-row\"><label class=\"wf-label\">כמות</label><input class=\"wf-input\" disabled placeholder=\"1\" /></div><div class=\"wf-row\"><label class=\"wf-label\">הערה לשורה</label><input class=\"wf-input\" disabled placeholder=\"למשל: בלי בצל\" /></div><div class=\"wf-section\"><strong>סה\"כ: 214 ₪</strong></div><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">שליחת הזמנה</button><button class=\"wf-button\">הוספת מנה נוספת</button></div><p class=\"wf-hint\">לאחר השליחה ההזמנה מתפצלת אוטומטית לתחנות: בשרית / חלבית / קינוחים.</p></div>"
+ },
+ "uc-add-items": {
+  "id": "uc-add-items",
+  "name": "הוספת מנות להזמנה פתוחה",
+  "primaryActor": "diner",
+  "description": "במהלך הארוחה הסועד מוסיף שורות (למשל קינוחים) לאותה הזמנה פתוחה של השולחן.",
+  "preconditions": [
+   "לשולחן קיימת הזמנה פתוחה שאינה \"שולמה\" ואינה \"בוטלה\" (BR-8)."
+  ],
+  "postconditions": [
+   "השורות החדשות נוספו להזמנה במצב \"ממתינה\", סכום ההזמנה עודכן, והשורות הופיעו בתורי התחנות."
+  ],
+  "scenarios": [
+   {
+    "id": "sc-main",
+    "name": "מסלול מרכזי",
+    "flow": [
+     {
+      "kind": "actor",
+      "actor": "diner",
+      "text": "סורק את קוד ה-QR ובוחר \"הוספה להזמנה\""
+     },
+     {
+      "kind": "system",
+      "text": "מאתרת את ההזמנה הפתוחה של השולחן ומציגה את שורותיה הקיימות עם מצבן"
+     },
+     {
+      "kind": "loop",
+      "condition": "הסועד רוצה להוסיף מנות",
+      "steps": [
+       {
+        "kind": "actor",
+        "actor": "diner",
+        "text": "בוחר מנה, מזין כמות והערה"
+       },
+       {
+        "kind": "system",
+        "text": "מוודאת שהמנה זמינה ומוסיפה שורה חדשה במצב \"ממתינה\" עם המחיר הנוכחי"
+       }
+      ]
+     },
+     {
+      "kind": "actor",
+      "actor": "diner",
+      "text": "לוחץ \"שליחת התוספת\""
+     },
+     {
+      "kind": "system",
+      "text": "מעדכנת את סכום ההזמנה ומעבירה את השורות החדשות לתורי התחנות"
+     },
+     {
+      "kind": "system",
+      "text": "מציגה את ההזמנה המעודכנת עם הסכום החדש"
+     }
+    ],
+    "extensions": [
+     {
+      "at": "2",
+      "text": "אין לשולחן הזמנה פתוחה",
+      "steps": [
+       "המערכת מציעה לפתוח הזמנה חדשה"
+      ],
+      "outcome": {
+       "kind": "terminate",
+       "text": "לא נוספו שורות; הסועד עובר ל\"פתיחת הזמנה\"."
+      }
+     },
+     {
+      "at": "2",
+      "text": "ההזמנה כבר \"שולמה\" או \"בוטלה\"",
+      "steps": [
+       "המערכת מציגה \"לא ניתן להוסיף להזמנה סגורה\""
+      ],
+      "outcome": {
+       "kind": "terminate",
+       "text": "לא נוספו שורות."
+      }
+     },
+     {
+      "at": "3.2",
+      "text": "המנה סומנה \"אזלה\"",
+      "steps": [
+       "המערכת מציגה \"המנה אינה זמינה כרגע\""
+      ],
+      "outcome": {
+       "kind": "resume",
+       "at": "3.1"
+      }
+     }
+    ]
+   }
+  ],
+  "userStories": [
+   {
+    "role": "סועד",
+    "want": "להוסיף קינוח באמצע הארוחה בלי לפתוח הזמנה חדשה",
+    "so": "שכל הארוחה תהיה בחשבון אחד"
+   },
+   {
+    "role": "קופאי",
+    "want": "שכל התוספות ייכנסו לאותה הזמנה",
+    "so": "שהחשבון בסוף הארוחה יהיה מלא ונכון"
+   }
+  ],
+  "wireframe": "<div class=\"wf-screen\"><h3 class=\"wf-heading\">הוספה להזמנה #4871 — שולחן 12</h3><table class=\"wf-table\"><thead><tr><th>מנה</th><th>כמות</th><th>מצב</th></tr></thead><tbody><tr><td>המבורגר 220 ג'</td><td>2</td><td>הוגשה</td></tr><tr><td>סלט יווני</td><td>1</td><td>הוגשה</td></tr><tr><td>קולה</td><td>3</td><td>הוגשה</td></tr></tbody></table><div class=\"wf-row\"><label class=\"wf-label\">הוספת מנה</label><select class=\"wf-select\" disabled><option>טירמיסו</option></select></div><div class=\"wf-row\"><label class=\"wf-label\">כמות</label><input class=\"wf-input\" disabled placeholder=\"2\" /></div><div class=\"wf-row\"><label class=\"wf-label\">הערה</label><input class=\"wf-input\" disabled placeholder=\"\" /></div><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">שליחת התוספת</button><button class=\"wf-button\">ביטול</button></div><p class=\"wf-hint\">השורות החדשות מצטרפות לחשבון הקיים ונשלחות לתחנת הקינוחים.</p></div>"
+ },
+ "uc-order-status": {
+  "id": "uc-order-status",
+  "name": "צפייה במצב ההזמנה",
+  "primaryActor": "diner",
+  "description": "הסועד רואה לכל שורה בהזמנה הפתוחה של השולחן את מצבה (ממתינה / בהכנה / מוכנה / הוגשה / בוטלה) ואת הסכום המצטבר.",
+  "preconditions": [
+   "לשולחן קיימת הזמנה פתוחה."
+  ],
+  "postconditions": [
+   "מצב ההזמנה ושורותיה הוצג לסועד; לא בוצע שינוי בנתונים."
+  ],
+  "scenarios": [
+   {
+    "id": "sc-main",
+    "name": "מסלול מרכזי",
+    "flow": [
+     {
+      "kind": "actor",
+      "actor": "diner",
+      "text": "סורק את קוד ה-QR ובוחר \"מצב ההזמנה\""
+     },
+     {
+      "kind": "system",
+      "text": "מאתרת את ההזמנה הפתוחה של השולחן"
+     },
+     {
+      "kind": "system",
+      "text": "מציגה כל שורה עם כמות, הערה, מצב (ממתינה / בהכנה / מוכנה / הוגשה / בוטלה) וסיבת ביטול כשיש"
+     },
+     {
+      "kind": "system",
+      "text": "מציגה את המצב הכולל של ההזמנה, את הסכום המצטבר ואת היתרה לתשלום"
+     },
+     {
+      "kind": "actor",
+      "actor": "diner",
+      "text": "לוחץ \"רענון\" כדי לראות עדכון מהמטבח"
+     },
+     {
+      "kind": "system",
+      "text": "טוענת מחדש את מצב השורות"
+     }
+    ],
+    "extensions": [
+     {
+      "at": "2",
+      "text": "אין לשולחן הזמנה פתוחה",
+      "steps": [
+       "המערכת מציגה \"אין הזמנה פתוחה לשולחן זה\""
+      ],
+      "outcome": {
+       "kind": "terminate",
+       "text": "לא הוצג מצב הזמנה."
+      }
+     }
+    ]
+   }
+  ],
+  "userStories": [
+   {
+    "role": "סועד",
+    "want": "לדעת אם המנה שלי כבר בהכנה",
+    "so": "שלא אצטרך לשאול מלצר"
+   },
+   {
+    "role": "סועד",
+    "want": "לראות שמנה בוטלה ולמה",
+    "so": "שאוכל להזמין משהו אחר במקומה"
+   }
+  ],
+  "wireframe": "<div class=\"wf-screen\"><h3 class=\"wf-heading\">מצב ההזמנה #4871 — שולחן 12</h3><table class=\"wf-table\"><thead><tr><th>מנה</th><th>כמות</th><th>תחנה</th><th>מצב</th></tr></thead><tbody><tr><td>המבורגר 220 ג'</td><td>2</td><td>בשרית</td><td><span class=\"wf-badge\">בהכנה</span></td></tr><tr><td>סלט יווני</td><td>1</td><td>חלבית</td><td><span class=\"wf-badge\">הוגשה</span></td></tr><tr><td>טירמיסו</td><td>2</td><td>קינוחים</td><td><span class=\"wf-badge\">ממתינה</span></td></tr><tr><td>פנקייק</td><td>1</td><td>קינוחים</td><td>בוטלה — אזל</td></tr></tbody></table><div class=\"wf-section\">מצב ההזמנה: <strong>בהכנה</strong> · סכום: 250 ₪ · יתרה לתשלום: 250 ₪</div><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">רענון</button><button class=\"wf-button\">הוספת מנות</button><button class=\"wf-button\">תשלום</button></div></div>"
+ },
+ "uc-pay": {
+  "id": "uc-pay",
+  "name": "רישום תשלום עבור הזמנה",
+  "primaryActor": "cashier",
+  "description": "רישום תשלום אחד או יותר על הזמנה — בקופה על ידי הקופאי או מהשולחן על ידי הסועד — במזומן או בכרטיס דרך חברת הסליקה, עם פיצול בין כמה סועדים. ההזמנה עוברת ל\"שולמה\" כשסך התשלומים מכסה את הסכום (BR-6).",
+  "preconditions": [
+   "לשולחן קיימת הזמנה פתוחה עם יתרה לתשלום.",
+   "תשלום בכרטיס: יש תקשורת עם חברת הסליקה (BR-9)."
+  ],
+  "postconditions": [
+   "כל תשלום נרשם עם סכום, טיפ, אמצעי ואסמכתת סליקה (בכרטיס).",
+   "כשסך התשלומים ≥ סכום ההזמנה — ההזמנה במצב \"שולמה\" והשולחן פנוי."
+  ],
+  "scenarios": [
+   {
+    "id": "sc-cashier",
+    "name": "תשלום בקופה (קופאי)",
+    "flow": [
+     {
+      "kind": "actor",
+      "actor": "cashier",
+      "text": "מזין מספר שולחן במסך הקופה"
+     },
+     {
+      "kind": "system",
+      "text": "מאתרת את ההזמנה הפתוחה של השולחן ומציגה את שורותיה, הסכום הכולל והיתרה לתשלום"
+     },
+     {
+      "kind": "loop",
+      "condition": "נותרה יתרה לתשלום",
+      "steps": [
+       {
+        "kind": "actor",
+        "actor": "cashier",
+        "text": "מזין את הסכום שהסועד משלם (מלא, או חלקי בפיצול בין סועדים) ואת הטיפ"
+       },
+       {
+        "kind": "alt",
+        "condition": "אמצעי התשלום",
+        "branches": [
+         {
+          "label": "מזומן",
+          "steps": [
+           {
+            "kind": "actor",
+            "actor": "cashier",
+            "text": "מזין את הסכום שהתקבל במזומן"
+           },
+           {
+            "kind": "system",
+            "text": "מחשבת עודף ורושמת תשלום מזומן"
+           }
+          ]
+         },
+         {
+          "label": "כרטיס אשראי",
+          "steps": [
+           {
+            "kind": "actor",
+            "actor": "cashier",
+            "text": "מעביר את הכרטיס במסופון"
+           },
+           {
+            "kind": "system",
+            "text": "שולחת בקשת חיוב לחברת הסליקה ומקבלת אסמכתא"
+           },
+           {
+            "kind": "system",
+            "text": "רושמת תשלום כרטיס עם אסמכתת הסליקה"
+           }
+          ]
+         }
+        ]
+       },
+       {
+        "kind": "system",
+        "text": "מעדכנת את היתרה לתשלום ומציגה אותה"
+       }
+      ]
+     },
+     {
+      "kind": "system",
+      "text": "מסמנת את ההזמנה \"שולמה\" ומשחררת את השולחן"
+     },
+     {
+      "kind": "system",
+      "text": "מציגה קבלה מסכמת לכל התשלומים שנרשמו"
+     }
+    ],
+    "extensions": [
+     {
+      "at": "2",
+      "text": "אין לשולחן הזמנה פתוחה",
+      "steps": [
+       "המערכת מציגה \"אין הזמנה פתוחה לשולחן זה\""
+      ],
+      "outcome": {
+       "kind": "terminate",
+       "text": "לא נרשם תשלום."
+      }
+     },
+     {
+      "at": "3.1",
+      "text": "הסכום שהוזן גדול מהיתרה לתשלום",
+      "steps": [
+       "המערכת מציגה את היתרה ומבקשת סכום מתוקן"
+      ],
+      "outcome": {
+       "kind": "resume",
+       "at": "3.1"
+      }
+     },
+     {
+      "at": "3.2.2.2",
+      "text": "חברת הסליקה דוחה את החיוב",
+      "steps": [
+       "המערכת מציגה את סיבת הדחייה"
+      ],
+      "outcome": {
+       "kind": "resume",
+       "at": "3.2"
+      }
+     },
+     {
+      "at": "3.2.2.2",
+      "text": "אין תקשורת עם חברת הסליקה",
+      "steps": [
+       "המערכת מציגה \"שירות הסליקה אינו זמין — יש לשלם במזומן או לנסות שוב\""
+      ],
+      "outcome": {
+       "kind": "resume",
+       "at": "3.2"
+      }
+     }
+    ]
+   },
+   {
+    "id": "sc-diner",
+    "name": "תשלום עצמי מהשולחן (סועד)",
+    "flow": [
+     {
+      "kind": "actor",
+      "actor": "diner",
+      "text": "סורק את קוד ה-QR ובוחר \"תשלום\""
+     },
+     {
+      "kind": "system",
+      "text": "מציגה את שורות ההזמנה, הסכום הכולל והיתרה לתשלום"
+     },
+     {
+      "kind": "alt",
+      "condition": "אופן הפיצול שנבחר",
+      "branches": [
+       {
+        "label": "כל החשבון",
+        "steps": [
+         {
+          "kind": "actor",
+          "actor": "diner",
+          "text": "בוחר \"תשלום מלא\""
+         },
+         {
+          "kind": "system",
+          "text": "מציגה סכום לתשלום השווה ליתרה"
+         }
+        ]
+       },
+       {
+        "label": "המנות שלי",
+        "steps": [
+         {
+          "kind": "actor",
+          "actor": "diner",
+          "text": "מסמן את השורות שהוא משלם עליהן"
+         },
+         {
+          "kind": "system",
+          "text": "מחשבת את סכום השורות שסומנו ומסמנת אותן \"בתשלום\""
+         }
+        ]
+       },
+       {
+        "label": "חלוקה שווה",
+        "steps": [
+         {
+          "kind": "actor",
+          "actor": "diner",
+          "text": "מזין את מספר הסועדים המתחלקים"
+         },
+         {
+          "kind": "system",
+          "text": "מחלקת את היתרה במספר הסועדים ומציגה את חלקו"
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "kind": "actor",
+      "actor": "diner",
+      "text": "מזין טיפ ופרטי כרטיס אשראי"
+     },
+     {
+      "kind": "system",
+      "text": "שולחת בקשת חיוב לחברת הסליקה ומקבלת אסמכתא"
+     },
+     {
+      "kind": "system",
+      "text": "רושמת את התשלום עם האסמכתא ומעדכנת את היתרה לתשלום"
+     },
+     {
+      "kind": "system",
+      "text": "מציגה אישור תשלום ואת היתרה שנותרה לשולחן"
+     }
+    ],
+    "extensions": [
+     {
+      "at": "2",
+      "text": "אין לשולחן הזמנה פתוחה או שהיתרה אפס",
+      "steps": [
+       "המערכת מציגה \"אין יתרה לתשלום\""
+      ],
+      "outcome": {
+       "kind": "terminate",
+       "text": "לא נרשם תשלום."
+      }
+     },
+     {
+      "at": "3.2.1",
+      "text": "השורות שסומנו כבר שולמו על ידי סועד אחר",
+      "steps": [
+       "המערכת מציגה אילו שורות כבר שולמו"
+      ],
+      "outcome": {
+       "kind": "resume",
+       "at": "3"
+      }
+     },
+     {
+      "at": "5",
+      "text": "חברת הסליקה דוחה את החיוב",
+      "steps": [
+       "המערכת מציגה את סיבת הדחייה ומציעה כרטיס אחר או תשלום בקופה"
+      ],
+      "outcome": {
+       "kind": "resume",
+       "at": "4"
+      }
+     }
+    ]
+   }
+  ],
+  "userStories": [
+   {
+    "role": "סועד",
+    "want": "לשלם על המנות שלי בלבד מהטלפון",
+    "so": "שלא נצטרך לחשב חלוקה בעצמנו"
+   },
+   {
+    "role": "קופאי",
+    "want": "לרשום כמה תשלומים על הזמנה אחת",
+    "so": "שהחשבון ייסגר גם כשמשלמים בנפרד"
+   },
+   {
+    "role": "קופאי",
+    "want": "לקבל תשובת סליקה לפני שאני סוגר חשבון",
+    "so": "שלא אשחרר שולחן בלי תשלום מאושר"
+   },
+   {
+    "role": "מנהל המסעדה",
+    "want": "שהזמנה תיחשב \"שולמה\" רק כשהתשלומים מכסים את הסכום",
+    "so": "שלא יהיו חשבונות שנסגרו בחסר"
+   }
+  ],
+  "wireframe": "<div class=\"wf-screen\"><h3 class=\"wf-heading\">תשלום — הזמנה #4871 · שולחן 12</h3><div class=\"wf-section\">סכום ההזמנה: <strong>250 ₪</strong> · שולם עד כה: 100 ₪ · <strong>יתרה: 150 ₪</strong></div><table class=\"wf-table\"><thead><tr><th>#</th><th>סכום</th><th>טיפ</th><th>אמצעי</th><th>אסמכתא</th></tr></thead><tbody><tr><td>1</td><td>100 ₪</td><td>10 ₪</td><td>כרטיס</td><td>SLK-88213</td></tr></tbody></table><div class=\"wf-row\"><label class=\"wf-label\">סכום לתשלום</label><input class=\"wf-input\" disabled placeholder=\"150\" /></div><div class=\"wf-row\"><label class=\"wf-label\">טיפ</label><input class=\"wf-input\" disabled placeholder=\"0\" /></div><div class=\"wf-row\"><label class=\"wf-label\">אמצעי תשלום</label><select class=\"wf-select\" disabled><option>מזומן / כרטיס אשראי</option></select></div><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">רישום תשלום</button><button class=\"wf-button\">פיצול שווה</button><button class=\"wf-button\">ביטול</button></div><p class=\"wf-hint\">בכרטיס: המערכת ממתינה לאישור חברת הסליקה לפני רישום התשלום. כשהיתרה מגיעה ל-0 ההזמנה מסומנת \"שולמה\".</p></div>"
+ },
+ "uc-serve": {
+  "id": "uc-serve",
+  "name": "סימון מנה כהוגשה",
+  "primaryActor": "waiter",
+  "description": "המלצר רואה אילו מנות מוכנות להגשה ולאיזה שולחן, ומסמן מנה שהגיש. המערכת מחשבת מחדש את מצב ההזמנה (BR-5).",
+  "preconditions": [
+   "קיימות שורות הזמנה במצב \"מוכנה\"."
+  ],
+  "postconditions": [
+   "השורה במצב \"הוגשה\".",
+   "אם כל השורות שלא בוטלו הוגשו — ההזמנה במצב \"הוגשה\"."
+  ],
+  "scenarios": [
+   {
+    "id": "sc-main",
+    "name": "מסלול מרכזי",
+    "flow": [
+     {
+      "kind": "actor",
+      "actor": "waiter",
+      "text": "פותח את מסך \"מוכן להגשה\""
+     },
+     {
+      "kind": "system",
+      "text": "מציגה את כל השורות במצב \"מוכנה\" לפי זמן, עם מספר שולחן, תחנה, כמות והערה"
+     },
+     {
+      "kind": "actor",
+      "actor": "waiter",
+      "text": "בוחר את המנה שהגיש לשולחן ולוחץ \"הוגשה\""
+     },
+     {
+      "kind": "system",
+      "text": "מעדכנת את השורה למצב \"הוגשה\" ומסירה אותה מרשימת ההגשה"
+     },
+     {
+      "kind": "system",
+      "text": "מחשבת מחדש את מצב ההזמנה — \"הוגשה\" כאשר כל השורות שלא בוטלו הוגשו — ומציגה אותו במצב ההזמנה של הסועד"
+     }
+    ],
+    "extensions": [
+     {
+      "at": "2",
+      "text": "אין מנות מוכנות להגשה",
+      "steps": [
+       "המערכת מציגה \"אין מנות ממתינות להגשה\""
+      ],
+      "outcome": {
+       "kind": "terminate",
+       "text": "לא סומנה מנה."
+      }
+     },
+     {
+      "at": "3",
+      "text": "השורה כבר סומנה \"הוגשה\" על ידי מלצר אחר",
+      "steps": [
+       "המערכת מציגה \"המנה כבר הוגשה\" ומרעננת את הרשימה"
+      ],
+      "outcome": {
+       "kind": "resume",
+       "at": "2"
+      }
+     }
+    ]
+   }
+  ],
+  "userStories": [
+   {
+    "role": "מלצר",
+    "want": "לראות מה מוכן ולאיזה שולחן",
+    "so": "שאגיש את המנה מיד כשהיא יוצאת מהמטבח"
+   },
+   {
+    "role": "סועד",
+    "want": "שמצב ההזמנה שלי יתעדכן ל\"הוגשה\"",
+    "so": "שאדע שכל מה שהזמנתי הגיע"
+   },
+   {
+    "role": "מנהל משמרת",
+    "want": "שההזמנה תסומן \"הוגשה\" רק כשכל השורות הוגשו",
+    "so": "שאראה אילו שולחנות עדיין ממתינים למנה"
+   }
+  ],
+  "wireframe": "<div class=\"wf-screen\"><h3 class=\"wf-heading\">מוכן להגשה</h3><table class=\"wf-table\"><thead><tr><th>שולחן</th><th>מנה</th><th>כמות</th><th>תחנה</th><th>הערה</th><th>מוכן מאז</th><th></th></tr></thead><tbody><tr><td>12</td><td>המבורגר 220 ג'</td><td>2</td><td>בשרית</td><td>אחד מדיום</td><td>3 דק'</td><td><button class=\"wf-button wf-primary\">הוגשה</button></td></tr><tr><td>7</td><td>פסטה ברוטב שמנת</td><td>1</td><td>חלבית</td><td></td><td>1 דק'</td><td><button class=\"wf-button wf-primary\">הוגשה</button></td></tr></tbody></table><p class=\"wf-hint\">הרשימה מתעדכנת אוטומטית כשתחנה מסמנת מנה \"מוכן להגשה\".</p></div>"
+ },
+ "uc-close-day": {
+  "id": "uc-close-day",
+  "name": "סגירת יום",
+  "primaryActor": "cashier",
+  "description": "בסוף יום העסקים הקופאי מוודא שאין הזמנות פתוחות, משווה את ספירת המזומן לפדיון הרשום, ונועל את היום.",
+  "preconditions": [
+   "כל ההזמנות של היום במצב \"שולמה\" או \"בוטלה\"."
+  ],
+  "postconditions": [
+   "יום העסקים ננעל: סיכום הפדיון לפי אמצעי תשלום, ספירת המזומן והפער (אם היה) נשמרו; לא ניתן לרשום עוד תשלומים לתאריך זה."
+  ],
+  "scenarios": [
+   {
+    "id": "sc-main",
+    "name": "מסלול מרכזי",
+    "flow": [
+     {
+      "kind": "actor",
+      "actor": "cashier",
+      "text": "בוחר \"סגירת יום\" במסך הקופה"
+     },
+     {
+      "kind": "system",
+      "text": "מוודאת שאין הזמנות פתוחות או הזמנות עם יתרה לתשלום"
+     },
+     {
+      "kind": "system",
+      "text": "מציגה סיכום: מספר הזמנות, פדיון במזומן, פדיון בכרטיס, סך טיפים"
+     },
+     {
+      "kind": "actor",
+      "actor": "cashier",
+      "text": "מזין את סכום המזומן שנספר בקופה"
+     },
+     {
+      "kind": "system",
+      "text": "משווה את הספירה לפדיון המזומן הרשום ומציגה את הפער"
+     },
+     {
+      "kind": "actor",
+      "actor": "cashier",
+      "text": "מאשר את סגירת היום"
+     },
+     {
+      "kind": "system",
+      "text": "נועלת את יום העסקים, שומרת את הסיכום ומציגה דוח סגירה"
+     }
+    ],
+    "extensions": [
+     {
+      "at": "2",
+      "text": "קיימות הזמנות פתוחות או לא משולמות",
+      "steps": [
+       "המערכת מציגה את רשימת השולחנות הפתוחים"
+      ],
+      "outcome": {
+       "kind": "terminate",
+       "text": "היום לא נסגר; יש לסגור או לבטל את ההזמנות תחילה."
+      }
+     },
+     {
+      "at": "5",
+      "text": "קיים פער בין הספירה לפדיון",
+      "steps": [
+       "המערכת דורשת הזנת הסבר לפער"
+      ],
+      "outcome": {
+       "kind": "resume",
+       "at": "6"
+      }
+     },
+     {
+      "at": "4",
+      "text": "הוזן סכום שלילי או לא מספרי",
+      "steps": [
+       "המערכת מציגה \"יש להזין סכום תקין\""
+      ],
+      "outcome": {
+       "kind": "resume",
+       "at": "4"
+      }
+     }
+    ]
+   }
+  ],
+  "userStories": [
+   {
+    "role": "קופאי",
+    "want": "לסגור את היום בלחיצה ולראות את הפדיון לפי אמצעי",
+    "so": "שלא אצטרך לסכם פתקים ידנית"
+   },
+   {
+    "role": "מנהל המסעדה",
+    "want": "שהיום ייסגר רק כשכל ההזמנות שולמו",
+    "so": "שהדוח היומי יהיה שלם ונכון"
+   }
+  ],
+  "wireframe": "<div class=\"wf-screen\"><h3 class=\"wf-heading\">סגירת יום — 30/08/2026</h3><table class=\"wf-table\"><thead><tr><th></th><th>סכום</th></tr></thead><tbody><tr><td>מספר הזמנות</td><td>142</td></tr><tr><td>פדיון מזומן</td><td>6,240 ₪</td></tr><tr><td>פדיון כרטיס</td><td>21,880 ₪</td></tr><tr><td>טיפים</td><td>2,310 ₪</td></tr></tbody></table><div class=\"wf-row\"><label class=\"wf-label\">מזומן שנספר בקופה</label><input class=\"wf-input\" disabled placeholder=\"6,200\" /></div><div class=\"wf-row\"><label class=\"wf-label\">הסבר לפער</label><textarea class=\"wf-textarea\" disabled placeholder=\"\"></textarea></div><div class=\"wf-section\">פער: <strong>-40 ₪</strong></div><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">אישור סגירת יום</button><button class=\"wf-button\">ביטול</button></div><p class=\"wf-hint\">הכפתור פעיל רק כשאין הזמנות פתוחות.</p></div>"
+ },
+ "uc-dish-avail": {
+  "id": "uc-dish-avail",
+  "name": "סימון מנה כאזלה / זמינה",
+  "primaryActor": "cook",
+  "description": "אחראי התחנה מסמן מנה של תחנתו כ\"אזלה\" — והיא נעלמת מיד מתפריט הסועדים — או מחזיר אותה ל\"זמינה\".",
+  "preconditions": [
+   "המנה שייכת לתחנה של הטבח (BR-2)."
+  ],
+  "postconditions": [
+   "זמינות המנה עודכנה; תפריט הסועדים מציג / מסתיר אותה בהתאם (BR-3)."
+  ],
+  "scenarios": [
+   {
+    "id": "sc-out",
+    "name": "סימון מנה כאזלה",
+    "flow": [
+     {
+      "kind": "actor",
+      "actor": "cook",
+      "text": "בוחר מנה מרשימת מנות התחנה במסך התחנה"
+     },
+     {
+      "kind": "system",
+      "text": "מציגה את זמינות המנה הנוכחית ואת מספר השורות הפתוחות שלה בתור"
+     },
+     {
+      "kind": "actor",
+      "actor": "cook",
+      "text": "לוחץ \"אזלה\""
+     },
+     {
+      "kind": "system",
+      "text": "מעדכנת את המנה ל\"אזלה\" ומסירה אותה מהתפריט המוצג לסועדים"
+     },
+     {
+      "kind": "system",
+      "text": "מציגה לטבח את רשימת השורות הפתוחות שכבר הוזמנו עבור המנה, לצורך ביטולן ביוסקייס \"ביטול שורת הזמנה\""
+     }
+    ],
+    "extensions": [
+     {
+      "at": "1",
+      "text": "המנה אינה שייכת לתחנה של הטבח",
+      "steps": [
+       "המערכת מציגה \"מנה זו שייכת לתחנה אחרת\""
+      ],
+      "outcome": {
+       "kind": "terminate",
+       "text": "הזמינות לא שונתה."
+      }
+     },
+     {
+      "at": "3",
+      "text": "המנה כבר במצב \"אזלה\"",
+      "steps": [
+       "המערכת מציגה \"המנה כבר מסומנת אזלה\""
+      ],
+      "outcome": {
+       "kind": "resume",
+       "at": "1"
+      }
+     }
+    ]
+   },
+   {
+    "id": "sc-back",
+    "name": "החזרת מנה לזמינה",
+    "flow": [
+     {
+      "kind": "actor",
+      "actor": "cook",
+      "text": "בוחר מנה המסומנת \"אזלה\" ברשימת התחנה"
+     },
+     {
+      "kind": "system",
+      "text": "מציגה את המנה עם סימון \"אזלה\""
+     },
+     {
+      "kind": "actor",
+      "actor": "cook",
+      "text": "לוחץ \"זמינה\""
+     },
+     {
+      "kind": "system",
+      "text": "מעדכנת את המנה ל\"זמינה\" ומחזירה אותה לתפריט הסועדים"
+     }
+    ],
+    "extensions": [
+     {
+      "at": "1",
+      "text": "המנה אינה שייכת לתחנה של הטבח",
+      "steps": [
+       "המערכת מציגה \"מנה זו שייכת לתחנה אחרת\""
+      ],
+      "outcome": {
+       "kind": "terminate",
+       "text": "הזמינות לא שונתה."
+      }
+     }
+    ]
+   }
+  ],
+  "userStories": [
+   {
+    "role": "טבח",
+    "want": "לסמן מנה שאזלה בלחיצה אחת",
+    "so": "שסועדים לא יזמינו אותה"
+   },
+   {
+    "role": "סועד",
+    "want": "שלא אראה מנות שאזלו",
+    "so": "שלא אתאכזב אחרי שהזמנתי"
+   },
+   {
+    "role": "מנהל המסעדה",
+    "want": "שהמנה תיעלם מהתפריט באותו רגע",
+    "so": "שלא ייווצרו ביטולים מיותרים"
+   }
+  ],
+  "wireframe": "<div class=\"wf-screen\"><h3 class=\"wf-heading\">זמינות מנות — תחנה בשרית</h3><table class=\"wf-table\"><thead><tr><th>מנה</th><th>זמינות</th><th>שורות פתוחות</th><th></th></tr></thead><tbody><tr><td>המבורגר 220 ג'</td><td><span class=\"wf-badge\">זמינה</span></td><td>4</td><td><button class=\"wf-button\">אזלה</button></td></tr><tr><td>סטייק אנטריקוט</td><td>אזלה</td><td>1</td><td><button class=\"wf-button wf-primary\">זמינה</button></td></tr></tbody></table><p class=\"wf-hint\">רק מנות של התחנה שלך מוצגות.</p></div>"
+ },
+ "uc-station-queue": {
+  "id": "uc-station-queue",
+  "name": "טיפול בתור התחנה",
+  "primaryActor": "cook",
+  "description": "אחראי התחנה עובד על תור השורות של תחנתו לפי סדר הגעה: מסמן \"התחלת הכנה\" ולאחר מכן \"מוכן להגשה\".",
+  "preconditions": [
+   "הטבח משויך לתחנה במשמרת הנוכחית.",
+   "קיימות שורות הזמנה במצב \"ממתינה\" או \"בהכנה\" בתחנה."
+  ],
+  "postconditions": [
+   "השורות שטופלו במצב \"בהכנה\" / \"מוכנה\"; זמני ההתחלה והסיום נרשמו לחישוב זמן הכנה ממוצע."
+  ],
+  "scenarios": [
+   {
+    "id": "sc-main",
+    "name": "מסלול מרכזי",
+    "flow": [
+     {
+      "kind": "actor",
+      "actor": "cook",
+      "text": "פותח את מסך התחנה"
+     },
+     {
+      "kind": "system",
+      "text": "מציגה את תור התחנה: שורות במצב \"ממתינה\" ו\"בהכנה\" לפי זמן ההזמנה, עם שולחן, כמות והערה"
+     },
+     {
+      "kind": "loop",
+      "condition": "יש שורות בתור",
+      "steps": [
+       {
+        "kind": "actor",
+        "actor": "cook",
+        "text": "בוחר את השורה הבאה ולוחץ \"התחלת הכנה\""
+       },
+       {
+        "kind": "system",
+        "text": "מעדכנת את השורה ל\"בהכנה\", רושמת זמן התחלה ומעדכנת את מצב ההזמנה ל\"בהכנה\""
+       },
+       {
+        "kind": "actor",
+        "actor": "cook",
+        "text": "לוחץ \"מוכן להגשה\" כשהמנה מוכנה"
+       },
+       {
+        "kind": "system",
+        "text": "מעדכנת את השורה ל\"מוכנה\", רושמת זמן סיום ומציגה אותה במסך ההגשה של המלצרים"
+       }
+      ]
+     }
+    ],
+    "extensions": [
+     {
+      "at": "2",
+      "text": "התור ריק",
+      "steps": [
+       "המערכת מציגה \"אין הזמנות ממתינות\""
+      ],
+      "outcome": {
+       "kind": "terminate",
+       "text": "לא טופלו שורות."
+      }
+     },
+     {
+      "at": "3.1",
+      "text": "השורה בוטלה בינתיים (על ידי טבח או מנהל משמרת)",
+      "steps": [
+       "המערכת מסירה את השורה מהתור ומציגה \"השורה בוטלה\""
+      ],
+      "outcome": {
+       "kind": "resume",
+       "at": "3.1"
+      }
+     },
+     {
+      "at": "3.3",
+      "text": "המנה אזלה באמצע ההכנה",
+      "steps": [
+       "המערכת מפנה לביטול שורת ההזמנה עם סיבה"
+      ],
+      "outcome": {
+       "kind": "terminate",
+       "text": "השורה נותרת \"בהכנה\" עד לביטול."
+      }
+     }
+    ]
+   }
+  ],
+  "userStories": [
+   {
+    "role": "טבח",
+    "want": "לראות רק את השורות של התחנה שלי לפי סדר הגעה",
+    "so": "שאדע מה להכין עכשיו"
+   },
+   {
+    "role": "טבח",
+    "want": "לראות את ההערות של הסועד ליד כל שורה",
+    "so": "שאכין את המנה כפי שביקש"
+   },
+   {
+    "role": "מלצר",
+    "want": "שמנה שסומנה \"מוכן\" תופיע אצלי מיד",
+    "so": "שאגיש אותה חמה"
+   },
+   {
+    "role": "מנהל המסעדה",
+    "want": "שזמני ההתחלה והסיום יירשמו",
+    "so": "שאדע את זמן ההכנה הממוצע לפי תחנה ושעה"
+   }
+  ],
+  "wireframe": "<div class=\"wf-screen\"><h3 class=\"wf-heading\">תור התחנה — בשרית · 19:42</h3><table class=\"wf-table\"><thead><tr><th>#</th><th>שולחן</th><th>מנה</th><th>כמות</th><th>הערה</th><th>הוזמן</th><th>מצב</th><th></th></tr></thead><tbody><tr><td>1</td><td>12</td><td>המבורגר 220 ג'</td><td>2</td><td>אחד מדיום, אחד well</td><td>19:31</td><td><span class=\"wf-badge\">בהכנה</span></td><td><button class=\"wf-button wf-primary\">מוכן להגשה</button></td></tr><tr><td>2</td><td>7</td><td>סטייק אנטריקוט</td><td>1</td><td>מדיום-רייר</td><td>19:35</td><td>ממתינה</td><td><button class=\"wf-button\">התחלת הכנה</button></td></tr><tr><td>3</td><td>3</td><td>כנפיים</td><td>1</td><td></td><td>19:38</td><td>ממתינה</td><td><button class=\"wf-button\">התחלת הכנה</button></td></tr></tbody></table><p class=\"wf-hint\">המסך מתעדכן תוך 2 שניות מרגע ההזמנה.</p></div>"
+ },
+ "uc-cancel-line": {
+  "id": "uc-cancel-line",
+  "name": "ביטול שורת הזמנה",
+  "primaryActor": "cook",
+  "description": "אחראי התחנה מבטל שורה בודדת (למשל כשהמנה אזלה אחרי שהוזמנה) ורושם סיבה; הסועד רואה זאת במצב ההזמנה.",
+  "preconditions": [
+   "השורה שייכת לתחנה של הטבח ועדיין לא הוגשה."
+  ],
+  "postconditions": [
+   "השורה במצב \"בוטלה\" עם סיבה; סכום ההזמנה עודכן; השורה הוסרה מהתור."
+  ],
+  "scenarios": [
+   {
+    "id": "sc-main",
+    "name": "מסלול מרכזי",
+    "flow": [
+     {
+      "kind": "actor",
+      "actor": "cook",
+      "text": "בוחר שורה בתור התחנה ולוחץ \"ביטול שורה\""
+     },
+     {
+      "kind": "system",
+      "text": "מציגה את פרטי השורה (שולחן, מנה, כמות) ומבקשת סיבה"
+     },
+     {
+      "kind": "actor",
+      "actor": "cook",
+      "text": "בוחר סיבה (המנה אזלה / תקלה במטבח / אחר) ומזין הערה"
+     },
+     {
+      "kind": "system",
+      "text": "מוודאת שהשורה טרם הוגשה"
+     },
+     {
+      "kind": "system",
+      "text": "מעדכנת את השורה ל\"בוטלה\" עם הסיבה, מסירה אותה מהתור ומחשבת מחדש את סכום ההזמנה"
+     },
+     {
+      "kind": "system",
+      "text": "מציגה את הביטול והסיבה במצב ההזמנה של הסועד"
+     }
+    ],
+    "extensions": [
+     {
+      "at": "3",
+      "text": "לא נבחרה סיבה",
+      "steps": [
+       "המערכת מציגה \"חובה לציין סיבת ביטול\""
+      ],
+      "outcome": {
+       "kind": "resume",
+       "at": "3"
+      }
+     },
+     {
+      "at": "4",
+      "text": "השורה כבר סומנה \"הוגשה\"",
+      "steps": [
+       "המערכת מציגה \"לא ניתן לבטל שורה שהוגשה — פנה למנהל המשמרת\""
+      ],
+      "outcome": {
+       "kind": "terminate",
+       "text": "השורה לא בוטלה."
+      }
+     }
+    ]
+   }
+  ],
+  "userStories": [
+   {
+    "role": "טבח",
+    "want": "לבטל שורה של מנה שאזלה ולרשום למה",
+    "so": "שהסועד יידע מיד ויזמין משהו אחר"
+   },
+   {
+    "role": "קופאי",
+    "want": "ששורה מבוטלת לא תיכלל בחשבון",
+    "so": "שלא אגבה על מנה שלא הוגשה"
+   },
+   {
+    "role": "מנהל המסעדה",
+    "want": "שכל ביטול יירשם עם סיבה",
+    "so": "שאוכל לנתח ביטולים לפי סיבה"
+   }
+  ],
+  "wireframe": "<div class=\"wf-screen\"><h3 class=\"wf-heading\">ביטול שורה — שולחן 12 · פנקייק × 1</h3><div class=\"wf-row\"><label class=\"wf-label\">סיבת הביטול</label><select class=\"wf-select\" disabled><option>המנה אזלה / תקלה במטבח / אחר</option></select></div><div class=\"wf-row\"><label class=\"wf-label\">הערה</label><textarea class=\"wf-textarea\" disabled placeholder=\"\"></textarea></div><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">אישור ביטול</button><button class=\"wf-button\">חזרה לתור</button></div><p class=\"wf-hint\">הביטול מוצג לסועד במסך מצב ההזמנה ומוריד את הסכום מהחשבון.</p></div>"
+ },
+ "uc-cancel-order": {
+  "id": "uc-cancel-order",
+  "name": "ביטול הזמנה שלמה",
+  "primaryActor": "shift_mgr",
+  "description": "מנהל המשמרת מבטל הזמנה שלמה של שולחן עם סיבה (BR-7); כל השורות מבוטלות, מוסרות מהתורים והשולחן משתחרר.",
+  "preconditions": [
+   "לשולחן קיימת הזמנה פתוחה.",
+   "המשתמש הוא מנהל משמרת."
+  ],
+  "postconditions": [
+   "ההזמנה וכל שורותיה במצב \"בוטלה\" עם סיבה; השורות הוסרו מתורי התחנות; השולחן פנוי."
+  ],
+  "scenarios": [
+   {
+    "id": "sc-main",
+    "name": "מסלול מרכזי",
+    "flow": [
+     {
+      "kind": "actor",
+      "actor": "shift_mgr",
+      "text": "בוחר שולחן במסך מצב השולחנות ולוחץ \"ביטול הזמנה\""
+     },
+     {
+      "kind": "system",
+      "text": "מציגה את ההזמנה הפתוחה של השולחן עם שורותיה, מצבן והתשלומים שנרשמו"
+     },
+     {
+      "kind": "actor",
+      "actor": "shift_mgr",
+      "text": "בוחר סיבה (הסועדים עזבו / תלונה / טעות בהזמנה / אחר) ומזין הסבר"
+     },
+     {
+      "kind": "system",
+      "text": "מוודאת שלא נרשמו תשלומים על ההזמנה"
+     },
+     {
+      "kind": "system",
+      "text": "מעדכנת את ההזמנה וכל שורותיה ל\"בוטלה\" עם הסיבה, מסירה את השורות מתורי התחנות ומשחררת את השולחן"
+     },
+     {
+      "kind": "system",
+      "text": "מציגה אישור ביטול"
+     }
+    ],
+    "extensions": [
+     {
+      "at": "2",
+      "text": "אין לשולחן הזמנה פתוחה",
+      "steps": [
+       "המערכת מציגה \"אין הזמנה פתוחה לשולחן זה\""
+      ],
+      "outcome": {
+       "kind": "terminate",
+       "text": "לא בוטלה הזמנה."
+      }
+     },
+     {
+      "at": "3",
+      "text": "לא נבחרה סיבה",
+      "steps": [
+       "המערכת מציגה \"חובה לציין סיבת ביטול\""
+      ],
+      "outcome": {
+       "kind": "resume",
+       "at": "3"
+      }
+     },
+     {
+      "at": "4",
+      "text": "על ההזמנה כבר נרשמו תשלומים",
+      "steps": [
+       "המערכת מציגה את התשלומים ומפנה לקופאי לביטול/זיכוי התשלום תחילה"
+      ],
+      "outcome": {
+       "kind": "terminate",
+       "text": "ההזמנה לא בוטלה."
+      }
+     }
+    ]
+   }
+  ],
+  "userStories": [
+   {
+    "role": "מנהל משמרת",
+    "want": "לבטל הזמנה של שולחן שעזב",
+    "so": "שהשולחן יתפנה והמטבח יפסיק להכין"
+   },
+   {
+    "role": "טבח",
+    "want": "ששורות של הזמנה מבוטלת ייעלמו מהתור שלי",
+    "so": "שלא אכין מנות לשולחן ריק"
+   },
+   {
+    "role": "מנהל המסעדה",
+    "want": "שכל ביטול הזמנה יירשם עם סיבה ועל ידי מי",
+    "so": "שאוכל לבקר ביטולים"
+   }
+  ],
+  "wireframe": "<div class=\"wf-screen\"><h3 class=\"wf-heading\">ביטול הזמנה #4871 — שולחן 12</h3><table class=\"wf-table\"><thead><tr><th>מנה</th><th>כמות</th><th>מצב</th></tr></thead><tbody><tr><td>המבורגר 220 ג'</td><td>2</td><td>בהכנה</td></tr><tr><td>סלט יווני</td><td>1</td><td>הוגשה</td></tr></tbody></table><div class=\"wf-section\">תשלומים שנרשמו: <strong>0 ₪</strong></div><div class=\"wf-row\"><label class=\"wf-label\">סיבת הביטול</label><select class=\"wf-select\" disabled><option>הסועדים עזבו / תלונה / טעות / אחר</option></select></div><div class=\"wf-row\"><label class=\"wf-label\">הסבר</label><textarea class=\"wf-textarea\" disabled placeholder=\"\"></textarea></div><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">אישור ביטול ההזמנה</button><button class=\"wf-button\">חזרה</button></div><p class=\"wf-hint\">פעולה זו זמינה למנהל משמרת בלבד ואינה ניתנת לביטול.</p></div>"
+ },
+ "uc-tables": {
+  "id": "uc-tables",
+  "name": "צפייה במצב השולחנות",
+  "primaryActor": "shift_mgr",
+  "description": "מנהל המשמרת רואה את 32 השולחנות ומצבם (פנוי / הזמנה פתוחה / ממתין לתשלום), ויכול להיכנס לפירוט ההזמנה ולהיסטוריית השולחן במשמרת.",
+  "preconditions": [
+   "המשתמש הוא מנהל משמרת."
+  ],
+  "postconditions": [
+   "מצב השולחנות הוצג; לא בוצע שינוי בנתונים."
+  ],
+  "scenarios": [
+   {
+    "id": "sc-main",
+    "name": "מסלול מרכזי",
+    "flow": [
+     {
+      "kind": "actor",
+      "actor": "shift_mgr",
+      "text": "פותח את מסך \"מצב השולחנות\""
+     },
+     {
+      "kind": "system",
+      "text": "מציגה מפה של 32 השולחנות (אולם / חצר) עם צבע לפי מצב: פנוי, הזמנה פתוחה, הוגשה, ממתין לתשלום"
+     },
+     {
+      "kind": "system",
+      "text": "מציגה לכל שולחן תפוס את זמן פתיחת ההזמנה ואת מספר השורות שטרם הוגשו"
+     },
+     {
+      "kind": "actor",
+      "actor": "shift_mgr",
+      "text": "בוחר שולחן"
+     },
+     {
+      "kind": "system",
+      "text": "מציגה את ההזמנה הפתוחה של השולחן עם מצב כל שורה"
+     },
+     {
+      "kind": "actor",
+      "actor": "shift_mgr",
+      "text": "בוחר \"היסטוריית השולחן במשמרת\""
+     },
+     {
+      "kind": "system",
+      "text": "מציגה את כל ההזמנות שנפתחו בשולחן במשמרת הנוכחית"
+     }
+    ],
+    "extensions": [
+     {
+      "at": "5",
+      "text": "השולחן פנוי — אין הזמנה פתוחה",
+      "steps": [
+       "המערכת מציגה \"שולחן פנוי\" ואת ההזמנה האחרונה שנסגרה בו"
+      ],
+      "outcome": {
+       "kind": "resume",
+       "at": "2"
+      }
+     }
+    ]
+   }
+  ],
+  "userStories": [
+   {
+    "role": "מנהל משמרת",
+    "want": "לראות במבט אחד אילו שולחנות תפוסים ומה חסר להם",
+    "so": "שאזהה שולחן שמחכה יותר מדי"
+   },
+   {
+    "role": "מנהל משמרת",
+    "want": "לראות מה קרה בשולחן 12 לאורך הערב",
+    "so": "שאוכל לטפל בתלונה"
+   },
+   {
+    "role": "מלצר",
+    "want": "לדעת אילו שולחנות ממתינים לתשלום",
+    "so": "שאפנה שולחנות מהר יותר"
+   }
+  ],
+  "wireframe": "<div class=\"wf-screen\"><h3 class=\"wf-heading\">מצב השולחנות — משמרת ערב</h3><div class=\"wf-section\"><span class=\"wf-badge\">פנוי: 11</span> <span class=\"wf-badge\">הזמנה פתוחה: 14</span> <span class=\"wf-badge\">הוגשה: 4</span> <span class=\"wf-badge\">ממתין לתשלום: 3</span></div><div class=\"wf-image-box\">[מפת 32 השולחנות — אולם / חצר, צבע לפי מצב]</div><table class=\"wf-table\"><thead><tr><th>שולחן</th><th>מצב</th><th>נפתחה</th><th>טרם הוגשו</th><th>סכום</th></tr></thead><tbody><tr><td>12</td><td>בהכנה</td><td>19:31</td><td>2</td><td>250 ₪</td></tr><tr><td>7</td><td>ממתין לתשלום</td><td>18:55</td><td>0</td><td>312 ₪</td></tr></tbody></table><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">פירוט הזמנה</button><button class=\"wf-button\">היסטוריית שולחן</button><button class=\"wf-button\">ביטול הזמנה</button></div></div>"
+ },
+ "uc-manage-dishes": {
+  "id": "uc-manage-dishes",
+  "name": "ניהול מנות",
+  "primaryActor": "rest_mgr",
+  "description": "מנהל המסעדה מנהל את נתוני האב של מנות: הוספה, צפייה, עדכון ומחיקה. המחיר הוא שדה של המנה (ומחיר חריג — של המנה בתפריט), ולכן ניהול מחירים הוא חלק מיוסקייס זה.",
+  "preconditions": [
+   "המשתמש הוא מנהל המסעדה."
+  ],
+  "postconditions": [
+   "רשימת מנות מעודכנת; השינוי משתקף בתפריט הסועדים."
+  ],
+  "scenarios": [
+   {
+    "id": "sc-add",
+    "name": "הוספת מנה",
+    "flow": [
+     {
+      "kind": "actor",
+      "actor": "rest_mgr",
+      "text": "בוחר \"מנה חדשה\" במסך ניהול מנות"
+     },
+     {
+      "kind": "actor",
+      "actor": "rest_mgr",
+      "text": "מזין שם, תיאור, מחיר בסיס, תחנת הכנה (אחת בלבד), קטגוריה ואלרגנים"
+     },
+     {
+      "kind": "system",
+      "text": "מוודאת שהשדות החובה מולאו ושהשם אינו קיים כבר"
+     },
+     {
+      "kind": "system",
+      "text": "שומרת את המנה ומציגה אותה ברשימה"
+     }
+    ],
+    "extensions": [
+     {
+      "at": "3",
+      "text": "שדה חובה חסר או שם כפול",
+      "steps": [
+       "המערכת מסמנת את השדה השגוי ומציגה הודעה"
+      ],
+      "outcome": {
+       "kind": "resume",
+       "at": "2"
+      }
+     }
+    ]
+   },
+   {
+    "id": "sc-view",
+    "name": "צפייה במנות",
+    "flow": [
+     {
+      "kind": "actor",
+      "actor": "rest_mgr",
+      "text": "פותח את מסך ניהול מנות"
+     },
+     {
+      "kind": "system",
+      "text": "מציגה את רשימת מנות עם קוד, שם, מחיר בסיס, תחנת הכנה, קטגוריה, זמינות ואלרגנים"
+     },
+     {
+      "kind": "actor",
+      "actor": "rest_mgr",
+      "text": "מסנן או מחפש לפי שם"
+     },
+     {
+      "kind": "system",
+      "text": "מציגה את הרשומות התואמות"
+     }
+    ],
+    "extensions": [
+     {
+      "at": "4",
+      "text": "אין רשומות תואמות לחיפוש",
+      "steps": [
+       "המערכת מציגה \"לא נמצאו תוצאות\""
+      ],
+      "outcome": {
+       "kind": "resume",
+       "at": "3"
+      }
+     }
+    ]
+   },
+   {
+    "id": "sc-update",
+    "name": "עדכון מנה",
+    "flow": [
+     {
+      "kind": "actor",
+      "actor": "rest_mgr",
+      "text": "בוחר מנה מהרשימה ולוחץ \"עריכה\""
+     },
+     {
+      "kind": "system",
+      "text": "מציגה את פרטי המנה לעריכה"
+     },
+     {
+      "kind": "actor",
+      "actor": "rest_mgr",
+      "text": "משנה את השדות הרצויים ולוחץ \"שמירה\""
+     },
+     {
+      "kind": "system",
+      "text": "מוודאת את תקינות השדות"
+     },
+     {
+      "kind": "system",
+      "text": "שומרת את השינוי ומעדכנת את תפריט הסועדים בהתאם"
+     }
+    ],
+    "extensions": [
+     {
+      "at": "4",
+      "text": "ערך לא תקין (למשל מחיר שלילי או שדה חובה ריק)",
+      "steps": [
+       "המערכת מסמנת את השדה ומציגה הודעה"
+      ],
+      "outcome": {
+       "kind": "resume",
+       "at": "3"
+      }
+     }
+    ]
+   },
+   {
+    "id": "sc-delete",
+    "name": "מחיקת מנה",
+    "flow": [
+     {
+      "kind": "actor",
+      "actor": "rest_mgr",
+      "text": "בוחר מנה מהרשימה ולוחץ \"מחיקה\""
+     },
+     {
+      "kind": "system",
+      "text": "מוודאת שהמנה אינה מופיעה בתפריט פעיל ואינה בהזמנה פתוחה"
+     },
+     {
+      "kind": "system",
+      "text": "מבקשת אישור למחיקה"
+     },
+     {
+      "kind": "actor",
+      "actor": "rest_mgr",
+      "text": "מאשר"
+     },
+     {
+      "kind": "system",
+      "text": "מוחקת את המנה ומעדכנת את הרשימה"
+     }
+    ],
+    "extensions": [
+     {
+      "at": "2",
+      "text": "המנה מופיעה בתפריט פעיל או בהזמנה פתוחה",
+      "steps": [
+       "המערכת מציגה את הסיבה ומציעה להשבית במקום למחוק"
+      ],
+      "outcome": {
+       "kind": "terminate",
+       "text": "המנה לא נמחקה."
+      }
+     },
+     {
+      "at": "4",
+      "text": "מנהל המסעדה מבטל את האישור",
+      "outcome": {
+       "kind": "resume",
+       "at": "1"
+      }
+     }
+    ]
+   }
+  ],
+  "userStories": [
+   {
+    "role": "מנהל המסעדה",
+    "want": "להוסיף ולעדכן מנות בעצמי",
+    "so": "שהתפריט יהיה עדכני בלי מתכנת"
+   },
+   {
+    "role": "מנהל המסעדה",
+    "want": "לקבוע לכל מנה תחנת הכנה אחת",
+    "so": "שכל שורה תגיע לתחנה הנכונה"
+   },
+   {
+    "role": "מנהל המסעדה",
+    "want": "לעדכן מחיר בסיס של מנה",
+    "so": "שהמחיר בתפריט יהיה נכון מהמשמרת הבאה"
+   },
+   {
+    "role": "סועד",
+    "want": "לראות אלרגנים ליד כל מנה",
+    "so": "שאדע ממה להיזהר"
+   }
+  ],
+  "wireframe": "<div class=\"wf-screen\"><h3 class=\"wf-heading\">ניהול מנות</h3><table class=\"wf-table\"><thead><tr><th>קוד</th><th>שם</th><th>מחיר בסיס</th><th>תחנה</th><th>קטגוריה</th><th>אלרגנים</th></tr></thead><tbody><tr><td>M-101</td><td>המבורגר 220 ג'</td><td>68 ₪</td><td>בשרית</td><td>עיקריות</td><td>גלוטן</td></tr><tr><td>D-204</td><td>סלט יווני</td><td>42 ₪</td><td>חלבית</td><td>ראשונות</td><td>חלב</td></tr><tr><td>S-310</td><td>טירמיסו</td><td>38 ₪</td><td>קינוחים</td><td>קינוחים</td><td>חלב, ביצים</td></tr></tbody></table><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">מנה חדשה</button><button class=\"wf-button\">עריכה</button><button class=\"wf-button\">מחיקה</button></div><p class=\"wf-hint\">שינוי נשמר ומשתקף מיד בתפריט הסועדים.</p></div>"
+ },
+ "uc-manage-menus": {
+  "id": "uc-manage-menus",
+  "name": "ניהול תפריטים",
+  "primaryActor": "rest_mgr",
+  "description": "מנהל המסעדה מנהל את נתוני האב של תפריטים: הוספה, צפייה, עדכון ומחיקה. שעות התוקף קובעות איזה תפריט מוצג לסועד.",
+  "preconditions": [
+   "המשתמש הוא מנהל המסעדה."
+  ],
+  "postconditions": [
+   "רשימת תפריטים מעודכנת; השינוי משתקף בתפריט הסועדים."
+  ],
+  "scenarios": [
+   {
+    "id": "sc-add",
+    "name": "הוספת תפריט",
+    "flow": [
+     {
+      "kind": "actor",
+      "actor": "rest_mgr",
+      "text": "בוחר \"תפריט חדש\" במסך ניהול תפריטים"
+     },
+     {
+      "kind": "actor",
+      "actor": "rest_mgr",
+      "text": "מזין שם התפריט (צהריים / ערב), שעות תוקף, ובוחר את המנות הכלולות בו עם מחיר חריג לכל מנה כשנדרש"
+     },
+     {
+      "kind": "system",
+      "text": "מוודאת שהשדות החובה מולאו ושהשם אינו קיים כבר"
+     },
+     {
+      "kind": "system",
+      "text": "שומרת את התפריט ומציגה אותו ברשימה"
+     }
+    ],
+    "extensions": [
+     {
+      "at": "3",
+      "text": "שדה חובה חסר או שם כפול",
+      "steps": [
+       "המערכת מסמנת את השדה השגוי ומציגה הודעה"
+      ],
+      "outcome": {
+       "kind": "resume",
+       "at": "2"
+      }
+     }
+    ]
+   },
+   {
+    "id": "sc-view",
+    "name": "צפייה בתפריטים",
+    "flow": [
+     {
+      "kind": "actor",
+      "actor": "rest_mgr",
+      "text": "פותח את מסך ניהול תפריטים"
+     },
+     {
+      "kind": "system",
+      "text": "מציגה את רשימת תפריטים עם שם, שעות תוקף ומספר המנות בו"
+     },
+     {
+      "kind": "actor",
+      "actor": "rest_mgr",
+      "text": "מסנן או מחפש לפי שם"
+     },
+     {
+      "kind": "system",
+      "text": "מציגה את הרשומות התואמות"
+     }
+    ],
+    "extensions": [
+     {
+      "at": "4",
+      "text": "אין רשומות תואמות לחיפוש",
+      "steps": [
+       "המערכת מציגה \"לא נמצאו תוצאות\""
+      ],
+      "outcome": {
+       "kind": "resume",
+       "at": "3"
+      }
+     }
+    ]
+   },
+   {
+    "id": "sc-update",
+    "name": "עדכון תפריט",
+    "flow": [
+     {
+      "kind": "actor",
+      "actor": "rest_mgr",
+      "text": "בוחר תפריט מהרשימה ולוחץ \"עריכה\""
+     },
+     {
+      "kind": "system",
+      "text": "מציגה את פרטי התפריט לעריכה"
+     },
+     {
+      "kind": "actor",
+      "actor": "rest_mgr",
+      "text": "משנה את השדות הרצויים ולוחץ \"שמירה\""
+     },
+     {
+      "kind": "system",
+      "text": "מוודאת את תקינות השדות"
+     },
+     {
+      "kind": "system",
+      "text": "שומרת את השינוי ומעדכנת את תפריט הסועדים בהתאם"
+     }
+    ],
+    "extensions": [
+     {
+      "at": "4",
+      "text": "ערך לא תקין (למשל מחיר שלילי או שדה חובה ריק)",
+      "steps": [
+       "המערכת מסמנת את השדה ומציגה הודעה"
+      ],
+      "outcome": {
+       "kind": "resume",
+       "at": "3"
+      }
+     }
+    ]
+   },
+   {
+    "id": "sc-delete",
+    "name": "מחיקת תפריט",
+    "flow": [
+     {
+      "kind": "actor",
+      "actor": "rest_mgr",
+      "text": "בוחר תפריט מהרשימה ולוחץ \"מחיקה\""
+     },
+     {
+      "kind": "system",
+      "text": "מוודאת שהתפריט אינו פעיל כרגע"
+     },
+     {
+      "kind": "system",
+      "text": "מבקשת אישור למחיקה"
+     },
+     {
+      "kind": "actor",
+      "actor": "rest_mgr",
+      "text": "מאשר"
+     },
+     {
+      "kind": "system",
+      "text": "מוחקת את התפריט ומעדכנת את הרשימה"
+     }
+    ],
+    "extensions": [
+     {
+      "at": "2",
+      "text": "התפריט פעיל כרגע (בתוך שעות התוקף)",
+      "steps": [
+       "המערכת מציגה את הסיבה ומציעה להשבית במקום למחוק"
+      ],
+      "outcome": {
+       "kind": "terminate",
+       "text": "התפריט לא נמחק."
+      }
+     },
+     {
+      "at": "4",
+      "text": "מנהל המסעדה מבטל את האישור",
+      "outcome": {
+       "kind": "resume",
+       "at": "1"
+      }
+     }
+    ]
+   }
+  ],
+  "userStories": [
+   {
+    "role": "מנהל המסעדה",
+    "want": "להוסיף ולעדכן תפריטים בעצמי",
+    "so": "שהתפריט יהיה עדכני בלי מתכנת"
+   },
+   {
+    "role": "מנהל המסעדה",
+    "want": "שאותה מנה תופיע בתפריט צהריים ובתפריט ערב במחיר שונה",
+    "so": "שאקבע מחירים לפי שעה"
+   },
+   {
+    "role": "סועד",
+    "want": "שהתפריט יתחלף אוטומטית לפי השעה",
+    "so": "שלא אזמין מנת צהריים בערב"
+   }
+  ],
+  "wireframe": "<div class=\"wf-screen\"><h3 class=\"wf-heading\">ניהול תפריטים</h3><table class=\"wf-table\"><thead><tr><th>תפריט</th><th>שעות</th><th>מנות</th><th>פעיל</th></tr></thead><tbody><tr><td>צהריים</td><td>11:30–17:00</td><td>34</td><td>כן</td></tr><tr><td>ערב</td><td>17:00–23:30</td><td>52</td><td>כן</td></tr><tr><td>חג</td><td>—</td><td>40</td><td>לא</td></tr></tbody></table><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">תפריט חדש</button><button class=\"wf-button\">עריכה</button><button class=\"wf-button\">מחיקה</button></div><p class=\"wf-hint\">שינוי נשמר ומשתקף מיד בתפריט הסועדים.</p></div>"
+ },
+ "uc-manage-categories": {
+  "id": "uc-manage-categories",
+  "name": "ניהול קטגוריות",
+  "primaryActor": "rest_mgr",
+  "description": "מנהל המסעדה מנהל את נתוני האב של קטגוריות: הוספה, צפייה, עדכון ומחיקה. הקטגוריות משמשות להצגת התפריט בלבד ואינן קובעות תחנת הכנה.",
+  "preconditions": [
+   "המשתמש הוא מנהל המסעדה."
+  ],
+  "postconditions": [
+   "רשימת קטגוריות מעודכנת; השינוי משתקף בתפריט הסועדים."
+  ],
+  "scenarios": [
+   {
+    "id": "sc-add",
+    "name": "הוספת קטגוריה",
+    "flow": [
+     {
+      "kind": "actor",
+      "actor": "rest_mgr",
+      "text": "בוחר \"קטגוריה חדשה\" במסך ניהול קטגוריות"
+     },
+     {
+      "kind": "actor",
+      "actor": "rest_mgr",
+      "text": "מזין שם הקטגוריה וסדר התצוגה בתפריט"
+     },
+     {
+      "kind": "system",
+      "text": "מוודאת שהשדות החובה מולאו ושהשם אינו קיים כבר"
+     },
+     {
+      "kind": "system",
+      "text": "שומרת את הקטגוריה ומציגה אותה ברשימה"
+     }
+    ],
+    "extensions": [
+     {
+      "at": "3",
+      "text": "שדה חובה חסר או שם כפול",
+      "steps": [
+       "המערכת מסמנת את השדה השגוי ומציגה הודעה"
+      ],
+      "outcome": {
+       "kind": "resume",
+       "at": "2"
+      }
+     }
+    ]
+   },
+   {
+    "id": "sc-view",
+    "name": "צפייה בקטגוריות",
+    "flow": [
+     {
+      "kind": "actor",
+      "actor": "rest_mgr",
+      "text": "פותח את מסך ניהול קטגוריות"
+     },
+     {
+      "kind": "system",
+      "text": "מציגה את רשימת קטגוריות עם שם, סדר תצוגה ומספר המנות בה"
+     },
+     {
+      "kind": "actor",
+      "actor": "rest_mgr",
+      "text": "מסנן או מחפש לפי שם"
+     },
+     {
+      "kind": "system",
+      "text": "מציגה את הרשומות התואמות"
+     }
+    ],
+    "extensions": [
+     {
+      "at": "4",
+      "text": "אין רשומות תואמות לחיפוש",
+      "steps": [
+       "המערכת מציגה \"לא נמצאו תוצאות\""
+      ],
+      "outcome": {
+       "kind": "resume",
+       "at": "3"
+      }
+     }
+    ]
+   },
+   {
+    "id": "sc-update",
+    "name": "עדכון קטגוריה",
+    "flow": [
+     {
+      "kind": "actor",
+      "actor": "rest_mgr",
+      "text": "בוחר קטגוריה מהרשימה ולוחץ \"עריכה\""
+     },
+     {
+      "kind": "system",
+      "text": "מציגה את פרטי הקטגוריה לעריכה"
+     },
+     {
+      "kind": "actor",
+      "actor": "rest_mgr",
+      "text": "משנה את השדות הרצויים ולוחץ \"שמירה\""
+     },
+     {
+      "kind": "system",
+      "text": "מוודאת את תקינות השדות"
+     },
+     {
+      "kind": "system",
+      "text": "שומרת את השינוי ומעדכנת את תפריט הסועדים בהתאם"
+     }
+    ],
+    "extensions": [
+     {
+      "at": "4",
+      "text": "ערך לא תקין (למשל מחיר שלילי או שדה חובה ריק)",
+      "steps": [
+       "המערכת מסמנת את השדה ומציגה הודעה"
+      ],
+      "outcome": {
+       "kind": "resume",
+       "at": "3"
+      }
+     }
+    ]
+   },
+   {
+    "id": "sc-delete",
+    "name": "מחיקת קטגוריה",
+    "flow": [
+     {
+      "kind": "actor",
+      "actor": "rest_mgr",
+      "text": "בוחר קטגוריה מהרשימה ולוחץ \"מחיקה\""
+     },
+     {
+      "kind": "system",
+      "text": "מוודאת שלא משויכות לקטגוריה מנות"
+     },
+     {
+      "kind": "system",
+      "text": "מבקשת אישור למחיקה"
+     },
+     {
+      "kind": "actor",
+      "actor": "rest_mgr",
+      "text": "מאשר"
+     },
+     {
+      "kind": "system",
+      "text": "מוחקת את הקטגוריה ומעדכנת את הרשימה"
+     }
+    ],
+    "extensions": [
+     {
+      "at": "2",
+      "text": "משויכות לקטגוריה מנות",
+      "steps": [
+       "המערכת מציגה את הסיבה ומציעה להשבית במקום למחוק"
+      ],
+      "outcome": {
+       "kind": "terminate",
+       "text": "הקטגוריה לא נמחקה."
+      }
+     },
+     {
+      "at": "4",
+      "text": "מנהל המסעדה מבטל את האישור",
+      "outcome": {
+       "kind": "resume",
+       "at": "1"
+      }
+     }
+    ]
+   }
+  ],
+  "userStories": [
+   {
+    "role": "מנהל המסעדה",
+    "want": "להוסיף ולעדכן קטגוריות בעצמי",
+    "so": "שהתפריט יהיה עדכני בלי מתכנת"
+   },
+   {
+    "role": "מנהל המסעדה",
+    "want": "לשנות את סדר הקטגוריות בתפריט",
+    "so": "שהסועד יראה קודם את מה שאני רוצה לקדם"
+   }
+  ],
+  "wireframe": "<div class=\"wf-screen\"><h3 class=\"wf-heading\">ניהול קטגוריות</h3><table class=\"wf-table\"><thead><tr><th>#</th><th>קטגוריה</th><th>מנות</th></tr></thead><tbody><tr><td>1</td><td>ראשונות</td><td>12</td></tr><tr><td>2</td><td>עיקריות</td><td>25</td></tr><tr><td>3</td><td>שתייה</td><td>18</td></tr><tr><td>4</td><td>קינוחים</td><td>9</td></tr></tbody></table><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">קטגוריה חדשה</button><button class=\"wf-button\">עריכה</button><button class=\"wf-button\">מחיקה</button></div><p class=\"wf-hint\">שינוי נשמר ומשתקף מיד בתפריט הסועדים.</p></div>"
+ },
+ "uc-daily-report": {
+  "id": "uc-daily-report",
+  "name": "הפקת דוח מכירות יומי",
+  "primaryActor": "rest_mgr",
+  "description": "מנהל המסעדה מפיק לתאריך נבחר דוח מכירות: מספר הזמנות, סכום כולל, פילוח לפי תחנה ולפי אמצעי תשלום, עשר המנות הנמכרות ביותר וזמן הכנה ממוצע לפי תחנה.",
+  "preconditions": [
+   "המשתמש הוא מנהל המסעדה.",
+   "קיימות הזמנות ששולמו בתאריך המבוקש."
+  ],
+  "postconditions": [
+   "הדוח הוצג ונשמר כקובץ PDF; לא בוצע שינוי בנתוני ההזמנות."
+  ],
+  "scenarios": [
+   {
+    "id": "sc-main",
+    "name": "מסלול מרכזי",
+    "flow": [
+     {
+      "kind": "actor",
+      "actor": "rest_mgr",
+      "text": "בוחר \"דוח מכירות יומי\" ומזין תאריך"
+     },
+     {
+      "kind": "system",
+      "text": "מאתרת את כל ההזמנות במצב \"שולמה\" בתאריך ואת תשלומיהן"
+     },
+     {
+      "kind": "system",
+      "text": "מחשבת מספר הזמנות, סכום כולל, פילוח לפי תחנת הכנה ולפי אמצעי תשלום"
+     },
+     {
+      "kind": "system",
+      "text": "מחשבת את עשר המנות הנמכרות ביותר לפי כמות ואת זמן ההכנה הממוצע לכל תחנה לפי שעה"
+     },
+     {
+      "kind": "system",
+      "text": "מציגה את הדוח על המסך"
+     },
+     {
+      "kind": "actor",
+      "actor": "rest_mgr",
+      "text": "לוחץ \"ייצוא ל-PDF\""
+     },
+     {
+      "kind": "system",
+      "text": "מפיקה קובץ PDF של הדוח ומציעה להורידו"
+     }
+    ],
+    "extensions": [
+     {
+      "at": "1",
+      "text": "התאריך שהוזן עתידי",
+      "steps": [
+       "המערכת מציגה \"לא ניתן להפיק דוח לתאריך עתידי\""
+      ],
+      "outcome": {
+       "kind": "resume",
+       "at": "1"
+      }
+     },
+     {
+      "at": "2",
+      "text": "אין הזמנות ששולמו בתאריך",
+      "steps": [
+       "המערכת מציגה \"אין מכירות בתאריך זה\""
+      ],
+      "outcome": {
+       "kind": "terminate",
+       "text": "לא הופק דוח."
+      }
+     }
+    ]
+   }
+  ],
+  "userStories": [
+   {
+    "role": "מנהל המסעדה",
+    "want": "לראות כמה מכרנו היום ובאיזה אמצעי",
+    "so": "שאדע את הפדיון בלי לסכם פתקים"
+   },
+   {
+    "role": "מנהל המסעדה",
+    "want": "לדעת מהן עשר המנות הנמכרות ביותר",
+    "so": "שאתכנן רכש ותפריט"
+   },
+   {
+    "role": "מנהל המסעדה",
+    "want": "לראות זמן הכנה ממוצע בתחנה הבשרית בערב שישי",
+    "so": "שאתגבר את התחנה כשצריך"
+   }
+  ],
+  "wireframe": "<div class=\"wf-screen\"><h3 class=\"wf-heading\">דוח מכירות יומי</h3><div class=\"wf-row\"><label class=\"wf-label\">תאריך</label><input class=\"wf-input\" disabled placeholder=\"30/08/2026\" /></div><table class=\"wf-table\"><thead><tr><th></th><th>סכום</th></tr></thead><tbody><tr><td>מספר הזמנות</td><td>142</td></tr><tr><td>סכום כולל</td><td>28,120 ₪</td></tr><tr><td>בשרית / חלבית / קינוחים</td><td>15,300 / 9,020 / 3,800 ₪</td></tr><tr><td>מזומן / כרטיס</td><td>6,240 / 21,880 ₪</td></tr></tbody></table><table class=\"wf-table\"><thead><tr><th>#</th><th>מנה</th><th>כמות</th></tr></thead><tbody><tr><td>1</td><td>המבורגר 220 ג'</td><td>88</td></tr><tr><td>2</td><td>סלט יווני</td><td>61</td></tr><tr><td>3</td><td>טירמיסו</td><td>44</td></tr></tbody></table><table class=\"wf-table\"><thead><tr><th>תחנה</th><th>זמן הכנה ממוצע</th></tr></thead><tbody><tr><td>בשרית</td><td>14 דק'</td></tr><tr><td>חלבית</td><td>9 דק'</td></tr><tr><td>קינוחים</td><td>6 דק'</td></tr></tbody></table><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">הפקת דוח</button><button class=\"wf-button\">ייצוא ל-PDF</button></div></div>"
+ }
+};
+    var diagramModel        = {
+ "kind": "use-case",
+ "title": "מערכת ההזמנות של מסעדת 'המלצר האוטומטי'",
+ "parts": [
+  {
+   "id": "part-1",
+   "label": "הזמנה, הגשה ותשלום",
+   "splitRationale": "פיצול לפי מספר יוסקייסים: 16 > 8 — לשונית זו: התהליך העסקי מהתפריט ועד התשלום (סועד, מלצר, קופאי)",
+   "elements": [
+    {
+     "kind": "system",
+     "id": "sys-part-1",
+     "name": "מערכת ההזמנות של מסעדת 'המלצר האוטומטי'",
+     "x": 0,
+     "y": 0,
+     "w": 0,
+     "h": 0
+    },
+    {
+     "kind": "actor",
+     "id": "diner",
+     "name": "סועד",
+     "actorType": "human",
+     "side": "left",
+     "x": 0,
+     "y": 0
+    },
+    {
+     "kind": "actor",
+     "id": "cashier",
+     "name": "קופאי",
+     "actorType": "human",
+     "side": "left",
+     "x": 0,
+     "y": 0
+    },
+    {
+     "kind": "actor",
+     "id": "waiter",
+     "name": "מלצר",
+     "actorType": "human",
+     "side": "right",
+     "x": 0,
+     "y": 0
+    },
+    {
+     "kind": "useCase",
+     "id": "uc-view-menu",
+     "name": "צפייה בתפריט לפי שולחן",
+     "primaryActor": "diner",
+     "description": "הסועד סורק את קוד ה-QR שעל השולחן ורואה את התפריט הפעיל כרגע, ובו רק מנות זמינות.",
+     "preconditions": [
+      "לשולחן מודבק קוד QR תקף.",
+      "קיים תפריט פעיל לשעה הנוכחית (צהריים / ערב)."
+     ],
+     "postconditions": [
+      "התפריט הפעיל הוצג לסועד, משויך למספר השולחן, ללא מנות שסומנו \"אזלה\"."
+     ],
+     "scenarios": [
+      {
+       "id": "sc-main",
+       "name": "מסלול מרכזי",
+       "flow": [
+        {
+         "kind": "actor",
+         "actor": "diner",
+         "text": "סורק את קוד ה-QR שעל השולחן בטלפון"
+        },
+        {
+         "kind": "system",
+         "text": "מפענחת את הקוד, מזהה את מספר השולחן ומוודאת שהוא קיים במערכת"
+        },
+        {
+         "kind": "system",
+         "text": "בוחרת את התפריט הפעיל לפי השעה הנוכחית ומסננת ממנו מנות שסומנו \"אזלה\""
+        },
+        {
+         "kind": "system",
+         "text": "מציגה את התפריט לפי קטגוריות, עם שם, תיאור ומחיר לכל מנה"
+        },
+        {
+         "kind": "actor",
+         "actor": "diner",
+         "text": "בוחר קטגוריה (ראשונות / עיקריות / שתייה / קינוחים)"
+        },
+        {
+         "kind": "system",
+         "text": "מציגה את מנות הקטגוריה כולל סימון אלרגנים"
+        }
+       ],
+       "extensions": [
+        {
+         "at": "2",
+         "text": "הקוד אינו תואם שולחן קיים",
+         "steps": [
+          "המערכת מציגה \"קוד שולחן אינו תקין — פנה למלצר\""
+         ],
+         "outcome": {
+          "kind": "terminate",
+          "text": "התפריט לא הוצג; הסועד פונה לצוות."
+         }
+        },
+        {
+         "at": "3",
+         "text": "אין תפריט פעיל לשעה הנוכחית (המטבח סגור)",
+         "steps": [
+          "המערכת מציגה את שעות הפעילות"
+         ],
+         "outcome": {
+          "kind": "terminate",
+          "text": "התפריט לא הוצג."
+         }
+        },
+        {
+         "at": "6",
+         "text": "כל מנות הקטגוריה אזלו",
+         "steps": [
+          "המערכת מציגה \"אין מנות זמינות בקטגוריה זו כרגע\""
+         ],
+         "outcome": {
+          "kind": "resume",
+          "at": "5"
+         }
+        }
+       ]
+      }
+     ],
+     "userStories": [
+      {
+       "role": "סועד",
+       "want": "לראות את התפריט בטלפון מיד כשאני מתיישב",
+       "so": "שלא אצטרך לחכות למלצר"
+      },
+      {
+       "role": "סועד",
+       "want": "לראות רק מנות שקיימות עכשיו במטבח",
+       "so": "שלא אזמין מנה שאזלה"
+      },
+      {
+       "role": "מנהל המסעדה",
+       "want": "שהתפריט המוצג יהיה תמיד התפריט הפעיל לשעה",
+       "so": "שסועדים לא יזמינו מנות מתפריט הצהריים בערב"
+      }
+     ],
+     "wireframe": "<div class=\"wf-screen\"><h3 class=\"wf-heading\">תפריט — שולחן 12 · תפריט ערב</h3><div class=\"wf-section\"><span class=\"wf-badge\">ראשונות</span> <span class=\"wf-badge\">עיקריות</span> <span class=\"wf-badge\">שתייה</span> <span class=\"wf-badge\">קינוחים</span></div><table class=\"wf-table\"><thead><tr><th>מנה</th><th>תיאור</th><th>מחיר</th><th>אלרגנים</th></tr></thead><tbody><tr><td>המבורגר 220 ג'</td><td>בקר טחון, לחמנייה</td><td>68 ₪</td><td>גלוטן</td></tr><tr><td>סלט יווני</td><td>עגבניות, מלפפון, פטה</td><td>42 ₪</td><td>חלב</td></tr><tr><td>קולה</td><td>330 מ\"ל</td><td>12 ₪</td><td>—</td></tr></tbody></table><p class=\"wf-hint\">מנות שסומנו \"אזלה\" אינן מופיעות ברשימה כלל.</p><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">התחלת הזמנה</button></div></div>",
+     "x": 0,
+     "y": 0,
+     "rx": 0,
+     "ry": 0
+    },
+    {
+     "kind": "useCase",
+     "id": "uc-place-order",
+     "name": "פתיחת הזמנה",
+     "primaryActor": "diner",
+     "description": "הסועד פותח הזמנה חדשה לשולחן, בוחר מנות בכמויות עם הערה לכל שורה, ומאשר אותה; המערכת מפצלת את השורות לתחנות ההכנה.",
+     "preconditions": [
+      "התפריט הוצג לסועד (צפייה בתפריט לפי שולחן).",
+      "אין לשולחן הזמנה פתוחה (BR-1)."
+     ],
+     "postconditions": [
+      "נשמרה הזמנה במצב \"התקבלה\" המשויכת לשולחן, עם שורותיה ומחיר ליחידה שנקבע בזמן ההזמנה (BR-4).",
+      "כל שורה מופיעה בתור התחנה של המנה שלה (BR-2)."
+     ],
+     "scenarios": [
+      {
+       "id": "sc-main",
+       "name": "מסלול מרכזי",
+       "flow": [
+        {
+         "kind": "actor",
+         "actor": "diner",
+         "text": "בוחר \"התחלת הזמנה\" במסך התפריט"
+        },
+        {
+         "kind": "system",
+         "text": "מוודאת שאין לשולחן הזמנה פתוחה ופותחת הזמנה חדשה (טיוטה) לשולחן"
+        },
+        {
+         "kind": "loop",
+         "condition": "הסועד רוצה להוסיף מנות",
+         "steps": [
+          {
+           "kind": "actor",
+           "actor": "diner",
+           "text": "בוחר מנה מהתפריט ומזין כמות"
+          },
+          {
+           "kind": "actor",
+           "actor": "diner",
+           "text": "מזין הערה לשורה (למשל \"בלי בצל\", \"מדיום\")"
+          },
+          {
+           "kind": "system",
+           "text": "מוודאת שהמנה עדיין זמינה, מוסיפה שורה עם המחיר הנוכחי ומציגה סכום ביניים"
+          }
+         ]
+        },
+        {
+         "kind": "actor",
+         "actor": "diner",
+         "text": "סוקר את סיכום ההזמנה ולוחץ \"שליחת הזמנה\""
+        },
+        {
+         "kind": "system",
+         "text": "שומרת את ההזמנה במצב \"התקבלה\", קובעת מחיר ליחידה לכל שורה ומשייכת כל שורה לתחנת ההכנה של המנה"
+        },
+        {
+         "kind": "system",
+         "text": "מציגה מספר הזמנה, סכום כולל וזמן הכנה משוער"
+        }
+       ],
+       "extensions": [
+        {
+         "at": "2",
+         "text": "לשולחן כבר קיימת הזמנה פתוחה",
+         "steps": [
+          "המערכת מציגה את ההזמנה הפתוחה ומציעה להוסיף לה מנות"
+         ],
+         "outcome": {
+          "kind": "terminate",
+          "text": "לא נפתחה הזמנה חדשה; הסועד ממשיך ב\"הוספת מנות להזמנה פתוחה\"."
+         }
+        },
+        {
+         "at": "3.3",
+         "text": "המנה סומנה \"אזלה\" מאז שהתפריט הוצג",
+         "steps": [
+          "המערכת מציגה \"המנה אזלה זה עתה\" ומרעננת את התפריט"
+         ],
+         "outcome": {
+          "kind": "resume",
+          "at": "3.1"
+         }
+        },
+        {
+         "at": "3.1",
+         "text": "הכמות שהוזנה אינה חיובית",
+         "steps": [
+          "המערכת מציגה \"יש להזין כמות של 1 לפחות\""
+         ],
+         "outcome": {
+          "kind": "resume",
+          "at": "3.1"
+         }
+        },
+        {
+         "at": "4",
+         "text": "ההזמנה ריקה",
+         "steps": [
+          "המערכת מציגה \"לא נבחרו מנות\""
+         ],
+         "outcome": {
+          "kind": "resume",
+          "at": "3.1"
+         }
+        }
+       ]
+      }
+     ],
+     "userStories": [
+      {
+       "role": "סועד",
+       "want": "להזמין כמה מנות בכמויות שונות בבת אחת",
+       "so": "שכל השולחן יזמין מהטלפון שלי"
+      },
+      {
+       "role": "סועד",
+       "want": "לצרף הערה לכל מנה",
+       "so": "שהבקשה שלי (בלי בצל, אלרגיה) תגיע לתחנה הנכונה"
+      },
+      {
+       "role": "טבח",
+       "want": "שכל שורה תגיע ישירות לתור התחנה שלי",
+       "so": "שלא אפספס הזמנות ולא אראה מנות של תחנות אחרות"
+      },
+      {
+       "role": "מנהל המסעדה",
+       "want": "שמחיר השורה יינעל בזמן ההזמנה",
+       "so": "ששינוי מחיר בתפריט לא ישנה חשבון פתוח"
+      }
+     ],
+     "wireframe": "<div class=\"wf-screen\"><h3 class=\"wf-heading\">הזמנה חדשה — שולחן 12</h3><table class=\"wf-table\"><thead><tr><th>מנה</th><th>כמות</th><th>הערה</th><th>סכום</th></tr></thead><tbody><tr><td>המבורגר 220 ג'</td><td>2</td><td>אחד מדיום, אחד well</td><td>136 ₪</td></tr><tr><td>סלט יווני</td><td>1</td><td>בלי בצל</td><td>42 ₪</td></tr><tr><td>קולה</td><td>3</td><td></td><td>36 ₪</td></tr></tbody></table><div class=\"wf-row\"><label class=\"wf-label\">הוספת מנה</label><select class=\"wf-select\" disabled><option>בחר מנה מהתפריט…</option></select></div><div class=\"wf-row\"><label class=\"wf-label\">כמות</label><input class=\"wf-input\" disabled placeholder=\"1\" /></div><div class=\"wf-row\"><label class=\"wf-label\">הערה לשורה</label><input class=\"wf-input\" disabled placeholder=\"למשל: בלי בצל\" /></div><div class=\"wf-section\"><strong>סה\"כ: 214 ₪</strong></div><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">שליחת הזמנה</button><button class=\"wf-button\">הוספת מנה נוספת</button></div><p class=\"wf-hint\">לאחר השליחה ההזמנה מתפצלת אוטומטית לתחנות: בשרית / חלבית / קינוחים.</p></div>",
+     "x": 0,
+     "y": 0,
+     "rx": 0,
+     "ry": 0
+    },
+    {
+     "kind": "useCase",
+     "id": "uc-add-items",
+     "name": "הוספת מנות להזמנה פתוחה",
+     "primaryActor": "diner",
+     "description": "במהלך הארוחה הסועד מוסיף שורות (למשל קינוחים) לאותה הזמנה פתוחה של השולחן.",
+     "preconditions": [
+      "לשולחן קיימת הזמנה פתוחה שאינה \"שולמה\" ואינה \"בוטלה\" (BR-8)."
+     ],
+     "postconditions": [
+      "השורות החדשות נוספו להזמנה במצב \"ממתינה\", סכום ההזמנה עודכן, והשורות הופיעו בתורי התחנות."
+     ],
+     "scenarios": [
+      {
+       "id": "sc-main",
+       "name": "מסלול מרכזי",
+       "flow": [
+        {
+         "kind": "actor",
+         "actor": "diner",
+         "text": "סורק את קוד ה-QR ובוחר \"הוספה להזמנה\""
+        },
+        {
+         "kind": "system",
+         "text": "מאתרת את ההזמנה הפתוחה של השולחן ומציגה את שורותיה הקיימות עם מצבן"
+        },
+        {
+         "kind": "loop",
+         "condition": "הסועד רוצה להוסיף מנות",
+         "steps": [
+          {
+           "kind": "actor",
+           "actor": "diner",
+           "text": "בוחר מנה, מזין כמות והערה"
+          },
+          {
+           "kind": "system",
+           "text": "מוודאת שהמנה זמינה ומוסיפה שורה חדשה במצב \"ממתינה\" עם המחיר הנוכחי"
+          }
+         ]
+        },
+        {
+         "kind": "actor",
+         "actor": "diner",
+         "text": "לוחץ \"שליחת התוספת\""
+        },
+        {
+         "kind": "system",
+         "text": "מעדכנת את סכום ההזמנה ומעבירה את השורות החדשות לתורי התחנות"
+        },
+        {
+         "kind": "system",
+         "text": "מציגה את ההזמנה המעודכנת עם הסכום החדש"
+        }
+       ],
+       "extensions": [
+        {
+         "at": "2",
+         "text": "אין לשולחן הזמנה פתוחה",
+         "steps": [
+          "המערכת מציעה לפתוח הזמנה חדשה"
+         ],
+         "outcome": {
+          "kind": "terminate",
+          "text": "לא נוספו שורות; הסועד עובר ל\"פתיחת הזמנה\"."
+         }
+        },
+        {
+         "at": "2",
+         "text": "ההזמנה כבר \"שולמה\" או \"בוטלה\"",
+         "steps": [
+          "המערכת מציגה \"לא ניתן להוסיף להזמנה סגורה\""
+         ],
+         "outcome": {
+          "kind": "terminate",
+          "text": "לא נוספו שורות."
+         }
+        },
+        {
+         "at": "3.2",
+         "text": "המנה סומנה \"אזלה\"",
+         "steps": [
+          "המערכת מציגה \"המנה אינה זמינה כרגע\""
+         ],
+         "outcome": {
+          "kind": "resume",
+          "at": "3.1"
+         }
+        }
+       ]
+      }
+     ],
+     "userStories": [
+      {
+       "role": "סועד",
+       "want": "להוסיף קינוח באמצע הארוחה בלי לפתוח הזמנה חדשה",
+       "so": "שכל הארוחה תהיה בחשבון אחד"
+      },
+      {
+       "role": "קופאי",
+       "want": "שכל התוספות ייכנסו לאותה הזמנה",
+       "so": "שהחשבון בסוף הארוחה יהיה מלא ונכון"
+      }
+     ],
+     "wireframe": "<div class=\"wf-screen\"><h3 class=\"wf-heading\">הוספה להזמנה #4871 — שולחן 12</h3><table class=\"wf-table\"><thead><tr><th>מנה</th><th>כמות</th><th>מצב</th></tr></thead><tbody><tr><td>המבורגר 220 ג'</td><td>2</td><td>הוגשה</td></tr><tr><td>סלט יווני</td><td>1</td><td>הוגשה</td></tr><tr><td>קולה</td><td>3</td><td>הוגשה</td></tr></tbody></table><div class=\"wf-row\"><label class=\"wf-label\">הוספת מנה</label><select class=\"wf-select\" disabled><option>טירמיסו</option></select></div><div class=\"wf-row\"><label class=\"wf-label\">כמות</label><input class=\"wf-input\" disabled placeholder=\"2\" /></div><div class=\"wf-row\"><label class=\"wf-label\">הערה</label><input class=\"wf-input\" disabled placeholder=\"\" /></div><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">שליחת התוספת</button><button class=\"wf-button\">ביטול</button></div><p class=\"wf-hint\">השורות החדשות מצטרפות לחשבון הקיים ונשלחות לתחנת הקינוחים.</p></div>",
+     "x": 0,
+     "y": 0,
+     "rx": 0,
+     "ry": 0
+    },
+    {
+     "kind": "useCase",
+     "id": "uc-order-status",
+     "name": "צפייה במצב ההזמנה",
+     "primaryActor": "diner",
+     "description": "הסועד רואה לכל שורה בהזמנה הפתוחה של השולחן את מצבה (ממתינה / בהכנה / מוכנה / הוגשה / בוטלה) ואת הסכום המצטבר.",
+     "preconditions": [
+      "לשולחן קיימת הזמנה פתוחה."
+     ],
+     "postconditions": [
+      "מצב ההזמנה ושורותיה הוצג לסועד; לא בוצע שינוי בנתונים."
+     ],
+     "scenarios": [
+      {
+       "id": "sc-main",
+       "name": "מסלול מרכזי",
+       "flow": [
+        {
+         "kind": "actor",
+         "actor": "diner",
+         "text": "סורק את קוד ה-QR ובוחר \"מצב ההזמנה\""
+        },
+        {
+         "kind": "system",
+         "text": "מאתרת את ההזמנה הפתוחה של השולחן"
+        },
+        {
+         "kind": "system",
+         "text": "מציגה כל שורה עם כמות, הערה, מצב (ממתינה / בהכנה / מוכנה / הוגשה / בוטלה) וסיבת ביטול כשיש"
+        },
+        {
+         "kind": "system",
+         "text": "מציגה את המצב הכולל של ההזמנה, את הסכום המצטבר ואת היתרה לתשלום"
+        },
+        {
+         "kind": "actor",
+         "actor": "diner",
+         "text": "לוחץ \"רענון\" כדי לראות עדכון מהמטבח"
+        },
+        {
+         "kind": "system",
+         "text": "טוענת מחדש את מצב השורות"
+        }
+       ],
+       "extensions": [
+        {
+         "at": "2",
+         "text": "אין לשולחן הזמנה פתוחה",
+         "steps": [
+          "המערכת מציגה \"אין הזמנה פתוחה לשולחן זה\""
+         ],
+         "outcome": {
+          "kind": "terminate",
+          "text": "לא הוצג מצב הזמנה."
+         }
+        }
+       ]
+      }
+     ],
+     "userStories": [
+      {
+       "role": "סועד",
+       "want": "לדעת אם המנה שלי כבר בהכנה",
+       "so": "שלא אצטרך לשאול מלצר"
+      },
+      {
+       "role": "סועד",
+       "want": "לראות שמנה בוטלה ולמה",
+       "so": "שאוכל להזמין משהו אחר במקומה"
+      }
+     ],
+     "wireframe": "<div class=\"wf-screen\"><h3 class=\"wf-heading\">מצב ההזמנה #4871 — שולחן 12</h3><table class=\"wf-table\"><thead><tr><th>מנה</th><th>כמות</th><th>תחנה</th><th>מצב</th></tr></thead><tbody><tr><td>המבורגר 220 ג'</td><td>2</td><td>בשרית</td><td><span class=\"wf-badge\">בהכנה</span></td></tr><tr><td>סלט יווני</td><td>1</td><td>חלבית</td><td><span class=\"wf-badge\">הוגשה</span></td></tr><tr><td>טירמיסו</td><td>2</td><td>קינוחים</td><td><span class=\"wf-badge\">ממתינה</span></td></tr><tr><td>פנקייק</td><td>1</td><td>קינוחים</td><td>בוטלה — אזל</td></tr></tbody></table><div class=\"wf-section\">מצב ההזמנה: <strong>בהכנה</strong> · סכום: 250 ₪ · יתרה לתשלום: 250 ₪</div><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">רענון</button><button class=\"wf-button\">הוספת מנות</button><button class=\"wf-button\">תשלום</button></div></div>",
+     "x": 0,
+     "y": 0,
+     "rx": 0,
+     "ry": 0
+    },
+    {
+     "kind": "useCase",
+     "id": "uc-pay",
+     "name": "רישום תשלום עבור הזמנה",
+     "primaryActor": "cashier",
+     "description": "רישום תשלום אחד או יותר על הזמנה — בקופה על ידי הקופאי או מהשולחן על ידי הסועד — במזומן או בכרטיס דרך חברת הסליקה, עם פיצול בין כמה סועדים. ההזמנה עוברת ל\"שולמה\" כשסך התשלומים מכסה את הסכום (BR-6).",
+     "preconditions": [
+      "לשולחן קיימת הזמנה פתוחה עם יתרה לתשלום.",
+      "תשלום בכרטיס: יש תקשורת עם חברת הסליקה (BR-9)."
+     ],
+     "postconditions": [
+      "כל תשלום נרשם עם סכום, טיפ, אמצעי ואסמכתת סליקה (בכרטיס).",
+      "כשסך התשלומים ≥ סכום ההזמנה — ההזמנה במצב \"שולמה\" והשולחן פנוי."
+     ],
+     "scenarios": [
+      {
+       "id": "sc-cashier",
+       "name": "תשלום בקופה (קופאי)",
+       "flow": [
+        {
+         "kind": "actor",
+         "actor": "cashier",
+         "text": "מזין מספר שולחן במסך הקופה"
+        },
+        {
+         "kind": "system",
+         "text": "מאתרת את ההזמנה הפתוחה של השולחן ומציגה את שורותיה, הסכום הכולל והיתרה לתשלום"
+        },
+        {
+         "kind": "loop",
+         "condition": "נותרה יתרה לתשלום",
+         "steps": [
+          {
+           "kind": "actor",
+           "actor": "cashier",
+           "text": "מזין את הסכום שהסועד משלם (מלא, או חלקי בפיצול בין סועדים) ואת הטיפ"
+          },
+          {
+           "kind": "alt",
+           "condition": "אמצעי התשלום",
+           "branches": [
+            {
+             "label": "מזומן",
+             "steps": [
+              {
+               "kind": "actor",
+               "actor": "cashier",
+               "text": "מזין את הסכום שהתקבל במזומן"
+              },
+              {
+               "kind": "system",
+               "text": "מחשבת עודף ורושמת תשלום מזומן"
+              }
+             ]
+            },
+            {
+             "label": "כרטיס אשראי",
+             "steps": [
+              {
+               "kind": "actor",
+               "actor": "cashier",
+               "text": "מעביר את הכרטיס במסופון"
+              },
+              {
+               "kind": "system",
+               "text": "שולחת בקשת חיוב לחברת הסליקה ומקבלת אסמכתא"
+              },
+              {
+               "kind": "system",
+               "text": "רושמת תשלום כרטיס עם אסמכתת הסליקה"
+              }
+             ]
+            }
+           ]
+          },
+          {
+           "kind": "system",
+           "text": "מעדכנת את היתרה לתשלום ומציגה אותה"
+          }
+         ]
+        },
+        {
+         "kind": "system",
+         "text": "מסמנת את ההזמנה \"שולמה\" ומשחררת את השולחן"
+        },
+        {
+         "kind": "system",
+         "text": "מציגה קבלה מסכמת לכל התשלומים שנרשמו"
+        }
+       ],
+       "extensions": [
+        {
+         "at": "2",
+         "text": "אין לשולחן הזמנה פתוחה",
+         "steps": [
+          "המערכת מציגה \"אין הזמנה פתוחה לשולחן זה\""
+         ],
+         "outcome": {
+          "kind": "terminate",
+          "text": "לא נרשם תשלום."
+         }
+        },
+        {
+         "at": "3.1",
+         "text": "הסכום שהוזן גדול מהיתרה לתשלום",
+         "steps": [
+          "המערכת מציגה את היתרה ומבקשת סכום מתוקן"
+         ],
+         "outcome": {
+          "kind": "resume",
+          "at": "3.1"
+         }
+        },
+        {
+         "at": "3.2.2.2",
+         "text": "חברת הסליקה דוחה את החיוב",
+         "steps": [
+          "המערכת מציגה את סיבת הדחייה"
+         ],
+         "outcome": {
+          "kind": "resume",
+          "at": "3.2"
+         }
+        },
+        {
+         "at": "3.2.2.2",
+         "text": "אין תקשורת עם חברת הסליקה",
+         "steps": [
+          "המערכת מציגה \"שירות הסליקה אינו זמין — יש לשלם במזומן או לנסות שוב\""
+         ],
+         "outcome": {
+          "kind": "resume",
+          "at": "3.2"
+         }
+        }
+       ]
+      },
+      {
+       "id": "sc-diner",
+       "name": "תשלום עצמי מהשולחן (סועד)",
+       "flow": [
+        {
+         "kind": "actor",
+         "actor": "diner",
+         "text": "סורק את קוד ה-QR ובוחר \"תשלום\""
+        },
+        {
+         "kind": "system",
+         "text": "מציגה את שורות ההזמנה, הסכום הכולל והיתרה לתשלום"
+        },
+        {
+         "kind": "alt",
+         "condition": "אופן הפיצול שנבחר",
+         "branches": [
+          {
+           "label": "כל החשבון",
+           "steps": [
+            {
+             "kind": "actor",
+             "actor": "diner",
+             "text": "בוחר \"תשלום מלא\""
+            },
+            {
+             "kind": "system",
+             "text": "מציגה סכום לתשלום השווה ליתרה"
+            }
+           ]
+          },
+          {
+           "label": "המנות שלי",
+           "steps": [
+            {
+             "kind": "actor",
+             "actor": "diner",
+             "text": "מסמן את השורות שהוא משלם עליהן"
+            },
+            {
+             "kind": "system",
+             "text": "מחשבת את סכום השורות שסומנו ומסמנת אותן \"בתשלום\""
+            }
+           ]
+          },
+          {
+           "label": "חלוקה שווה",
+           "steps": [
+            {
+             "kind": "actor",
+             "actor": "diner",
+             "text": "מזין את מספר הסועדים המתחלקים"
+            },
+            {
+             "kind": "system",
+             "text": "מחלקת את היתרה במספר הסועדים ומציגה את חלקו"
+            }
+           ]
+          }
+         ]
+        },
+        {
+         "kind": "actor",
+         "actor": "diner",
+         "text": "מזין טיפ ופרטי כרטיס אשראי"
+        },
+        {
+         "kind": "system",
+         "text": "שולחת בקשת חיוב לחברת הסליקה ומקבלת אסמכתא"
+        },
+        {
+         "kind": "system",
+         "text": "רושמת את התשלום עם האסמכתא ומעדכנת את היתרה לתשלום"
+        },
+        {
+         "kind": "system",
+         "text": "מציגה אישור תשלום ואת היתרה שנותרה לשולחן"
+        }
+       ],
+       "extensions": [
+        {
+         "at": "2",
+         "text": "אין לשולחן הזמנה פתוחה או שהיתרה אפס",
+         "steps": [
+          "המערכת מציגה \"אין יתרה לתשלום\""
+         ],
+         "outcome": {
+          "kind": "terminate",
+          "text": "לא נרשם תשלום."
+         }
+        },
+        {
+         "at": "3.2.1",
+         "text": "השורות שסומנו כבר שולמו על ידי סועד אחר",
+         "steps": [
+          "המערכת מציגה אילו שורות כבר שולמו"
+         ],
+         "outcome": {
+          "kind": "resume",
+          "at": "3"
+         }
+        },
+        {
+         "at": "5",
+         "text": "חברת הסליקה דוחה את החיוב",
+         "steps": [
+          "המערכת מציגה את סיבת הדחייה ומציעה כרטיס אחר או תשלום בקופה"
+         ],
+         "outcome": {
+          "kind": "resume",
+          "at": "4"
+         }
+        }
+       ]
+      }
+     ],
+     "userStories": [
+      {
+       "role": "סועד",
+       "want": "לשלם על המנות שלי בלבד מהטלפון",
+       "so": "שלא נצטרך לחשב חלוקה בעצמנו"
+      },
+      {
+       "role": "קופאי",
+       "want": "לרשום כמה תשלומים על הזמנה אחת",
+       "so": "שהחשבון ייסגר גם כשמשלמים בנפרד"
+      },
+      {
+       "role": "קופאי",
+       "want": "לקבל תשובת סליקה לפני שאני סוגר חשבון",
+       "so": "שלא אשחרר שולחן בלי תשלום מאושר"
+      },
+      {
+       "role": "מנהל המסעדה",
+       "want": "שהזמנה תיחשב \"שולמה\" רק כשהתשלומים מכסים את הסכום",
+       "so": "שלא יהיו חשבונות שנסגרו בחסר"
+      }
+     ],
+     "wireframe": "<div class=\"wf-screen\"><h3 class=\"wf-heading\">תשלום — הזמנה #4871 · שולחן 12</h3><div class=\"wf-section\">סכום ההזמנה: <strong>250 ₪</strong> · שולם עד כה: 100 ₪ · <strong>יתרה: 150 ₪</strong></div><table class=\"wf-table\"><thead><tr><th>#</th><th>סכום</th><th>טיפ</th><th>אמצעי</th><th>אסמכתא</th></tr></thead><tbody><tr><td>1</td><td>100 ₪</td><td>10 ₪</td><td>כרטיס</td><td>SLK-88213</td></tr></tbody></table><div class=\"wf-row\"><label class=\"wf-label\">סכום לתשלום</label><input class=\"wf-input\" disabled placeholder=\"150\" /></div><div class=\"wf-row\"><label class=\"wf-label\">טיפ</label><input class=\"wf-input\" disabled placeholder=\"0\" /></div><div class=\"wf-row\"><label class=\"wf-label\">אמצעי תשלום</label><select class=\"wf-select\" disabled><option>מזומן / כרטיס אשראי</option></select></div><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">רישום תשלום</button><button class=\"wf-button\">פיצול שווה</button><button class=\"wf-button\">ביטול</button></div><p class=\"wf-hint\">בכרטיס: המערכת ממתינה לאישור חברת הסליקה לפני רישום התשלום. כשהיתרה מגיעה ל-0 ההזמנה מסומנת \"שולמה\".</p></div>",
+     "x": 0,
+     "y": 0,
+     "rx": 0,
+     "ry": 0
+    },
+    {
+     "kind": "useCase",
+     "id": "uc-close-day",
+     "name": "סגירת יום",
+     "primaryActor": "cashier",
+     "description": "בסוף יום העסקים הקופאי מוודא שאין הזמנות פתוחות, משווה את ספירת המזומן לפדיון הרשום, ונועל את היום.",
+     "preconditions": [
+      "כל ההזמנות של היום במצב \"שולמה\" או \"בוטלה\"."
+     ],
+     "postconditions": [
+      "יום העסקים ננעל: סיכום הפדיון לפי אמצעי תשלום, ספירת המזומן והפער (אם היה) נשמרו; לא ניתן לרשום עוד תשלומים לתאריך זה."
+     ],
+     "scenarios": [
+      {
+       "id": "sc-main",
+       "name": "מסלול מרכזי",
+       "flow": [
+        {
+         "kind": "actor",
+         "actor": "cashier",
+         "text": "בוחר \"סגירת יום\" במסך הקופה"
+        },
+        {
+         "kind": "system",
+         "text": "מוודאת שאין הזמנות פתוחות או הזמנות עם יתרה לתשלום"
+        },
+        {
+         "kind": "system",
+         "text": "מציגה סיכום: מספר הזמנות, פדיון במזומן, פדיון בכרטיס, סך טיפים"
+        },
+        {
+         "kind": "actor",
+         "actor": "cashier",
+         "text": "מזין את סכום המזומן שנספר בקופה"
+        },
+        {
+         "kind": "system",
+         "text": "משווה את הספירה לפדיון המזומן הרשום ומציגה את הפער"
+        },
+        {
+         "kind": "actor",
+         "actor": "cashier",
+         "text": "מאשר את סגירת היום"
+        },
+        {
+         "kind": "system",
+         "text": "נועלת את יום העסקים, שומרת את הסיכום ומציגה דוח סגירה"
+        }
+       ],
+       "extensions": [
+        {
+         "at": "2",
+         "text": "קיימות הזמנות פתוחות או לא משולמות",
+         "steps": [
+          "המערכת מציגה את רשימת השולחנות הפתוחים"
+         ],
+         "outcome": {
+          "kind": "terminate",
+          "text": "היום לא נסגר; יש לסגור או לבטל את ההזמנות תחילה."
+         }
+        },
+        {
+         "at": "5",
+         "text": "קיים פער בין הספירה לפדיון",
+         "steps": [
+          "המערכת דורשת הזנת הסבר לפער"
+         ],
+         "outcome": {
+          "kind": "resume",
+          "at": "6"
+         }
+        },
+        {
+         "at": "4",
+         "text": "הוזן סכום שלילי או לא מספרי",
+         "steps": [
+          "המערכת מציגה \"יש להזין סכום תקין\""
+         ],
+         "outcome": {
+          "kind": "resume",
+          "at": "4"
+         }
+        }
+       ]
+      }
+     ],
+     "userStories": [
+      {
+       "role": "קופאי",
+       "want": "לסגור את היום בלחיצה ולראות את הפדיון לפי אמצעי",
+       "so": "שלא אצטרך לסכם פתקים ידנית"
+      },
+      {
+       "role": "מנהל המסעדה",
+       "want": "שהיום ייסגר רק כשכל ההזמנות שולמו",
+       "so": "שהדוח היומי יהיה שלם ונכון"
+      }
+     ],
+     "wireframe": "<div class=\"wf-screen\"><h3 class=\"wf-heading\">סגירת יום — 30/08/2026</h3><table class=\"wf-table\"><thead><tr><th></th><th>סכום</th></tr></thead><tbody><tr><td>מספר הזמנות</td><td>142</td></tr><tr><td>פדיון מזומן</td><td>6,240 ₪</td></tr><tr><td>פדיון כרטיס</td><td>21,880 ₪</td></tr><tr><td>טיפים</td><td>2,310 ₪</td></tr></tbody></table><div class=\"wf-row\"><label class=\"wf-label\">מזומן שנספר בקופה</label><input class=\"wf-input\" disabled placeholder=\"6,200\" /></div><div class=\"wf-row\"><label class=\"wf-label\">הסבר לפער</label><textarea class=\"wf-textarea\" disabled placeholder=\"\"></textarea></div><div class=\"wf-section\">פער: <strong>-40 ₪</strong></div><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">אישור סגירת יום</button><button class=\"wf-button\">ביטול</button></div><p class=\"wf-hint\">הכפתור פעיל רק כשאין הזמנות פתוחות.</p></div>",
+     "x": 0,
+     "y": 0,
+     "rx": 0,
+     "ry": 0
+    },
+    {
+     "kind": "useCase",
+     "id": "uc-serve",
+     "name": "סימון מנה כהוגשה",
+     "primaryActor": "waiter",
+     "description": "המלצר רואה אילו מנות מוכנות להגשה ולאיזה שולחן, ומסמן מנה שהגיש. המערכת מחשבת מחדש את מצב ההזמנה (BR-5).",
+     "preconditions": [
+      "קיימות שורות הזמנה במצב \"מוכנה\"."
+     ],
+     "postconditions": [
+      "השורה במצב \"הוגשה\".",
+      "אם כל השורות שלא בוטלו הוגשו — ההזמנה במצב \"הוגשה\"."
+     ],
+     "scenarios": [
+      {
+       "id": "sc-main",
+       "name": "מסלול מרכזי",
+       "flow": [
+        {
+         "kind": "actor",
+         "actor": "waiter",
+         "text": "פותח את מסך \"מוכן להגשה\""
+        },
+        {
+         "kind": "system",
+         "text": "מציגה את כל השורות במצב \"מוכנה\" לפי זמן, עם מספר שולחן, תחנה, כמות והערה"
+        },
+        {
+         "kind": "actor",
+         "actor": "waiter",
+         "text": "בוחר את המנה שהגיש לשולחן ולוחץ \"הוגשה\""
+        },
+        {
+         "kind": "system",
+         "text": "מעדכנת את השורה למצב \"הוגשה\" ומסירה אותה מרשימת ההגשה"
+        },
+        {
+         "kind": "system",
+         "text": "מחשבת מחדש את מצב ההזמנה — \"הוגשה\" כאשר כל השורות שלא בוטלו הוגשו — ומציגה אותו במצב ההזמנה של הסועד"
+        }
+       ],
+       "extensions": [
+        {
+         "at": "2",
+         "text": "אין מנות מוכנות להגשה",
+         "steps": [
+          "המערכת מציגה \"אין מנות ממתינות להגשה\""
+         ],
+         "outcome": {
+          "kind": "terminate",
+          "text": "לא סומנה מנה."
+         }
+        },
+        {
+         "at": "3",
+         "text": "השורה כבר סומנה \"הוגשה\" על ידי מלצר אחר",
+         "steps": [
+          "המערכת מציגה \"המנה כבר הוגשה\" ומרעננת את הרשימה"
+         ],
+         "outcome": {
+          "kind": "resume",
+          "at": "2"
+         }
+        }
+       ]
+      }
+     ],
+     "userStories": [
+      {
+       "role": "מלצר",
+       "want": "לראות מה מוכן ולאיזה שולחן",
+       "so": "שאגיש את המנה מיד כשהיא יוצאת מהמטבח"
+      },
+      {
+       "role": "סועד",
+       "want": "שמצב ההזמנה שלי יתעדכן ל\"הוגשה\"",
+       "so": "שאדע שכל מה שהזמנתי הגיע"
+      },
+      {
+       "role": "מנהל משמרת",
+       "want": "שההזמנה תסומן \"הוגשה\" רק כשכל השורות הוגשו",
+       "so": "שאראה אילו שולחנות עדיין ממתינים למנה"
+      }
+     ],
+     "wireframe": "<div class=\"wf-screen\"><h3 class=\"wf-heading\">מוכן להגשה</h3><table class=\"wf-table\"><thead><tr><th>שולחן</th><th>מנה</th><th>כמות</th><th>תחנה</th><th>הערה</th><th>מוכן מאז</th><th></th></tr></thead><tbody><tr><td>12</td><td>המבורגר 220 ג'</td><td>2</td><td>בשרית</td><td>אחד מדיום</td><td>3 דק'</td><td><button class=\"wf-button wf-primary\">הוגשה</button></td></tr><tr><td>7</td><td>פסטה ברוטב שמנת</td><td>1</td><td>חלבית</td><td></td><td>1 דק'</td><td><button class=\"wf-button wf-primary\">הוגשה</button></td></tr></tbody></table><p class=\"wf-hint\">הרשימה מתעדכנת אוטומטית כשתחנה מסמנת מנה \"מוכן להגשה\".</p></div>",
+     "x": 0,
+     "y": 0,
+     "rx": 0,
+     "ry": 0
+    }
+   ],
+   "relationships": [
+    {
+     "kind": "actorAssoc",
+     "id": "as-diner-menu",
+     "actorId": "diner",
+     "ucId": "uc-view-menu",
+     "role": "initiator",
+     "description": "הסועד יוזם: סורק QR כדי לראות את התפריט של השולחן."
+    },
+    {
+     "kind": "actorAssoc",
+     "id": "as-diner-order",
+     "actorId": "diner",
+     "ucId": "uc-place-order",
+     "role": "initiator",
+     "description": "הסועד יוזם: פותח הזמנה ובוחר מנות בכמויות עם הערות."
+    },
+    {
+     "kind": "actorAssoc",
+     "id": "as-diner-add",
+     "actorId": "diner",
+     "ucId": "uc-add-items",
+     "role": "initiator",
+     "description": "הסועד יוזם: מוסיף שורות להזמנה הפתוחה במהלך הארוחה."
+    },
+    {
+     "kind": "actorAssoc",
+     "id": "as-diner-status",
+     "actorId": "diner",
+     "ucId": "uc-order-status",
+     "role": "initiator",
+     "description": "הסועד יוזם: בודק מה מצב המנות שהזמין."
+    },
+    {
+     "kind": "actorAssoc",
+     "id": "as-diner-pay",
+     "actorId": "diner",
+     "ucId": "uc-pay",
+     "role": "initiator",
+     "description": "הסועד יוזם תשלום עצמי מהשולחן (על חלקו או על כל החשבון) בכרטיס דרך חברת הסליקה."
+    },
+    {
+     "kind": "actorAssoc",
+     "id": "as-cashier-pay",
+     "actorId": "cashier",
+     "ucId": "uc-pay",
+     "role": "initiator",
+     "description": "הקופאי יוזם רישום תשלום בקופה — מזומן או כרטיס, כולל פיצול בין סועדים."
+    },
+    {
+     "kind": "actorAssoc",
+     "id": "as-cashier-close",
+     "actorId": "cashier",
+     "ucId": "uc-close-day",
+     "role": "initiator",
+     "description": "הקופאי יוזם את סגירת היום בסוף המשמרת האחרונה."
+    },
+    {
+     "kind": "actorAssoc",
+     "id": "as-waiter-serve",
+     "actorId": "waiter",
+     "ucId": "uc-serve",
+     "role": "initiator",
+     "description": "המלצר יוזם: מסמן מנה שהגיש לשולחן."
+    }
+   ]
+  },
+  {
+   "id": "part-2",
+   "label": "מטבח ומשמרת",
+   "splitRationale": "פיצול לפי מספר יוסקייסים: 16 > 8 — לשונית זו: תפעול המטבח (טבח אחראי תחנה) והמשמרת (מנהל משמרת)",
+   "elements": [
+    {
+     "kind": "system",
+     "id": "sys-part-2",
+     "name": "מערכת ההזמנות של מסעדת 'המלצר האוטומטי'",
+     "x": 0,
+     "y": 0,
+     "w": 0,
+     "h": 0
+    },
+    {
+     "kind": "actor",
+     "id": "cook",
+     "name": "טבח",
+     "actorType": "human",
+     "side": "left",
+     "x": 0,
+     "y": 0
+    },
+    {
+     "kind": "actor",
+     "id": "shift_mgr",
+     "name": "מנהל משמרת",
+     "actorType": "human",
+     "side": "right",
+     "x": 0,
+     "y": 0
+    },
+    {
+     "kind": "useCase",
+     "id": "uc-dish-avail",
+     "name": "סימון מנה כאזלה / זמינה",
+     "primaryActor": "cook",
+     "description": "אחראי התחנה מסמן מנה של תחנתו כ\"אזלה\" — והיא נעלמת מיד מתפריט הסועדים — או מחזיר אותה ל\"זמינה\".",
+     "preconditions": [
+      "המנה שייכת לתחנה של הטבח (BR-2)."
+     ],
+     "postconditions": [
+      "זמינות המנה עודכנה; תפריט הסועדים מציג / מסתיר אותה בהתאם (BR-3)."
+     ],
+     "scenarios": [
+      {
+       "id": "sc-out",
+       "name": "סימון מנה כאזלה",
+       "flow": [
+        {
+         "kind": "actor",
+         "actor": "cook",
+         "text": "בוחר מנה מרשימת מנות התחנה במסך התחנה"
+        },
+        {
+         "kind": "system",
+         "text": "מציגה את זמינות המנה הנוכחית ואת מספר השורות הפתוחות שלה בתור"
+        },
+        {
+         "kind": "actor",
+         "actor": "cook",
+         "text": "לוחץ \"אזלה\""
+        },
+        {
+         "kind": "system",
+         "text": "מעדכנת את המנה ל\"אזלה\" ומסירה אותה מהתפריט המוצג לסועדים"
+        },
+        {
+         "kind": "system",
+         "text": "מציגה לטבח את רשימת השורות הפתוחות שכבר הוזמנו עבור המנה, לצורך ביטולן ביוסקייס \"ביטול שורת הזמנה\""
+        }
+       ],
+       "extensions": [
+        {
+         "at": "1",
+         "text": "המנה אינה שייכת לתחנה של הטבח",
+         "steps": [
+          "המערכת מציגה \"מנה זו שייכת לתחנה אחרת\""
+         ],
+         "outcome": {
+          "kind": "terminate",
+          "text": "הזמינות לא שונתה."
+         }
+        },
+        {
+         "at": "3",
+         "text": "המנה כבר במצב \"אזלה\"",
+         "steps": [
+          "המערכת מציגה \"המנה כבר מסומנת אזלה\""
+         ],
+         "outcome": {
+          "kind": "resume",
+          "at": "1"
+         }
+        }
+       ]
+      },
+      {
+       "id": "sc-back",
+       "name": "החזרת מנה לזמינה",
+       "flow": [
+        {
+         "kind": "actor",
+         "actor": "cook",
+         "text": "בוחר מנה המסומנת \"אזלה\" ברשימת התחנה"
+        },
+        {
+         "kind": "system",
+         "text": "מציגה את המנה עם סימון \"אזלה\""
+        },
+        {
+         "kind": "actor",
+         "actor": "cook",
+         "text": "לוחץ \"זמינה\""
+        },
+        {
+         "kind": "system",
+         "text": "מעדכנת את המנה ל\"זמינה\" ומחזירה אותה לתפריט הסועדים"
+        }
+       ],
+       "extensions": [
+        {
+         "at": "1",
+         "text": "המנה אינה שייכת לתחנה של הטבח",
+         "steps": [
+          "המערכת מציגה \"מנה זו שייכת לתחנה אחרת\""
+         ],
+         "outcome": {
+          "kind": "terminate",
+          "text": "הזמינות לא שונתה."
+         }
+        }
+       ]
+      }
+     ],
+     "userStories": [
+      {
+       "role": "טבח",
+       "want": "לסמן מנה שאזלה בלחיצה אחת",
+       "so": "שסועדים לא יזמינו אותה"
+      },
+      {
+       "role": "סועד",
+       "want": "שלא אראה מנות שאזלו",
+       "so": "שלא אתאכזב אחרי שהזמנתי"
+      },
+      {
+       "role": "מנהל המסעדה",
+       "want": "שהמנה תיעלם מהתפריט באותו רגע",
+       "so": "שלא ייווצרו ביטולים מיותרים"
+      }
+     ],
+     "wireframe": "<div class=\"wf-screen\"><h3 class=\"wf-heading\">זמינות מנות — תחנה בשרית</h3><table class=\"wf-table\"><thead><tr><th>מנה</th><th>זמינות</th><th>שורות פתוחות</th><th></th></tr></thead><tbody><tr><td>המבורגר 220 ג'</td><td><span class=\"wf-badge\">זמינה</span></td><td>4</td><td><button class=\"wf-button\">אזלה</button></td></tr><tr><td>סטייק אנטריקוט</td><td>אזלה</td><td>1</td><td><button class=\"wf-button wf-primary\">זמינה</button></td></tr></tbody></table><p class=\"wf-hint\">רק מנות של התחנה שלך מוצגות.</p></div>",
+     "x": 0,
+     "y": 0,
+     "rx": 0,
+     "ry": 0
+    },
+    {
+     "kind": "useCase",
+     "id": "uc-station-queue",
+     "name": "טיפול בתור התחנה",
+     "primaryActor": "cook",
+     "description": "אחראי התחנה עובד על תור השורות של תחנתו לפי סדר הגעה: מסמן \"התחלת הכנה\" ולאחר מכן \"מוכן להגשה\".",
+     "preconditions": [
+      "הטבח משויך לתחנה במשמרת הנוכחית.",
+      "קיימות שורות הזמנה במצב \"ממתינה\" או \"בהכנה\" בתחנה."
+     ],
+     "postconditions": [
+      "השורות שטופלו במצב \"בהכנה\" / \"מוכנה\"; זמני ההתחלה והסיום נרשמו לחישוב זמן הכנה ממוצע."
+     ],
+     "scenarios": [
+      {
+       "id": "sc-main",
+       "name": "מסלול מרכזי",
+       "flow": [
+        {
+         "kind": "actor",
+         "actor": "cook",
+         "text": "פותח את מסך התחנה"
+        },
+        {
+         "kind": "system",
+         "text": "מציגה את תור התחנה: שורות במצב \"ממתינה\" ו\"בהכנה\" לפי זמן ההזמנה, עם שולחן, כמות והערה"
+        },
+        {
+         "kind": "loop",
+         "condition": "יש שורות בתור",
+         "steps": [
+          {
+           "kind": "actor",
+           "actor": "cook",
+           "text": "בוחר את השורה הבאה ולוחץ \"התחלת הכנה\""
+          },
+          {
+           "kind": "system",
+           "text": "מעדכנת את השורה ל\"בהכנה\", רושמת זמן התחלה ומעדכנת את מצב ההזמנה ל\"בהכנה\""
+          },
+          {
+           "kind": "actor",
+           "actor": "cook",
+           "text": "לוחץ \"מוכן להגשה\" כשהמנה מוכנה"
+          },
+          {
+           "kind": "system",
+           "text": "מעדכנת את השורה ל\"מוכנה\", רושמת זמן סיום ומציגה אותה במסך ההגשה של המלצרים"
+          }
+         ]
+        }
+       ],
+       "extensions": [
+        {
+         "at": "2",
+         "text": "התור ריק",
+         "steps": [
+          "המערכת מציגה \"אין הזמנות ממתינות\""
+         ],
+         "outcome": {
+          "kind": "terminate",
+          "text": "לא טופלו שורות."
+         }
+        },
+        {
+         "at": "3.1",
+         "text": "השורה בוטלה בינתיים (על ידי טבח או מנהל משמרת)",
+         "steps": [
+          "המערכת מסירה את השורה מהתור ומציגה \"השורה בוטלה\""
+         ],
+         "outcome": {
+          "kind": "resume",
+          "at": "3.1"
+         }
+        },
+        {
+         "at": "3.3",
+         "text": "המנה אזלה באמצע ההכנה",
+         "steps": [
+          "המערכת מפנה לביטול שורת ההזמנה עם סיבה"
+         ],
+         "outcome": {
+          "kind": "terminate",
+          "text": "השורה נותרת \"בהכנה\" עד לביטול."
+         }
+        }
+       ]
+      }
+     ],
+     "userStories": [
+      {
+       "role": "טבח",
+       "want": "לראות רק את השורות של התחנה שלי לפי סדר הגעה",
+       "so": "שאדע מה להכין עכשיו"
+      },
+      {
+       "role": "טבח",
+       "want": "לראות את ההערות של הסועד ליד כל שורה",
+       "so": "שאכין את המנה כפי שביקש"
+      },
+      {
+       "role": "מלצר",
+       "want": "שמנה שסומנה \"מוכן\" תופיע אצלי מיד",
+       "so": "שאגיש אותה חמה"
+      },
+      {
+       "role": "מנהל המסעדה",
+       "want": "שזמני ההתחלה והסיום יירשמו",
+       "so": "שאדע את זמן ההכנה הממוצע לפי תחנה ושעה"
+      }
+     ],
+     "wireframe": "<div class=\"wf-screen\"><h3 class=\"wf-heading\">תור התחנה — בשרית · 19:42</h3><table class=\"wf-table\"><thead><tr><th>#</th><th>שולחן</th><th>מנה</th><th>כמות</th><th>הערה</th><th>הוזמן</th><th>מצב</th><th></th></tr></thead><tbody><tr><td>1</td><td>12</td><td>המבורגר 220 ג'</td><td>2</td><td>אחד מדיום, אחד well</td><td>19:31</td><td><span class=\"wf-badge\">בהכנה</span></td><td><button class=\"wf-button wf-primary\">מוכן להגשה</button></td></tr><tr><td>2</td><td>7</td><td>סטייק אנטריקוט</td><td>1</td><td>מדיום-רייר</td><td>19:35</td><td>ממתינה</td><td><button class=\"wf-button\">התחלת הכנה</button></td></tr><tr><td>3</td><td>3</td><td>כנפיים</td><td>1</td><td></td><td>19:38</td><td>ממתינה</td><td><button class=\"wf-button\">התחלת הכנה</button></td></tr></tbody></table><p class=\"wf-hint\">המסך מתעדכן תוך 2 שניות מרגע ההזמנה.</p></div>",
+     "x": 0,
+     "y": 0,
+     "rx": 0,
+     "ry": 0
+    },
+    {
+     "kind": "useCase",
+     "id": "uc-cancel-line",
+     "name": "ביטול שורת הזמנה",
+     "primaryActor": "cook",
+     "description": "אחראי התחנה מבטל שורה בודדת (למשל כשהמנה אזלה אחרי שהוזמנה) ורושם סיבה; הסועד רואה זאת במצב ההזמנה.",
+     "preconditions": [
+      "השורה שייכת לתחנה של הטבח ועדיין לא הוגשה."
+     ],
+     "postconditions": [
+      "השורה במצב \"בוטלה\" עם סיבה; סכום ההזמנה עודכן; השורה הוסרה מהתור."
+     ],
+     "scenarios": [
+      {
+       "id": "sc-main",
+       "name": "מסלול מרכזי",
+       "flow": [
+        {
+         "kind": "actor",
+         "actor": "cook",
+         "text": "בוחר שורה בתור התחנה ולוחץ \"ביטול שורה\""
+        },
+        {
+         "kind": "system",
+         "text": "מציגה את פרטי השורה (שולחן, מנה, כמות) ומבקשת סיבה"
+        },
+        {
+         "kind": "actor",
+         "actor": "cook",
+         "text": "בוחר סיבה (המנה אזלה / תקלה במטבח / אחר) ומזין הערה"
+        },
+        {
+         "kind": "system",
+         "text": "מוודאת שהשורה טרם הוגשה"
+        },
+        {
+         "kind": "system",
+         "text": "מעדכנת את השורה ל\"בוטלה\" עם הסיבה, מסירה אותה מהתור ומחשבת מחדש את סכום ההזמנה"
+        },
+        {
+         "kind": "system",
+         "text": "מציגה את הביטול והסיבה במצב ההזמנה של הסועד"
+        }
+       ],
+       "extensions": [
+        {
+         "at": "3",
+         "text": "לא נבחרה סיבה",
+         "steps": [
+          "המערכת מציגה \"חובה לציין סיבת ביטול\""
+         ],
+         "outcome": {
+          "kind": "resume",
+          "at": "3"
+         }
+        },
+        {
+         "at": "4",
+         "text": "השורה כבר סומנה \"הוגשה\"",
+         "steps": [
+          "המערכת מציגה \"לא ניתן לבטל שורה שהוגשה — פנה למנהל המשמרת\""
+         ],
+         "outcome": {
+          "kind": "terminate",
+          "text": "השורה לא בוטלה."
+         }
+        }
+       ]
+      }
+     ],
+     "userStories": [
+      {
+       "role": "טבח",
+       "want": "לבטל שורה של מנה שאזלה ולרשום למה",
+       "so": "שהסועד יידע מיד ויזמין משהו אחר"
+      },
+      {
+       "role": "קופאי",
+       "want": "ששורה מבוטלת לא תיכלל בחשבון",
+       "so": "שלא אגבה על מנה שלא הוגשה"
+      },
+      {
+       "role": "מנהל המסעדה",
+       "want": "שכל ביטול יירשם עם סיבה",
+       "so": "שאוכל לנתח ביטולים לפי סיבה"
+      }
+     ],
+     "wireframe": "<div class=\"wf-screen\"><h3 class=\"wf-heading\">ביטול שורה — שולחן 12 · פנקייק × 1</h3><div class=\"wf-row\"><label class=\"wf-label\">סיבת הביטול</label><select class=\"wf-select\" disabled><option>המנה אזלה / תקלה במטבח / אחר</option></select></div><div class=\"wf-row\"><label class=\"wf-label\">הערה</label><textarea class=\"wf-textarea\" disabled placeholder=\"\"></textarea></div><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">אישור ביטול</button><button class=\"wf-button\">חזרה לתור</button></div><p class=\"wf-hint\">הביטול מוצג לסועד במסך מצב ההזמנה ומוריד את הסכום מהחשבון.</p></div>",
+     "x": 0,
+     "y": 0,
+     "rx": 0,
+     "ry": 0
+    },
+    {
+     "kind": "useCase",
+     "id": "uc-cancel-order",
+     "name": "ביטול הזמנה שלמה",
+     "primaryActor": "shift_mgr",
+     "description": "מנהל המשמרת מבטל הזמנה שלמה של שולחן עם סיבה (BR-7); כל השורות מבוטלות, מוסרות מהתורים והשולחן משתחרר.",
+     "preconditions": [
+      "לשולחן קיימת הזמנה פתוחה.",
+      "המשתמש הוא מנהל משמרת."
+     ],
+     "postconditions": [
+      "ההזמנה וכל שורותיה במצב \"בוטלה\" עם סיבה; השורות הוסרו מתורי התחנות; השולחן פנוי."
+     ],
+     "scenarios": [
+      {
+       "id": "sc-main",
+       "name": "מסלול מרכזי",
+       "flow": [
+        {
+         "kind": "actor",
+         "actor": "shift_mgr",
+         "text": "בוחר שולחן במסך מצב השולחנות ולוחץ \"ביטול הזמנה\""
+        },
+        {
+         "kind": "system",
+         "text": "מציגה את ההזמנה הפתוחה של השולחן עם שורותיה, מצבן והתשלומים שנרשמו"
+        },
+        {
+         "kind": "actor",
+         "actor": "shift_mgr",
+         "text": "בוחר סיבה (הסועדים עזבו / תלונה / טעות בהזמנה / אחר) ומזין הסבר"
+        },
+        {
+         "kind": "system",
+         "text": "מוודאת שלא נרשמו תשלומים על ההזמנה"
+        },
+        {
+         "kind": "system",
+         "text": "מעדכנת את ההזמנה וכל שורותיה ל\"בוטלה\" עם הסיבה, מסירה את השורות מתורי התחנות ומשחררת את השולחן"
+        },
+        {
+         "kind": "system",
+         "text": "מציגה אישור ביטול"
+        }
+       ],
+       "extensions": [
+        {
+         "at": "2",
+         "text": "אין לשולחן הזמנה פתוחה",
+         "steps": [
+          "המערכת מציגה \"אין הזמנה פתוחה לשולחן זה\""
+         ],
+         "outcome": {
+          "kind": "terminate",
+          "text": "לא בוטלה הזמנה."
+         }
+        },
+        {
+         "at": "3",
+         "text": "לא נבחרה סיבה",
+         "steps": [
+          "המערכת מציגה \"חובה לציין סיבת ביטול\""
+         ],
+         "outcome": {
+          "kind": "resume",
+          "at": "3"
+         }
+        },
+        {
+         "at": "4",
+         "text": "על ההזמנה כבר נרשמו תשלומים",
+         "steps": [
+          "המערכת מציגה את התשלומים ומפנה לקופאי לביטול/זיכוי התשלום תחילה"
+         ],
+         "outcome": {
+          "kind": "terminate",
+          "text": "ההזמנה לא בוטלה."
+         }
+        }
+       ]
+      }
+     ],
+     "userStories": [
+      {
+       "role": "מנהל משמרת",
+       "want": "לבטל הזמנה של שולחן שעזב",
+       "so": "שהשולחן יתפנה והמטבח יפסיק להכין"
+      },
+      {
+       "role": "טבח",
+       "want": "ששורות של הזמנה מבוטלת ייעלמו מהתור שלי",
+       "so": "שלא אכין מנות לשולחן ריק"
+      },
+      {
+       "role": "מנהל המסעדה",
+       "want": "שכל ביטול הזמנה יירשם עם סיבה ועל ידי מי",
+       "so": "שאוכל לבקר ביטולים"
+      }
+     ],
+     "wireframe": "<div class=\"wf-screen\"><h3 class=\"wf-heading\">ביטול הזמנה #4871 — שולחן 12</h3><table class=\"wf-table\"><thead><tr><th>מנה</th><th>כמות</th><th>מצב</th></tr></thead><tbody><tr><td>המבורגר 220 ג'</td><td>2</td><td>בהכנה</td></tr><tr><td>סלט יווני</td><td>1</td><td>הוגשה</td></tr></tbody></table><div class=\"wf-section\">תשלומים שנרשמו: <strong>0 ₪</strong></div><div class=\"wf-row\"><label class=\"wf-label\">סיבת הביטול</label><select class=\"wf-select\" disabled><option>הסועדים עזבו / תלונה / טעות / אחר</option></select></div><div class=\"wf-row\"><label class=\"wf-label\">הסבר</label><textarea class=\"wf-textarea\" disabled placeholder=\"\"></textarea></div><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">אישור ביטול ההזמנה</button><button class=\"wf-button\">חזרה</button></div><p class=\"wf-hint\">פעולה זו זמינה למנהל משמרת בלבד ואינה ניתנת לביטול.</p></div>",
+     "x": 0,
+     "y": 0,
+     "rx": 0,
+     "ry": 0
+    },
+    {
+     "kind": "useCase",
+     "id": "uc-tables",
+     "name": "צפייה במצב השולחנות",
+     "primaryActor": "shift_mgr",
+     "description": "מנהל המשמרת רואה את 32 השולחנות ומצבם (פנוי / הזמנה פתוחה / ממתין לתשלום), ויכול להיכנס לפירוט ההזמנה ולהיסטוריית השולחן במשמרת.",
+     "preconditions": [
+      "המשתמש הוא מנהל משמרת."
+     ],
+     "postconditions": [
+      "מצב השולחנות הוצג; לא בוצע שינוי בנתונים."
+     ],
+     "scenarios": [
+      {
+       "id": "sc-main",
+       "name": "מסלול מרכזי",
+       "flow": [
+        {
+         "kind": "actor",
+         "actor": "shift_mgr",
+         "text": "פותח את מסך \"מצב השולחנות\""
+        },
+        {
+         "kind": "system",
+         "text": "מציגה מפה של 32 השולחנות (אולם / חצר) עם צבע לפי מצב: פנוי, הזמנה פתוחה, הוגשה, ממתין לתשלום"
+        },
+        {
+         "kind": "system",
+         "text": "מציגה לכל שולחן תפוס את זמן פתיחת ההזמנה ואת מספר השורות שטרם הוגשו"
+        },
+        {
+         "kind": "actor",
+         "actor": "shift_mgr",
+         "text": "בוחר שולחן"
+        },
+        {
+         "kind": "system",
+         "text": "מציגה את ההזמנה הפתוחה של השולחן עם מצב כל שורה"
+        },
+        {
+         "kind": "actor",
+         "actor": "shift_mgr",
+         "text": "בוחר \"היסטוריית השולחן במשמרת\""
+        },
+        {
+         "kind": "system",
+         "text": "מציגה את כל ההזמנות שנפתחו בשולחן במשמרת הנוכחית"
+        }
+       ],
+       "extensions": [
+        {
+         "at": "5",
+         "text": "השולחן פנוי — אין הזמנה פתוחה",
+         "steps": [
+          "המערכת מציגה \"שולחן פנוי\" ואת ההזמנה האחרונה שנסגרה בו"
+         ],
+         "outcome": {
+          "kind": "resume",
+          "at": "2"
+         }
+        }
+       ]
+      }
+     ],
+     "userStories": [
+      {
+       "role": "מנהל משמרת",
+       "want": "לראות במבט אחד אילו שולחנות תפוסים ומה חסר להם",
+       "so": "שאזהה שולחן שמחכה יותר מדי"
+      },
+      {
+       "role": "מנהל משמרת",
+       "want": "לראות מה קרה בשולחן 12 לאורך הערב",
+       "so": "שאוכל לטפל בתלונה"
+      },
+      {
+       "role": "מלצר",
+       "want": "לדעת אילו שולחנות ממתינים לתשלום",
+       "so": "שאפנה שולחנות מהר יותר"
+      }
+     ],
+     "wireframe": "<div class=\"wf-screen\"><h3 class=\"wf-heading\">מצב השולחנות — משמרת ערב</h3><div class=\"wf-section\"><span class=\"wf-badge\">פנוי: 11</span> <span class=\"wf-badge\">הזמנה פתוחה: 14</span> <span class=\"wf-badge\">הוגשה: 4</span> <span class=\"wf-badge\">ממתין לתשלום: 3</span></div><div class=\"wf-image-box\">[מפת 32 השולחנות — אולם / חצר, צבע לפי מצב]</div><table class=\"wf-table\"><thead><tr><th>שולחן</th><th>מצב</th><th>נפתחה</th><th>טרם הוגשו</th><th>סכום</th></tr></thead><tbody><tr><td>12</td><td>בהכנה</td><td>19:31</td><td>2</td><td>250 ₪</td></tr><tr><td>7</td><td>ממתין לתשלום</td><td>18:55</td><td>0</td><td>312 ₪</td></tr></tbody></table><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">פירוט הזמנה</button><button class=\"wf-button\">היסטוריית שולחן</button><button class=\"wf-button\">ביטול הזמנה</button></div></div>",
+     "x": 0,
+     "y": 0,
+     "rx": 0,
+     "ry": 0
+    }
+   ],
+   "relationships": [
+    {
+     "kind": "actorAssoc",
+     "id": "as-cook-avail",
+     "actorId": "cook",
+     "ucId": "uc-dish-avail",
+     "role": "initiator",
+     "description": "הטבח יוזם: מסמן מנה של תחנתו כאזלה או מחזיר אותה לזמינה."
+    },
+    {
+     "kind": "actorAssoc",
+     "id": "as-cook-queue",
+     "actorId": "cook",
+     "ucId": "uc-station-queue",
+     "role": "initiator",
+     "description": "הטבח יוזם: עובד על תור התחנה — התחלת הכנה וסימון מוכן להגשה."
+    },
+    {
+     "kind": "actorAssoc",
+     "id": "as-cook-cancel",
+     "actorId": "cook",
+     "ucId": "uc-cancel-line",
+     "role": "initiator",
+     "description": "הטבח יוזם: מבטל שורה בודדת עם סיבה כשהמנה אזלה אחרי שהוזמנה."
+    },
+    {
+     "kind": "actorAssoc",
+     "id": "as-shift-cancel",
+     "actorId": "shift_mgr",
+     "ucId": "uc-cancel-order",
+     "role": "initiator",
+     "description": "מנהל המשמרת יוזם: מבטל הזמנה שלמה עם סיבה (BR-7)."
+    },
+    {
+     "kind": "actorAssoc",
+     "id": "as-shift-tables",
+     "actorId": "shift_mgr",
+     "ucId": "uc-tables",
+     "role": "initiator",
+     "description": "מנהל המשמרת יוזם: צופה במצב 32 השולחנות."
+    }
+   ]
+  },
+  {
+   "id": "part-3",
+   "label": "ניהול מערכת",
+   "splitRationale": "פיצול לפי בלוק נתוני-אב: מנהל המסעדה מחזיק ≥2 יוסקייסים של \"ניהול X\" — לשונית משלו, לצד דוח המכירות שהוא יוזם",
+   "elements": [
+    {
+     "kind": "system",
+     "id": "sys-part-3",
+     "name": "מערכת ההזמנות של מסעדת 'המלצר האוטומטי'",
+     "x": 0,
+     "y": 0,
+     "w": 0,
+     "h": 0
+    },
+    {
+     "kind": "actor",
+     "id": "rest_mgr",
+     "name": "מנהל המסעדה",
+     "actorType": "human",
+     "side": "right",
+     "x": 0,
+     "y": 0
+    },
+    {
+     "kind": "useCase",
+     "id": "uc-manage-dishes",
+     "name": "ניהול מנות",
+     "primaryActor": "rest_mgr",
+     "description": "מנהל המסעדה מנהל את נתוני האב של מנות: הוספה, צפייה, עדכון ומחיקה. המחיר הוא שדה של המנה (ומחיר חריג — של המנה בתפריט), ולכן ניהול מחירים הוא חלק מיוסקייס זה.",
+     "preconditions": [
+      "המשתמש הוא מנהל המסעדה."
+     ],
+     "postconditions": [
+      "רשימת מנות מעודכנת; השינוי משתקף בתפריט הסועדים."
+     ],
+     "scenarios": [
+      {
+       "id": "sc-add",
+       "name": "הוספת מנה",
+       "flow": [
+        {
+         "kind": "actor",
+         "actor": "rest_mgr",
+         "text": "בוחר \"מנה חדשה\" במסך ניהול מנות"
+        },
+        {
+         "kind": "actor",
+         "actor": "rest_mgr",
+         "text": "מזין שם, תיאור, מחיר בסיס, תחנת הכנה (אחת בלבד), קטגוריה ואלרגנים"
+        },
+        {
+         "kind": "system",
+         "text": "מוודאת שהשדות החובה מולאו ושהשם אינו קיים כבר"
+        },
+        {
+         "kind": "system",
+         "text": "שומרת את המנה ומציגה אותה ברשימה"
+        }
+       ],
+       "extensions": [
+        {
+         "at": "3",
+         "text": "שדה חובה חסר או שם כפול",
+         "steps": [
+          "המערכת מסמנת את השדה השגוי ומציגה הודעה"
+         ],
+         "outcome": {
+          "kind": "resume",
+          "at": "2"
+         }
+        }
+       ]
+      },
+      {
+       "id": "sc-view",
+       "name": "צפייה במנות",
+       "flow": [
+        {
+         "kind": "actor",
+         "actor": "rest_mgr",
+         "text": "פותח את מסך ניהול מנות"
+        },
+        {
+         "kind": "system",
+         "text": "מציגה את רשימת מנות עם קוד, שם, מחיר בסיס, תחנת הכנה, קטגוריה, זמינות ואלרגנים"
+        },
+        {
+         "kind": "actor",
+         "actor": "rest_mgr",
+         "text": "מסנן או מחפש לפי שם"
+        },
+        {
+         "kind": "system",
+         "text": "מציגה את הרשומות התואמות"
+        }
+       ],
+       "extensions": [
+        {
+         "at": "4",
+         "text": "אין רשומות תואמות לחיפוש",
+         "steps": [
+          "המערכת מציגה \"לא נמצאו תוצאות\""
+         ],
+         "outcome": {
+          "kind": "resume",
+          "at": "3"
+         }
+        }
+       ]
+      },
+      {
+       "id": "sc-update",
+       "name": "עדכון מנה",
+       "flow": [
+        {
+         "kind": "actor",
+         "actor": "rest_mgr",
+         "text": "בוחר מנה מהרשימה ולוחץ \"עריכה\""
+        },
+        {
+         "kind": "system",
+         "text": "מציגה את פרטי המנה לעריכה"
+        },
+        {
+         "kind": "actor",
+         "actor": "rest_mgr",
+         "text": "משנה את השדות הרצויים ולוחץ \"שמירה\""
+        },
+        {
+         "kind": "system",
+         "text": "מוודאת את תקינות השדות"
+        },
+        {
+         "kind": "system",
+         "text": "שומרת את השינוי ומעדכנת את תפריט הסועדים בהתאם"
+        }
+       ],
+       "extensions": [
+        {
+         "at": "4",
+         "text": "ערך לא תקין (למשל מחיר שלילי או שדה חובה ריק)",
+         "steps": [
+          "המערכת מסמנת את השדה ומציגה הודעה"
+         ],
+         "outcome": {
+          "kind": "resume",
+          "at": "3"
+         }
+        }
+       ]
+      },
+      {
+       "id": "sc-delete",
+       "name": "מחיקת מנה",
+       "flow": [
+        {
+         "kind": "actor",
+         "actor": "rest_mgr",
+         "text": "בוחר מנה מהרשימה ולוחץ \"מחיקה\""
+        },
+        {
+         "kind": "system",
+         "text": "מוודאת שהמנה אינה מופיעה בתפריט פעיל ואינה בהזמנה פתוחה"
+        },
+        {
+         "kind": "system",
+         "text": "מבקשת אישור למחיקה"
+        },
+        {
+         "kind": "actor",
+         "actor": "rest_mgr",
+         "text": "מאשר"
+        },
+        {
+         "kind": "system",
+         "text": "מוחקת את המנה ומעדכנת את הרשימה"
+        }
+       ],
+       "extensions": [
+        {
+         "at": "2",
+         "text": "המנה מופיעה בתפריט פעיל או בהזמנה פתוחה",
+         "steps": [
+          "המערכת מציגה את הסיבה ומציעה להשבית במקום למחוק"
+         ],
+         "outcome": {
+          "kind": "terminate",
+          "text": "המנה לא נמחקה."
+         }
+        },
+        {
+         "at": "4",
+         "text": "מנהל המסעדה מבטל את האישור",
+         "outcome": {
+          "kind": "resume",
+          "at": "1"
+         }
+        }
+       ]
+      }
+     ],
+     "userStories": [
+      {
+       "role": "מנהל המסעדה",
+       "want": "להוסיף ולעדכן מנות בעצמי",
+       "so": "שהתפריט יהיה עדכני בלי מתכנת"
+      },
+      {
+       "role": "מנהל המסעדה",
+       "want": "לקבוע לכל מנה תחנת הכנה אחת",
+       "so": "שכל שורה תגיע לתחנה הנכונה"
+      },
+      {
+       "role": "מנהל המסעדה",
+       "want": "לעדכן מחיר בסיס של מנה",
+       "so": "שהמחיר בתפריט יהיה נכון מהמשמרת הבאה"
+      },
+      {
+       "role": "סועד",
+       "want": "לראות אלרגנים ליד כל מנה",
+       "so": "שאדע ממה להיזהר"
+      }
+     ],
+     "wireframe": "<div class=\"wf-screen\"><h3 class=\"wf-heading\">ניהול מנות</h3><table class=\"wf-table\"><thead><tr><th>קוד</th><th>שם</th><th>מחיר בסיס</th><th>תחנה</th><th>קטגוריה</th><th>אלרגנים</th></tr></thead><tbody><tr><td>M-101</td><td>המבורגר 220 ג'</td><td>68 ₪</td><td>בשרית</td><td>עיקריות</td><td>גלוטן</td></tr><tr><td>D-204</td><td>סלט יווני</td><td>42 ₪</td><td>חלבית</td><td>ראשונות</td><td>חלב</td></tr><tr><td>S-310</td><td>טירמיסו</td><td>38 ₪</td><td>קינוחים</td><td>קינוחים</td><td>חלב, ביצים</td></tr></tbody></table><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">מנה חדשה</button><button class=\"wf-button\">עריכה</button><button class=\"wf-button\">מחיקה</button></div><p class=\"wf-hint\">שינוי נשמר ומשתקף מיד בתפריט הסועדים.</p></div>",
+     "x": 0,
+     "y": 0,
+     "rx": 0,
+     "ry": 0
+    },
+    {
+     "kind": "useCase",
+     "id": "uc-manage-menus",
+     "name": "ניהול תפריטים",
+     "primaryActor": "rest_mgr",
+     "description": "מנהל המסעדה מנהל את נתוני האב של תפריטים: הוספה, צפייה, עדכון ומחיקה. שעות התוקף קובעות איזה תפריט מוצג לסועד.",
+     "preconditions": [
+      "המשתמש הוא מנהל המסעדה."
+     ],
+     "postconditions": [
+      "רשימת תפריטים מעודכנת; השינוי משתקף בתפריט הסועדים."
+     ],
+     "scenarios": [
+      {
+       "id": "sc-add",
+       "name": "הוספת תפריט",
+       "flow": [
+        {
+         "kind": "actor",
+         "actor": "rest_mgr",
+         "text": "בוחר \"תפריט חדש\" במסך ניהול תפריטים"
+        },
+        {
+         "kind": "actor",
+         "actor": "rest_mgr",
+         "text": "מזין שם התפריט (צהריים / ערב), שעות תוקף, ובוחר את המנות הכלולות בו עם מחיר חריג לכל מנה כשנדרש"
+        },
+        {
+         "kind": "system",
+         "text": "מוודאת שהשדות החובה מולאו ושהשם אינו קיים כבר"
+        },
+        {
+         "kind": "system",
+         "text": "שומרת את התפריט ומציגה אותו ברשימה"
+        }
+       ],
+       "extensions": [
+        {
+         "at": "3",
+         "text": "שדה חובה חסר או שם כפול",
+         "steps": [
+          "המערכת מסמנת את השדה השגוי ומציגה הודעה"
+         ],
+         "outcome": {
+          "kind": "resume",
+          "at": "2"
+         }
+        }
+       ]
+      },
+      {
+       "id": "sc-view",
+       "name": "צפייה בתפריטים",
+       "flow": [
+        {
+         "kind": "actor",
+         "actor": "rest_mgr",
+         "text": "פותח את מסך ניהול תפריטים"
+        },
+        {
+         "kind": "system",
+         "text": "מציגה את רשימת תפריטים עם שם, שעות תוקף ומספר המנות בו"
+        },
+        {
+         "kind": "actor",
+         "actor": "rest_mgr",
+         "text": "מסנן או מחפש לפי שם"
+        },
+        {
+         "kind": "system",
+         "text": "מציגה את הרשומות התואמות"
+        }
+       ],
+       "extensions": [
+        {
+         "at": "4",
+         "text": "אין רשומות תואמות לחיפוש",
+         "steps": [
+          "המערכת מציגה \"לא נמצאו תוצאות\""
+         ],
+         "outcome": {
+          "kind": "resume",
+          "at": "3"
+         }
+        }
+       ]
+      },
+      {
+       "id": "sc-update",
+       "name": "עדכון תפריט",
+       "flow": [
+        {
+         "kind": "actor",
+         "actor": "rest_mgr",
+         "text": "בוחר תפריט מהרשימה ולוחץ \"עריכה\""
+        },
+        {
+         "kind": "system",
+         "text": "מציגה את פרטי התפריט לעריכה"
+        },
+        {
+         "kind": "actor",
+         "actor": "rest_mgr",
+         "text": "משנה את השדות הרצויים ולוחץ \"שמירה\""
+        },
+        {
+         "kind": "system",
+         "text": "מוודאת את תקינות השדות"
+        },
+        {
+         "kind": "system",
+         "text": "שומרת את השינוי ומעדכנת את תפריט הסועדים בהתאם"
+        }
+       ],
+       "extensions": [
+        {
+         "at": "4",
+         "text": "ערך לא תקין (למשל מחיר שלילי או שדה חובה ריק)",
+         "steps": [
+          "המערכת מסמנת את השדה ומציגה הודעה"
+         ],
+         "outcome": {
+          "kind": "resume",
+          "at": "3"
+         }
+        }
+       ]
+      },
+      {
+       "id": "sc-delete",
+       "name": "מחיקת תפריט",
+       "flow": [
+        {
+         "kind": "actor",
+         "actor": "rest_mgr",
+         "text": "בוחר תפריט מהרשימה ולוחץ \"מחיקה\""
+        },
+        {
+         "kind": "system",
+         "text": "מוודאת שהתפריט אינו פעיל כרגע"
+        },
+        {
+         "kind": "system",
+         "text": "מבקשת אישור למחיקה"
+        },
+        {
+         "kind": "actor",
+         "actor": "rest_mgr",
+         "text": "מאשר"
+        },
+        {
+         "kind": "system",
+         "text": "מוחקת את התפריט ומעדכנת את הרשימה"
+        }
+       ],
+       "extensions": [
+        {
+         "at": "2",
+         "text": "התפריט פעיל כרגע (בתוך שעות התוקף)",
+         "steps": [
+          "המערכת מציגה את הסיבה ומציעה להשבית במקום למחוק"
+         ],
+         "outcome": {
+          "kind": "terminate",
+          "text": "התפריט לא נמחק."
+         }
+        },
+        {
+         "at": "4",
+         "text": "מנהל המסעדה מבטל את האישור",
+         "outcome": {
+          "kind": "resume",
+          "at": "1"
+         }
+        }
+       ]
+      }
+     ],
+     "userStories": [
+      {
+       "role": "מנהל המסעדה",
+       "want": "להוסיף ולעדכן תפריטים בעצמי",
+       "so": "שהתפריט יהיה עדכני בלי מתכנת"
+      },
+      {
+       "role": "מנהל המסעדה",
+       "want": "שאותה מנה תופיע בתפריט צהריים ובתפריט ערב במחיר שונה",
+       "so": "שאקבע מחירים לפי שעה"
+      },
+      {
+       "role": "סועד",
+       "want": "שהתפריט יתחלף אוטומטית לפי השעה",
+       "so": "שלא אזמין מנת צהריים בערב"
+      }
+     ],
+     "wireframe": "<div class=\"wf-screen\"><h3 class=\"wf-heading\">ניהול תפריטים</h3><table class=\"wf-table\"><thead><tr><th>תפריט</th><th>שעות</th><th>מנות</th><th>פעיל</th></tr></thead><tbody><tr><td>צהריים</td><td>11:30–17:00</td><td>34</td><td>כן</td></tr><tr><td>ערב</td><td>17:00–23:30</td><td>52</td><td>כן</td></tr><tr><td>חג</td><td>—</td><td>40</td><td>לא</td></tr></tbody></table><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">תפריט חדש</button><button class=\"wf-button\">עריכה</button><button class=\"wf-button\">מחיקה</button></div><p class=\"wf-hint\">שינוי נשמר ומשתקף מיד בתפריט הסועדים.</p></div>",
+     "x": 0,
+     "y": 0,
+     "rx": 0,
+     "ry": 0
+    },
+    {
+     "kind": "useCase",
+     "id": "uc-manage-categories",
+     "name": "ניהול קטגוריות",
+     "primaryActor": "rest_mgr",
+     "description": "מנהל המסעדה מנהל את נתוני האב של קטגוריות: הוספה, צפייה, עדכון ומחיקה. הקטגוריות משמשות להצגת התפריט בלבד ואינן קובעות תחנת הכנה.",
+     "preconditions": [
+      "המשתמש הוא מנהל המסעדה."
+     ],
+     "postconditions": [
+      "רשימת קטגוריות מעודכנת; השינוי משתקף בתפריט הסועדים."
+     ],
+     "scenarios": [
+      {
+       "id": "sc-add",
+       "name": "הוספת קטגוריה",
+       "flow": [
+        {
+         "kind": "actor",
+         "actor": "rest_mgr",
+         "text": "בוחר \"קטגוריה חדשה\" במסך ניהול קטגוריות"
+        },
+        {
+         "kind": "actor",
+         "actor": "rest_mgr",
+         "text": "מזין שם הקטגוריה וסדר התצוגה בתפריט"
+        },
+        {
+         "kind": "system",
+         "text": "מוודאת שהשדות החובה מולאו ושהשם אינו קיים כבר"
+        },
+        {
+         "kind": "system",
+         "text": "שומרת את הקטגוריה ומציגה אותה ברשימה"
+        }
+       ],
+       "extensions": [
+        {
+         "at": "3",
+         "text": "שדה חובה חסר או שם כפול",
+         "steps": [
+          "המערכת מסמנת את השדה השגוי ומציגה הודעה"
+         ],
+         "outcome": {
+          "kind": "resume",
+          "at": "2"
+         }
+        }
+       ]
+      },
+      {
+       "id": "sc-view",
+       "name": "צפייה בקטגוריות",
+       "flow": [
+        {
+         "kind": "actor",
+         "actor": "rest_mgr",
+         "text": "פותח את מסך ניהול קטגוריות"
+        },
+        {
+         "kind": "system",
+         "text": "מציגה את רשימת קטגוריות עם שם, סדר תצוגה ומספר המנות בה"
+        },
+        {
+         "kind": "actor",
+         "actor": "rest_mgr",
+         "text": "מסנן או מחפש לפי שם"
+        },
+        {
+         "kind": "system",
+         "text": "מציגה את הרשומות התואמות"
+        }
+       ],
+       "extensions": [
+        {
+         "at": "4",
+         "text": "אין רשומות תואמות לחיפוש",
+         "steps": [
+          "המערכת מציגה \"לא נמצאו תוצאות\""
+         ],
+         "outcome": {
+          "kind": "resume",
+          "at": "3"
+         }
+        }
+       ]
+      },
+      {
+       "id": "sc-update",
+       "name": "עדכון קטגוריה",
+       "flow": [
+        {
+         "kind": "actor",
+         "actor": "rest_mgr",
+         "text": "בוחר קטגוריה מהרשימה ולוחץ \"עריכה\""
+        },
+        {
+         "kind": "system",
+         "text": "מציגה את פרטי הקטגוריה לעריכה"
+        },
+        {
+         "kind": "actor",
+         "actor": "rest_mgr",
+         "text": "משנה את השדות הרצויים ולוחץ \"שמירה\""
+        },
+        {
+         "kind": "system",
+         "text": "מוודאת את תקינות השדות"
+        },
+        {
+         "kind": "system",
+         "text": "שומרת את השינוי ומעדכנת את תפריט הסועדים בהתאם"
+        }
+       ],
+       "extensions": [
+        {
+         "at": "4",
+         "text": "ערך לא תקין (למשל מחיר שלילי או שדה חובה ריק)",
+         "steps": [
+          "המערכת מסמנת את השדה ומציגה הודעה"
+         ],
+         "outcome": {
+          "kind": "resume",
+          "at": "3"
+         }
+        }
+       ]
+      },
+      {
+       "id": "sc-delete",
+       "name": "מחיקת קטגוריה",
+       "flow": [
+        {
+         "kind": "actor",
+         "actor": "rest_mgr",
+         "text": "בוחר קטגוריה מהרשימה ולוחץ \"מחיקה\""
+        },
+        {
+         "kind": "system",
+         "text": "מוודאת שלא משויכות לקטגוריה מנות"
+        },
+        {
+         "kind": "system",
+         "text": "מבקשת אישור למחיקה"
+        },
+        {
+         "kind": "actor",
+         "actor": "rest_mgr",
+         "text": "מאשר"
+        },
+        {
+         "kind": "system",
+         "text": "מוחקת את הקטגוריה ומעדכנת את הרשימה"
+        }
+       ],
+       "extensions": [
+        {
+         "at": "2",
+         "text": "משויכות לקטגוריה מנות",
+         "steps": [
+          "המערכת מציגה את הסיבה ומציעה להשבית במקום למחוק"
+         ],
+         "outcome": {
+          "kind": "terminate",
+          "text": "הקטגוריה לא נמחקה."
+         }
+        },
+        {
+         "at": "4",
+         "text": "מנהל המסעדה מבטל את האישור",
+         "outcome": {
+          "kind": "resume",
+          "at": "1"
+         }
+        }
+       ]
+      }
+     ],
+     "userStories": [
+      {
+       "role": "מנהל המסעדה",
+       "want": "להוסיף ולעדכן קטגוריות בעצמי",
+       "so": "שהתפריט יהיה עדכני בלי מתכנת"
+      },
+      {
+       "role": "מנהל המסעדה",
+       "want": "לשנות את סדר הקטגוריות בתפריט",
+       "so": "שהסועד יראה קודם את מה שאני רוצה לקדם"
+      }
+     ],
+     "wireframe": "<div class=\"wf-screen\"><h3 class=\"wf-heading\">ניהול קטגוריות</h3><table class=\"wf-table\"><thead><tr><th>#</th><th>קטגוריה</th><th>מנות</th></tr></thead><tbody><tr><td>1</td><td>ראשונות</td><td>12</td></tr><tr><td>2</td><td>עיקריות</td><td>25</td></tr><tr><td>3</td><td>שתייה</td><td>18</td></tr><tr><td>4</td><td>קינוחים</td><td>9</td></tr></tbody></table><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">קטגוריה חדשה</button><button class=\"wf-button\">עריכה</button><button class=\"wf-button\">מחיקה</button></div><p class=\"wf-hint\">שינוי נשמר ומשתקף מיד בתפריט הסועדים.</p></div>",
+     "x": 0,
+     "y": 0,
+     "rx": 0,
+     "ry": 0
+    },
+    {
+     "kind": "useCase",
+     "id": "uc-daily-report",
+     "name": "הפקת דוח מכירות יומי",
+     "primaryActor": "rest_mgr",
+     "description": "מנהל המסעדה מפיק לתאריך נבחר דוח מכירות: מספר הזמנות, סכום כולל, פילוח לפי תחנה ולפי אמצעי תשלום, עשר המנות הנמכרות ביותר וזמן הכנה ממוצע לפי תחנה.",
+     "preconditions": [
+      "המשתמש הוא מנהל המסעדה.",
+      "קיימות הזמנות ששולמו בתאריך המבוקש."
+     ],
+     "postconditions": [
+      "הדוח הוצג ונשמר כקובץ PDF; לא בוצע שינוי בנתוני ההזמנות."
+     ],
+     "scenarios": [
+      {
+       "id": "sc-main",
+       "name": "מסלול מרכזי",
+       "flow": [
+        {
+         "kind": "actor",
+         "actor": "rest_mgr",
+         "text": "בוחר \"דוח מכירות יומי\" ומזין תאריך"
+        },
+        {
+         "kind": "system",
+         "text": "מאתרת את כל ההזמנות במצב \"שולמה\" בתאריך ואת תשלומיהן"
+        },
+        {
+         "kind": "system",
+         "text": "מחשבת מספר הזמנות, סכום כולל, פילוח לפי תחנת הכנה ולפי אמצעי תשלום"
+        },
+        {
+         "kind": "system",
+         "text": "מחשבת את עשר המנות הנמכרות ביותר לפי כמות ואת זמן ההכנה הממוצע לכל תחנה לפי שעה"
+        },
+        {
+         "kind": "system",
+         "text": "מציגה את הדוח על המסך"
+        },
+        {
+         "kind": "actor",
+         "actor": "rest_mgr",
+         "text": "לוחץ \"ייצוא ל-PDF\""
+        },
+        {
+         "kind": "system",
+         "text": "מפיקה קובץ PDF של הדוח ומציעה להורידו"
+        }
+       ],
+       "extensions": [
+        {
+         "at": "1",
+         "text": "התאריך שהוזן עתידי",
+         "steps": [
+          "המערכת מציגה \"לא ניתן להפיק דוח לתאריך עתידי\""
+         ],
+         "outcome": {
+          "kind": "resume",
+          "at": "1"
+         }
+        },
+        {
+         "at": "2",
+         "text": "אין הזמנות ששולמו בתאריך",
+         "steps": [
+          "המערכת מציגה \"אין מכירות בתאריך זה\""
+         ],
+         "outcome": {
+          "kind": "terminate",
+          "text": "לא הופק דוח."
+         }
+        }
+       ]
+      }
+     ],
+     "userStories": [
+      {
+       "role": "מנהל המסעדה",
+       "want": "לראות כמה מכרנו היום ובאיזה אמצעי",
+       "so": "שאדע את הפדיון בלי לסכם פתקים"
+      },
+      {
+       "role": "מנהל המסעדה",
+       "want": "לדעת מהן עשר המנות הנמכרות ביותר",
+       "so": "שאתכנן רכש ותפריט"
+      },
+      {
+       "role": "מנהל המסעדה",
+       "want": "לראות זמן הכנה ממוצע בתחנה הבשרית בערב שישי",
+       "so": "שאתגבר את התחנה כשצריך"
+      }
+     ],
+     "wireframe": "<div class=\"wf-screen\"><h3 class=\"wf-heading\">דוח מכירות יומי</h3><div class=\"wf-row\"><label class=\"wf-label\">תאריך</label><input class=\"wf-input\" disabled placeholder=\"30/08/2026\" /></div><table class=\"wf-table\"><thead><tr><th></th><th>סכום</th></tr></thead><tbody><tr><td>מספר הזמנות</td><td>142</td></tr><tr><td>סכום כולל</td><td>28,120 ₪</td></tr><tr><td>בשרית / חלבית / קינוחים</td><td>15,300 / 9,020 / 3,800 ₪</td></tr><tr><td>מזומן / כרטיס</td><td>6,240 / 21,880 ₪</td></tr></tbody></table><table class=\"wf-table\"><thead><tr><th>#</th><th>מנה</th><th>כמות</th></tr></thead><tbody><tr><td>1</td><td>המבורגר 220 ג'</td><td>88</td></tr><tr><td>2</td><td>סלט יווני</td><td>61</td></tr><tr><td>3</td><td>טירמיסו</td><td>44</td></tr></tbody></table><table class=\"wf-table\"><thead><tr><th>תחנה</th><th>זמן הכנה ממוצע</th></tr></thead><tbody><tr><td>בשרית</td><td>14 דק'</td></tr><tr><td>חלבית</td><td>9 דק'</td></tr><tr><td>קינוחים</td><td>6 דק'</td></tr></tbody></table><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">הפקת דוח</button><button class=\"wf-button\">ייצוא ל-PDF</button></div></div>",
+     "x": 0,
+     "y": 0,
+     "rx": 0,
+     "ry": 0
+    }
+   ],
+   "relationships": [
+    {
+     "kind": "actorAssoc",
+     "id": "as-mgr-dishes",
+     "actorId": "rest_mgr",
+     "ucId": "uc-manage-dishes",
+     "role": "initiator",
+     "description": "מנהל המסעדה יוזם: מוסיף / מעדכן / מוחק מנות, כולל מחיר בסיס ותחנת הכנה."
+    },
+    {
+     "kind": "actorAssoc",
+     "id": "as-mgr-menus",
+     "actorId": "rest_mgr",
+     "ucId": "uc-manage-menus",
+     "role": "initiator",
+     "description": "מנהל המסעדה יוזם: מגדיר תפריטי צהריים / ערב, שעות תוקף והמנות בכל תפריט."
+    },
+    {
+     "kind": "actorAssoc",
+     "id": "as-mgr-cats",
+     "actorId": "rest_mgr",
+     "ucId": "uc-manage-categories",
+     "role": "initiator",
+     "description": "מנהל המסעדה יוזם: מנהל את קטגוריות התצוגה של התפריט."
+    },
+    {
+     "kind": "actorAssoc",
+     "id": "as-mgr-report",
+     "actorId": "rest_mgr",
+     "ucId": "uc-daily-report",
+     "role": "initiator",
+     "description": "מנהל המסעדה יוזם: מפיק דוח מכירות לתאריך."
+    }
+   ]
+  }
+ ],
+ "assumptions": [
+  "חברת הסליקה אינה שחקן: המערכת קוראת לה (בקשת חיוב) והיא אינה יוזמת דבר במערכת — זו תלות עיצובית (API), והיא מופיעה כצעד מערכת בתוך \"רישום תשלום עבור הזמנה\" (BR-9). היא הייתה שחקן רק אילו הייתה מפעילה אותנו בעצמה (למשל webhook של זיכוי).",
+  "למלצר אין תפקיד בהזנת הזמנות — הסועד מזמין בעצמו בסריקת QR; המלצר מסמן הגשה בלבד.",
+  "מחירים אינם יוסקייס נפרד: מחיר הבסיס הוא שדה של המנה ומחיר חריג הוא שדה של המנה-בתפריט, ולכן ניהולם נכלל ב\"ניהול מנות\" וב\"ניהול תפריטים\". הדרישה \"ניהול תפריטים, מנות, מחירים וקטגוריות\" פוצלה ליוסקייס אחד לכל ישות נתוני-אב.",
+  "דוח המכירות היומי מופק לפי דרישה על ידי מנהל המסעדה (הוא היוזם). הנחה חלופית תקפה באותה מידה: שחקן זמן ⏰ שמפיק את הדוח אוטומטית פעם ביום.",
+  "\"הגשת מנה לשולחן\" היא פעולה פיזית; הפעולה מול המערכת היא סימון המנה כהוגשה, ולכן זה שם היוסקייס.",
+  "\"ניהול תור התחנה\" נקרא כאן \"טיפול בתור התחנה\" — זה יוסקייס תפעולי אחד (התחלת הכנה + מוכן להגשה על שורות בתור), לא ניהול ישות נתוני-אב.",
+  "טיפ נרשם כשדה של התשלום ואינו יוסקייס נפרד.",
+  "מצב ההזמנה (התקבלה / בהכנה / הוגשה / שולמה) מחושב על ידי המערכת בתוך היוסקייסים שמשנים שורות ותשלומים — אין יוסקייס \"עדכון מצב הזמנה\"."
+ ],
+ "openQuestions": [
+  "האם הסועד רשאי לבטל בעצמו שורה שטרם החלה הכנתה, או שכל ביטול עובר דרך הטבח / מנהל המשמרת?",
+  "כיצד מזוהה מנהל המשמרת בעת ביטול הזמנה שלמה — קוד אישי במסך, או תחנת עבודה ייעודית?",
+  "מה קורה להזמנה פתוחה כשהסועדים עוזבים בלי לשלם — האם נדרש יוסקייס מופעל-זמן לזיהוי שולחן \"נטוש\"?"
+ ]
+};
+    // Keep the per-tab split-rationale line in sync with the active tab (data only — no redeclared runtime names).
+    document.addEventListener('click', function (e) {
+      var t = e.target.closest && e.target.closest('.tab');
+      if (!t) return;
+      var idx = Array.prototype.indexOf.call(document.querySelectorAll('.tab'), t);
+      document.querySelectorAll('.split-rationale').forEach(function (r, i) { r.hidden = i !== idx; });
+    });
+  </script>
+  <script src="https://themathbible.com/sad-mcp/uc-diagram-common.js"></script>
+</body>
+</html>
