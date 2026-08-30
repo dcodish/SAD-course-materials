@@ -1,0 +1,4451 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>מערכת ההזמנות של מלון 'גלי הים' — Use Case Diagram</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Hebrew:wght@400;600&family=IBM+Plex+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://themathbible.com/sad-mcp/uc-diagram-common.css" rel="stylesheet">
+  <!-- REQUIRED: uc-diagram-common.css sets display:flex on .diagram-part, which overrides
+       the browser's [hidden]{display:none}. This one-liner restores correct tab switching. -->
+  <style>[hidden] { display: none !important; }</style>
+</head>
+<body>
+  <h1 class="page-title">מערכת ההזמנות של מלון 'גלי הים' — תרשים תרחישי שימוש</h1>
+
+  <div class="tab-bar">
+<button class="tab active" onclick="showDiagram(0)">הזמנה ושהות</button>
+<button class="tab" onclick="showDiagram(1)">ניהול מערכת ודוחות</button>
+<button class="tab" onclick="showDiagram(2)">תהליכים אוטומטיים</button>
+  </div>
+
+  <div class="split-rationale">Split by UC count: 16 UCs > 8 threshold — לשונית זו: מחזור ההזמנה (הזמנה ← אישור ← צ'ק-אין ← שהות ← צ'ק-אאוט) והחריגים שבדלפק · Admin master-data block in its own tab (trigger #3) — מנהל המלון: סוגי חדרים ותעריפים, חדרים, קטלוג שירותים, דוחות · Time-actor triggers in their own tab (trigger #3) — שחקן הזמן: אי-הגעה בחצות, ביטול הזמנות שחיובן לא הושלם</div>
+
+  <div style="text-align:center;margin:8px 0;">
+    <button onclick="fixLayout(currentLayout())" class="fix-btn">Fix Layout</button>
+  </div>
+
+<div class="diagram-part" id="diagram-0">
+<svg id="diagram-svg-0" viewBox="0 0 1100 560" width="1100" height="560" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<pattern id="dots-0" width="24" height="24" patternUnits="userSpaceOnUse"><circle cx="12" cy="12" r="0.8" fill="#cbd5e1"/></pattern>
+<marker id="arrow-include-0" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polyline points="0 0, 9 3.5, 0 7" fill="none" stroke="#7c3aed" stroke-width="1.2"/></marker>
+</defs>
+<rect x="0" y="0" width="100%" height="100%" fill="#f8fafc"/>
+<rect x="0" y="0" width="100%" height="100%" fill="url(#dots-0)"/>
+<rect class="system-boundary" x="200" y="60" width="640" height="400" rx="12" fill="#ffffff" stroke="#3b82f6" stroke-width="2.5"/>
+<rect x="200" y="60" width="640" height="44" rx="12" fill="#1e40af"/>
+<rect x="200" y="82" width="640" height="22" fill="#1e40af"/>
+<text x="520.0" y="88" text-anchor="middle" font-size="14" font-weight="700" fill="#ffffff" direction="rtl" font-family="'Noto Sans Hebrew',sans-serif">מערכת ההזמנות של מלון 'גלי הים' — הזמנה ושהות</text>
+<line data-conn-from="guest" data-conn-to="uc-book" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+<line class="conn-hitbox" data-conn-id="a1" data-hitbox-from="guest" data-hitbox-to="uc-book" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('a1','assoc',event)"/>
+<line data-conn-from="reception" data-conn-to="uc-book" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+<line class="conn-hitbox" data-conn-id="a2" data-hitbox-from="reception" data-hitbox-to="uc-book" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('a2','assoc',event)"/>
+<line data-conn-from="guest" data-conn-to="uc-cancel" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+<line class="conn-hitbox" data-conn-id="a3" data-hitbox-from="guest" data-hitbox-to="uc-cancel" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('a3','assoc',event)"/>
+<line data-conn-from="guest" data-conn-to="uc-my-bookings" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+<line class="conn-hitbox" data-conn-id="a4" data-hitbox-from="guest" data-hitbox-to="uc-my-bookings" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('a4','assoc',event)"/>
+<line data-conn-from="reception" data-conn-to="uc-confirm" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+<line class="conn-hitbox" data-conn-id="a5" data-hitbox-from="reception" data-hitbox-to="uc-confirm" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('a5','assoc',event)"/>
+<line data-conn-from="reception" data-conn-to="uc-checkin" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+<line class="conn-hitbox" data-conn-id="a6" data-hitbox-from="reception" data-hitbox-to="uc-checkin" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('a6','assoc',event)"/>
+<line data-conn-from="reception" data-conn-to="uc-add-charge" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+<line class="conn-hitbox" data-conn-id="a7" data-hitbox-from="reception" data-hitbox-to="uc-add-charge" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('a7','assoc',event)"/>
+<line data-conn-from="reception" data-conn-to="uc-extend" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+<line class="conn-hitbox" data-conn-id="a8" data-hitbox-from="reception" data-hitbox-to="uc-extend" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('a8','assoc',event)"/>
+<line data-conn-from="reception" data-conn-to="uc-checkout" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+<line class="conn-hitbox" data-conn-id="a9" data-hitbox-from="reception" data-hitbox-to="uc-checkout" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('a9','assoc',event)"/>
+<line data-conn-from="recep-mgr" data-conn-to="uc-delete-dup" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+<line class="conn-hitbox" data-conn-id="a10" data-hitbox-from="recep-mgr" data-hitbox-to="uc-delete-dup" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('a10','assoc',event)"/>
+<line data-conn-from="uc-confirm" data-conn-to="uc-charge" x1="0" y1="0" x2="0" y2="0" stroke="#7c3aed" stroke-width="1.6" stroke-dasharray="6 4" marker-end="url(#arrow-include-0)"/>
+<line class="conn-hitbox" data-hitbox-from="uc-confirm" data-hitbox-to="uc-charge" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14"/>
+<text data-label-for="uc-confirm uc-charge" x="0" y="0" text-anchor="middle" font-size="9.5" fill="#7c3aed" font-family="'IBM Plex Mono',monospace">«include»</text>
+<line data-conn-from="uc-checkout" data-conn-to="uc-charge" x1="0" y1="0" x2="0" y2="0" stroke="#7c3aed" stroke-width="1.6" stroke-dasharray="6 4" marker-end="url(#arrow-include-0)"/>
+<line class="conn-hitbox" data-hitbox-from="uc-checkout" data-hitbox-to="uc-charge" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14"/>
+<text data-label-for="uc-checkout uc-charge" x="0" y="0" text-anchor="middle" font-size="9.5" fill="#7c3aed" font-family="'IBM Plex Mono',monospace">«include»</text>
+<g id="uc-group-uc-book" data-uc-id="uc-book" onclick="showDesc('uc-book','uc',event)" style="cursor:pointer">
+<ellipse cx="520" cy="161" rx="70" ry="27" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+<text x="520" y="165" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" direction="rtl" font-family="'Noto Sans Hebrew',sans-serif">הזמנת חדר</text>
+</g>
+<g id="uc-group-uc-cancel" data-uc-id="uc-cancel" onclick="showDesc('uc-cancel','uc',event)" style="cursor:pointer">
+<ellipse cx="314" cy="161" rx="70" ry="30" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+<text x="314" y="158" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" direction="rtl" font-family="'Noto Sans Hebrew',sans-serif">ביטול הזמנה</text>
+<text x="314" y="172" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" direction="rtl" font-family="'Noto Sans Hebrew',sans-serif">על ידי האורח</text>
+</g>
+<g id="uc-group-uc-my-bookings" data-uc-id="uc-my-bookings" onclick="showDesc('uc-my-bookings','uc',event)" style="cursor:pointer">
+<ellipse cx="314" cy="235" rx="70" ry="30" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+<text x="314" y="232" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" direction="rtl" font-family="'Noto Sans Hebrew',sans-serif">צפייה</text>
+<text x="314" y="246" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" direction="rtl" font-family="'Noto Sans Hebrew',sans-serif">בהזמנות שלי</text>
+</g>
+<g id="uc-group-uc-confirm" data-uc-id="uc-confirm" onclick="showDesc('uc-confirm','uc',event)" style="cursor:pointer">
+<ellipse cx="736" cy="161" rx="70" ry="30" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+<text x="736" y="158" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" direction="rtl" font-family="'Noto Sans Hebrew',sans-serif">אישור או</text>
+<text x="736" y="172" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" direction="rtl" font-family="'Noto Sans Hebrew',sans-serif">דחיית הזמנה</text>
+</g>
+<g id="uc-group-uc-charge" data-uc-id="uc-charge" onclick="showDesc('uc-charge','uc',event)" style="cursor:pointer">
+<ellipse cx="520" cy="235" rx="70" ry="30" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+<text x="520" y="232" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" direction="rtl" font-family="'Noto Sans Hebrew',sans-serif">חיוב כרטיס</text>
+<text x="520" y="246" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" direction="rtl" font-family="'Noto Sans Hebrew',sans-serif">אשראי</text>
+</g>
+<g id="uc-group-uc-checkin" data-uc-id="uc-checkin" onclick="showDesc('uc-checkin','uc',event)" style="cursor:pointer">
+<ellipse cx="736" cy="235" rx="70" ry="30" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+<text x="736" y="232" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" direction="rtl" font-family="'Noto Sans Hebrew',sans-serif">רישום צ'ק-אין</text>
+<text x="736" y="246" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" direction="rtl" font-family="'Noto Sans Hebrew',sans-serif">ושיבוץ חדר</text>
+</g>
+<g id="uc-group-uc-add-charge" data-uc-id="uc-add-charge" onclick="showDesc('uc-add-charge','uc',event)" style="cursor:pointer">
+<ellipse cx="736" cy="309" rx="70" ry="30" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+<text x="736" y="306" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" direction="rtl" font-family="'Noto Sans Hebrew',sans-serif">רישום חיוב</text>
+<text x="736" y="320" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" direction="rtl" font-family="'Noto Sans Hebrew',sans-serif">על שהות</text>
+</g>
+<g id="uc-group-uc-extend" data-uc-id="uc-extend" onclick="showDesc('uc-extend','uc',event)" style="cursor:pointer">
+<ellipse cx="736" cy="383" rx="70" ry="27" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+<text x="736" y="387" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" direction="rtl" font-family="'Noto Sans Hebrew',sans-serif">הארכת שהות</text>
+</g>
+<g id="uc-group-uc-checkout" data-uc-id="uc-checkout" onclick="showDesc('uc-checkout','uc',event)" style="cursor:pointer">
+<ellipse cx="736" cy="457" rx="70" ry="30" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+<text x="736" y="454" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" direction="rtl" font-family="'Noto Sans Hebrew',sans-serif">רישום תשלום</text>
+<text x="736" y="468" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" direction="rtl" font-family="'Noto Sans Hebrew',sans-serif">וצ'ק-אאוט</text>
+</g>
+<g id="uc-group-uc-delete-dup" data-uc-id="uc-delete-dup" onclick="showDesc('uc-delete-dup','uc',event)" style="cursor:pointer">
+<ellipse cx="736" cy="531" rx="70" ry="30" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+<text x="736" y="528" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" direction="rtl" font-family="'Noto Sans Hebrew',sans-serif">מחיקת</text>
+<text x="736" y="542" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" direction="rtl" font-family="'Noto Sans Hebrew',sans-serif">הזמנה כפולה</text>
+</g>
+<g id="actor-group-guest" data-actor-id="guest" onclick="showDesc('guest','actor',event)" style="cursor:pointer" transform="translate(120,200)">
+<circle cx="0" cy="-60" r="14" fill="#e0f0ff" stroke="#334155" stroke-width="2"/>
+<line x1="0" y1="-46" x2="0" y2="-10" stroke="#334155" stroke-width="2"/>
+<line x1="-18" y1="-36" x2="18" y2="-36" stroke="#334155" stroke-width="2"/>
+<line x1="0" y1="-10" x2="-14" y2="14" stroke="#334155" stroke-width="2"/>
+<line x1="0" y1="-10" x2="14" y2="14" stroke="#334155" stroke-width="2"/>
+<text x="0" y="30" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b" direction="rtl" font-family="'Noto Sans Hebrew',sans-serif">אורח</text>
+</g>
+<g id="actor-group-reception" data-actor-id="reception" onclick="showDesc('reception','actor',event)" style="cursor:pointer" transform="translate(920,200)">
+<circle cx="0" cy="-60" r="14" fill="#e0f0ff" stroke="#334155" stroke-width="2"/>
+<line x1="0" y1="-46" x2="0" y2="-10" stroke="#334155" stroke-width="2"/>
+<line x1="-18" y1="-36" x2="18" y2="-36" stroke="#334155" stroke-width="2"/>
+<line x1="0" y1="-10" x2="-14" y2="14" stroke="#334155" stroke-width="2"/>
+<line x1="0" y1="-10" x2="14" y2="14" stroke="#334155" stroke-width="2"/>
+<text x="0" y="30" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b" direction="rtl" font-family="'Noto Sans Hebrew',sans-serif">פקיד קבלה</text>
+</g>
+<g id="actor-group-recep-mgr" data-actor-id="recep-mgr" onclick="showDesc('recep-mgr','actor',event)" style="cursor:pointer" transform="translate(920,350)">
+<circle cx="0" cy="-60" r="14" fill="#e0f0ff" stroke="#334155" stroke-width="2"/>
+<line x1="0" y1="-46" x2="0" y2="-10" stroke="#334155" stroke-width="2"/>
+<line x1="-18" y1="-36" x2="18" y2="-36" stroke="#334155" stroke-width="2"/>
+<line x1="0" y1="-10" x2="-14" y2="14" stroke="#334155" stroke-width="2"/>
+<line x1="0" y1="-10" x2="14" y2="14" stroke="#334155" stroke-width="2"/>
+<text x="0" y="30" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b" direction="rtl" font-family="'Noto Sans Hebrew',sans-serif">מנהל קבלה</text>
+</g>
+</svg>
+</div>
+<div class="diagram-part" id="diagram-1" hidden>
+<svg id="diagram-svg-1" viewBox="0 0 1100 560" width="1100" height="560" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<pattern id="dots-1" width="24" height="24" patternUnits="userSpaceOnUse"><circle cx="12" cy="12" r="0.8" fill="#cbd5e1"/></pattern>
+<marker id="arrow-include-1" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polyline points="0 0, 9 3.5, 0 7" fill="none" stroke="#7c3aed" stroke-width="1.2"/></marker>
+</defs>
+<rect x="0" y="0" width="100%" height="100%" fill="#f8fafc"/>
+<rect x="0" y="0" width="100%" height="100%" fill="url(#dots-1)"/>
+<rect class="system-boundary" x="200" y="60" width="640" height="400" rx="12" fill="#ffffff" stroke="#3b82f6" stroke-width="2.5"/>
+<rect x="200" y="60" width="640" height="44" rx="12" fill="#1e40af"/>
+<rect x="200" y="82" width="640" height="22" fill="#1e40af"/>
+<text x="520.0" y="88" text-anchor="middle" font-size="14" font-weight="700" fill="#ffffff" direction="rtl" font-family="'Noto Sans Hebrew',sans-serif">מערכת ההזמנות של מלון 'גלי הים' — ניהול מערכת ודוחות</text>
+<line data-conn-from="hotel-mgr" data-conn-to="uc-manage-roomtypes" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+<line class="conn-hitbox" data-conn-id="a11" data-hitbox-from="hotel-mgr" data-hitbox-to="uc-manage-roomtypes" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('a11','assoc',event)"/>
+<line data-conn-from="hotel-mgr" data-conn-to="uc-manage-rooms" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+<line class="conn-hitbox" data-conn-id="a12" data-hitbox-from="hotel-mgr" data-hitbox-to="uc-manage-rooms" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('a12','assoc',event)"/>
+<line data-conn-from="hotel-mgr" data-conn-to="uc-manage-extras" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+<line class="conn-hitbox" data-conn-id="a13" data-hitbox-from="hotel-mgr" data-hitbox-to="uc-manage-extras" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('a13','assoc',event)"/>
+<line data-conn-from="hotel-mgr" data-conn-to="uc-report" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+<line class="conn-hitbox" data-conn-id="a14" data-hitbox-from="hotel-mgr" data-hitbox-to="uc-report" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('a14','assoc',event)"/>
+<g id="uc-group-uc-manage-roomtypes" data-uc-id="uc-manage-roomtypes" onclick="showDesc('uc-manage-roomtypes','uc',event)" style="cursor:pointer">
+<ellipse cx="736" cy="161" rx="74" ry="30" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+<text x="736" y="158" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" direction="rtl" font-family="'Noto Sans Hebrew',sans-serif">ניהול סוגי</text>
+<text x="736" y="172" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" direction="rtl" font-family="'Noto Sans Hebrew',sans-serif">חדרים ותעריפים</text>
+</g>
+<g id="uc-group-uc-manage-rooms" data-uc-id="uc-manage-rooms" onclick="showDesc('uc-manage-rooms','uc',event)" style="cursor:pointer">
+<ellipse cx="736" cy="235" rx="70" ry="27" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+<text x="736" y="239" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" direction="rtl" font-family="'Noto Sans Hebrew',sans-serif">ניהול חדרים</text>
+</g>
+<g id="uc-group-uc-manage-extras" data-uc-id="uc-manage-extras" onclick="showDesc('uc-manage-extras','uc',event)" style="cursor:pointer">
+<ellipse cx="736" cy="309" rx="70" ry="30" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+<text x="736" y="306" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" direction="rtl" font-family="'Noto Sans Hebrew',sans-serif">ניהול קטלוג</text>
+<text x="736" y="320" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" direction="rtl" font-family="'Noto Sans Hebrew',sans-serif">שירותים</text>
+</g>
+<g id="uc-group-uc-report" data-uc-id="uc-report" onclick="showDesc('uc-report','uc',event)" style="cursor:pointer">
+<ellipse cx="736" cy="383" rx="70" ry="30" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+<text x="736" y="380" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" direction="rtl" font-family="'Noto Sans Hebrew',sans-serif">הפקת דוח</text>
+<text x="736" y="394" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" direction="rtl" font-family="'Noto Sans Hebrew',sans-serif">תפוסה והכנסות</text>
+</g>
+<g id="actor-group-hotel-mgr" data-actor-id="hotel-mgr" onclick="showDesc('hotel-mgr','actor',event)" style="cursor:pointer" transform="translate(920,200)">
+<circle cx="0" cy="-60" r="14" fill="#e0f0ff" stroke="#334155" stroke-width="2"/>
+<line x1="0" y1="-46" x2="0" y2="-10" stroke="#334155" stroke-width="2"/>
+<line x1="-18" y1="-36" x2="18" y2="-36" stroke="#334155" stroke-width="2"/>
+<line x1="0" y1="-10" x2="-14" y2="14" stroke="#334155" stroke-width="2"/>
+<line x1="0" y1="-10" x2="14" y2="14" stroke="#334155" stroke-width="2"/>
+<text x="0" y="30" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b" direction="rtl" font-family="'Noto Sans Hebrew',sans-serif">מנהל המלון</text>
+</g>
+</svg>
+</div>
+<div class="diagram-part" id="diagram-2" hidden>
+<svg id="diagram-svg-2" viewBox="0 0 1100 560" width="1100" height="560" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<pattern id="dots-2" width="24" height="24" patternUnits="userSpaceOnUse"><circle cx="12" cy="12" r="0.8" fill="#cbd5e1"/></pattern>
+<marker id="arrow-include-2" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polyline points="0 0, 9 3.5, 0 7" fill="none" stroke="#7c3aed" stroke-width="1.2"/></marker>
+</defs>
+<rect x="0" y="0" width="100%" height="100%" fill="#f8fafc"/>
+<rect x="0" y="0" width="100%" height="100%" fill="url(#dots-2)"/>
+<rect class="system-boundary" x="200" y="60" width="640" height="400" rx="12" fill="#ffffff" stroke="#3b82f6" stroke-width="2.5"/>
+<rect x="200" y="60" width="640" height="44" rx="12" fill="#1e40af"/>
+<rect x="200" y="82" width="640" height="22" fill="#1e40af"/>
+<text x="520.0" y="88" text-anchor="middle" font-size="14" font-weight="700" fill="#ffffff" direction="rtl" font-family="'Noto Sans Hebrew',sans-serif">מערכת ההזמנות של מלון 'גלי הים' — תהליכים אוטומטיים</text>
+<line data-conn-from="clock" data-conn-to="uc-noshow" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+<line class="conn-hitbox" data-conn-id="a15" data-hitbox-from="clock" data-hitbox-to="uc-noshow" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('a15','assoc',event)"/>
+<line data-conn-from="clock" data-conn-to="uc-cancel-unpaid" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+<line class="conn-hitbox" data-conn-id="a16" data-hitbox-from="clock" data-hitbox-to="uc-cancel-unpaid" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('a16','assoc',event)"/>
+<line data-conn-from="uc-noshow" data-conn-to="uc-charge" x1="0" y1="0" x2="0" y2="0" stroke="#7c3aed" stroke-width="1.6" stroke-dasharray="6 4" marker-end="url(#arrow-include-2)"/>
+<line class="conn-hitbox" data-hitbox-from="uc-noshow" data-hitbox-to="uc-charge" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14"/>
+<text data-label-for="uc-noshow uc-charge" x="0" y="0" text-anchor="middle" font-size="9.5" fill="#7c3aed" font-family="'IBM Plex Mono',monospace">«include»</text>
+<g id="uc-group-uc-noshow" data-uc-id="uc-noshow" onclick="showDesc('uc-noshow','uc',event)" style="cursor:pointer">
+<ellipse cx="314" cy="161" rx="70" ry="30" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+<text x="314" y="158" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" direction="rtl" font-family="'Noto Sans Hebrew',sans-serif">טיפול בהזמנות</text>
+<text x="314" y="172" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" direction="rtl" font-family="'Noto Sans Hebrew',sans-serif">שלא הגיעו</text>
+</g>
+<g id="uc-group-uc-cancel-unpaid" data-uc-id="uc-cancel-unpaid" onclick="showDesc('uc-cancel-unpaid','uc',event)" style="cursor:pointer">
+<ellipse cx="314" cy="235" rx="79" ry="30" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+<text x="314" y="232" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" direction="rtl" font-family="'Noto Sans Hebrew',sans-serif">ביטול הזמנות</text>
+<text x="314" y="246" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" direction="rtl" font-family="'Noto Sans Hebrew',sans-serif">שחיובן לא הושלם</text>
+</g>
+<g id="uc-group-uc-charge" data-uc-id="uc-charge">
+<ellipse cx="520" cy="161" rx="70" ry="30" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/>
+<text x="520" y="158" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" direction="rtl" font-family="'Noto Sans Hebrew',sans-serif">חיוב כרטיס אשראי</text>
+<text x="520" y="172" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" direction="rtl" font-family="'Noto Sans Hebrew',sans-serif">(← לשונית 1)</text>
+</g>
+<g id="actor-group-clock" data-actor-id="clock" onclick="showDesc('clock','actor',event)" style="cursor:pointer" transform="translate(120,200)">
+<circle cx="0" cy="-60" r="14" fill="#fef3c7" stroke="#334155" stroke-width="2"/>
+<line x1="0" y1="-46" x2="0" y2="-10" stroke="#334155" stroke-width="2"/>
+<line x1="-18" y1="-36" x2="18" y2="-36" stroke="#334155" stroke-width="2"/>
+<line x1="0" y1="-10" x2="-14" y2="14" stroke="#334155" stroke-width="2"/>
+<line x1="0" y1="-10" x2="14" y2="14" stroke="#334155" stroke-width="2"/>
+<text x="0" y="30" text-anchor="middle" font-size="9" font-style="italic" fill="#64748b" font-family="'IBM Plex Mono',monospace">«system»</text>
+<text x="0" y="44" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b" direction="rtl" font-family="'Noto Sans Hebrew',sans-serif">תזמון</text>
+</g>
+</svg>
+</div>
+
+  <div id="assumptions-panel" class="assumptions-panel" hidden>
+    <div class="assumptions-col" id="assumptions-col">
+      <h3>הנחות</h3><ul id="assumptions-list"></ul>
+    </div>
+    <div class="assumptions-col" id="open-questions-col">
+      <h3>שאלות פתוחות</h3><ul id="open-questions-list"></ul>
+    </div>
+  </div>
+
+  <div id="user-stories-panel" class="user-stories-panel" hidden>
+    <h3>סיפורי משתמש</h3>
+    <ul id="user-stories-list"></ul>
+  </div>
+
+  <div id="uc-modal" class="uc-modal" hidden role="dialog" aria-modal="true">
+    <div class="uc-modal-backdrop" onclick="closeUcModal()"></div>
+    <div class="uc-modal-body"></div>
+  </div>
+
+  <button class="vp-export-btn" onclick="exportXMI()">Download .xmi (Visual Paradigm)</button>
+
+  <!-- DIAGRAM DATA ONLY — all functions are in uc-diagram-common.js. -->
+  <script>
+    var diagramLayouts      = [
+ {
+  "svgId": "diagram-svg-0",
+  "boundary": {
+   "x": 200,
+   "y": 60,
+   "width": 640,
+   "height": 400
+  },
+  "actors": [
+   {
+    "id": "guest",
+    "label": "אורח",
+    "side": "left",
+    "x": 120,
+    "y": 200,
+    "ucIds": [
+     "uc-book",
+     "uc-cancel",
+     "uc-my-bookings"
+    ]
+   },
+   {
+    "id": "reception",
+    "label": "פקיד קבלה",
+    "side": "right",
+    "x": 920,
+    "y": 200,
+    "ucIds": [
+     "uc-book",
+     "uc-confirm",
+     "uc-checkin",
+     "uc-add-charge",
+     "uc-extend",
+     "uc-checkout"
+    ]
+   },
+   {
+    "id": "recep-mgr",
+    "label": "מנהל קבלה",
+    "side": "right",
+    "x": 920,
+    "y": 350,
+    "ucIds": [
+     "uc-delete-dup"
+    ]
+   }
+  ],
+  "useCases": [
+   {
+    "id": "uc-book",
+    "cx": 520,
+    "cy": 161,
+    "rx": 70,
+    "ry": 27
+   },
+   {
+    "id": "uc-cancel",
+    "cx": 314,
+    "cy": 161,
+    "rx": 70,
+    "ry": 30
+   },
+   {
+    "id": "uc-my-bookings",
+    "cx": 314,
+    "cy": 235,
+    "rx": 70,
+    "ry": 30
+   },
+   {
+    "id": "uc-confirm",
+    "cx": 736,
+    "cy": 161,
+    "rx": 70,
+    "ry": 30
+   },
+   {
+    "id": "uc-charge",
+    "cx": 520,
+    "cy": 235,
+    "rx": 70,
+    "ry": 30
+   },
+   {
+    "id": "uc-checkin",
+    "cx": 736,
+    "cy": 235,
+    "rx": 70,
+    "ry": 30
+   },
+   {
+    "id": "uc-add-charge",
+    "cx": 736,
+    "cy": 309,
+    "rx": 70,
+    "ry": 30
+   },
+   {
+    "id": "uc-extend",
+    "cx": 736,
+    "cy": 383,
+    "rx": 70,
+    "ry": 27
+   },
+   {
+    "id": "uc-checkout",
+    "cx": 736,
+    "cy": 457,
+    "rx": 70,
+    "ry": 30
+   },
+   {
+    "id": "uc-delete-dup",
+    "cx": 736,
+    "cy": 531,
+    "rx": 70,
+    "ry": 30
+   }
+  ],
+  "connections": [
+   {
+    "from": "guest",
+    "to": "uc-book",
+    "type": "association"
+   },
+   {
+    "from": "reception",
+    "to": "uc-book",
+    "type": "association"
+   },
+   {
+    "from": "guest",
+    "to": "uc-cancel",
+    "type": "association"
+   },
+   {
+    "from": "guest",
+    "to": "uc-my-bookings",
+    "type": "association"
+   },
+   {
+    "from": "reception",
+    "to": "uc-confirm",
+    "type": "association"
+   },
+   {
+    "from": "reception",
+    "to": "uc-checkin",
+    "type": "association"
+   },
+   {
+    "from": "reception",
+    "to": "uc-add-charge",
+    "type": "association"
+   },
+   {
+    "from": "reception",
+    "to": "uc-extend",
+    "type": "association"
+   },
+   {
+    "from": "reception",
+    "to": "uc-checkout",
+    "type": "association"
+   },
+   {
+    "from": "recep-mgr",
+    "to": "uc-delete-dup",
+    "type": "association"
+   },
+   {
+    "from": "uc-confirm",
+    "to": "uc-charge",
+    "type": "include"
+   },
+   {
+    "from": "uc-checkout",
+    "to": "uc-charge",
+    "type": "include"
+   }
+  ],
+  "assumptions": [
+   "שער התשלום (חברת הסליקה) אינו שחקן: המערכת פונה אליו (קריאת API) והוא אינו יוזם דבר. הוא מופיע כצעדי מערכת בתרחיש \"חיוב כרטיס אשראי\".",
+   "להנהלת החשבונות אין גישה ישירה למערכת; מנהל המלון מייצא אליה דוחות ותנועות. אחרת היה נדרש שחקן \"הנהלת חשבונות\".",
+   "למשק הבית אין גישה למערכת; הכנת החדרים מתואמת מחוץ לה. אחרת היה נדרש שחקן \"משק בית\".",
+   "אורח שמזמין בטלפון אינו נכנס למערכת בעצמו — פקיד הקבלה מזין את ההזמנה בשמו; לכן שניהם יוזמים את \"הזמנת חדר\".",
+   "הזמנה היא לסוג חדר; חדר ספציפי משובץ רק בצ'ק-אין. \"חדר פנוי\" באישור = מספר ההזמנות המאושרות/הפעילות לסוג בכל לילה קטן ממספר החדרים הפעילים מהסוג.",
+   "הארכת שהות מעדכנת את תאריך היציאה של אותה הזמנה ואינה פותחת הזמנה חדשה."
+  ],
+  "openQuestions": [
+   "בין כישלון חיוב המקדמה לביטול האוטומטי אחרי 24 שעות — האם ההזמנה במצב נפרד (\"ממתינה לתשלום\") או עדיין \"חדשה\" עם סימון? (מוכרע בתרשים המצבים.)",
+   "האם דחייה על חוסר זמינות היא \"בוטלה\" עם סיבה, או מצב תוצאה משלה (\"נדחתה\")? מה דוח \"ביקוש שהפסדנו\" צריך?",
+   "כמה זמן נשמרת הזמנה שנדחתה ולא חויבה מעולם — 7 שנים כמו הזמנה שחויבה, או שנתיים לפי צורכי הדוחות?",
+   "האם אורח רשאי להאריך שהות בעצמו באתר, או רק דרך הקבלה? (כיום — רק דרך הקבלה.)"
+  ]
+ },
+ {
+  "svgId": "diagram-svg-1",
+  "boundary": {
+   "x": 200,
+   "y": 60,
+   "width": 640,
+   "height": 400
+  },
+  "actors": [
+   {
+    "id": "hotel-mgr",
+    "label": "מנהל המלון",
+    "side": "right",
+    "x": 920,
+    "y": 200,
+    "ucIds": [
+     "uc-manage-roomtypes",
+     "uc-manage-rooms",
+     "uc-manage-extras",
+     "uc-report"
+    ]
+   }
+  ],
+  "useCases": [
+   {
+    "id": "uc-manage-roomtypes",
+    "cx": 736,
+    "cy": 161,
+    "rx": 74,
+    "ry": 30
+   },
+   {
+    "id": "uc-manage-rooms",
+    "cx": 736,
+    "cy": 235,
+    "rx": 70,
+    "ry": 27
+   },
+   {
+    "id": "uc-manage-extras",
+    "cx": 736,
+    "cy": 309,
+    "rx": 70,
+    "ry": 30
+   },
+   {
+    "id": "uc-report",
+    "cx": 736,
+    "cy": 383,
+    "rx": 70,
+    "ry": 30
+   }
+  ],
+  "connections": [
+   {
+    "from": "hotel-mgr",
+    "to": "uc-manage-roomtypes",
+    "type": "association"
+   },
+   {
+    "from": "hotel-mgr",
+    "to": "uc-manage-rooms",
+    "type": "association"
+   },
+   {
+    "from": "hotel-mgr",
+    "to": "uc-manage-extras",
+    "type": "association"
+   },
+   {
+    "from": "hotel-mgr",
+    "to": "uc-report",
+    "type": "association"
+   }
+  ],
+  "assumptions": [
+   "שער התשלום (חברת הסליקה) אינו שחקן: המערכת פונה אליו (קריאת API) והוא אינו יוזם דבר. הוא מופיע כצעדי מערכת בתרחיש \"חיוב כרטיס אשראי\".",
+   "להנהלת החשבונות אין גישה ישירה למערכת; מנהל המלון מייצא אליה דוחות ותנועות. אחרת היה נדרש שחקן \"הנהלת חשבונות\".",
+   "למשק הבית אין גישה למערכת; הכנת החדרים מתואמת מחוץ לה. אחרת היה נדרש שחקן \"משק בית\".",
+   "אורח שמזמין בטלפון אינו נכנס למערכת בעצמו — פקיד הקבלה מזין את ההזמנה בשמו; לכן שניהם יוזמים את \"הזמנת חדר\".",
+   "הזמנה היא לסוג חדר; חדר ספציפי משובץ רק בצ'ק-אין. \"חדר פנוי\" באישור = מספר ההזמנות המאושרות/הפעילות לסוג בכל לילה קטן ממספר החדרים הפעילים מהסוג.",
+   "הארכת שהות מעדכנת את תאריך היציאה של אותה הזמנה ואינה פותחת הזמנה חדשה."
+  ],
+  "openQuestions": [
+   "בין כישלון חיוב המקדמה לביטול האוטומטי אחרי 24 שעות — האם ההזמנה במצב נפרד (\"ממתינה לתשלום\") או עדיין \"חדשה\" עם סימון? (מוכרע בתרשים המצבים.)",
+   "האם דחייה על חוסר זמינות היא \"בוטלה\" עם סיבה, או מצב תוצאה משלה (\"נדחתה\")? מה דוח \"ביקוש שהפסדנו\" צריך?",
+   "כמה זמן נשמרת הזמנה שנדחתה ולא חויבה מעולם — 7 שנים כמו הזמנה שחויבה, או שנתיים לפי צורכי הדוחות?",
+   "האם אורח רשאי להאריך שהות בעצמו באתר, או רק דרך הקבלה? (כיום — רק דרך הקבלה.)"
+  ]
+ },
+ {
+  "svgId": "diagram-svg-2",
+  "boundary": {
+   "x": 200,
+   "y": 60,
+   "width": 640,
+   "height": 400
+  },
+  "actors": [
+   {
+    "id": "clock",
+    "label": "תזמון",
+    "side": "left",
+    "x": 120,
+    "y": 200,
+    "ucIds": [
+     "uc-noshow",
+     "uc-cancel-unpaid"
+    ]
+   }
+  ],
+  "useCases": [
+   {
+    "id": "uc-noshow",
+    "cx": 314,
+    "cy": 161,
+    "rx": 70,
+    "ry": 30
+   },
+   {
+    "id": "uc-cancel-unpaid",
+    "cx": 314,
+    "cy": 235,
+    "rx": 79,
+    "ry": 30
+   },
+   {
+    "id": "uc-charge",
+    "cx": 520,
+    "cy": 161,
+    "rx": 70,
+    "ry": 30
+   }
+  ],
+  "connections": [
+   {
+    "from": "clock",
+    "to": "uc-noshow",
+    "type": "association",
+    "timing": "בחצות, מדי יום"
+   },
+   {
+    "from": "clock",
+    "to": "uc-cancel-unpaid",
+    "type": "association",
+    "timing": "כל שעה"
+   },
+   {
+    "from": "uc-noshow",
+    "to": "uc-charge",
+    "type": "include"
+   }
+  ],
+  "assumptions": [
+   "שער התשלום (חברת הסליקה) אינו שחקן: המערכת פונה אליו (קריאת API) והוא אינו יוזם דבר. הוא מופיע כצעדי מערכת בתרחיש \"חיוב כרטיס אשראי\".",
+   "להנהלת החשבונות אין גישה ישירה למערכת; מנהל המלון מייצא אליה דוחות ותנועות. אחרת היה נדרש שחקן \"הנהלת חשבונות\".",
+   "למשק הבית אין גישה למערכת; הכנת החדרים מתואמת מחוץ לה. אחרת היה נדרש שחקן \"משק בית\".",
+   "אורח שמזמין בטלפון אינו נכנס למערכת בעצמו — פקיד הקבלה מזין את ההזמנה בשמו; לכן שניהם יוזמים את \"הזמנת חדר\".",
+   "הזמנה היא לסוג חדר; חדר ספציפי משובץ רק בצ'ק-אין. \"חדר פנוי\" באישור = מספר ההזמנות המאושרות/הפעילות לסוג בכל לילה קטן ממספר החדרים הפעילים מהסוג.",
+   "הארכת שהות מעדכנת את תאריך היציאה של אותה הזמנה ואינה פותחת הזמנה חדשה."
+  ],
+  "openQuestions": [
+   "בין כישלון חיוב המקדמה לביטול האוטומטי אחרי 24 שעות — האם ההזמנה במצב נפרד (\"ממתינה לתשלום\") או עדיין \"חדשה\" עם סימון? (מוכרע בתרשים המצבים.)",
+   "האם דחייה על חוסר זמינות היא \"בוטלה\" עם סיבה, או מצב תוצאה משלה (\"נדחתה\")? מה דוח \"ביקוש שהפסדנו\" צריך?",
+   "כמה זמן נשמרת הזמנה שנדחתה ולא חויבה מעולם — 7 שנים כמו הזמנה שחויבה, או שנתיים לפי צורכי הדוחות?",
+   "האם אורח רשאי להאריך שהות בעצמו באתר, או רק דרך הקבלה? (כיום — רק דרך הקבלה.)"
+  ]
+ }
+];
+    var actorDescriptions   = {
+ "guest": {
+  "name": "אורח",
+  "desc": "אורח המלון. מזמין חדר באתר, מבטל בתוך החלון המותר וצופה בהזמנותיו."
+ },
+ "reception": {
+  "name": "פקיד קבלה",
+  "desc": "פקיד בדלפק הקבלה. מאשר או דוחה הזמנות, מבצע צ'ק-אין וצ'ק-אאוט, רושם חיובים והארכות."
+ },
+ "recep-mgr": {
+  "name": "מנהל קבלה",
+  "desc": "אחראי דלפק הקבלה. מטפל בחריגים — ובהם מחיקת הזמנות כפולות."
+ },
+ "hotel-mgr": {
+  "name": "מנהל המלון",
+  "desc": "מנהל המלון. מתחזק את סוגי החדרים והתעריפים, החדרים וקטלוג השירותים, ומפיק דוחות."
+ },
+ "clock": {
+  "name": "תזמון",
+  "desc": "שחקן הזמן. מפעיל את תהליכי החצות (אי-הגעה) ואת הביטול האוטומטי של הזמנות שחיובן לא הושלם."
+ }
+};
+    var assocDescriptions   = {
+ "a1": {
+  "name": "אורח ↔ הזמנת חדר",
+  "desc": "אורח יוזם את \"הזמנת חדר\". תפקיד: Initiator."
+ },
+ "a2": {
+  "name": "פקיד קבלה ↔ הזמנת חדר",
+  "desc": "פקיד קבלה יוזם את \"הזמנת חדר\". תפקיד: Initiator."
+ },
+ "a3": {
+  "name": "אורח ↔ ביטול הזמנה על ידי האורח",
+  "desc": "אורח יוזם את \"ביטול הזמנה על ידי האורח\". תפקיד: Initiator."
+ },
+ "a4": {
+  "name": "אורח ↔ צפייה בהזמנות שלי",
+  "desc": "אורח יוזם את \"צפייה בהזמנות שלי\". תפקיד: Initiator."
+ },
+ "a5": {
+  "name": "פקיד קבלה ↔ אישור או דחיית הזמנה",
+  "desc": "פקיד קבלה יוזם את \"אישור או דחיית הזמנה\". תפקיד: Initiator."
+ },
+ "a6": {
+  "name": "פקיד קבלה ↔ רישום צ'ק-אין ושיבוץ חדר",
+  "desc": "פקיד קבלה יוזם את \"רישום צ'ק-אין ושיבוץ חדר\". תפקיד: Initiator."
+ },
+ "a7": {
+  "name": "פקיד קבלה ↔ רישום חיוב על שהות",
+  "desc": "פקיד קבלה יוזם את \"רישום חיוב על שהות\". תפקיד: Initiator."
+ },
+ "a8": {
+  "name": "פקיד קבלה ↔ הארכת שהות",
+  "desc": "פקיד קבלה יוזם את \"הארכת שהות\". תפקיד: Initiator."
+ },
+ "a9": {
+  "name": "פקיד קבלה ↔ רישום תשלום וצ'ק-אאוט",
+  "desc": "פקיד קבלה יוזם את \"רישום תשלום וצ'ק-אאוט\". תפקיד: Initiator."
+ },
+ "a10": {
+  "name": "מנהל קבלה ↔ מחיקת הזמנה כפולה",
+  "desc": "מנהל קבלה יוזם את \"מחיקת הזמנה כפולה\". תפקיד: Initiator."
+ },
+ "a11": {
+  "name": "מנהל המלון ↔ ניהול סוגי חדרים ותעריפים",
+  "desc": "מנהל המלון יוזם את \"ניהול סוגי חדרים ותעריפים\". תפקיד: Initiator."
+ },
+ "a12": {
+  "name": "מנהל המלון ↔ ניהול חדרים",
+  "desc": "מנהל המלון יוזם את \"ניהול חדרים\". תפקיד: Initiator."
+ },
+ "a13": {
+  "name": "מנהל המלון ↔ ניהול קטלוג שירותים",
+  "desc": "מנהל המלון יוזם את \"ניהול קטלוג שירותים\". תפקיד: Initiator."
+ },
+ "a14": {
+  "name": "מנהל המלון ↔ הפקת דוח תפוסה והכנסות",
+  "desc": "מנהל המלון יוזם את \"הפקת דוח תפוסה והכנסות\". תפקיד: Initiator."
+ },
+ "a15": {
+  "name": "תזמון ↔ טיפול בהזמנות שלא הגיעו",
+  "desc": "תזמון יוזם את \"טיפול בהזמנות שלא הגיעו\". תפקיד: Initiator. תזמון: בחצות, מדי יום."
+ },
+ "a16": {
+  "name": "תזמון ↔ ביטול הזמנות שחיובן לא הושלם",
+  "desc": "תזמון יוזם את \"ביטול הזמנות שחיובן לא הושלם\". תפקיד: Initiator. תזמון: כל שעה."
+ }
+};
+    var useCaseDocs         = {
+ "uc-book": {
+  "id": "uc-book",
+  "name": "הזמנת חדר",
+  "primaryActor": "guest",
+  "description": "אורח (או פקיד קבלה בשם אורח שהתקשר) פותח הזמנה חדשה לסוג חדר, לתאריכים ולמספר אורחים.",
+  "preconditions": [
+   "סוגי החדרים והתעריפים מוגדרים במערכת."
+  ],
+  "postconditions": [
+   "ההזמנה נשמרה במצב \"חדשה\" עם מספר הזמנה, וממתינה לאישור פקיד קבלה.",
+   "נשלח לאורח אישור קבלת ההזמנה עם מספרה."
+  ],
+  "scenarios": [
+   {
+    "id": "sc-book-web",
+    "name": "הזמנה באתר",
+    "flow": [
+     {
+      "kind": "actor",
+      "actor": "guest",
+      "text": "מזין תאריך הגעה, תאריך יציאה ומספר אורחים"
+     },
+     {
+      "kind": "system",
+      "text": "מציגה את סוגי החדרים, התעריף ללילה לכל סוג והמחיר הכולל לשהות"
+     },
+     {
+      "kind": "actor",
+      "actor": "guest",
+      "text": "בוחר סוג חדר"
+     },
+     {
+      "kind": "actor",
+      "actor": "guest",
+      "text": "מזין שם מלא, מספר תעודה מזהה, טלפון, דוא\"ל ופרטי כרטיס אשראי"
+     },
+     {
+      "kind": "system",
+      "text": "שומרת את פרטי הכרטיס כאסימון בשער התשלום (ללא חיוב)"
+     },
+     {
+      "kind": "system",
+      "text": "שומרת את ההזמנה במצב \"חדשה\", מקצה מספר הזמנה ומציגה אותו"
+     }
+    ],
+    "extensions": [
+     {
+      "at": "1",
+      "text": "תאריך היציאה אינו מאוחר מתאריך ההגעה",
+      "steps": [
+       "המערכת מציגה 'תאריך יציאה חייב להיות אחרי תאריך ההגעה'"
+      ],
+      "outcome": {
+       "kind": "resume",
+       "at": "1"
+      }
+     },
+     {
+      "at": "3",
+      "text": "מספר האורחים גדול מהמרבי לסוג החדר שנבחר",
+      "steps": [
+       "המערכת מציגה את המרבי לסוג ומבקשת לבחור סוג אחר"
+      ],
+      "outcome": {
+       "kind": "resume",
+       "at": "3"
+      }
+     },
+     {
+      "at": "5",
+      "text": "שער התשלום דחה את הכרטיס (פרטים שגויים)",
+      "steps": [
+       "המערכת מציגה 'פרטי הכרטיס אינם תקינים'"
+      ],
+      "outcome": {
+       "kind": "resume",
+       "at": "4"
+      }
+     }
+    ]
+   },
+   {
+    "id": "sc-book-phone",
+    "name": "הזמנה בטלפון (פקיד קבלה מזין)",
+    "flow": [
+     {
+      "kind": "actor",
+      "actor": "reception",
+      "text": "מזין את פרטי האורח כפי שנמסרו בטלפון: שם, תעודה מזהה, טלפון"
+     },
+     {
+      "kind": "actor",
+      "actor": "reception",
+      "text": "מזין תאריכים, מספר אורחים וסוג חדר"
+     },
+     {
+      "kind": "system",
+      "text": "מציגה את המחיר הכולל ואת הצורך בכרטיס אשראי למקדמה"
+     },
+     {
+      "kind": "actor",
+      "actor": "reception",
+      "text": "מזין את פרטי הכרטיס שמסר האורח"
+     },
+     {
+      "kind": "system",
+      "text": "שומרת את ההזמנה במצב \"חדשה\" ומציגה את מספרה להקראה לאורח"
+     }
+    ],
+    "extensions": [
+     {
+      "at": "1",
+      "text": "האורח כבר קיים במערכת (לפי תעודה מזהה)",
+      "steps": [
+       "המערכת מציגה את פרטי האורח הקיימים לאישור"
+      ],
+      "outcome": {
+       "kind": "resume",
+       "at": "2"
+      }
+     }
+    ]
+   }
+  ],
+  "userStories": [
+   {
+    "role": "אורח",
+    "want": "להזמין חדר באתר בכמה דקות",
+    "so": "לא אצטרך להתקשר למלון"
+   },
+   {
+    "role": "אורח",
+    "want": "לראות את המחיר הכולל לפני שאני מזין כרטיס אשראי",
+    "so": "לא יהיו הפתעות"
+   },
+   {
+    "role": "פקיד קבלה",
+    "want": "להזין הזמנה טלפונית באותו מסך",
+    "so": "כל ההזמנות יהיו במקום אחד"
+   }
+  ],
+  "wireframe": "<div class=\"wf-screen\"><h3 class=\"wf-heading\">הזמנת חדר</h3><div class=\"wf-row\"><label class=\"wf-label\">תאריך הגעה</label><input class=\"wf-input\" disabled /></div><div class=\"wf-row\"><label class=\"wf-label\">תאריך יציאה</label><input class=\"wf-input\" disabled /></div><div class=\"wf-row\"><label class=\"wf-label\">מספר אורחים</label><select class=\"wf-select\" disabled></select></div><div class=\"wf-row\"><label class=\"wf-label\">סוג חדר</label><select class=\"wf-select\" disabled></select></div><div class=\"wf-row\"><label class=\"wf-label\">שם מלא</label><input class=\"wf-input\" disabled /></div><div class=\"wf-row\"><label class=\"wf-label\">תעודה מזהה</label><input class=\"wf-input\" disabled /></div><div class=\"wf-row\"><label class=\"wf-label\">טלפון / דוא\"ל</label><input class=\"wf-input\" disabled /></div><div class=\"wf-row\"><label class=\"wf-label\">כרטיס אשראי</label><input class=\"wf-input\" disabled /></div><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">שליחת הזמנה</button><button class=\"wf-button\">ביטול</button></div><p class=\"wf-hint\">לאחר השליחה מוצג מספר ההזמנה; ההזמנה תאושר על ידי הקבלה.</p></div>"
+ },
+ "uc-cancel": {
+  "id": "uc-cancel",
+  "name": "ביטול הזמנה על ידי האורח",
+  "primaryActor": "guest",
+  "description": "האורח מבטל הזמנה מאושרת עד 48 שעות לפני יום ההגעה ומקבל החזר מלא של המקדמה.",
+  "preconditions": [
+   "ההזמנה במצב \"מאושרת\" (או \"חדשה\").",
+   "נותרו לפחות 48 שעות עד יום ההגעה."
+  ],
+  "postconditions": [
+   "ההזמנה במצב \"בוטלה\" עם הסיבה \"ביטול על ידי האורח\".",
+   "נרשם חיוב מסוג \"החזר\" על המקדמה ונשלחה הודעת ביטול."
+  ],
+  "scenarios": [
+   {
+    "id": "sc-cancel",
+    "name": "מסלול מרכזי",
+    "flow": [
+     {
+      "kind": "actor",
+      "actor": "guest",
+      "text": "בוחר הזמנה מרשימת ההזמנות שלו ולוחץ 'ביטול הזמנה'"
+     },
+     {
+      "kind": "system",
+      "text": "מוודאת שנותרו לפחות 48 שעות עד יום ההגעה ומציגה את סכום ההחזר"
+     },
+     {
+      "kind": "actor",
+      "actor": "guest",
+      "text": "מאשר את הביטול"
+     },
+     {
+      "kind": "system",
+      "text": "מעבירה את ההזמנה למצב \"בוטלה\" עם הסיבה \"ביטול על ידי האורח\" ורושמת חיוב \"החזר\" על המקדמה"
+     },
+     {
+      "kind": "system",
+      "text": "שולחת לאורח הודעת ביטול ואישור החזר"
+     }
+    ],
+    "extensions": [
+     {
+      "at": "2",
+      "text": "נותרו פחות מ-48 שעות עד יום ההגעה",
+      "steps": [
+       "המערכת מציגה 'לא ניתן לבטל — חלון הביטול נסגר; פנה לקבלה'"
+      ],
+      "outcome": {
+       "kind": "terminate",
+       "text": "ההזמנה נותרת \"מאושרת\"."
+      }
+     },
+     {
+      "at": "2",
+      "text": "ההזמנה כבר אינה במצב שניתן לבטל (פעילה / הושלמה / בוטלה)",
+      "steps": [
+       "המערכת מציגה את מצב ההזמנה"
+      ],
+      "outcome": {
+       "kind": "terminate",
+       "text": "ללא שינוי."
+      }
+     }
+    ]
+   }
+  ],
+  "userStories": [
+   {
+    "role": "אורח",
+    "want": "לבטל הזמנה בעצמי באתר",
+    "so": "לא אצטרך להתקשר"
+   },
+   {
+    "role": "מנהל קבלה",
+    "want": "שהמערכת תאכוף את חלון 48 השעות",
+    "so": "לא יהיו ויכוחים על החזרים"
+   }
+  ],
+  "wireframe": "<div class=\"wf-screen\"><h3 class=\"wf-heading\">ביטול הזמנה</h3><div class=\"wf-row\"><label class=\"wf-label\">מספר הזמנה</label><input class=\"wf-input\" disabled /></div><div class=\"wf-row\"><label class=\"wf-label\">תאריכים</label><input class=\"wf-input\" disabled /></div><div class=\"wf-row\"><label class=\"wf-label\">סכום להחזר</label><input class=\"wf-input\" disabled /></div><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">אישור ביטול</button><button class=\"wf-button\">חזרה</button></div><p class=\"wf-hint\">ביטול אפשרי עד 48 שעות לפני יום ההגעה.</p></div>"
+ },
+ "uc-my-bookings": {
+  "id": "uc-my-bookings",
+  "name": "צפייה בהזמנות שלי",
+  "primaryActor": "guest",
+  "description": "האורח צופה בהזמנותיו — הקרובות והקודמות — במצבן ובחיובים שנרשמו עליהן.",
+  "preconditions": [
+   "האורח מזוהה לפי מספר הזמנה ותעודה מזהה."
+  ],
+  "postconditions": [
+   "לא שונה דבר במערכת."
+  ],
+  "scenarios": [
+   {
+    "id": "sc-my",
+    "name": "מסלול מרכזי",
+    "flow": [
+     {
+      "kind": "actor",
+      "actor": "guest",
+      "text": "מזין מספר הזמנה ומספר תעודה מזהה"
+     },
+     {
+      "kind": "system",
+      "text": "מאתרת את האורח ומציגה את כל הזמנותיו עם תאריכים, סוג חדר ומצב"
+     },
+     {
+      "kind": "actor",
+      "actor": "guest",
+      "text": "בוחר הזמנה"
+     },
+     {
+      "kind": "system",
+      "text": "מציגה את פרטי ההזמנה, החיובים שנרשמו עליה והיתרה"
+     }
+    ],
+    "extensions": [
+     {
+      "at": "2",
+      "text": "לא נמצאה הזמנה התואמת לפרטים",
+      "steps": [
+       "המערכת מציגה 'לא נמצאה הזמנה'"
+      ],
+      "outcome": {
+       "kind": "resume",
+       "at": "1"
+      }
+     }
+    ]
+   }
+  ],
+  "userStories": [
+   {
+    "role": "אורח",
+    "want": "לראות מה מצב ההזמנה שלי",
+    "so": "אדע אם אושרה"
+   },
+   {
+    "role": "אורח",
+    "want": "לראות אילו חיובים נרשמו על השהות שלי",
+    "so": "לא אופתע בצ'ק-אאוט"
+   }
+  ],
+  "wireframe": "<div class=\"wf-screen\"><h3 class=\"wf-heading\">ההזמנות שלי</h3><div class=\"wf-row\"><label class=\"wf-label\">מספר הזמנה</label><input class=\"wf-input\" disabled /></div><div class=\"wf-row\"><label class=\"wf-label\">תעודה מזהה</label><input class=\"wf-input\" disabled /></div><table class=\"wf-table\"><thead><tr><th>מספר</th><th>תאריכים</th><th>סוג חדר</th><th>מצב</th></tr></thead><tbody><tr><td>10482</td><td>12–15.7</td><td>נוף לים</td><td>מאושרת</td></tr><tr><td>10117</td><td>3–5.4</td><td>סטנדרט</td><td>הושלמה</td></tr></tbody></table><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">הצגה</button></div></div>"
+ },
+ "uc-confirm": {
+  "id": "uc-confirm",
+  "name": "אישור או דחיית הזמנה",
+  "primaryActor": "reception",
+  "description": "פקיד הקבלה בודק זמינות לסוג החדר בכל לילות השהות; אם יש חדר פנוי — מאשר ומחייב מקדמה, אחרת דוחה.",
+  "preconditions": [
+   "ההזמנה במצב \"חדשה\"."
+  ],
+  "postconditions": [
+   "ההזמנה במצב \"מאושרת\" עם תעריף מוקפא וחיוב מקדמה ששולם — או \"בוטלה\" עם הסיבה \"דחייה — אין זמינות\".",
+   "נשלחה לאורח הודעה על התוצאה."
+  ],
+  "scenarios": [
+   {
+    "id": "sc-confirm",
+    "name": "מסלול מרכזי",
+    "flow": [
+     {
+      "kind": "actor",
+      "actor": "reception",
+      "text": "בוחר הזמנה במצב \"חדשה\" מרשימת ההזמנות הממתינות"
+     },
+     {
+      "kind": "system",
+      "text": "בודקת זמינות: לכל לילה, מספר ההזמנות המאושרות/הפעילות לסוג החדר לעומת מספר החדרים הפעילים מהסוג — ומציגה את התוצאה"
+     },
+     {
+      "kind": "alt",
+      "condition": "תוצאת בדיקת הזמינות",
+      "branches": [
+       {
+        "label": "יש חדר פנוי",
+        "steps": [
+         {
+          "kind": "actor",
+          "actor": "reception",
+          "text": "לוחץ 'אישור'"
+         },
+         {
+          "kind": "system",
+          "text": "מקפיאה את התעריף ללילה לפי התעריף העונתי הנוכחי"
+         },
+         {
+          "kind": "include",
+          "uc": "uc-charge",
+          "text": ""
+         },
+         {
+          "kind": "system",
+          "text": "מעבירה את ההזמנה למצב \"מאושרת\" ושולחת לאורח אישור הזמנה"
+         }
+        ]
+       },
+       {
+        "label": "אין חדר פנוי",
+        "steps": [
+         {
+          "kind": "actor",
+          "actor": "reception",
+          "text": "לוחץ 'דחייה'"
+         },
+         {
+          "kind": "system",
+          "text": "מעבירה את ההזמנה למצב \"בוטלה\" עם הסיבה \"דחייה — אין זמינות\" ושולחת לאורח הודעה"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "extensions": [
+     {
+      "at": "3.1.3",
+      "text": "חיוב המקדמה נכשל (הכרטיס נדחה)",
+      "steps": [
+       "המערכת מסמנת את החיוב \"נכשל\" ורושמת את מועד הניסיון",
+       "המערכת שולחת לאורח הודעה לעדכון אמצעי תשלום"
+      ],
+      "outcome": {
+       "kind": "terminate",
+       "text": "ההזמנה אינה מאושרת; ניתן לנסות חיוב נוסף עד 24 שעות מהניסיון הראשון (BR-2), אחרת תבוטל אוטומטית."
+      }
+     }
+    ]
+   },
+   {
+    "id": "sc-retry",
+    "name": "ניסיון חיוב חוזר אחרי כישלון",
+    "flow": [
+     {
+      "kind": "actor",
+      "actor": "reception",
+      "text": "בוחר הזמנה שחיוב המקדמה בה נכשל"
+     },
+     {
+      "kind": "system",
+      "text": "מציגה את מועד הניסיון הראשון ואת הזמן שנותר עד 24 שעות"
+     },
+     {
+      "kind": "actor",
+      "actor": "reception",
+      "text": "מזין פרטי כרטיס חדשים שמסר האורח"
+     },
+     {
+      "kind": "include",
+      "uc": "uc-charge",
+      "text": ""
+     },
+     {
+      "kind": "system",
+      "text": "מעבירה את ההזמנה למצב \"מאושרת\" ושולחת אישור"
+     }
+    ],
+    "extensions": [
+     {
+      "at": "4",
+      "text": "גם החיוב החוזר נכשל",
+      "steps": [
+       "המערכת רושמת ניסיון נוסף שנכשל"
+      ],
+      "outcome": {
+       "kind": "terminate",
+       "text": "ההזמנה עדיין אינה מאושרת."
+      }
+     },
+     {
+      "at": "2",
+      "text": "חלפו 24 שעות מהניסיון הראשון",
+      "steps": [
+       "המערכת מציגה שההזמנה כבר בוטלה אוטומטית"
+      ],
+      "outcome": {
+       "kind": "terminate",
+       "text": "ללא שינוי; האורח יכול להזמין מחדש."
+      }
+     }
+    ]
+   }
+  ],
+  "userStories": [
+   {
+    "role": "פקיד קבלה",
+    "want": "לראות בלחיצה אחת אם יש חדר פנוי לכל הלילות",
+    "so": "אאשר הזמנה בדקה"
+   },
+   {
+    "role": "מנהל קבלה",
+    "want": "שחיוב שנכשל יישאר גלוי עד שיטופל",
+    "so": "לא יגיע אורח להזמנה מאושרת שלא שולמה"
+   },
+   {
+    "role": "מנהל המלון",
+    "want": "שכל דחייה על חוסר זמינות תירשם עם הסיבה",
+    "so": "אראה ביקוש שהפסדנו"
+   }
+  ],
+  "wireframe": "<div class=\"wf-screen\"><h3 class=\"wf-heading\">אישור הזמנה #10482</h3><div class=\"wf-row\"><label class=\"wf-label\">אורח</label><input class=\"wf-input\" disabled /></div><div class=\"wf-row\"><label class=\"wf-label\">תאריכים / סוג חדר</label><input class=\"wf-input\" disabled /></div><div class=\"wf-row\"><label class=\"wf-label\">זמינות</label><input class=\"wf-input\" disabled /></div><div class=\"wf-row\"><label class=\"wf-label\">מקדמה (לילה ראשון)</label><input class=\"wf-input\" disabled /></div><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">אישור וחיוב מקדמה</button><button class=\"wf-button\">דחייה — אין זמינות</button></div><p class=\"wf-hint\">באישור מוקפא התעריף ומחויבת המקדמה דרך שער התשלום.</p></div>"
+ },
+ "uc-charge": {
+  "id": "uc-charge",
+  "name": "חיוב כרטיס אשראי",
+  "description": "המערכת מחייבת (או מזכה) את כרטיס האשראי של האורח דרך שער התשלום ורושמת חיוב על ההזמנה — מקדמה, יתרה, דמי אי-הגעה או החזר.",
+  "preconditions": [
+   "להזמנה קיים אסימון כרטיס אשראי בשער התשלום.",
+   "סכום החיוב וסוגו נקבעו על ידי תרחיש השימוש הקורא."
+  ],
+  "postconditions": [
+   "נרשם חיוב על ההזמנה במצב \"שולם\" עם אסמכתת סליקה — או \"נכשל\" עם סיבת הדחייה."
+  ],
+  "scenarios": [
+   {
+    "id": "sc-charge",
+    "name": "מסלול מרכזי",
+    "flow": [
+     {
+      "kind": "system",
+      "text": "יוצרת רשומת חיוב על ההזמנה במצב \"ממתין\" עם הסוג והסכום"
+     },
+     {
+      "kind": "system",
+      "text": "שולחת לשער התשלום בקשת חיוב עם האסימון והסכום"
+     },
+     {
+      "kind": "system",
+      "text": "מקבלת משער התשלום אישור ואסמכתת סליקה"
+     },
+     {
+      "kind": "system",
+      "text": "מסמנת את החיוב \"שולם\" ורושמת את האסמכתה"
+     }
+    ],
+    "extensions": [
+     {
+      "at": "3",
+      "text": "שער התשלום דחה את החיוב (מסגרת / כרטיס חסום)",
+      "steps": [
+       "המערכת מסמנת את החיוב \"נכשל\" עם סיבת הדחייה"
+      ],
+      "outcome": {
+       "kind": "terminate",
+       "text": "החיוב נכשל; תרחיש השימוש הקורא מטפל בתוצאה."
+      }
+     },
+     {
+      "at": "2",
+      "text": "שער התשלום אינו זמין (אין תשובה תוך 15 שניות)",
+      "steps": [
+       "המערכת רושמת את הכישלון ביומן ומסמנת את החיוב \"נכשל\""
+      ],
+      "outcome": {
+       "kind": "terminate",
+       "text": "החיוב לא בוצע; ניתן לנסות שוב."
+      }
+     }
+    ]
+   }
+  ],
+  "userStories": [
+   {
+    "role": "הנהלת חשבונות",
+    "want": "שכל חיוב והחזר יירשמו עם אסמכתת סליקה",
+    "so": "אוכל להתאים מול חברת הסליקה"
+   },
+   {
+    "role": "פקיד קבלה",
+    "want": "שהחיוב ייעשה מהמערכת ולא במסופון נפרד",
+    "so": "לא אצטרך להקליד סכומים פעמיים"
+   }
+  ],
+  "wireframe": ""
+ },
+ "uc-checkin": {
+  "id": "uc-checkin",
+  "name": "רישום צ'ק-אין ושיבוץ חדר",
+  "primaryActor": "reception",
+  "description": "ביום ההגעה פקיד הקבלה מזהה את האורח, משבץ חדר מהסוג שהוזמן ומעביר את ההזמנה לשהות פעילה.",
+  "preconditions": [
+   "ההזמנה במצב \"מאושרת\" ותאריך ההגעה שלה הוא היום."
+  ],
+  "postconditions": [
+   "להזמנה משובץ חדר והיא במצב \"פעילה\"."
+  ],
+  "scenarios": [
+   {
+    "id": "sc-checkin",
+    "name": "מסלול מרכזי",
+    "flow": [
+     {
+      "kind": "actor",
+      "actor": "reception",
+      "text": "מאתר את ההזמנה לפי מספר הזמנה או שם האורח"
+     },
+     {
+      "kind": "system",
+      "text": "מציגה את ההזמנה ומוודאת שהיא \"מאושרת\" ושתאריך ההגעה הוא היום"
+     },
+     {
+      "kind": "actor",
+      "actor": "reception",
+      "text": "מזין את מספר התעודה המזהה שהציג האורח"
+     },
+     {
+      "kind": "system",
+      "text": "משווה לתעודה שנרשמה בהזמנה ומציגה את החדרים הפנויים מהסוג שהוזמן"
+     },
+     {
+      "kind": "actor",
+      "actor": "reception",
+      "text": "בוחר חדר"
+     },
+     {
+      "kind": "system",
+      "text": "משבצת את החדר להזמנה, מעבירה אותה למצב \"פעילה\" ומדפיסה כרטיס חדר"
+     }
+    ],
+    "extensions": [
+     {
+      "at": "2",
+      "text": "ההזמנה אינה \"מאושרת\" (חדשה עם חיוב שנכשל, או בוטלה)",
+      "steps": [
+       "המערכת מציגה את מצב ההזמנה והסיבה"
+      ],
+      "outcome": {
+       "kind": "terminate",
+       "text": "לא בוצע צ'ק-אין; פקיד הקבלה מפנה למנהל הקבלה."
+      }
+     },
+     {
+      "at": "4",
+      "text": "התעודה אינה תואמת לשם בהזמנה",
+      "steps": [
+       "המערכת מציגה אזהרה ומבקשת אישור מנהל קבלה"
+      ],
+      "outcome": {
+       "kind": "resume",
+       "at": "3"
+      }
+     },
+     {
+      "at": "4",
+      "text": "אין חדר פנוי מהסוג שהוזמן (תקלה בחדר)",
+      "steps": [
+       "המערכת מציגה חדרים פנויים מסוג גבוה יותר"
+      ],
+      "outcome": {
+       "kind": "resume",
+       "at": "5"
+      }
+     }
+    ]
+   }
+  ],
+  "userStories": [
+   {
+    "role": "פקיד קבלה",
+    "want": "לראות רק חדרים פנויים מהסוג שהוזמן",
+    "so": "לא אשבץ חדר תפוס"
+   },
+   {
+    "role": "אורח",
+    "want": "שהצ'ק-אין ייקח דקה",
+    "so": "אגיע לחדר מהר"
+   }
+  ],
+  "wireframe": "<div class=\"wf-screen\"><h3 class=\"wf-heading\">צ'ק-אין — הזמנה #10482</h3><div class=\"wf-row\"><label class=\"wf-label\">אורח</label><input class=\"wf-input\" disabled /></div><div class=\"wf-row\"><label class=\"wf-label\">תעודה מזהה שהוצגה</label><input class=\"wf-input\" disabled /></div><div class=\"wf-row\"><label class=\"wf-label\">סוג חדר שהוזמן</label><input class=\"wf-input\" disabled /></div><div class=\"wf-row\"><label class=\"wf-label\">חדר משובץ</label><select class=\"wf-select\" disabled></select></div><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">ביצוע צ'ק-אין</button><button class=\"wf-button\">ביטול</button></div></div>"
+ },
+ "uc-add-charge": {
+  "id": "uc-add-charge",
+  "name": "רישום חיוב על שהות",
+  "primaryActor": "reception",
+  "description": "במהלך שהות פעילה פקיד הקבלה רושם על ההזמנה חיוב על שירות נוסף מהקטלוג (מיני-בר, ארוחה, חניה).",
+  "preconditions": [
+   "ההזמנה במצב \"פעילה\"."
+  ],
+  "postconditions": [
+   "נרשם על ההזמנה חיוב מסוג \"שירות נוסף\" במצב \"ממתין\" (משולם בצ'ק-אאוט)."
+  ],
+  "scenarios": [
+   {
+    "id": "sc-add-charge",
+    "name": "מסלול מרכזי",
+    "flow": [
+     {
+      "kind": "actor",
+      "actor": "reception",
+      "text": "מאתר את השהות לפי מספר חדר"
+     },
+     {
+      "kind": "system",
+      "text": "מציגה את ההזמנה הפעילה בחדר ואת החיובים שנרשמו עליה עד כה"
+     },
+     {
+      "kind": "loop",
+      "condition": "יש עוד שירותים לרשום",
+      "steps": [
+       {
+        "kind": "actor",
+        "actor": "reception",
+        "text": "בוחר שירות מהקטלוג ומזין כמות"
+       },
+       {
+        "kind": "system",
+        "text": "מוסיפה חיוב בסכום מחיר × כמות ומציגה את היתרה המעודכנת"
+       }
+      ]
+     },
+     {
+      "kind": "actor",
+      "actor": "reception",
+      "text": "מאשר"
+     },
+     {
+      "kind": "system",
+      "text": "שומרת את החיובים על ההזמנה"
+     }
+    ],
+    "extensions": [
+     {
+      "at": "2",
+      "text": "אין שהות פעילה בחדר",
+      "steps": [
+       "המערכת מציגה 'החדר אינו מאוכלס'"
+      ],
+      "outcome": {
+       "kind": "terminate",
+       "text": "לא נרשם חיוב."
+      }
+     },
+     {
+      "at": "3.1",
+      "text": "השירות שנבחר הוסר מהקטלוג",
+      "steps": [
+       "המערכת מציגה 'שירות לא זמין'"
+      ],
+      "outcome": {
+       "kind": "resume",
+       "at": "3.1"
+      }
+     }
+    ]
+   }
+  ],
+  "userStories": [
+   {
+    "role": "פקיד קבלה",
+    "want": "לרשום מיני-בר על החדר ברגע שמדווחים לי",
+    "so": "לא יישכח בצ'ק-אאוט"
+   },
+   {
+    "role": "אורח",
+    "want": "לראות את כל החיובים על השהות שלי",
+    "so": "החשבון בצ'ק-אאוט לא יפתיע"
+   }
+  ],
+  "wireframe": "<div class=\"wf-screen\"><h3 class=\"wf-heading\">חיוב על שהות — חדר 214</h3><div class=\"wf-row\"><label class=\"wf-label\">שירות</label><select class=\"wf-select\" disabled></select></div><div class=\"wf-row\"><label class=\"wf-label\">כמות</label><input class=\"wf-input\" disabled /></div><table class=\"wf-table\"><thead><tr><th>שירות</th><th>כמות</th><th>סכום</th></tr></thead><tbody><tr><td>מיני-בר</td><td>1</td><td>38 ₪</td></tr><tr><td>ארוחת בוקר</td><td>2</td><td>140 ₪</td></tr></tbody></table><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">הוספת חיוב</button><button class=\"wf-button\">סיום</button></div></div>"
+ },
+ "uc-extend": {
+  "id": "uc-extend",
+  "name": "הארכת שהות",
+  "primaryActor": "reception",
+  "description": "במהלך שהות פעילה פקיד הקבלה מאריך את תאריך היציאה, אם החדר המשובץ פנוי ללילות הנוספים.",
+  "preconditions": [
+   "ההזמנה במצב \"פעילה\"."
+  ],
+  "postconditions": [
+   "תאריך היציאה עודכן באותה הזמנה ונרשמו חיובי לילה נוספים לפי התעריף המוקפא."
+  ],
+  "scenarios": [
+   {
+    "id": "sc-extend",
+    "name": "מסלול מרכזי",
+    "flow": [
+     {
+      "kind": "actor",
+      "actor": "reception",
+      "text": "מאתר את השהות ומזין תאריך יציאה חדש"
+     },
+     {
+      "kind": "system",
+      "text": "בודקת שהחדר המשובץ פנוי לכל הלילות הנוספים"
+     },
+     {
+      "kind": "system",
+      "text": "מציגה את מספר הלילות הנוספים ואת העלות לפי התעריף המוקפא בהזמנה"
+     },
+     {
+      "kind": "actor",
+      "actor": "reception",
+      "text": "מאשר"
+     },
+     {
+      "kind": "system",
+      "text": "מעדכנת את תאריך היציאה ורושמת חיובי לילה נוספים במצב \"ממתין\""
+     }
+    ],
+    "extensions": [
+     {
+      "at": "2",
+      "text": "החדר תפוס באחד הלילות הנוספים",
+      "steps": [
+       "המערכת מציגה את הלילה התפוס ומציעה חדרים פנויים אחרים מאותו סוג"
+      ],
+      "outcome": {
+       "kind": "terminate",
+       "text": "ההארכה לא בוצעה; החלפת חדר — לפי החלטת מנהל קבלה."
+      }
+     },
+     {
+      "at": "1",
+      "text": "תאריך היציאה החדש אינו מאוחר מהנוכחי",
+      "steps": [
+       "המערכת מציגה 'תאריך היציאה חייב להיות מאוחר מהנוכחי'"
+      ],
+      "outcome": {
+       "kind": "resume",
+       "at": "1"
+      }
+     }
+    ]
+   }
+  ],
+  "userStories": [
+   {
+    "role": "אורח",
+    "want": "להישאר עוד לילה בלי לפתוח הזמנה חדשה",
+    "so": "החשבון שלי יישאר אחד"
+   },
+   {
+    "role": "פקיד קבלה",
+    "want": "שהמערכת תבדוק בעצמה אם החדר פנוי להארכה",
+    "so": "לא אבטיח לילה שאין"
+   }
+  ],
+  "wireframe": "<div class=\"wf-screen\"><h3 class=\"wf-heading\">הארכת שהות — חדר 214</h3><div class=\"wf-row\"><label class=\"wf-label\">תאריך יציאה נוכחי</label><input class=\"wf-input\" disabled /></div><div class=\"wf-row\"><label class=\"wf-label\">תאריך יציאה חדש</label><input class=\"wf-input\" disabled /></div><div class=\"wf-row\"><label class=\"wf-label\">לילות נוספים / עלות</label><input class=\"wf-input\" disabled /></div><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">אישור הארכה</button><button class=\"wf-button\">ביטול</button></div></div>"
+ },
+ "uc-checkout": {
+  "id": "uc-checkout",
+  "name": "רישום תשלום וצ'ק-אאוט",
+  "primaryActor": "reception",
+  "description": "בסיום השהות פקיד הקבלה מציג את החשבון, גובה את היתרה ומעביר את ההזמנה למצב \"הושלמה\".",
+  "preconditions": [
+   "ההזמנה במצב \"פעילה\"."
+  ],
+  "postconditions": [
+   "כל החיובים על ההזמנה במצב \"שולם\", ההזמנה במצב \"הושלמה\" והחדר התפנה."
+  ],
+  "scenarios": [
+   {
+    "id": "sc-checkout",
+    "name": "מסלול מרכזי",
+    "flow": [
+     {
+      "kind": "actor",
+      "actor": "reception",
+      "text": "מאתר את השהות לפי מספר חדר"
+     },
+     {
+      "kind": "system",
+      "text": "מחשבת את החשבון: לילות × תעריף מוקפא + שירותים נוספים − מקדמה, ומציגה את היתרה"
+     },
+     {
+      "kind": "actor",
+      "actor": "reception",
+      "text": "מציג לאורח את החשבון ומאשר את הפירוט"
+     },
+     {
+      "kind": "alt",
+      "condition": "אמצעי התשלום של היתרה",
+      "branches": [
+       {
+        "label": "כרטיס אשראי",
+        "steps": [
+         {
+          "kind": "include",
+          "uc": "uc-charge",
+          "text": ""
+         }
+        ]
+       },
+       {
+        "label": "מזומן",
+        "steps": [
+         {
+          "kind": "actor",
+          "actor": "reception",
+          "text": "מזין את הסכום שהתקבל במזומן"
+         },
+         {
+          "kind": "system",
+          "text": "רושמת חיוב \"שולם\" באמצעי מזומן"
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "kind": "system",
+      "text": "מוודאת שהיתרה אפס, מעבירה את ההזמנה למצב \"הושלמה\", מפנה את החדר ושולחת לאורח קבלה"
+     }
+    ],
+    "extensions": [
+     {
+      "at": "4.1.1",
+      "text": "חיוב היתרה בכרטיס נכשל",
+      "steps": [
+       "המערכת מציגה את סיבת הכישלון ומציעה אמצעי תשלום אחר"
+      ],
+      "outcome": {
+       "kind": "resume",
+       "at": "4"
+      }
+     },
+     {
+      "at": "5",
+      "text": "היתרה אינה אפס (תשלום חלקי)",
+      "steps": [
+       "המערכת מציגה 'לא ניתן לסיים צ'ק-אאוט עם יתרת חוב'"
+      ],
+      "outcome": {
+       "kind": "terminate",
+       "text": "ההזמנה נותרת \"פעילה\" עד לתשלום מלא (BR-7)."
+      }
+     }
+    ]
+   }
+  ],
+  "userStories": [
+   {
+    "role": "פקיד קבלה",
+    "want": "שהחשבון יחושב אוטומטית מכל החיובים",
+    "so": "לא אשכח תוספת"
+   },
+   {
+    "role": "הנהלת חשבונות",
+    "want": "שהזמנה לא תסומן כהושלמה עם חוב",
+    "so": "לא ארדוף אחרי אורחים"
+   }
+  ],
+  "wireframe": "<div class=\"wf-screen\"><h3 class=\"wf-heading\">צ'ק-אאוט — חדר 214</h3><table class=\"wf-table\"><thead><tr><th>פריט</th><th>סכום</th></tr></thead><tbody><tr><td>3 לילות × 620 ₪</td><td>1,860 ₪</td></tr><tr><td>שירותים נוספים</td><td>178 ₪</td></tr><tr><td>מקדמה ששולמה</td><td>−620 ₪</td></tr><tr><td>יתרה לתשלום</td><td>1,418 ₪</td></tr></tbody></table><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">חיוב כרטיס</button><button class=\"wf-button\">מזומן</button><button class=\"wf-button\">הדפסת חשבון</button></div><p class=\"wf-hint\">צ'ק-אאוט מסתיים רק כשהיתרה אפס.</p></div>"
+ },
+ "uc-delete-dup": {
+  "id": "uc-delete-dup",
+  "name": "מחיקת הזמנה כפולה",
+  "primaryActor": "recep-mgr",
+  "description": "מנהל הקבלה מזהה שתי הזמנות זהות של אותו אורח (לחיצה כפולה או הזמנה גם באתר וגם בטלפון) ומוחק את הכפולה — היא אינה הזמנה שבוטלה.",
+  "preconditions": [
+   "קיימות שתי הזמנות במצב \"חדשה\" לאותו אורח, אותם תאריכים ואותו סוג חדר, ואף אחת מהן לא חויבה."
+  ],
+  "postconditions": [
+   "ההזמנה הכפולה נמחקה מהמערכת (לא נשמרת בארכיון); ההזמנה המקורית נותרת ללא שינוי."
+  ],
+  "scenarios": [
+   {
+    "id": "sc-dup",
+    "name": "מסלול מרכזי",
+    "flow": [
+     {
+      "kind": "actor",
+      "actor": "recep-mgr",
+      "text": "פותח את רשימת ההזמנות החשודות ככפולות"
+     },
+     {
+      "kind": "system",
+      "text": "מציגה זוגות הזמנות \"חדשות\" עם אותו אורח, תאריכים וסוג חדר, ומסמנת את המאוחרת"
+     },
+     {
+      "kind": "actor",
+      "actor": "recep-mgr",
+      "text": "בוחר זוג ומסמן איזו הזמנה למחוק"
+     },
+     {
+      "kind": "system",
+      "text": "מוודאת שההזמנה למחיקה לא חויבה מעולם ומבקשת אישור"
+     },
+     {
+      "kind": "actor",
+      "actor": "recep-mgr",
+      "text": "מאשר את המחיקה"
+     },
+     {
+      "kind": "system",
+      "text": "מוחקת את ההזמנה הכפולה ורושמת ביומן מי ומתי"
+     }
+    ],
+    "extensions": [
+     {
+      "at": "4",
+      "text": "להזמנה שנבחרה למחיקה כבר נרשם חיוב (מקדמה)",
+      "steps": [
+       "המערכת מציגה 'הזמנה שחויבה אינה ניתנת למחיקה — יש לבטלה'"
+      ],
+      "outcome": {
+       "kind": "terminate",
+       "text": "לא נמחק דבר; מנהל הקבלה מבטל את ההזמנה בתרחיש הביטול."
+      }
+     }
+    ]
+   }
+  ],
+  "userStories": [
+   {
+    "role": "מנהל קבלה",
+    "want": "למחוק הזמנה כפולה בלי שתיספר כביטול",
+    "so": "דוח הביטולים יהיה אמיתי"
+   },
+   {
+    "role": "אורח",
+    "want": "שלא אחויב פעמיים על לחיצה כפולה",
+    "so": "אסמוך על האתר"
+   }
+  ],
+  "wireframe": "<div class=\"wf-screen\"><h3 class=\"wf-heading\">הזמנות כפולות</h3><table class=\"wf-table\"><thead><tr><th>אורח</th><th>תאריכים</th><th>הזמנה א'</th><th>הזמנה ב'</th></tr></thead><tbody><tr><td>ר. כהן</td><td>12–15.7</td><td>#10482</td><td>#10483 (מאוחרת)</td></tr></tbody></table><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">מחיקת הכפולה</button><button class=\"wf-button\">לא כפולה</button></div><p class=\"wf-hint\">מחיקה אפשרית רק להזמנה שלא חויבה מעולם.</p></div>"
+ },
+ "uc-manage-roomtypes": {
+  "id": "uc-manage-roomtypes",
+  "name": "ניהול סוגי חדרים ותעריפים",
+  "primaryActor": "hotel-mgr",
+  "description": "מנהל המלון מתחזק את סוגי החדרים: שם, מספר אורחים מרבי ותעריף ללילה לפי עונה.",
+  "preconditions": [
+   "מנהל המלון מזוהה במערכת."
+  ],
+  "postconditions": [
+   "רשימת סוגי החדרים והתעריפים מעודכנת."
+  ],
+  "scenarios": [
+   {
+    "id": "sc-rt-add",
+    "name": "הוספת סוג חדר",
+    "flow": [
+     {
+      "kind": "actor",
+      "actor": "hotel-mgr",
+      "text": "בוחר 'הוספת סוג חדר'"
+     },
+     {
+      "kind": "actor",
+      "actor": "hotel-mgr",
+      "text": "מזין שם, מספר אורחים מרבי, תעריף ללילה ותקופת התעריף"
+     },
+     {
+      "kind": "system",
+      "text": "מוודאת שהשדות תקינים ושהשם אינו קיים כבר"
+     },
+     {
+      "kind": "system",
+      "text": "שומרת את סוג חדר ומציגה אותו ברשימה"
+     }
+    ],
+    "extensions": [
+     {
+      "at": "3",
+      "text": "השם כבר קיים במערכת",
+      "steps": [
+       "המערכת מציגה 'שם זה כבר קיים'"
+      ],
+      "outcome": {
+       "kind": "resume",
+       "at": "2"
+      }
+     }
+    ]
+   },
+   {
+    "id": "sc-rt-view",
+    "name": "צפייה ברשימת סוג חדר",
+    "flow": [
+     {
+      "kind": "actor",
+      "actor": "hotel-mgr",
+      "text": "פותח את רשימת סוג חדר"
+     },
+     {
+      "kind": "system",
+      "text": "מציגה את הרשימה עם כל השדות, ממוינת לפי שם"
+     },
+     {
+      "kind": "actor",
+      "actor": "hotel-mgr",
+      "text": "מסנן או ממיין את הרשימה"
+     },
+     {
+      "kind": "system",
+      "text": "מציגה את הרשימה המסוננת"
+     }
+    ],
+    "extensions": [
+     {
+      "at": "4",
+      "text": "לא נמצאו רשומות התואמות לסינון",
+      "steps": [
+       "המערכת מציגה 'לא נמצאו רשומות'"
+      ],
+      "outcome": {
+       "kind": "resume",
+       "at": "3"
+      }
+     }
+    ]
+   },
+   {
+    "id": "sc-rt-update",
+    "name": "עדכון סוג חדר",
+    "flow": [
+     {
+      "kind": "actor",
+      "actor": "hotel-mgr",
+      "text": "בוחר סוג חדר מהרשימה ולוחץ 'עריכה'"
+     },
+     {
+      "kind": "system",
+      "text": "מציגה את השדות לעריכה"
+     },
+     {
+      "kind": "actor",
+      "actor": "hotel-mgr",
+      "text": "משנה שדות ומאשר"
+     },
+     {
+      "kind": "system",
+      "text": "מוודאת תקינות, שומרת את השינוי ורושמת ביומן מי ומתי"
+     }
+    ],
+    "extensions": [
+     {
+      "at": "4",
+      "text": "ערך לא תקין (למשל תעריף שלילי)",
+      "steps": [
+       "המערכת מציגה את השגיאה ליד השדה"
+      ],
+      "outcome": {
+       "kind": "resume",
+       "at": "3"
+      }
+     }
+    ]
+   },
+   {
+    "id": "sc-rt-delete",
+    "name": "מחיקת סוג חדר",
+    "flow": [
+     {
+      "kind": "actor",
+      "actor": "hotel-mgr",
+      "text": "בוחר סוג חדר מהרשימה ולוחץ 'מחיקה'"
+     },
+     {
+      "kind": "system",
+      "text": "בודקת שאין חדרים או הזמנות המשויכים לסוג"
+     },
+     {
+      "kind": "actor",
+      "actor": "hotel-mgr",
+      "text": "מאשר את המחיקה"
+     },
+     {
+      "kind": "system",
+      "text": "מוחקת את הרשומה ומציגה את הרשימה המעודכנת"
+     }
+    ],
+    "extensions": [
+     {
+      "at": "2",
+      "text": "הרשומה בשימוש בהזמנות קיימות",
+      "steps": [
+       "המערכת מציגה 'לא ניתן למחוק — קיימות הזמנות המפנות לרשומה'"
+      ],
+      "outcome": {
+       "kind": "terminate",
+       "text": "הרשומה לא נמחקה."
+      }
+     }
+    ]
+   }
+  ],
+  "userStories": [
+   {
+    "role": "מנהל המלון",
+    "want": "לעדכן תעריף עונתי מראש",
+    "so": "הזמנות חדשות יקבלו את התעריף הנכון"
+   },
+   {
+    "role": "פקיד קבלה",
+    "want": "שהתעריף שמוקפא בהזמנה יבוא מהרשימה",
+    "so": "לא אקליד מחירים"
+   }
+  ],
+  "wireframe": "<div class=\"wf-screen\"><h3 class=\"wf-heading\">סוגי חדרים ותעריפים</h3><div class=\"wf-row\"><label class=\"wf-label\">שם</label><input class=\"wf-input\" disabled /></div><div class=\"wf-row\"><label class=\"wf-label\">אורחים מרבי</label><input class=\"wf-input\" disabled /></div><div class=\"wf-row\"><label class=\"wf-label\">תעריף ללילה</label><input class=\"wf-input\" disabled /></div><div class=\"wf-row\"><label class=\"wf-label\">תקופה</label><input class=\"wf-input\" disabled /></div><table class=\"wf-table\"><thead><tr><th>סוג</th><th>מרבי</th><th>תעריף</th></tr></thead><tbody><tr><td>סטנדרט</td><td>2</td><td>480 ₪</td></tr><tr><td>נוף לים</td><td>3</td><td>620 ₪</td></tr><tr><td>סוויטה</td><td>4</td><td>980 ₪</td></tr></tbody></table><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">שמירה</button><button class=\"wf-button\">הוספת סוג</button><button class=\"wf-button\">מחיקה</button></div></div>"
+ },
+ "uc-manage-rooms": {
+  "id": "uc-manage-rooms",
+  "name": "ניהול חדרים",
+  "primaryActor": "hotel-mgr",
+  "description": "מנהל המלון מתחזק את רשימת החדרים: מספר, קומה, סוג ומצב (פעיל / בשיפוץ).",
+  "preconditions": [
+   "מנהל המלון מזוהה במערכת."
+  ],
+  "postconditions": [
+   "רשימת החדרים מעודכנת."
+  ],
+  "scenarios": [
+   {
+    "id": "sc-room-add",
+    "name": "הוספת חדר",
+    "flow": [
+     {
+      "kind": "actor",
+      "actor": "hotel-mgr",
+      "text": "בוחר 'הוספת חדר'"
+     },
+     {
+      "kind": "actor",
+      "actor": "hotel-mgr",
+      "text": "מזין מספר חדר, קומה, סוג חדר ומצב"
+     },
+     {
+      "kind": "system",
+      "text": "מוודאת שהשדות תקינים ושהשם אינו קיים כבר"
+     },
+     {
+      "kind": "system",
+      "text": "שומרת את חדר ומציגה אותו ברשימה"
+     }
+    ],
+    "extensions": [
+     {
+      "at": "3",
+      "text": "השם כבר קיים במערכת",
+      "steps": [
+       "המערכת מציגה 'שם זה כבר קיים'"
+      ],
+      "outcome": {
+       "kind": "resume",
+       "at": "2"
+      }
+     }
+    ]
+   },
+   {
+    "id": "sc-room-view",
+    "name": "צפייה ברשימת חדר",
+    "flow": [
+     {
+      "kind": "actor",
+      "actor": "hotel-mgr",
+      "text": "פותח את רשימת חדר"
+     },
+     {
+      "kind": "system",
+      "text": "מציגה את הרשימה עם כל השדות, ממוינת לפי שם"
+     },
+     {
+      "kind": "actor",
+      "actor": "hotel-mgr",
+      "text": "מסנן או ממיין את הרשימה"
+     },
+     {
+      "kind": "system",
+      "text": "מציגה את הרשימה המסוננת"
+     }
+    ],
+    "extensions": [
+     {
+      "at": "4",
+      "text": "לא נמצאו רשומות התואמות לסינון",
+      "steps": [
+       "המערכת מציגה 'לא נמצאו רשומות'"
+      ],
+      "outcome": {
+       "kind": "resume",
+       "at": "3"
+      }
+     }
+    ]
+   },
+   {
+    "id": "sc-room-update",
+    "name": "עדכון חדר",
+    "flow": [
+     {
+      "kind": "actor",
+      "actor": "hotel-mgr",
+      "text": "בוחר חדר מהרשימה ולוחץ 'עריכה'"
+     },
+     {
+      "kind": "system",
+      "text": "מציגה את השדות לעריכה"
+     },
+     {
+      "kind": "actor",
+      "actor": "hotel-mgr",
+      "text": "משנה שדות ומאשר"
+     },
+     {
+      "kind": "system",
+      "text": "מוודאת תקינות, שומרת את השינוי ורושמת ביומן מי ומתי"
+     }
+    ],
+    "extensions": [
+     {
+      "at": "4",
+      "text": "ערך לא תקין (למשל תעריף שלילי)",
+      "steps": [
+       "המערכת מציגה את השגיאה ליד השדה"
+      ],
+      "outcome": {
+       "kind": "resume",
+       "at": "3"
+      }
+     }
+    ]
+   },
+   {
+    "id": "sc-room-delete",
+    "name": "מחיקת חדר",
+    "flow": [
+     {
+      "kind": "actor",
+      "actor": "hotel-mgr",
+      "text": "בוחר חדר מהרשימה ולוחץ 'מחיקה'"
+     },
+     {
+      "kind": "system",
+      "text": "בודקת שאין שהות פעילה בחדר"
+     },
+     {
+      "kind": "actor",
+      "actor": "hotel-mgr",
+      "text": "מאשר את המחיקה"
+     },
+     {
+      "kind": "system",
+      "text": "מוחקת את הרשומה ומציגה את הרשימה המעודכנת"
+     }
+    ],
+    "extensions": [
+     {
+      "at": "2",
+      "text": "הרשומה בשימוש בהזמנות קיימות",
+      "steps": [
+       "המערכת מציגה 'לא ניתן למחוק — קיימות הזמנות המפנות לרשומה'"
+      ],
+      "outcome": {
+       "kind": "terminate",
+       "text": "הרשומה לא נמחקה."
+      }
+     }
+    ]
+   }
+  ],
+  "userStories": [
+   {
+    "role": "מנהל המלון",
+    "want": "לסמן חדר בשיפוץ",
+    "so": "לא ישובץ"
+   },
+   {
+    "role": "פקיד קבלה",
+    "want": "לראות רק חדרים פעילים בצ'ק-אין",
+    "so": "לא אשבץ חדר בשיפוץ"
+   }
+  ],
+  "wireframe": "<div class=\"wf-screen\"><h3 class=\"wf-heading\">חדרים</h3><div class=\"wf-row\"><label class=\"wf-label\">מספר חדר</label><input class=\"wf-input\" disabled /></div><div class=\"wf-row\"><label class=\"wf-label\">קומה</label><select class=\"wf-select\" disabled></select></div><div class=\"wf-row\"><label class=\"wf-label\">סוג</label><select class=\"wf-select\" disabled></select></div><div class=\"wf-row\"><label class=\"wf-label\">מצב</label><select class=\"wf-select\" disabled></select></div><table class=\"wf-table\"><thead><tr><th>חדר</th><th>קומה</th><th>סוג</th><th>מצב</th></tr></thead><tbody><tr><td>214</td><td>2</td><td>נוף לים</td><td>פעיל</td></tr><tr><td>305</td><td>3</td><td>סוויטה</td><td>בשיפוץ</td></tr></tbody></table><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">שמירה</button><button class=\"wf-button\">הוספת חדר</button></div></div>"
+ },
+ "uc-manage-extras": {
+  "id": "uc-manage-extras",
+  "name": "ניהול קטלוג שירותים",
+  "primaryActor": "hotel-mgr",
+  "description": "מנהל המלון מתחזק את קטלוג השירותים הנוספים (מיני-בר, ארוחת בוקר, חניה, ספא) ומחיריהם.",
+  "preconditions": [
+   "מנהל המלון מזוהה במערכת."
+  ],
+  "postconditions": [
+   "קטלוג השירותים מעודכן."
+  ],
+  "scenarios": [
+   {
+    "id": "sc-extra-add",
+    "name": "הוספת שירות נוסף",
+    "flow": [
+     {
+      "kind": "actor",
+      "actor": "hotel-mgr",
+      "text": "בוחר 'הוספת שירות נוסף'"
+     },
+     {
+      "kind": "actor",
+      "actor": "hotel-mgr",
+      "text": "מזין שם ומחיר"
+     },
+     {
+      "kind": "system",
+      "text": "מוודאת שהשדות תקינים ושהשם אינו קיים כבר"
+     },
+     {
+      "kind": "system",
+      "text": "שומרת את שירות נוסף ומציגה אותו ברשימה"
+     }
+    ],
+    "extensions": [
+     {
+      "at": "3",
+      "text": "השם כבר קיים במערכת",
+      "steps": [
+       "המערכת מציגה 'שם זה כבר קיים'"
+      ],
+      "outcome": {
+       "kind": "resume",
+       "at": "2"
+      }
+     }
+    ]
+   },
+   {
+    "id": "sc-extra-view",
+    "name": "צפייה ברשימת שירות נוסף",
+    "flow": [
+     {
+      "kind": "actor",
+      "actor": "hotel-mgr",
+      "text": "פותח את רשימת שירות נוסף"
+     },
+     {
+      "kind": "system",
+      "text": "מציגה את הרשימה עם כל השדות, ממוינת לפי שם"
+     },
+     {
+      "kind": "actor",
+      "actor": "hotel-mgr",
+      "text": "מסנן או ממיין את הרשימה"
+     },
+     {
+      "kind": "system",
+      "text": "מציגה את הרשימה המסוננת"
+     }
+    ],
+    "extensions": [
+     {
+      "at": "4",
+      "text": "לא נמצאו רשומות התואמות לסינון",
+      "steps": [
+       "המערכת מציגה 'לא נמצאו רשומות'"
+      ],
+      "outcome": {
+       "kind": "resume",
+       "at": "3"
+      }
+     }
+    ]
+   },
+   {
+    "id": "sc-extra-update",
+    "name": "עדכון שירות נוסף",
+    "flow": [
+     {
+      "kind": "actor",
+      "actor": "hotel-mgr",
+      "text": "בוחר שירות נוסף מהרשימה ולוחץ 'עריכה'"
+     },
+     {
+      "kind": "system",
+      "text": "מציגה את השדות לעריכה"
+     },
+     {
+      "kind": "actor",
+      "actor": "hotel-mgr",
+      "text": "משנה שדות ומאשר"
+     },
+     {
+      "kind": "system",
+      "text": "מוודאת תקינות, שומרת את השינוי ורושמת ביומן מי ומתי"
+     }
+    ],
+    "extensions": [
+     {
+      "at": "4",
+      "text": "ערך לא תקין (למשל תעריף שלילי)",
+      "steps": [
+       "המערכת מציגה את השגיאה ליד השדה"
+      ],
+      "outcome": {
+       "kind": "resume",
+       "at": "3"
+      }
+     }
+    ]
+   },
+   {
+    "id": "sc-extra-delete",
+    "name": "מחיקת שירות נוסף",
+    "flow": [
+     {
+      "kind": "actor",
+      "actor": "hotel-mgr",
+      "text": "בוחר שירות נוסף מהרשימה ולוחץ 'מחיקה'"
+     },
+     {
+      "kind": "system",
+      "text": "בודקת שהשירות אינו בשימוש בחיובים פתוחים"
+     },
+     {
+      "kind": "actor",
+      "actor": "hotel-mgr",
+      "text": "מאשר את המחיקה"
+     },
+     {
+      "kind": "system",
+      "text": "מוחקת את הרשומה ומציגה את הרשימה המעודכנת"
+     }
+    ],
+    "extensions": [
+     {
+      "at": "2",
+      "text": "הרשומה בשימוש בהזמנות קיימות",
+      "steps": [
+       "המערכת מציגה 'לא ניתן למחוק — קיימות הזמנות המפנות לרשומה'"
+      ],
+      "outcome": {
+       "kind": "terminate",
+       "text": "הרשומה לא נמחקה."
+      }
+     }
+    ]
+   }
+  ],
+  "userStories": [
+   {
+    "role": "מנהל המלון",
+    "want": "לשנות מחיר של שירות בלי לגעת בחיובים שכבר נרשמו",
+    "so": "החשבונות הישנים לא ישתנו"
+   },
+   {
+    "role": "פקיד קבלה",
+    "want": "לבחור שירות מרשימה",
+    "so": "לא אקליד מחיר ידנית"
+   }
+  ],
+  "wireframe": "<div class=\"wf-screen\"><h3 class=\"wf-heading\">קטלוג שירותים</h3><div class=\"wf-row\"><label class=\"wf-label\">שם השירות</label><input class=\"wf-input\" disabled /></div><div class=\"wf-row\"><label class=\"wf-label\">מחיר</label><input class=\"wf-input\" disabled /></div><table class=\"wf-table\"><thead><tr><th>שירות</th><th>מחיר</th></tr></thead><tbody><tr><td>מיני-בר</td><td>38 ₪</td></tr><tr><td>ארוחת בוקר</td><td>70 ₪</td></tr><tr><td>חניה</td><td>45 ₪</td></tr></tbody></table><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">שמירה</button><button class=\"wf-button\">הוספת שירות</button></div></div>"
+ },
+ "uc-report": {
+  "id": "uc-report",
+  "name": "הפקת דוח תפוסה והכנסות",
+  "primaryActor": "hotel-mgr",
+  "description": "מנהל המלון מפיק דוח לתקופה: הזמנות לפי מצב, ביטולים לפי סיבה, תפוסה והכנסה לפי סוג חדר.",
+  "preconditions": [
+   "קיימות הזמנות בתקופה המבוקשת."
+  ],
+  "postconditions": [
+   "הדוח הוצג / יוצא; לא שונה דבר במערכת."
+  ],
+  "scenarios": [
+   {
+    "id": "sc-report",
+    "name": "מסלול מרכזי",
+    "flow": [
+     {
+      "kind": "actor",
+      "actor": "hotel-mgr",
+      "text": "בוחר טווח תאריכים וסוג חדר (או הכול)"
+     },
+     {
+      "kind": "system",
+      "text": "סופרת הזמנות לפי מצב ובוטלות לפי סיבה (דחייה / ביטול אורח / אי-הגעה / תשלום נכשל)"
+     },
+     {
+      "kind": "system",
+      "text": "מחשבת תפוסה לכל לילה והכנסה מחיובים ששולמו, לפי סוג חדר"
+     },
+     {
+      "kind": "system",
+      "text": "מציגה את הדוח עם גרף תפוסה"
+     },
+     {
+      "kind": "actor",
+      "actor": "hotel-mgr",
+      "text": "מייצא לקובץ"
+     }
+    ],
+    "extensions": [
+     {
+      "at": "2",
+      "text": "אין הזמנות בטווח שנבחר",
+      "steps": [
+       "המערכת מציגה 'אין נתונים לתקופה'"
+      ],
+      "outcome": {
+       "kind": "resume",
+       "at": "1"
+      }
+     }
+    ]
+   }
+  ],
+  "userStories": [
+   {
+    "role": "מנהל המלון",
+    "want": "לראות כמה הזמנות נדחו על חוסר זמינות",
+    "so": "אדע איזה ביקוש הפסדתי"
+   },
+   {
+    "role": "מנהל המלון",
+    "want": "לראות ביטולים לפי סיבה",
+    "so": "אבין אם בעיית אי-ההגעה גדלה"
+   }
+  ],
+  "wireframe": "<div class=\"wf-screen\"><h3 class=\"wf-heading\">דוח תפוסה והכנסות</h3><div class=\"wf-row\"><label class=\"wf-label\">מתאריך</label><input class=\"wf-input\" disabled /></div><div class=\"wf-row\"><label class=\"wf-label\">עד תאריך</label><input class=\"wf-input\" disabled /></div><div class=\"wf-row\"><label class=\"wf-label\">סוג חדר</label><select class=\"wf-select\" disabled></select></div><table class=\"wf-table\"><thead><tr><th>מצב</th><th>הזמנות</th></tr></thead><tbody><tr><td>מאושרות</td><td>212</td></tr><tr><td>הושלמו</td><td>540</td></tr><tr><td>בוטלו — אי-הגעה</td><td>18</td></tr><tr><td>בוטלו — דחייה</td><td>63</td></tr></tbody></table><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">הפקה</button><button class=\"wf-button\">ייצוא</button></div></div>"
+ },
+ "uc-noshow": {
+  "id": "uc-noshow",
+  "name": "טיפול בהזמנות שלא הגיעו",
+  "primaryActor": "clock",
+  "description": "בחצות, המערכת מאתרת הזמנות מאושרות שתאריך ההגעה שלהן היה היום ולא בוצע בהן צ'ק-אין, מבטלת אותן כאי-הגעה ומשאירה את המקדמה במלון.",
+  "preconditions": [
+   "השעה חצות.",
+   "קיימות הזמנות \"מאושרות\" עם תאריך הגעה של היום."
+  ],
+  "postconditions": [
+   "כל הזמנה כזו במצב \"בוטלה\" עם הסיבה \"אי-הגעה\"; המקדמה נרשמה כדמי אי-הגעה; נשלחה הודעה לאורח."
+  ],
+  "scenarios": [
+   {
+    "id": "sc-noshow",
+    "name": "מסלול מרכזי",
+    "flow": [
+     {
+      "kind": "system",
+      "text": "מאתרת הזמנות במצב \"מאושרת\" שתאריך ההגעה שלהן הוא היום ולא בוצע בהן צ'ק-אין"
+     },
+     {
+      "kind": "loop",
+      "condition": "לכל הזמנה שנמצאה",
+      "steps": [
+       {
+        "kind": "system",
+        "text": "מעבירה את ההזמנה למצב \"בוטלה\" עם הסיבה \"אי-הגעה\""
+       },
+       {
+        "kind": "system",
+        "text": "ממירה את חיוב המקדמה ל\"דמי אי-הגעה\" (ללא זיכוי)"
+       },
+       {
+        "kind": "system",
+        "text": "שולחת לאורח הודעה על ביטול בשל אי-הגעה"
+       }
+      ]
+     },
+     {
+      "kind": "system",
+      "text": "רושמת ביומן את מספר ההזמנות שטופלו"
+     }
+    ],
+    "extensions": [
+     {
+      "at": "2.2",
+      "text": "המקדמה מעולם לא שולמה (חיוב נכשל)",
+      "steps": [
+       "המערכת מנסה לחייב דמי אי-הגעה"
+      ],
+      "outcome": {
+       "kind": "resume",
+       "at": "2.3"
+      }
+     }
+    ]
+   }
+  ],
+  "userStories": [
+   {
+    "role": "מנהל קבלה",
+    "want": "שאי-הגעה תזוהה בחצות ולא בבוקר",
+    "so": "החדר ישוחרר להזמנות אחרות"
+   },
+   {
+    "role": "הנהלת חשבונות",
+    "want": "שדמי אי-ההגעה יירשמו אוטומטית",
+    "so": "לא אחפש אותם בסוף החודש"
+   }
+  ],
+  "wireframe": ""
+ },
+ "uc-cancel-unpaid": {
+  "id": "uc-cancel-unpaid",
+  "name": "ביטול הזמנות שחיובן לא הושלם",
+  "primaryActor": "clock",
+  "description": "כל שעה, המערכת מבטלת הזמנות שחיוב המקדמה בהן נכשל ולא הצליח תוך 24 שעות מהניסיון הראשון (BR-2).",
+  "preconditions": [
+   "קיימות הזמנות שחיוב המקדמה בהן נכשל."
+  ],
+  "postconditions": [
+   "כל הזמנה שחלפו בה 24 שעות ללא חיוב מוצלח — במצב \"בוטלה\" עם הסיבה \"תשלום נכשל\"; נשלחה הודעה לאורח."
+  ],
+  "scenarios": [
+   {
+    "id": "sc-unpaid",
+    "name": "מסלול מרכזי",
+    "flow": [
+     {
+      "kind": "system",
+      "text": "מאתרת הזמנות שאינן מאושרות ושחיוב המקדמה הראשון בהן נכשל לפני יותר מ-24 שעות"
+     },
+     {
+      "kind": "loop",
+      "condition": "לכל הזמנה שנמצאה",
+      "steps": [
+       {
+        "kind": "system",
+        "text": "מעבירה את ההזמנה למצב \"בוטלה\" עם הסיבה \"תשלום נכשל\""
+       },
+       {
+        "kind": "system",
+        "text": "שולחת לאורח הודעה שההזמנה בוטלה וניתן להזמין מחדש"
+       }
+      ]
+     },
+     {
+      "kind": "system",
+      "text": "רושמת ביומן את מספר ההזמנות שבוטלו"
+     }
+    ],
+    "extensions": [
+     {
+      "at": "2.1",
+      "text": "בינתיים בוצע צ'ק-אין להזמנה באישור מנהל קבלה",
+      "steps": [
+       "המערכת מדלגת על ההזמנה ורושמת חריגה ביומן"
+      ],
+      "outcome": {
+       "kind": "resume",
+       "at": "2"
+      }
+     }
+    ]
+   }
+  ],
+  "userStories": [
+   {
+    "role": "מנהל קבלה",
+    "want": "שהזמנה שלא שולמה לא תישאר תקועה לנצח",
+    "so": "החדר יחזור למלאי"
+   },
+   {
+    "role": "אורח",
+    "want": "לקבל הודעה שההזמנה בוטלה ולמה",
+    "so": "אוכל להזמין מחדש בזמן"
+   }
+  ],
+  "wireframe": ""
+ }
+};
+    var diagramModel        = {
+ "kind": "use-case",
+ "title": "מערכת ההזמנות של מלון 'גלי הים'",
+ "parts": [
+  {
+   "id": "part-1",
+   "label": "הזמנה ושהות",
+   "splitRationale": "Split by UC count: 16 UCs > 8 threshold — לשונית זו: מחזור ההזמנה (הזמנה ← אישור ← צ'ק-אין ← שהות ← צ'ק-אאוט) והחריגים שבדלפק",
+   "elements": [
+    {
+     "kind": "actor",
+     "id": "guest",
+     "name": "אורח",
+     "actorType": "human",
+     "side": "left",
+     "x": 120,
+     "y": 200
+    },
+    {
+     "kind": "actor",
+     "id": "reception",
+     "name": "פקיד קבלה",
+     "actorType": "human",
+     "side": "right",
+     "x": 920,
+     "y": 200
+    },
+    {
+     "kind": "actor",
+     "id": "recep-mgr",
+     "name": "מנהל קבלה",
+     "actorType": "human",
+     "side": "right",
+     "x": 920,
+     "y": 350
+    },
+    {
+     "kind": "useCase",
+     "id": "uc-book",
+     "name": "הזמנת חדר",
+     "description": "אורח (או פקיד קבלה בשם אורח שהתקשר) פותח הזמנה חדשה לסוג חדר, לתאריכים ולמספר אורחים.",
+     "primaryActor": "guest",
+     "preconditions": [
+      "סוגי החדרים והתעריפים מוגדרים במערכת."
+     ],
+     "postconditions": [
+      "ההזמנה נשמרה במצב \"חדשה\" עם מספר הזמנה, וממתינה לאישור פקיד קבלה.",
+      "נשלח לאורח אישור קבלת ההזמנה עם מספרה."
+     ],
+     "scenarios": [
+      {
+       "id": "sc-book-web",
+       "name": "הזמנה באתר",
+       "flow": [
+        {
+         "kind": "actor",
+         "actor": "guest",
+         "text": "מזין תאריך הגעה, תאריך יציאה ומספר אורחים"
+        },
+        {
+         "kind": "system",
+         "text": "מציגה את סוגי החדרים, התעריף ללילה לכל סוג והמחיר הכולל לשהות"
+        },
+        {
+         "kind": "actor",
+         "actor": "guest",
+         "text": "בוחר סוג חדר"
+        },
+        {
+         "kind": "actor",
+         "actor": "guest",
+         "text": "מזין שם מלא, מספר תעודה מזהה, טלפון, דוא\"ל ופרטי כרטיס אשראי"
+        },
+        {
+         "kind": "system",
+         "text": "שומרת את פרטי הכרטיס כאסימון בשער התשלום (ללא חיוב)"
+        },
+        {
+         "kind": "system",
+         "text": "שומרת את ההזמנה במצב \"חדשה\", מקצה מספר הזמנה ומציגה אותו"
+        }
+       ],
+       "extensions": [
+        {
+         "at": "1",
+         "text": "תאריך היציאה אינו מאוחר מתאריך ההגעה",
+         "steps": [
+          "המערכת מציגה 'תאריך יציאה חייב להיות אחרי תאריך ההגעה'"
+         ],
+         "outcome": {
+          "kind": "resume",
+          "at": "1"
+         }
+        },
+        {
+         "at": "3",
+         "text": "מספר האורחים גדול מהמרבי לסוג החדר שנבחר",
+         "steps": [
+          "המערכת מציגה את המרבי לסוג ומבקשת לבחור סוג אחר"
+         ],
+         "outcome": {
+          "kind": "resume",
+          "at": "3"
+         }
+        },
+        {
+         "at": "5",
+         "text": "שער התשלום דחה את הכרטיס (פרטים שגויים)",
+         "steps": [
+          "המערכת מציגה 'פרטי הכרטיס אינם תקינים'"
+         ],
+         "outcome": {
+          "kind": "resume",
+          "at": "4"
+         }
+        }
+       ]
+      },
+      {
+       "id": "sc-book-phone",
+       "name": "הזמנה בטלפון (פקיד קבלה מזין)",
+       "flow": [
+        {
+         "kind": "actor",
+         "actor": "reception",
+         "text": "מזין את פרטי האורח כפי שנמסרו בטלפון: שם, תעודה מזהה, טלפון"
+        },
+        {
+         "kind": "actor",
+         "actor": "reception",
+         "text": "מזין תאריכים, מספר אורחים וסוג חדר"
+        },
+        {
+         "kind": "system",
+         "text": "מציגה את המחיר הכולל ואת הצורך בכרטיס אשראי למקדמה"
+        },
+        {
+         "kind": "actor",
+         "actor": "reception",
+         "text": "מזין את פרטי הכרטיס שמסר האורח"
+        },
+        {
+         "kind": "system",
+         "text": "שומרת את ההזמנה במצב \"חדשה\" ומציגה את מספרה להקראה לאורח"
+        }
+       ],
+       "extensions": [
+        {
+         "at": "1",
+         "text": "האורח כבר קיים במערכת (לפי תעודה מזהה)",
+         "steps": [
+          "המערכת מציגה את פרטי האורח הקיימים לאישור"
+         ],
+         "outcome": {
+          "kind": "resume",
+          "at": "2"
+         }
+        }
+       ]
+      }
+     ],
+     "userStories": [
+      {
+       "role": "אורח",
+       "want": "להזמין חדר באתר בכמה דקות",
+       "so": "לא אצטרך להתקשר למלון"
+      },
+      {
+       "role": "אורח",
+       "want": "לראות את המחיר הכולל לפני שאני מזין כרטיס אשראי",
+       "so": "לא יהיו הפתעות"
+      },
+      {
+       "role": "פקיד קבלה",
+       "want": "להזין הזמנה טלפונית באותו מסך",
+       "so": "כל ההזמנות יהיו במקום אחד"
+      }
+     ],
+     "wireframe": "<div class=\"wf-screen\"><h3 class=\"wf-heading\">הזמנת חדר</h3><div class=\"wf-row\"><label class=\"wf-label\">תאריך הגעה</label><input class=\"wf-input\" disabled /></div><div class=\"wf-row\"><label class=\"wf-label\">תאריך יציאה</label><input class=\"wf-input\" disabled /></div><div class=\"wf-row\"><label class=\"wf-label\">מספר אורחים</label><select class=\"wf-select\" disabled></select></div><div class=\"wf-row\"><label class=\"wf-label\">סוג חדר</label><select class=\"wf-select\" disabled></select></div><div class=\"wf-row\"><label class=\"wf-label\">שם מלא</label><input class=\"wf-input\" disabled /></div><div class=\"wf-row\"><label class=\"wf-label\">תעודה מזהה</label><input class=\"wf-input\" disabled /></div><div class=\"wf-row\"><label class=\"wf-label\">טלפון / דוא\"ל</label><input class=\"wf-input\" disabled /></div><div class=\"wf-row\"><label class=\"wf-label\">כרטיס אשראי</label><input class=\"wf-input\" disabled /></div><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">שליחת הזמנה</button><button class=\"wf-button\">ביטול</button></div><p class=\"wf-hint\">לאחר השליחה מוצג מספר ההזמנה; ההזמנה תאושר על ידי הקבלה.</p></div>",
+     "x": 520,
+     "y": 161,
+     "rx": 70,
+     "ry": 27
+    },
+    {
+     "kind": "useCase",
+     "id": "uc-cancel",
+     "name": "ביטול הזמנה על ידי האורח",
+     "description": "האורח מבטל הזמנה מאושרת עד 48 שעות לפני יום ההגעה ומקבל החזר מלא של המקדמה.",
+     "primaryActor": "guest",
+     "preconditions": [
+      "ההזמנה במצב \"מאושרת\" (או \"חדשה\").",
+      "נותרו לפחות 48 שעות עד יום ההגעה."
+     ],
+     "postconditions": [
+      "ההזמנה במצב \"בוטלה\" עם הסיבה \"ביטול על ידי האורח\".",
+      "נרשם חיוב מסוג \"החזר\" על המקדמה ונשלחה הודעת ביטול."
+     ],
+     "scenarios": [
+      {
+       "id": "sc-cancel",
+       "name": "מסלול מרכזי",
+       "flow": [
+        {
+         "kind": "actor",
+         "actor": "guest",
+         "text": "בוחר הזמנה מרשימת ההזמנות שלו ולוחץ 'ביטול הזמנה'"
+        },
+        {
+         "kind": "system",
+         "text": "מוודאת שנותרו לפחות 48 שעות עד יום ההגעה ומציגה את סכום ההחזר"
+        },
+        {
+         "kind": "actor",
+         "actor": "guest",
+         "text": "מאשר את הביטול"
+        },
+        {
+         "kind": "system",
+         "text": "מעבירה את ההזמנה למצב \"בוטלה\" עם הסיבה \"ביטול על ידי האורח\" ורושמת חיוב \"החזר\" על המקדמה"
+        },
+        {
+         "kind": "system",
+         "text": "שולחת לאורח הודעת ביטול ואישור החזר"
+        }
+       ],
+       "extensions": [
+        {
+         "at": "2",
+         "text": "נותרו פחות מ-48 שעות עד יום ההגעה",
+         "steps": [
+          "המערכת מציגה 'לא ניתן לבטל — חלון הביטול נסגר; פנה לקבלה'"
+         ],
+         "outcome": {
+          "kind": "terminate",
+          "text": "ההזמנה נותרת \"מאושרת\"."
+         }
+        },
+        {
+         "at": "2",
+         "text": "ההזמנה כבר אינה במצב שניתן לבטל (פעילה / הושלמה / בוטלה)",
+         "steps": [
+          "המערכת מציגה את מצב ההזמנה"
+         ],
+         "outcome": {
+          "kind": "terminate",
+          "text": "ללא שינוי."
+         }
+        }
+       ]
+      }
+     ],
+     "userStories": [
+      {
+       "role": "אורח",
+       "want": "לבטל הזמנה בעצמי באתר",
+       "so": "לא אצטרך להתקשר"
+      },
+      {
+       "role": "מנהל קבלה",
+       "want": "שהמערכת תאכוף את חלון 48 השעות",
+       "so": "לא יהיו ויכוחים על החזרים"
+      }
+     ],
+     "wireframe": "<div class=\"wf-screen\"><h3 class=\"wf-heading\">ביטול הזמנה</h3><div class=\"wf-row\"><label class=\"wf-label\">מספר הזמנה</label><input class=\"wf-input\" disabled /></div><div class=\"wf-row\"><label class=\"wf-label\">תאריכים</label><input class=\"wf-input\" disabled /></div><div class=\"wf-row\"><label class=\"wf-label\">סכום להחזר</label><input class=\"wf-input\" disabled /></div><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">אישור ביטול</button><button class=\"wf-button\">חזרה</button></div><p class=\"wf-hint\">ביטול אפשרי עד 48 שעות לפני יום ההגעה.</p></div>",
+     "x": 314,
+     "y": 161,
+     "rx": 70,
+     "ry": 30
+    },
+    {
+     "kind": "useCase",
+     "id": "uc-my-bookings",
+     "name": "צפייה בהזמנות שלי",
+     "description": "האורח צופה בהזמנותיו — הקרובות והקודמות — במצבן ובחיובים שנרשמו עליהן.",
+     "primaryActor": "guest",
+     "preconditions": [
+      "האורח מזוהה לפי מספר הזמנה ותעודה מזהה."
+     ],
+     "postconditions": [
+      "לא שונה דבר במערכת."
+     ],
+     "scenarios": [
+      {
+       "id": "sc-my",
+       "name": "מסלול מרכזי",
+       "flow": [
+        {
+         "kind": "actor",
+         "actor": "guest",
+         "text": "מזין מספר הזמנה ומספר תעודה מזהה"
+        },
+        {
+         "kind": "system",
+         "text": "מאתרת את האורח ומציגה את כל הזמנותיו עם תאריכים, סוג חדר ומצב"
+        },
+        {
+         "kind": "actor",
+         "actor": "guest",
+         "text": "בוחר הזמנה"
+        },
+        {
+         "kind": "system",
+         "text": "מציגה את פרטי ההזמנה, החיובים שנרשמו עליה והיתרה"
+        }
+       ],
+       "extensions": [
+        {
+         "at": "2",
+         "text": "לא נמצאה הזמנה התואמת לפרטים",
+         "steps": [
+          "המערכת מציגה 'לא נמצאה הזמנה'"
+         ],
+         "outcome": {
+          "kind": "resume",
+          "at": "1"
+         }
+        }
+       ]
+      }
+     ],
+     "userStories": [
+      {
+       "role": "אורח",
+       "want": "לראות מה מצב ההזמנה שלי",
+       "so": "אדע אם אושרה"
+      },
+      {
+       "role": "אורח",
+       "want": "לראות אילו חיובים נרשמו על השהות שלי",
+       "so": "לא אופתע בצ'ק-אאוט"
+      }
+     ],
+     "wireframe": "<div class=\"wf-screen\"><h3 class=\"wf-heading\">ההזמנות שלי</h3><div class=\"wf-row\"><label class=\"wf-label\">מספר הזמנה</label><input class=\"wf-input\" disabled /></div><div class=\"wf-row\"><label class=\"wf-label\">תעודה מזהה</label><input class=\"wf-input\" disabled /></div><table class=\"wf-table\"><thead><tr><th>מספר</th><th>תאריכים</th><th>סוג חדר</th><th>מצב</th></tr></thead><tbody><tr><td>10482</td><td>12–15.7</td><td>נוף לים</td><td>מאושרת</td></tr><tr><td>10117</td><td>3–5.4</td><td>סטנדרט</td><td>הושלמה</td></tr></tbody></table><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">הצגה</button></div></div>",
+     "x": 314,
+     "y": 235,
+     "rx": 70,
+     "ry": 30
+    },
+    {
+     "kind": "useCase",
+     "id": "uc-confirm",
+     "name": "אישור או דחיית הזמנה",
+     "description": "פקיד הקבלה בודק זמינות לסוג החדר בכל לילות השהות; אם יש חדר פנוי — מאשר ומחייב מקדמה, אחרת דוחה.",
+     "primaryActor": "reception",
+     "preconditions": [
+      "ההזמנה במצב \"חדשה\"."
+     ],
+     "postconditions": [
+      "ההזמנה במצב \"מאושרת\" עם תעריף מוקפא וחיוב מקדמה ששולם — או \"בוטלה\" עם הסיבה \"דחייה — אין זמינות\".",
+      "נשלחה לאורח הודעה על התוצאה."
+     ],
+     "scenarios": [
+      {
+       "id": "sc-confirm",
+       "name": "מסלול מרכזי",
+       "flow": [
+        {
+         "kind": "actor",
+         "actor": "reception",
+         "text": "בוחר הזמנה במצב \"חדשה\" מרשימת ההזמנות הממתינות"
+        },
+        {
+         "kind": "system",
+         "text": "בודקת זמינות: לכל לילה, מספר ההזמנות המאושרות/הפעילות לסוג החדר לעומת מספר החדרים הפעילים מהסוג — ומציגה את התוצאה"
+        },
+        {
+         "kind": "alt",
+         "condition": "תוצאת בדיקת הזמינות",
+         "branches": [
+          {
+           "label": "יש חדר פנוי",
+           "steps": [
+            {
+             "kind": "actor",
+             "actor": "reception",
+             "text": "לוחץ 'אישור'"
+            },
+            {
+             "kind": "system",
+             "text": "מקפיאה את התעריף ללילה לפי התעריף העונתי הנוכחי"
+            },
+            {
+             "kind": "include",
+             "uc": "uc-charge",
+             "text": ""
+            },
+            {
+             "kind": "system",
+             "text": "מעבירה את ההזמנה למצב \"מאושרת\" ושולחת לאורח אישור הזמנה"
+            }
+           ]
+          },
+          {
+           "label": "אין חדר פנוי",
+           "steps": [
+            {
+             "kind": "actor",
+             "actor": "reception",
+             "text": "לוחץ 'דחייה'"
+            },
+            {
+             "kind": "system",
+             "text": "מעבירה את ההזמנה למצב \"בוטלה\" עם הסיבה \"דחייה — אין זמינות\" ושולחת לאורח הודעה"
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "extensions": [
+        {
+         "at": "3.1.3",
+         "text": "חיוב המקדמה נכשל (הכרטיס נדחה)",
+         "steps": [
+          "המערכת מסמנת את החיוב \"נכשל\" ורושמת את מועד הניסיון",
+          "המערכת שולחת לאורח הודעה לעדכון אמצעי תשלום"
+         ],
+         "outcome": {
+          "kind": "terminate",
+          "text": "ההזמנה אינה מאושרת; ניתן לנסות חיוב נוסף עד 24 שעות מהניסיון הראשון (BR-2), אחרת תבוטל אוטומטית."
+         }
+        }
+       ]
+      },
+      {
+       "id": "sc-retry",
+       "name": "ניסיון חיוב חוזר אחרי כישלון",
+       "flow": [
+        {
+         "kind": "actor",
+         "actor": "reception",
+         "text": "בוחר הזמנה שחיוב המקדמה בה נכשל"
+        },
+        {
+         "kind": "system",
+         "text": "מציגה את מועד הניסיון הראשון ואת הזמן שנותר עד 24 שעות"
+        },
+        {
+         "kind": "actor",
+         "actor": "reception",
+         "text": "מזין פרטי כרטיס חדשים שמסר האורח"
+        },
+        {
+         "kind": "include",
+         "uc": "uc-charge",
+         "text": ""
+        },
+        {
+         "kind": "system",
+         "text": "מעבירה את ההזמנה למצב \"מאושרת\" ושולחת אישור"
+        }
+       ],
+       "extensions": [
+        {
+         "at": "4",
+         "text": "גם החיוב החוזר נכשל",
+         "steps": [
+          "המערכת רושמת ניסיון נוסף שנכשל"
+         ],
+         "outcome": {
+          "kind": "terminate",
+          "text": "ההזמנה עדיין אינה מאושרת."
+         }
+        },
+        {
+         "at": "2",
+         "text": "חלפו 24 שעות מהניסיון הראשון",
+         "steps": [
+          "המערכת מציגה שההזמנה כבר בוטלה אוטומטית"
+         ],
+         "outcome": {
+          "kind": "terminate",
+          "text": "ללא שינוי; האורח יכול להזמין מחדש."
+         }
+        }
+       ]
+      }
+     ],
+     "userStories": [
+      {
+       "role": "פקיד קבלה",
+       "want": "לראות בלחיצה אחת אם יש חדר פנוי לכל הלילות",
+       "so": "אאשר הזמנה בדקה"
+      },
+      {
+       "role": "מנהל קבלה",
+       "want": "שחיוב שנכשל יישאר גלוי עד שיטופל",
+       "so": "לא יגיע אורח להזמנה מאושרת שלא שולמה"
+      },
+      {
+       "role": "מנהל המלון",
+       "want": "שכל דחייה על חוסר זמינות תירשם עם הסיבה",
+       "so": "אראה ביקוש שהפסדנו"
+      }
+     ],
+     "wireframe": "<div class=\"wf-screen\"><h3 class=\"wf-heading\">אישור הזמנה #10482</h3><div class=\"wf-row\"><label class=\"wf-label\">אורח</label><input class=\"wf-input\" disabled /></div><div class=\"wf-row\"><label class=\"wf-label\">תאריכים / סוג חדר</label><input class=\"wf-input\" disabled /></div><div class=\"wf-row\"><label class=\"wf-label\">זמינות</label><input class=\"wf-input\" disabled /></div><div class=\"wf-row\"><label class=\"wf-label\">מקדמה (לילה ראשון)</label><input class=\"wf-input\" disabled /></div><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">אישור וחיוב מקדמה</button><button class=\"wf-button\">דחייה — אין זמינות</button></div><p class=\"wf-hint\">באישור מוקפא התעריף ומחויבת המקדמה דרך שער התשלום.</p></div>",
+     "x": 736,
+     "y": 161,
+     "rx": 70,
+     "ry": 30
+    },
+    {
+     "kind": "useCase",
+     "id": "uc-charge",
+     "name": "חיוב כרטיס אשראי",
+     "description": "המערכת מחייבת (או מזכה) את כרטיס האשראי של האורח דרך שער התשלום ורושמת חיוב על ההזמנה — מקדמה, יתרה, דמי אי-הגעה או החזר.",
+     "preconditions": [
+      "להזמנה קיים אסימון כרטיס אשראי בשער התשלום.",
+      "סכום החיוב וסוגו נקבעו על ידי תרחיש השימוש הקורא."
+     ],
+     "postconditions": [
+      "נרשם חיוב על ההזמנה במצב \"שולם\" עם אסמכתת סליקה — או \"נכשל\" עם סיבת הדחייה."
+     ],
+     "scenarios": [
+      {
+       "id": "sc-charge",
+       "name": "מסלול מרכזי",
+       "flow": [
+        {
+         "kind": "system",
+         "text": "יוצרת רשומת חיוב על ההזמנה במצב \"ממתין\" עם הסוג והסכום"
+        },
+        {
+         "kind": "system",
+         "text": "שולחת לשער התשלום בקשת חיוב עם האסימון והסכום"
+        },
+        {
+         "kind": "system",
+         "text": "מקבלת משער התשלום אישור ואסמכתת סליקה"
+        },
+        {
+         "kind": "system",
+         "text": "מסמנת את החיוב \"שולם\" ורושמת את האסמכתה"
+        }
+       ],
+       "extensions": [
+        {
+         "at": "3",
+         "text": "שער התשלום דחה את החיוב (מסגרת / כרטיס חסום)",
+         "steps": [
+          "המערכת מסמנת את החיוב \"נכשל\" עם סיבת הדחייה"
+         ],
+         "outcome": {
+          "kind": "terminate",
+          "text": "החיוב נכשל; תרחיש השימוש הקורא מטפל בתוצאה."
+         }
+        },
+        {
+         "at": "2",
+         "text": "שער התשלום אינו זמין (אין תשובה תוך 15 שניות)",
+         "steps": [
+          "המערכת רושמת את הכישלון ביומן ומסמנת את החיוב \"נכשל\""
+         ],
+         "outcome": {
+          "kind": "terminate",
+          "text": "החיוב לא בוצע; ניתן לנסות שוב."
+         }
+        }
+       ]
+      }
+     ],
+     "userStories": [
+      {
+       "role": "הנהלת חשבונות",
+       "want": "שכל חיוב והחזר יירשמו עם אסמכתת סליקה",
+       "so": "אוכל להתאים מול חברת הסליקה"
+      },
+      {
+       "role": "פקיד קבלה",
+       "want": "שהחיוב ייעשה מהמערכת ולא במסופון נפרד",
+       "so": "לא אצטרך להקליד סכומים פעמיים"
+      }
+     ],
+     "wireframe": "",
+     "x": 520,
+     "y": 235,
+     "rx": 70,
+     "ry": 30
+    },
+    {
+     "kind": "useCase",
+     "id": "uc-checkin",
+     "name": "רישום צ'ק-אין ושיבוץ חדר",
+     "description": "ביום ההגעה פקיד הקבלה מזהה את האורח, משבץ חדר מהסוג שהוזמן ומעביר את ההזמנה לשהות פעילה.",
+     "primaryActor": "reception",
+     "preconditions": [
+      "ההזמנה במצב \"מאושרת\" ותאריך ההגעה שלה הוא היום."
+     ],
+     "postconditions": [
+      "להזמנה משובץ חדר והיא במצב \"פעילה\"."
+     ],
+     "scenarios": [
+      {
+       "id": "sc-checkin",
+       "name": "מסלול מרכזי",
+       "flow": [
+        {
+         "kind": "actor",
+         "actor": "reception",
+         "text": "מאתר את ההזמנה לפי מספר הזמנה או שם האורח"
+        },
+        {
+         "kind": "system",
+         "text": "מציגה את ההזמנה ומוודאת שהיא \"מאושרת\" ושתאריך ההגעה הוא היום"
+        },
+        {
+         "kind": "actor",
+         "actor": "reception",
+         "text": "מזין את מספר התעודה המזהה שהציג האורח"
+        },
+        {
+         "kind": "system",
+         "text": "משווה לתעודה שנרשמה בהזמנה ומציגה את החדרים הפנויים מהסוג שהוזמן"
+        },
+        {
+         "kind": "actor",
+         "actor": "reception",
+         "text": "בוחר חדר"
+        },
+        {
+         "kind": "system",
+         "text": "משבצת את החדר להזמנה, מעבירה אותה למצב \"פעילה\" ומדפיסה כרטיס חדר"
+        }
+       ],
+       "extensions": [
+        {
+         "at": "2",
+         "text": "ההזמנה אינה \"מאושרת\" (חדשה עם חיוב שנכשל, או בוטלה)",
+         "steps": [
+          "המערכת מציגה את מצב ההזמנה והסיבה"
+         ],
+         "outcome": {
+          "kind": "terminate",
+          "text": "לא בוצע צ'ק-אין; פקיד הקבלה מפנה למנהל הקבלה."
+         }
+        },
+        {
+         "at": "4",
+         "text": "התעודה אינה תואמת לשם בהזמנה",
+         "steps": [
+          "המערכת מציגה אזהרה ומבקשת אישור מנהל קבלה"
+         ],
+         "outcome": {
+          "kind": "resume",
+          "at": "3"
+         }
+        },
+        {
+         "at": "4",
+         "text": "אין חדר פנוי מהסוג שהוזמן (תקלה בחדר)",
+         "steps": [
+          "המערכת מציגה חדרים פנויים מסוג גבוה יותר"
+         ],
+         "outcome": {
+          "kind": "resume",
+          "at": "5"
+         }
+        }
+       ]
+      }
+     ],
+     "userStories": [
+      {
+       "role": "פקיד קבלה",
+       "want": "לראות רק חדרים פנויים מהסוג שהוזמן",
+       "so": "לא אשבץ חדר תפוס"
+      },
+      {
+       "role": "אורח",
+       "want": "שהצ'ק-אין ייקח דקה",
+       "so": "אגיע לחדר מהר"
+      }
+     ],
+     "wireframe": "<div class=\"wf-screen\"><h3 class=\"wf-heading\">צ'ק-אין — הזמנה #10482</h3><div class=\"wf-row\"><label class=\"wf-label\">אורח</label><input class=\"wf-input\" disabled /></div><div class=\"wf-row\"><label class=\"wf-label\">תעודה מזהה שהוצגה</label><input class=\"wf-input\" disabled /></div><div class=\"wf-row\"><label class=\"wf-label\">סוג חדר שהוזמן</label><input class=\"wf-input\" disabled /></div><div class=\"wf-row\"><label class=\"wf-label\">חדר משובץ</label><select class=\"wf-select\" disabled></select></div><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">ביצוע צ'ק-אין</button><button class=\"wf-button\">ביטול</button></div></div>",
+     "x": 736,
+     "y": 235,
+     "rx": 70,
+     "ry": 30
+    },
+    {
+     "kind": "useCase",
+     "id": "uc-add-charge",
+     "name": "רישום חיוב על שהות",
+     "description": "במהלך שהות פעילה פקיד הקבלה רושם על ההזמנה חיוב על שירות נוסף מהקטלוג (מיני-בר, ארוחה, חניה).",
+     "primaryActor": "reception",
+     "preconditions": [
+      "ההזמנה במצב \"פעילה\"."
+     ],
+     "postconditions": [
+      "נרשם על ההזמנה חיוב מסוג \"שירות נוסף\" במצב \"ממתין\" (משולם בצ'ק-אאוט)."
+     ],
+     "scenarios": [
+      {
+       "id": "sc-add-charge",
+       "name": "מסלול מרכזי",
+       "flow": [
+        {
+         "kind": "actor",
+         "actor": "reception",
+         "text": "מאתר את השהות לפי מספר חדר"
+        },
+        {
+         "kind": "system",
+         "text": "מציגה את ההזמנה הפעילה בחדר ואת החיובים שנרשמו עליה עד כה"
+        },
+        {
+         "kind": "loop",
+         "condition": "יש עוד שירותים לרשום",
+         "steps": [
+          {
+           "kind": "actor",
+           "actor": "reception",
+           "text": "בוחר שירות מהקטלוג ומזין כמות"
+          },
+          {
+           "kind": "system",
+           "text": "מוסיפה חיוב בסכום מחיר × כמות ומציגה את היתרה המעודכנת"
+          }
+         ]
+        },
+        {
+         "kind": "actor",
+         "actor": "reception",
+         "text": "מאשר"
+        },
+        {
+         "kind": "system",
+         "text": "שומרת את החיובים על ההזמנה"
+        }
+       ],
+       "extensions": [
+        {
+         "at": "2",
+         "text": "אין שהות פעילה בחדר",
+         "steps": [
+          "המערכת מציגה 'החדר אינו מאוכלס'"
+         ],
+         "outcome": {
+          "kind": "terminate",
+          "text": "לא נרשם חיוב."
+         }
+        },
+        {
+         "at": "3.1",
+         "text": "השירות שנבחר הוסר מהקטלוג",
+         "steps": [
+          "המערכת מציגה 'שירות לא זמין'"
+         ],
+         "outcome": {
+          "kind": "resume",
+          "at": "3.1"
+         }
+        }
+       ]
+      }
+     ],
+     "userStories": [
+      {
+       "role": "פקיד קבלה",
+       "want": "לרשום מיני-בר על החדר ברגע שמדווחים לי",
+       "so": "לא יישכח בצ'ק-אאוט"
+      },
+      {
+       "role": "אורח",
+       "want": "לראות את כל החיובים על השהות שלי",
+       "so": "החשבון בצ'ק-אאוט לא יפתיע"
+      }
+     ],
+     "wireframe": "<div class=\"wf-screen\"><h3 class=\"wf-heading\">חיוב על שהות — חדר 214</h3><div class=\"wf-row\"><label class=\"wf-label\">שירות</label><select class=\"wf-select\" disabled></select></div><div class=\"wf-row\"><label class=\"wf-label\">כמות</label><input class=\"wf-input\" disabled /></div><table class=\"wf-table\"><thead><tr><th>שירות</th><th>כמות</th><th>סכום</th></tr></thead><tbody><tr><td>מיני-בר</td><td>1</td><td>38 ₪</td></tr><tr><td>ארוחת בוקר</td><td>2</td><td>140 ₪</td></tr></tbody></table><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">הוספת חיוב</button><button class=\"wf-button\">סיום</button></div></div>",
+     "x": 736,
+     "y": 309,
+     "rx": 70,
+     "ry": 30
+    },
+    {
+     "kind": "useCase",
+     "id": "uc-extend",
+     "name": "הארכת שהות",
+     "description": "במהלך שהות פעילה פקיד הקבלה מאריך את תאריך היציאה, אם החדר המשובץ פנוי ללילות הנוספים.",
+     "primaryActor": "reception",
+     "preconditions": [
+      "ההזמנה במצב \"פעילה\"."
+     ],
+     "postconditions": [
+      "תאריך היציאה עודכן באותה הזמנה ונרשמו חיובי לילה נוספים לפי התעריף המוקפא."
+     ],
+     "scenarios": [
+      {
+       "id": "sc-extend",
+       "name": "מסלול מרכזי",
+       "flow": [
+        {
+         "kind": "actor",
+         "actor": "reception",
+         "text": "מאתר את השהות ומזין תאריך יציאה חדש"
+        },
+        {
+         "kind": "system",
+         "text": "בודקת שהחדר המשובץ פנוי לכל הלילות הנוספים"
+        },
+        {
+         "kind": "system",
+         "text": "מציגה את מספר הלילות הנוספים ואת העלות לפי התעריף המוקפא בהזמנה"
+        },
+        {
+         "kind": "actor",
+         "actor": "reception",
+         "text": "מאשר"
+        },
+        {
+         "kind": "system",
+         "text": "מעדכנת את תאריך היציאה ורושמת חיובי לילה נוספים במצב \"ממתין\""
+        }
+       ],
+       "extensions": [
+        {
+         "at": "2",
+         "text": "החדר תפוס באחד הלילות הנוספים",
+         "steps": [
+          "המערכת מציגה את הלילה התפוס ומציעה חדרים פנויים אחרים מאותו סוג"
+         ],
+         "outcome": {
+          "kind": "terminate",
+          "text": "ההארכה לא בוצעה; החלפת חדר — לפי החלטת מנהל קבלה."
+         }
+        },
+        {
+         "at": "1",
+         "text": "תאריך היציאה החדש אינו מאוחר מהנוכחי",
+         "steps": [
+          "המערכת מציגה 'תאריך היציאה חייב להיות מאוחר מהנוכחי'"
+         ],
+         "outcome": {
+          "kind": "resume",
+          "at": "1"
+         }
+        }
+       ]
+      }
+     ],
+     "userStories": [
+      {
+       "role": "אורח",
+       "want": "להישאר עוד לילה בלי לפתוח הזמנה חדשה",
+       "so": "החשבון שלי יישאר אחד"
+      },
+      {
+       "role": "פקיד קבלה",
+       "want": "שהמערכת תבדוק בעצמה אם החדר פנוי להארכה",
+       "so": "לא אבטיח לילה שאין"
+      }
+     ],
+     "wireframe": "<div class=\"wf-screen\"><h3 class=\"wf-heading\">הארכת שהות — חדר 214</h3><div class=\"wf-row\"><label class=\"wf-label\">תאריך יציאה נוכחי</label><input class=\"wf-input\" disabled /></div><div class=\"wf-row\"><label class=\"wf-label\">תאריך יציאה חדש</label><input class=\"wf-input\" disabled /></div><div class=\"wf-row\"><label class=\"wf-label\">לילות נוספים / עלות</label><input class=\"wf-input\" disabled /></div><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">אישור הארכה</button><button class=\"wf-button\">ביטול</button></div></div>",
+     "x": 736,
+     "y": 383,
+     "rx": 70,
+     "ry": 27
+    },
+    {
+     "kind": "useCase",
+     "id": "uc-checkout",
+     "name": "רישום תשלום וצ'ק-אאוט",
+     "description": "בסיום השהות פקיד הקבלה מציג את החשבון, גובה את היתרה ומעביר את ההזמנה למצב \"הושלמה\".",
+     "primaryActor": "reception",
+     "preconditions": [
+      "ההזמנה במצב \"פעילה\"."
+     ],
+     "postconditions": [
+      "כל החיובים על ההזמנה במצב \"שולם\", ההזמנה במצב \"הושלמה\" והחדר התפנה."
+     ],
+     "scenarios": [
+      {
+       "id": "sc-checkout",
+       "name": "מסלול מרכזי",
+       "flow": [
+        {
+         "kind": "actor",
+         "actor": "reception",
+         "text": "מאתר את השהות לפי מספר חדר"
+        },
+        {
+         "kind": "system",
+         "text": "מחשבת את החשבון: לילות × תעריף מוקפא + שירותים נוספים − מקדמה, ומציגה את היתרה"
+        },
+        {
+         "kind": "actor",
+         "actor": "reception",
+         "text": "מציג לאורח את החשבון ומאשר את הפירוט"
+        },
+        {
+         "kind": "alt",
+         "condition": "אמצעי התשלום של היתרה",
+         "branches": [
+          {
+           "label": "כרטיס אשראי",
+           "steps": [
+            {
+             "kind": "include",
+             "uc": "uc-charge",
+             "text": ""
+            }
+           ]
+          },
+          {
+           "label": "מזומן",
+           "steps": [
+            {
+             "kind": "actor",
+             "actor": "reception",
+             "text": "מזין את הסכום שהתקבל במזומן"
+            },
+            {
+             "kind": "system",
+             "text": "רושמת חיוב \"שולם\" באמצעי מזומן"
+            }
+           ]
+          }
+         ]
+        },
+        {
+         "kind": "system",
+         "text": "מוודאת שהיתרה אפס, מעבירה את ההזמנה למצב \"הושלמה\", מפנה את החדר ושולחת לאורח קבלה"
+        }
+       ],
+       "extensions": [
+        {
+         "at": "4.1.1",
+         "text": "חיוב היתרה בכרטיס נכשל",
+         "steps": [
+          "המערכת מציגה את סיבת הכישלון ומציעה אמצעי תשלום אחר"
+         ],
+         "outcome": {
+          "kind": "resume",
+          "at": "4"
+         }
+        },
+        {
+         "at": "5",
+         "text": "היתרה אינה אפס (תשלום חלקי)",
+         "steps": [
+          "המערכת מציגה 'לא ניתן לסיים צ'ק-אאוט עם יתרת חוב'"
+         ],
+         "outcome": {
+          "kind": "terminate",
+          "text": "ההזמנה נותרת \"פעילה\" עד לתשלום מלא (BR-7)."
+         }
+        }
+       ]
+      }
+     ],
+     "userStories": [
+      {
+       "role": "פקיד קבלה",
+       "want": "שהחשבון יחושב אוטומטית מכל החיובים",
+       "so": "לא אשכח תוספת"
+      },
+      {
+       "role": "הנהלת חשבונות",
+       "want": "שהזמנה לא תסומן כהושלמה עם חוב",
+       "so": "לא ארדוף אחרי אורחים"
+      }
+     ],
+     "wireframe": "<div class=\"wf-screen\"><h3 class=\"wf-heading\">צ'ק-אאוט — חדר 214</h3><table class=\"wf-table\"><thead><tr><th>פריט</th><th>סכום</th></tr></thead><tbody><tr><td>3 לילות × 620 ₪</td><td>1,860 ₪</td></tr><tr><td>שירותים נוספים</td><td>178 ₪</td></tr><tr><td>מקדמה ששולמה</td><td>−620 ₪</td></tr><tr><td>יתרה לתשלום</td><td>1,418 ₪</td></tr></tbody></table><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">חיוב כרטיס</button><button class=\"wf-button\">מזומן</button><button class=\"wf-button\">הדפסת חשבון</button></div><p class=\"wf-hint\">צ'ק-אאוט מסתיים רק כשהיתרה אפס.</p></div>",
+     "x": 736,
+     "y": 457,
+     "rx": 70,
+     "ry": 30
+    },
+    {
+     "kind": "useCase",
+     "id": "uc-delete-dup",
+     "name": "מחיקת הזמנה כפולה",
+     "description": "מנהל הקבלה מזהה שתי הזמנות זהות של אותו אורח (לחיצה כפולה או הזמנה גם באתר וגם בטלפון) ומוחק את הכפולה — היא אינה הזמנה שבוטלה.",
+     "primaryActor": "recep-mgr",
+     "preconditions": [
+      "קיימות שתי הזמנות במצב \"חדשה\" לאותו אורח, אותם תאריכים ואותו סוג חדר, ואף אחת מהן לא חויבה."
+     ],
+     "postconditions": [
+      "ההזמנה הכפולה נמחקה מהמערכת (לא נשמרת בארכיון); ההזמנה המקורית נותרת ללא שינוי."
+     ],
+     "scenarios": [
+      {
+       "id": "sc-dup",
+       "name": "מסלול מרכזי",
+       "flow": [
+        {
+         "kind": "actor",
+         "actor": "recep-mgr",
+         "text": "פותח את רשימת ההזמנות החשודות ככפולות"
+        },
+        {
+         "kind": "system",
+         "text": "מציגה זוגות הזמנות \"חדשות\" עם אותו אורח, תאריכים וסוג חדר, ומסמנת את המאוחרת"
+        },
+        {
+         "kind": "actor",
+         "actor": "recep-mgr",
+         "text": "בוחר זוג ומסמן איזו הזמנה למחוק"
+        },
+        {
+         "kind": "system",
+         "text": "מוודאת שההזמנה למחיקה לא חויבה מעולם ומבקשת אישור"
+        },
+        {
+         "kind": "actor",
+         "actor": "recep-mgr",
+         "text": "מאשר את המחיקה"
+        },
+        {
+         "kind": "system",
+         "text": "מוחקת את ההזמנה הכפולה ורושמת ביומן מי ומתי"
+        }
+       ],
+       "extensions": [
+        {
+         "at": "4",
+         "text": "להזמנה שנבחרה למחיקה כבר נרשם חיוב (מקדמה)",
+         "steps": [
+          "המערכת מציגה 'הזמנה שחויבה אינה ניתנת למחיקה — יש לבטלה'"
+         ],
+         "outcome": {
+          "kind": "terminate",
+          "text": "לא נמחק דבר; מנהל הקבלה מבטל את ההזמנה בתרחיש הביטול."
+         }
+        }
+       ]
+      }
+     ],
+     "userStories": [
+      {
+       "role": "מנהל קבלה",
+       "want": "למחוק הזמנה כפולה בלי שתיספר כביטול",
+       "so": "דוח הביטולים יהיה אמיתי"
+      },
+      {
+       "role": "אורח",
+       "want": "שלא אחויב פעמיים על לחיצה כפולה",
+       "so": "אסמוך על האתר"
+      }
+     ],
+     "wireframe": "<div class=\"wf-screen\"><h3 class=\"wf-heading\">הזמנות כפולות</h3><table class=\"wf-table\"><thead><tr><th>אורח</th><th>תאריכים</th><th>הזמנה א'</th><th>הזמנה ב'</th></tr></thead><tbody><tr><td>ר. כהן</td><td>12–15.7</td><td>#10482</td><td>#10483 (מאוחרת)</td></tr></tbody></table><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">מחיקת הכפולה</button><button class=\"wf-button\">לא כפולה</button></div><p class=\"wf-hint\">מחיקה אפשרית רק להזמנה שלא חויבה מעולם.</p></div>",
+     "x": 736,
+     "y": 531,
+     "rx": 70,
+     "ry": 30
+    },
+    {
+     "kind": "system",
+     "id": "sys-0",
+     "name": "מערכת ההזמנות של מלון 'גלי הים'",
+     "x": 200,
+     "y": 60,
+     "w": 640,
+     "h": 400
+    }
+   ],
+   "relationships": [
+    {
+     "kind": "actorAssoc",
+     "id": "a1",
+     "actorId": "guest",
+     "ucId": "uc-book",
+     "role": "initiator",
+     "description": "אורח יוזם את \"הזמנת חדר\". תפקיד: Initiator."
+    },
+    {
+     "kind": "actorAssoc",
+     "id": "a2",
+     "actorId": "reception",
+     "ucId": "uc-book",
+     "role": "initiator",
+     "description": "פקיד קבלה יוזם את \"הזמנת חדר\". תפקיד: Initiator."
+    },
+    {
+     "kind": "actorAssoc",
+     "id": "a3",
+     "actorId": "guest",
+     "ucId": "uc-cancel",
+     "role": "initiator",
+     "description": "אורח יוזם את \"ביטול הזמנה על ידי האורח\". תפקיד: Initiator."
+    },
+    {
+     "kind": "actorAssoc",
+     "id": "a4",
+     "actorId": "guest",
+     "ucId": "uc-my-bookings",
+     "role": "initiator",
+     "description": "אורח יוזם את \"צפייה בהזמנות שלי\". תפקיד: Initiator."
+    },
+    {
+     "kind": "actorAssoc",
+     "id": "a5",
+     "actorId": "reception",
+     "ucId": "uc-confirm",
+     "role": "initiator",
+     "description": "פקיד קבלה יוזם את \"אישור או דחיית הזמנה\". תפקיד: Initiator."
+    },
+    {
+     "kind": "actorAssoc",
+     "id": "a6",
+     "actorId": "reception",
+     "ucId": "uc-checkin",
+     "role": "initiator",
+     "description": "פקיד קבלה יוזם את \"רישום צ'ק-אין ושיבוץ חדר\". תפקיד: Initiator."
+    },
+    {
+     "kind": "actorAssoc",
+     "id": "a7",
+     "actorId": "reception",
+     "ucId": "uc-add-charge",
+     "role": "initiator",
+     "description": "פקיד קבלה יוזם את \"רישום חיוב על שהות\". תפקיד: Initiator."
+    },
+    {
+     "kind": "actorAssoc",
+     "id": "a8",
+     "actorId": "reception",
+     "ucId": "uc-extend",
+     "role": "initiator",
+     "description": "פקיד קבלה יוזם את \"הארכת שהות\". תפקיד: Initiator."
+    },
+    {
+     "kind": "actorAssoc",
+     "id": "a9",
+     "actorId": "reception",
+     "ucId": "uc-checkout",
+     "role": "initiator",
+     "description": "פקיד קבלה יוזם את \"רישום תשלום וצ'ק-אאוט\". תפקיד: Initiator."
+    },
+    {
+     "kind": "actorAssoc",
+     "id": "a10",
+     "actorId": "recep-mgr",
+     "ucId": "uc-delete-dup",
+     "role": "initiator",
+     "description": "מנהל קבלה יוזם את \"מחיקת הזמנה כפולה\". תפקיד: Initiator."
+    },
+    {
+     "kind": "include",
+     "id": "inc1",
+     "from": "uc-confirm",
+     "to": "uc-charge"
+    },
+    {
+     "kind": "include",
+     "id": "inc2",
+     "from": "uc-checkout",
+     "to": "uc-charge"
+    },
+    {
+     "kind": "include",
+     "id": "inc3",
+     "from": "uc-noshow",
+     "to": "uc-charge"
+    }
+   ]
+  },
+  {
+   "id": "part-2",
+   "label": "ניהול מערכת ודוחות",
+   "splitRationale": "Admin master-data block in its own tab (trigger #3) — מנהל המלון: סוגי חדרים ותעריפים, חדרים, קטלוג שירותים, דוחות",
+   "elements": [
+    {
+     "kind": "actor",
+     "id": "hotel-mgr",
+     "name": "מנהל המלון",
+     "actorType": "human",
+     "side": "right",
+     "x": 920,
+     "y": 200
+    },
+    {
+     "kind": "useCase",
+     "id": "uc-manage-roomtypes",
+     "name": "ניהול סוגי חדרים ותעריפים",
+     "description": "מנהל המלון מתחזק את סוגי החדרים: שם, מספר אורחים מרבי ותעריף ללילה לפי עונה.",
+     "primaryActor": "hotel-mgr",
+     "preconditions": [
+      "מנהל המלון מזוהה במערכת."
+     ],
+     "postconditions": [
+      "רשימת סוגי החדרים והתעריפים מעודכנת."
+     ],
+     "scenarios": [
+      {
+       "id": "sc-rt-add",
+       "name": "הוספת סוג חדר",
+       "flow": [
+        {
+         "kind": "actor",
+         "actor": "hotel-mgr",
+         "text": "בוחר 'הוספת סוג חדר'"
+        },
+        {
+         "kind": "actor",
+         "actor": "hotel-mgr",
+         "text": "מזין שם, מספר אורחים מרבי, תעריף ללילה ותקופת התעריף"
+        },
+        {
+         "kind": "system",
+         "text": "מוודאת שהשדות תקינים ושהשם אינו קיים כבר"
+        },
+        {
+         "kind": "system",
+         "text": "שומרת את סוג חדר ומציגה אותו ברשימה"
+        }
+       ],
+       "extensions": [
+        {
+         "at": "3",
+         "text": "השם כבר קיים במערכת",
+         "steps": [
+          "המערכת מציגה 'שם זה כבר קיים'"
+         ],
+         "outcome": {
+          "kind": "resume",
+          "at": "2"
+         }
+        }
+       ]
+      },
+      {
+       "id": "sc-rt-view",
+       "name": "צפייה ברשימת סוג חדר",
+       "flow": [
+        {
+         "kind": "actor",
+         "actor": "hotel-mgr",
+         "text": "פותח את רשימת סוג חדר"
+        },
+        {
+         "kind": "system",
+         "text": "מציגה את הרשימה עם כל השדות, ממוינת לפי שם"
+        },
+        {
+         "kind": "actor",
+         "actor": "hotel-mgr",
+         "text": "מסנן או ממיין את הרשימה"
+        },
+        {
+         "kind": "system",
+         "text": "מציגה את הרשימה המסוננת"
+        }
+       ],
+       "extensions": [
+        {
+         "at": "4",
+         "text": "לא נמצאו רשומות התואמות לסינון",
+         "steps": [
+          "המערכת מציגה 'לא נמצאו רשומות'"
+         ],
+         "outcome": {
+          "kind": "resume",
+          "at": "3"
+         }
+        }
+       ]
+      },
+      {
+       "id": "sc-rt-update",
+       "name": "עדכון סוג חדר",
+       "flow": [
+        {
+         "kind": "actor",
+         "actor": "hotel-mgr",
+         "text": "בוחר סוג חדר מהרשימה ולוחץ 'עריכה'"
+        },
+        {
+         "kind": "system",
+         "text": "מציגה את השדות לעריכה"
+        },
+        {
+         "kind": "actor",
+         "actor": "hotel-mgr",
+         "text": "משנה שדות ומאשר"
+        },
+        {
+         "kind": "system",
+         "text": "מוודאת תקינות, שומרת את השינוי ורושמת ביומן מי ומתי"
+        }
+       ],
+       "extensions": [
+        {
+         "at": "4",
+         "text": "ערך לא תקין (למשל תעריף שלילי)",
+         "steps": [
+          "המערכת מציגה את השגיאה ליד השדה"
+         ],
+         "outcome": {
+          "kind": "resume",
+          "at": "3"
+         }
+        }
+       ]
+      },
+      {
+       "id": "sc-rt-delete",
+       "name": "מחיקת סוג חדר",
+       "flow": [
+        {
+         "kind": "actor",
+         "actor": "hotel-mgr",
+         "text": "בוחר סוג חדר מהרשימה ולוחץ 'מחיקה'"
+        },
+        {
+         "kind": "system",
+         "text": "בודקת שאין חדרים או הזמנות המשויכים לסוג"
+        },
+        {
+         "kind": "actor",
+         "actor": "hotel-mgr",
+         "text": "מאשר את המחיקה"
+        },
+        {
+         "kind": "system",
+         "text": "מוחקת את הרשומה ומציגה את הרשימה המעודכנת"
+        }
+       ],
+       "extensions": [
+        {
+         "at": "2",
+         "text": "הרשומה בשימוש בהזמנות קיימות",
+         "steps": [
+          "המערכת מציגה 'לא ניתן למחוק — קיימות הזמנות המפנות לרשומה'"
+         ],
+         "outcome": {
+          "kind": "terminate",
+          "text": "הרשומה לא נמחקה."
+         }
+        }
+       ]
+      }
+     ],
+     "userStories": [
+      {
+       "role": "מנהל המלון",
+       "want": "לעדכן תעריף עונתי מראש",
+       "so": "הזמנות חדשות יקבלו את התעריף הנכון"
+      },
+      {
+       "role": "פקיד קבלה",
+       "want": "שהתעריף שמוקפא בהזמנה יבוא מהרשימה",
+       "so": "לא אקליד מחירים"
+      }
+     ],
+     "wireframe": "<div class=\"wf-screen\"><h3 class=\"wf-heading\">סוגי חדרים ותעריפים</h3><div class=\"wf-row\"><label class=\"wf-label\">שם</label><input class=\"wf-input\" disabled /></div><div class=\"wf-row\"><label class=\"wf-label\">אורחים מרבי</label><input class=\"wf-input\" disabled /></div><div class=\"wf-row\"><label class=\"wf-label\">תעריף ללילה</label><input class=\"wf-input\" disabled /></div><div class=\"wf-row\"><label class=\"wf-label\">תקופה</label><input class=\"wf-input\" disabled /></div><table class=\"wf-table\"><thead><tr><th>סוג</th><th>מרבי</th><th>תעריף</th></tr></thead><tbody><tr><td>סטנדרט</td><td>2</td><td>480 ₪</td></tr><tr><td>נוף לים</td><td>3</td><td>620 ₪</td></tr><tr><td>סוויטה</td><td>4</td><td>980 ₪</td></tr></tbody></table><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">שמירה</button><button class=\"wf-button\">הוספת סוג</button><button class=\"wf-button\">מחיקה</button></div></div>",
+     "x": 736,
+     "y": 161,
+     "rx": 74,
+     "ry": 30
+    },
+    {
+     "kind": "useCase",
+     "id": "uc-manage-rooms",
+     "name": "ניהול חדרים",
+     "description": "מנהל המלון מתחזק את רשימת החדרים: מספר, קומה, סוג ומצב (פעיל / בשיפוץ).",
+     "primaryActor": "hotel-mgr",
+     "preconditions": [
+      "מנהל המלון מזוהה במערכת."
+     ],
+     "postconditions": [
+      "רשימת החדרים מעודכנת."
+     ],
+     "scenarios": [
+      {
+       "id": "sc-room-add",
+       "name": "הוספת חדר",
+       "flow": [
+        {
+         "kind": "actor",
+         "actor": "hotel-mgr",
+         "text": "בוחר 'הוספת חדר'"
+        },
+        {
+         "kind": "actor",
+         "actor": "hotel-mgr",
+         "text": "מזין מספר חדר, קומה, סוג חדר ומצב"
+        },
+        {
+         "kind": "system",
+         "text": "מוודאת שהשדות תקינים ושהשם אינו קיים כבר"
+        },
+        {
+         "kind": "system",
+         "text": "שומרת את חדר ומציגה אותו ברשימה"
+        }
+       ],
+       "extensions": [
+        {
+         "at": "3",
+         "text": "השם כבר קיים במערכת",
+         "steps": [
+          "המערכת מציגה 'שם זה כבר קיים'"
+         ],
+         "outcome": {
+          "kind": "resume",
+          "at": "2"
+         }
+        }
+       ]
+      },
+      {
+       "id": "sc-room-view",
+       "name": "צפייה ברשימת חדר",
+       "flow": [
+        {
+         "kind": "actor",
+         "actor": "hotel-mgr",
+         "text": "פותח את רשימת חדר"
+        },
+        {
+         "kind": "system",
+         "text": "מציגה את הרשימה עם כל השדות, ממוינת לפי שם"
+        },
+        {
+         "kind": "actor",
+         "actor": "hotel-mgr",
+         "text": "מסנן או ממיין את הרשימה"
+        },
+        {
+         "kind": "system",
+         "text": "מציגה את הרשימה המסוננת"
+        }
+       ],
+       "extensions": [
+        {
+         "at": "4",
+         "text": "לא נמצאו רשומות התואמות לסינון",
+         "steps": [
+          "המערכת מציגה 'לא נמצאו רשומות'"
+         ],
+         "outcome": {
+          "kind": "resume",
+          "at": "3"
+         }
+        }
+       ]
+      },
+      {
+       "id": "sc-room-update",
+       "name": "עדכון חדר",
+       "flow": [
+        {
+         "kind": "actor",
+         "actor": "hotel-mgr",
+         "text": "בוחר חדר מהרשימה ולוחץ 'עריכה'"
+        },
+        {
+         "kind": "system",
+         "text": "מציגה את השדות לעריכה"
+        },
+        {
+         "kind": "actor",
+         "actor": "hotel-mgr",
+         "text": "משנה שדות ומאשר"
+        },
+        {
+         "kind": "system",
+         "text": "מוודאת תקינות, שומרת את השינוי ורושמת ביומן מי ומתי"
+        }
+       ],
+       "extensions": [
+        {
+         "at": "4",
+         "text": "ערך לא תקין (למשל תעריף שלילי)",
+         "steps": [
+          "המערכת מציגה את השגיאה ליד השדה"
+         ],
+         "outcome": {
+          "kind": "resume",
+          "at": "3"
+         }
+        }
+       ]
+      },
+      {
+       "id": "sc-room-delete",
+       "name": "מחיקת חדר",
+       "flow": [
+        {
+         "kind": "actor",
+         "actor": "hotel-mgr",
+         "text": "בוחר חדר מהרשימה ולוחץ 'מחיקה'"
+        },
+        {
+         "kind": "system",
+         "text": "בודקת שאין שהות פעילה בחדר"
+        },
+        {
+         "kind": "actor",
+         "actor": "hotel-mgr",
+         "text": "מאשר את המחיקה"
+        },
+        {
+         "kind": "system",
+         "text": "מוחקת את הרשומה ומציגה את הרשימה המעודכנת"
+        }
+       ],
+       "extensions": [
+        {
+         "at": "2",
+         "text": "הרשומה בשימוש בהזמנות קיימות",
+         "steps": [
+          "המערכת מציגה 'לא ניתן למחוק — קיימות הזמנות המפנות לרשומה'"
+         ],
+         "outcome": {
+          "kind": "terminate",
+          "text": "הרשומה לא נמחקה."
+         }
+        }
+       ]
+      }
+     ],
+     "userStories": [
+      {
+       "role": "מנהל המלון",
+       "want": "לסמן חדר בשיפוץ",
+       "so": "לא ישובץ"
+      },
+      {
+       "role": "פקיד קבלה",
+       "want": "לראות רק חדרים פעילים בצ'ק-אין",
+       "so": "לא אשבץ חדר בשיפוץ"
+      }
+     ],
+     "wireframe": "<div class=\"wf-screen\"><h3 class=\"wf-heading\">חדרים</h3><div class=\"wf-row\"><label class=\"wf-label\">מספר חדר</label><input class=\"wf-input\" disabled /></div><div class=\"wf-row\"><label class=\"wf-label\">קומה</label><select class=\"wf-select\" disabled></select></div><div class=\"wf-row\"><label class=\"wf-label\">סוג</label><select class=\"wf-select\" disabled></select></div><div class=\"wf-row\"><label class=\"wf-label\">מצב</label><select class=\"wf-select\" disabled></select></div><table class=\"wf-table\"><thead><tr><th>חדר</th><th>קומה</th><th>סוג</th><th>מצב</th></tr></thead><tbody><tr><td>214</td><td>2</td><td>נוף לים</td><td>פעיל</td></tr><tr><td>305</td><td>3</td><td>סוויטה</td><td>בשיפוץ</td></tr></tbody></table><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">שמירה</button><button class=\"wf-button\">הוספת חדר</button></div></div>",
+     "x": 736,
+     "y": 235,
+     "rx": 70,
+     "ry": 27
+    },
+    {
+     "kind": "useCase",
+     "id": "uc-manage-extras",
+     "name": "ניהול קטלוג שירותים",
+     "description": "מנהל המלון מתחזק את קטלוג השירותים הנוספים (מיני-בר, ארוחת בוקר, חניה, ספא) ומחיריהם.",
+     "primaryActor": "hotel-mgr",
+     "preconditions": [
+      "מנהל המלון מזוהה במערכת."
+     ],
+     "postconditions": [
+      "קטלוג השירותים מעודכן."
+     ],
+     "scenarios": [
+      {
+       "id": "sc-extra-add",
+       "name": "הוספת שירות נוסף",
+       "flow": [
+        {
+         "kind": "actor",
+         "actor": "hotel-mgr",
+         "text": "בוחר 'הוספת שירות נוסף'"
+        },
+        {
+         "kind": "actor",
+         "actor": "hotel-mgr",
+         "text": "מזין שם ומחיר"
+        },
+        {
+         "kind": "system",
+         "text": "מוודאת שהשדות תקינים ושהשם אינו קיים כבר"
+        },
+        {
+         "kind": "system",
+         "text": "שומרת את שירות נוסף ומציגה אותו ברשימה"
+        }
+       ],
+       "extensions": [
+        {
+         "at": "3",
+         "text": "השם כבר קיים במערכת",
+         "steps": [
+          "המערכת מציגה 'שם זה כבר קיים'"
+         ],
+         "outcome": {
+          "kind": "resume",
+          "at": "2"
+         }
+        }
+       ]
+      },
+      {
+       "id": "sc-extra-view",
+       "name": "צפייה ברשימת שירות נוסף",
+       "flow": [
+        {
+         "kind": "actor",
+         "actor": "hotel-mgr",
+         "text": "פותח את רשימת שירות נוסף"
+        },
+        {
+         "kind": "system",
+         "text": "מציגה את הרשימה עם כל השדות, ממוינת לפי שם"
+        },
+        {
+         "kind": "actor",
+         "actor": "hotel-mgr",
+         "text": "מסנן או ממיין את הרשימה"
+        },
+        {
+         "kind": "system",
+         "text": "מציגה את הרשימה המסוננת"
+        }
+       ],
+       "extensions": [
+        {
+         "at": "4",
+         "text": "לא נמצאו רשומות התואמות לסינון",
+         "steps": [
+          "המערכת מציגה 'לא נמצאו רשומות'"
+         ],
+         "outcome": {
+          "kind": "resume",
+          "at": "3"
+         }
+        }
+       ]
+      },
+      {
+       "id": "sc-extra-update",
+       "name": "עדכון שירות נוסף",
+       "flow": [
+        {
+         "kind": "actor",
+         "actor": "hotel-mgr",
+         "text": "בוחר שירות נוסף מהרשימה ולוחץ 'עריכה'"
+        },
+        {
+         "kind": "system",
+         "text": "מציגה את השדות לעריכה"
+        },
+        {
+         "kind": "actor",
+         "actor": "hotel-mgr",
+         "text": "משנה שדות ומאשר"
+        },
+        {
+         "kind": "system",
+         "text": "מוודאת תקינות, שומרת את השינוי ורושמת ביומן מי ומתי"
+        }
+       ],
+       "extensions": [
+        {
+         "at": "4",
+         "text": "ערך לא תקין (למשל תעריף שלילי)",
+         "steps": [
+          "המערכת מציגה את השגיאה ליד השדה"
+         ],
+         "outcome": {
+          "kind": "resume",
+          "at": "3"
+         }
+        }
+       ]
+      },
+      {
+       "id": "sc-extra-delete",
+       "name": "מחיקת שירות נוסף",
+       "flow": [
+        {
+         "kind": "actor",
+         "actor": "hotel-mgr",
+         "text": "בוחר שירות נוסף מהרשימה ולוחץ 'מחיקה'"
+        },
+        {
+         "kind": "system",
+         "text": "בודקת שהשירות אינו בשימוש בחיובים פתוחים"
+        },
+        {
+         "kind": "actor",
+         "actor": "hotel-mgr",
+         "text": "מאשר את המחיקה"
+        },
+        {
+         "kind": "system",
+         "text": "מוחקת את הרשומה ומציגה את הרשימה המעודכנת"
+        }
+       ],
+       "extensions": [
+        {
+         "at": "2",
+         "text": "הרשומה בשימוש בהזמנות קיימות",
+         "steps": [
+          "המערכת מציגה 'לא ניתן למחוק — קיימות הזמנות המפנות לרשומה'"
+         ],
+         "outcome": {
+          "kind": "terminate",
+          "text": "הרשומה לא נמחקה."
+         }
+        }
+       ]
+      }
+     ],
+     "userStories": [
+      {
+       "role": "מנהל המלון",
+       "want": "לשנות מחיר של שירות בלי לגעת בחיובים שכבר נרשמו",
+       "so": "החשבונות הישנים לא ישתנו"
+      },
+      {
+       "role": "פקיד קבלה",
+       "want": "לבחור שירות מרשימה",
+       "so": "לא אקליד מחיר ידנית"
+      }
+     ],
+     "wireframe": "<div class=\"wf-screen\"><h3 class=\"wf-heading\">קטלוג שירותים</h3><div class=\"wf-row\"><label class=\"wf-label\">שם השירות</label><input class=\"wf-input\" disabled /></div><div class=\"wf-row\"><label class=\"wf-label\">מחיר</label><input class=\"wf-input\" disabled /></div><table class=\"wf-table\"><thead><tr><th>שירות</th><th>מחיר</th></tr></thead><tbody><tr><td>מיני-בר</td><td>38 ₪</td></tr><tr><td>ארוחת בוקר</td><td>70 ₪</td></tr><tr><td>חניה</td><td>45 ₪</td></tr></tbody></table><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">שמירה</button><button class=\"wf-button\">הוספת שירות</button></div></div>",
+     "x": 736,
+     "y": 309,
+     "rx": 70,
+     "ry": 30
+    },
+    {
+     "kind": "useCase",
+     "id": "uc-report",
+     "name": "הפקת דוח תפוסה והכנסות",
+     "description": "מנהל המלון מפיק דוח לתקופה: הזמנות לפי מצב, ביטולים לפי סיבה, תפוסה והכנסה לפי סוג חדר.",
+     "primaryActor": "hotel-mgr",
+     "preconditions": [
+      "קיימות הזמנות בתקופה המבוקשת."
+     ],
+     "postconditions": [
+      "הדוח הוצג / יוצא; לא שונה דבר במערכת."
+     ],
+     "scenarios": [
+      {
+       "id": "sc-report",
+       "name": "מסלול מרכזי",
+       "flow": [
+        {
+         "kind": "actor",
+         "actor": "hotel-mgr",
+         "text": "בוחר טווח תאריכים וסוג חדר (או הכול)"
+        },
+        {
+         "kind": "system",
+         "text": "סופרת הזמנות לפי מצב ובוטלות לפי סיבה (דחייה / ביטול אורח / אי-הגעה / תשלום נכשל)"
+        },
+        {
+         "kind": "system",
+         "text": "מחשבת תפוסה לכל לילה והכנסה מחיובים ששולמו, לפי סוג חדר"
+        },
+        {
+         "kind": "system",
+         "text": "מציגה את הדוח עם גרף תפוסה"
+        },
+        {
+         "kind": "actor",
+         "actor": "hotel-mgr",
+         "text": "מייצא לקובץ"
+        }
+       ],
+       "extensions": [
+        {
+         "at": "2",
+         "text": "אין הזמנות בטווח שנבחר",
+         "steps": [
+          "המערכת מציגה 'אין נתונים לתקופה'"
+         ],
+         "outcome": {
+          "kind": "resume",
+          "at": "1"
+         }
+        }
+       ]
+      }
+     ],
+     "userStories": [
+      {
+       "role": "מנהל המלון",
+       "want": "לראות כמה הזמנות נדחו על חוסר זמינות",
+       "so": "אדע איזה ביקוש הפסדתי"
+      },
+      {
+       "role": "מנהל המלון",
+       "want": "לראות ביטולים לפי סיבה",
+       "so": "אבין אם בעיית אי-ההגעה גדלה"
+      }
+     ],
+     "wireframe": "<div class=\"wf-screen\"><h3 class=\"wf-heading\">דוח תפוסה והכנסות</h3><div class=\"wf-row\"><label class=\"wf-label\">מתאריך</label><input class=\"wf-input\" disabled /></div><div class=\"wf-row\"><label class=\"wf-label\">עד תאריך</label><input class=\"wf-input\" disabled /></div><div class=\"wf-row\"><label class=\"wf-label\">סוג חדר</label><select class=\"wf-select\" disabled></select></div><table class=\"wf-table\"><thead><tr><th>מצב</th><th>הזמנות</th></tr></thead><tbody><tr><td>מאושרות</td><td>212</td></tr><tr><td>הושלמו</td><td>540</td></tr><tr><td>בוטלו — אי-הגעה</td><td>18</td></tr><tr><td>בוטלו — דחייה</td><td>63</td></tr></tbody></table><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">הפקה</button><button class=\"wf-button\">ייצוא</button></div></div>",
+     "x": 736,
+     "y": 383,
+     "rx": 70,
+     "ry": 30
+    },
+    {
+     "kind": "system",
+     "id": "sys-1",
+     "name": "מערכת ההזמנות של מלון 'גלי הים'",
+     "x": 200,
+     "y": 60,
+     "w": 640,
+     "h": 400
+    }
+   ],
+   "relationships": [
+    {
+     "kind": "actorAssoc",
+     "id": "a11",
+     "actorId": "hotel-mgr",
+     "ucId": "uc-manage-roomtypes",
+     "role": "initiator",
+     "description": "מנהל המלון יוזם את \"ניהול סוגי חדרים ותעריפים\". תפקיד: Initiator."
+    },
+    {
+     "kind": "actorAssoc",
+     "id": "a12",
+     "actorId": "hotel-mgr",
+     "ucId": "uc-manage-rooms",
+     "role": "initiator",
+     "description": "מנהל המלון יוזם את \"ניהול חדרים\". תפקיד: Initiator."
+    },
+    {
+     "kind": "actorAssoc",
+     "id": "a13",
+     "actorId": "hotel-mgr",
+     "ucId": "uc-manage-extras",
+     "role": "initiator",
+     "description": "מנהל המלון יוזם את \"ניהול קטלוג שירותים\". תפקיד: Initiator."
+    },
+    {
+     "kind": "actorAssoc",
+     "id": "a14",
+     "actorId": "hotel-mgr",
+     "ucId": "uc-report",
+     "role": "initiator",
+     "description": "מנהל המלון יוזם את \"הפקת דוח תפוסה והכנסות\". תפקיד: Initiator."
+    }
+   ]
+  },
+  {
+   "id": "part-3",
+   "label": "תהליכים אוטומטיים",
+   "splitRationale": "Time-actor triggers in their own tab (trigger #3) — שחקן הזמן: אי-הגעה בחצות, ביטול הזמנות שחיובן לא הושלם",
+   "elements": [
+    {
+     "kind": "actor",
+     "id": "clock",
+     "name": "תזמון",
+     "actorType": "system",
+     "side": "left",
+     "x": 120,
+     "y": 200
+    },
+    {
+     "kind": "useCase",
+     "id": "uc-noshow",
+     "name": "טיפול בהזמנות שלא הגיעו",
+     "description": "בחצות, המערכת מאתרת הזמנות מאושרות שתאריך ההגעה שלהן היה היום ולא בוצע בהן צ'ק-אין, מבטלת אותן כאי-הגעה ומשאירה את המקדמה במלון.",
+     "primaryActor": "clock",
+     "preconditions": [
+      "השעה חצות.",
+      "קיימות הזמנות \"מאושרות\" עם תאריך הגעה של היום."
+     ],
+     "postconditions": [
+      "כל הזמנה כזו במצב \"בוטלה\" עם הסיבה \"אי-הגעה\"; המקדמה נרשמה כדמי אי-הגעה; נשלחה הודעה לאורח."
+     ],
+     "scenarios": [
+      {
+       "id": "sc-noshow",
+       "name": "מסלול מרכזי",
+       "flow": [
+        {
+         "kind": "system",
+         "text": "מאתרת הזמנות במצב \"מאושרת\" שתאריך ההגעה שלהן הוא היום ולא בוצע בהן צ'ק-אין"
+        },
+        {
+         "kind": "loop",
+         "condition": "לכל הזמנה שנמצאה",
+         "steps": [
+          {
+           "kind": "system",
+           "text": "מעבירה את ההזמנה למצב \"בוטלה\" עם הסיבה \"אי-הגעה\""
+          },
+          {
+           "kind": "system",
+           "text": "ממירה את חיוב המקדמה ל\"דמי אי-הגעה\" (ללא זיכוי)"
+          },
+          {
+           "kind": "system",
+           "text": "שולחת לאורח הודעה על ביטול בשל אי-הגעה"
+          }
+         ]
+        },
+        {
+         "kind": "system",
+         "text": "רושמת ביומן את מספר ההזמנות שטופלו"
+        }
+       ],
+       "extensions": [
+        {
+         "at": "2.2",
+         "text": "המקדמה מעולם לא שולמה (חיוב נכשל)",
+         "steps": [
+          "המערכת מנסה לחייב דמי אי-הגעה"
+         ],
+         "outcome": {
+          "kind": "resume",
+          "at": "2.3"
+         }
+        }
+       ]
+      }
+     ],
+     "userStories": [
+      {
+       "role": "מנהל קבלה",
+       "want": "שאי-הגעה תזוהה בחצות ולא בבוקר",
+       "so": "החדר ישוחרר להזמנות אחרות"
+      },
+      {
+       "role": "הנהלת חשבונות",
+       "want": "שדמי אי-ההגעה יירשמו אוטומטית",
+       "so": "לא אחפש אותם בסוף החודש"
+      }
+     ],
+     "wireframe": "",
+     "x": 314,
+     "y": 161,
+     "rx": 70,
+     "ry": 30
+    },
+    {
+     "kind": "useCase",
+     "id": "uc-cancel-unpaid",
+     "name": "ביטול הזמנות שחיובן לא הושלם",
+     "description": "כל שעה, המערכת מבטלת הזמנות שחיוב המקדמה בהן נכשל ולא הצליח תוך 24 שעות מהניסיון הראשון (BR-2).",
+     "primaryActor": "clock",
+     "preconditions": [
+      "קיימות הזמנות שחיוב המקדמה בהן נכשל."
+     ],
+     "postconditions": [
+      "כל הזמנה שחלפו בה 24 שעות ללא חיוב מוצלח — במצב \"בוטלה\" עם הסיבה \"תשלום נכשל\"; נשלחה הודעה לאורח."
+     ],
+     "scenarios": [
+      {
+       "id": "sc-unpaid",
+       "name": "מסלול מרכזי",
+       "flow": [
+        {
+         "kind": "system",
+         "text": "מאתרת הזמנות שאינן מאושרות ושחיוב המקדמה הראשון בהן נכשל לפני יותר מ-24 שעות"
+        },
+        {
+         "kind": "loop",
+         "condition": "לכל הזמנה שנמצאה",
+         "steps": [
+          {
+           "kind": "system",
+           "text": "מעבירה את ההזמנה למצב \"בוטלה\" עם הסיבה \"תשלום נכשל\""
+          },
+          {
+           "kind": "system",
+           "text": "שולחת לאורח הודעה שההזמנה בוטלה וניתן להזמין מחדש"
+          }
+         ]
+        },
+        {
+         "kind": "system",
+         "text": "רושמת ביומן את מספר ההזמנות שבוטלו"
+        }
+       ],
+       "extensions": [
+        {
+         "at": "2.1",
+         "text": "בינתיים בוצע צ'ק-אין להזמנה באישור מנהל קבלה",
+         "steps": [
+          "המערכת מדלגת על ההזמנה ורושמת חריגה ביומן"
+         ],
+         "outcome": {
+          "kind": "resume",
+          "at": "2"
+         }
+        }
+       ]
+      }
+     ],
+     "userStories": [
+      {
+       "role": "מנהל קבלה",
+       "want": "שהזמנה שלא שולמה לא תישאר תקועה לנצח",
+       "so": "החדר יחזור למלאי"
+      },
+      {
+       "role": "אורח",
+       "want": "לקבל הודעה שההזמנה בוטלה ולמה",
+       "so": "אוכל להזמין מחדש בזמן"
+      }
+     ],
+     "wireframe": "",
+     "x": 314,
+     "y": 235,
+     "rx": 79,
+     "ry": 30
+    },
+    {
+     "kind": "system",
+     "id": "sys-2",
+     "name": "מערכת ההזמנות של מלון 'גלי הים'",
+     "x": 200,
+     "y": 60,
+     "w": 640,
+     "h": 400
+    }
+   ],
+   "relationships": [
+    {
+     "kind": "actorAssoc",
+     "id": "a15",
+     "actorId": "clock",
+     "ucId": "uc-noshow",
+     "role": "initiator",
+     "description": "תזמון יוזם את \"טיפול בהזמנות שלא הגיעו\". תפקיד: Initiator. תזמון: בחצות, מדי יום."
+    },
+    {
+     "kind": "actorAssoc",
+     "id": "a16",
+     "actorId": "clock",
+     "ucId": "uc-cancel-unpaid",
+     "role": "initiator",
+     "description": "תזמון יוזם את \"ביטול הזמנות שחיובן לא הושלם\". תפקיד: Initiator. תזמון: כל שעה."
+    }
+   ]
+  }
+ ],
+ "assumptions": [
+  "שער התשלום (חברת הסליקה) אינו שחקן: המערכת פונה אליו (קריאת API) והוא אינו יוזם דבר. הוא מופיע כצעדי מערכת בתרחיש \"חיוב כרטיס אשראי\".",
+  "להנהלת החשבונות אין גישה ישירה למערכת; מנהל המלון מייצא אליה דוחות ותנועות. אחרת היה נדרש שחקן \"הנהלת חשבונות\".",
+  "למשק הבית אין גישה למערכת; הכנת החדרים מתואמת מחוץ לה. אחרת היה נדרש שחקן \"משק בית\".",
+  "אורח שמזמין בטלפון אינו נכנס למערכת בעצמו — פקיד הקבלה מזין את ההזמנה בשמו; לכן שניהם יוזמים את \"הזמנת חדר\".",
+  "הזמנה היא לסוג חדר; חדר ספציפי משובץ רק בצ'ק-אין. \"חדר פנוי\" באישור = מספר ההזמנות המאושרות/הפעילות לסוג בכל לילה קטן ממספר החדרים הפעילים מהסוג.",
+  "הארכת שהות מעדכנת את תאריך היציאה של אותה הזמנה ואינה פותחת הזמנה חדשה."
+ ],
+ "openQuestions": [
+  "בין כישלון חיוב המקדמה לביטול האוטומטי אחרי 24 שעות — האם ההזמנה במצב נפרד (\"ממתינה לתשלום\") או עדיין \"חדשה\" עם סימון? (מוכרע בתרשים המצבים.)",
+  "האם דחייה על חוסר זמינות היא \"בוטלה\" עם סיבה, או מצב תוצאה משלה (\"נדחתה\")? מה דוח \"ביקוש שהפסדנו\" צריך?",
+  "כמה זמן נשמרת הזמנה שנדחתה ולא חויבה מעולם — 7 שנים כמו הזמנה שחויבה, או שנתיים לפי צורכי הדוחות?",
+  "האם אורח רשאי להאריך שהות בעצמו באתר, או רק דרך הקבלה? (כיום — רק דרך הקבלה.)"
+ ]
+};
+  </script>
+  <script src="https://themathbible.com/sad-mcp/uc-diagram-common.js"></script>
+</body>
+</html>
