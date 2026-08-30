@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<!-- Campus food ORDER lifecycle — SAD lecture 8 marquee asset (state diagram).
+     Drawn per the uml_state_diagram skill (SKILL.md §2/§4/§6) + NOTATION.md +
+     LIFECYCLE-END.md, and EXACTLY the canonical model in lecture-08/PORTING_BRIEF.md
+     ("CANONICAL CAMPUS ORDER LIFECYCLE"): 8 states + composite פעילה, T0–T13,
+     two self-loops, ONE ◎ with two incoming arcs (archive tail + bypass), and a UML
+     NOTE on לא נאספה for BR-3 (decided 2026-08-30: החיוב נשאר — ללא זיכוי). The rule is
+     visible as an ABSENT action — לא נאספה has no refund() in its entry, בוטלה does;
+     the note only explains why. (Until L8 this was drawn as an open ❓ hole.)
+     Embedded by lecture-08/slides/slide-campus-order-lifecycle.html as
+       <iframe src="assets/statediagram-campus-order.html?embed=1">
+     ?embed=1  → fit-to-viewport SVG (letterbox via viewBox), page title + export
+                 button hidden, no scrolling. Click a state / arrow → Hebrew panel.
+
+     RTL NOTE (deliberate, same as the L6-7 class asset): <html> carries NO dir="rtl"
+     and neither does <body> or the <svg>. SVG coordinates are LTR. Only Hebrew
+     <text> elements carry direction="rtl" (their text-anchor="start" then anchors
+     the RIGHT edge); mono / Latin labels stay LTR. The click panel is HTML and is
+     dir="rtl" on its own. Do NOT add dir="rtl" higher up — it is inherited into
+     <text> and flips every anchor.
+
+     Labels are laid out at runtime: each label segment (event / [guard] / action)
+     is its own <text>, measured with getComputedTextLength(), packed on its line in
+     reading order (RTL when the event is Hebrew, LTR for after(...) labels), and a
+     white rect is drawn behind each line. Re-run after web fonts load. -->
+<html lang="he">
+<head>
+  <meta charset="UTF-8">
+  <title>תרשים מצבים — מחזור החיים של הזמנה בקמפוס</title>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;700&family=Noto+Sans+Hebrew:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    body { margin: 0; background: #f1f5f9; font-family: 'Noto Sans Hebrew', 'Segoe UI', Arial, sans-serif; }
+    .page-title { font-size: 15px; font-weight: 700; color: #1e293b; padding: 12px 16px 4px; direction: rtl; }
+    svg { display: block; max-width: 100%; height: auto; }
+    .sd-wrap { max-width: 1240px; margin: 0 auto; }
+
+    /* Clickable states + transitions */
+    .sd-state { cursor: pointer; }
+    .sd-state:hover > .sd-box { stroke-width: 3; }
+    .sd-state.sel > .sd-box { stroke: #e6007e !important; stroke-width: 3.2; }
+    .sd-edge-hit { cursor: pointer; }
+    .sd-edge.sel { stroke: #e6007e !important; stroke-width: 3.4 !important; }
+
+    /* VP export button styles (from export-buttons.md) */
+    .vp-export-btn {
+      position: fixed; bottom: 20px; right: 20px; z-index: 1000;
+      background: #1e40af; color: #fff; border: none; border-radius: 6px;
+      padding: 8px 16px; font-size: 13px; cursor: pointer;
+      font-family: 'IBM Plex Mono', monospace;
+    }
+    .vp-export-btn:hover { background: #1e3a8a; }
+
+    /* Click-an-element description panel (HTML overlay — RTL lives ONLY here) */
+    .sd-hint {
+      position: fixed; top: 8px; left: 50%; transform: translateX(-50%);
+      z-index: 1100; background: rgba(30,64,175,.92); color: #fff;
+      font-size: 12.5px; padding: 3px 12px; border-radius: 999px; pointer-events: none;
+      transition: opacity .25s;
+    }
+    .sd-info {
+      position: fixed; left: 12px; right: 12px; bottom: 12px; z-index: 1200;
+      background: rgba(255,255,255,.975); border: 2px solid #1e40af;
+      border-left-width: 8px; border-radius: 8px; padding: 9px 40px 10px 14px;
+      box-shadow: 0 6px 22px rgba(15,23,42,.22);
+    }
+    .sd-info[hidden] { display: none; }
+    .sd-info-title { font-size: 16px; font-weight: 700; color: #1e40af; margin-bottom: 3px; }
+    .sd-info-title .en { font-family: 'IBM Plex Mono', monospace; font-size: 13.5px; font-weight: 400; color: #475569; direction: ltr; unicode-bidi: isolate; }
+    .sd-info-body { font-size: 14.5px; line-height: 1.45; color: #1e293b; }
+    .sd-info-body b { color: #1e40af; }
+    .sd-info-body .en { font-family: 'IBM Plex Mono', monospace; font-size: 13px; direction: ltr; unicode-bidi: isolate; }
+    .sd-info-body .g { color: #0891b2; }
+    .sd-info-body .ac { color: #15803d; }
+    .sd-info-body .rule { color: #E86C00; font-weight: 700; }
+    .sd-note { cursor: pointer; }
+    .sd-note:hover > .sd-note-box { stroke-width: 2.6; }
+    .sd-note.sel > .sd-note-box { stroke: #e6007e !important; stroke-width: 2.8; }
+    .sd-info-x {
+      position: absolute; top: 5px; left: 7px; border: none; background: none;
+      font-size: 17px; line-height: 1; color: #64748b; cursor: pointer;
+    }
+
+    /* Embed mode — full-viewport iframe with no chrome */
+    body.embed { overflow: hidden; margin: 0; }
+    body.embed .vp-export-btn,
+    body.embed .page-title { display: none; }
+    body.embed .sd-wrap { max-width: none; margin: 0; }
+    body.embed svg { width: 100vw; height: 100vh; max-width: none; }
+    body.embed .sd-info { padding: 7px 34px 8px 12px; }
+    body.embed .sd-info-title { font-size: 15px; }
+    body.embed .sd-info-body { font-size: 13.5px; }
+  </style>
+</head>
+<body>
+  <div class="page-title">תרשים מצבים — מחזור החיים של הזמנה בקמפיטריה של הקמפוס (Order)</div>
+
+  <div class="sd-wrap">
+    <svg id="diagram-svg" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="תרשים מצבים של הזמנה בקמפוס"></svg>
+  </div>
+
+  <div class="sd-hint" id="sd-hint" dir="rtl">לחצו על מצב או על חץ לקבלת הסבר</div>
+  <div class="sd-info" id="sd-info" dir="rtl" hidden>
+    <button class="sd-info-x" onclick="hideInfo()" title="סגור">✕</button>
+    <div class="sd-info-title" id="sd-info-title"></div>
+    <div class="sd-info-body" id="sd-info-body"></div>
+  </div>
+
+  <button class="vp-export-btn" onclick="exportXMI()">Download .xmi (Visual Paradigm)</button>
+
+  <script>
+  /* ============================================================
+     1. DATA — the canonical model (PORTING_BRIEF.md, verbatim)
+     viewBox 0 0 1200 735. Rows: ● / ממתינה לתשלום / composite פעילה /
+     outcomes / ארכיון / ◎. All coordinates hand-placed; every polyline
+     orthogonal (validated at render), endpoints on box edges.
+     ============================================================ */
+  const HE = /[֐-׿]/;
+  const BOX_NAME_H = 28, LINE_H = 15, PAD_T = 12;
+  const boxH = n => BOX_NAME_H + PAD_T + LINE_H * n;
+
+  const STATES = [
+    { id: 'awaiting', name: 'ממתינה לתשלום', constant: 'AWAITING_PAYMENT',
+      lines: ["entry / setStatus('AWAITING_PAYMENT')"],
+      x: 185, y: 58, w: 250,
+      desc: "ההזמנה נוצרה אך טרם שולמה — מצב <b>טרום-התחייבות</b>: אף אחד לא חויב, אף מטבח לא התחיל לעבוד. לכן דווקא כאן יש שתי יציאות מיוחדות: לולאה-עצמית על <b>תשלום נכשל</b> (הנתונים מתעדכנים, המצב לא), ו<b>מעקף ישיר</b> אל ◎ עם <span class='en ac'>delete()</span> — הזמנה שלא שולמה מעולם לא הפכה לעובדה עסקית, אין מה לשמור בארכיון." },
+    { id: 'active', name: 'פעילה', constant: 'ACTIVE', composite: true,
+      lines: ["entry / setStatus('ACTIVE')"],
+      x: 170, y: 175, w: 900, h: 200,
+      desc: "<b>מצב-על</b> (קו מקווקו): ההזמנה שולמה והיא בטיפול. שלושת המצבים הפנימיים חולקים חץ אחד שיוצא <b>מהגבול</b> — <b>ביטול ע״י הצוות [פריט אזל]</b> — והוא יורה מכל אחד מהם. בלי מצב-העל היינו מציירים אותו שלוש פעמים. הכניסה אל מצב-העל היא דרך ה-● הפנימי אל ממתינה; <span class='en'>entry / setStatus('ACTIVE')</span> רץ לפני ה-<span class='en'>entry</span> של המצב הפנימי." },
+    { id: 'pending', name: 'ממתינה', constant: 'PENDING',
+      lines: ["entry / setStatus('PENDING');", "  notifyKitchen()"],
+      x: 190, y: 235, w: 230,
+      desc: "שולם, והמטבח קיבל התראה. זה המצב היחיד שבו הסטודנט עדיין יכול לבטל בעצמו (<span class='en g'>[BR-4]</span>) או לעדכן את שעת האיסוף (לולאה-עצמית: הנתון משתנה, המצב לא — וה-<span class='en'>entry</span> רץ שוב). יציאות: <b>תחילת הכנה</b> ← בהכנה · <b>ביטול ע״י הסטודנט</b> ← בוטלה · ביטול ע״י הצוות (מהגבול)." },
+    { id: 'prep', name: 'בהכנה', constant: 'IN_PREPARATION',
+      lines: ["entry / setStatus('IN_PREPARATION')", "do / prepareItems()"],
+      x: 500, y: 235, w: 240,
+      desc: "המצב היחיד עם <span class='en'>do /</span> — כי כאן באמת <b>משהו רץ</b> לאורך זמן (הכנת המנות). שימו לב למה <b>אין</b> כאן: אין חץ <b>ביטול ע״י הסטודנט</b>. זהו <span class='en g'>BR-4</span> — חוק עסקי שמצויר כ<b>חץ שחסר</b>, לא כתנאי. רק הצוות יכול לבטל (מהגבול של פעילה)." },
+    { id: 'ready', name: 'מוכנה', constant: 'READY',
+      lines: ["entry / setStatus('READY');", "  notifyStudent()"],
+      x: 825, y: 235, w: 230,
+      desc: "המנות מוכנות והסטודנט קיבל התראה. שלוש יציאות — זה לא תרשים זרימה: <b>אימות איסוף</b> <span class='en g'>[BR-2: קוד תואם]</span> ← נאספה · <b>תיקון</b> <span class='en g'>[מנה חסרה]</span> ← <b>חזרה</b> לבהכנה (חץ אחורה!) · <span class='en'>after(60 דקות מזמן האיסוף)</span> ← לא נאספה (אירוע זמן). קוד לא תואם? התנאי נכשל — <b>לא קורה כלום</b>, ולכן אין חץ." },
+    { id: 'cancelled', name: 'בוטלה', constant: 'CANCELLED',
+      lines: ["entry / setStatus('CANCELLED');", "  setClosureReason('CANCELLED');", "  refund()"],
+      x: 185, y: 460, w: 250,
+      desc: "<b>תוצאה עסקית = מצב</b>, לא ◎. ההזמנה שולמה, ולכן ביטול הוא <b>עובדה</b> (יש זיכוי, יש דוח ביטולים) — היא הולכת לארכיון ולא נמחקת. <span class='en'>setClosureReason('CANCELLED')</span> שומר את <i>הסיבה</i> בתכונה נפרדת, כי הארכיון ידרוס את <span class='en'>status</span>. שני חצים נכנסים: מממתינה (הסטודנט) ומגבול פעילה (הצוות)." },
+    { id: 'collected', name: 'נאספה', constant: 'COLLECTED',
+      lines: ["entry / setStatus('COLLECTED');", "  setClosureReason('COLLECTED')"],
+      x: 575, y: 460, w: 250,
+      desc: "התוצאה הטובה. נכנסים אליה רק דרך <b>אימות איסוף</b> עם התנאי <span class='en g'>[BR-2: קוד תואם]</span> — ההזמנה נמסרת רק למי שהזמין ושילם. גם כאן: מצב, לא ◎ — ״מה הזמנתי בשבוע שעבר?״ היא שאלה שהמערכת חייבת לענות עליה. <span class='en'>closureReason</span> שורד את הארכיון." },
+    { id: 'notcollected', name: 'לא נאספה', constant: 'NOT_COLLECTED',
+      lines: ["entry / setStatus('NOT_COLLECTED');", "  setClosureReason('NOT_COLLECTED')"],
+      x: 875, y: 460, w: 250,
+      desc: "נכנסים לכאן ב<b>אירוע זמן</b>: <span class='en'>after(60 דקות מזמן האיסוף)</span>. שימו לב למה <b>אין</b> ב-<span class='en'>entry</span>: אין <span class='en ac'>refund()</span> — לעומת בוטלה. זהו <span class='rule'>BR-3</span>: הזמנה ששולמה ולא נאספה — <b>החיוב נשאר, ללא זיכוי</b>. החוק היה פתוח מאז הרצאה 3; בניית התרשים הכריחה את הקמפוס להכריע, וההכרעה נראית כאן כ<b>פעולה שחסרה</b>. הפתק ליד המצב רק מסביר למה." },
+    { id: 'archived', name: 'ארכיון', constant: 'ARCHIVED',
+      lines: ["entry / setStatus('ARCHIVED')"],
+      x: 600, y: 610, w: 200,
+      desc: "<b>סוף הרלוונטיות</b>, לא סוף הקיום: ההזמנה יצאה מהמסכים התפעוליים אבל עדיין קיימת — לדוחות, לביקורת, לשאלות. שלוש התוצאות <b>מתכנסות</b> לארכיון אחד (לא ארכיון לכל תוצאה). אין <span class='en'>do /</span> — ״להישמר״ אינו התנהגות. יציאה אחת בלבד: פקיעת תקופת השמירה." }
+  ];
+  for (const s of STATES) if (!s.h) s.h = boxH(s.lines.length);
+
+  // Pseudostates
+  const INITIAL = { x: 310, y: 24 };          // top ●
+  const INNER_INITIAL = { x: 310, y: 200 };   // ● inside פעילה
+  const FINAL = { x: 700, y: 710 };           // the ONE ◎
+
+  // Label segment kinds: ev (event) / g (guard, cyan) / ac (action, green) / note (orange)
+  const ev = t => ({ t, k: 'ev' }), g = t => ({ t, k: 'g' }), ac = t => ({ t, k: 'ac' });
+
+  const TRANSITIONS = [
+    { id: 'T0', from: 'initial', to: 'awaiting', pts: [[310, 32], [310, 58]], label: null,
+      title: 'T0 — ● ← ממתינה לתשלום',
+      desc: "החץ מה-● ההתחלתי — <b>היחיד</b> בתרשים בלי תווית. הוא אומר: ״כשנוצרת הזמנה חדשה, היא מתחילה כאן.״ כל חץ אחר חייב לשאת אירוע." },
+    { id: 'T1', from: 'awaiting', to: 'awaiting', self: true, d: 'M435,72 C500,50 500,122 435,100',
+      label: { lines: [[ev('תשלום נכשל'), ac('/ showError()')]], x: 492, y: 91, align: 'left' },
+      title: 'T1 — לולאה-עצמית: תשלום נכשל',
+      desc: "<b>לולאה-עצמית</b>: אירוע שמעדכן נתונים (הודעת שגיאה, ניסיון נוסף) אבל <b>לא משנה מצב</b> — ההזמנה עדיין ממתינה לתשלום. שימו לב: ה-<span class='en'>entry</span> רץ מחדש בכל כניסה, גם בלולאה." },
+    { id: 'T2', from: 'awaiting', to: 'active', pts: [[310, 113], [310, 175]],
+      label: { lines: [[ev('תשלום אושר'), ac('/ recordPayment()')]], x: 320, y: 148, align: 'left' },
+      title: 'T2 — תשלום אושר ← פעילה',
+      desc: "האירוע שהופך את ההזמנה ל<b>עובדה עסקית</b>: מכאן והלאה היא כבר לא נמחקת — היא מבוטלת ומתועדת. החץ מגיע אל <b>גבול</b> מצב-העל, והכניסה ממשיכה דרך ה-● הפנימי אל ממתינה." },
+    { id: 'T3', from: 'awaiting', to: 'final', pts: [[185, 85], [60, 85], [60, 710], [686, 710]],
+      label: { lines: [[ev('ביטול'), ac('/ delete()')]], x: 370, y: 699, align: 'center' },
+      title: 'T3 — המעקף: ביטול / delete() ← ◎',
+      desc: "<b>מבחן העובדה העסקית</b>: הזמנה שבוטלה <i>לפני</i> תשלום מעולם לא חייבה אף אחד, לא נשלחה למטבח, לא תופיע בשום דוח — היא <b>מעולם לא הייתה עובדה</b>. לכן היא נמחקת ישירות, ולא עוברת בארכיון. החץ מגיע לאותו ◎ יחיד (לא ◎ שני!), נושא <b>אירוע עסקי</b> אמיתי ולא <span class='en'>after(...)</span>, ומותר רק ממצב טרום-התחייבות." },
+    { id: 'Tin', from: 'innerInitial', to: 'pending', pts: [[310, 207], [310, 235]], label: null,
+      title: '● פנימי ← ממתינה',
+      desc: "ה-● הפנימי של מצב-העל: כל חץ שמגיע אל הגבול של פעילה נכנס דרכו — ולכן תמיד מתחילים בממתינה." },
+    { id: 'T4', from: 'pending', to: 'pending', self: true, d: 'M345,235 C345,186 405,186 405,235',
+      label: { lines: [[ev('עדכון שעת איסוף')], [ac('/ updatePickupTime()')]], x: 422, y: 200, align: 'left' },
+      title: 'T4 — לולאה-עצמית: עדכון שעת איסוף',
+      desc: "הסטודנט משנה את שעת האיסוף (תרחיש <i>Schedule Pickup</i> מהרצאה 4-5). הנתון <span class='en'>pickupTime</span> מתעדכן, ההזמנה נשארת ממתינה — <b>לולאה-עצמית</b>, לא מצב חדש. ה-<span class='en'>entry</span> רץ שוב: המטבח מקבל התראה מעודכנת." },
+    { id: 'T5', from: 'pending', to: 'prep', pts: [[420, 265], [500, 265]],
+      label: { lines: [[ev('תחילת הכנה')]], x: 460, y: 254, align: 'center' },
+      title: 'T5 — תחילת הכנה',
+      desc: "עובד המטבח לוקח את ההזמנה. שימו לב לניסוח: <b>״תחילת הכנה״</b> הוא אירוע (רגע), ״הכנה״ היא פעילות — ופעילות לא כותבים על חץ. מרגע זה הסטודנט כבר לא יכול לבטל (<span class='en g'>BR-4</span>)." },
+    { id: 'T6', from: 'pending', to: 'cancelled', pts: [[260, 305], [260, 460]],
+      label: { lines: [[ev('ביטול ע״י הסטודנט')], [g('[BR-4: לפני תחילת הכנה]')]], x: 250, y: 400, align: 'right' },
+      title: 'T6 — ביטול ע״י הסטודנט [BR-4]',
+      desc: "הסטודנט מבטל — מותר רק מממתינה. התנאי <span class='en g'>[BR-4: לפני תחילת הכנה]</span> <b>מפנה</b> לקטלוג החוקים של הרצאה 3 במקום לנסח את החוק מחדש. והצד השני של אותו חוק: החץ הזה <b>לא</b> מצויר מבהכנה או ממוכנה — חוק עסקי הוא חץ שחסר." },
+    { id: 'T7', from: 'prep', to: 'ready', pts: [[740, 265], [825, 265]],
+      label: { lines: [[ev('סימון מוכן')]], x: 782, y: 254, align: 'center' },
+      title: 'T7 — סימון מוכן',
+      desc: "עובד המטבח מסמן שההזמנה מוכנה (תרחיש <i>Mark Order Ready</i>). ה-<span class='en'>do / prepareItems()</span> של בהכנה נפסק, וה-<span class='en'>entry</span> של מוכנה שולח התראה לסטודנט." },
+    { id: 'T8', from: 'ready', to: 'collected', pts: [[860, 305], [860, 430], [700, 430], [700, 460]],
+      label: { lines: [[ev('אימות איסוף'), g('[BR-2: קוד תואם]')], [ac('/ markCollected()')]], x: 848, y: 345, align: 'right' },
+      title: 'T8 — אימות איסוף [BR-2: קוד תואם] / markCollected()',
+      desc: "תווית מלאה: <b>אירוע</b> <span class='en g'>[תנאי]</span> <span class='en ac'>/ פעולה</span>. עובד הדלפק מאמת את קוד האיסוף; רק אם הקוד תואם (<span class='en g'>BR-2</span> — מוסרים רק למי שהזמין ושילם) ההזמנה נאספת. <b>קוד לא תואם = התנאי נכשל = לא קורה כלום</b> — ולכן אין חץ ״חזרה למוכנה״ עבור זה." },
+    { id: 'T9', from: 'ready', to: 'prep', pts: [[870, 235], [870, 212], [690, 212], [690, 235]],
+      label: { lines: [[ev('תיקון'), g('[מנה חסרה]')]], x: 780, y: 199, align: 'center' },
+      title: 'T9 — תיקון [מנה חסרה] — חץ אחורה',
+      desc: "<b>חץ אחורה</b>: הסטודנט הגיע, חסרה מנה (תרחיש <i>Refund/Adjust Order</i>) — ההזמנה חוזרת לבהכנה. זה מה שמבדיל תרשים מצבים מתרשים זרימה: <b>מעגלים</b>. הזמנה יכולה לעבור בהכנה ← מוכנה ← בהכנה ← מוכנה." },
+    { id: 'T10', from: 'ready', to: 'notcollected', pts: [[1055, 285], [1110, 285], [1110, 460]],
+      label: { lines: [[ev('after(60'), ev('דקות מזמן האיסוף'), { t: ')', k: 'ev', nogap: true }]], x: 1100, y: 405, align: 'right' },
+      title: 'T10 — after(60 דקות מזמן האיסוף)',
+      desc: "<b>אירוע זמן</b>: אף אחד לא לחץ על כלום — השעון הוא הטריגר. שעה אחרי זמן האיסוף שנקבע, ההזמנה עוברת ללא נאספה. <span class='en'>after(...)</span> נושא תקופה <b>קונקרטית</b>, לא ״X דקות״." },
+    { id: 'T11', from: 'active', to: 'cancelled', pts: [[400, 375], [400, 460]],
+      label: { lines: [[ev('ביטול ע״י הצוות'), g('[פריט אזל]')]], x: 412, y: 405, align: 'left' },
+      title: 'T11 — ביטול ע״י הצוות [פריט אזל] — מהגבול',
+      desc: "החץ יוצא מ<b>גבול</b> מצב-העל פעילה, ולכן הוא יורה מ<b>כל</b> מצב פנימי: ממתינה, בהכנה או מוכנה. חץ אחד במקום שלושה זהים — זו הסיבה לצייר מצב-על. (לסטודנט, לעומת זאת, יש רק את T6 מממתינה.)" },
+    { id: 'T12a', from: 'cancelled', to: 'archived', pts: [[310, 545], [310, 590], [680, 590], [680, 610]],
+      label: { lines: [[ev('סגירת יום'), ac('/ archive()')]], x: 495, y: 580, align: 'center' },
+      title: 'T12 — סגירת יום / archive()',
+      desc: "שלוש התוצאות <b>מתכנסות</b> לארכיון אחד באותו אירוע — סגירת היום. ההזמנה יוצאת מהמסכים התפעוליים אבל נשארת קיימת. <span class='en'>closureReason</span> שנקבע בתוצאה שורד; רק <span class='en'>status</span> נדרס." },
+    { id: 'T12b', from: 'collected', to: 'archived', pts: [[700, 530], [700, 610]],
+      label: { lines: [[ev('סגירת יום'), ac('/ archive()')]], x: 708, y: 556, align: 'left' },
+      title: 'T12 — סגירת יום / archive()',
+      desc: "שלוש התוצאות <b>מתכנסות</b> לארכיון אחד באותו אירוע — סגירת היום. ההזמנה יוצאת מהמסכים התפעוליים אבל נשארת קיימת. <span class='en'>closureReason</span> שנקבע בתוצאה שורד; רק <span class='en'>status</span> נדרס." },
+    { id: 'T12c', from: 'notcollected', to: 'archived', pts: [[930, 530], [930, 590], [720, 590], [720, 610]],
+      label: { lines: [[ev('סגירת יום'), ac('/ archive()')]], x: 830, y: 580, align: 'center' },
+      title: 'T12 — סגירת יום / archive()',
+      desc: "שלוש התוצאות <b>מתכנסות</b> לארכיון אחד באותו אירוע — סגירת היום. ההזמנה יוצאת מהמסכים התפעוליים אבל נשארת קיימת. <span class='en'>closureReason</span> שנקבע בתוצאה שורד; רק <span class='en'>status</span> נדרס." },
+    { id: 'T13', from: 'archived', to: 'final', pts: [[700, 665], [700, 698]],
+      label: { lines: [[ev('after(7'), ev('שנים'), { t: ')', k: 'ev', nogap: true }, ac('/ purge()')]], x: 708, y: 686, align: 'left' },
+      title: 'T13 — after(7 שנים) / purge() ← ◎',
+      desc: "<b>סוף הקיום</b>: הרשומה נמחקת רק כש<b>תקופת השמירה פוקעת</b> — אירוע זמן, לא אירוע עסקי. 7 שנים כי הזמנה היא <b>רשומה כספית</b> (חויבה / זוכתה) — חובת שמירת ספרים בישראל. ״<span class='en'>after(X ימים)</span>״ הוא מציין-מקום, לא החלטה." }
+  ];
+
+  // UML NOTES (dog-eared rectangle + dashed anchor to the element it explains).
+  // Notes are standard UML; the ❓ "hole" that used to hang off לא נאספה was not.
+  const NOTES = [
+    { id: 'BR3', attachTo: 'notcollected', x: 975, y: 556, w: 150, h: 42,
+      anchor: [[1050, 530], [1050, 556]],
+      latin: 'BR-3:', heb: 'ללא זיכוי',
+      title: 'BR-3 — ללא זיכוי (הוכרע תוך כדי העיצוב)',
+      desc: "<b>פתק</b> (<span class='en'>UML note</span>) — לא מעבר. <span class='rule'>BR-3</span>: הזמנה ששולמה ולא נאספה עד סוף חלון האיסוף — <b>החיוב נשאר, ללא זיכוי</b> (בעלים: אגף שירותי קמפוס). החוק היה פתוח בקטלוג מאז הרצאה 3; תרשים המצבים הוא מה שהכריח להכריע — אי אפשר לכתוב את ה-<span class='en'>entry</span> של לא נאספה בלי לדעת אם יש <span class='en ac'>refund()</span>. ההכרעה נראית בתרשים כ<b>פעולה שחסרה</b>: בבוטלה יש <span class='en ac'>refund()</span>, בלא נאספה — אין. חוק שלא מוצאים בתרשים הוא חוק שטרם הוחלט — הולכים להשיג את ההחלטה, לא מנחשים." }
+  ];
+
+  /* ============================================================
+     2. ENGINE
+     ============================================================ */
+  const SVG_NS = 'http://www.w3.org/2000/svg';
+  const VB = { w: 1200, h: 735 };
+  const MONO = "'IBM Plex Mono', Consolas, monospace";
+  const HEB  = "'Noto Sans Hebrew', 'Segoe UI', Arial, sans-serif";
+  const COL = { ev: '#334155', g: '#0891b2', ac: '#15803d' };
+
+  function el(tag, attrs, parent) {
+    const n = document.createElementNS(SVG_NS, tag);
+    for (const k in attrs) if (attrs[k] !== null && attrs[k] !== undefined) n.setAttribute(k, attrs[k]);
+    if (parent) parent.appendChild(n);
+    return n;
+  }
+  function txt(parent, attrs, content) {
+    const t = el('text', attrs, parent);
+    t.textContent = content;
+    return t;
+  }
+  // Rounded-top path for the name band
+  function bandPath(x, y, w, h, r) {
+    return `M${x},${y + h} L${x},${y + r} Q${x},${y} ${x + r},${y} L${x + w - r},${y} Q${x + w},${y} ${x + w},${y + r} L${x + w},${y + h} Z`;
+  }
+
+  function drawState(s, parent) {
+    const gr = el('g', { class: 'sd-state', 'data-id': s.id }, parent);
+    if (s.composite) {
+      el('rect', { x: s.x, y: s.y, width: s.w, height: s.h, rx: 20, ry: 20, fill: '#f0f7ff',
+                   stroke: '#2563eb', 'stroke-width': 2, 'stroke-dasharray': '8 4', class: 'sd-box' }, gr);
+      // name top-right (Hebrew → rtl, start anchor = right edge) + entry line under it
+      txt(gr, { x: s.x + s.w - 16, y: s.y + 24, direction: 'rtl', 'text-anchor': 'start', 'font-family': HEB,
+                'font-size': 17, 'font-weight': 700, fill: '#1e293b' }, s.name);
+      txt(gr, { x: s.x + s.w - 16, y: s.y + 41, 'text-anchor': 'end', 'font-family': MONO,
+                'font-size': 11, fill: '#334155' }, s.lines[0]);
+      txt(gr, { x: s.x + s.w - 80, y: s.y + 24, 'text-anchor': 'end', 'font-family': MONO,
+                'font-size': 10.5, fill: '#64748b' }, '«composite»');
+      return gr;
+    }
+    el('rect', { x: s.x, y: s.y, width: s.w, height: s.h, rx: 14, ry: 14, fill: '#fff',
+                 stroke: '#3b82f6', 'stroke-width': 1.8, class: 'sd-box' }, gr);
+    el('path', { d: bandPath(s.x + 0.9, s.y + 0.9, s.w - 1.8, BOX_NAME_H, 13), fill: '#eef4ff' }, gr);
+    el('line', { x1: s.x, y1: s.y + BOX_NAME_H, x2: s.x + s.w, y2: s.y + BOX_NAME_H, stroke: '#3b82f6', 'stroke-width': 1 }, gr);
+    txt(gr, { x: s.x + s.w / 2, y: s.y + 20, direction: 'rtl', 'text-anchor': 'middle', 'font-family': HEB,
+              'font-size': 17, 'font-weight': 700, fill: '#1e293b' }, s.name);
+    let cy = s.y + BOX_NAME_H + 17;
+    for (const ln of s.lines) {
+      const cont = ln.startsWith('  ');
+      txt(gr, { x: s.x + 10 + (cont ? 44 : 0), y: cy, 'text-anchor': 'start', 'font-family': MONO,
+                'font-size': 11, fill: '#334155' }, ln.trim());
+      cy += LINE_H;
+    }
+    return gr;
+  }
+
+  function drawPseudostates(parent) {
+    el('circle', { cx: INITIAL.x, cy: INITIAL.y, r: 8, fill: '#1e293b' }, parent);
+    el('circle', { cx: INNER_INITIAL.x, cy: INNER_INITIAL.y, r: 7, fill: '#1e293b' }, parent);
+    el('circle', { cx: FINAL.x, cy: FINAL.y, r: 12, fill: 'none', stroke: '#1e293b', 'stroke-width': 2 }, parent);
+    el('circle', { cx: FINAL.x, cy: FINAL.y, r: 7, fill: '#1e293b' }, parent);
+  }
+
+  function pathD(tr) {
+    if (tr.d) return tr.d;
+    return tr.pts.map((p, i) => (i ? 'L' : 'M') + p[0] + ',' + p[1]).join(' ');
+  }
+
+  function drawTransition(tr, parent) {
+    const p = el('path', { d: pathD(tr), fill: 'none', stroke: '#334155', 'stroke-width': 1.8, class: 'sd-edge',
+                           'data-id': tr.id, 'marker-end': 'url(#sd-arr)' }, parent);
+    // wide transparent hit path on top (hover + click)
+    const hit = el('path', { d: pathD(tr), fill: 'none', stroke: 'transparent', 'stroke-width': 16,
+                             class: 'sd-edge-hit', 'data-id': tr.id }, parent);
+    hit.style.pointerEvents = 'stroke';
+    return { p, hit };
+  }
+
+  // Labels: each segment is its own <text>; positions resolved in layoutLabels().
+  function drawLabel(tr, parent) {
+    const L = tr.label; if (!L) return;
+    const gr = el('g', { class: 'sd-label', 'data-id': tr.id }, parent);
+    L.lines.forEach((segs, li) => {
+      segs.forEach(seg => {
+        const isHeb = HE.test(seg.t.charAt(0));
+        const mono = seg.k === 'ac';
+        txt(gr, { x: 0, y: L.y + li * 16, 'text-anchor': 'start', direction: isHeb ? 'rtl' : 'ltr',
+                  'font-family': mono ? MONO : HEB, 'font-size': mono ? 12 : 13,
+                  'font-weight': 400, fill: COL[seg.k],
+                  'data-line': li, 'data-heb': isHeb ? 1 : 0, 'data-nogap': seg.nogap ? 1 : 0 }, seg.t);
+      });
+    });
+    gr.__label = L;
+  }
+
+  function layoutLabels(svg) {
+    const bg = svg.querySelector('#sd-labelbg');
+    while (bg.firstChild) bg.removeChild(bg.firstChild);
+    svg.querySelectorAll('.sd-label').forEach(gr => {
+      const L = gr.__label;
+      const texts = Array.from(gr.querySelectorAll('text'));
+      const nLines = L.lines.length;
+      let union = null;
+      for (let li = 0; li < nLines; li++) {
+        const segs = texts.filter(t => +t.getAttribute('data-line') === li);
+        const widths = segs.map(t => t.getComputedTextLength());
+        // gap BEFORE each segment (0 for a glued ')' segment of an after(...) label —
+        // split into its own <text> so bidi never mirrors the paren across the Hebrew)
+        const gaps = segs.map((t, i) => (i === 0 || t.getAttribute('data-nogap') === '1') ? 0 : 8);
+        const total = widths.reduce((a, b) => a + b, 0) + gaps.reduce((a, b) => a + b, 0);
+        const left = L.align === 'left' ? L.x : L.align === 'right' ? L.x - total : L.x - total / 2;
+        // reading order: RTL when the first segment is Hebrew, else LTR (after(...) labels)
+        const rtlLine = segs[0].getAttribute('data-heb') === '1';
+        let cur = rtlLine ? left + total : left;
+        segs.forEach((t, i) => {
+          const w = widths[i];
+          if (rtlLine) cur -= gaps[i]; else cur += gaps[i];
+          const segLeft = rtlLine ? cur - w : cur;
+          const heb = t.getAttribute('data-heb') === '1';
+          t.setAttribute('x', heb ? segLeft + w : segLeft);   // rtl start-anchor = right edge
+          cur = rtlLine ? cur - w : cur + w;
+        });
+        const y = +segs[0].getAttribute('y');
+        const box = { x: left - 3, y: y - 11, w: total + 6, h: 15 };
+        union = union ? { x: Math.min(union.x, box.x), y: Math.min(union.y, box.y),
+                          x2: Math.max(union.x + union.w, box.x + box.w), y2: Math.max(union.y + union.h, box.y + box.h) } : { x: box.x, y: box.y, x2: box.x + box.w, y2: box.y + box.h };
+        union.w = union.x2 - union.x; union.h = union.y2 - union.y;
+      }
+      const r = el('rect', { x: union.x, y: union.y, width: union.w, height: union.h, rx: 3, fill: '#fff' }, bg);
+      r.setAttribute('fill-opacity', '0.96');
+    });
+  }
+
+  function drawNote(n, parent) {
+    const gr = el('g', { class: 'sd-note', 'data-id': n.id }, parent);
+    // dashed anchor line to the element the note explains (no arrowhead — a UML note anchor)
+    el('path', { d: n.anchor.map((p, i) => (i ? 'L' : 'M') + p[0] + ',' + p[1]).join(' '),
+                 fill: 'none', stroke: '#64748b', 'stroke-width': 1.4, 'stroke-dasharray': '4 3' }, gr);
+    const e = 11; // dog-ear size
+    const { x, y, w, h } = n;
+    el('path', { d: `M${x},${y} H${x + w - e} L${x + w},${y + e} V${y + h} H${x} Z`,
+                 fill: '#fff7ed', stroke: '#E86C00', 'stroke-width': 1.6, class: 'sd-note-box' }, gr);
+    el('path', { d: `M${x + w - e},${y} V${y + e} H${x + w}`, fill: 'none', stroke: '#E86C00', 'stroke-width': 1.2 }, gr);
+    // "BR-3:" (LTR, on the right in reading order) then the Hebrew phrase to its left
+    txt(gr, { x: x + w - 18, y: y + 27, 'text-anchor': 'end', 'font-family': MONO, 'font-size': 13, 'font-weight': 700, fill: '#E86C00' }, n.latin);
+    txt(gr, { x: x + w - 64, y: y + 27, direction: 'rtl', 'text-anchor': 'start', 'font-family': HEB, 'font-size': 14, 'font-weight': 700, fill: '#1e293b' }, n.heb);
+    return gr;
+  }
+
+  function drawLegend(parent) {
+    const y = 34;
+    txt(parent, { x: VB.w - 18, y, direction: 'rtl', 'text-anchor': 'start', 'font-family': HEB, 'font-size': 12, fill: '#64748b' },
+        '● התחלה · ◎ סוף (הרשומה נמחקת) · ▭ מצב · ⬚ מצב-על · חץ: אירוע [תנאי] / פעולה');
+  }
+
+  function validate() {
+    for (const tr of TRANSITIONS) {
+      if (!tr.pts) continue;
+      for (let i = 0; i < tr.pts.length - 1; i++) {
+        const a = tr.pts[i], b = tr.pts[i + 1];
+        if (a[0] !== b[0] && a[1] !== b[1]) console.warn('Diagonal segment on', tr.id, 'at', i);
+      }
+      // endpoints must not land strictly inside any state box
+      for (const s of STATES) {
+        for (const p of [tr.pts[0], tr.pts[tr.pts.length - 1]]) {
+          if (p[0] > s.x && p[0] < s.x + s.w && p[1] > s.y && p[1] < s.y + s.h && !(s.composite))
+            console.warn('Endpoint inside', s.id, 'on', tr.id, p);
+        }
+      }
+    }
+  }
+
+  /* ── click / hover ─────────────────────────────────────────────────────── */
+  const byId = {};
+  for (const s of STATES) byId['s:' + s.id] = s;
+  for (const t of TRANSITIONS) byId['t:' + t.id] = t;
+  for (const n of NOTES) byId['n:' + n.id] = n;
+
+  function clearSel() {
+    document.querySelectorAll('.sd-state.sel').forEach(n => n.classList.remove('sel'));
+    document.querySelectorAll('.sd-edge.sel').forEach(n => n.classList.remove('sel'));
+    document.querySelectorAll('.sd-note.sel').forEach(n => n.classList.remove('sel'));
+  }
+  function hideInfo() {
+    document.getElementById('sd-info').hidden = true;
+    clearSel();
+  }
+  function showInfo(title, html) {
+    document.getElementById('sd-info-title').innerHTML = title;
+    document.getElementById('sd-info-body').innerHTML = html;
+    document.getElementById('sd-info').hidden = false;
+    const hint = document.getElementById('sd-hint');
+    if (hint) hint.style.opacity = '0';
+  }
+  function wireClicks(svg) {
+    svg.querySelectorAll('.sd-state').forEach(gr => {
+      gr.addEventListener('click', ev => {
+        ev.stopPropagation();
+        const s = byId['s:' + gr.getAttribute('data-id')];
+        if (gr.classList.contains('sel')) { hideInfo(); return; }
+        clearSel(); gr.classList.add('sel');
+        showInfo(`${s.name} <span class="en">${s.composite ? 'composite · ' : ''}setStatus('${s.constant}')</span>`, s.desc);
+      });
+    });
+    svg.querySelectorAll('.sd-note').forEach(gr => {
+      gr.addEventListener('click', ev => {
+        ev.stopPropagation();
+        const n = byId['n:' + gr.getAttribute('data-id')];
+        if (gr.classList.contains('sel')) { hideInfo(); return; }
+        clearSel(); gr.classList.add('sel');
+        showInfo(n.title, n.desc);
+      });
+    });
+    svg.querySelectorAll('.sd-edge-hit').forEach(hit => {
+      const id = hit.getAttribute('data-id');
+      const line = svg.querySelector(`.sd-edge[data-id="${id}"]`);
+      const s0 = line.getAttribute('stroke'), w0 = line.getAttribute('stroke-width');
+      hit.addEventListener('mouseenter', () => {
+        if (line.classList.contains('sel')) return;
+        line.setAttribute('stroke', '#e6007e'); line.setAttribute('stroke-width', '3.4');
+        line.parentNode.appendChild(line); line.parentNode.appendChild(hit);
+      });
+      hit.addEventListener('mouseleave', () => {
+        if (line.classList.contains('sel')) return;
+        line.setAttribute('stroke', s0); line.setAttribute('stroke-width', w0);
+      });
+      hit.addEventListener('click', ev => {
+        ev.stopPropagation();
+        const tr = byId['t:' + id];
+        if (line.classList.contains('sel')) { hideInfo(); line.setAttribute('stroke', s0); line.setAttribute('stroke-width', w0); return; }
+        clearSel(); line.classList.add('sel');
+        showInfo(tr.title, tr.desc);
+      });
+    });
+    svg.addEventListener('click', hideInfo);
+  }
+
+  function render() {
+    validate();
+    const svg = document.getElementById('diagram-svg');
+    svg.setAttribute('viewBox', `0 0 ${VB.w} ${VB.h}`);
+    svg.setAttribute('width', VB.w); svg.setAttribute('height', VB.h);
+    svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
+    while (svg.firstChild) svg.removeChild(svg.firstChild);
+
+    const defs = el('defs', {}, svg);
+    const pat = el('pattern', { id: 'sd-dotgrid', width: 24, height: 24, patternUnits: 'userSpaceOnUse' }, defs);
+    el('circle', { cx: 12, cy: 12, r: 0.8, fill: '#cbd5e1' }, pat);
+    const mk = el('marker', { id: 'sd-arr', markerWidth: 12, markerHeight: 9, refX: 11, refY: 4.5, orient: 'auto', markerUnits: 'userSpaceOnUse' }, defs);
+    el('polygon', { points: '0 0, 12 4.5, 0 9', fill: '#334155' }, mk);
+
+    el('rect', { width: VB.w, height: VB.h, fill: '#f8fafc' }, svg);
+    el('rect', { width: VB.w, height: VB.h, fill: 'url(#sd-dotgrid)' }, svg);
+
+    // composite first (behind), then edges, then simple states, then labels
+    const gComposite = el('g', { id: 'sd-composite' }, svg);
+    const gEdges = el('g', { id: 'sd-edges' }, svg);
+    const gStates = el('g', { id: 'sd-states' }, svg);
+    const gPseudo = el('g', { id: 'sd-pseudo' }, svg);
+    const gNotes = el('g', { id: 'sd-notes' }, svg);
+    const gLabelBg = el('g', { id: 'sd-labelbg' }, svg);
+    const gLabels = el('g', { id: 'sd-labels' }, svg);
+
+    for (const s of STATES) drawState(s, s.composite ? gComposite : gStates);
+    drawPseudostates(gPseudo);
+    for (const tr of TRANSITIONS) drawTransition(tr, gEdges);
+    for (const tr of TRANSITIONS) drawLabel(tr, gLabels);
+    for (const n of NOTES) drawNote(n, gNotes);
+    drawLegend(svg);
+
+    layoutLabels(svg);
+    wireClicks(svg);
+    // Re-layout whenever measurement could have changed: web fonts arriving, the page
+    // load, and — crucially — the iframe gaining size. Inside a reveal deck the slide's
+    // lazy iframe is laid out while the slide is hidden (display:none), where
+    // getComputedTextLength() returns 0 and every segment collapses onto x=left.
+    // A ResizeObserver on the svg fires when the slide becomes visible; a bounded
+    // retry loop covers browsers where it does not.
+    const relayout = () => layoutLabels(svg);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(relayout);
+    window.addEventListener('load', relayout);
+    window.addEventListener('resize', relayout);
+    window.addEventListener('pageshow', relayout);
+    if (window.ResizeObserver) new ResizeObserver(relayout).observe(svg);
+    let tries = 0;
+    const probe = svg.querySelector('.sd-label text');
+    const retry = () => {
+      if (++tries > 40) return;
+      if (!probe || probe.getComputedTextLength() === 0) { setTimeout(retry, 250); return; }
+      relayout();
+      setTimeout(relayout, 600);   // once more after late font swaps
+    };
+    setTimeout(retry, 250);
+  }
+
+  /* ============================================================
+     3. VP EXPORT — export-buttons.md (state-diagram xmiBody)
+     ============================================================ */
+  function xmlEscape(s) {
+    return String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;').replace(/'/g, '&apos;');
+  }
+  function downloadFile(filename, mimeType, content) {
+    const blob = new Blob([content], { type: mimeType });
+    const url = URL.createObjectURL(blob);
+    const a = Object.assign(document.createElement('a'), { href: url, download: filename });
+    document.body.appendChild(a); a.click();
+    setTimeout(() => { URL.revokeObjectURL(url); a.remove(); }, 1000);
+  }
+  function xmiBody(elements, rels) {
+    const lines = [];
+    lines.push(`    <packagedElement xmi:type="uml:StateMachine" xmi:id="sm_1" name="${xmlEscape(diagramModel.title)}">`);
+    lines.push(`      <region xmi:type="uml:Region" xmi:id="region_1">`);
+    const walk = (els, indent) => {
+      for (const e of els) {
+        if (e.kind === 'pseudostate')
+          lines.push(`${indent}<subvertex xmi:type="uml:Pseudostate" xmi:id="${e.id}" kind="${e.subKind}"/>`);
+        if (e.kind === 'state') {
+          if (e.isComposite) {
+            lines.push(`${indent}<subvertex xmi:type="uml:State" xmi:id="${e.id}" name="${xmlEscape(e.name)}">`);
+            lines.push(`${indent}  <region xmi:type="uml:Region" xmi:id="${e.id}_region">`);
+            walk(e.subElements || [], indent + '    ');
+            lines.push(`${indent}  </region>`);
+            lines.push(`${indent}</subvertex>`);
+          } else {
+            lines.push(`${indent}<subvertex xmi:type="uml:State" xmi:id="${e.id}" name="${xmlEscape(e.name)}"/>`);
+          }
+        }
+      }
+    };
+    walk(elements, '        ');
+    for (const r of rels) if (r.kind === 'transition')
+      lines.push(`        <transition xmi:type="uml:Transition" xmi:id="${r.id}" source="${r.from}" target="${r.to}"${r.event ? ` name="${xmlEscape(r.event)}"` : ''}/>`);
+    lines.push(`      </region>`);
+    lines.push(`    </packagedElement>`);
+    return lines.join('\n');
+  }
+  function exportXMI() {
+    const m = diagramModel;
+    const title = xmlEscape(m.title || 'diagram');
+    const allElements = m.parts.flatMap(p => p.elements);
+    const allRelationships = m.parts.flatMap(p => p.relationships);
+    const body = xmiBody(allElements, allRelationships);
+    const xmi = `<?xml version="1.0" encoding="UTF-8"?>
+<xmi:XMI xmi:version="2.1"
+  xmlns:xmi="http://www.omg.org/XMI"
+  xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML">
+  <uml:Model xmi:id="model_1" name="${title}">
+${body}
+  </uml:Model>
+</xmi:XMI>`;
+    downloadFile(title.replace(/\s+/g, '_') + '.xmi', 'application/xml', xmi);
+  }
+
+  /* ============================================================
+     4. diagramModel — model-shape.md, kind: 'state'
+     ============================================================ */
+  const st = (s, extra) => ({ kind: 'state', id: s.id, name: s.name, isComposite: !!s.composite,
+    statusConstant: s.constant, activities: extra, x: s.x, y: s.y, w: s.w, h: s.h, subElements: [] });
+  const S = Object.fromEntries(STATES.map(s => [s.id, s]));
+  const diagramModel = {
+    kind: 'state',
+    title: 'מחזור החיים של הזמנה בקמפוס — Order',
+    parts: [{
+      id: 'part-1', label: 'Order lifecycle', splitRationale: '',
+      elements: [
+        { kind: 'pseudostate', id: 'initial', subKind: 'initial', x: INITIAL.x, y: INITIAL.y },
+        st(S.awaiting, { entry: ["setStatus('AWAITING_PAYMENT')"], exit: [], do: [] }),
+        Object.assign(st(S.active, { entry: ["setStatus('ACTIVE')"], exit: [], do: [] }), { subElements: [
+          { kind: 'pseudostate', id: 'innerInitial', subKind: 'initial', x: INNER_INITIAL.x, y: INNER_INITIAL.y },
+          st(S.pending, { entry: ["setStatus('PENDING')", 'notifyKitchen()'], exit: [], do: [] }),
+          st(S.prep, { entry: ["setStatus('IN_PREPARATION')"], exit: [], do: ['prepareItems()'] }),
+          st(S.ready, { entry: ["setStatus('READY')", 'notifyStudent()'], exit: [], do: [] })
+        ] }),
+        st(S.collected, { entry: ["setStatus('COLLECTED')", "setClosureReason('COLLECTED')"], exit: [], do: [] }),
+        st(S.cancelled, { entry: ["setStatus('CANCELLED')", "setClosureReason('CANCELLED')", 'refund()'], exit: [], do: [] }),
+        st(S.notcollected, { entry: ["setStatus('NOT_COLLECTED')", "setClosureReason('NOT_COLLECTED')"], exit: [], do: [] }),
+        st(S.archived, { entry: ["setStatus('ARCHIVED')"], exit: [], do: [] }),
+        { kind: 'pseudostate', id: 'final', subKind: 'final', x: FINAL.x, y: FINAL.y }
+      ],
+      relationships: [
+        { kind: 'transition', id: 'T0', from: 'initial', to: 'awaiting', event: '', guard: '', action: '', isSelf: false },
+        { kind: 'transition', id: 'T1', from: 'awaiting', to: 'awaiting', event: 'תשלום נכשל', guard: '', action: 'showError()', isSelf: true },
+        { kind: 'transition', id: 'T2', from: 'awaiting', to: 'active', event: 'תשלום אושר', guard: '', action: 'recordPayment()', isSelf: false },
+        { kind: 'transition', id: 'T3', from: 'awaiting', to: 'final', event: 'ביטול', guard: '', action: 'delete()', isSelf: false },
+        { kind: 'transition', id: 'Tin', from: 'innerInitial', to: 'pending', event: '', guard: '', action: '', isSelf: false },
+        { kind: 'transition', id: 'T4', from: 'pending', to: 'pending', event: 'עדכון שעת איסוף', guard: '', action: 'updatePickupTime()', isSelf: true },
+        { kind: 'transition', id: 'T5', from: 'pending', to: 'prep', event: 'תחילת הכנה', guard: '', action: '', isSelf: false },
+        { kind: 'transition', id: 'T6', from: 'pending', to: 'cancelled', event: 'ביטול ע״י הסטודנט', guard: 'BR-4: לפני תחילת הכנה', action: '', isSelf: false },
+        { kind: 'transition', id: 'T7', from: 'prep', to: 'ready', event: 'סימון מוכן', guard: '', action: '', isSelf: false },
+        { kind: 'transition', id: 'T8', from: 'ready', to: 'collected', event: 'אימות איסוף', guard: 'BR-2: קוד תואם', action: 'markCollected()', isSelf: false },
+        { kind: 'transition', id: 'T9', from: 'ready', to: 'prep', event: 'תיקון', guard: 'מנה חסרה', action: '', isSelf: false },
+        { kind: 'transition', id: 'T10', from: 'ready', to: 'notcollected', event: 'after(60 דקות מזמן האיסוף)', guard: '', action: '', isSelf: false },
+        { kind: 'transition', id: 'T11', from: 'active', to: 'cancelled', event: 'ביטול ע״י הצוות', guard: 'פריט אזל', action: '', isSelf: false },
+        { kind: 'transition', id: 'T12a', from: 'cancelled', to: 'archived', event: 'סגירת יום', guard: '', action: 'archive()', isSelf: false },
+        { kind: 'transition', id: 'T12b', from: 'collected', to: 'archived', event: 'סגירת יום', guard: '', action: 'archive()', isSelf: false },
+        { kind: 'transition', id: 'T12c', from: 'notcollected', to: 'archived', event: 'סגירת יום', guard: '', action: 'archive()', isSelf: false },
+        { kind: 'transition', id: 'T13', from: 'archived', to: 'final', event: 'after(7 שנים)', guard: '', action: 'purge()', isSelf: false }
+        // BR-3 (decided: no refund) is NOT a transition — it is the ABSENT refund() in notcollected's entry.
+      ]
+    }]
+  };
+
+  /* ============================================================
+     Boot — embed mode + render
+     ============================================================ */
+  function boot() {
+    if (location.search.includes('embed=1')) document.body.classList.add('embed');
+    render();
+  }
+  document.addEventListener('DOMContentLoaded', boot);
+  </script>
+</body>
+</html>
