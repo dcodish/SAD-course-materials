@@ -1,0 +1,2933 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>מתודולוגיות פיתוח</title>
+<link rel="stylesheet" href="../web/vendor/reveal/dist/reset.css">
+<link rel="stylesheet" href="../web/vendor/reveal/dist/reveal.css">
+<link rel="stylesheet" href="../web/vendor/reveal/plugin/highlight/monokai.css">
+<link rel="stylesheet" href="../web/theme/sad.css">
+</head>
+<body>
+<div class="reveal">
+  <div class="slides">
+    <section class="title-slide" data-slug="title">
+      <div class="course">ניתוח ועיצוב מערכות מידע</div>
+      <h1>מתודולוגיות פיתוח</h1>
+      <div class="lecture-no">הרצאה 11</div>
+      <img class="cover-img" src="assets/title.png" alt="">
+      <div class="updated">עודכן: 30.08.2026</div>
+    </section>
+    <section class="toc-slide has-acro-footer" data-slug="toc">
+      <h1>סדר היום</h1>
+      <div class="body">
+        <ol class="toc">
+          <li class="active">למה בכלל צריך שיטה</li>
+          <li>מפל מים ואב-טיפוס</li>
+          <li>תוספתי, איטרטיבי וספירלה</li>
+          <li>Agile ו-Scrum</li>
+          <li>בחירה, AI וסיכום</li>
+        </ol>
+      </div>
+    <div class="acro-footer"><span class="acro"><span class="en">AI</span> = <span class="en">Artificial Intelligence</span> · בינה מלאכותית</span></div>
+    </section>
+    <!-- A3 — מתודולוגיה אינה שלב. NEW. Frames the whole lecture as META over everything learned so
+         far: the same eight SDLC phases, three different shapes. Built in HTML (no SVG) so the RTL
+         flow and the phase pills come for free.
+         Picks up the last line of L10's recommendation — "העלאה מדורגת, קפיטריה אחת בסמסטר א׳" —
+         and names it as what it always was: a methodology decision made without saying so. -->
+    <section data-slug="where-we-are" class="has-acro-footer">
+      <div class="sdlc-chip" title="שלב 6 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>פיתוח</div>
+      <style>
+        section[data-slug="where-we-are"] .lead{ background:var(--light-blue); border:1px solid var(--blue); flex:0 0 auto; }
+        section[data-slug="where-we-are"] .lead p{ margin:0; font-weight:700; color:#fff; font-size:17px; line-height:1.4; }
+        section[data-slug="where-we-are"] .lead p b{ color:#fff; }
+        section[data-slug="where-we-are"] .shapes{ flex:1 1 auto; min-height:0; display:grid;
+          grid-template-rows:repeat(3,1fr); gap:10px; }
+        section[data-slug="where-we-are"] .sh{ display:grid; grid-template-columns:180px 1fr;
+          gap:14px; align-items:center; background:#fff; border:2px solid var(--card-border);
+          border-radius:13px; padding:8px 14px; min-height:0; }
+        section[data-slug="where-we-are"] .sh .nm{ font-size:18px; font-weight:800; color:var(--dark-blue); line-height:1.2; }
+        section[data-slug="where-we-are"] .sh .de{ font-size:14px; color:var(--muted); line-height:1.3; margin-top:2px; }
+        section[data-slug="where-we-are"] .track{ display:flex; flex-direction:column; gap:5px; }
+        section[data-slug="where-we-are"] .pass{ display:flex; gap:4px; align-items:center; }
+        section[data-slug="where-we-are"] .ph{ flex:1 1 0; text-align:center; font-size:11.5px; font-weight:700;
+          color:#fff; background:var(--light-blue); border-radius:5px; padding:4px 2px; line-height:1.15;
+          white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+        section[data-slug="where-we-are"] .ph.dim{ background:#C7D8E4; color:#33506a; }
+        section[data-slug="where-we-are"] .pass .tag2{ flex:0 0 74px; font-size:11.5px; font-weight:800;
+          color:var(--orange); text-align:center; }
+        section[data-slug="where-we-are"] .sh.w{ border-color:var(--blue); }
+        section[data-slug="where-we-are"] .sh.i{ border-color:var(--green); }
+        section[data-slug="where-we-are"] .sh.n{ border-color:var(--orange); background:var(--hero-bg); }
+        section[data-slug="where-we-are"] .sh.n .nm{ color:var(--orange); }
+      </style>
+      <h1>מתודולוגיה אינה שלב — היא <b>צורת הצינור</b></h1>
+      <div class="subtitle">אותם שמונה שלבים שאתם מכירים. מה שמשתנה הוא <b>באיזה גודל מנה ובאיזה סדר</b> עוברים בהם</div>
+      <div class="body">
+
+        <div class="card lead">
+          <p>בסוף ההרצאה הקודמת המלצנו ״להעלות בשלבים — קפיטריה אחת בסמסטר א׳״. זו כבר הייתה <b>החלטה מתודולוגית</b>, פשוט בלי לקרוא לה בשם. היום נותנים לה שם.</p>
+        </div>
+
+        <div class="shapes">
+
+          <div class="sh w">
+            <div>
+              <div class="nm">מעבר אחד ארוך</div>
+              <div class="de">כל שלב פעם אחת, לכל המערכת</div>
+            </div>
+            <div class="track">
+              <div class="pass">
+                <span class="tag2">הפרויקט</span>
+                <span class="ph">ייזום</span><span class="ph">מצב קיים</span><span class="ph">דרישות</span><span class="ph">ישימות</span><span class="ph">עיצוב</span><span class="ph">פיתוח</span><span class="ph">בדיקות</span><span class="ph">הטמעה</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="sh i">
+            <div>
+              <div class="nm">מעברים חוזרים</div>
+              <div class="de">כל סבב עובר בכל השלבים — ומשפר את אותה מערכת</div>
+            </div>
+            <div class="track">
+              <div class="pass">
+                <span class="tag2">סבב 1</span>
+                <span class="ph">ייזום</span><span class="ph">מצב קיים</span><span class="ph">דרישות</span><span class="ph">ישימות</span><span class="ph">עיצוב</span><span class="ph">פיתוח</span><span class="ph">בדיקות</span><span class="ph">הטמעה</span>
+              </div>
+              <div class="pass">
+                <span class="tag2">סבב 2</span>
+                <span class="ph dim">ייזום</span><span class="ph dim">מצב קיים</span><span class="ph">דרישות</span><span class="ph">ישימות</span><span class="ph">עיצוב</span><span class="ph">פיתוח</span><span class="ph">בדיקות</span><span class="ph">הטמעה</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="sh n">
+            <div>
+              <div class="nm">פרוסות</div>
+              <div class="de">כל פרוסה היא חלק <b>עובד</b> מהמערכת, מקצה לקצה</div>
+            </div>
+            <div class="track">
+              <div class="pass">
+                <span class="tag2">תפריט + הזמנה</span>
+                <span class="ph dim">ייזום</span><span class="ph dim">מצב קיים</span><span class="ph">דרישות</span><span class="ph dim">ישימות</span><span class="ph">עיצוב</span><span class="ph">פיתוח</span><span class="ph">בדיקות</span><span class="ph">הטמעה</span>
+              </div>
+              <div class="pass">
+                <span class="tag2">תשלום</span>
+                <span class="ph dim">ייזום</span><span class="ph dim">מצב קיים</span><span class="ph">דרישות</span><span class="ph dim">ישימות</span><span class="ph">עיצוב</span><span class="ph">פיתוח</span><span class="ph">בדיקות</span><span class="ph">הטמעה</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <p class="bottom-line">כל מה שלמדתם עד היום הוא <b>שלב</b>. היום לומדים מה מחליט על <b>הסדר, הגודל והחזרתיות</b> שלהם.</p>
+
+      </div>
+      <aside class="notes">
+        השקופית שממקמת את ההרצאה. הטעות הנפוצה של סטודנטים היא לחשוב שמתודולוגיה היא ״עוד נושא״
+        ליד ה-SDLC. היא לא — <b>היא המבנה של ה-SDLC עצמו</b>.
+        <b>לעבור על שלוש השורות</b> ולשאול מה ההבדל: לא השלבים (הם זהים), אלא <b>כמה פעמים עוברים בהם
+        וכמה מערכת בונים בכל פעם</b>.
+        <b>השורה השלישית (פרוסות)</b> היא החשובה: כל פרוסה עוברת מדרישות ועד הטמעה — כלומר בסוף כל
+        פרוסה יש <b>משהו שעובד ואפשר להשתמש בו</b>. שימו לב ששלבי הייזום, המצב הקיים והישימות מעומעמים:
+        הם נעשים פעם אחת בגדול, ולא לכל פרוסה.
+        <b>לחבר להרצאה הקודמת:</b> ההמלצה שכתבנו לוועדה הכילה כבר החלטה מתודולוגית — ״להעלות בשלבים״.
+        כל פעם שמישהו אומר ״נעשה את זה בשלבים״ או ״קודם גרסה בסיסית״ — הוא מקבל את ההחלטה של היום.
+        <b>לשאול את הכיתה בסוף:</b> ״ולמה שלא תמיד נבחר בשורה השלישית?״ ולהשאיר את השאלה פתוחה —
+        התשובה מגיעה לאורך ההרצאה.
+      </aside>
+    <div class="acro-footer"><span class="acro"><span class="en">SDLC</span> = <span class="en">Software Development Life Cycle</span> · מחזור פיתוח תוכנה</span></div>
+    </section>
+    <!-- A4 — Where-are-we transition, flagged on פיתוח. Uses the shared interactive SDLC x roles
+         rail (assets/sdlc_roles_rtl.html), copied from L8/L10, with ?here=dev. Same treatment as
+         every other HTML deck — one asset, one look. -->
+    <section data-slug="sdlc-roles-dev" class="has-acro-footer">
+      <div class="sdlc-chip" title="שלב 6 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>פיתוח</div>
+      <style>
+        /* The shared rail asset is ~640px tall; the embed box is ~525px, so scale it to fit
+           (identical to the L8 / L10 wrappers). */
+        section[data-slug="sdlc-roles-dev"] .embed > iframe{ width:calc(100% / .82); height:calc(100% / .82);
+          transform:scale(.82); transform-origin:top right; }
+      </style>
+      <h1>היכן אנחנו ב-<span class="en">SDLC</span></h1>
+      <div class="subtitle">הצ׳יפ אומר <b>פיתוח</b> — אבל המתודולוגיה קובעת איך רצים <b>בכל</b> המסילה, לא רק בתחנה הזו</div>
+      <div class="body">
+        <div class="embed">
+          <iframe src="assets/sdlc_roles_rtl.html?here=dev" title="SDLC stages and roles" loading="lazy"></iframe>
+        </div>
+      </div>
+      <aside class="notes">
+        להסביר את הבחירה: הצ׳יפ מסמן את שלב הפיתוח, כי שם המתודולוגיה מורגשת הכי חזק — קצב, ספרינטים,
+        מסירות. אבל מתודולוגיה היא <b>החלטה על כל המסילה</b>: היא קובעת מתי נאספות הדרישות, מתי מעצבים
+        ומתי בודקים — ובכמה מנות.
+        <b>לשים לב לשורת התפקידים ברייל:</b> באג׳ייל היא מתערבבת. אין ״שלב המנתח״ ואחריו ״שלב המפתח״ —
+        כולם בצוות אחד, באותו ספרינט. זה שינוי ארגוני, לא רק שינוי בלוח זמנים, וזו אחת הסיבות
+        שארגונים נכשלים במעבר לאג׳ייל: הם משנים את התהליך ולא את המבנה.
+      </aside>
+    <div class="acro-footer"><span class="acro"><span class="en">SDLC</span> = <span class="en">Software Development Life Cycle</span> · מחזור פיתוח תוכנה</span></div>
+    </section>
+    <!-- A5 — משבר התוכנה. REFRESH of source slides 3 + 4, merged. The gap between what hardware
+         could do and what teams could reliably build; the symptoms; and what the crisis actually
+         produced — including methodologies, which is why this lecture exists.
+         Modernised with the point the source leaves implicit: faster machines never solved it. And
+         closed with the question that sets up section ה: does AI dissolve the crisis, or move it? -->
+    <section data-slug="software-crisis" class="has-acro-footer">
+      <div class="sdlc-chip" title="שלב 6 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>פיתוח</div>
+      <style>
+        section[data-slug="software-crisis"] .main{ flex:1 1 auto; min-height:0; display:grid;
+          grid-template-columns:1fr 1fr 1fr; gap:12px; align-items:stretch; }
+        section[data-slug="software-crisis"] .p{ background:#fff; border:2px solid var(--card-border);
+          border-radius:13px; padding:9px 13px; display:flex; flex-direction:column; min-height:0; }
+        section[data-slug="software-crisis"] .p h3{ margin:0 0 4px; font-size:17.5px; color:var(--dark-blue); }
+        section[data-slug="software-crisis"] .p .sub{ font-size:13px; color:var(--muted); margin-bottom:6px; line-height:1.3; }
+        section[data-slug="software-crisis"] .p ul.bullets > li{ font-size:15px !important; margin-bottom:5px; }
+        section[data-slug="software-crisis"] .p.sym{ border-color:var(--red); }
+        section[data-slug="software-crisis"] .p.sym h3{ color:var(--red); }
+        section[data-slug="software-crisis"] .p.out{ border-color:var(--green); }
+        section[data-slug="software-crisis"] .p.out h3{ color:var(--green); }
+        section[data-slug="software-crisis"] .p .hl{ margin-top:auto; background:var(--card-bg); border-radius:9px;
+          padding:5px 10px; font-size:14px; line-height:1.32; color:var(--body); }
+        section[data-slug="software-crisis"] .p .hl b{ color:var(--dark-blue); }
+        section[data-slug="software-crisis"] .p.out .hl{ background:#EAF6EC; }
+        section[data-slug="software-crisis"] .p.out .hl b{ color:var(--green); }
+      </style>
+      <h1>משבר התוכנה — <span class="en">The Software Crisis</span></h1>
+      <div class="subtitle">הפער בין <b>מה שאפשר להריץ</b> לבין <b>מה שאנחנו מצליחים לבנות באופן אמין</b></div>
+      <div class="body">
+
+        <div class="main">
+
+          <div class="p">
+            <h3>מה שקרה לחומרה</h3>
+            <div class="sub">עקומה שעולה בלי הפסקה</div>
+            <ul class="bullets">
+              <li>המחשב <b>מהיר יותר</b> — חוק מור</li>
+              <li>המחשב <b>זול יותר</b> — מחירי רכיבים יורדים בקצב של 25%–40% בשנה</li>
+              <li>צריכת אנרגיה קטנה פי אלפים לאותה עוצמה</li>
+              <li>מזעור — הכול נכנס לכיס</li>
+            </ul>
+            <div class="hl">בשנות ה-70 ההשקעה עברה מהחומרה ל<b>תוכנה</b> — הרכיב שדורש בעיקר <b>אנשים</b>, ולכן הפך ליקר ביותר.</div>
+          </div>
+
+          <div class="p sym">
+            <h3>מה שקרה לתוכנה</h3>
+            <div class="sub">הסימפטומים — ומה שמאחוריהם</div>
+            <ul class="bullets">
+              <li><b>לא עומדים בדרישות</b> — המערכת לא עושה מה שצריך</li>
+              <li><b>אמינות</b> — נופלת, מחשבת לא נכון</li>
+              <li><b>עלות</b> — חורגת פי כמה</li>
+              <li><b>גמישות</b> — כל שינוי קטן יקר ומסוכן</li>
+            </ul>
+            <div class="hl">הסיבה: <b>מורכבות</b>. הרבה דרישות, הרבה מודולים, הרבה בדיקות, הרבה מפתחים ומשתמשים — <b>ובעיות תקשורת ביניהם</b>. מערכות נעשו מורכבות מכדי לנהל אותן.</div>
+          </div>
+
+          <div class="p out">
+            <h3>ומה זה הוליד</h3>
+            <div class="sub">התשובות שהתחום פיתח</div>
+            <ul class="bullets">
+              <li>כלים וסביבות פיתוח</li>
+              <li>שפות תכנות ופרדיגמות חדשות</li>
+              <li><b>שפות מידול</b> — <span class="en">UML</span>, <span class="en">BPMN</span></li>
+              <li>ארכיטקטורה</li>
+              <li>שיטות בדיקה</li>
+              <li><b>מתודולוגיות פיתוח</b></li>
+            </ul>
+            <div class="hl">שימו לב מה <b>לא</b> פתר את המשבר: מחשבים מהירים יותר. מה שכן — <b>שיטה</b>. וכל הקורס הזה הוא ברשימה הזו.</div>
+          </div>
+
+        </div>
+
+        <div class="callout ai">
+          <span class="label">🤖 והשאלה של 2026</span>
+          אם המשבר נולד מכך שכתיבת תוכנה איטרת ויקרה — האם <span class="en">AI</span> שמייצר קוד במהירות <b>מסיים אותו</b>? נחזור לזה בסוף ההרצאה. רמז: הוא לא מבטל את המורכבות — הוא <b>מזיז את הצוואר</b>.
+        </div>
+
+      </div>
+      <aside class="notes">
+        <b>הפואנטה ההיסטורית:</b> בשנות ה-60–70 החומרה השתפרה בקצב מסחרר, והתוכנה — לא. ככל שהחומרה
+        אפשרה מערכות גדולות יותר, כך גדל הפער בין מה שאפשר להריץ לבין מה שמצליחים לבנות. זה ״המשבר״.
+        <b>ההיפוך הכלכלי:</b> בעבר עיקר ההשקעה הייתה בחומרה. מרגע שמחירי הרכיבים צנחו, התוכנה — שדורשת
+        כוח אדם — הפכה לרכיב היקר. וכוח אדם לא מתייעל לפי חוק מור.
+        <b>העמודה השלישית היא הפואנטה:</b> להצביע על ״שפות מידול״ ו״מתודולוגיות״ ולומר — <b>זה הקורס
+        הזה</b>. BPMN, UML, תרשימי מחלקות ומצבים הם תוצרים ישירים של המשבר הזה. לא למדנו אותם כי הם
+        יפים, אלא כי בלעדיהם מערכות גדולות נכשלות.
+        <b>ומה שלא פתר:</b> שווה לעצור. מחשבים היום מהירים פי מיליון, והפרויקטים עדיין חורגים. כי הבעיה
+        מעולם לא הייתה מהירות החישוב — היא הייתה <b>תקשורת, מורכבות והבנה של הצורך</b>.
+        <b>שאלת ה-AI</b> — לא לענות עליה עכשיו. לשמור אותה לשקופית ה-🤖 בחלק ה׳. אם סטודנט מתעקש,
+        התשובה בקצרה: הכתיבה נעשית זולה, ולכן הצוואר עובר להגדרה נכונה ולבדיקה.
+      </aside>
+    <div class="acro-footer"><span class="acro"><span class="en">BPMN</span> = <span class="en">Business Process Model and Notation</span> · מידול וסימון תהליכים עסקיים</span> &nbsp;·&nbsp; <span class="acro"><span class="en">UML</span> = <span class="en">Unified Modeling Language</span> · שפת מידול אחידה</span> &nbsp;·&nbsp; <span class="acro"><span class="en">AI</span> = <span class="en">Artificial Intelligence</span> · בינה מלאכותית</span></div>
+    </section>
+    <!-- A6 — מה מתודולוגיה מחליטה. REFRESH of source slide 7, plus the lecture's organising device:
+         THE FOUR QUESTIONS. Every model from here on answers these same four, in the same four
+         slots, on a card with the same look — which is what turns a list of models into a comparison.
+         (Net-new; flagged in REDESIGN_OUTLINE.md open decision 2.) -->
+    <section data-slug="what-is-methodology">
+      <div class="sdlc-chip" title="שלב 6 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>פיתוח</div>
+      <style>
+        section[data-slug="what-is-methodology"] .def{ flex:0 0 auto; background:var(--light-blue);
+          border:1px solid var(--blue); }
+        section[data-slug="what-is-methodology"] .def p{ margin:0; color:#fff; font-size:18px; line-height:1.44; font-weight:700; }
+        section[data-slug="what-is-methodology"] .def p b{ color:#fff; }
+        section[data-slug="what-is-methodology"] .def p .en{ color:#fff; }
+        section[data-slug="what-is-methodology"] .qs{ flex:1 1 auto; min-height:0; display:grid;
+          grid-template-columns:1fr 1fr; grid-auto-rows:1fr; gap:12px; }
+        section[data-slug="what-is-methodology"] .q{ background:#fff; border:2px solid var(--card-border);
+          border-radius:14px; padding:10px 16px; display:flex; flex-direction:column; justify-content:center; }
+        section[data-slug="what-is-methodology"] .q .h{ font-size:22px; font-weight:800; color:var(--dark-blue);
+          display:flex; align-items:center; gap:10px; line-height:1.2; }
+        section[data-slug="what-is-methodology"] .q .h .n{ flex:0 0 32px; width:32px; height:32px; border-radius:50%;
+          background:var(--orange); color:#fff; font-size:17px; text-align:center; line-height:32px; }
+        section[data-slug="what-is-methodology"] .q .d{ font-size:17px; line-height:1.4; color:var(--body); margin-top:5px; }
+        section[data-slug="what-is-methodology"] .q .d b{ color:var(--orange); }
+      </style>
+      <h1>מה מתודולוגיה בעצם מחליטה</h1>
+      <div class="subtitle">ארבע שאלות. כל מודל שנראה היום עונה עליהן — ולכן אפשר יהיה להשוות ביניהם</div>
+      <div class="body">
+
+        <div class="card def">
+          <p>מתודולוגיה היא <b>מסגרת שלפיה מפתחים את המערכת</b> — הכלי שבו מנהל/ת הפרויקט מנווט/ת את תהליך הפיתוח. <span class="en">It is a framework in which the system is developed by.</span></p>
+        </div>
+
+        <div class="qs">
+
+          <div class="q">
+            <div class="h"><span class="n">1</span>מה גודל המנה?</div>
+            <div class="d">כמה מהמערכת נבנה לפני שמישהו רואה משהו עובד? <b>הכול בבת אחת</b> — או פרוסה קטנה בכל פעם?</div>
+          </div>
+
+          <div class="q">
+            <div class="h"><span class="n">2</span>מה הסדר?</div>
+            <div class="d">שלבים ברצף, כל אחד פעם אחת — או <b>מעברים חוזרים</b> שבכל אחד מהם עושים קצת מהכול?</div>
+          </div>
+
+          <div class="q">
+            <div class="h"><span class="n">3</span>מתי הלקוח רואה?</div>
+            <div class="d">המפגש הראשון עם תוכנה <b>עובדת</b>: בסוף הפרויקט, או כל שבועיים? זה קובע כמה מוקדם נגלה שטעינו.</div>
+          </div>
+
+          <div class="q">
+            <div class="h"><span class="n">4</span>איך מטפלים בשינוי?</div>
+            <div class="d">בקשת שינוי היא <b>הפרעה</b> שצריך לנהל ולתמחר — או שהיא <b>התוכנית עצמה</b>?</div>
+          </div>
+
+        </div>
+
+        <p class="bottom-line">אין מודל שעונה ״נכון״ על כל הארבע. יש מודל שעונה <b>נכון לפרויקט שלכם</b>.</p>
+
+      </div>
+      <aside class="notes">
+        זו שקופית המפתח של ההרצאה. ארבע השאלות חוזרות על כרטיס בכל מודל, בדיוק באותם ארבעה מקומות —
+        ולכן אפשר להשוות ולא רק לזכור רשימה.
+        <b>לחדד את ההגדרה:</b> מתודולוגיה איננה כלי ואיננה טכנולוגיה. היא <b>כלי ניהולי</b>: איך מנווטים
+        את הפרויקט. ולכן היא נבחרת על ידי מי שמנהל, לא על ידי מי שמתכנת.
+        <b>שאלה 1 (גודל המנה)</b> היא השורש של כל השאר. ברגע שהמנה קטנה — הלקוח רואה מוקדם (3),
+        ולכן שינוי הופך לזול (4), ולכן משתלם לחזור על השלבים (2).
+        <b>שאלה 3 היא המדד המעשי:</b> ״כמה זמן עובר עד שמישהו חיצוני נוגע בתוכנה עובדת?״ זו השאלה
+        שהכי מנבאת אם פרויקט ייכשל. אם התשובה היא ״תשעה חודשים״ — יש סיכון גבוה שבנינו את הדבר הלא נכון.
+        <b>שאלה 4</b> היא ההבדל התרבותי העמוק בין מפל מים לאג׳ייל: אצל האחד שינוי הוא חריגה שמנוהלת
+        בוועדת שינויים, אצל השני הוא מה שמצפים לו.
+        <b>ולומר בפירוש:</b> אין תשובה נכונה אחת. בסוף ההרצאה נתרגל בחירה לפי סוג הפרויקט.
+      </aside>
+    </section>
+    <!-- B1 — מודל מפל המים. REFRESH of source slides 9 + 10, merged. The cascade is drawn in
+         HTML/CSS (stepped blocks) rather than SVG — no diagram text means no RTL anchoring risk, and
+         the staircase reads naturally right-to-left in an RTL page.
+         Each stage carries its verification, because that IS the model's discipline. The
+         change-in-requirements arrow that runs all the way back is the whole cost of the model,
+         shown as its own band under the cascade. -->
+    <section data-slug="waterfall">
+      <div class="sdlc-chip" title="שלב 6 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>פיתוח</div>
+      <style>
+        section[data-slug="waterfall"] .main{ flex:1 1 auto; min-height:0; display:grid;
+          grid-template-columns:1.45fr 1fr; gap:14px; align-items:stretch; }
+        section[data-slug="waterfall"] .fallbox{ background:#fff; border:1px solid var(--card-border);
+          border-radius:14px; padding:9px 12px; display:flex; flex-direction:column; min-height:0; }
+        section[data-slug="waterfall"] .cascade{ flex:1 1 auto; min-height:0; display:flex;
+          flex-direction:column; justify-content:space-between; gap:3px; }
+        section[data-slug="waterfall"] .stg{ display:flex; align-items:center; gap:8px; }
+        section[data-slug="waterfall"] .stg .pad{ flex:0 0 auto; }
+        section[data-slug="waterfall"] .stg .box{ flex:0 0 auto; background:var(--light-blue); color:#fff;
+          border-radius:8px; padding:5px 14px; font-size:15px; font-weight:800; white-space:nowrap; }
+        section[data-slug="waterfall"] .stg .ver{ font-size:12.5px; color:var(--muted); white-space:nowrap; }
+        section[data-slug="waterfall"] .stg.tail .box{ background:var(--gray); }
+        section[data-slug="waterfall"] .backband{ margin-top:8px; background:#FBEAEA; border:1.5px solid var(--red);
+          border-radius:10px; padding:6px 12px; font-size:14px; line-height:1.34; color:var(--body); }
+        section[data-slug="waterfall"] .backband b{ color:var(--red); }
+        section[data-slug="waterfall"] .side{ display:flex; flex-direction:column; gap:10px; min-height:0; }
+        section[data-slug="waterfall"] .r{ background:#fff; border:2px solid var(--card-border); border-radius:13px;
+          padding:8px 13px; flex:1 1 0; display:flex; flex-direction:column; justify-content:center; }
+        section[data-slug="waterfall"] .r .h{ font-size:17px; font-weight:800; color:var(--dark-blue); }
+        section[data-slug="waterfall"] .r .d{ font-size:15px; line-height:1.38; color:var(--body); margin-top:2px; }
+        section[data-slug="waterfall"] .r .d b{ color:var(--dark-blue); }
+      </style>
+      <h1>מודל מפל המים — <span class="en">Waterfall</span></h1>
+      <div class="subtitle">המודל המובנה ביותר: שלבים סדורים, וכל שלב זורם אל הבא אחריו</div>
+      <div class="body">
+
+        <div class="main">
+
+          <div class="fallbox">
+            <div class="cascade">
+              <div class="stg"><span class="pad" style="width:0"></span><span class="box">דרישות</span><span class="ver">← אימות</span></div>
+              <div class="stg"><span class="pad" style="width:38px"></span><span class="box">אפיון</span><span class="ver">← אימות</span></div>
+              <div class="stg"><span class="pad" style="width:76px"></span><span class="box">אפיון מפורט</span><span class="ver">← אימות</span></div>
+              <div class="stg"><span class="pad" style="width:114px"></span><span class="box">עיצוב</span><span class="ver">← אימות</span></div>
+              <div class="stg"><span class="pad" style="width:152px"></span><span class="box">מימוש</span><span class="ver">← אימות</span></div>
+              <div class="stg"><span class="pad" style="width:190px"></span><span class="box">הטמעה ואינטגרציה</span><span class="ver">← אישור</span></div>
+              <div class="stg tail"><span class="pad" style="width:228px"></span><span class="box">הפעלה מבצעית</span></div>
+              <div class="stg tail"><span class="pad" style="width:266px"></span><span class="box">תחזוקה ← פרישה</span></div>
+            </div>
+            <div class="backband">
+              <b>ומה קורה כששינוי בדרישות מגיע בשלב המימוש?</b> חוזרים אחורה דרך <b>כל</b> השלבים — דרישות, אפיון, עיצוב — ומעדכנים כל מסמך בדרך. זו העלות האמיתית של המודל, והיא גדלה ככל שמתקדמים.
+            </div>
+          </div>
+
+          <div class="side">
+            <div class="r">
+              <div class="h">הפלט של כל שלב הוא הקלט של הבא</div>
+              <div class="d">מסמך הדרישות מזין את האפיון, האפיון מזין את העיצוב, העיצוב מזין את הקוד. <b>שלב לא מתחיל לפני שקודמו אושר.</b></div>
+            </div>
+            <div class="r">
+              <div class="h">אימות בכל שלב</div>
+              <div class="d">אחרי כל שלב בודקים שהתוצר נכון <b>לפני</b> שממשיכים. זו המשמעת של המודל — וגם מה שהופך אותו לאיטי.</div>
+            </div>
+            <div class="r">
+              <div class="h">יש חפיפה ופעילות גומלין</div>
+              <div class="d">בפועל שלבים עוקבים <b>חופפים בזמן</b>, ושלב יכול לעדכן את קודמו. ״מפל טהור״ הוא ציור, לא פרויקט.</div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+      <aside class="notes">
+        <b>המודל המובנה ביותר</b>, וגם הראשון שנוסח. השלבים מוגדרים וסדורים, וכל שלב זורם לבא —
+        כמו מפל.
+        <b>שתי תכונות מגדירות:</b> (1) הפלט של כל שלב הוא הקלט של הבא; (2) יש נקודת אימות בין שלבים.
+        זו לא ביורוקרטיה — זה הרעיון: לתפוס טעות במסמך, כשהיא זולה, ולא בקוד.
+        <b>ולומר את הניואנס שכולם מפספסים:</b> גם ורסיות מקוריות של המודל תיארו <b>חפיפת זמנים</b> בין
+        שלבים עוקבים ואפשרות לעדכן שלב קודם. ה״מפל הטהור״ שבו אין חזרה אחורה הוא קריקטורה שאיש לא
+        באמת הציע. אבל גם עם חפיפה — כיוון הזרימה אחד.
+        <b>הפס האדום הוא הלב:</b> לשאול את הכיתה — ״נניח שאחרי חמישה חודשי פיתוח מנהלת הקפיטריה אומרת
+        ׳שכחתי, צריך גם הזמנות מראש לשעת צהריים׳. מה קורה?״ התשובה: חוזרים לדרישות, מעדכנים אפיון,
+        מעדכנים עיצוב, ורק אז קוד. <b>עלות השינוי עולה אקספוננציאלית עם השלב שבו הוא מתגלה</b> — וזו
+        ההצדקה של כל שאר המודלים בהרצאה.
+        <b>לחבר לארבע השאלות:</b> גודל מנה — הכול. סדר — רצף. הלקוח רואה — בסוף. שינוי — הפרעה יקרה.
+      </aside>
+    </section>
+    <!-- B2 — מפל מים: יתרונות, חסרונות, ומתי כן. MERGE of source slides 11 + 12. Pros and cons side
+         by side, then the four "when it is actually right" conditions, then the four-question card
+         that every model in this deck carries in the same four slots (introduced on A6).
+         Over-spec / gold plating is explained rather than named, because it is the failure students
+         will actually commit in their own project. -->
+    <section data-slug="waterfall-when">
+      <div class="sdlc-chip" title="שלב 6 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>פיתוח</div>
+      <style>
+        section[data-slug="waterfall-when"] .main{ flex:1 1 auto; min-height:0; display:grid;
+          grid-template-columns:1fr 1fr 1.05fr; gap:12px; align-items:stretch; }
+        section[data-slug="waterfall-when"] .p{ background:#fff; border:2px solid var(--card-border);
+          border-radius:13px; padding:9px 13px; display:flex; flex-direction:column; min-height:0; }
+        section[data-slug="waterfall-when"] .p h3{ margin:0 0 5px; font-size:17.5px; color:var(--dark-blue); }
+        section[data-slug="waterfall-when"] .p.pro{ border-color:var(--green); }
+        section[data-slug="waterfall-when"] .p.pro h3{ color:var(--green); }
+        section[data-slug="waterfall-when"] .p.con{ border-color:var(--red); }
+        section[data-slug="waterfall-when"] .p.con h3{ color:var(--red); }
+        section[data-slug="waterfall-when"] .p.when{ border-color:var(--orange); background:var(--hero-bg); }
+        section[data-slug="waterfall-when"] .p.when h3{ color:var(--orange); }
+        section[data-slug="waterfall-when"] .p ul.bullets > li{ font-size:15px !important; margin-bottom:6px; }
+        section[data-slug="waterfall-when"] .p .note{ margin-top:auto; background:var(--card-bg); border-radius:9px;
+          padding:5px 10px; font-size:13.5px; line-height:1.32; color:var(--muted); }
+        section[data-slug="waterfall-when"] .p.when .note{ background:#fff; }
+        section[data-slug="waterfall-when"] .p .note b{ color:var(--dark-blue); }
+        /* the shared four-question card, used identically on every model slide */
+        section[data-slug="waterfall-when"] .fourq{ flex:0 0 auto; display:grid; grid-template-columns:repeat(4,1fr);
+          gap:9px; }
+        section[data-slug="waterfall-when"] .fq{ background:var(--tint-blue); border-radius:10px; padding:5px 11px; }
+        section[data-slug="waterfall-when"] .fq .k{ font-size:12px; font-weight:800; color:var(--light-blue); }
+        section[data-slug="waterfall-when"] .fq .v{ font-size:15px; font-weight:700; color:var(--dark-blue); line-height:1.3; }
+      </style>
+      <h1>מפל מים — יתרונות, חסרונות, ומתי הוא דווקא נכון</h1>
+      <div class="subtitle">המודל שהכי קל להתלוצץ עליו — ובכל זאת המודל הנכון לכמה סוגי פרויקטים</div>
+      <div class="body">
+
+        <div class="main">
+
+          <div class="p pro">
+            <h3>יתרונות</h3>
+            <ul class="bullets">
+              <li><b>תקורות מעבר נמוכות</b> — פחות בזבוז בין שלב לשלב, פחות תיאום חוזר</li>
+              <li><b>קל לניהול</b> — ברור מי עושה מה ומתי, ומה מצב הפרויקט</li>
+              <li><b>מסודר ומתועד</b> — כל שלב מסתיים במסמך מאושר</li>
+              <li>קל לתמחר ולחתום עליו <b>בחוזה</b></li>
+            </ul>
+            <div class="note">בגלל השורה האחרונה — <b>מכרזים ממשלתיים</b> עדיין מנוסחים כך.</div>
+          </div>
+
+          <div class="p con">
+            <h3>חסרונות</h3>
+            <ul class="bullets">
+              <li><b>הלקוח רואה את המערכת רק כשהיא מוכנה</b> — זמן רב אחרי שהגדיר את הדרישות. ובינתיים גם הדרישות וגם הטכנולוגיה השתנו</li>
+              <li><b>הגדרת יתר</b> — כשצריך להחליט הכול מראש, מוסיפים ״ליתר ביטחון״ דרישות שאיש לא ישתמש בהן</li>
+              <li><b>הלחץ מתרכז בסוף</b>, אצל המתכנתים: כל עיכוב קודם נאכל מזמן הפיתוח</li>
+            </ul>
+            <div class="note">שינוי שמתגלה מאוחר <b>עולה פי כמה</b> משינוי שמתגלה מוקדם.</div>
+          </div>
+
+          <div class="p when">
+            <h3>מתי כן להשתמש</h3>
+            <ul class="bullets">
+              <li><b>פרויקט קטן יחסית</b> — כלל אצבע: עד 6 חודשים, עד 6 אנשים</li>
+              <li><b>הדרישות מוגדרות היטב ולא משתנות</b></li>
+              <li><b>קיימת כבר מערכת דומה</b> — יודעים מה בונים</li>
+              <li><b>קריטיות או רגולציה גבוהות</b> — מערכות רפואיות, תעופה, בטיחות: שם התיעוד והאימות אינם תקורה אלא <b>דרישה</b></li>
+            </ul>
+            <div class="note">מכשיר רפואי לא ״נשחרר גרסה ונראה״. <b>יש דברים שאסור ללמוד תוך כדי.</b></div>
+          </div>
+
+        </div>
+
+        <div class="fourq">
+          <div class="fq"><div class="k">1 · גודל המנה</div><div class="v">כל המערכת בבת אחת</div></div>
+          <div class="fq"><div class="k">2 · הסדר</div><div class="v">רצף, מעבר אחד</div></div>
+          <div class="fq"><div class="k">3 · הלקוח רואה</div><div class="v">בסוף בלבד</div></div>
+          <div class="fq"><div class="k">4 · שינוי</div><div class="v">הפרעה יקרה שמנוהלת</div></div>
+        </div>
+
+      </div>
+      <aside class="notes">
+        <b>תקורות מעבר</b> — העלויות והמאמץ שנדרשים במעבר בין שלב לשלב (העברת ידע, תיאום, תיעוד).
+        במפל מים הן נמוכות דווקא כי עוברים פעם אחת.
+        <b>הגדרת יתר (over-spec)</b> — שווה זמן, כי הסטודנטים יעשו את זה בפרויקט שלהם. כשצריך להגדיר
+        הכול מראש ואי אפשר לתקן אחר כך, כולם מוסיפים ״ליתר ביטחון״. התוצאה היא <b>gold plating</b>:
+        פיצ׳רים שאיש לא ביקש, שעולים כסף, מסבכים את המערכת, ואף אחד לא ישתמש בהם. מחקרים חוזרים
+        מראים שחלק גדול מהפיצ׳רים במערכות ארגוניות כמעט לא בשימוש.
+        <b>הלחץ בסוף</b> — כרונולוגיה מוכרת: הדרישות התעכבו בחודש, האפיון בחודש, העיצוב בשבועיים —
+        ותאריך המסירה לא זז. מי סופג? הפיתוח והבדיקות. ומה נחתך ראשון? הבדיקות.
+        <b>העמודה הכתומה חשובה מאוד פדגוגית:</b> הסטודנטים שומעים בשוק ש״מפל מים זה מיושן״. זה לא נכון
+        כשהתשובה לארבע השאלות מתאימה. תוכנה למשאבת אינסולין לא מפותחת בספרינטים עם ״נשחרר ונראה״ —
+        שם נדרשת ולידציה רגולטורית מלאה לפני כל שחרור.
+        <b>וכלל 6/6</b> — לומר שהוא כלל אצבע ולא חוק, ולהמשיך לטבלת הגדלים בשקופית הבאה.
+      </aside>
+    </section>
+    <!-- B3 — קטן, בינוני, גדול. KEEP of source slide 13 (the sizing table), with the framing the
+         source leaves implicit: this is a reference for answering "is the 6/6 rule even relevant
+         here", and the row that actually decides the methodology is the requirements row, not the
+         headcount row. -->
+    <section data-slug="project-size">
+      <div class="sdlc-chip" title="שלב 6 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>פיתוח</div>
+      <style>
+        section[data-slug="project-size"] table.sad{ font-size:16px; }
+        section[data-slug="project-size"] table.sad th{ font-size:16px; padding:8px 10px; }
+        section[data-slug="project-size"] table.sad td{ padding:7px 11px; }
+        section[data-slug="project-size"] table.sad td.k{ font-weight:700; color:var(--dark-blue); width:20%; }
+        section[data-slug="project-size"] table.sad tr.key td{ background:var(--hero-bg) !important; }
+        section[data-slug="project-size"] table.sad tr.key td.k{ color:var(--orange); }
+        section[data-slug="project-size"] .wrap{ flex:1 1 auto; min-height:0; display:flex; flex-direction:column; }
+        section[data-slug="project-size"] .cols{ flex:0 0 auto; gap:12px; margin-top:9px; }
+        section[data-slug="project-size"] .cols .callout{ margin:0; }
+      </style>
+      <h1>קטן, בינוני, גדול — קווים מנחים</h1>
+      <div class="subtitle">אין הגדרה רשמית. אלה כללי אצבע — והם מספיקים כדי לדעת איזו שאלה לשאול</div>
+      <div class="body">
+
+        <div class="wrap">
+          <table class="sad">
+            <tr>
+              <th>קריטריון</th>
+              <th>פרויקט קטן</th>
+              <th>פרויקט בינוני</th>
+              <th>פרויקט גדול</th>
+            </tr>
+            <tr><td class="k">משך זמן</td><td>עד 6 חודשים</td><td>6–18 חודשים</td><td>מעל 18 חודשים</td></tr>
+            <tr><td class="k">מספר עובדים</td><td>1–6 מפתחים</td><td>6–15 עובדים</td><td>מעל 15, כולל צוותים מקבילים</td></tr>
+            <tr class="key"><td class="k">היקף דרישות</td><td>מוגדר היטב, מצומצם</td><td>בינוני, עשוי להשתנות</td><td>רחב ומורכב, דורש ניהול דרישות</td></tr>
+            <tr><td class="k">מורכבות טכנולוגית</td><td>טכנולוגיות מוכרות</td><td>שילוב רכיבים או ממשקים</td><td>שילוב מערכות, טכנולוגיות חדשות</td></tr>
+            <tr><td class="k">תלות חיצונית</td><td>כמעט ואין</td><td>מספר תלויות</td><td>תלות בגורמים וספקים רבים</td></tr>
+            <tr><td class="k">חשיפה לסיכון</td><td>נמוכה</td><td>בינונית</td><td>גבוהה — רגולציה, שוק, ארגון</td></tr>
+            <tr><td class="k">עלות</td><td>אלפים עד עשרות אלפים</td><td>מאות אלפים</td><td>מיליונים ומעלה</td></tr>
+          </table>
+
+          <div class="cols">
+            <div class="callout warn">
+              <span class="label">⚠️ השורה שבאמת מכריעה</span>
+              לא כמות האנשים ולא התקציב — אלא <b>היקף הדרישות ויציבותן</b>. פרויקט קטן עם דרישות שלא ברורות לאף אחד מסוכן יותר מפרויקט גדול עם דרישות יציבות.
+            </div>
+            <div class="callout ai">
+              <span class="label">ובקמפוס</span>
+              כ-9 חודשים, צוות קטן, שני ממשקים למערכות האוניברסיטה, ודרישות ש<b>חלקן עוד לא ידועות</b> (איך המטבח באמת יעבוד) — <b>פרויקט בינוני</b>. כלל ה-6/6 של מפל המים כבר לא מתקיים.
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <aside class="notes">
+        להבהיר מיד: <b>אלה קווים מנחים בלבד</b>, לא הגדרה מקובלת. הערך שלהם הוא בכך שהם נותנים שפה
+        משותפת בדיון — ״זה פרויקט בינוני״ אומר משהו.
+        <b>השורה המודגשת</b> היא הפואנטה, ושווה לעצור עליה. הסטודנטים ימדדו גודל לפי תקציב או מספר
+        אנשים; זה לא מה שקובע מתודולוגיה. <b>יציבות הדרישות</b> קובעת. פרויקט של שלושה חודשים שבו
+        אף אחד לא יודע מה הוא רוצה — לא יעבוד במפל מים; פרויקט של שנתיים עם מפרט תקני מלא — כן יעבוד.
+        <b>לשאול את הכיתה</b> לפני החשיפה של הקופסה הכחולה: ״לפי הטבלה, מה גודלו של פרויקט הקמפוס?״
+        ואז להצביע על מה שנובע מזה: בינוני, ולכן כלל ה-6/6 לא מתקיים, ולכן מפל מים לא מובן מאליו.
+        ההכרעה עצמה מגיעה בחלק ה׳ — כאן רק שותלים אותה.
+        להזכיר שהטבלה שימושית גם לפרויקט המסכם שלהם: היא עוזרת להצדיק את בחירת המתודולוגיה במסמך.
+      </aside>
+    </section>
+    <!-- B4 — אב-טיפוס. REFRESH of source slides 14 + 17. What a prototype is FOR (it is a
+         requirements instrument, not a development model), what it buys, and what it costs.
+         The framing that matters and the source leaves implicit: a prototype is the cheapest way to
+         discover that the requirement you wrote down is not the requirement the user has. -->
+    <section data-slug="prototyping" class="has-acro-footer">
+      <div class="sdlc-chip" title="שלב 6 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>פיתוח</div>
+      <style>
+        section[data-slug="prototyping"] .lead{ background:var(--light-blue); border:1px solid var(--blue); flex:0 0 auto; }
+        section[data-slug="prototyping"] .lead p{ margin:0; font-weight:700; color:#fff; font-size:17px; line-height:1.4; }
+        section[data-slug="prototyping"] .lead p b{ color:#fff; }
+        section[data-slug="prototyping"] .main{ flex:1 1 auto; min-height:0; display:grid;
+          grid-template-columns:1.1fr 1fr 1fr; gap:12px; align-items:stretch; }
+        section[data-slug="prototyping"] .p{ background:#fff; border:2px solid var(--card-border);
+          border-radius:13px; padding:9px 13px; display:flex; flex-direction:column; min-height:0; }
+        section[data-slug="prototyping"] .p h3{ margin:0 0 5px; font-size:17.5px; color:var(--dark-blue); }
+        section[data-slug="prototyping"] .p.pro{ border-color:var(--green); }
+        section[data-slug="prototyping"] .p.pro h3{ color:var(--green); }
+        section[data-slug="prototyping"] .p.con{ border-color:var(--red); }
+        section[data-slug="prototyping"] .p.con h3{ color:var(--red); }
+        section[data-slug="prototyping"] .p ul.bullets > li{ font-size:15px !important; margin-bottom:6px; }
+        section[data-slug="prototyping"] .p .note{ margin-top:auto; background:var(--card-bg); border-radius:9px;
+          padding:5px 10px; font-size:13.5px; line-height:1.32; color:var(--muted); }
+        section[data-slug="prototyping"] .p .note b{ color:var(--dark-blue); }
+        section[data-slug="prototyping"] .quote{ background:var(--hero-bg); border-inline-start:5px solid var(--orange);
+          border-radius:9px; padding:6px 11px; font-size:15px; line-height:1.36; color:var(--body); margin-top:6px; }
+        section[data-slug="prototyping"] .quote b{ color:var(--orange); }
+      </style>
+      <h1>אב-טיפוס — <span class="en">Prototyping</span></h1>
+      <div class="subtitle">מודל שנותן למשתמשים משהו לגעת בו <b>מוקדם</b>, כדי להבין מה הם באמת צריכים</div>
+      <div class="body">
+
+        <div class="card lead">
+          <p>אב-טיפוס אינו בעיקר מודל פיתוח — הוא <b>כלי לאיסוף דרישות</b>. הדרך הזולה ביותר לגלות שהדרישה שכתבנו איננה הדרישה שיש למשתמש.</p>
+        </div>
+
+        <div class="main">
+
+          <div class="p">
+            <h3>מה זה נותן</h3>
+            <ul class="bullets">
+              <li>מודל בידי המשתמשים <b>בשלב מוקדם</b> של הפיתוח</li>
+              <li>הבנה טובה בהרבה של הצורך האמיתי</li>
+              <li>ללקוח יש דוגמה מוחשית של המוצר הסופי — במקום מסמך</li>
+              <li>מתאים במיוחד כש<b>הדרישות אינן מוגדרות היטב</b></li>
+            </ul>
+            <div class="quote">
+              ״לא ידעתי מה אני רוצה עד שראיתי מה שלא רציתי.״ <b>זה בדיוק מה שאב-טיפוס קונה.</b>
+            </div>
+          </div>
+
+          <div class="p pro">
+            <h3>יתרונות</h3>
+            <ul class="bullets">
+              <li>עוזר להבין את דרישות הלקוח — ומקטין את הסיכון הגדול ביותר בפרויקט</li>
+              <li>הלקוח מקבל תוצר בתדירות גבוהה יחסית</li>
+              <li>מגלה מוקדם התנגדויות והרגלי עבודה שלא צפינו</li>
+            </ul>
+            <div class="note">בקמפוס: תנו לצוות המטבח מסך דמה לשבוע — <b>ותדעו הכול</b> על ההיבט התרבותי.</div>
+          </div>
+
+          <div class="p con">
+            <h3>חסרונות</h3>
+            <ul class="bullets">
+              <li><b>איכות מוצר ירודה</b> — אב-טיפוס נבנה מהר, לא נכון</li>
+              <li><b>עלות</b> — במיוחד באב-טיפוס לזריקה, שנזרק לפי הגדרה</li>
+              <li>הלקוח רואה מסך יפה ו<b>חושב שהמערכת כמעט מוכנה</b></li>
+            </ul>
+            <div class="note">החיסרון האחרון הוא ניהולי, לא טכני — <b>ומפיל פרויקטים</b>.</div>
+          </div>
+
+        </div>
+
+      </div>
+      <aside class="notes">
+        <b>המסגור החשוב:</b> אב-טיפוס הוא בראש ובראשונה כלי לאיסוף דרישות, ולא ״עוד דרך לפתח״.
+        לכן הוא כמעט תמיד מופיע <b>בתוך</b> מודל אחר — ספירלה, איטרטיבי, ואפילו מפל מים שמקדים לו
+        אב-טיפוס בשלב הדרישות.
+        <b>למה זה עובד:</b> אנשים גרועים בלתאר מה הם רוצים בהפשטה, וטובים מאוד בלהגיב למשהו קונקרטי.
+        מסמך דרישות מקבל ״כן, זה נשמע בסדר״. מסך אמיתי מקבל ״רגע, לא ככה — אצלנו זה עובד אחרת״.
+        <b>החיסרון השלישי הוא הכי מסוכן והוא לא טכני:</b> אחרי שהלקוח ראה מסך שנראה גמור, קשה מאוד
+        להסביר שנשארו שמונה חודשי עבודה. יש צוותים שמציגים אב-טיפוס בכוונה בסגנון סקיצה
+        (<span class="en">wireframe</span> אפור) בדיוק כדי למנוע את זה.
+        <b>ובקמפוס</b> — ההיבט התרבותי מהרצאה 10: במקום להתווכח אם צוות המטבח יעבוד עם מסך, נותנים
+        להם מסך דמה לשבוע ורואים. זה חקר ישימות תפעולי ותרבותי בעלות של ימים.
+        <b>ולקשר קדימה:</b> עם AI, עלות בניית אב-טיפוס צנחה דרמטית — נחזור לזה בסוף.
+      </aside>
+    <div class="acro-footer"><span class="acro"><span class="en">AI</span> = <span class="en">Artificial Intelligence</span> · בינה מלאכותית</span></div>
+    </section>
+    <!-- B5 — לזריקה מול מתפתח. REFRESH of source slides 15 + 16, side by side, plus THE TRAP that
+         the source only hints at in a speaker note: an evolutionary prototype was built fast, not
+         right, and under schedule pressure nobody ever goes back and rebuilds it. That is where a
+         large share of real-world technical debt comes from, and it is worth naming explicitly. -->
+    <section data-slug="prototype-kinds" class="has-acro-footer">
+      <div class="sdlc-chip" title="שלב 6 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>פיתוח</div>
+      <style>
+        section[data-slug="prototype-kinds"] .main{ flex:1 1 auto; min-height:0; display:grid;
+          grid-template-columns:1fr 1fr; gap:14px; align-items:stretch; }
+        section[data-slug="prototype-kinds"] .k{ background:#fff; border:2px solid var(--card-border);
+          border-radius:14px; padding:9px 14px; display:flex; flex-direction:column; min-height:0; }
+        section[data-slug="prototype-kinds"] .k.t{ border-color:var(--blue); }
+        section[data-slug="prototype-kinds"] .k.e{ border-color:var(--green); }
+        section[data-slug="prototype-kinds"] .k h3{ margin:0; font-size:20px; }
+        section[data-slug="prototype-kinds"] .k.t h3{ color:var(--blue); }
+        section[data-slug="prototype-kinds"] .k.e h3{ color:var(--green); }
+        section[data-slug="prototype-kinds"] .k .he{ font-size:15px; color:var(--muted); margin-bottom:6px; }
+        section[data-slug="prototype-kinds"] .k ul.bullets > li{ font-size:15.5px !important; margin-bottom:6px; }
+        section[data-slug="prototype-kinds"] .cycle{ margin-top:6px; background:var(--card-bg); border-radius:9px;
+          padding:6px 11px; }
+        section[data-slug="prototype-kinds"] .cycle .t2{ font-size:12.5px; font-weight:800; color:var(--muted); margin-bottom:3px; }
+        section[data-slug="prototype-kinds"] .cycle .steps{ display:flex; align-items:center; gap:5px; flex-wrap:wrap; }
+        section[data-slug="prototype-kinds"] .cycle .s{ background:#fff; border:1.5px solid var(--card-border);
+          border-radius:7px; padding:3px 8px; font-size:13px; color:var(--body); }
+        section[data-slug="prototype-kinds"] .cycle .ar{ color:var(--blue); font-weight:800; font-size:15px; }
+        section[data-slug="prototype-kinds"] .k .fate{ margin-top:auto; border-radius:9px; padding:5px 11px;
+          font-size:14.5px; line-height:1.32; font-weight:700; }
+        section[data-slug="prototype-kinds"] .k.t .fate{ background:#EAF3FB; color:var(--dark-blue); }
+        section[data-slug="prototype-kinds"] .k.e .fate{ background:#EAF6EC; color:var(--green); }
+      </style>
+      <h1>שני סוגים של אב-טיפוס — ומה קורה לו בסוף</h1>
+      <div class="subtitle">ההבדל ביניהם אינו טכני. הוא <b>מה מתכננים לעשות איתו ביום שאחרי</b></div>
+      <div class="body">
+
+        <div class="main">
+
+          <div class="k t">
+            <h3><span class="en">Throwaway prototyping</span></h3>
+            <div class="he">אב-טיפוס לזריקה</div>
+            <ul class="bullets">
+              <li>מערכת <b>זמנית</b> שמסיימת את חייה בתום שלב הבחינה</li>
+              <li>המטרה: להגביר את הקשר עם המשתמשים ולהבין מה הם רוצים מהמערכת</li>
+              <li>שלבי הניתוח והעיצוב <b>מתקצרים במכוון</b> — חוסכים זמן על חשבון איכות, וזה בסדר</li>
+              <li>הקמה מהירה, בחינה, ומסקנות</li>
+            </ul>
+            <div class="fate">גורלו: <b>נזרק — בכוונה.</b> התוצר האמיתי הוא מסמך דרישות טוב יותר.</div>
+          </div>
+
+          <div class="k e">
+            <h3><span class="en">Evolutionary prototyping</span></h3>
+            <div class="he">אב-טיפוס מתפתח</div>
+            <ul class="bullets">
+              <li>אב-טיפוס שעובר שינויים ובסוף התהליך <b>הופך למערכת עצמה</b></li>
+              <li>נבנה מתוך הנחה שישופר ויהפוך למערכת עובדת</li>
+            </ul>
+            <div class="cycle">
+              <div class="t2">מחזור החיים</div>
+              <div class="steps">
+                <span class="s">זיהוי דרישות ראשוניות</span><span class="ar">←</span>
+                <span class="s">פיתוח אב-טיפוס</span><span class="ar">←</span>
+                <span class="s">שימוש והערכה</span><span class="ar">←</span>
+                <span class="s">רביזיה ושיפור</span><span class="ar">↺</span>
+              </div>
+            </div>
+            <div class="fate">גורלו: <b>הופך למוצר.</b> וכאן מתחילה הבעיה ←</div>
+          </div>
+
+        </div>
+
+        <div class="callout warn">
+          <span class="label">⚠️ המלכודת — ומאיפה מגיע חוב טכני</span>
+          אב-טיפוס נבנה <b>מהר, לא נכון</b>: בלי מבנה קוד תקין, בלי בדיקות, בלי טיפול בשגיאות. הכוונה תמיד לבנות מחדש ״אחרי שנבין״ — אבל אז מגיע לחץ של זמן וכסף, ו<b>אף אחד לא בונה מחדש</b>. המערכת ממשיכה לרוץ שנים על יסודות שנועדו לשבוע. אם בוחרים <span class="en">evolutionary</span> — צריך <b>להחליט מראש</b> מתי עוצרים ומשקיעים בבנייה נכונה.
+        </div>
+
+      </div>
+      <aside class="notes">
+        <b>ההבדל אינו בקוד — הוא בכוונה.</b> אותו אב-טיפוס עצמו יכול להיות לזריקה או מתפתח, לפי מה
+        שהוחלט מראש. וההחלטה הזו משנה איך בונים אותו.
+        <b>לזריקה:</b> מותר ואף רצוי לקצר פינות — התוצר האמיתי הוא ההבנה, לא הקוד. הלקוח צריך לדעת מראש
+        שזה ייזרק, אחרת הוא ישאל למה משלמים פעמיים.
+        <b>מתפתח:</b> יעיל יותר לכאורה — לא זורקים כלום — אבל טומן את המלכודת.
+        <b>המלכודת שווה זמן</b>, כי היא אחת הסיבות המרכזיות לחוב טכני בעולם האמיתי. הרצף המוכר:
+        בונים מהר כדי להראות ללקוח ← הלקוח אומר ״מעולה, תמשיכו״ ← ״נסדר את הקוד אחר כך״ ← אין
+        ״אחר כך״. חמש שנים אחר כך יש מערכת ייצור שנבנתה כדמו לשבועיים.
+        <b>מה עושים בפועל:</b> אם בוחרים מתפתח, קובעים מראש נקודת עצירה — ״אחרי הגרסה השלישית עוצרים
+        שבועיים לרפקטור ובדיקות״ — וכותבים את זה בתוכנית הפרויקט. אחרת זה לא יקרה.
+        <b>וקישור ל-AI:</b> כשעלות בניית אב-טיפוס צונחת, ה״לזריקה״ נעשה כמעט חינם — וזה מחליש את
+        הפיתוי להפוך אב-טיפוס למוצר. נחזור לזה בחלק ה׳.
+      </aside>
+    <div class="acro-footer"><span class="acro"><span class="en">AI</span> = <span class="en">Artificial Intelligence</span> · בינה מלאכותית</span></div>
+    </section>
+    <!-- C1 — פיתוח תוספתי. REFRESH of source slides 18 + 19. The core idea stated as a risk move
+         (shrink the project by shrinking each project), the three ways the source lists of slicing a
+         lifecycle, pros/cons, and the four-question card.
+         "בנה ותקן" (build and fix) is named as the failure mode, because it is exactly what an
+         incremental project degenerates into without design discipline. -->
+    <section data-slug="incremental">
+      <div class="sdlc-chip" title="שלב 6 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>פיתוח</div>
+      <style>
+        section[data-slug="incremental"] .lead{ background:var(--light-blue); border:1px solid var(--blue); flex:0 0 auto; }
+        section[data-slug="incremental"] .lead p{ margin:0; font-weight:700; color:#fff; font-size:17px; line-height:1.4; }
+        section[data-slug="incremental"] .lead p b{ color:#fff; }
+        section[data-slug="incremental"] .main{ flex:1 1 auto; min-height:0; display:grid;
+          grid-template-columns:1.2fr 1fr 1fr; gap:12px; align-items:stretch; }
+        section[data-slug="incremental"] .p{ background:#fff; border:2px solid var(--card-border);
+          border-radius:13px; padding:9px 13px; display:flex; flex-direction:column; min-height:0; }
+        section[data-slug="incremental"] .p h3{ margin:0 0 5px; font-size:17px; color:var(--dark-blue); }
+        section[data-slug="incremental"] .p.pro{ border-color:var(--green); }
+        section[data-slug="incremental"] .p.pro h3{ color:var(--green); }
+        section[data-slug="incremental"] .p.con{ border-color:var(--red); }
+        section[data-slug="incremental"] .p.con h3{ color:var(--red); }
+        section[data-slug="incremental"] .p ul.bullets > li{ font-size:15px !important; margin-bottom:6px; }
+        section[data-slug="incremental"] .ways{ display:flex; flex-direction:column; gap:6px; }
+        section[data-slug="incremental"] .w{ background:var(--card-bg); border-inline-start:4px solid var(--light-blue);
+          border-radius:8px; padding:5px 10px; font-size:14.5px; line-height:1.32; color:var(--body); }
+        section[data-slug="incremental"] .w b{ color:var(--dark-blue); }
+        section[data-slug="incremental"] .p .note{ margin-top:auto; background:var(--card-bg); border-radius:9px;
+          padding:5px 10px; font-size:13.5px; line-height:1.32; color:var(--muted); }
+        section[data-slug="incremental"] .p .note b{ color:var(--red); }
+        section[data-slug="incremental"] .fourq{ flex:0 0 auto; display:grid; grid-template-columns:repeat(4,1fr); gap:9px; }
+        section[data-slug="incremental"] .fq{ background:var(--tint-blue); border-radius:10px; padding:5px 11px; }
+        section[data-slug="incremental"] .fq .k{ font-size:12px; font-weight:800; color:var(--light-blue); }
+        section[data-slug="incremental"] .fq .v{ font-size:15px; font-weight:700; color:var(--dark-blue); line-height:1.3; }
+      </style>
+      <h1>פיתוח תוספתי — <span class="en">Incremental</span></h1>
+      <div class="subtitle">מתאים למערכות גדולות ומורכבות. הרעיון: להקטין את הסיכון על ידי הקטנת ה<b>פרויקט</b></div>
+      <div class="body">
+
+        <div class="card lead">
+          <p>במקום פרויקט אחד גדול — <b>סדרה של מיני-פרויקטים</b>, שכל אחד מוסיף חלק מתפקד. אפשר להתחיל להשתמש בחלקים מהמערכת לפני שהפיתוח כולו הושלם.</p>
+        </div>
+
+        <div class="main">
+
+          <div class="p">
+            <h3>שלוש דרכים לחתוך את מחזור החיים</h3>
+            <div class="ways">
+              <div class="w"><b>סדרה של מפלי מים קטנים</b> — כל תוספת עוברת את כל השלבים מקצה לקצה</div>
+              <div class="w"><b>מתכננים הכול, מבצעים בשלבים</b> — פרויקט שלם עד סוף התכנון, ומשם מימוש מדורג</div>
+              <div class="w"><b>אוספים את כל הדרישות, ומשם בשלבים</b> — דרישות פעם אחת, ואז תכנון וביצוע לכל תוספת</div>
+            </div>
+            <div class="note" style="background:var(--hero-bg); color:var(--body)">ההבדל ביניהן: <b style="color:var(--orange)">כמה מקדימים מחליטים מראש</b>. ככל שפחות — יותר גמישות, ויותר סיכון לאינטגרציה.</div>
+          </div>
+
+          <div class="p pro">
+            <h3>יתרונות</h3>
+            <ul class="bullets">
+              <li><b>בכל שלב מתקבל מוצר תפעולי</b> — משהו שאפשר להשתמש בו, לא רק מסמך</li>
+              <li><b>הטמעה מדורגת</b> — הארגון מתרגל לשינוי בקצב שהוא סופג</li>
+              <li>ערך עסקי מגיע מוקדם, במקום להמתין לסוף</li>
+              <li>סיכון קטן יותר: טעות פוגעת בתוספת אחת, לא בפרויקט</li>
+            </ul>
+          </div>
+
+          <div class="p con">
+            <h3>חסרונות</h3>
+            <ul class="bullets">
+              <li><b>רמת סיבוכיות עולה</b> — כל תוספת צריכה להשתלב במה שכבר קיים ולא לשבור אותו</li>
+              <li>נדרשת ארכיטקטורה שתחזיק את כל התוספות שיבואו — <b>ואותה כן צריך לחשוב מראש</b></li>
+              <li>יותר תקורות מעבר: אינטגרציה, בדיקות ומסירה בכל סבב</li>
+            </ul>
+            <div class="note">הכשל הקלאסי: המודל מתדרדר ל<b>״בנה ותקן״</b> — מוסיפים חתיכות בלי תכנון, עד שאי אפשר להוסיף עוד.</div>
+          </div>
+
+        </div>
+
+        <div class="fourq">
+          <div class="fq"><div class="k">1 · גודל המנה</div><div class="v">תוספת אחת בכל פעם</div></div>
+          <div class="fq"><div class="k">2 · הסדר</div><div class="v">מעברים חוזרים על השלבים</div></div>
+          <div class="fq"><div class="k">3 · הלקוח רואה</div><div class="v">בסוף כל תוספת</div></div>
+          <div class="fq"><div class="k">4 · שינוי</div><div class="v">נכנס לתוספת הבאה</div></div>
+        </div>
+
+      </div>
+      <aside class="notes">
+        <b>הרעיון בשורה אחת:</b> פרויקט גדול מסוכן. אז נחתוך אותו לכמה פרויקטים קטנים — וכל אחד מהם
+        מסוכן פחות. הסיכון לא נעלם, אבל הוא מתפזר וגם מתגלה מוקדם.
+        <b>שלוש הדרכים</b> הן ציר: כמה מקדימים סוגרים מראש. הראשונה (מפלים קטנים) היא הכי גמישה
+        והכי מסוכנת לאינטגרציה; השלישית (כל הדרישות מראש) היא הכי בטוחה והכי קרובה למפל מים.
+        בפועל, רוב הארגונים הגדולים עובדים בגרסה השלישית.
+        <b>החיסרון המרכזי הוא ארכיטקטוני</b>, ושווה להדגיש אותו: פיתוח תוספתי לא פוטר מתכנון — הוא
+        מחייב לחשוב מראש על <b>שלד</b> שיחזיק את כל מה שיבוא. זה מחבר ישירות לתרשים המחלקות: מודל
+        התחום הוא בדיוק השלד הזה.
+        <b>״בנה ותקן״ (build and fix)</b> — הכשל: מוסיפים תוספת, מתקנים מה שנשבר, מוסיפים עוד,
+        מתקנים שוב, ואחרי חמש תוספות כל שינוי שובר שלושה דברים. לשאול את הכיתה: ״איך נמנעים מזה?״ —
+        ארכיטקטורה מלכתחילה, בדיקות אוטומטיות, ורפקטור מתוכנן.
+        <b>בקמפוס:</b> תוספת = קפיטריה אחת, או יכולת אחת (תפריט ← הזמנה ← תשלום). נחזור לזה בחלק ה׳.
+      </aside>
+    </section>
+    <!-- C2 — תוספתי מול איטרטיבי. REFRESH of source slide 20 (which was a bare picture). The classic
+         contrast, rebuilt as two labelled rows so the difference is unmissable:
+           incremental — the car assembled part by part; nothing usable until the last part
+           iterative   — skateboard → scooter → bicycle → car; usable at EVERY step
+         The "usable?" badge is the whole teaching point, so it is a column of its own on each card.
+         Closes by saying real projects are both at once, and maps it onto the campus system. -->
+    <section data-slug="iterative-vs-incremental">
+      <div class="sdlc-chip" title="שלב 6 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>פיתוח</div>
+      <style>
+        section[data-slug="iterative-vs-incremental"] .rows{ flex:1 1 auto; min-height:0; display:grid;
+          grid-template-rows:1fr 1fr; gap:11px; }
+        section[data-slug="iterative-vs-incremental"] .row{ display:grid; grid-template-columns:158px 1fr;
+          gap:12px; align-items:stretch; background:#fff; border:2px solid var(--card-border);
+          border-radius:14px; padding:8px 13px; min-height:0; }
+        section[data-slug="iterative-vs-incremental"] .row.inc{ border-color:var(--blue); }
+        section[data-slug="iterative-vs-incremental"] .row.it{ border-color:var(--green); }
+        section[data-slug="iterative-vs-incremental"] .lbl{ display:flex; flex-direction:column; justify-content:center; }
+        section[data-slug="iterative-vs-incremental"] .lbl .nm{ font-size:20px; font-weight:800; line-height:1.15; }
+        section[data-slug="iterative-vs-incremental"] .row.inc .lbl .nm{ color:var(--blue); }
+        section[data-slug="iterative-vs-incremental"] .row.it .lbl .nm{ color:var(--green); }
+        section[data-slug="iterative-vs-incremental"] .lbl .en2{ font-size:14px; color:var(--muted); direction:ltr;
+          unicode-bidi:isolate; text-align:right; }
+        section[data-slug="iterative-vs-incremental"] .lbl .de{ font-size:14px; color:var(--body); line-height:1.3; margin-top:4px; }
+        section[data-slug="iterative-vs-incremental"] .strip{ display:grid; grid-template-columns:repeat(4,1fr);
+          gap:9px; min-height:0; }
+        section[data-slug="iterative-vs-incremental"] .st{ background:var(--card-bg); border:1.5px solid var(--card-border);
+          border-radius:11px; padding:5px 8px; display:flex; flex-direction:column; align-items:center;
+          justify-content:center; gap:2px; text-align:center; min-height:0; }
+        section[data-slug="iterative-vs-incremental"] .st .ico{ font-size:34px; line-height:1.05; }
+        section[data-slug="iterative-vs-incremental"] .st .ico.part{ font-size:20px; font-weight:800; color:#8a99a8;
+          letter-spacing:2px; }
+        section[data-slug="iterative-vs-incremental"] .st .nm2{ font-size:14.5px; font-weight:700; color:var(--dark-blue); line-height:1.2; }
+        section[data-slug="iterative-vs-incremental"] .st .use{ font-size:12.5px; font-weight:800; border-radius:6px;
+          padding:1px 8px; }
+        section[data-slug="iterative-vs-incremental"] .st .use.no{ background:#FBEAEA; color:var(--red); }
+        section[data-slug="iterative-vs-incremental"] .st .use.yes{ background:#EAF6EC; color:var(--green); }
+        section[data-slug="iterative-vs-incremental"] .st.final{ background:#fff; border-color:var(--green); border-width:2px; }
+        section[data-slug="iterative-vs-incremental"] .both{ flex:0 0 auto; }
+      </style>
+      <h1>תוספתי מול איטרטיבי — ההבדל שאי אפשר לבטל</h1>
+      <div class="subtitle">שניהם ״בונים בשלבים״. השאלה היא אם בסוף כל שלב יש משהו ש<b>אפשר להשתמש בו</b></div>
+      <div class="body">
+
+        <div class="rows">
+
+          <div class="row inc">
+            <div class="lbl">
+              <div class="nm">תוספתי</div>
+              <div class="en2">Incremental</div>
+              <div class="de">מוסיפים בכל פעם <b>חלק חדש</b> של המערכת. כל חלק מפותח מההתחלה עד הסוף.</div>
+            </div>
+            <div class="strip">
+              <div class="st"><div class="ico part">◯</div><div class="nm2">גלגל</div><div class="use no">✗ לא שימושי</div></div>
+              <div class="st"><div class="ico part">◯▭◯</div><div class="nm2">גלגלים ושלדה</div><div class="use no">✗ לא שימושי</div></div>
+              <div class="st"><div class="ico part">▭▬</div><div class="nm2">+ מרכב ומנוע</div><div class="use no">✗ לא שימושי</div></div>
+              <div class="st final"><div class="ico">🚗</div><div class="nm2">מכונית</div><div class="use yes">✓ סוף סוף</div></div>
+            </div>
+          </div>
+
+          <div class="row it">
+            <div class="lbl">
+              <div class="nm">איטרטיבי</div>
+              <div class="en2">Iterative</div>
+              <div class="de">כל הפונקציות קיימות <b>מההתחלה</b>, ומשתפרות בכל סבב — גרסה בסיסית, ואז שדרוגים.</div>
+            </div>
+            <div class="strip">
+              <div class="st"><div class="ico">🛹</div><div class="nm2">סקייטבורד</div><div class="use yes">✓ מגיע ליעד</div></div>
+              <div class="st"><div class="ico">🛴</div><div class="nm2">קורקינט</div><div class="use yes">✓ מהר יותר</div></div>
+              <div class="st"><div class="ico">🚲</div><div class="nm2">אופניים</div><div class="use yes">✓ נוח יותר</div></div>
+              <div class="st final"><div class="ico">🚗</div><div class="nm2">מכונית</div><div class="use yes">✓ מצוין</div></div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="callout good both">
+          <span class="label">ובפועל — שניהם יחד</span>
+          פרויקטים אמיתיים עושים את שניהם: <b>מוסיפים יכולות חדשות</b> (תוספתי) <b>ומשפרים קיימות</b> (איטרטיבי) באותו סבב. בקמפוס: סבב שמוסיף ״תשלום״ הוא תוספתי; סבב שמחליף אישור ידני של הצוות בהתראה אוטומטית — איטרטיבי. השאלה שנשארת בכל סבב: <b>מה הסטודנט יכול לעשות עכשיו שלא יכול היה אתמול?</b>
+        </div>
+
+      </div>
+      <aside class="notes">
+        השקופית שהכי מבלבלת סטודנטים, ושווה לה זמן. שני המונחים נשמעים כמו מילים נרדפות ל״בשלבים״,
+        והם לא.
+        <b>השורה העליונה:</b> כל שלב מוסיף חלק — אבל <b>אף שלב ביניים אינו שימושי</b>. שלושה רבעים
+        ממכונית אינם רבע שימוש; הם גרוטאה. אם הפרויקט נעצר בשלב 3 — לא קיבלנו כלום.
+        <b>השורה התחתונה:</b> כל שלב הוא <b>מוצר שלם ברמת בשלות נמוכה יותר</b>. סקייטבורד לא ״שליש
+        ממכונית״ — הוא פתרון מלא לבעיה ״להגיע מ-א׳ ל-ב׳״. ולכן אם הפרויקט נעצר בשלב 2 — עדיין יש ערך.
+        <b>המבחן המעשי</b> ששווה לתת להם: ״אם הפרויקט ייעצר עכשיו, האם למשתמש יש משהו?״ תשובה
+        ״לא, צריך עוד שני חלקים״ = תוספתי. תשובה ״כן, פחות טוב אבל עובד״ = איטרטיבי.
+        <b>ולמה זה חשוב לניהול סיכונים:</b> איטרטיבי ממזער את הנזק של פרויקט שנקטע — וגם מביא משוב
+        אמיתי מוקדם, כי משתמשים באמת משתמשים.
+        <b>ולומר שזה לא או-או:</b> בפועל עושים את שניהם. סקראם, שנראה בקרוב, הוא בדיוק תוספתי-ואיטרטיבי.
+        <b>שאלה טובה לסיום:</b> ״מה הסקייטבורד של מערכת ההזמנות בקמפוס?״ תשובה: תפריט + הזמנה, בלי
+        תשלום ובלי התראות — הצוות מסמן מוכן ידנית. הסטודנט כבר לא עומד בתור. זה בדיוק הספרינט הראשון
+        שנתכנן בחלק ה׳.
+      </aside>
+    </section>
+    <!-- C3 — מודל הספירלה. REFRESH of source slides 21, 22, 23 merged. The four quadrants as a 2x2
+         grid (HTML, not SVG — the spiral drawing itself adds nothing the quadrants don't say), each
+         with what actually happens in it, plus the model's defining property: it is RISK-DRIVEN.
+         The one idea that distinguishes spiral from everything else in this deck: the order of work
+         is decided by risk, not by the structure of the system. -->
+    <section data-slug="spiral">
+      <div class="sdlc-chip" title="שלב 6 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>פיתוח</div>
+      <style>
+        section[data-slug="spiral"] .lead{ background:var(--light-blue); border:1px solid var(--blue); flex:0 0 auto; }
+        section[data-slug="spiral"] .lead p{ margin:0; font-weight:700; color:#fff; font-size:17px; line-height:1.4; }
+        section[data-slug="spiral"] .lead p b{ color:#fff; }
+        section[data-slug="spiral"] .main{ flex:1 1 auto; min-height:0; display:grid;
+          grid-template-columns:1.35fr 1fr; gap:13px; align-items:stretch; }
+        section[data-slug="spiral"] .quad{ display:grid; grid-template-columns:1fr 1fr; grid-template-rows:1fr 1fr;
+          gap:10px; min-height:0; }
+        section[data-slug="spiral"] .q{ background:#fff; border:2px solid var(--card-border); border-radius:13px;
+          padding:8px 13px; display:flex; flex-direction:column; min-height:0; }
+        section[data-slug="spiral"] .q .n{ display:inline-flex; align-items:center; gap:7px; font-size:16.5px;
+          font-weight:800; color:var(--dark-blue); }
+        section[data-slug="spiral"] .q .n span{ flex:0 0 24px; width:24px; height:24px; border-radius:50%;
+          background:var(--light-blue); color:#fff; font-size:13px; text-align:center; line-height:24px; }
+        section[data-slug="spiral"] .q .d{ font-size:14.5px; line-height:1.34; color:var(--body); margin-top:4px; }
+        section[data-slug="spiral"] .q .d b{ color:var(--dark-blue); }
+        section[data-slug="spiral"] .q.risk{ border-color:var(--orange); background:var(--hero-bg); }
+        section[data-slug="spiral"] .q.risk .n{ color:var(--orange); }
+        section[data-slug="spiral"] .q.risk .n span{ background:var(--orange); }
+        section[data-slug="spiral"] .side{ display:flex; flex-direction:column; gap:10px; min-height:0; }
+        section[data-slug="spiral"] .r{ background:#fff; border:2px solid var(--card-border); border-radius:13px;
+          padding:8px 13px; flex:1 1 0; display:flex; flex-direction:column; justify-content:center; }
+        section[data-slug="spiral"] .r .h{ font-size:16.5px; font-weight:800; color:var(--dark-blue); }
+        section[data-slug="spiral"] .r .d{ font-size:14.5px; line-height:1.36; color:var(--body); margin-top:2px; }
+        section[data-slug="spiral"] .r .d b{ color:var(--orange); }
+      </style>
+      <h1>מודל הספירלה — <span class="en">Spiral</span></h1>
+      <div class="subtitle">המודל היחיד שבו סדר העבודה נקבע לפי <b>סיכון</b>, ולא לפי מבנה המערכת</div>
+      <div class="body">
+
+        <div class="card lead">
+          <p>קודם פותרים את מה שהכי <b>מסוכן</b>. אפיון מפורט של רכיבים ברמת סיכון נמוכה — נדחה לשלב מאוחר יותר. אם מזהים סיכון חדש, אפשר לחזור אחורה.</p>
+        </div>
+
+        <div class="main">
+
+          <div class="quad">
+            <div class="q">
+              <div class="n"><span>1</span>תכנון הסבב</div>
+              <div class="d">קביעת <b>מטרות</b> לחלק המוצר שבמוקד (ביצועים, פונקציונליות, קבלת שינוי), <b>חלופות</b> להשגתן (עיצוב A מול B, שימוש חוזר מול רכישת רכיב), ו<b>אילוצים</b> (עלות, לו״ז, ממשק).</div>
+            </div>
+            <div class="q risk">
+              <div class="n"><span>2</span>ניתוח סיכונים</div>
+              <div class="d">השוואת החלופות לאור האילוצים, וזיהוי תחומי <b>אי-ודאות</b>. פיתוח אסטרטגיה להתמודד: אב-טיפוס, סימולציה, <span class="en">benchmarking</span>, שאלונים, מודל אנליטי.</div>
+            </div>
+            <div class="q">
+              <div class="n"><span>4</span>הערכה ותכנון הסבב הבא</div>
+              <div class="d">בדיקת הסיכונים <b>שנותרו</b>, והחלטה מה מפתחים בסבב הבא — ובאיזו שיטה: אב-טיפוס מתפתח, מפל מים, או משהו אחר.</div>
+            </div>
+            <div class="q">
+              <div class="n"><span>3</span>פיתוח ובדיקה</div>
+              <div class="d">פיתוח מענה למטרות שהוגדרו — <b>ובדיקתו</b>. כאן, ורק כאן, נכתב קוד — ורק לחלק שהסבב הזה עוסק בו.</div>
+            </div>
+          </div>
+
+          <div class="side">
+            <div class="r">
+              <div class="h">אורך סבב</div>
+              <div class="d">בין <b>מספר חודשים לשנתיים</b>. זה לא ספרינט — זה מחזור ניהולי כבד.</div>
+            </div>
+            <div class="r">
+              <div class="h">מכיל מודלים אחרים</div>
+              <div class="d">אפשר לשלב בתוך סבב אלמנטים של <b>מפל מים</b> ושל <b>אב-טיפוס</b>. הספירלה היא מסגרת-על, לא שיטת פיתוח.</div>
+            </div>
+            <div class="r">
+              <div class="h">למה זה עובד</div>
+              <div class="d">כי מה שהורג פרויקטים גדולים אינו מה שקשה — אלא <b>מה שלא ידענו</b>. הספירלה מכריחה לתקוף את אי-הידיעה ראשונה.</div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+      <aside class="notes">
+        <b>הרעיון המרכזי בשורה אחת:</b> בכל שאר המודלים סדר העבודה נגזר ממבנה המערכת או מהעדיפות
+        העסקית. בספירלה הוא נגזר מ<b>סיכון</b>: מה שהכי לא ידוע — נעשה ראשון.
+        <b>למה זה הגיוני:</b> אם יש סיכון שיפיל את הפרויקט, עדיף לגלות אותו בחודש השני ולא בחודש
+        העשרים. דוגמה: ״האם המערכת בכלל תעמוד ב-5,000 משתמשים במקביל?״ — אם התשובה שלילית, כל שאר
+        התכנון חסר משמעות. אז בונים <span class="en">benchmark</span> קטן בסבב הראשון.
+        <b>הרביע השני הוא הלב</b> ולכן הוא מודגש. שימו לב שהוא לא ״כותבים מסמך סיכונים״ — הוא
+        <b>מבצעים פעולה</b> להפחתת אי-ודאות: אב-טיפוס, סימולציה, מדידה.
+        <b>ההבדל מספרינט</b> — לחדד: סבב ספירלה הוא חודשים עד שנתיים, כי הוא מיועד לפרויקטים ענקיים.
+        לא לבלבל בין סבב לספרינט.
+        <b>שאלה טובה:</b> ״מה הסיכון הכי גדול בפרויקט הקמפוס?״ תשובות: הממשק למערכת הזיהוי (תלוי
+        בגורם שלא בשליטתנו), והעומס בצהריים. שתיהן ראויות לסבב ראשון בגישה ספירלית — וזה מסביר למה
+        בהמלצה שלנו הממשק נבנה על ידי יחידת המחשוב ולא נדחה לסוף.
+      </aside>
+    </section>
+    <!-- C4 — הספירלה: מה היא לא. MERGE of source slides 24 + 25. The three misreadings are given as
+         myth/reality pairs (they are stated as myths in the source, and they are exactly the wrong
+         mental models students form from the picture), then pros/cons and when it fits. -->
+    <section data-slug="spiral-truth" class="has-acro-footer">
+      <div class="sdlc-chip" title="שלב 6 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>פיתוח</div>
+      <style>
+        section[data-slug="spiral-truth"] .myths{ flex:0 0 auto; display:grid; grid-template-columns:repeat(3,1fr); gap:11px; }
+        section[data-slug="spiral-truth"] .m{ background:#fff; border:2px solid var(--card-border);
+          border-radius:13px; overflow:hidden; }
+        section[data-slug="spiral-truth"] .m .bad{ background:#FBEAEA; padding:6px 12px; font-size:14.5px;
+          line-height:1.32; color:var(--red); font-weight:700; }
+        section[data-slug="spiral-truth"] .m .good{ padding:6px 12px; font-size:14.5px; line-height:1.34; color:var(--body); }
+        section[data-slug="spiral-truth"] .m .good b{ color:var(--green); }
+        section[data-slug="spiral-truth"] .main{ flex:1 1 auto; min-height:0; display:grid;
+          grid-template-columns:1fr 1fr 1fr; gap:12px; align-items:stretch; }
+        section[data-slug="spiral-truth"] .p{ background:#fff; border:2px solid var(--card-border);
+          border-radius:13px; padding:9px 13px; display:flex; flex-direction:column; min-height:0; }
+        section[data-slug="spiral-truth"] .p h3{ margin:0 0 5px; font-size:17px; color:var(--dark-blue); }
+        section[data-slug="spiral-truth"] .p.pro{ border-color:var(--green); }
+        section[data-slug="spiral-truth"] .p.pro h3{ color:var(--green); }
+        section[data-slug="spiral-truth"] .p.con{ border-color:var(--red); }
+        section[data-slug="spiral-truth"] .p.con h3{ color:var(--red); }
+        section[data-slug="spiral-truth"] .p.when{ border-color:var(--orange); background:var(--hero-bg); }
+        section[data-slug="spiral-truth"] .p.when h3{ color:var(--orange); }
+        section[data-slug="spiral-truth"] .p ul.bullets > li{ font-size:15px !important; margin-bottom:6px; }
+        section[data-slug="spiral-truth"] .fourq{ flex:0 0 auto; display:grid; grid-template-columns:repeat(4,1fr); gap:9px; }
+        section[data-slug="spiral-truth"] .fq{ background:var(--tint-blue); border-radius:10px; padding:5px 11px; }
+        section[data-slug="spiral-truth"] .fq .k{ font-size:12px; font-weight:800; color:var(--light-blue); }
+        section[data-slug="spiral-truth"] .fq .v{ font-size:15px; font-weight:700; color:var(--dark-blue); line-height:1.3; }
+      </style>
+      <h1>הספירלה — מה היא <b>לא</b>, ומתי היא כן</h1>
+      <div class="subtitle">התרשים המפורסם קיבל הרבה פרשנויות שגויות. שלוש מהן חוזרות תמיד</div>
+      <div class="body">
+
+        <div class="myths">
+          <div class="m">
+            <div class="bad">✗ ״הספירלה מגדירה תהליך אחד מסודר״</div>
+            <div class="good">זו <b>סדרה של סבבים</b>, וכל אחד יכול להיראות אחרת לגמרי — תלוי במטרות ובסיכונים של אותו סבב.</div>
+          </div>
+          <div class="m">
+            <div class="bad">✗ ״זה פשוט אוסף של מפלי מים קטנים״</div>
+            <div class="good">הדגש אינו על הפיתוח אלא על <b>ניהול הסיכונים</b> ועל מעבר גמיש בין שלבים. מפל קטן אינו שואל ״מה הכי מסוכן״.</div>
+          </div>
+          <div class="m">
+            <div class="bad">✗ ״כל רביע תמיד מבוצע״</div>
+            <div class="good">הפעולות הן <b>פוטנציאליות</b>. סבב שבו אין אי-ודאות מהותית לא צריך אב-טיפוס ולא סימולציה.</div>
+          </div>
+        </div>
+
+        <div class="main">
+          <div class="p pro">
+            <h3>יתרונות</h3>
+            <ul class="bullets">
+              <li>מתאימה לפרויקטים <b>גדולים מאוד</b> ולחוסר ודאות גבוה</li>
+              <li>תוכנה ממומשת כבר בשלב מוקדם</li>
+              <li><b>ניתוח סיכונים נרחב</b> ומובנה</li>
+              <li>מזעור נזקים — עשויה להוביל להחלטה <b>לעצור</b> את הפרויקט מוקדם, וזה יתרון</li>
+            </ul>
+          </div>
+          <div class="p con">
+            <h3>חסרונות</h3>
+            <ul class="bullets">
+              <li>מחייבת <b>צוות מיומן בניתוח סיכונים</b> — לא כל ארגון מסוגל</li>
+              <li>עבודה ש״נזרקת לפח״ — אב-טיפוסים וסימולציות שאינם תורמים ישירות לתוצר</li>
+              <li>משך הפרויקט הכולל <b>קשה להערכה</b>, וזה בעייתי מול תקציב שנתי</li>
+              <li>לא מתאימה לפרויקטים קטנים בסיכון נמוך — התקורה בולעת אותם</li>
+            </ul>
+          </div>
+          <div class="p when">
+            <h3>מתי כן</h3>
+            <ul class="bullets">
+              <li>פרויקט <b>גדול ויקר</b>, שכישלונו יקר מאוד</li>
+              <li>טכנולוגיה או דרישות ש<b>אף אחד עוד לא ניסה</b></li>
+              <li>יש סיכון שיכול <b>להפיל את הפרויקט כולו</b>, ועדיף לגלות אותו מוקדם</li>
+              <li>לארגון יש היכולת והסמכות לעצור באמצע</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="fourq">
+          <div class="fq"><div class="k">1 · גודל המנה</div><div class="v">סבב לפי סיכון, לא לפי יכולת</div></div>
+          <div class="fq"><div class="k">2 · הסדר</div><div class="v">חוזר — הכי מסוכן ראשון</div></div>
+          <div class="fq"><div class="k">3 · הלקוח רואה</div><div class="v">אב-טיפוסים מוקדם</div></div>
+          <div class="fq"><div class="k">4 · שינוי</div><div class="v">סיכון חדש ← סבב חדש</div></div>
+        </div>
+
+      </div>
+      <aside class="notes">
+        שלוש הטעויות מגיעות מהתרשים המפורסם עצמו, שנראה כמו תהליך קבוע — והוא לא.
+        <b>טעות 1:</b> אין ״התהליך הספירלי״. יש עיקרון — סבבים מונחי סיכון — וכל ארגון מממש אותו אחרת.
+        <b>טעות 2</b> היא הנפוצה ביותר בכיתה: ״אז זה בעצם מפלים קטנים״. לא. במפלים קטנים מחליטים מה
+        לבנות לפי סדר הגיוני של המערכת; בספירלה — לפי <b>מה שהכי לא ידוע</b>. זה סדר שונה לגמרי,
+        ולפעמים לא אינטואיטיבי בכלל.
+        <b>טעות 3:</b> ״כל פעולה היא פוטנציאלית״ — לא כל סבב כולל אב-טיפוס וסימולציה. הרביעים הם
+        <b>שאלות</b>, לא רשימת משימות.
+        <b>היתרון של ״מזעור נזקים״ שווה דיון:</b> ספירלה יכולה להוביל להחלטה לבטל התקשרויות ולעצור.
+        זה נשמע ככישלון והוא הצלחה — עצירה אחרי סבב אחד עולה חלק זעיר מכישלון אחרי שלוש שנים.
+        לשאול את הכיתה: ״למי בארגון יש סמכות להגיד ׳עוצרים׳?״ אם לאף אחד — הספירלה לא באמת תעבוד שם.
+        <b>החיסרון של ׳עבודה שנזרקת׳</b> — לחבר לאב-טיפוס לזריקה: זו אותה עלות, ובעולם של AI היא ירדה
+        משמעותית. עוד סיבה לחזור לזה בסוף.
+      </aside>
+    <div class="acro-footer"><span class="acro"><span class="en">AI</span> = <span class="en">Artificial Intelligence</span> · בינה מלאכותית</span></div>
+    </section>
+    <!-- D1 — Agile: מה זה בכלל. REFRESH of source slides 26 + 27. The founding claim stated as a
+         claim (you cannot fully specify software before building it) rather than as a slogan, what
+         follows from it, and the four-question card.
+         Also names the thing students most often get wrong: Agile is a FAMILY of methodologies and a
+         set of values — not a methodology you can "do". -->
+    <section data-slug="agile-what">
+      <div class="sdlc-chip" title="שלב 6 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>פיתוח</div>
+      <style>
+        section[data-slug="agile-what"] .claim{ flex:0 0 auto; background:var(--orange); border-radius:14px;
+          padding:11px 18px; color:#fff; }
+        section[data-slug="agile-what"] .claim .k{ font-size:13px; font-weight:800; opacity:.92; }
+        section[data-slug="agile-what"] .claim .v{ font-size:24px; font-weight:800; line-height:1.25; }
+        section[data-slug="agile-what"] .main{ flex:1 1 auto; min-height:0; display:grid;
+          grid-template-columns:1fr 1fr 1fr; gap:12px; align-items:stretch; }
+        section[data-slug="agile-what"] .p{ background:#fff; border:2px solid var(--card-border);
+          border-radius:13px; padding:9px 13px; display:flex; flex-direction:column; min-height:0; }
+        section[data-slug="agile-what"] .p h3{ margin:0 0 5px; font-size:17px; color:var(--dark-blue); }
+        section[data-slug="agile-what"] .p .d{ font-size:15px; line-height:1.4; color:var(--body); }
+        section[data-slug="agile-what"] .p .d b{ color:var(--dark-blue); }
+        section[data-slug="agile-what"] .p ul.bullets > li{ font-size:15px !important; margin-bottom:6px; }
+        section[data-slug="agile-what"] .p .note{ margin-top:auto; background:var(--card-bg); border-radius:9px;
+          padding:5px 10px; font-size:13.5px; line-height:1.32; color:var(--muted); }
+        section[data-slug="agile-what"] .p .note b{ color:var(--orange); }
+        section[data-slug="agile-what"] .fam{ display:flex; flex-wrap:wrap; gap:5px; margin-top:4px; }
+        section[data-slug="agile-what"] .fam .t{ background:var(--tint-blue); color:var(--dark-blue); border-radius:6px;
+          padding:2px 9px; font-size:13.5px; font-weight:700; direction:ltr; unicode-bidi:isolate; }
+        section[data-slug="agile-what"] .fourq{ flex:0 0 auto; display:grid; grid-template-columns:repeat(4,1fr); gap:9px; }
+        section[data-slug="agile-what"] .fq{ background:var(--tint-blue); border-radius:10px; padding:5px 11px; }
+        section[data-slug="agile-what"] .fq .k{ font-size:12px; font-weight:800; color:var(--light-blue); }
+        section[data-slug="agile-what"] .fq .v{ font-size:15px; font-weight:700; color:var(--dark-blue); line-height:1.3; }
+      </style>
+      <h1><span class="en">Agile</span> — פיתוח זריז וגמיש</h1>
+      <div class="subtitle">לא ״עוד מודל״ — אלא טענה על טבע התוכנה, וסדרה שלמה של שיטות שנגזרות ממנה</div>
+      <div class="body">
+
+        <div class="claim">
+          <div class="k">הטענה שממנה הכול נובע</div>
+          <div class="v">לא ניתן להגדיר במלואה תוכנה מסוימת קודם לפיתוחה בפועל.</div>
+        </div>
+
+        <div class="main">
+
+          <div class="p">
+            <h3>ואם הטענה נכונה — מה נובע ממנה?</h3>
+            <ul class="bullets">
+              <li>אין טעם להשקיע חודשים במפרט מלא — הוא <b>יתגלה כשגוי חלקית</b> בכל מקרה</li>
+              <li>עדיף <b>לספק תוצרים במהירות</b> ולגלות מה נכון מהמציאות</li>
+              <li>דרישות ופתרונות מתפתחים <b>תוך כדי עבודה משותפת</b>, בקבוצות אוטונומיות</li>
+            </ul>
+            <div class="note">שימו לב מה זה <b>לא</b> אומר: לא ״בלי לתכנן״. אומר: לתכנן ברזולוציה שמתאימה לוודאות שיש.</div>
+          </div>
+
+          <div class="p">
+            <h3>מה משתנה בפועל</h3>
+            <ul class="bullets">
+              <li><b>מנה קטנה</b> — שבועיים עד חודש, ובסופה תוכנה עובדת</li>
+              <li><b>הלקוח בפנים</b> — לא לקוח שמאשר מסמך, אלא שותף יומיומי</li>
+              <li><b>הצוות מחליט</b> איך לבצע — לא מקבל תוכנית מלמעלה</li>
+              <li><b>שינוי מתקבל בברכה</b>, גם בשלב מתקדם</li>
+            </ul>
+          </div>
+
+          <div class="p">
+            <h3>וזו משפחה, לא שיטה</h3>
+            <div class="d"><span class="en">Agile</span> הוא <b>אוסף ערכים ועקרונות</b>. מתחתיו יושבות שיטות ממשיות שאותן באמת מיישמים:</div>
+            <div class="fam">
+              <span class="t">Scrum</span><span class="t">Extreme Programming (XP)</span><span class="t">Kanban</span>
+              <span class="t">AUP</span><span class="t">Crystal Clear</span><span class="t">ASD</span>
+              <span class="t">DSDM</span><span class="t">RAD</span>
+            </div>
+            <div class="note">״אנחנו עובדים <b>אג׳ייל</b>״ אינו משפט מלא. השאלה היא <b>איזו שיטה</b>, ואיך היא מיושמת.</div>
+          </div>
+
+        </div>
+
+        <div class="fourq">
+          <div class="fq"><div class="k">1 · גודל המנה</div><div class="v">שבועיים עד חודש</div></div>
+          <div class="fq"><div class="k">2 · הסדר</div><div class="v">חוזר, קצר וקבוע</div></div>
+          <div class="fq"><div class="k">3 · הלקוח רואה</div><div class="v">בסוף כל סבב</div></div>
+          <div class="fq"><div class="k">4 · שינוי</div><div class="v">מתקבל בברכה — הוא התוכנית</div></div>
+        </div>
+
+      </div>
+      <aside class="notes">
+        <b>להתחיל מהטענה, לא מהערכים.</b> אג׳ייל נשמע לרוב כמו סיסמאות, ואז קשה לדון בו. אבל הוא נשען
+        על טענה שאפשר להסכים או לחלוק עליה: <b>אי אפשר להגדיר תוכנה במלואה לפני שבונים אותה</b>.
+        <b>לשאול את הכיתה אם הטענה נכונה.</b> תשובה מעניינת: תלוי בתוכנה. בקר מינון תרופות — כן אפשר
+        להגדיר מראש, ולכן שם אג׳ייל פחות מתאים. אפליקציית הזמנות לסטודנטים — כמעט בוודאות לא.
+        <b>ה״לא אומר״ בהערה הראשונה חשוב:</b> הטעות הנפוצה היא שאג׳ייל = בלי תכנון ובלי מסמכים.
+        זו קריקטורה, והשקופית הבאה על המנשר מפריכה אותה במפורש.
+        <b>״זו משפחה״</b> — לחדד: כשארגון אומר ״אנחנו אג׳ייל״ זה כמעט לא אומר כלום. השאלה היא איזו
+        שיטה, ואיך היא מיושמת בפועל. הרבה ארגונים מיישמים את הטקסים בלי הערכים ומקבלים
+        ״מפל מים עם פגישות יומיות״.
+        <b>לחבר לארבע השאלות</b> ולהשוות בקול לכרטיס של מפל המים משקופית 8 — ההבדל בשאלה 4 הוא
+        התהומי: הפרעה יקרה מול התוכנית עצמה.
+      </aside>
+    </section>
+    <!-- D2 — המנשר: ארבעה ערכים. REFRESH of source slide 28 (which listed 13 principles as one wall
+         of text). The four value PAIRS are the memorable core, and the slide's real work is the
+         closing sentence of the manifesto that almost everyone drops:
+           "while there is value in the items on the right, we value the items on the left more."
+         That sentence is what protects everything taught in lectures 2-8 — agile never said
+         documentation, process, contracts or plans are worthless. It is the single most useful thing
+         an IE student can take from this slide into an argument at work. -->
+    <section data-slug="agile-manifesto" class="has-acro-footer">
+      <div class="sdlc-chip" title="שלב 6 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>פיתוח</div>
+      <style>
+        section[data-slug="agile-manifesto"] .pairs{ flex:1 1 auto; min-height:0; display:grid;
+          grid-template-rows:repeat(4,1fr); gap:10px; }
+        section[data-slug="agile-manifesto"] .pr{ display:grid; grid-template-columns:1fr 62px 1fr;
+          gap:10px; align-items:stretch; min-height:0; }
+        section[data-slug="agile-manifesto"] .sd{ border-radius:12px; padding:8px 15px; display:flex;
+          flex-direction:column; justify-content:center; }
+        section[data-slug="agile-manifesto"] .sd .he{ font-size:19px; font-weight:800; line-height:1.2; }
+        section[data-slug="agile-manifesto"] .sd .en2{ font-size:13.5px; direction:ltr; unicode-bidi:isolate;
+          text-align:right; margin-top:1px; }
+        section[data-slug="agile-manifesto"] .left{ background:#EAF6EC; border:2px solid var(--green); }
+        section[data-slug="agile-manifesto"] .left .he{ color:var(--green); }
+        section[data-slug="agile-manifesto"] .left .en2{ color:#3d7a41; }
+        section[data-slug="agile-manifesto"] .right{ background:var(--card-bg); border:2px solid var(--card-border); }
+        section[data-slug="agile-manifesto"] .right .he{ color:var(--muted); }
+        section[data-slug="agile-manifesto"] .right .en2{ color:var(--source); }
+        section[data-slug="agile-manifesto"] .over{ display:flex; align-items:center; justify-content:center;
+          font-size:15px; font-weight:800; color:var(--orange); }
+        section[data-slug="agile-manifesto"] .sd .mn{ font-size:14px; line-height:1.32; margin-top:4px; }
+        section[data-slug="agile-manifesto"] .left .mn{ color:#2c5f30; }
+        section[data-slug="agile-manifesto"] .right .mn{ color:var(--source); }
+        /* the SDLC chip floats bottom-left (z-index 6) — keep the band's text clear of it */
+        section[data-slug="agile-manifesto"] .theline{ flex:0 0 auto; background:var(--orange); border-radius:13px;
+          padding:10px 18px 10px 150px; color:#fff; }
+        section[data-slug="agile-manifesto"] .theline .k{ font-size:13px; font-weight:800; opacity:.92; }
+        section[data-slug="agile-manifesto"] .theline .v{ font-size:19px; font-weight:800; line-height:1.35; }
+        section[data-slug="agile-manifesto"] .theline .v i{ font-style:normal; text-decoration:underline; }
+        section[data-slug="agile-manifesto"] .theline .gloss{ display:block; margin-top:3px; font-size:14.5px;
+          font-weight:600; opacity:.9; direction:ltr; unicode-bidi:isolate; text-align:right; }
+      </style>
+      <h1>המנשר האג׳ילי — ארבעה ערכים</h1>
+      <div class="subtitle">ארבעה זוגות. שני הצדדים בעלי ערך — אבל כשצריך להכריע, <b>שמאל גובר</b></div>
+      <div class="body">
+
+        <div class="pairs">
+
+          <div class="pr">
+            <div class="sd left"><div class="he">אנשים ואינטראקציות</div><div class="en2">Individuals and interactions</div><div class="mn">שיחה של עשר דקות עדיפה על שלושה מיילים ועל כלי ניהול משימות</div></div>
+            <div class="over">גובר על</div>
+            <div class="sd right"><div class="he">תהליכים וכלים</div><div class="en2">processes and tools</div><div class="mn">אבל בלי תהליך אין קצב, ובלי כלים אין שקיפות</div></div>
+          </div>
+
+          <div class="pr">
+            <div class="sd left"><div class="he">תוכנה עובדת</div><div class="en2">Working software</div><div class="mn">״80% מהקוד נכתב״ אינו התקדמות. פיצ׳ר שרץ אצל משתמש — כן</div></div>
+            <div class="over">גובר על</div>
+            <div class="sd right"><div class="he">תיעוד מקיף</div><div class="en2">comprehensive documentation</div><div class="mn">אבל תרשים שחוסך שבועיים אי-הבנה הוא <b>תקשורת</b>, לא ניירת</div></div>
+          </div>
+
+          <div class="pr">
+            <div class="sd left"><div class="he">שיתוף פעולה עם הלקוח</div><div class="en2">Customer collaboration</div><div class="mn">הלקוח בפנים כל שבועיים, לא מאשר מסמך פעם ברבעון</div></div>
+            <div class="over">גובר על</div>
+            <div class="sd right"><div class="he">משא ומתן חוזי</div><div class="en2">contract negotiation</div><div class="mn">אבל בלי חוזה אין מבחני קבלה — ראו הרצאה 10</div></div>
+          </div>
+
+          <div class="pr">
+            <div class="sd left"><div class="he">תגובה לשינוי</div><div class="en2">Responding to change</div><div class="mn">תוכנית שלא השתנתה בשלושה חודשים — סימן שלא למדנו כלום</div></div>
+            <div class="over">גובר על</div>
+            <div class="sd right"><div class="he">עמידה בתוכנית</div><div class="en2">following a plan</div><div class="mn">אבל בלי תוכנית אי אפשר לתקצב ואי אפשר לדווח</div></div>
+          </div>
+
+        </div>
+
+        <div class="theline">
+          <div class="k">והמשפט שכולם שוכחים — והוא חלק מהמנשר</div>
+          <div class="v">״<i>גם לפריטים שמימין יש ערך</i> — אנחנו פשוט מעריכים את אלה שמשמאל יותר.״<span class="gloss">while there is value in the items on the right, we value the items on the left more</span></div>
+        </div>
+
+      </div>
+      <aside class="notes">
+        <b>השורה הכתומה היא כל השקופית.</b> המנשר מעולם לא אמר שתיעוד חסר ערך, שתהליכים מיותרים, או
+        שחוזים לא נחוצים. הוא אמר שכשיש התנגשות — הצד השמאלי מכריע.
+        <b>למה זה חשוב לכם במיוחד:</b> ״אנחנו אג׳ייל, אנחנו לא כותבים מסמכים״ הוא המשפט שיגידו לכם
+        בעבודה, והוא <b>שימוש שגוי במנשר</b>. תרשים מחלקות שחוסך שבועיים של אי-הבנה הוא בדיוק
+        ״אנשים ואינטראקציות״ — הוא <b>אמצעי תקשורת</b>, לא ביורוקרטיה.
+        <b>המבחן המעשי לכל מסמך:</b> ״האם מישהו יקרא אותו ויקבל בגללו החלטה אחרת?״ אם כן — הוא שווה
+        את הזמן. אם הוא נכתב כדי שיהיה — לא.
+        <b>הזוג השלישי</b> הוא העדין ביותר: ״שיתוף פעולה גובר על משא ומתן חוזי״ לא אומר לוותר על חוזה.
+        בהרצאה הקודמת ראינו למה החוזה קריטי. זה אומר שלא מנהלים פרויקט מתוך החוזה — לא מנצחים בוויכוח
+        ומפסידים את המערכת.
+        <b>הזוג הרביעי</b> הוא ההבדל התרבותי מול מפל מים: שם עמידה בתוכנית היא מדד ההצלחה. כאן,
+        תוכנית שלא השתנתה אחרי שלושה חודשים היא סימן שלא למדנו כלום.
+        <b>שאלה טובה לכיתה:</b> ״איזה זוג הכי קשה ליישום בארגון גדול?״ בדרך כלל הרביעי — כי תקציבים,
+        דיווח להנהלה ומכרזים בנויים על תוכניות.
+      </aside>
+    <div class="acro-footer"><span class="acro"><span class="en">SDLC</span> = <span class="en">Software Development Life Cycle</span> · מחזור פיתוח תוכנה</span></div>
+    </section>
+    <!-- D3 — עקרונות שמשנים התנהגות. REFRESH of source slide 28's 13-principle wall of text, which is
+         unreadable at 1280x720 and unmemorable anyway. Grouped into four families — delivery, change,
+         people, craft — keeping the principles that genuinely change how a team behaves.
+         Each group ends with the concrete behaviour it implies, so the principle is testable rather
+         than aspirational. -->
+    <section data-slug="agile-principles">
+      <div class="sdlc-chip" title="שלב 6 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>פיתוח</div>
+      <style>
+        section[data-slug="agile-principles"] .grid{ flex:1 1 auto; min-height:0; display:grid;
+          grid-template-columns:1fr 1fr; grid-auto-rows:1fr; gap:12px; }
+        section[data-slug="agile-principles"] .g{ background:#fff; border:2px solid var(--card-border);
+          border-radius:13px; padding:9px 14px; display:flex; flex-direction:column; min-height:0; }
+        section[data-slug="agile-principles"] .g h3{ margin:0 0 5px; font-size:18px; color:var(--dark-blue);
+          display:flex; align-items:center; gap:8px; }
+        section[data-slug="agile-principles"] .g h3 .ic{ flex:0 0 28px; width:28px; height:28px; border-radius:8px;
+          background:var(--tint-blue); font-size:15px; text-align:center; line-height:28px; }
+        section[data-slug="agile-principles"] .g ul.bullets > li{ font-size:15px !important; margin-bottom:5px; }
+        section[data-slug="agile-principles"] .g .so{ margin-top:auto; background:var(--hero-bg);
+          border-inline-start:4px solid var(--orange); border-radius:8px; padding:5px 10px;
+          font-size:13.5px; line-height:1.32; color:var(--body); }
+        section[data-slug="agile-principles"] .g .so b{ color:var(--orange); }
+      </style>
+      <h1>העקרונות שבאמת משנים התנהגות</h1>
+      <div class="subtitle">מתוך 13 עקרונות המנשר — אלה שאפשר לראות אם צוות מקיים אותם או לא</div>
+      <div class="body">
+
+        <div class="grid">
+
+          <div class="g">
+            <h3><span class="ic">🚚</span>אספקה</h3>
+            <ul class="bullets">
+              <li>העדיפות העליונה — לספק <b>מוקדם וברציפות</b> תוכנה בעלת ערך ללקוח</li>
+              <li>אספקה תדירה של תוכנה עובדת: משבועות ועד חודשים, <b>בשאיפה לקצר</b></li>
+              <li><b>תוכנה עובדת היא יחידת המידה העיקרית</b> להתקדמות</li>
+            </ul>
+            <div class="so"><b>ולכן בפועל:</b> ״סיימנו 80% מהקוד״ אינו דיווח התקדמות. ״הפיצ׳ר עובד אצל משתמש״ — כן.</div>
+          </div>
+
+          <div class="g">
+            <h3><span class="ic">🔄</span>שינוי</h3>
+            <ul class="bullets">
+              <li>מקבלים בברכה שינויים בדרישות — <b>אפילו בשלב מתקדם</b></li>
+              <li>תהליכים ברי-שינוי הם <b>יתרון תחרותי</b> ללקוח, לא נזק</li>
+              <li>אנשי פיתוח והמשתמש העסקי עובדים יחד <b>יום-יום</b> לאורך הפרויקט</li>
+            </ul>
+            <div class="so"><b>ולכן בפועל:</b> אין ״ועדת שינויים״ שמתכנסת פעם בחודש. יש בקלוג שמתועדף מחדש כל סבב.</div>
+          </div>
+
+          <div class="g">
+            <h3><span class="ic">👥</span>אנשים</h3>
+            <ul class="bullets">
+              <li>בונים פרויקטים סביב <b>יחידים בעלי מוטיבציה</b>: תנו סביבה, ענו על צרכים, וסמכו עליהם</li>
+              <li><b>שיחה פנים אל פנים</b> היא הדרך היעילה ביותר להעביר מידע</li>
+              <li>ארכיטקטורה, עיצוב ודרישות מגיעים מ<b>צוותים עצמאיים</b></li>
+              <li><b>קצב בר-קיימא</b> — לא לרוץ ולקרוס</li>
+            </ul>
+            <div class="so"><b>ולכן בפועל:</b> ״סמוך עליהם״ הוא הקשה מכולם. ארגונים מאמצים טקסים ולא מוותרים על שליטה.</div>
+          </div>
+
+          <div class="g">
+            <h3><span class="ic">🛠️</span>מקצועיות</h3>
+            <ul class="bullets">
+              <li>תשומת לב מתמדת ל<b>מצוינות טכנית ולעיצוב טוב</b> — הם מה שמאפשר להישאר זריזים</li>
+              <li><b>פשטות</b> חיונית — האומנות למקסם את כמות העבודה <b>שלא תיעשה</b></li>
+              <li>הצוות עוצר, חושב איך להיות אפקטיבי יותר, <b>ומשנה את התנהגותו</b></li>
+            </ul>
+            <div class="so"><b>ולכן בפועל:</b> עיצוב טוב אינו מותרות באג׳ייל — הוא התנאי לכך שהסבב הבא יהיה מהיר.</div>
+          </div>
+
+        </div>
+
+      </div>
+      <aside class="notes">
+        הרשימה המלאה היא 13 עקרונות; כאן ארבע משפחות עם מה שנגזר מהן. אם יש זמן — לעבור על ה״ולכן
+        בפועל״ בלבד, זה מספיק.
+        <b>אספקה:</b> העיקרון החשוב הוא ״תוכנה עובדת היא המדד״. הוא מחליף דיווחי אחוזים — שהם תמיד
+        אופטימיים ותמיד לא מדויקים — במשהו בינארי. זה חוסך את ״90% מוכן״ שנמשך חצי שנה.
+        <b>שינוי:</b> לחדד את הניסוח — ״מקבלים בברכה״, לא ״סובלים״. זו הפיכה של הפוזיציה: במפל מים
+        שינוי הוא כישלון תכנוני; באג׳ייל הוא מידע חדש, וזה בדיוק מה שרצינו.
+        <b>אנשים:</b> העיקרון ״סמוך עליהם״ הוא בפועל הקשה ביותר ליישום בארגון היררכי, ושווה לדבר על
+        זה — הרבה ארגונים מאמצים את הטקסים (פגישה יומית, ספרינטים) ולא את הוויתור על השליטה, ומקבלים
+        את הגרוע משני העולמות.
+        <b>מקצועיות:</b> חשוב במיוחד לכיתה הזו, כי הוא מפריך את ״אג׳ייל = מהר ומלוכלך״. פשטות מוגדרת
+        כאן כאומנות למקסם את העבודה <b>שלא תיעשה</b> — כלומר לא לבנות מה שלא צריך. וזו בדיוק
+        התשובה ל-over-spec של מפל המים.
+        <b>ולחבר לקורס:</b> ״קצב בר-קיימא״ ו״מצוינות טכנית״ הם מה שמונע את מלכודת האב-טיפוס המתפתח.
+      </aside>
+    </section>
+    <!-- D4 — אחוזי הצלחה, ואיך לקרוא אותם. REFRESH of source slide 30 (Standish CHAOS 2015, which the
+         source presents at face value). The numbers are taught AND the scepticism is taught, because
+         an IE student who quotes 39%-vs-11% in a meeting without knowing how "success" was defined
+         will lose the argument to anyone who does.
+         Numbers are the published CHAOS 2015 agile-vs-waterfall breakdown by project size. -->
+    <section data-slug="agile-vs-waterfall">
+      <div class="sdlc-chip" title="שלב 6 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>פיתוח</div>
+      <style>
+        section[data-slug="agile-vs-waterfall"] .main{ flex:1 1 auto; min-height:0; display:grid;
+          grid-template-columns:1.15fr 1fr; gap:13px; align-items:stretch; }
+        section[data-slug="agile-vs-waterfall"] table.sad{ font-size:16px; }
+        section[data-slug="agile-vs-waterfall"] table.sad th{ font-size:15px; padding:6px 8px; }
+        section[data-slug="agile-vs-waterfall"] table.sad td{ padding:6px 9px; text-align:center; }
+        section[data-slug="agile-vs-waterfall"] table.sad td.k{ text-align:right; font-weight:700; color:var(--dark-blue); }
+        section[data-slug="agile-vs-waterfall"] table.sad td.ag{ color:var(--green); font-weight:800; }
+        section[data-slug="agile-vs-waterfall"] table.sad td.wf{ color:var(--red); font-weight:800; }
+        section[data-slug="agile-vs-waterfall"] table.sad tr.all td{ background:var(--tint-blue) !important;
+          font-size:19px; font-weight:800; }
+        section[data-slug="agile-vs-waterfall"] table.sad tr.all td.k{ font-size:15.5px; }
+        section[data-slug="agile-vs-waterfall"] .src2{ font-size:13px; color:var(--source); margin-top:5px; }
+        section[data-slug="agile-vs-waterfall"] .crit{ display:flex; flex-direction:column; gap:9px; min-height:0; }
+        section[data-slug="agile-vs-waterfall"] .c{ background:#FFF6E6; border-inline-start:5px solid var(--orange);
+          border-radius:11px; padding:7px 12px; flex:1 1 0; display:flex; flex-direction:column; justify-content:center; }
+        section[data-slug="agile-vs-waterfall"] .c .h{ font-size:15.5px; font-weight:800; color:var(--orange); }
+        section[data-slug="agile-vs-waterfall"] .c .d{ font-size:14.5px; line-height:1.34; color:var(--body); margin-top:2px; }
+        section[data-slug="agile-vs-waterfall"] .c .d b{ color:var(--dark-blue); }
+        section[data-slug="agile-vs-waterfall"] .keep{ flex:0 0 auto; }
+      </style>
+      <h1>אחוזי הצלחה — ואיך לקרוא אותם</h1>
+      <div class="subtitle">המספר שכולם מצטטים. שווה להכיר אותו — <b>ולדעת מה הוא לא אומר</b></div>
+      <div class="body">
+
+        <div class="main">
+
+          <div>
+            <table class="sad">
+              <tr><th style="width:26%">גודל הפרויקט</th><th><span class="en">Agile</span> — הצליח</th><th><span class="en">Waterfall</span> — הצליח</th></tr>
+              <tr><td class="k">גדול</td><td class="ag">18%</td><td class="wf">3%</td></tr>
+              <tr><td class="k">בינוני</td><td class="ag">27%</td><td class="wf">7%</td></tr>
+              <tr><td class="k">קטן</td><td class="ag">58%</td><td class="wf">44%</td></tr>
+              <tr class="all"><td class="k">כלל הפרויקטים</td><td class="ag">39%</td><td class="wf">11%</td></tr>
+            </table>
+            <div class="src2"><span class="src">Standish Group, CHAOS Report 2015. ״הצלחה״ = עמידה בזמן, בתקציב ובתכולה.</span></div>
+
+            <div class="callout good keep" style="margin-top:9px">
+              <span class="label">מה כן אפשר ללמוד מזה</span>
+              שתי מגמות יציבות שחוזרות בכל דוח: <b>ככל שהפרויקט גדול יותר — שיעור ההצלחה נמוך יותר</b>, בשתי השיטות. ו<b>הפער לטובת אג׳ייל גדל</b> ככל שהפרויקט גדול. שתי המגמות מצביעות לאותו כיוון: <b>מנות קטנות</b>.
+            </div>
+          </div>
+
+          <div class="crit">
+            <div class="c">
+              <div class="h">⚠️ מה נחשב ״הצלחה״</div>
+              <div class="d">בזמן, בתקציב ובתכולה. <b>לא</b> ״הביא ערך לארגון״. מערכת שסופקה בדיוק כמתוכנן ואיש לא משתמש בה — נספרת כהצלחה.</div>
+            </div>
+            <div class="c">
+              <div class="h">⚠️ הטיית בחירה</div>
+              <div class="d">מי בוחר אג׳ייל? לרוב ארגונים וצוותים <b>שכבר בשלים יותר</b>. ייתכן שהשיטה מסמנת צוות טוב יותר, ולא גורמת לו.</div>
+            </div>
+            <div class="c">
+              <div class="h">⚠️ הגדרות שנעות</div>
+              <div class="d">בפרויקט אג׳ילי התכולה <b>משתנה במכוון</b>. ״עמידה בתכולה״ פשוט אינה אותה מדידה בשתי השיטות.</div>
+            </div>
+            <div class="c">
+              <div class="h">⚠️ מי מדד</div>
+              <div class="d">הנתונים של גוף פרטי, המתודולוגיה אינה פתוחה לביקורת מלאה, והדוחות <b>שנויים במחלוקת</b> בספרות. לצטט בזהירות.</div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+      <aside class="notes">
+        שקופית כפולת-מטרה: ללמד את המספר <b>וגם</b> ללמד ספקנות. כמהנדסי תעשייה, הסטודנטים יידרשו
+        להשתמש בנתונים כאלה כדי לשכנע הנהלה — ומי שיצטט 39% מול 11% בלי לדעת מה נמדד, ייפול בשאלה
+        הראשונה.
+        <b>לחשוף קודם את הטבלה</b> ולשאול ״מה אתם לומדים מזה?״ ואז לעבור לעמודה הכתומה.
+        <b>הביקורת החזקה ביותר היא הראשונה:</b> ״הצלחה״ מוגדרת כעמידה בזמן, תקציב ותכולה — כלומר
+        <b>עמידה בתוכנית</b>. זו הגדרה של מפל מים! ולפי הערכים האג׳יליים היא כלל לא המדד הנכון:
+        ״תוכנה עובדת בעלת ערך״ הוא המדד. יש כאן אירוניה שכדאי להצביע עליה.
+        <b>הטיית הבחירה</b> — שאלת סיבתיות קלאסית: השיטה שיפרה את הצוות, או שצוותים טובים בוחרים בה?
+        בלי ניסוי מבוקר אי אפשר לדעת, ולא יהיה ניסוי כזה.
+        <b>ומה כן נשאר:</b> שתי המגמות — ההצלחה יורדת עם הגודל, והפער גדל עם הגודל — יציבות מספיק
+        כדי להישען עליהן. שתיהן אומרות אותו דבר: <b>הקטינו את המנה</b>. וזה מה שרוב ההרצאה עוסק בו.
+        <b>שאלה טובה:</b> ״למה בפרויקטים קטנים הפער כמעט נעלם (58% מול 44%)?״ כי בפרויקט קטן ממילא
+        המנה קטנה, ומפל מים עובד שם היטב — בדיוק כלל ה-6/6.
+      </aside>
+    </section>
+    <!-- D5 — Scrum: המסגרת. REFRESH of source slides 31, 32 and 36 merged. What Scrum assumes
+         (an empirical problem, not a predictable one), what it therefore does, and the framework
+         triple — Roles / Ceremonies / Artifacts — which is the map for the next four slides. -->
+    <section data-slug="scrum-overview">
+      <div class="sdlc-chip" title="שלב 6 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>פיתוח</div>
+      <style>
+        section[data-slug="scrum-overview"] .why{ flex:0 0 auto; background:var(--light-blue);
+          border:1px solid var(--blue); }
+        section[data-slug="scrum-overview"] .why p{ margin:0; color:#fff; font-size:17px; line-height:1.42; font-weight:700; }
+        section[data-slug="scrum-overview"] .why p b{ color:#fff; }
+        section[data-slug="scrum-overview"] .main{ flex:1 1 auto; min-height:0; display:grid;
+          grid-template-columns:0.95fr 1.35fr; gap:13px; align-items:stretch; }
+        section[data-slug="scrum-overview"] .facts{ background:#fff; border:2px solid var(--card-border);
+          border-radius:13px; padding:9px 14px; display:flex; flex-direction:column; min-height:0; }
+        section[data-slug="scrum-overview"] .facts h3{ margin:0 0 5px; font-size:17px; color:var(--dark-blue); }
+        section[data-slug="scrum-overview"] .facts ul.bullets > li{ font-size:15px !important; margin-bottom:6px; }
+        section[data-slug="scrum-overview"] .facts .src{ margin-top:auto; font-size:13px; }
+        section[data-slug="scrum-overview"] .triple{ display:grid; grid-template-columns:repeat(3,1fr);
+          gap:11px; min-height:0; }
+        section[data-slug="scrum-overview"] .t{ background:#fff; border:2px solid var(--card-border);
+          border-radius:13px; display:flex; flex-direction:column; min-height:0; overflow:hidden; }
+        section[data-slug="scrum-overview"] .t .hd{ padding:7px 12px; color:#fff; }
+        section[data-slug="scrum-overview"] .t .hd .he{ font-size:19px; font-weight:800; line-height:1.15; }
+        section[data-slug="scrum-overview"] .t .hd .en2{ font-size:13.5px; direction:ltr; unicode-bidi:isolate;
+          text-align:right; opacity:.92; }
+        section[data-slug="scrum-overview"] .t.r .hd{ background:var(--dark-blue); }
+        section[data-slug="scrum-overview"] .t.c .hd{ background:var(--light-blue); }
+        section[data-slug="scrum-overview"] .t.a .hd{ background:var(--orange); }
+        section[data-slug="scrum-overview"] .t.r{ border-color:var(--dark-blue); }
+        section[data-slug="scrum-overview"] .t.c{ border-color:var(--light-blue); }
+        section[data-slug="scrum-overview"] .t.a{ border-color:var(--orange); }
+        section[data-slug="scrum-overview"] .t .bd{ padding:8px 12px; display:flex; flex-direction:column;
+          gap:5px; flex:1 1 auto; min-height:0; }
+        section[data-slug="scrum-overview"] .t .it{ background:var(--card-bg); border-radius:8px; padding:4px 10px;
+          font-size:15px; font-weight:700; color:var(--dark-blue); direction:ltr; unicode-bidi:isolate; text-align:right; }
+        section[data-slug="scrum-overview"] .t .q{ margin-top:auto; font-size:13.5px; line-height:1.32; color:var(--muted); }
+        section[data-slug="scrum-overview"] .t .q b{ color:var(--dark-blue); }
+      </style>
+      <h1><span class="en">Scrum</span> — המסגרת</h1>
+      <div class="subtitle">השיטה האג׳ילית הנפוצה ביותר. שלושה סוגי דברים, וזה הכול</div>
+      <div class="body">
+
+        <div class="card why">
+          <p>ההנחה שביסודה: פיתוח תוכנה הוא <b>בעיה אמפירית</b> — לומדים אותה מתצפית וניסיון — ולא בעיה שאפשר לפתור בחיזוי ובתכנון מראש. מכאן הכול נגזר.</p>
+        </div>
+
+        <div class="main">
+
+          <div class="facts">
+            <h3>מה זה אומר בפועל</h3>
+            <ul class="bullets">
+              <li>לספק את <b>הערך העסקי הגבוה ביותר בזמן הקצר ביותר</b></li>
+              <li>לבחון תוכנה עובדת <b>שוב ושוב</b>, כל שבועיים עד חודש</li>
+              <li><b>העסק קובע עדיפויות</b>; הצוות מחליט איך לממש</li>
+              <li>צוותים <b>קטנים, רב-תחומיים ובהכוונה עצמית</b> — לא פיקוח מלמעלה</li>
+              <li>בסוף כל סבב אפשר <b>לשחרר כמו שזה</b> או להמשיך לשפר</li>
+            </ul>
+            <div class="src">פותחה ע״י קן שוואבר וג׳ף סאתרלנד, על בסיס טקאוצ׳י ונונקה (1986): צוותים קטנים ורב-תחומיים משיגים תוצאות טובות יותר בפיתוח מוצרים חדשים.</div>
+          </div>
+
+          <div class="triple">
+            <div class="t r">
+              <div class="hd"><div class="he">בעלי תפקידים</div><div class="en2">Roles</div></div>
+              <div class="bd">
+                <div class="it">Product Owner</div>
+                <div class="it">Scrum Master</div>
+                <div class="it">Team</div>
+                <div class="q"><b>מי</b> מחליט, מי מגן ומי בונה</div>
+              </div>
+            </div>
+            <div class="t c">
+              <div class="hd"><div class="he">טקסים</div><div class="en2">Ceremonies</div></div>
+              <div class="bd">
+                <div class="it">Sprint planning</div>
+                <div class="it">Daily scrum</div>
+                <div class="it">Sprint review</div>
+                <div class="it">Sprint retrospective</div>
+                <div class="q"><b>מתי</b> נפגשים, ולשם מה</div>
+              </div>
+            </div>
+            <div class="t a">
+              <div class="hd"><div class="he">תוצרים</div><div class="en2">Artifacts</div></div>
+              <div class="bd">
+                <div class="it">Product backlog</div>
+                <div class="it">Sprint backlog</div>
+                <div class="it">Burndown chart</div>
+                <div class="q"><b>מה</b> כתוב, ומי מסתכל בו</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+      <aside class="notes">
+        <b>להתחיל מההנחה, לא מהטקסים.</b> ״בעיה אמפירית״ פירושה: אי אפשר לחשב מראש את התשובה, אפשר
+        רק לנסות, למדוד ולתקן. מי שמאמין שאפשר לתכנן פרויקט תוכנה מראש — לא צריך סקראם.
+        <b>המבנה הזה — שלושה סוגי דברים — הוא כל סקראם.</b> זה מפתיע סטודנטים: השיטה המדוברת ביותר
+        בתעשייה היא שלוש רשימות קצרות.
+        <b>״העסק קובע עדיפויות, הצוות מחליט איך״</b> הוא הגבול הכי חשוב בסקראם, ובו נופלים ארגונים:
+        מנהל שאומר לצוות <b>איך</b> לממש שבר את המודל.
+        <b>הערה על התרגום:</b> ״טקסים״ הוא תרגום מקובל ל-ceremonies, ובגרסאות עדכניות של Scrum
+        קוראים להם <span class="en">events</span>. לא קריטי, אבל אם סטודנט מעיר — הוא צודק.
+        <b>ארבע השקופיות הבאות</b> מפרקות את השלושה: קודם המחזור שמחבר ביניהם, ואז תפקידים, טקסים
+        ותוצרים.
+      </aside>
+    </section>
+    <!-- D6 — מחזור הספרינט. REFRESH of source slides 34 + 35 (the Scrum loop picture). Rebuilt in
+         HTML as a left-to-right... in RTL, a right-to-left pipeline with the sprint box in the middle
+         carrying the daily loop, so the flow reads with the language.
+         Two rules get their own band because they are the ones teams break: a CONSTANT sprint length,
+         and NO CHANGE entering a running sprint. -->
+    <section data-slug="scrum-loop" class="has-acro-footer">
+      <div class="sdlc-chip" title="שלב 6 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>פיתוח</div>
+      <style>
+        section[data-slug="scrum-loop"] .flow{ flex:1 1 auto; min-height:0; display:grid;
+          grid-template-columns:0.95fr 46px 1.25fr 46px 0.95fr; gap:6px; align-items:stretch; }
+        section[data-slug="scrum-loop"] .col{ display:flex; flex-direction:column; gap:9px; min-height:0; }
+        section[data-slug="scrum-loop"] .bx{ background:#fff; border:2px solid var(--card-border);
+          border-radius:13px; padding:8px 12px; flex:1 1 0; display:flex; flex-direction:column; justify-content:center; }
+        section[data-slug="scrum-loop"] .bx .nm{ font-size:16.5px; font-weight:800; color:var(--dark-blue); line-height:1.2; }
+        section[data-slug="scrum-loop"] .bx .en2{ font-size:13px; color:var(--muted); direction:ltr;
+          unicode-bidi:isolate; text-align:right; }
+        section[data-slug="scrum-loop"] .bx .d{ font-size:13.5px; line-height:1.32; color:var(--body); margin-top:3px; }
+        section[data-slug="scrum-loop"] .bx .d b{ color:var(--dark-blue); }
+        section[data-slug="scrum-loop"] .bx.art{ border-color:var(--orange); background:var(--hero-bg); }
+        section[data-slug="scrum-loop"] .bx.art .nm{ color:var(--orange); }
+        section[data-slug="scrum-loop"] .bx.cer{ border-color:var(--light-blue); }
+        section[data-slug="scrum-loop"] .arrow{ display:flex; align-items:center; justify-content:center;
+          font-size:30px; font-weight:800; color:var(--blue); }
+        section[data-slug="scrum-loop"] .sprint{ background:#EAF3FB; border:3px solid var(--blue);
+          border-radius:15px; padding:9px 13px; display:flex; flex-direction:column; min-height:0; gap:7px; }
+        section[data-slug="scrum-loop"] .sprint .hd{ text-align:center; }
+        section[data-slug="scrum-loop"] .sprint .hd .nm{ font-size:21px; font-weight:800; color:var(--dark-blue); line-height:1.15; }
+        section[data-slug="scrum-loop"] .sprint .hd .du{ font-size:14px; color:var(--blue); font-weight:700; }
+        section[data-slug="scrum-loop"] .daily{ background:#fff; border:2px dashed var(--light-blue); border-radius:11px;
+          padding:6px 11px; flex:1 1 auto; display:flex; flex-direction:column; justify-content:center; }
+        section[data-slug="scrum-loop"] .daily .nm2{ font-size:16px; font-weight:800; color:var(--light-blue); }
+        section[data-slug="scrum-loop"] .daily .d2{ font-size:13.5px; line-height:1.32; color:var(--body); margin-top:2px; }
+        section[data-slug="scrum-loop"] .sprint .out{ background:var(--green); color:#fff; border-radius:10px;
+          padding:5px 11px; font-size:14.5px; font-weight:700; line-height:1.3; text-align:center; }
+        section[data-slug="scrum-loop"] .rules{ flex:0 0 auto; display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+        section[data-slug="scrum-loop"] .rules .callout{ margin:0; }
+        /* the SDLC chip floats bottom-left (z-index 6); keep the left card's text clear of it */
+        section[data-slug="scrum-loop"] .rules .callout.bad{ padding-inline-end:135px; }
+      </style>
+      <h1>מחזור הספרינט</h1>
+      <div class="subtitle">מרשימת הדרישות ועד תוספת עובדת — ושוב, כל שבועיים עד חודש</div>
+      <div class="body">
+
+        <div class="flow">
+
+          <div class="col">
+            <div class="bx art">
+              <div class="nm">בקלוג המוצר</div>
+              <div class="en2">Product Backlog</div>
+              <div class="d">כל מה שרוצים במערכת, <b>מתועדף</b> — באחריות ה-<span class="en">Product Owner</span></div>
+            </div>
+            <div class="bx cer">
+              <div class="nm">תכנון ספרינט</div>
+              <div class="en2">Sprint Planning</div>
+              <div class="d">בוחרים מטרה, ומושכים ממנה פריטים ל<b>בקלוג הספרינט</b></div>
+            </div>
+          </div>
+
+          <div class="arrow">←</div>
+
+          <div class="sprint">
+            <div class="hd">
+              <div class="nm">ספרינט</div>
+              <div class="du">2–4 שבועות · אורך <b>קבוע</b></div>
+            </div>
+            <div class="daily">
+              <div class="nm2">פגישה יומית · <span class="en">Daily Scrum</span></div>
+              <div class="d2">15 דקות, בעמידה. מה עשיתי אתמול · מה אעשה היום · מה חוסם אותי.<br>לאורך כל הספרינט המוצר <b>מעוצב, מקודד ונבדק</b>.</div>
+            </div>
+            <div class="out">בסופו: <b>תוספת עובדת</b> — <span class="en">Increment</span></div>
+          </div>
+
+          <div class="arrow">←</div>
+
+          <div class="col">
+            <div class="bx cer">
+              <div class="nm">סקירת ספרינט</div>
+              <div class="en2">Sprint Review</div>
+              <div class="d">מציגים את מה שנעשה, ו<b>מעדכנים את בקלוג המוצר</b> לפי מה שנלמד</div>
+            </div>
+            <div class="bx cer">
+              <div class="nm">רטרוספקטיבה</div>
+              <div class="en2">Sprint Retrospective</div>
+              <div class="d">איך <b>עבדנו</b> — לא מה בנינו. ומה נשנה בספרינט הבא</div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="rules">
+          <div class="callout ai">
+            <span class="label">כלל 1 — אורך קבוע</span>
+            אותו מספר שבועות בכל ספרינט. אורך קבוע מכניס את הצוות ל<b>קצב</b>, ומאפשר לאמוד כמה נכנס לספרינט על סמך ניסיון ולא על סמך ניחוש.
+          </div>
+          <div class="callout bad">
+            <span class="label">כלל 2 — אין שינוי בתוך ספרינט</span>
+            ברגע שהספרינט התחיל, <b>לא נכנסות אליו דרישות חדשות</b>. בקשה שמגיעה באמצע — הולכת לבקלוג ותתועדף לספרינט הבא. זה מה שהופך שבועיים ל<b>הבטחה</b> ולא לכוונה.
+          </div>
+        </div>
+
+      </div>
+      <aside class="notes">
+        לעבור על המחזור מימין לשמאל: בקלוג מוצר ← תכנון ← ספרינט ← סקירה ורטרוספקטיבה ← ובחזרה לבקלוג.
+        <b>הכלל השני הוא הכי חשוב, והכי מופר.</b> ״אג׳ייל = גמיש״ מתפרש בטעות כ״אפשר לשנות מתי שרוצים״.
+        ההפך: הגמישות היא <b>בין</b> הספרינטים, ובתוך הספרינט יש נעילה. בלי הנעילה אין התחייבות, ובלי
+        התחייבות אין קצב — ומקבלים כאוס עם פגישות יומיות.
+        <b>לשאול את הכיתה:</b> ״ומה אם מנהלת הקפיטריה מבקשת באמצע ספרינט משהו דחוף?״ תשובה: זה נכנס
+        לבקלוג, ובספרינט הבא — בעוד שבוע וחצי לכל היותר. זו הסיבה שספרינטים קצרים: <b>הם מה שמאפשר
+        לומר לא בלי לפגוע</b>.
+        <b>הפגישה היומית</b> — לא לפתור בה בעיות; מי שיש לו חסימה נשאר אחריה עם מי שרלוונטי. שלוש
+        השאלות אינן דיווח סטטוס לסקראם מאסטר אלא <b>התחייבות בפני עמיתים</b>.
+        <b>ההבדל בין סקירה לרטרוספקטיבה</b> תמיד מתבלבל: סקירה = <b>מה</b> בנינו, עם הלקוח. רטרוספקטיבה =
+        <b>איך</b> עבדנו, פנימית בצוות. הרטרוספקטיבה היא זו שמאפשרת שיפור, והיא הראשונה שמתבטלת
+        כשלוחצים — וזו טעות.
+        <b>״תוספת עובדת״</b> — לא ״קוד שנכתב״. עובד, נבדק, ועומד בהגדרת <span class="en">Done</span>.
+      </aside>
+    <div class="acro-footer"><span class="acro"><span class="en">SDLC</span> = <span class="en">Software Development Life Cycle</span> · מחזור פיתוח תוכנה</span></div>
+    </section>
+    <!-- D7 — בעלי התפקידים. REFRESH of source slides 37, 38, 39. Three columns, each with what the
+         role OWNS, and a one-line pin at the bottom that students remember. The Scrum Master coach
+         analogy is from the source's own speaker notes and is the best one available.
+         The Team column carries the constraints that are usually skipped and always matter:
+         full-time, no titles, and turnover only between sprints. -->
+    <section data-slug="scrum-roles">
+      <div class="sdlc-chip" title="שלב 6 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>פיתוח</div>
+      <style>
+        section[data-slug="scrum-roles"] .main{ flex:1 1 auto; min-height:0; display:grid;
+          grid-template-columns:repeat(3,1fr); gap:13px; align-items:stretch; }
+        section[data-slug="scrum-roles"] .r{ background:#fff; border:2px solid var(--card-border);
+          border-radius:14px; display:flex; flex-direction:column; min-height:0; overflow:hidden; }
+        section[data-slug="scrum-roles"] .r .hd{ padding:8px 14px; color:#fff; }
+        section[data-slug="scrum-roles"] .r .hd .en2{ font-size:21px; font-weight:800; direction:ltr;
+          unicode-bidi:isolate; text-align:right; line-height:1.15; }
+        section[data-slug="scrum-roles"] .r .hd .he{ font-size:15px; opacity:.94; }
+        section[data-slug="scrum-roles"] .r.po .hd{ background:var(--orange); }
+        section[data-slug="scrum-roles"] .r.po{ border-color:var(--orange); }
+        section[data-slug="scrum-roles"] .r.sm .hd{ background:var(--dark-blue); }
+        section[data-slug="scrum-roles"] .r.sm{ border-color:var(--dark-blue); }
+        section[data-slug="scrum-roles"] .r.tm .hd{ background:var(--green); }
+        section[data-slug="scrum-roles"] .r.tm{ border-color:var(--green); }
+        section[data-slug="scrum-roles"] .r .bd{ padding:9px 14px; flex:1 1 auto; min-height:0;
+          display:flex; flex-direction:column; }
+        section[data-slug="scrum-roles"] .r ul.bullets > li{ font-size:15px !important; margin-bottom:6px; }
+        section[data-slug="scrum-roles"] .r .pin{ margin-top:auto; border-radius:10px; padding:6px 11px;
+          font-size:14.5px; line-height:1.34; font-weight:700; }
+        section[data-slug="scrum-roles"] .r.po .pin{ background:var(--hero-bg); color:#8f3e00; }
+        section[data-slug="scrum-roles"] .r.sm .pin{ background:#EAF3FB; color:var(--dark-blue); }
+        section[data-slug="scrum-roles"] .r.tm .pin{ background:#EAF6EC; color:var(--green); }
+      </style>
+      <h1><span class="en">Scrum</span> — בעלי התפקידים</h1>
+      <div class="subtitle">שלושה תפקידים בלבד. ומי ש<b>מנהל</b> את הפרויקט — לא נמצא ברשימה</div>
+      <div class="body">
+
+        <div class="main">
+
+          <div class="r po">
+            <div class="hd"><div class="en2">Product Owner</div><div class="he">בעל/ת המוצר — מייצג/ת את הלקוח</div></div>
+            <div class="bd">
+              <ul class="bullets">
+                <li>חלק מצוות הפיתוח, ואחראי/ת על הקשר עם הלקוח וייצוג צרכיו</li>
+                <li><b>מגדיר/ה את צרכי המוצר</b></li>
+                <li>מחליט/ה על <b>תאריכי שחרור ותוכן</b></li>
+                <li>אחראי/ת ליצירת <b>הערך העסקי</b> של המוצר (<span class="en">ROI</span>)</li>
+                <li><b>מתעדף/ת</b> את בקלוג המוצר לכל ספרינט</li>
+                <li>מקבל/ת או דוחה את התוצר בסוף הספרינט</li>
+              </ul>
+              <div class="pin">מחליט/ה <b>מה</b> ייבנה ובאיזה סדר — לעולם לא איך.</div>
+            </div>
+          </div>
+
+          <div class="r sm">
+            <div class="hd"><div class="en2">Scrum Master</div><div class="he">שומר/ת השיטה</div></div>
+            <div class="bd">
+              <ul class="bullets">
+                <li>מייצג/ת את ההנהלה בפרויקט ומתאם/ת בין הצוות לארגון</li>
+                <li>אחראי/ת לשמירה על <b>עקרונות ושיטת העבודה</b> של <span class="en">Scrum</span></li>
+                <li><b>הסרת מכשולים</b> — טכנולוגיים, ארגוניים, תקשורתיים</li>
+                <li>וידוא שעבודת הצוות יעילה</li>
+                <li>יצירת שיתוף פעולה בין כל חלקי הפרויקט</li>
+                <li><b>הגנה על הצוות</b> מפני הפרעות חיצוניות</li>
+              </ul>
+              <div class="pin">כמו מאמן/ת הקבוצה: לא משחק/ת בעצמו/ה — דואג/ת שהשחקנים יצליחו.</div>
+            </div>
+          </div>
+
+          <div class="r tm">
+            <div class="hd"><div class="en2">Team</div><div class="he">צוות הפיתוח</div></div>
+            <div class="bd">
+              <ul class="bullets">
+                <li><b>5–9 אנשים</b>, בדרך כלל</li>
+                <li><b>חוצה תחומים</b>: מתכנתים, בודקים, <span class="en">UX</span>, <span class="en">IT</span>, עיצוב</li>
+                <li><b>משרה מלאה</b> — לא עובד על משימות חיצוניות במקביל (למעט מקרים שאין ברירה, כמו <span class="en">DBA</span> משותף)</li>
+                <li><b>מתארגן לבד — אין תארים</b></li>
+                <li>תחלופה רק <b>בין</b> ספרינטים, ועדיף בכלל לא</li>
+              </ul>
+              <div class="pin">מחליט <b>איך</b> ייבנה, ומתחייב על כמה — מתוך עצמו.</div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+      <aside class="notes">
+        <b>לפתוח בשאלה:</b> ״מי מנהל הפרויקט בסקראם?״ התשובה: <b>אף אחד</b>, ובכוונה. הסמכויות שבדרך
+        כלל מרוכזות אצל מנהל פרויקט מפוצלות לשלושה — <b>מה</b> (PO), <b>איך</b> (Team), ו<b>שהתהליך
+        יעבוד</b> (SM). זה השינוי הארגוני האמיתי, והוא מה שארגונים הכי מתקשים לאמץ.
+        <b>Product Owner</b> — הקושי בפועל הוא זמינות. PO שנמצא בישיבות אחרות ואינו זמין לצוות הוא
+        צוואר בקבוק שמשתק ספרינט שלם.
+        <b>Scrum Master</b> — הטעות הנפוצה: להפוך אותו למנהל הצוות. הוא לא. אנלוגיית המאמן עובדת טוב:
+        לא נכנס לתוכן, שומר על הכללים, מסיר מכשולים, מגן מהפרעות. אם הוא מחלק משימות — משהו נשבר.
+        <b>Team</b> — שלוש נקודות ששווה להתעכב עליהן: (1) <b>משרה מלאה</b>: אדם שמחולק בין שני צוותים
+        מאבד זמן מעבר עצום ואינו מתחייב לאף אחד. (2) <b>אין תארים</b>: לא ״ארכיטקט״ ולא ״בכיר״ —
+        בתוך הצוות כולם חברי צוות, ובזה מתאפשרת ההתארגנות העצמית. (3) <b>תחלופה רק בין ספרינטים</b>:
+        להחליף אדם באמצע ספרינט הורס את ההתחייבות שניתנה.
+        <b>ה-DBA המשותף</b> מהערות המקור הוא דוגמה טובה לחוסר עצמאות: אם הצוות צריך לחכות ל-DBA
+        שיוסיף טבלה — הוא לא באמת עצמאי, וזו חסימה שה-Scrum Master אמור להסיר.
+      </aside>
+    </section>
+    <!-- D8 — הטקסים. REFRESH of source slides 41, 43, 44, 45, 46 merged into one comparable grid:
+         each ceremony gets when / how long / who / what comes out of it. The "what it is NOT" line on
+         each is where the real teaching is — every one of these four is routinely degraded into
+         something else (planning into a wish list, daily into a status report, review into a demo
+         with no backlog update, retro into the first meeting that gets cancelled). -->
+    <section data-slug="scrum-ceremonies">
+      <div class="sdlc-chip" title="שלב 6 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>פיתוח</div>
+      <style>
+        section[data-slug="scrum-ceremonies"] .grid{ flex:1 1 auto; min-height:0; display:grid;
+          grid-template-columns:1fr 1fr; grid-auto-rows:1fr; gap:11px; }
+        section[data-slug="scrum-ceremonies"] .c{ background:#fff; border:2px solid var(--card-border);
+          border-radius:13px; padding:8px 13px; display:flex; flex-direction:column; min-height:0; }
+        section[data-slug="scrum-ceremonies"] .c .hd{ display:flex; align-items:baseline; gap:9px; flex-wrap:wrap; }
+        section[data-slug="scrum-ceremonies"] .c .hd .en2{ font-size:18px; font-weight:800; color:var(--dark-blue);
+          direction:ltr; unicode-bidi:isolate; }
+        section[data-slug="scrum-ceremonies"] .c .hd .he{ font-size:15px; color:var(--muted); font-weight:700; }
+        section[data-slug="scrum-ceremonies"] .c .meta{ display:flex; gap:6px; flex-wrap:wrap; margin:4px 0 5px; }
+        section[data-slug="scrum-ceremonies"] .c .meta span{ background:var(--tint-blue); color:var(--dark-blue);
+          border-radius:6px; padding:2px 8px; font-size:12.5px; font-weight:700; }
+        section[data-slug="scrum-ceremonies"] .c ul.bullets > li{ font-size:14.5px !important; margin-bottom:4px; }
+        section[data-slug="scrum-ceremonies"] .c .not{ margin-top:auto; background:#FBEAEA; border-radius:9px;
+          padding:5px 10px; font-size:13.5px; line-height:1.32; color:var(--body); }
+        section[data-slug="scrum-ceremonies"] .c .not b{ color:var(--red); }
+        section[data-slug="scrum-ceremonies"] .c.d{ border-color:var(--light-blue); }
+      </style>
+      <h1><span class="en">Scrum</span> — הטקסים</h1>
+      <div class="subtitle">ארבע פגישות. לכל אחת <b>מטרה אחת</b> — וכל אחת מהן מתדרדרת בקלות למשהו אחר</div>
+      <div class="body">
+
+        <div class="grid">
+
+          <div class="c">
+            <div class="hd"><span class="en2">Sprint Planning</span><span class="he">תכנון ספרינט</span></div>
+            <div class="meta"><span>בתחילת כל ספרינט</span><span>הצוות + <span class="en">PO</span> + <span class="en">SM</span></span></div>
+            <ul class="bullets">
+              <li>קלטים: <b>קיבולת הצוות</b>, בקלוג המוצר, תנאים עסקיים, מצב המוצר ומגבלות טכנולוגיות</li>
+              <li>חלק א׳ — תעדוף: בוחרים <b>מטרת ספרינט</b> אחת ברורה</li>
+              <li>חלק ב׳ — תכנון: <b>איך</b> משיגים אותה, בונים את בקלוג הספרינט ומעריכים בשעות</li>
+            </ul>
+            <div class="not"><b>לא</b> רשימת משאלות של ההנהלה. הצוות הוא זה שמתחייב — לפי קיבולת אמיתית.</div>
+          </div>
+
+          <div class="c d">
+            <div class="hd"><span class="en2">Daily Scrum</span><span class="he">פגישה יומית</span></div>
+            <div class="meta"><span>כל יום</span><span>15 דקות</span><span>בעמידה</span><span>כולם מוזמנים, רק הצוות מדבר</span></div>
+            <ul class="bullets">
+              <li>מה עשיתי אתמול</li>
+              <li>מה אעשה היום</li>
+              <li>מה <b>חוסם</b> אותי</li>
+            </ul>
+            <div class="not"><b>לא</b> דיווח סטטוס לסקראם מאסטר, ו<b>לא</b> מקום לפתור בעיות. אלה <b>התחייבויות בפני עמיתים</b>; מי שחסום נשאר אחרי הפגישה.</div>
+          </div>
+
+          <div class="c">
+            <div class="hd"><span class="en2">Sprint Review</span><span class="he">סקירת ספרינט</span></div>
+            <div class="meta"><span>בסוף הספרינט</span><span>2–4 שעות</span><span>+ בעלי עניין</span></div>
+            <ul class="bullets">
+              <li>הצוות <b>מציג את התוספת</b> שפותחה</li>
+              <li>בודקים מה <b>מוכן</b> לפי הגדרת <span class="en">Done</span>, ומה לא</li>
+              <li><b>מעדכנים את בקלוג המוצר</b> לפי מה שנלמד, וקובעים תאריך לתכנון הבא</li>
+            </ul>
+            <div class="not"><b>לא</b> מצגת. מראים תוכנה שרצה. ואם הבקלוג לא השתנה בסופה — כנראה לא באמת למדנו כלום.</div>
+          </div>
+
+          <div class="c">
+            <div class="hd"><span class="en2">Sprint Retrospective</span><span class="he">רטרוספקטיבה</span></div>
+            <div class="meta"><span>אחרי הסקירה</span><span>הצוות בלבד</span></div>
+            <ul class="bullets">
+              <li>מה עבד טוב?</li>
+              <li>מה אפשר לשפר?</li>
+              <li><b>איך נשפר את זה בספרינט הבא</b> — פעולה אחת קונקרטית</li>
+            </ul>
+            <div class="not"><b>לא</b> על מה בנינו אלא על <b>איך עבדנו</b>, ו<b>לא</b> מקום לשפוט אנשים. זו הפגישה הראשונה שמבטלים כשלוחצים — וזו הטעות.</div>
+          </div>
+
+        </div>
+
+      </div>
+      <aside class="notes">
+        ארבע פגישות, וכל אחת עונה על שאלה אחרת. הכי חשוב פדגוגית הוא ״מה זה <b>לא</b>״ בכל אחת, כי
+        שם קורית ההידרדרות בשטח.
+        <b>תכנון:</b> הפואנטה היא ״קיבולת״. הצוות מתחייב לפי מה שהוא באמת יכול — ולא לפי מה שההנהלה
+        רוצה. ברגע שהתחייבות נכפית, המספרים הופכים לפיקציה והמודל מת.
+        <b>יומית:</b> ההבחנה בין ״דיווח סטטוס״ ל״התחייבות בפני עמיתים״ היא לב העניין. ההבדל מורגש
+        בכיוון המבט: אם כולם מסתכלים על הסקראם מאסטר — זה הפך לדיווח.
+        15 דקות ובעמידה הן מנגנון, לא גימיק: הן מה שמונע פגישה של שעה.
+        <b>סקירה:</b> ״מראים תוכנה שרצה, לא מצגת״. ושורת המבחן: הבקלוג צריך להשתנות בסופה. סקירה שבה
+        כולם מהנהנים ושום דבר לא זז — היא טקס ריק.
+        <b>רטרוספקטיבה:</b> הפגישה שהכי מהר מתבטלת, והיא היחידה שמשפרת את הצוות עצמו. ולומר במפורש:
+        לצאת ממנה עם <b>פעולה אחת קונקרטית</b>, לא עם רשימת תלונות.
+        <b>שאלה טובה:</b> ״מה ההבדל בין סקירה לרטרוספקטיבה?״ — מה מול איך; עם הלקוח מול פנימי.
+      </aside>
+    </section>
+    <!-- D9 — התוצרים, והבקלוג של הקמפוס. REFRESH of source slides 48, 49, 51, 53, with the course
+         spine folded in: the campus product backlog is written STRAIGHT OUT of our own L4-5 use
+         cases, as user stories with estimates.
+         That is the payoff of the slide — the backlog is not a new artifact the students have to
+         learn, it is the use-case model re-shaped and prioritised. The estimates are relative story
+         points, deliberately Fibonacci-ish, and the university-identity item is the big one (13),
+         which is consistent with L10 where that integration was the hard constraint. -->
+    <section data-slug="scrum-artifacts">
+      <div class="sdlc-chip" title="שלב 6 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>פיתוח</div>
+      <style>
+        section[data-slug="scrum-artifacts"] .main{ flex:1 1 auto; min-height:0; display:grid;
+          grid-template-columns:0.82fr 1.35fr; gap:13px; align-items:stretch; }
+        section[data-slug="scrum-artifacts"] .arts{ display:flex; flex-direction:column; gap:9px; min-height:0; }
+        section[data-slug="scrum-artifacts"] .a{ background:#fff; border:2px solid var(--card-border);
+          border-radius:12px; padding:7px 12px; flex:1 1 0; display:flex; flex-direction:column; justify-content:center; }
+        section[data-slug="scrum-artifacts"] .a .en2{ font-size:16.5px; font-weight:800; color:var(--dark-blue);
+          direction:ltr; unicode-bidi:isolate; text-align:right; line-height:1.15; }
+        section[data-slug="scrum-artifacts"] .a .he{ font-size:13.5px; color:var(--muted); font-weight:700; }
+        section[data-slug="scrum-artifacts"] .a .d{ font-size:14px; line-height:1.34; color:var(--body); margin-top:3px; }
+        section[data-slug="scrum-artifacts"] .a .d b{ color:var(--dark-blue); }
+        section[data-slug="scrum-artifacts"] .a.pb{ border-color:var(--orange); }
+        section[data-slug="scrum-artifacts"] .a.pb .en2{ color:var(--orange); }
+        section[data-slug="scrum-artifacts"] .bl{ background:#fff; border:2px solid var(--orange);
+          border-radius:13px; padding:8px 13px; display:flex; flex-direction:column; min-height:0; }
+        section[data-slug="scrum-artifacts"] .bl .panel-title{ margin:0 0 5px; font-size:16.5px; color:var(--orange); }
+        section[data-slug="scrum-artifacts"] table.sad{ font-size:14.5px; }
+        section[data-slug="scrum-artifacts"] table.sad th{ font-size:14px; padding:5px 8px; }
+        section[data-slug="scrum-artifacts"] table.sad td{ padding:4px 9px; }
+        section[data-slug="scrum-artifacts"] table.sad td.e{ text-align:center; font-weight:800; color:var(--orange);
+          font-family:Consolas,monospace; direction:ltr; unicode-bidi:isolate; }
+        section[data-slug="scrum-artifacts"] table.sad td.uc{ text-align:center; font-size:12.5px; color:var(--muted); }
+        section[data-slug="scrum-artifacts"] .bl .tie{ margin-top:auto; background:var(--hero-bg); border-radius:9px;
+          padding:5px 11px; font-size:14px; line-height:1.34; color:var(--body); }
+        section[data-slug="scrum-artifacts"] .bl .tie b{ color:var(--orange); }
+      </style>
+      <h1><span class="en">Scrum</span> — התוצרים, והבקלוג של הקמפוס</h1>
+      <div class="subtitle">שלוש רשימות. ואת הראשונה שבהן — <b>כבר כתבנו</b>, בהרצאות 4–5</div>
+      <div class="body">
+
+        <div class="main">
+
+          <div class="arts">
+            <div class="a pb">
+              <div class="en2">Product Backlog</div>
+              <div class="he">בקלוג המוצר</div>
+              <div class="d">רשימת <b>כל</b> העבודה הרצויה בפרויקט — הדרישות. כל פריט בעל ערך למשתמש או ללקוח. <b>מתועדף ע״י ה-<span class="en">PO</span></b>, ומתועדף מחדש בתחילת כל ספרינט. רשימה <b>חיה</b>, לא מסמך מאושר.</div>
+            </div>
+            <div class="a">
+              <div class="en2">Sprint Backlog</div>
+              <div class="he">בקלוג הספרינט</div>
+              <div class="d">מה שהצוות <b>התחייב</b> לספרינט הזה, מפורק למשימות. <b>חברי הצוות בוחרים בעצמם</b> — עבודה לעולם לא מוקצית. הזמן שנותר מתעדכן כל יום, וכל חבר צוות יכול להוסיף, לשנות או למחוק.</div>
+            </div>
+            <div class="a">
+              <div class="en2">Burndown Chart</div>
+              <div class="he">גרף שריפה</div>
+              <div class="d">כמה עבודה <b>נותרה</b> בכל יום של הספרינט. ציר אנכי — עבודה שנותרה; אופקי — ימים. קו מתוכנן מול <b>קו בפועל</b>. כלי של הצוות לעצמו, לא כלי בקרה של ההנהלה.</div>
+            </div>
+          </div>
+
+          <div class="bl">
+            <div class="panel-title">בקלוג המוצר — מערכת ההזמנות בקמפוס</div>
+            <table class="sad">
+              <tr><th style="width:70%">פריט — סיפור משתמש</th><th style="width:14%">הערכה</th><th style="width:16%">מקור</th></tr>
+              <tr><td>כסטודנט/ית, אני רוצה <b>לראות את התפריט</b> של הקפיטריה, כדי לדעת מה יש היום</td><td class="e">3</td><td class="uc">עיון בתפריט</td></tr>
+              <tr><td>כסטודנט/ית, אני רוצה <b>להזמין מנות ולקבוע שעת איסוף</b>, כדי לא לעמוד בתור</td><td class="e">8</td><td class="uc">ביצוע הזמנה</td></tr>
+              <tr><td>כעובד/ת מטבח, אני רוצה <b>לראות את תור ההזמנות לפי עמדה</b>, כדי לדעת מה להכין</td><td class="e">5</td><td class="uc">תור הכנה</td></tr>
+              <tr><td>כעובד/ת מטבח, אני רוצה <b>לסמן מנה כמוכנה</b>, כדי שהסטודנט/ית יידע/תדע לבוא</td><td class="e">3</td><td class="uc">סימון מוכן</td></tr>
+              <tr><td>כסטודנט/ית, אני רוצה <b>לשלם בכרטיס האוניברסיטה</b>, כדי לא להזין כרטיס אשראי</td><td class="e">13</td><td class="uc">תשלום</td></tr>
+              <tr><td>כעובד/ת דלפק, אני רוצה <b>לאמת שההזמנה שולמה ושייכת לסטודנט/ית</b></td><td class="e">8</td><td class="uc">אימות איסוף</td></tr>
+              <tr><td>כסטודנט/ית, אני רוצה <b>לסנן מנות לפי העדפה תזונתית</b></td><td class="e">5</td><td class="uc">עיון בתפריט</td></tr>
+              <tr><td>כמנהל/ת קפיטריה, אני רוצה <b>לעדכן שמנה אזלה</b>, כדי שלא יזמינו אותה</td><td class="e">3</td><td class="uc">ניהול מלאי</td></tr>
+              <tr><td>כמנהל/ת קפיטריה, אני רוצה <b>דוח מכירות יומי</b>, כדי לתכנן הזמנות מספקים</td><td class="e">8</td><td class="uc">דוח יומי</td></tr>
+              <tr><td style="color:var(--muted)">… ועוד פריטים שטרם פורקו</td><td class="e">21</td><td class="uc">—</td></tr>
+            </table>
+            <div class="tie">
+              שימו לב לעמודה השמאלית: <b>כל פריט הוא תרחיש שימוש מהרצאות 4–5</b>, כתוב כסיפור משתמש ומתומחר. הבקלוג אינו תוצר חדש — הוא <b>מודל תרחישי השימוש, מסודר לפי עדיפות</b>.
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+      <aside class="notes">
+        <b>הפואנטה של השקופית היא הפס הכתום למטה</b>, ושווה לעצור עליו: הסטודנטים חוששים ש״אג׳ייל
+        מבטל את כל מה שלמדנו״. הנה ההפך — הבקלוג הוא <b>בדיוק</b> תרחישי השימוש שבנינו, בסדר עדיפות.
+        <b>סיפור משתמש</b> — לחדד את הפורמט: ״כ<b>מי</b>, אני רוצה <b>מה</b>, כדי <b>למה</b>״. החלק
+        האחרון (״כדי״) הוא החשוב ביותר והראשון שנופל — בלעדיו אין דרך לדעת אם הפריט באמת נחוץ.
+        התאמה לקורס: ה״מי״ הוא ה<b>שחקן</b> מתרשים תרחישי השימוש.
+        <b>ההערכות</b> — נקודות יחסיות (סקאלה פיבונאצ׳ית: 1,2,3,5,8,13,21), לא שעות. הן אומרות ״זה
+        בערך פי שניים מזה״. שימו לב שהתשלום מקבל <b>13</b>: זה הפריט שדורש את הממשק למערכת החשבונות
+        של האוניברסיטה — בדיוק האילוץ הקשה מהרצאה 10. הגודל הזה הוא סימן שכדאי לפרק אותו.
+        <b>Sprint Backlog</b> — הכלל ״עבודה לעולם לא מוקצית״ מפתיע סטודנטים. חברי הצוות בוחרים משימות
+        בעצמם. זה עיקרון של אחריות אישית, וזה גם עובד טוב יותר: מי שבחר משימה מחויב לה.
+        <b>Burndown</b> — להזכיר את הצורה: קו יורד. אם הקו בפועל מעל המתוכנן — לא נספיק, ועדיף לדעת
+        ביום השלישי. ולומר במפורש: זה כלי של הצוות לעצמו. ברגע שהנהלה מודדת בו ביצועים, הצוות מתחיל
+        לנפח הערכות והכלי מת.
+      </aside>
+    </section>
+    <!-- D10 — XP. MERGE of source slides 55-59. XP in one panel + the Scrum-vs-XP table from the
+         source, with the point the table implies but does not state: they are not alternatives.
+         Scrum manages the team and the process and says nothing about how to write code; XP
+         prescribes the engineering practice. Most real teams run Scrum with XP practices inside. -->
+    <section data-slug="xp" class="has-acro-footer">
+      <div class="sdlc-chip" title="שלב 6 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>פיתוח</div>
+      <style>
+        section[data-slug="xp"] .main{ flex:1 1 auto; min-height:0; display:grid;
+          grid-template-columns:1fr 1.25fr; gap:13px; align-items:stretch; }
+        section[data-slug="xp"] .p{ background:#fff; border:2px solid var(--card-border);
+          border-radius:13px; padding:9px 14px; display:flex; flex-direction:column; min-height:0; }
+        section[data-slug="xp"] .p h3{ margin:0 0 4px; font-size:17.5px; color:var(--dark-blue); }
+        section[data-slug="xp"] .p .sub2{ font-size:13.5px; color:var(--muted); margin-bottom:6px; line-height:1.3; }
+        section[data-slug="xp"] .p ul.bullets > li{ font-size:15px !important; margin-bottom:5px; }
+        section[data-slug="xp"] .four{ display:flex; gap:7px; margin-bottom:7px; }
+        section[data-slug="xp"] .four span{ flex:1 1 0; background:var(--tint-blue); color:var(--dark-blue);
+          border-radius:8px; padding:5px 4px; text-align:center; font-size:14.5px; font-weight:800; }
+        section[data-slug="xp"] table.sad{ font-size:15px; }
+        section[data-slug="xp"] table.sad th{ font-size:15px; padding:6px 9px; }
+        section[data-slug="xp"] table.sad td{ padding:6px 10px; }
+        section[data-slug="xp"] table.sad td.k{ font-weight:700; color:var(--dark-blue); width:22%; }
+        section[data-slug="xp"] .tbl{ background:#fff; border:2px solid var(--card-border); border-radius:13px;
+          padding:9px 13px; display:flex; flex-direction:column; min-height:0; }
+        section[data-slug="xp"] .tbl .panel-title{ margin:0 0 5px; font-size:16.5px; }
+        section[data-slug="xp"] .tbl .concl{ margin-top:auto; background:#EAF6EC; border-inline-start:5px solid var(--green);
+          border-radius:9px; padding:6px 11px; font-size:14.5px; line-height:1.36; color:var(--body); }
+        section[data-slug="xp"] .tbl .concl b{ color:var(--green); }
+      </style>
+      <h1><span class="en">Extreme Programming</span> — ולמה הוא לא מתחרה ב-<span class="en">Scrum</span></h1>
+      <div class="subtitle">שיטה אג׳ילית שמדברת דווקא על מה ש-<span class="en">Scrum</span> שותק לגביו: <b>איך כותבים את הקוד</b></div>
+      <div class="body">
+
+        <div class="main">
+
+          <div class="p">
+            <h3><span class="en">XP</span> — קנט בק ווורד קנינגהאם, 2000</h3>
+            <div class="sub2">מבוססת על תקשורת, פשטות ומשוב מהלקוח. מתאימה במיוחד לסביבות עם דרישות משתנות וקצב עבודה גבוה.</div>
+            <div class="four"><span>הקשבה</span><span>עיצוב</span><span>קידוד</span><span>בדיקות</span></div>
+            <ul class="bullets">
+              <li>הלקוחות כותבים <b>סיפורי משתמש</b> — בשפת הלקוח, לא טכנית; לכל סיפור הערכת מאמץ (למשל 1–3 ימי עבודה)</li>
+              <li>הסיפורים משמשים גם <b>בסיס לבדיקות קבלה</b></li>
+              <li>מסירת גרסה שמישה כל <b>1–3 שבועות</b>; לפני כל סבב — פגישת תכנון</li>
+              <li>עבודה בצוותים קטנים, ולעיתים ב<b>זוגות</b> (<span class="en">pair programming</span>)</li>
+              <li>משימות קטנות, מעקב יומי (<span class="en">stand-up</span>), <b>בדיקות אוטומטיות</b> ושיפור מתמיד</li>
+            </ul>
+          </div>
+
+          <div class="tbl">
+            <div class="panel-title"><span class="en">Scrum</span> מול <span class="en">XP</span></div>
+            <table class="sad">
+              <tr><th>נושא</th><th><span class="en">Scrum</span></th><th><span class="en">XP</span></th></tr>
+              <tr><td class="k">מיקוד</td><td>ניהול הצוות והתהליך</td><td>איכות הקוד והתהליך הטכני</td></tr>
+              <tr><td class="k">הנחיות לכתיבת קוד</td><td><b>אין</b> — רק ניהול משימות</td><td><b>יש</b> — בדיקות, תכנות בזוגות, עיצוב פשוט</td></tr>
+              <tr><td class="k">שיתוף הלקוח</td><td>בתכנון ובסקירה</td><td>שותף <b>פעיל לאורך כל הדרך</b></td></tr>
+              <tr><td class="k">כלי ניהול</td><td><span class="en">Backlog</span>, <span class="en">Sprint</span>, <span class="en">Burndown</span></td><td><span class="en">Stories</span>, <span class="en">Iterations</span>, <span class="en">Pair Programming</span></td></tr>
+            </table>
+            <div class="concl">
+              תסתכלו על השורה השנייה: <span class="en">Scrum</span> <b>לא אומר דבר</b> על איך לכתוב קוד, ו-<span class="en">XP</span> כן. הן לא חלופות — הן <b>משלימות</b>. רוב הצוותים בשטח מריצים <span class="en">Scrum</span> כמסגרת, עם פרקטיקות <span class="en">XP</span> בפנים: בדיקות אוטומטיות, אינטגרציה רציפה וסקירת קוד.
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+      <aside class="notes">
+        <b>המסר המרכזי הוא בשורה השנייה בטבלה</b>, ושווה לעצור עליה: סקראם הוא מסגרת ניהולית שאינה
+        מתייחסת בכלל לאיכות הקוד. זה יתרון (אפשר להשתמש בו בכל תחום, גם מחוץ לתוכנה) וגם חולשה —
+        צוות שמריץ סקראם בלי משמעת הנדסית מייצר חוב טכני מהר מאוד, ואחרי כמה ספרינטים המהירות צונחת.
+        <b>ולכן ״לא חלופות אלא משלימות״.</b> בפועל בתעשייה: סקראם כמסגרת, ובתוכה בדיקות אוטומטיות,
+        אינטגרציה רציפה וסקירת קוד — שהן פרקטיקות XP.
+        <b>סיפורי משתמש</b> — לחדד שהם אותו רעיון כמו בבקלוג של סקראם, ושהם נכתבים <b>בשפת הלקוח</b>.
+        ושהם משמשים גם כבדיקות קבלה — וזה מחבר ישירות למבחני הקבלה בחוזה מהרצאה 10.
+        <b>תכנות בזוגות</b> — הפרקטיקה הכי שנויה במחלוקת ב-XP. הטיעון בעד: סקירת קוד בזמן אמת, פחות
+        באגים, הפצת ידע. הטיעון נגד: שני אנשים על משימה אחת. בפועל רוב הארגונים אימצו את המטרה
+        (סקירת קוד) ולא את הפרקטיקה עצמה.
+        <b>לחבר ל-AI:</b> ״תכנות בזוגות״ הוא בדיוק מה שהרבה אנשים עושים היום עם כלי AI — אחד כותב,
+        השני בודק ומאתגר. רק שהשני אינו אדם. נחזור לזה בשקופית ה-AI.
+      </aside>
+    <div class="acro-footer"><span class="acro"><span class="en">AI</span> = <span class="en">Artificial Intelligence</span> · בינה מלאכותית</span></div>
+    </section>
+    <!-- D11 — Scaled Agile. KEEP of source slides 60 + 61, compressed to one slide: why scaling is a
+         problem at all, the three levels (team / program / portfolio) with what is planned at each,
+         and the named frameworks. The honest caveat at the bottom is worth keeping — scaling
+         frameworks are widely used and widely criticised for reintroducing the hierarchy agile
+         removed. -->
+    <section data-slug="scaled-agile">
+      <div class="sdlc-chip" title="שלב 6 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>פיתוח</div>
+      <style>
+        section[data-slug="scaled-agile"] .why{ flex:0 0 auto; background:var(--light-blue); border:1px solid var(--blue); }
+        section[data-slug="scaled-agile"] .why p{ margin:0; color:#fff; font-size:17px; line-height:1.4; font-weight:700; }
+        section[data-slug="scaled-agile"] .why p b{ color:#fff; }
+        section[data-slug="scaled-agile"] .levels{ flex:1 1 auto; min-height:0; display:grid;
+          grid-template-rows:repeat(3,1fr); gap:10px; }
+        section[data-slug="scaled-agile"] .lv{ display:grid; grid-template-columns:200px 1fr 240px;
+          gap:12px; align-items:center; background:#fff; border:2px solid var(--card-border);
+          border-radius:13px; padding:8px 14px; min-height:0; }
+        section[data-slug="scaled-agile"] .lv .nm{ font-size:18px; font-weight:800; color:var(--dark-blue); line-height:1.15; }
+        section[data-slug="scaled-agile"] .lv .en2{ font-size:13.5px; color:var(--muted); direction:ltr;
+          unicode-bidi:isolate; text-align:right; }
+        section[data-slug="scaled-agile"] .lv .d{ font-size:14.5px; line-height:1.34; color:var(--body); }
+        section[data-slug="scaled-agile"] .lv .d b{ color:var(--dark-blue); }
+        section[data-slug="scaled-agile"] .lv .unit{ background:var(--tint-blue); border-radius:9px; padding:6px 11px;
+          font-size:14px; line-height:1.3; color:var(--dark-blue); }
+        section[data-slug="scaled-agile"] .lv .unit b{ color:var(--orange); }
+        section[data-slug="scaled-agile"] .lv.t{ border-color:var(--green); }
+        section[data-slug="scaled-agile"] .lv.t .nm{ color:var(--green); }
+        section[data-slug="scaled-agile"] .lv.pr{ border-color:var(--blue); }
+        section[data-slug="scaled-agile"] .lv.po{ border-color:var(--orange); }
+        section[data-slug="scaled-agile"] .lv.po .nm{ color:var(--orange); }
+        section[data-slug="scaled-agile"] .fw{ flex:0 0 auto; display:flex; align-items:center; gap:8px; flex-wrap:wrap;
+          background:var(--card-bg); border-radius:11px; padding:7px 13px; }
+        section[data-slug="scaled-agile"] .fw .k{ font-size:14px; font-weight:800; color:var(--muted); }
+        section[data-slug="scaled-agile"] .fw .t2{ background:#fff; border:1.5px solid var(--card-border);
+          border-radius:7px; padding:3px 10px; font-size:14px; font-weight:700; color:var(--dark-blue);
+          direction:ltr; unicode-bidi:isolate; }
+      </style>
+      <h1>כשזה גדל — <span class="en">Scaled Agile</span></h1>
+      <div class="subtitle">סקראם תוכנן לצוות אחד של 5–9 אנשים. מה עושים כשיש שנים-עשר צוותים?</div>
+      <div class="body">
+
+        <div class="card why">
+          <p>מעל כ-<b>20 מפתחים</b> נוטים לאמץ גישות היברידיות. הבעיה שהן פותרות: <b>תיאום בין צוותים</b> — תלויות הדדיות, ממשקים משותפים, ומסירה בקצב אחיד.</p>
+        </div>
+
+        <div class="levels">
+
+          <div class="lv t">
+            <div>
+              <div class="nm">רמת הצוות</div>
+              <div class="en2">Team Level</div>
+            </div>
+            <div class="d">צוותי <span class="en">Scrum</span> רגילים — <span class="en">PO</span>, <span class="en">Scrum Master</span>, מפתחים ובודקים. עובדים בספרינטים, ובסופם תכנון, דמו ורטרוספקטיבה. <b>בדיוק מה שלמדנו.</b></div>
+            <div class="unit">מתכננים ב<b>סיפורי משתמש</b><br>אופק: ספרינט</div>
+          </div>
+
+          <div class="lv pr">
+            <div>
+              <div class="nm">רמת התכנית</div>
+              <div class="en2">Program Level · ART</div>
+            </div>
+            <div class="d">קבוצה של <b>5–12 צוותים</b> שעובדים יחד לספק פתרון בקצב אחיד (<span class="en">Agile Release Train</span>). תיאום, הדגמת מערכת משותפת, ותפקידים רוחביים — <span class="en">UX</span>, ארכיטקטים.</div>
+            <div class="unit">מתכננים ב<b>פיצ׳רים</b><br>אופק: <span class="en">PI</span> — כמה ספרינטים</div>
+          </div>
+
+          <div class="lv po">
+            <div>
+              <div class="nm">רמת הפורטפוליו</div>
+              <div class="en2">Portfolio Level</div>
+            </div>
+            <div class="d">כאן מחליטים על <b>כיווני המוצר וההשקעה</b>: תקציבים, מדדים ואסטרטגיה ארגונית. ניהול באמצעות <span class="en">Kanban</span> להשקעות עיקריות.</div>
+            <div class="unit">מתכננים ב<b><span class="en">Epics</span></b><br>אופק: שנה ומעלה</div>
+          </div>
+
+        </div>
+
+        <div class="fw">
+          <span class="k">המסגרות המוכרות:</span>
+          <span class="t2">SAFe</span><span class="t2">LeSS</span><span class="t2">Nexus</span>
+          <span class="t2">Disciplined Agile Delivery</span><span class="t2">Scrum at Scale</span><span class="t2">Enterprise Scrum</span>
+          <span class="k" style="color:var(--orange)">⚠️ וגם ביקורת: ככל שמוסיפים שכבות תיאום, חוזרת ההיררכיה שאג׳ייל ניסה להסיר.</span>
+        </div>
+
+      </div>
+      <aside class="notes">
+        <b>הבעיה בשורה אחת:</b> סקראם פותר תיאום <b>בתוך</b> צוות. הוא לא אומר כלום על תיאום <b>בין</b>
+        צוותים. עם שנים-עשר צוותים שנוגעים באותה מערכת, זו הבעיה העיקרית.
+        <b>שלוש הרמות</b> נבדלות ביחידת התכנון ובאופק: סיפור/ספרינט · פיצ׳ר/<span class="en">PI</span> ·
+        אפיק/שנה. זה המבנה המשותף לרוב המסגרות, גם אם השמות שונים.
+        <b>הביקורת בסוף חשובה ואמיתית</b>, ואל תדלגו עליה: כל שכבת תיאום שמוסיפים מחזירה תכנון מרכזי,
+        תפקידי ניהול והיררכיה — בדיוק מה שאג׳ייל ניסה להסיר. יש מי שמכנה את SAFe ״מפל מים עם ספרינטים״.
+        זו לא בהכרח ביקורת קטלנית — ארגון של 300 מפתחים <b>חייב</b> תיאום — אבל צריך לדעת מה מחיר העסקה.
+        <b>ברמת עומק:</b> לסטודנטים מספיק לדעת שהבעיה קיימת, שיש לה שמות, ושהמבנה הוא שלוש רמות.
+        לא צריך לזכור את ההבדלים בין SAFe ל-LeSS.
+        <b>ולקשר לפרויקט שלהם:</b> צוות של 3–5 סטודנטים — רמת הצוות בלבד. אין להם בעיית סקייל, וטוב שכך.
+      </aside>
+    </section>
+    <!-- E1 — MARQUEE. ואיפה נמצאים התרשימים שלנו? NEW — the biggest net-new idea in the deck.
+         Every artifact of lectures 2-8 in a waterfall project vs in a Scrum project. The artifacts do
+         not disappear; their BATCH SIZE and TIMING change.
+         This answers, explicitly, the question students have been holding since lecture 2 — "was all
+         this UML a waterfall relic?" — and it belongs here, late, where the tension can resolve.
+         Deliberately placed AFTER the whole agile block so the student has the vocabulary to feel it. -->
+    <section data-slug="where-our-diagrams-live" class="has-acro-footer">
+      <div class="sdlc-chip" title="שלב 6 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>פיתוח</div>
+      <style>
+        section[data-slug="where-our-diagrams-live"] .q{ flex:0 0 auto; background:var(--orange);
+          border-radius:13px; padding:9px 18px; color:#fff; }
+        section[data-slug="where-our-diagrams-live"] .q .k{ font-size:13px; font-weight:800; opacity:.92; }
+        section[data-slug="where-our-diagrams-live"] .q .v{ font-size:21px; font-weight:800; line-height:1.25; }
+        section[data-slug="where-our-diagrams-live"] table.sad{ font-size:16px; }
+        section[data-slug="where-our-diagrams-live"] table.sad th{ font-size:15.5px; padding:7px 10px; line-height:1.2; }
+        section[data-slug="where-our-diagrams-live"] table.sad td{ padding:7px 10px; vertical-align:top; line-height:1.36; }
+        section[data-slug="where-our-diagrams-live"] table.sad td.k{ font-weight:700; color:var(--dark-blue); width:24%; }
+        section[data-slug="where-our-diagrams-live"] table.sad td.k small{ display:block; font-weight:400;
+          color:var(--muted); font-size:13.5px; }
+        section[data-slug="where-our-diagrams-live"] table.sad td.wf{ width:30%; color:var(--muted); }
+        section[data-slug="where-our-diagrams-live"] table.sad td.ag b{ color:var(--green); }
+        section[data-slug="where-our-diagrams-live"] .wrap{ flex:1 1 auto; min-height:0; display:flex; flex-direction:column; justify-content:space-between; }
+        section[data-slug="where-our-diagrams-live"] .ans{ flex:0 0 auto; background:#EAF6EC;
+          border:2px solid var(--green); border-radius:13px; padding:9px 16px; margin-top:8px; }
+        section[data-slug="where-our-diagrams-live"] .ans .h{ font-size:19px; font-weight:800; color:var(--green); }
+        section[data-slug="where-our-diagrams-live"] .ans .d{ font-size:17px; line-height:1.4; color:var(--body); margin-top:2px; }
+        section[data-slug="where-our-diagrams-live"] .ans .d b{ color:var(--green); }
+      </style>
+      <h1>ואיפה נמצאים התרשימים שלנו?</h1>
+      <div class="subtitle">השאלה שאתם מחזיקים מהרצאה 2 — ועכשיו יש לכם את המילים לשאול אותה</div>
+      <div class="body">
+
+        <div class="q">
+          <div class="k">השאלה</div>
+          <div class="v">אם היום עובדים אג׳ייל — <span class="en">BPMN</span>, תרחישי שימוש, תרשים מחלקות ותרשים מצבים הם שריד של מפל מים?</div>
+        </div>
+
+        <div class="wrap">
+          <table class="sad">
+            <tr>
+              <th>התוצר</th>
+              <th>בפרויקט מפל מים</th>
+              <th>בפרויקט <span class="en">Scrum</span></th>
+            </tr>
+            <tr>
+              <td class="k">תרשים <span class="en">BPMN</span><small>הרצאה 2</small></td>
+              <td class="wf">פעם אחת, בתחילת הפרויקט, לכל התהליכים בארגון</td>
+              <td class="ag">פעם אחת ל<b>תהליך הליבה</b>; תהליך משני ממופה כשמגיעים אליו</td>
+            </tr>
+            <tr>
+              <td class="k">קטלוג דרישות<small>הרצאה 3</small></td>
+              <td class="wf">מסמך שלם ומאושר לפני העיצוב. שינוי = ועדת שינויים</td>
+              <td class="ag"><b>בקלוג המוצר</b> — רשימה חיה, מתועדפת מחדש בכל ספרינט</td>
+            </tr>
+            <tr>
+              <td class="k">תרחישי שימוש<small>הרצאות 4–5</small></td>
+              <td class="wf">כולם, מפורטים מראש, לפני שנכתבה שורת קוד</td>
+              <td class="ag">תרחיש = <b>פריט בקלוג</b>. המפרט המפורט נכתב <b>בספרינט שבו הוא מפותח</b></td>
+            </tr>
+            <tr>
+              <td class="k">תרשים מחלקות<small>הרצאות 6–7</small></td>
+              <td class="wf">מודל התחום המלא, מאושר, לפני הקידוד</td>
+              <td class="ag">שלד ארכיטקטוני מראש + <b>הפרוסה שהספרינט צריך</b>. המודל <b>צומח</b></td>
+            </tr>
+            <tr>
+              <td class="k">תרשים מצבים<small>הרצאה 8</small></td>
+              <td class="wf">לכל אובייקט בעל מחזור חיים, מראש</td>
+              <td class="ag">כשהאובייקט <b>מקבל מחזור חיים אמיתי</b> — בספרינט שמוסיף לו מצבים</td>
+            </tr>
+            <tr>
+              <td class="k">חקר ישימות<small>הרצאה 10</small></td>
+              <td class="wf">פעם אחת, בשלב 4, לכל המערכת</td>
+              <td class="ag">פעם אחת בגדול — <b>ועוד החלטות ״לבנות או לקנות״ לכל רכיב</b>, תוך כדי</td>
+            </tr>
+          </table>
+
+          <div class="ans">
+            <div class="h">התשובה</div>
+            <div class="d">אף תוצר לא נעלם. מה שמשתנה הוא <b>גודל המנה והתזמון</b>: לא ״הכול מראש״ אלא ״מה שצריך, כשצריך״. <b>אג׳ייל אינו ׳בלי עיצוב׳ — הוא עיצוב במנות קטנות, בזמן אמת.</b> ומודל שנבנה בפרוסות דורש דווקא <b>יותר</b> משמעת מידול, לא פחות — כי כל פרוסה חייבת להשתלב במה שכבר קיים.</div>
+          </div>
+        </div>
+
+      </div>
+      <aside class="notes">
+        <b>זו שקופית המפתח של ההרצאה, ואולי של הסמסטר.</b> לפתוח בשאלה בקול, ולתת לכיתה לענות לפני
+        שחושפים את הטבלה — רבים באמת חושבים שכן, שהכול שריד.
+        <b>לעבור שורה-שורה</b> ולהצביע: אותו תוצר, שני העמודות. מה שמשתנה הוא <b>מתי</b> ו<b>כמה</b>,
+        לא <b>אם</b>.
+        <b>השורה של קטלוג הדרישות</b> היא ההמחשה הכי חדה: הקטלוג <b>הוא</b> בקלוג המוצר. אותו תוכן,
+        מבנה אחר — מסמך מאושר מול רשימה חיה ומתועדפת.
+        <b>שורת תרשים המחלקות</b> דורשת ניואנס: גם בסקראם צריך <b>שלד</b> מראש — ארכיטקטורה שתחזיק את
+        כל הפרוסות. מה שלא עושים מראש הוא לפרט כל מחלקה. זה בדיוק החיסרון שדיברנו עליו בפיתוח תוספתי:
+        בלי שלד מגיעים ל״בנה ותקן״.
+        <b>המשפט האחרון בקופסה הירוקה הוא הפואנטה,</b> ושווה לומר אותו לאט: מודל שנבנה בפרוסות דורש
+        <b>יותר</b> משמעת מידול, לא פחות. במפל מים מציירים פעם אחת; בסקראם מצטרפים למודל קיים כל שבועיים,
+        ואם אין מודל ברור — כל תוספת שוברת משהו.
+        <b>ולסיים בהיפוך:</b> ״אז מה כן היה שריד?״ — ההנחה שאפשר לדעת הכול מראש. לא הכלים.
+      </aside>
+    <div class="acro-footer"><span class="acro"><span class="en">BPMN</span> = <span class="en">Business Process Model and Notation</span> · מידול וסימון תהליכים עסקיים</span></div>
+    </section>
+    <!-- E2 — תרגול: איזו מתודולוגיה לאיזה פרויקט. NEW (built from the source's summary slide 62,
+         which only said "choose per project" without ever practising it).
+         Five flip cards, ordered so the answers do not fall into a tidy pattern. Each verdict names
+         the ONE property of the project that decided it — because that is the transferable skill.
+         Flip mechanics: inline onclick + rotateY, no <script> (same as L6-7 / L8 / L10). -->
+    <section data-slug="choose-methodology" class="has-acro-footer">
+      <div class="sdlc-chip" title="שלב 6 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>פיתוח</div>
+      <style>
+        section[data-slug="choose-methodology"] .lead{ background:var(--light-blue); border:1px solid var(--blue); flex:0 0 auto; }
+        section[data-slug="choose-methodology"] .lead p{ margin:0; font-weight:700; color:#fff; font-size:16.5px; line-height:1.38; }
+        section[data-slug="choose-methodology"] .lead p b{ color:#fff; }
+        section[data-slug="choose-methodology"] .grid5{ flex:1 1 auto; min-height:0; display:grid;
+          grid-template-columns:repeat(5,1fr); grid-auto-rows:1fr; gap:10px; }
+        section[data-slug="choose-methodology"] .qc{ perspective:1000px; cursor:pointer; }
+        section[data-slug="choose-methodology"] .inner{ position:relative; width:100%; height:100%;
+          transform-style:preserve-3d; transition:transform .5s; }
+        section[data-slug="choose-methodology"] .qc.flip .inner{ transform:rotateY(180deg); }
+        section[data-slug="choose-methodology"] .face{ position:absolute; inset:0; backface-visibility:hidden;
+          -webkit-backface-visibility:hidden; border-radius:13px; padding:9px 11px; display:flex;
+          flex-direction:column; gap:6px; text-align:center; }
+        section[data-slug="choose-methodology"] .front{ background:var(--card-bg); border:2px solid var(--card-border);
+          align-items:center; justify-content:center; }
+        section[data-slug="choose-methodology"] .front .ic{ font-size:30px; line-height:1; }
+        section[data-slug="choose-methodology"] .front .nm{ font-size:16px; font-weight:800; color:var(--dark-blue); line-height:1.22; }
+        section[data-slug="choose-methodology"] .front .de{ font-size:13.5px; color:var(--body); line-height:1.32; }
+        section[data-slug="choose-methodology"] .front .hint{ font-size:12px; color:var(--muted); margin-top:auto; }
+        section[data-slug="choose-methodology"] .back{ transform:rotateY(180deg); background:#fff;
+          border:2px solid var(--green); justify-content:center; }
+        section[data-slug="choose-methodology"] .back .vd{ font-size:17px; font-weight:800; color:var(--green); line-height:1.2; }
+        section[data-slug="choose-methodology"] .back .vd .en{ color:var(--green); }
+        section[data-slug="choose-methodology"] .back .why{ font-size:13.5px; line-height:1.36; color:var(--body); }
+        section[data-slug="choose-methodology"] .back .why b{ color:var(--dark-blue); }
+        section[data-slug="choose-methodology"] .back .dec{ font-size:12.5px; font-weight:800; color:#fff;
+          background:var(--orange); border-radius:7px; padding:2px 7px; line-height:1.3; }
+      </style>
+      <h1>תרגול: איזו מתודולוגיה — ולמה</h1>
+      <div class="subtitle">חמישה פרויקטים. <b>קודם מחליטים בכיתה</b>, ורק אחר כך הופכים את הכרטיס</div>
+      <div class="body">
+
+        <div class="card lead">
+          <p>בכל כרטיס יש <b>תכונה אחת</b> שמכריעה. חפשו אותה — היא כמעט תמיד קשורה ל<b>יציבות הדרישות</b> או ל<b>מחיר של טעות</b>.</p>
+        </div>
+
+        <div class="grid5">
+
+          <!-- 1 medical dosing — waterfall -->
+          <div class="qc" onclick="this.classList.toggle('flip')"><div class="inner">
+            <div class="face front">
+              <div class="ic">💊</div>
+              <div class="nm">בקרת מינון תרופות בבית חולים</div>
+              <div class="de">מחשבת מינון לפי משקל וגיל. כפופה לאישור רגולטורי לפני כל שחרור.</div>
+              <div class="hint">לחצו לתשובה</div>
+            </div>
+            <div class="face back">
+              <div class="vd">מפל מים <span class="en">(V-Model)</span></div>
+              <div class="dec">מכריע: מחיר הטעות</div>
+              <div class="why">הדרישות מוגדרות ברגולציה ו<b>לא משתנות</b>, ואי אפשר ״לשחרר ולראות״. תיעוד ואימות אינם תקורה — הם <b>דרישה</b>.</div>
+            </div>
+          </div></div>
+
+          <!-- 2 campus — agile -->
+          <div class="qc" onclick="this.classList.toggle('flip')"><div class="inner">
+            <div class="face front">
+              <div class="ic">🍔</div>
+              <div class="nm">הזמנות אוכל בקמפוס</div>
+              <div class="de">5,000 סטודנטים, צוות קטן, ואף אחד לא בטוח איך המטבח באמת יעבוד.</div>
+              <div class="hint">לחצו לתשובה</div>
+            </div>
+            <div class="face back">
+              <div class="vd">איטרטיבי-תוספתי · <span class="en">Scrum</span></div>
+              <div class="dec">מכריע: דרישות לא ידועות</div>
+              <div class="why">חלק מהדרישות יתבררו רק כשמשתמשים אמיתיים ייגעו במערכת. <b>מנות קצרות</b> ומשוב מהיר. השקופית הבאה מפרטת.</div>
+            </div>
+          </div></div>
+
+          <!-- 3 ERP — incremental hybrid -->
+          <div class="qc" onclick="this.classList.toggle('flip')"><div class="inner">
+            <div class="face front">
+              <div class="ic">🏢</div>
+              <div class="nm">שדרוג <span class="en">ERP</span> בארגון של 3,000 עובדים</div>
+              <div class="de">מודולים רבים, ממשקים לכל המערכות, והפסקת עבודה אינה אופציה.</div>
+              <div class="hint">לחצו לתשובה</div>
+            </div>
+            <div class="face back">
+              <div class="vd">תוספתי + היברידי</div>
+              <div class="dec">מכריע: הטמעה ארגונית</div>
+              <div class="why">מודול אחרי מודול, כדי שהארגון יספוג את השינוי. הדרישות דווקא ידועות (המוצר קיים) — הקושי הוא <b>אנשים ותהליכים</b>.</div>
+            </div>
+          </div></div>
+
+          <!-- 4 satellite — spiral -->
+          <div class="qc" onclick="this.classList.toggle('flip')"><div class="inner">
+            <div class="face front">
+              <div class="ic">🛰️</div>
+              <div class="nm">בקרה ללוויין ראשון מסוגו</div>
+              <div class="de">טכנולוגיה שלא נוסתה, תקציב ענק, ואין הזדמנות שנייה לתקן אחרי השיגור.</div>
+              <div class="hint">לחצו לתשובה</div>
+            </div>
+            <div class="face back">
+              <div class="vd">ספירלה</div>
+              <div class="dec">מכריע: אי-ודאות טכנולוגית</div>
+              <div class="why">הסיכון הגדול אינו ״מה לבנות״ אלא <b>״האם זה בכלל אפשרי״</b>. תוקפים את הלא-ידוע ראשון, בסימולציות ובאב-טיפוסים.</div>
+            </div>
+          </div></div>
+
+          <!-- 5 personal tool — prototyping / end-user -->
+          <div class="qc" onclick="this.classList.toggle('flip')"><div class="inner">
+            <div class="face front">
+              <div class="ic">📊</div>
+              <div class="nm">כלי אוטומציה אישי לאנליסט/ית</div>
+              <div class="de">מושך דוח משלוש מערכות ומרכיב טבלה אחת לישיבת בוקר. משתמש/ת אחד/ת.</div>
+              <div class="hint">לחצו לתשובה</div>
+            </div>
+            <div class="face back">
+              <div class="vd">אב-טיפוס · פיתוח ע״י המשתמש</div>
+              <div class="dec">מכריע: גודל וסיכון זניחים</div>
+              <div class="why">אין צוות, אין לקוח חיצוני, ואין סיכון. <b>כל מתודולוגיה כאן היא תקורה</b> שגדולה מהפרויקט עצמו.</div>
+            </div>
+          </div></div>
+
+        </div>
+
+        <p class="bottom-line">שימו לב שאף כרטיס לא הוכרע לפי ״מה מודרני״ — אלא לפי <b>יציבות הדרישות ומחיר הטעות</b>.</p>
+
+      </div>
+      <aside class="notes">
+        כרטיס אחד בכל פעם: קוראים, מצביעים, מנמקים, ורק אז הופכים. הנימוק חשוב יותר מהתשובה.
+        <b>1 — מינון תרופות:</b> הכרטיס שמפריך את ״מפל מים מיושן״. שתי תכונות: דרישות שנקבעו ברגולציה
+        ואינן משתנות, ומחיר טעות בלתי נסבל. אם סטודנט מציע אג׳ייל — לשאול ״ומה תעשה עם ולידציה
+        רגולטורית שנמשכת חודשים לכל שחרור?״
+        <b>2 — הקמפוס:</b> התשובה שלנו, ומפורטת בשקופית הבאה.
+        <b>3 — ERP:</b> הכרטיס המתוחכם. סטודנטים יגידו ״גדול ומורכב ← ספירלה״. לא: הדרישות דווקא
+        ידועות, כי המוצר קיים ומוכר. הקושי הוא <b>הטמעה</b> — ולכן תוספתי, מודול אחרי מודול. זה מחבר
+        ישירות ל״התאמת הארגון למערכת״ מהרצאה 10.
+        <b>4 — לוויין:</b> אי-ודאות <b>טכנולוגית</b>, לא עסקית. זה מה שמייחד ספירלה: לא ״מה הלקוח רוצה״
+        אלא ״האם זה בכלל אפשרי״. ואין הזדמנות שנייה, ולכן אי אפשר גם אג׳ייל טהור.
+        <b>5 — כלי אישי:</b> הכרטיס שמלמד שלפעמים התשובה היא ״כלום״. תקורת מתודולוגיה שגדולה מהפרויקט
+        היא בזבוז. ומחבר לרביע ה-End-user מהרצאה 10 — הרביע שה-AI הכי מגדיל.
+        <b>ואם יש זמן:</b> לשאול על הפרויקטים שלהם. רובם ייפלו בקטגוריה 2.
+      </aside>
+    <div class="acro-footer"><span class="acro"><span class="en">AI</span> = <span class="en">Artificial Intelligence</span> · בינה מלאכותית</span></div>
+    </section>
+    <!-- E3 — ואיך נריץ את פרויקט הקמפוס. NEW. The campus answer, made concrete: the decision, the
+         four-question justification, the first three sprints written out, and an explicit "why not
+         waterfall / why not pure prototyping".
+         The sprint contents come straight from the product backlog on slide-scrum-artifacts, and
+         sprint 1 is deliberately the "skateboard" from slide-iterative-vs-incremental: browse and
+         order, no payment, staff marks ready by hand. Continues L10's staged-rollout recommendation. -->
+    <section data-slug="campus-methodology" class="has-acro-footer">
+      <div class="sdlc-chip" title="שלב 6 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>פיתוח</div>
+      <style>
+        section[data-slug="campus-methodology"] .head{ flex:0 0 auto; background:var(--green);
+          border-radius:13px; padding:9px 17px; color:#fff; }
+        section[data-slug="campus-methodology"] .head .k{ font-size:13px; font-weight:800; opacity:.9; }
+        section[data-slug="campus-methodology"] .head .v{ font-size:22px; font-weight:800; line-height:1.22; }
+        section[data-slug="campus-methodology"] .head .s{ font-size:14.5px; line-height:1.35; margin-top:2px; }
+        section[data-slug="campus-methodology"] .main{ flex:1 1 auto; min-height:0; display:grid;
+          grid-template-columns:1.35fr 1fr; gap:13px; align-items:stretch; }
+        section[data-slug="campus-methodology"] .sprints{ display:flex; flex-direction:column; gap:8px; min-height:0; }
+        section[data-slug="campus-methodology"] .sp{ display:grid; grid-template-columns:96px 1fr;
+          gap:11px; align-items:center; background:#fff; border:2px solid var(--card-border);
+          border-radius:12px; padding:7px 12px; flex:1 1 0; }
+        section[data-slug="campus-methodology"] .sp .n{ display:flex; flex-direction:column; align-items:center;
+          justify-content:center; background:var(--tint-blue); border-radius:9px; padding:5px 3px; }
+        section[data-slug="campus-methodology"] .sp .n .t{ font-size:12px; font-weight:800; color:var(--light-blue); }
+        section[data-slug="campus-methodology"] .sp .n .v2{ font-size:20px; font-weight:800; color:var(--dark-blue); line-height:1; }
+        section[data-slug="campus-methodology"] .sp .goal{ font-size:15.5px; font-weight:800; color:var(--dark-blue); line-height:1.2; }
+        section[data-slug="campus-methodology"] .sp .items{ font-size:13.5px; line-height:1.34; color:var(--body); margin-top:2px; }
+        section[data-slug="campus-methodology"] .sp .items b{ color:var(--orange); }
+        section[data-slug="campus-methodology"] .sp.s1{ border-color:var(--green); }
+        section[data-slug="campus-methodology"] .sp.s1 .n{ background:#EAF6EC; }
+        section[data-slug="campus-methodology"] .sp.s1 .n .t{ color:var(--green); }
+        section[data-slug="campus-methodology"] .side{ display:flex; flex-direction:column; gap:9px; min-height:0; }
+        section[data-slug="campus-methodology"] .side .b{ background:#fff; border:2px solid var(--card-border);
+          border-radius:12px; padding:7px 12px; flex:1 1 0; display:flex; flex-direction:column; justify-content:center; }
+        section[data-slug="campus-methodology"] .side .b .h{ font-size:15.5px; font-weight:800; color:var(--red); }
+        section[data-slug="campus-methodology"] .side .b .d{ font-size:14px; line-height:1.34; color:var(--body); margin-top:2px; }
+        section[data-slug="campus-methodology"] .side .b .d b{ color:var(--dark-blue); }
+            /* the SDLC chip floats bottom-left (z-index 6) — keep the last card's text clear of it */
+        section[data-slug="campus-methodology"] .side .b:last-child{ padding-inline-end:120px; }
+        section[data-slug="campus-methodology"] .side .b.ok{ border-color:var(--green); background:#F3FAF4; }
+        section[data-slug="campus-methodology"] .side .b.ok .h{ color:var(--green); }
+      </style>
+      <h1>ואיך נריץ את פרויקט הקמפוס</h1>
+      <div class="subtitle">ההמלצה מהרצאה 10 אמרה ״להעלות בשלבים״. הנה מה זה אומר בפועל</div>
+      <div class="body">
+
+        <div class="head">
+          <div class="k">ההחלטה</div>
+          <div class="v">איטרטיבי-תוספתי בסגנון <span class="en">Scrum</span> · ספרינטים של שבועיים · תוספת ראשונה = <b>קפיטריה אחת</b></div>
+          <div class="s">גודל מנה — שבועיים · סדר — חוזר · הלקוח רואה — בסוף כל ספרינט · שינוי — נכנס לבקלוג ומתועדף</div>
+        </div>
+
+        <div class="main">
+
+          <div class="sprints">
+            <div class="sp s1">
+              <div class="n"><span class="t">ספרינט</span><span class="v2">1</span></div>
+              <div>
+                <div class="goal">סטודנט/ית מזמין/ה — ולא עומד/ת בתור</div>
+                <div class="items">עיון בתפריט <b>(3)</b> · הזמנה וקביעת שעת איסוף <b>(8)</b> · תור הזמנות לפי עמדה <b>(5)</b><br>
+                  <b>ללא תשלום</b> — משלמים בדלפק כרגיל. <b>ללא התראות</b> — הצוות מסמן מוכן ידנית. <span style="color:var(--green);font-weight:700">זה הסקייטבורד.</span></div>
+              </div>
+            </div>
+            <div class="sp">
+              <div class="n"><span class="t">ספרינט</span><span class="v2">2</span></div>
+              <div>
+                <div class="goal">ההזמנה נסגרת בלי לגעת בכסף בדלפק</div>
+                <div class="items">תשלום בכרטיס האוניברסיטה <b>(13 — מפורק)</b> · אימות איסוף <b>(8)</b><br>
+                  כאן יושב <b>הממשק למערכת הזיהוי</b> — הסיכון הגבוה ביותר, ולכן מוקדם.</div>
+              </div>
+            </div>
+            <div class="sp">
+              <div class="n"><span class="t">ספרינט</span><span class="v2">3</span></div>
+              <div>
+                <div class="goal">המטבח וההנהלה מקבלים את שלהם</div>
+                <div class="items">סימון מוכן והתראה לסטודנט <b>(3)</b> · עדכון ״אזל״ <b>(3)</b> · סינון תזונתי <b>(5)</b> · דוח מכירות יומי <b>(8)</b><br>
+                  ואז: <b>פיילוט בקפיטריה אחת</b>, ומשם הרחבה.</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="side">
+            <div class="b">
+              <div class="h">✗ למה לא מפל מים</div>
+              <div class="d">כלל 6/6 לא מתקיים (כ-9 חודשים), ו<b>חלק מהדרישות באמת לא ידועות</b> — איך המטבח יעבוד בשעת עומס יתברר רק בשטח. מסירה אחת בסוף = לגלות בחודש התשיעי.</div>
+            </div>
+            <div class="b">
+              <div class="h">✗ למה לא אב-טיפוס בלבד</div>
+              <div class="d">המערכת <b>נוגעת בכסף ובזהות</b> של 5,000 סטודנטים. אב-טיפוס מתפתח שהפך למוצר הוא בדיוק המלכודת שדיברנו עליה.</div>
+            </div>
+            <div class="b ok">
+              <div class="h">✓ ומה זה נותן לנו</div>
+              <div class="d">אחרי <b>שישה שבועות</b> יש משהו שסטודנטים משתמשים בו. הסיכון הגדול (הממשק) נבדק ב<b>ספרינט 2</b> ולא בחודש התשיעי. ואם התקציב ייחתך — יש מערכת חלקית שעובדת, לא חצי פרויקט.</div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+      <aside class="notes">
+        <b>לחבר מיד להרצאה 10:</b> ההמלצה לוועדה כללה ״העלאה מדורגת — קפיטריה אחת בסמסטר א׳״.
+        זו הייתה החלטה מתודולוגית. הנה הפירוט שלה.
+        <b>ספרינט 1 הוא הסקייטבורד</b>, ושווה להצביע על זה במפורש: הוא לא ״שליש מהמערכת״ — הוא פתרון
+        שלם לבעיה ״לא לעמוד בתור״. אין תשלום, אין התראות, הצוות מסמן ידנית — <b>והסטודנט כבר מרוויח</b>.
+        לשאול את הכיתה למה דווקא זה קודם: כי זה הכאב המרכזי מהראיונות בהרצאה 4.
+        <b>ספרינט 2 הוא ניהול סיכונים</b>, וזו נגיעה ספירלית בתוך סקראם: הממשק למערכת הזיהוי הוא
+        הדבר הכי לא בשליטתנו (תלוי בצוות אבטחת מידע של האוניברסיטה). מקדימים אותו בכוונה. לשאול:
+        ״למה לא לדחוף אותו לסוף, כשנהיה מנוסים יותר?״ — כי אם הוא לא יעבוד, עדיף לדעת בשבוע השישי.
+        <b>הפריט של 13 נקודות</b> — להזכיר מהשקופית הקודמת שפריט גדול כזה מפורקים; 13 הוא סימן אזהרה.
+        <b>שתי הקופסאות האדומות</b> חשובות כי הן מראות שהחלטה מתודולוגית היא <b>נימוק</b>, לא אופנה.
+        <b>והמשפט האחרון בקופסה הירוקה</b> הוא הטיעון החזק ביותר להנהלה: פרויקט שנקטע במפל מים
+        מותיר אפס; פרויקט איטרטיבי שנקטע מותיר מערכת חלקית עובדת.
+      </aside>
+    <div class="acro-footer"><span class="acro"><span class="en">SDLC</span> = <span class="en">Software Development Life Cycle</span> · מחזור פיתוח תוכנה</span></div>
+    </section>
+    <!-- E4 — 🤖 מה ה-AI עושה למחזור → ⚠️ ומה נעשה קשה יותר. NEW. The AI beat of this lecture, and the
+         answer to the question deliberately left open on slide-software-crisis ("does AI end the
+         software crisis?"). The answer: it moves the bottleneck.
+         Framing rule (memory note `ai-developer-framing`): AI is the CODER handed a spec; the team
+         still owns non-functional requirements and integration. Do NOT say "AI builds the system".
+         Sets up L13, where they do this by hand. -->
+    <section data-slug="ai-changes-the-cycle" class="has-acro-footer">
+      <div class="sdlc-chip" title="שלב 6 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>פיתוח</div>
+      <style>
+        section[data-slug="ai-changes-the-cycle"] .lead{ background:var(--light-blue); border:1px solid var(--blue); flex:0 0 auto; }
+        section[data-slug="ai-changes-the-cycle"] .lead p{ margin:0; font-weight:700; color:#fff; font-size:16.5px; line-height:1.4; }
+        section[data-slug="ai-changes-the-cycle"] .lead p b{ color:#fff; }
+        section[data-slug="ai-changes-the-cycle"] .main{ flex:1 1 auto; min-height:0; display:grid;
+          grid-template-columns:1fr 1fr; gap:13px; align-items:stretch; }
+        section[data-slug="ai-changes-the-cycle"] .col{ background:#fff; border:2px solid var(--card-border);
+          border-radius:13px; padding:9px 13px; display:flex; flex-direction:column; min-height:0; }
+        section[data-slug="ai-changes-the-cycle"] .col.up{ border-color:var(--green); }
+        section[data-slug="ai-changes-the-cycle"] .col.down{ border-color:var(--orange); }
+        section[data-slug="ai-changes-the-cycle"] .col h3{ margin:0 0 6px; font-size:18px; }
+        section[data-slug="ai-changes-the-cycle"] .col.up h3{ color:var(--green); }
+        section[data-slug="ai-changes-the-cycle"] .col.down h3{ color:var(--orange); }
+        section[data-slug="ai-changes-the-cycle"] .items{ display:grid; grid-auto-rows:1fr; gap:7px; flex:1 1 auto; min-height:0; }
+        section[data-slug="ai-changes-the-cycle"] .it{ border-radius:10px; padding:5px 11px; display:flex;
+          flex-direction:column; justify-content:center; }
+        section[data-slug="ai-changes-the-cycle"] .col.up .it{ background:#F3FAF4; border-inline-start:4px solid var(--green); }
+        section[data-slug="ai-changes-the-cycle"] .col.down .it{ background:#FFF6E6; border-inline-start:4px solid var(--orange); }
+        section[data-slug="ai-changes-the-cycle"] .it .h{ font-size:15px; font-weight:800; color:var(--dark-blue); line-height:1.2; }
+        section[data-slug="ai-changes-the-cycle"] .it .d{ font-size:13.5px; line-height:1.32; color:var(--body); margin-top:1px; }
+        section[data-slug="ai-changes-the-cycle"] .it .d b{ color:var(--dark-blue); }
+        section[data-slug="ai-changes-the-cycle"] .answer{ flex:0 0 auto; background:var(--orange);
+          border-radius:13px; padding:9px 17px; color:#fff; }
+        section[data-slug="ai-changes-the-cycle"] .answer .k{ font-size:13px; font-weight:800; opacity:.92; }
+        section[data-slug="ai-changes-the-cycle"] .answer .v{ font-size:18.5px; font-weight:800; line-height:1.35; }
+        section[data-slug="ai-changes-the-cycle"] .answer .v .en{ color:#fff; }
+      </style>
+      <h1>🤖 מה ה-<span class="en">AI</span> עושה למחזור — ⚠️ ומה נעשה קשה יותר</h1>
+      <div class="subtitle">בתחילת ההרצאה שאלנו אם <span class="en">AI</span> מסיים את משבר התוכנה. הנה התשובה</div>
+      <div class="body">
+
+        <div class="card lead">
+          <p>ה-<span class="en">AI</span> הוא <b>המתכנת</b> שמקבל מפרט. ולכן הוא מוזיל בצורה דרמטית את מה שהוא עושה — ומשאיר את כל השאר במקום, או מחמיר אותו.</p>
+        </div>
+
+        <div class="main">
+
+          <div class="col up">
+            <h3>✓ מה נעשה זול ומהיר</h3>
+            <div class="items">
+              <div class="it">
+                <div class="h">עלות הסבב צונחת</div>
+                <div class="d">״תוספת עובדת״ שדרשה שבועיים יכולה לדרוש ימים. וכשסבב זול — <b>משתלם לעשות סבבים קצרים יותר</b>. המטוטלת נעה עוד לכיוון האיטרטיבי.</div>
+              </div>
+              <div class="it">
+                <div class="h">אב-טיפוס לזריקה כמעט חינם</div>
+                <div class="d">החיסרון הגדול שלו היה שהוא עולה ונזרק. כשהוא נבנה בשעה — <b>אפשר לבנות שלושה ולבחור</b>. וגם פוחת הפיתוי להפוך אב-טיפוס למוצר.</div>
+              </div>
+              <div class="it">
+                <div class="h">״בואו ננסה״ הופך לזול</div>
+                <div class="d">ניתוח חלופות בספירלה, <span class="en">benchmark</span>, בדיקת היתכנות — פעולות שהיו יקרות ולכן דולגו, ונעשות עכשיו.</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col down">
+            <h3>⚠️ ומה נעשה קשה יותר</h3>
+            <div class="items">
+              <div class="it">
+                <div class="h">המפרט חשוב <b>יותר</b>, לא פחות</div>
+                <div class="d">ה-<span class="en">AI</span> בונה בדיוק את מה שהגדרתם. אפיון רופף ← מערכת שגויה, <b>מהר</b>. תרחישי השימוש ותרשים המחלקות הם ה<b>קלט</b> — ולכן ערכם עלה.</div>
+              </div>
+              <div class="it">
+                <div class="h">הצוואר עבר לבדיקה ולסקירה</div>
+                <div class="d">אם הכתיבה מהירה פי חמישה והביקורת לא — <b>הביקורת היא המגבלה</b>. שם צריך להשקיע עכשיו: בדיקות אוטומטיות, סקירת קוד, הגדרת <span class="en">Done</span>.</div>
+              </div>
+              <div class="it">
+                <div class="h">מהירות אינה התקדמות</div>
+                <div class="d">קוד שנכתב אינו ערך. <b>״תוכנה עובדת היא יחידת המידה״</b> — העיקרון האג׳ילי — נעשה חשוב פי כמה כשקל לייצר הרבה קוד שאיש לא בדק.</div>
+              </div>
+              <div class="it">
+                <div class="h">מה ש<b>לא</b> זז בכלל</div>
+                <div class="d">דרישות לא-פונקציונליות, אינטגרציה, אבטחה, תחזוקה ואחריות — <b>עדיין של הצוות</b>. וגם ההטמעה הארגונית: לשכנע את צוות המטבח.</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="answer">
+          <div class="k">אז מה עם משבר התוכנה?</div>
+          <div class="v">הוא לא נגמר — הוא <b>זז</b>. המשבר מעולם לא היה על מהירות הכתיבה, אלא על <b>מורכבות, תקשורת והבנת הצורך</b>. ואת אלה ה-<span class="en">AI</span> לא פותר. בהרצאה 13 נעשה בדיוק את זה בידיים: מפרט ← מערכת עובדת.</div>
+        </div>
+
+      </div>
+      <aside class="notes">
+        השקופית שסוגרת את הלולאה שפתחנו במשבר התוכנה.
+        <b>המסגור המחייב:</b> AI הוא המתכנת שמקבל מפרט. לא לומר ״ה-AI בונה את המערכת״ — הצוות עדיין
+        אחראי על הלא-פונקציונלי ועל האינטגרציה.
+        <b>הצד הירוק:</b> הטיעון המרכזי הוא כלכלי. כל ההרצאה הזו עסקה בגודל המנה, והשיקול נגד מנות
+        קטנות תמיד היה <b>תקורת הסבב</b>. כשהתקורה יורדת — האופטימום זז לכיוון מנות קטנות יותר.
+        <b>הצד הכתום — הפריט הראשון הוא החשוב ביותר לקורס הזה:</b> יש אינטואיציה נפוצה ש״עכשיו לא
+        צריך לאפיין, פשוט נבקש מה-AI״. ההפך המדויק. AI בונה מה שביקשתם; ככל שהבנייה זולה יותר,
+        כך <b>המפרט הוא הנכס היחיד שנשאר</b>. כל הקורס הזה הוא ייצור מפרטים.
+        <b>הצוואר שעבר:</b> אנלוגיה מהנדסת תעשייה — הגדלת קצב בתחנה אחת בקו ייצור לא מגדילה תפוקה אם
+        התחנה הבאה לא גדלה. היא רק מייצרת מלאי בתהליך. כאן: הרבה קוד שממתין לסקירה.
+        ולכן ההשקעה עוברת לבדיקות אוטומטיות ולהגדרת Done קפדנית.
+        <b>״מהירות אינה התקדמות״</b> — לחבר לעיקרון האג׳ילי ״תוכנה עובדת היא יחידת המידה״.
+        <b>ולסגור:</b> המשבר לא נעלם, הוא זז. וזה בדיוק מה שקרה גם עם כל קפיצת חומרה קודמת.
+      </aside>
+    <div class="acro-footer"><span class="acro"><span class="en">AI</span> = <span class="en">Artificial Intelligence</span> · בינה מלאכותית</span></div>
+    </section>
+    <!-- E5 — סיכום. REFRESH of source slide 62. A comparison strip across the four questions for all
+         five models (the payoff of the lens introduced on A6), then six takeaways.
+         The iterative-benefits list from the source is folded into takeaway 3. -->
+    <section data-slug="summary" class="has-acro-footer">
+      <div class="sdlc-chip" title="שלב 6 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>פיתוח</div>
+      <style>
+        section[data-slug="summary"] table.sad{ font-size:14.5px; }
+        section[data-slug="summary"] table.sad th{ font-size:14.5px; padding:5px 8px; line-height:1.2; }
+        section[data-slug="summary"] table.sad td{ padding:5px 9px; text-align:center; }
+        section[data-slug="summary"] table.sad td.k{ text-align:right; font-weight:800; color:var(--dark-blue); width:17%; }
+        section[data-slug="summary"] table.sad td.k small{ display:block; font-weight:400; color:var(--muted);
+          font-size:12px; direction:ltr; unicode-bidi:isolate; text-align:right; }
+        section[data-slug="summary"] .grid{ flex:1 1 auto; min-height:0; display:grid;
+          grid-template-columns:1fr 1fr 1fr; grid-auto-rows:1fr; gap:10px; margin-top:9px; }
+        section[data-slug="summary"] .k2{ background:#fff; border:2px solid var(--card-border); border-radius:12px;
+          padding:9px 15px; display:flex; flex-direction:column; justify-content:center; }
+        section[data-slug="summary"] .k2 .h{ font-size:18.5px; font-weight:800; color:var(--dark-blue); line-height:1.2; }
+        section[data-slug="summary"] .k2 .d{ font-size:16px; line-height:1.38; color:var(--body); margin-top:3px; }
+        section[data-slug="summary"] .k2 .d b{ color:var(--orange); }
+        section[data-slug="summary"] .k2.star{ border-color:var(--orange); background:var(--hero-bg); }
+        section[data-slug="summary"] .k2.star .h{ color:var(--orange); }
+      </style>
+      <h1>סיכום</h1>
+      <div class="subtitle">חמישה מודלים, ארבע שאלות — ואף מודל שמנצח תמיד</div>
+      <div class="body">
+
+        <table class="sad">
+          <tr>
+            <th>המודל</th>
+            <th>1 · גודל המנה</th>
+            <th>2 · הסדר</th>
+            <th>3 · הלקוח רואה</th>
+            <th>4 · שינוי</th>
+          </tr>
+          <tr><td class="k">מפל מים<small>Waterfall</small></td><td>כל המערכת</td><td>רצף, מעבר אחד</td><td>בסוף בלבד</td><td>הפרעה יקרה</td></tr>
+          <tr><td class="k">אב-טיפוס<small>Prototyping</small></td><td>מסך או תרחיש</td><td>לפני או בתוך מודל אחר</td><td>מוקדם מאוד</td><td>זו כל המטרה</td></tr>
+          <tr><td class="k">תוספתי<small>Incremental</small></td><td>תוספת מתפקדת</td><td>מעברים חוזרים</td><td>בסוף כל תוספת</td><td>לתוספת הבאה</td></tr>
+          <tr><td class="k">ספירלה<small>Spiral</small></td><td>לפי <b>סיכון</b></td><td>סבבים, הכי מסוכן ראשון</td><td>אב-טיפוסים מוקדם</td><td>סיכון חדש ← סבב חדש</td></tr>
+          <tr><td class="k">אג׳ייל<small>Agile / Scrum</small></td><td>שבועיים עד חודש</td><td>חוזר, קצר וקבוע</td><td>בסוף כל ספרינט</td><td><b>זו התוכנית</b></td></tr>
+        </table>
+
+        <div class="grid">
+          <div class="k2 star">
+            <div class="h">1 · אין מנצח קבוע</div>
+            <div class="d">לכל פרויקט בוחרים מתודולוגיה <b>ומתאימים אותה</b>. שילוב רעיונות מכמה מודלים הוא הנורמה, לא פשרה.</div>
+          </div>
+          <div class="k2 star">
+            <div class="h">2 · יציבות הדרישות מכריעה</div>
+            <div class="d">לא הגודל ולא התקציב. דרישות יציבות ← אפשר מפל מים. דרישות שיתבררו תוך כדי ← <b>מנות קצרות</b>.</div>
+          </div>
+          <div class="k2">
+            <div class="h">3 · מה שהאיטרטיביות קונה</div>
+            <div class="d">הקטנת סיכונים · תמיכה בשינויים · לימוד תוך כדי תנועה · שימוש חוזר · דרישות רלוונטיות · <b>יכולת ניבוי טובה יותר</b>.</div>
+          </div>
+          <div class="k2">
+            <div class="h">4 · אג׳ייל ≠ בלי עיצוב</div>
+            <div class="d">אותם תוצרים — <b>גודל מנה אחר</b>. ומודל שנבנה בפרוסות דורש דווקא יותר משמעת מידול.</div>
+          </div>
+          <div class="k2">
+            <div class="h">5 · טקסים בלי ערכים לא עובדים</div>
+            <div class="d">אפשר לאמץ ספרינטים ופגישות יומיות ולא לוותר על שליטה — ולקבל <b>מפל מים עם פגישות</b>.</div>
+          </div>
+          <div class="k2">
+            <div class="h">6 · ה-<span class="en">AI</span> מזיז את האופטימום</div>
+            <div class="d">סבב זול ← מנה קטנה יותר משתלמת. אבל <b>המפרט חשוב יותר</b>, והצוואר עבר לבדיקה ולסקירה.</div>
+          </div>
+        </div>
+
+      </div>
+      <aside class="notes">
+        <b>הטבלה היא הפואנטה של הלנס.</b> ארבע השאלות שהצגנו בהתחלה מאפשרות להשוות חמישה מודלים בטבלה
+        אחת. לעבור על <b>עמודה 4</b> מלמעלה למטה — ״הפרעה יקרה״ עד ״זו התוכנית״ — זה כל הסיפור של
+        ההרצאה בטור אחד.
+        <b>שורת אב-הטיפוס</b> חריגה בכוונה: הוא לא באמת מודל מתחרה אלא רכיב שנכנס לתוך אחרים.
+        <b>נקודה 2</b> היא הדבר המעשי ביותר לזכור לפרויקט המסכם ולעבודה: השאלה הראשונה בבחירת
+        מתודולוגיה איננה ״כמה זה גדול״ אלא ״<b>כמה אנחנו באמת יודעים מה צריך</b>״.
+        <b>נקודה 5</b> — התופעה הנפוצה ביותר בשטח. ארגון מאמץ ספרינטים, פגישות יומיות ו-Jira, אבל
+        המנהל עדיין מחלק משימות והתכולה נקבעת מלמעלה. התוצאה גרועה משני העולמות: אין את הוודאות של
+        מפל מים ואין את הגמישות של אג׳ייל.
+        <b>ולסגור את הקורס קדימה:</b> החלטנו מה לבנות (הרצאה 10) ואיך להריץ (היום). בהרצאה 13 ניקח
+        מפרט אמיתי ונבנה ממנו מערכת עובדת — סבב אחד, מקצה לקצה.
+      </aside>
+    <div class="acro-footer"><span class="acro"><span class="en">AI</span> = <span class="en">Artificial Intelligence</span> · בינה מלאכותית</span></div>
+    </section>
+    <!-- E6 — מטלת בית. NEW. Follows the course's homework shape (L8 / L10): the student produces the
+         reasoning, AI is used as an ADVERSARY rather than as a producer — a variation that fits this
+         lecture, because a methodology choice is an argument, not an artifact.
+         Uses the restaurant practice story (lecture-06-07/practice/restaurant.md), which is the same
+         story used for the L10 homework — so the student carries one case across both lectures.
+         Quotas and grade weights stay off the slide per ../../knowledge/project/deliverable-governance.md. -->
+    <section data-slug="homework" class="has-acro-footer">
+      <div class="sdlc-chip" title="שלב 6 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>פיתוח</div>
+      <style>
+        section[data-slug="homework"] .main{ flex:1 1 auto; min-height:0; display:grid;
+          grid-template-columns:1fr 1.2fr; gap:13px; align-items:stretch; }
+        section[data-slug="homework"] .p{ background:#fff; border:2px solid var(--card-border);
+          border-radius:13px; padding:9px 13px; display:flex; flex-direction:column; min-height:0; }
+        section[data-slug="homework"] .p h3{ margin:0 0 5px; font-size:17px; color:var(--dark-blue); }
+        section[data-slug="homework"] .p .story{ font-size:14.5px; line-height:1.4; color:var(--body); }
+        section[data-slug="homework"] .p .story b{ color:var(--dark-blue); }
+        section[data-slug="homework"] .facts{ margin-top:6px; display:flex; flex-direction:column; gap:5px; }
+        section[data-slug="homework"] .f{ background:var(--card-bg); border-inline-start:4px solid var(--light-blue);
+          border-radius:8px; padding:4px 10px; font-size:13.5px; line-height:1.32; color:var(--body); }
+        section[data-slug="homework"] .f b{ color:var(--dark-blue); }
+        section[data-slug="homework"] .flow{ display:grid; grid-auto-rows:1fr; gap:7px; flex:1 1 auto; min-height:0; }
+        section[data-slug="homework"] .st{ display:flex; gap:10px; align-items:center; background:var(--card-bg);
+          border-radius:10px; padding:5px 11px; }
+        section[data-slug="homework"] .st .n{ flex:0 0 24px; width:24px; height:24px; border-radius:50%;
+          background:var(--light-blue); color:#fff; font-size:12.5px; font-weight:800; text-align:center; line-height:24px; }
+        section[data-slug="homework"] .st .t{ font-size:14.5px; line-height:1.32; color:var(--body); }
+        section[data-slug="homework"] .st .t b{ color:var(--dark-blue); }
+        section[data-slug="homework"] .st.graded{ background:var(--hero-bg); border-inline-start:5px solid var(--orange); }
+        section[data-slug="homework"] .st.graded .n{ background:var(--orange); }
+        section[data-slug="homework"] .st.graded .t b{ color:var(--orange); }
+        section[data-slug="homework"] .prompt{ margin-top:6px; background:#1e293b; color:#e2e8f0; border-radius:9px;
+          padding:7px 11px; font-size:13.5px; line-height:1.4; }
+        section[data-slug="homework"] .prompt .lbl{ display:block; font-size:11.5px; font-weight:800;
+          color:#94a3b8; margin-bottom:2px; }
+      </style>
+      <h1>מטלת בית</h1>
+      <div class="subtitle">אותה מסעדה מהמטלה הקודמת — הפעם לא <b>מה</b> לבנות, אלא <b>איך להריץ</b></div>
+      <div class="body">
+
+        <div class="main">
+
+          <div class="p">
+            <h3>התיק</h3>
+            <div class="story">
+              <b>׳המלצר האוטומטי׳</b> החליטה על פתרון. עכשיו צריך להריץ את הפרויקט. מסמך האפיון המלא — מ<b>הרצאות 6–7</b>.
+            </div>
+            <div class="facts">
+              <div class="f">צוות: <b>3 מפתחים</b> ואנליסט/ית במשרה חלקית</div>
+              <div class="f">יעד: <b>עונת הקיץ</b>, בעוד חמישה חודשים</div>
+              <div class="f">שלוש תחנות הכנה, ו<b>אף אחד לא בטוח</b> איך הטבחים יגיבו למסך במקום פתקים</div>
+              <div class="f">המערכת <b>נוגעת בכסף</b> — תשלום וחלוקת חשבון</div>
+              <div class="f">בעל/ת המסעדה <b>זמין/ה כל יום</b> ורוצה להיות מעורב/ת</div>
+            </div>
+          </div>
+
+          <div class="p">
+            <h3>מה מגישים</h3>
+            <div class="flow">
+              <div class="st graded"><span class="n">1</span><span class="t"><b>בחרו מתודולוגיה ונמקו לפי ארבע השאלות</b> — גודל מנה · סדר · מתי הלקוח רואה · איך מטפלים בשינוי. לכל שאלה, מה בתיק הוביל לתשובה</span></div>
+              <div class="st"><span class="n">2</span><span class="t">כתבו את <b>שני הספרינטים הראשונים</b>: מטרה לכל ספרינט, ופריטי בקלוג כ<b>סיפורי משתמש</b> עם הערכה</span></div>
+              <div class="st"><span class="n">3</span><span class="t">הסבירו למה הספרינט הראשון הוא <b>״הסקייטבורד״</b> — מה הסועד כבר יכול לעשות בסופו</span></div>
+              <div class="st graded"><span class="n">4</span><span class="t"><b>תנו ל-<span class="en">AI</span> לטעון את ההפך</b> — וכתבו תשובה נגדית של חצי עמוד</span></div>
+            </div>
+            <div class="prompt">
+              <span class="lbl">הפקודה ל-<span class="en">AI</span> בסעיף 4</span>
+              ״בחרתי ב-<b>[המתודולוגיה שלכם]</b> לפרויקט הזה. טען בצורה המשכנעת ביותר <b>למה זו הבחירה השגויה</b>, ומה היה עדיף.״
+            </div>
+          </div>
+
+        </div>
+
+        <p class="bottom-line">התוצר שנבדק הוא <b>הנימוק והתשובה הנגדית</b>. בחירת מתודולוגיה היא טיעון — ומי שלא יודע מה החולשות שלה, לא באמת בחר בה.</p>
+
+      </div>
+      <aside class="notes">
+        <b>למה AI כיריב ולא כיצרן</b> (בשונה ממטלות קודמות): בחירת מתודולוגיה איננה תוצר שאפשר לייצר
+        ולבקר — היא <b>שיקול דעת</b>. הדרך לבחון שיקול דעת היא לאלץ את הסטודנט להתמודד עם הטיעון הנגדי.
+        <b>סעיף 4 הוא הלב.</b> הוא מונע את התשובה הקלה (״נעבוד אג׳ייל כי זה מודרני״), כי ה-AI יטען
+        בחזרה — למשל שיש דדליין קשיח, שהמערכת נוגעת בכסף, ושצוות של שלושה עם דרישות מתועדות
+        יכול היה לרוץ במפל מים ולחסוך תקורה. תשובה טובה תתמודד עם זה ולא תתעלם.
+        <b>הרמזים בתיק</b> מכוונים לשתי תשובות סבירות, ושתיהן מתקבלות אם הן מנומקות:
+        (א) איטרטיבי-תוספתי — כי אי-הוודאות סביב עבודת הטבחים אמיתית, ובעל/ת המסעדה זמין/ה יומיומית;
+        (ב) תוספתי עם תכנון מוקדם — כי הדרישות מתועדות היטב במסמך האפיון, הצוות זעיר, והדדליין קשיח.
+        <b>מה שנפסל:</b> בחירה בלי קישור לעובדות התיק, וסעיף 4 שהוא ״ה-AI טעה״ בלי התמודדות.
+        <b>סעיף 3</b> בודק אם הבינו את ההבדל בין תוספתי לאיטרטיבי: ספרינט ראשון שאינו נותן לסועד
+        כלום — אינו סקייטבורד.
+      </aside>
+    <div class="acro-footer"><span class="acro"><span class="en">AI</span> = <span class="en">Artificial Intelligence</span> · בינה מלאכותית</span></div>
+    </section>
+    <!-- Closing slide — תודה! + the next-lecture teaser over the licensed Adobe Stock photo shared
+         with L6-7 / L8 / L10 (assets/closing.jpg). Full-bleed on purpose: no blue title bar and no
+         left accent bar (same treatment as the cover). The SDLC chip is suppressed from slides.yaml
+         (sdlc_phase: ""). Keep the wording in sync with slide-summary.html. -->
+    <section data-slug="closing">
+      <style>
+        .reveal section[data-slug="closing"] { background: #04263F; }
+        .reveal .slides > section[data-slug="closing"]::before { display: none; }  /* no accent bar */
+
+        .reveal section[data-slug="closing"] > .body {
+          padding: 0; gap: 0;
+          position: relative; overflow: hidden;
+          align-items: center; justify-content: center;
+          background-image: url("assets/closing.jpg");
+          background-size: cover;
+          background-position: center 45%;
+          background-repeat: no-repeat;
+        }
+        .reveal section[data-slug="closing"] > .body::before {   /* the scrim */
+          content: ""; position: absolute; inset: 0;
+          background:
+            radial-gradient(ellipse at 50% 46%, rgba(0,28,52,.58) 0%, rgba(0,24,46,.78) 58%, rgba(0,18,36,.90) 100%),
+            linear-gradient(180deg, rgba(0,78,140,.30) 0%, rgba(0,20,40,.58) 100%);
+        }
+
+        .reveal section[data-slug="closing"] .closing-wrap {
+          position: relative; z-index: 1;
+          display: flex; flex-direction: column; align-items: center;
+          text-align: center;
+          padding: 0 90px 40px;
+        }
+        .reveal section[data-slug="closing"] .closing-thanks {
+          font-size: 108px; font-weight: 800; line-height: 1; color: #fff;
+          letter-spacing: .01em;
+          text-shadow: 0 4px 26px rgba(0,0,0,.60);
+        }
+        .reveal section[data-slug="closing"] .closing-rule {
+          width: 132px; height: 4px; border-radius: 2px; margin: 26px 0 24px;
+          background: rgba(255,255,255,.88);
+          box-shadow: 0 2px 10px rgba(0,0,0,.45);
+        }
+        .reveal section[data-slug="closing"] .closing-next {
+          font-size: 31px; font-weight: 600; line-height: 1.42; color: #fff;
+          max-width: 1030px;
+          text-wrap: balance;
+          text-shadow: 0 2px 12px rgba(0,0,0,.65);
+        }
+        .reveal section[data-slug="closing"] .closing-next .en { white-space: nowrap; }
+        .reveal section[data-slug="closing"] .closing-course {
+          margin-top: 30px;
+          font-size: 18px; font-weight: 600; line-height: 1.4;
+          color: rgba(255,255,255,.80); letter-spacing: .03em;
+          text-shadow: 0 1px 8px rgba(0,0,0,.6);
+        }
+        .reveal section[data-slug="closing"] > .acro-footer,
+        .reveal section[data-slug="closing"] .acro-footer .en {
+          color: rgba(255,255,255,.70); text-shadow: 0 1px 4px rgba(0,0,0,.7);
+        }
+      </style>
+
+      <div class="body">
+        <div class="closing-wrap">
+          <div class="closing-thanks">תודה!</div>
+          <div class="closing-rule"></div>
+          <div class="closing-next">
+            הבא בתור — <b>מהמפרט למערכת עובדת</b>: לוקחים את התוצרים של כל הסמסטר ובונים מהם מערכת, סבב אחד מקצה לקצה
+          </div>
+          <div class="closing-course">
+            ניתוח ועיצוב מערכות מידע &nbsp;·&nbsp; הרצאה 11 — מתודולוגיות פיתוח
+          </div>
+        </div>
+      </div>
+
+      <aside class="notes">סוגרים: תודה, ותזכורת שהמפרט שבנינו לאורך הסמסטר הוא הקלט לסבב הפיתוח שנעשה בידיים בהרצאה 13.</aside>
+    </section>
+  </div>
+</div>
+<script src="../web/vendor/reveal/dist/reveal.js"></script>
+<script src="../web/vendor/reveal/plugin/notes/notes.js"></script>
+<script src="../web/vendor/reveal/plugin/highlight/highlight.js"></script>
+<script src="../web/theme/sad.js"></script>
+<script src="../web/theme/glossary.js"></script>
+</body>
+</html>
