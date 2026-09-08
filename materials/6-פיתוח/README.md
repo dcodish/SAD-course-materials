@@ -20,8 +20,11 @@ Claude Code.
 
 ### לפני הסדנה — חובה
 
-- [`סדנת-Claude-Code/PREREQS.html`](סדנת-Claude-Code/PREREQS.html) — **מדריך ההכנה.**
-  התקנות, הקמת בסיס הנתונים (Azure SQL או מקומי), חשבון GitHub, ואימות שהכול עובד.
+- **[📖 מדריך ההכנה — פתחו כאן](https://dcodish.github.io/SAD-course-materials/materials/6-%D7%A4%D7%99%D7%AA%D7%95%D7%97/%D7%A1%D7%93%D7%A0%D7%AA-Claude-Code/PREREQS.html)** — התקנות, הקמת בסיס הנתונים
+  (Azure SQL או מקומי), חשבון GitHub, ואימות שהכול עובד.
   **יש להשלים לפני המפגש** — ביצוע ההתקנות בכיתה מבזבז את זמן הקבוצה כולה.
+
+  <sub>(הקובץ עצמו: [`סדנת-Claude-Code/PREREQS.html`](סדנת-Claude-Code/PREREQS.html) —
+  קישור זה מציג את קוד המקור ב-GitHub, לא את המדריך.)</sub>
 
 _שאר חומרי הסדנה (מדריך השלבים המלא, דף ה-Prompts, מדריך ה-git והמצגת) יתווספו בהמשך._
