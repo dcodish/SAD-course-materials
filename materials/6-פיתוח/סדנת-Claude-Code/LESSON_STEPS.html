@@ -1,0 +1,2152 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>שלבי השיעור</title>
+  <style>
+:root {
+--ink: #1a1a2e;
+--muted: #475569;
+--accent: #1e40af;
+--accent-2: #3b82f6;
+--line: #cbd5e1;
+--line-soft: #e2e8f0;
+--callout-bg: #eff6ff;
+--callout-br: #3b82f6;
+--code-bg: #f1f5f9;
+--code-br: #dbe3ec;
+--paper: #ffffff;
+--sans: "Segoe UI", "Noto Sans Hebrew", "Arial Hebrew", Arial, -apple-system, BlinkMacSystemFont, sans-serif;
+--mono: "Cascadia Mono", "Consolas", "JetBrains Mono", "SFMono-Regular", "Liberation Mono", monospace;
+}
+* { box-sizing: border-box; }
+html { -webkit-print-color-adjust: exact; print-color-adjust: exact; scroll-behavior: smooth; }
+body {
+font-family: var(--sans);
+color: var(--ink);
+line-height: 1.8;
+font-size: 16.5px;
+margin: 0;
+background: #f8fafc;
+}
+.wrap { display: flex; align-items: flex-start; max-width: 1180px; margin: 0 auto; }
+
+#TOC {
+position: sticky;
+top: 0;
+flex: 0 0 272px;
+max-height: 100vh;
+overflow-y: auto;
+padding: 28px 24px 40px;
+font-size: 13.5px;
+line-height: 1.5;
+border-inline-end: 1px solid var(--line-soft);
+}
+#TOC::before {
+content: "תוכן העניינים";
+display: block;
+font-size: 11.5px;
+font-weight: 700;
+letter-spacing: .04em;
+color: var(--muted);
+margin-bottom: 12px;
+}
+#TOC ul { list-style: none; margin: 0; padding: 0; padding-inline-start: 10px; }
+#TOC > ul { padding-inline-start: 0; }
+#TOC li { margin: 0 0 2px; }
+#TOC a {
+display: block;
+padding: 3px 8px;
+color: var(--muted);
+text-decoration: none;
+border-radius: 5px;
+border-inline-start: 2px solid transparent;
+}
+#TOC a:hover { background: var(--callout-bg); color: var(--accent); }
+#TOC > ul > li > a { font-weight: 600; color: var(--ink); }
+#TOC a.active { color: var(--accent); background: var(--callout-bg); border-inline-start-color: var(--accent-2); font-weight: 600; }
+
+.page {
+flex: 1 1 auto;
+min-width: 0;
+background: var(--paper);
+padding: 40px 52px 80px;
+border-inline: 1px solid var(--line-soft);
+min-height: 100vh;
+}
+
+.doc-head { border-bottom: 3px solid var(--accent); padding-bottom: 20px; margin-bottom: 32px; }
+.doc-head img { max-width: 210px; height: auto; display: block; margin-bottom: 18px; }
+.doc-head .course { font-size: 12.5px; color: var(--muted); font-weight: 700; letter-spacing: .03em; }
+.doc-head h1.doc-title { font-size: 33px; font-weight: 700; color: var(--accent); margin: 8px 0 0; line-height: 1.25; border: 0; padding: 0; }
+.doc-head .sub { font-size: 17px; color: var(--muted); margin-top: 8px; }
+.doc-head .author { font-size: 13.5px; color: var(--muted); margin-top: 14px; }
+
+h1 {
+font-size: 25px; font-weight: 700; color: var(--accent);
+margin: 46px 0 14px; padding-bottom: 8px; border-bottom: 2px solid var(--line);
+line-height: 1.35; scroll-margin-top: 20px;
+}
+h2 {
+font-size: 20px; font-weight: 700; color: var(--accent);
+margin: 34px 0 12px; padding-inline-start: 12px; border-inline-start: 5px solid var(--accent-2);
+line-height: 1.4; scroll-margin-top: 20px;
+}
+h3 { font-size: 17px; font-weight: 700; margin: 26px 0 10px; color: var(--ink); scroll-margin-top: 20px; }
+h4 { font-size: 15px; font-weight: 700; margin: 20px 0 8px; color: var(--muted); scroll-margin-top: 20px; }
+p { margin: 0 0 13px; }
+strong { font-weight: 700; }
+a { color: var(--accent); }
+hr { border: 0; border-top: 1px solid var(--line-soft); margin: 34px 0; }
+ol, ul { margin: 0 0 14px; padding-inline-start: 26px; padding-inline-end: 0; }
+li { margin-bottom: 7px; }
+li > ul, li > ol { margin-top: 7px; }
+
+code, pre, kbd, samp { direction: ltr; unicode-bidi: isolate; }
+code {
+font-family: var(--mono);
+background: var(--code-bg);
+padding: 1.5px 6px;
+border-radius: 4px;
+font-size: .87em;
+border: 1px solid var(--code-br);
+color: #0f172a;
+}
+pre {
+background: var(--code-bg);
+color: #0f172a;
+padding: 14px 16px;
+border: 1px solid var(--code-br);
+border-radius: 8px;
+overflow-x: auto;
+margin: 0 0 15px;
+font-size: 13.5px;
+line-height: 1.6;
+position: relative;
+text-align: left;
+unicode-bidi: isolate;
+}
+/* A <code> inside a <pre> is only a wrapper - it must never paint its own
+       box, in any context. Kept at high specificity so the callout rule below
+       cannot bleed into it (that bug rendered prompts as blank coloured bars). */
+    pre > code,
+    pre code,
+    blockquote pre code,
+    div.sourceCode pre code {
+      background: none !important;
+      border: 0 !important;
+      padding: 0;
+      font-size: 1em;
+      color: inherit;
+    }
+    div.sourceCode { background: none; margin: 0 0 15px; overflow: visible; }
+    div.sourceCode pre { margin: 0; }
+    pre a.sourceLine, pre .sourceLine a { text-decoration: none; }
+
+    /* Syntax-highlighting palette. Pandoc emits the skylighting span classes,
+       but we colour them here instead of importing pandoc's own stylesheet -
+       that sheet also carries document rules (a 36em cap on body among them)
+       which would override the layout above. NOTE: never write pandoc's
+       styles variable literally in this file, even inside a comment - the
+       template engine interpolates it anywhere it appears and injects the
+       whole default sheet. Tuned for the light code background. */
+    pre code span { color: inherit; }
+    code span.kw, code span.cf { color: #0550ae; font-weight: 600; }  /* keyword, control flow */
+    code span.dt              { color: #953800; }                     /* data type / JSON key */
+    code span.st, code span.ss, code span.vs { color: #0a7c3e; }      /* strings */
+    code span.dv, code span.bn, code span.fl { color: #0550ae; }      /* numbers */
+    code span.co              { color: #6a737d; font-style: italic; } /* comments */
+    code span.fu, code span.bu { color: #6f42c1; }                    /* functions, builtins */
+    code span.va              { color: #8250df; }                     /* variables */
+    code span.op, code span.sc { color: #24292f; }                    /* operators */
+    code span.at              { color: #0550ae; }                     /* attributes */
+    code span.pp              { color: #953800; }                     /* preprocessor */
+    code span.al, code span.er { color: #cf222e; font-weight: 600; }  /* alert, error */
+    code span.wa              { color: #9a6700; font-style: italic; } /* warning */
+    code span.an, code span.cv, code span.do { color: #6a737d; font-style: italic; }
+
+    /* ===== Callouts / pasteable prompts ===== */
+    blockquote {
+      margin: 15px 0;
+      padding: 14px 18px;
+      background: var(--callout-bg);
+      border-inline-start: 5px solid var(--callout-br);
+      border-radius: 7px;
+      border-start-start-radius: 0;
+      border-end-start-radius: 0;
+      color: #1e3a5f;
+      position: relative;
+    }
+    blockquote > :last-child { margin-bottom: 0; }
+
+    /* A blockquote is either a pasteable prompt (English, blue, gets a Copy
+       button) or an explanatory note (Hebrew, amber, no Copy button). The
+       distinction is set in JS by looking for Hebrew characters - without it
+       every note looks like something the student is meant to paste. */
+    blockquote.note {
+      background: var(--warn-bg);
+      border-inline-start-color: var(--warn-br);
+      color: #422006;
+    }
+
+    /* An English prompt inside an RTL page must render left-to-right. Without
+       this, the paragraph keeps the page's RTL direction and trailing neutral
+       runs - a closing `code` span, a full stop - jump to the start of the
+       line. Keep the accent bar on the right so prompts still line up with the
+       Hebrew notes, and move the Copy button clear of it. */
+    main.page blockquote.prompt {
+      direction: ltr;
+      text-align: left;
+      border-inline-start: 0;
+      border-inline-end: 5px solid var(--callout-br);
+      border-radius: 7px;
+      border-start-end-radius: 0;
+      border-end-end-radius: 0;
+    }
+    main.page blockquote.prompt > .copy-btn {
+      inset-inline-start: 8px;
+      inset-inline-end: auto;
+    }
+    blockquote.note :not(pre) > code { background: #fef3c7; border-color: #fde68a; }
+    /* Inline code only - never the <code> wrapper inside a <pre>. */
+    blockquote :not(pre) > code { background: #dbeafe; border-color: #bfdbfe; }
+    blockquote pre { background: #fff; border-color: #cfe0f5; }
+
+    /* ===== Copy button ===== */
+    .copy-btn {
+      position: absolute; top: 7px; inset-inline-end: 8px;
+      font-family: var(--sans); font-size: 11.5px; font-weight: 600;
+      padding: 3px 10px; border-radius: 5px; cursor: pointer;
+      border: 1px solid var(--line); background: #fff; color: var(--muted);
+      opacity: 0; transition: opacity .13s ease;
+      z-index: 2;
+    }
+    pre:hover .copy-btn, blockquote:hover .copy-btn, .copy-btn:focus { opacity: 1; }
+    .copy-btn:hover { color: var(--accent); border-color: var(--accent-2); }
+    .copy-btn.done { color: #15803d; border-color: #86efac; background: #f0fdf4; opacity: 1; }
+
+    /* ===== Tables ===== */
+    table { width: 100%; border-collapse: collapse; margin: 15px 0; font-size: 15px; display: block; overflow-x: auto; }
+    th, td { border: 1px solid var(--line); padding: 9px 12px; text-align: start; vertical-align: top; }
+    thead th { background: var(--accent); color: #fff; font-weight: 600; }
+    tbody tr:nth-child(even) { background: #f8fafc; }
+    td code { font-size: .84em; }
+
+    img { max-width: 100%; height: auto; }
+
+    /* ===== Narrow screens ===== */
+    @media (max-width: 900px) {
+      .wrap { display: block; }
+      #TOC { position: static; max-height: none; flex: none; width: auto; border-inline-end: 0; border-bottom: 1px solid var(--line-soft); padding: 18px 22px; background: var(--paper); }
+      .page { padding: 28px 22px 60px; border: 0; }
+    }
+
+    /* ===== Print ===== */
+    @media print {
+      body { background: #fff; font-size: 10.5pt; line-height: 1.6; }
+      .wrap { display: block; max-width: none; }
+      #TOC, .copy-btn { display: none; }
+      .page { padding: 0; border: 0; min-height: 0; }
+      h1 { page-break-before: always; page-break-after: avoid; font-size: 17pt; }
+      h1:first-of-type { page-break-before: avoid; }
+      h2, h3, h4 { page-break-after: avoid; }
+      pre, blockquote, table, li { page-break-inside: avoid; }
+      a { color: var(--ink); text-decoration: none; }
+      .doc-head { page-break-after: always; padding-top: 22%; text-align: center; border-bottom: 0; }
+      .doc-head img { margin: 0 auto 24px; }
+    }
+  </style>
+</head>
+<body>
+<div class="wrap">
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#מה-אנחנו-עושים-היום" id="toc-מה-אנחנו-עושים-היום">מה אנחנו
+עושים היום</a></li>
+<li><a href="#פתיחת-session-חדש-באמצע-השיעור" id="toc-פתיחת-session-חדש-באמצע-השיעור">פתיחת Session חדש באמצע
+השיעור</a></li>
+<li><a href="#דרישות-קדם-התקנה-לפני-השיעור" id="toc-דרישות-קדם-התקנה-לפני-השיעור">דרישות קדם — התקנה לפני
+השיעור</a></li>
+<li><a href="#שלב-0-יצירת-תיקיית-הפרויקט" id="toc-שלב-0-יצירת-תיקיית-הפרויקט">שלב 0 — יצירת תיקיית
+הפרויקט</a></li>
+<li><a href="#שלב-1-הקמת-הפרויקט" id="toc-שלב-1-הקמת-הפרויקט">שלב 1 —
+הקמת הפרויקט</a></li>
+<li><a href="#שלב-2-חילוץ-הניתוח-שלכם-ל-markdown-מובנה" id="toc-שלב-2-חילוץ-הניתוח-שלכם-ל-markdown-מובנה">שלב 2 — חילוץ הניתוח
+שלכם ל-Markdown מובנה</a></li>
+<li><a href="#שלב-3-יצירת-ה-claude.md-של-הפרויקט" id="toc-שלב-3-יצירת-ה-claude.md-של-הפרויקט">שלב 3 — יצירת ה-CLAUDE.md של
+הפרויקט</a></li>
+<li><a href="#שלב-4-סכמת-בסיס-הנתונים-ו-stored-procedures-בסיסיים" id="toc-שלב-4-סכמת-בסיס-הנתונים-ו-stored-procedures-בסיסיים">שלב 4 —
+סכמת בסיס הנתונים ו-Stored Procedures בסיסיים</a></li>
+<li><a href="#שלב-5-שלד-פרויקט-ה-c-והישות-הראשונה-מקצה-לקצה" id="toc-שלב-5-שלד-פרויקט-ה-c-והישות-הראשונה-מקצה-לקצה">שלב 5 — שלד
+פרויקט ה-C# והישות הראשונה מקצה לקצה</a></li>
+<li><a href="#שלב-6-יצירת-שאר-מסכי-ה-crud" id="toc-שלב-6-יצירת-שאר-מסכי-ה-crud">שלב 6 — יצירת שאר מסכי
+ה-CRUD</a></li>
+<li><a href="#שלב-7-מכונות-מצבים-הפיחו-חיים-בדיאגרמות-המצבים-שלכם" id="toc-שלב-7-מכונות-מצבים-הפיחו-חיים-בדיאגרמות-המצבים-שלכם">שלב 7 —
+מכונות מצבים: הפיחו חיים בדיאגרמות המצבים שלכם</a></li>
+<li><a href="#שלב-8-דוחות-שיעורי-בית" id="toc-שלב-8-דוחות-שיעורי-בית">שלב 8 — דוחות (שיעורי בית)</a></li>
+<li><a href="#שלב-9-תרחישי-uc-מורכבים-שיעורי-בית" id="toc-שלב-9-תרחישי-uc-מורכבים-שיעורי-בית">שלב 9 — תרחישי UC מורכבים
+(שיעורי בית)</a></li>
+<li><a href="#שלב-10-ליטוש-הממשק-עם-claude-שיעורי-בית" id="toc-שלב-10-ליטוש-הממשק-עם-claude-שיעורי-בית">שלב 10 — ליטוש הממשק עם
+Claude (שיעורי בית)</a></li>
+<li><a href="#מה-באמת-מחוץ-להיקף" id="toc-מה-באמת-מחוץ-להיקף">מה באמת
+מחוץ להיקף</a></li>
+</ul>
+</nav>
+<main class="page">
+  <header class="doc-head">
+    <img role="img" aria-label src="data:image/png;base64,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" alt>
+    <div class="course">ניתוח ועיצוב מערכות מידע — אוניברסיטת בן-גוריון,
+הנדסת תעשייה וניהול</div>
+    <h1 class="doc-title">שלבי השיעור</h1>
+    <div class="sub">מניתוח לפיתוח — המדריך המלא</div>
+    <div class="author">מרצה: דוד קודיש</div>
+  </header>
+
+<p>המדריך המלא של השיעור: כל שלב, כל Prompt, וההסבר למה כל דבר נעשה כפי
+שהוא נעשה.</p>
+<hr />
+<h2 id="מה-אנחנו-עושים-היום">מה אנחנו עושים היום</h2>
+<p><strong>המטרה:</strong> לקחת את הניתוח והעיצוב שהקבוצה שלכם כבר עשתה
+— ולהפוך אותם למערכת שרצה. בסוף השיעור יהיו לכם בסיס נתונים עם הטבלאות
+שלכם, אפליקציית WinForms שנפתחת, מסך התחברות אמיתי, ומסכי CRUD
+עובדים.</p>
+<h3 id="הרעיון-שמאחורי-השיעור">הרעיון שמאחורי השיעור</h3>
+<p>השיעור הזה הוא לא “איך לתכנת מהר יותר”. הוא על <strong>חלוקת העבודה
+הנכונה בין אדם לסוכן AI</strong>:</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>מה שרק אתם יכולים לעשות</th>
+<th>מה שהסוכן עושה טוב יותר מכם</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>להחליט מה המערכת צריכה לעשות</td>
+<td>לתרגם החלטה שכבר התקבלה לקוד</td>
+</tr>
+<tr>
+<td>לזהות שהניתוח שלכם סותר את עצמו</td>
+<td>לכתוב 40 Stored Procedures בלי טעות הקלדה</td>
+</tr>
+<tr>
+<td>לדעת מה נכון לתחום העסקי שלכם</td>
+<td>לייצר 10 מסכים באותה תבנית</td>
+</tr>
+<tr>
+<td><strong>לבדוק שמה שנוצר תואם למה שהתכוונתם</strong></td>
+<td>להריץ, לתקן שגיאות, ולנסות שוב</td>
+</tr>
+</tbody>
+</table>
+<p>הטור השמאלי הוא מה שהופך את השיעור למהיר. <strong>הטור הימני הוא מה
+שהופך אותו לנכון.</strong> אם תדלגו על הבדיקות, תקבלו מערכת שמתקמפלת
+ורצה — ועושה את הדבר הלא נכון, בשקט.</p>
+<h3 id="הקשת-של-השיעור-ארבעה-מעברים">הקשת של השיעור — ארבעה מעברים</h3>
+<ol type="1">
+<li><strong>מ-PDF ל-Markdown</strong> (שלב 2) — הניתוח שלכם עובר לפורמט
+ש-Claude קורא היטב.</li>
+<li><strong>מ-Markdown להקשר</strong> (שלב 3) — נבנה
+<code>CLAUDE.md</code>: מסמך אחד שמתאר את הפרויקט שלכם, ו-Claude קורא
+אותו אוטומטית בכל שיחה. <strong>זה הקובץ החשוב ביותר
+בפרויקט.</strong></li>
+<li><strong>מהקשר לבסיס נתונים</strong> (שלבים 4–4.5) — דיאגרמת המחלקות
+הופכת לטבלאות אמיתיות עם נתונים.</li>
+<li><strong>מבסיס נתונים לאפליקציה</strong> (שלבים 5–6) — הטבלאות הופכות
+למחלקות C# ולמסכים שרצים.</li>
+</ol>
+<p>כל מעבר מסתמך על הקודם. שגיאה בשלב 3 מתגלגלת לשלבים 4, 5 ו-6 — ולכן
+שלב הבדיקה בכל שלב הוא לא המלצה, הוא חלק מהעבודה.</p>
+<h3 id="שלושה-עקרונות-שחוזרים-לאורך-כל-השיעור">שלושה עקרונות שחוזרים
+לאורך כל השיעור</h3>
+<ul>
+<li><strong>נשארים ב-Claude Code.</strong> לא קופצים בין SSMS, טרמינל
+ודפדפן. גם ה-SQL רץ מתוך Claude.</li>
+<li><strong>הקבצים הם מקור האמת.</strong> כל שינוי סכמה נכנס לקובץ
+<code>.sql</code> ששמור ב-git. בסיס הנתונים הוא תוצר נגזר — אם הוא נמחק,
+מריצים מחדש את הסקריפטים.</li>
+<li><strong>בודקים את מה ש-Claude מייצר.</strong> הוא מהיר אבל לא
+זהיר.</li>
+</ul>
+<h3 id="איך-לקרוא-את-המסמך-הזה">איך לקרוא את המסמך הזה</h3>
+<ul>
+<li><strong>הקטעים בכחול הם Prompts להעתקה</strong> — הדביקו אותם
+ב-Claude Code כמו שהם (יש כפתור “העתק”). הם באנגלית בכוונה: כך הם נוסחו
+ונבדקו.</li>
+<li><strong>הטקסט סביבם בעברית מסביר מה קורה ולמה.</strong> אל תדלגו
+עליו — ההסבר הוא מה שמאפשר לכם לזהות מתי Claude טעה.</li>
+<li>כל שלב מסתיים ב<strong>נקודת Commit</strong> — שמרו את העבודה לפני
+שאתם ממשיכים.</li>
+</ul>
+<hr />
+<h2 id="פתיחת-session-חדש-באמצע-השיעור">פתיחת Session חדש באמצע
+השיעור</h2>
+<p>לאורך השיעור תפתחו כמה שיחות חדשות — כשחלון ההקשר מתמלא, או אחרי
+הפסקה. <strong>שיחה חדשה מתחילה בלי זיכרון של מה שדיברתם עליו</strong>
+(הקבצים כמובן נשארים).</p>
+<p><strong>משלב 3 והלאה</strong> זה כמעט לא מורגש: Claude קורא אוטומטית
+את <code>CLAUDE.md</code> ומתמצא מיד.</p>
+<p><strong>לפני שלב 3</strong>, או כשאתם רוצים למקד את Claude מהר,
+הדביקו את ה-Prompt הקצר הבא בתחילת השיחה החדשה:</p>
+<blockquote class="prompt">
+<p>I’m continuing a university course project — building a C# WinForms
+order-management-style system from our own analysis documents, driven
+entirely from Claude Code.</p>
+<p>Orient yourself before doing anything: read <code>CLAUDE.md</code> at
+the project root if it exists, list what’s in <code>docs/</code>, and
+check whether <code>scripts/</code> and a <code>.sln</code> already
+exist. The folder <code>cloned/</code> is the course’s sample project —
+read <code>cloned/PATTERNS.md</code> for the architecture conventions we
+follow, but do not copy its domain content.</p>
+<p>Then tell me in a few lines where the project currently stands and
+what you think the next step is, and wait for me to confirm before
+changing anything.</p>
+</blockquote>
+<p>זה חוסך לכם הסברים חוזרים, ומונע מ-Claude לנחש.</p>
+<hr />
+<h2 id="דרישות-קדם-התקנה-לפני-השיעור">דרישות קדם — התקנה לפני
+השיעור</h2>
+<p><strong>כל התקנות התוכנה מרוכזות ב-<a href="PREREQS.html"><code>PREREQS</code></a>.</strong> בצעו אותן לפני
+השיעור — לא במהלכו.</p>
+<p>בקצרה, מה שצריך להיות מותקן: Visual Studio Community (2022 או 2025 —
+שתיהן עובדות),‏ .NET 8 SDK יחד עם Windows Desktop Runtime,‏ SSMS (כל גרסה
+עדכנית),‏ Git,‏ VSCode, תוסף Claude Code (מחובר עם מנוי Pro/Max פעיל),
+‏<code>uv</code>, ובסיס נתונים שהוקם עבור הקבוצה — ב-Azure SQL (מומלץ) או
+מקומי. שלבי ההתקנה המלאים, האימות ופתרון התקלות נמצאים
+ב-<code>PREREQS</code>.</p>
+<p>השיעור מניח שכל מה שב-<code>PREREQS</code> עובד על המחשב שלכם. אם לא
+— תקנו את זה קודם.</p>
+<h3 id="ניהול-טוקנים-קראו-את-זה-לפני-שאתם-מתחילים">ניהול טוקנים — קראו
+את זה לפני שאתם מתחילים</h3>
+<p>רוב הסטודנטים עובדים עם מנוי <strong>Pro</strong> ב-20$. הוא מספיק
+לשיעור בהחלט — אבל רק אם לא מבזבזים. שתי ההחלטות שמשפיעות הכי הרבה הן
+<strong>באיזה מודל אתם משתמשים</strong> ו<strong>כמה ארוכה
+השיחה</strong>.</p>
+<h4 id="באיזה-מודל-להשתמש">באיזה מודל להשתמש</h4>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>מודל</th>
+<th>מתי</th>
+<th>איך</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Sonnet</strong></td>
+<td><strong>ברירת המחדל שלכם לכל השיעור.</strong> מתאים לרוב עבודת הקוד
+ועולה משמעותית פחות מ-Opus</td>
+<td><code>/model sonnet</code></td>
+</tr>
+<tr>
+<td><strong>Haiku</strong></td>
+<td>לשלבים מכניים: הרצת SQL, יצירת קוד תבניתי, הרצת סקריפטים, יצירת
+מסכים חוזרים (שלב 6)</td>
+<td><code>/model haiku</code></td>
+</tr>
+<tr>
+<td><strong>Opus</strong></td>
+<td><strong>הימנעו במנוי Pro.</strong> הוא שורף את המכסה הכי מהר, ואין
+בו צורך למה שאנחנו עושים</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<p><strong>בקצרה: התחילו ב-Sonnet, רדו ל-Haiku בשלבים המכניים, אל תשתמשו
+ב-Opus.</strong> השלבים שדורשים שיקול דעת אמיתי (2, 3, ומסך הכניסה
+ב-5.5) — השאירו ב-Sonnet.</p>
+<h4 id="מה-שורף-מכסה-יותר-מהמודל-שיחה-ארוכה">מה שורף מכסה יותר מהמודל:
+שיחה ארוכה</h4>
+<p>בכל הודעה ש-Claude שולח, <strong>הוא שולח את כל השיחה מחדש</strong>.
+שאלה קצרה בשיחה שפתוחה כבר שלוש שעות עולה כמו כל ההיסטוריה הזו. זה הגורם
+מספר אחת לבזבוז.</p>
+<ul>
+<li><strong>הריצו <code>/clear</code> בין שלבים.</strong> זה
+<strong>חינם לגמרי</strong> ומאפס את ההקשר. Claude יקרא מחדש את
+<code>CLAUDE.md</code> וימשיך לעבוד — הקבצים שלכם לא נוגעים.</li>
+<li><strong>אל תשאירו שיחה אחת פתוחה כל השיעור.</strong> שלב חדש =
+<code>/clear</code>.</li>
+<li><code>/compact</code> <strong>אינו</strong> חינם — הוא עצמו בקשה
+גדולה. אם אתם רק עוברים לנושא אחר, <code>/clear</code> עדיף.</li>
+<li><strong><code>/usage</code></strong> מראה כמה נשאר לכם מהמכסה ומה
+בזבז אותה.</li>
+</ul>
+<h4 id="שתי-הודעות-שונות-שקל-לבלבל-ביניהן">שתי הודעות שונות שקל לבלבל
+ביניהן</h4>
+<ul>
+<li><strong>“Context low” / התראת auto-compact</strong> — <strong>זו לא
+מגבלת מנוי.</strong> ההקשר של השיחה התמלא. הפתרון: <code>/clear</code>
+והמשך עבודה.</li>
+<li><strong>“You’ve hit your session limit” / “weekly limit”</strong> —
+זו כן מגבלת המנוי, והיא <strong>משותפת לכל המודלים</strong>. מעבר
+ל-Haiku <em>לא</em> יחזיר לכם גישה; צריך לחכות לאיפוס (ההודעה אומרת
+מתי).</li>
+<li><strong>“You’ve hit your Opus limit”</strong> — מגבלה ספציפית למודל
+אחד. <strong>כאן</strong> מעבר ל-Sonnet או Haiku <em>כן</em> מחזיר אתכם
+לעבודה מיד.</li>
+</ul>
+<blockquote class="note">
+<p><strong>⚠️ אם הקבוצה חולקת חשבון Claude אחד — שימו לב.</strong> המכסה
+היא של החשבון, לא של המחשב. ארבעה חברי קבוצה שעובדים במקביל על אותו
+חשבון <strong>לא</strong> מקבלים ארבע מכסות — הם מרוקנים מכסה אחת בערך
+פי ארבע מהר.</p>
+<p>לכן, בעבודה על חשבון משותף:</p>
+<ul>
+<li><strong>עדיף שאדם אחד יריץ את Claude בכל רגע נתון</strong>, ושהשאר
+יסתכלו, יבדקו את התוצרים ויחליטו יחד. ממילא רוב שלבי השיעור הם החלטה
+משותפת של הקבוצה.</li>
+<li>אם כן עובדים במקביל — <strong>הקפידו במיוחד על
+<code>/clear</code></strong>, כי כל שיחה פתוחה שולחת את ההיסטוריה שלה
+מחדש בכל הודעה.</li>
+<li><strong>הריצו <code>/usage</code> מדי פעם</strong> כדי לראות כמה
+נשאר לחשבון.</li>
+</ul>
+</blockquote>
+<h4 id="עוד-על-sessions">עוד על Sessions</h4>
+<p><strong>Session לא שומר את התקדמות השיחה.</strong> כשסוגרים Session,
+Claude שוכח את השיחה — אבל לא את הקבצים שלכם. ה-<code>CLAUDE.md</code>
+הוא מה ש-Claude קורא בתחילת כל Session חדש כדי להבין את הפרויקט. בצעו
+commit בסוף כל שלב, כדי שה-Session הבא יתחיל נקי.</p>
+<hr />
+<h2 id="שלב-0-יצירת-תיקיית-הפרויקט">שלב 0 — יצירת תיקיית הפרויקט</h2>
+<p><strong>מה השלב הזה עושה:</strong> מכין את מקום העבודה. Claude Code
+קורא וכותב קבצים בתיקייה <strong>שפתחתם ב-VSCode</strong> — לא בתיקייה
+שבה הקבצים “אמורים” להיות. אם תפתחו את התיקייה הלא נכונה, כל שאר השיעור
+יעבוד על הקבצים הלא נכונים.</p>
+<p><strong>בסיום השלב יהיה לכם:</strong> תיקייה ריקה עם תת-תיקיית
+<code>docs</code>, פתוחה ב-VSCode.</p>
+<p><strong>זמן צפוי:</strong> 2 דקות.</p>
+<p><strong>בצעו את זה לפני שאתם פותחים את VSCode.</strong> דילוג על השלב
+הזה הוא טעות ההקמה הנפוצה ביותר.</p>
+<ol type="1">
+<li><strong>צרו תיקייה ריקה</strong> במחשב — למשל
+<code>C:\projects\sad-groupname</code>. היא חייבת להיות <strong>ריקה
+לחלוטין</strong>. אל תשתמשו בתיקייה שכבר יש בה קבצים, ואל תשתמשו בתיקיית
+פרויקט הדוגמה המשוכפל.</li>
+</ol>
+<blockquote class="note">
+<p><strong>איפה למקם את התיקייה — חשוב:</strong></p>
+<ul>
+<li><strong>מומלץ:</strong> נתיב קצר ופשוט ישירות על כונן
+<code>C:</code>, למשל <code>C:\projects\sad-groupname</code>. אם התיקייה
+<code>C:\projects</code> לא קיימת — צרו אותה.</li>
+<li><strong>הימנעו משולחן העבודה ומתיקיית Documents.</strong> במחשבים
+רבים הן מסונכרנות ל-OneDrive, וזה גורם לקבצים להינעל באמצע בנייה,
+ל-Visual Studio להתנהג מוזר, ולנתיבים להיות ארוכים מדי.</li>
+<li><strong>הימנעו מאותיות עבריות בנתיב.</strong> נתיב כמו
+<code>C:\משתמשים\פרויקטים\sad</code> שובר חלק מכלי הפיתוח (MSBuild,‏
+.NET, וכלי שורת פקודה). זה נכון גם לשם המשתמש שלכם ב-Windows — אם הוא
+בעברית, זו סיבה נוספת לא לעבוד מתוך תיקיית הבית.</li>
+<li><strong>הימנעו מרווחים בשם התיקייה.</strong> השתמשו במקף במקום:
+<code>sad-groupname</code> ולא <code>sad groupname</code>.</li>
+</ul>
+<p>בקיצור: <code>C:\projects\sad-groupname</code> — באנגלית, בלי רווחים,
+בלי OneDrive. 2. <strong>צרו בתוכה תת-תיקייה ריקה בשם
+<code>docs</code></strong>. השאירו אותה ריקה בינתיים. 3. <strong>פתחו
+VSCode ← File ← Open Folder</strong> ← נווטו לתיקיית
+<code>sad-groupname</code> שלכם ופתחו אותה.</p>
+</blockquote>
+<p>‏“workspace” ב-VSCode וב-Claude Code פירושו התיקייה שפתחתם. כשהמדריך
+הזה אומר “תיקיית הפרויקט שלכם” או “פתחו את Claude Code בתיקיית הפרויקט”,
+הכוונה לתיקייה הריקה <code>sad-groupname</code>. Claude קורא קבצים
+מהתיקייה הזו — אם פתחתם את התיקייה הלא נכונה, הוא יקרא את הקבצים הלא
+נכונים.</p>
+<hr />
+<h2 id="שלב-1-הקמת-הפרויקט">שלב 1 — הקמת הפרויקט</h2>
+<p><strong>מה השלב הזה עושה:</strong> מחבר את שלושת מקורות המידע
+ש-Claude יעבוד מולם לאורך השיעור: המסמכים שלכם (<code>docs/</code>),
+פרויקט הדוגמה של הקורס (<code>cloned/</code>), ובסיס הנתונים (דרך
+ה-MCP). עד עכשיו Claude ידע לכתוב קוד; מכאן והלאה הוא גם יכול
+<strong>להריץ SQL בעצמו</strong>.</p>
+<p><strong>בסיום השלב יהיה לכם:</strong> תיקיית פרויקט עם המסמכים
+והדוגמה, <code>.gitignore</code>, ו-Claude שמצליח להריץ
+<code>SELECT @@VERSION</code> מול בסיס הנתונים שלכם.</p>
+<p><strong>זמן צפוי:</strong> 15–20 דקות. הגדרת ה-MCP היא החלק שהכי נוטה
+להשתבש — אל תיבהלו.</p>
+<ol type="1">
+<li><p><strong>ודאו שאתם בתיקייה שיצרתם בשלב 0</strong> — היא פתוחה
+ב-VSCode והיא עדיין ריקה למעט תת-התיקייה <code>docs</code>. זו תיקיית
+העבודה שלכם — היא אינה פרויקט הדוגמה.</p></li>
+<li><p><strong>הכניסו את קובצי הניתוח והעיצוב הקיימים שלכם
+ל-<code>docs/</code></strong> — קובצי ה-PDF של חלק א׳ וחלק ב׳ (ניתוח
+ארגוני, דרישות, דיאגרמת UC, דיאגרמת מחלקות וכו׳).</p></li>
+<li><p><strong>שכפלו את פרויקט הדוגמה של הקורס לתוך
+<code>cloned/</code></strong> על ידי בקשה מ-Claude Code:</p>
+<blockquote class="prompt">
+<p>Run this git command to clone the SAD sample project into a subfolder
+of this project:
+<code>git clone https://github.com/dcodish/SAD-sample-project.git cloned</code></p>
+</blockquote>
+<p>(אל תריצו את פקודת git ישירות בטרמינל — ייתכן ש-git לא נמצא ב-PATH של
+הטרמינל, ותקבלו שגיאת “command not found”. בקשה מ-Claude פותרת את זה
+אוטומטית.)</p>
+<p>קוד ה-C# לעיון נמצא אז ב-<code>cloned/example_project/</code>,
+והמוסכמות המשותפות ב-<code>cloned/PATTERNS.md</code>.</p></li>
+<li><p><strong>הוסיפו <code>.gitignore</code></strong> — בקשו
+מ-Claude:</p>
+<blockquote class="prompt">
+<p>Create a <code>.gitignore</code> file at the root of this project
+with two entries: <code>cloned/</code> and <code>.mcp.json</code></p>
+</blockquote>
+<p>‏<code>cloned/</code> מונע מפרויקט הדוגמה להיכנס ל-repository של
+הקבוצה. <code>.mcp.json</code> מכיל פרטי גישה לבסיס הנתונים — לעולם אל
+תעלו אותו.</p></li>
+<li><p><strong>התקינו את שרת ה-MSSQL MCP</strong> כדי ש-Claude Code יוכל
+לתקשר עם בסיס הנתונים של הקבוצה ב-Azure SQL.</p>
+<p>דרישת קדם: בסיס הנתונים של הקבוצה חייב כבר להתקיים (הוקם
+ב-<code>PREREQS</code> חלק ג׳ לפני השיעור).</p>
+<p><strong>☁️ מסלול Azure:</strong> ה-Prompt שלמטה מתאים לכם כמו שהוא.
+דרושים ארבעת ערכי החיבור: שרת, שם בסיס הנתונים, שם משתמש וסיסמה.</p>
+<p><strong>💻 מסלול מקומי:</strong> השתמשו ב-Prompt שלמטה, עם שני
+שינויים בלבד — בסעיף 2 בקשו מ-Claude <strong>לאתר את ה-Instance
+בעצמו</strong> (לא לשאול אתכם לשם), ובסעיף 3 החליפו את קטע
+ה-<code>env</code> בזה:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;env&quot;</span><span class="er">:</span> <span class="fu">{</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;MSSQL_SERVER&quot;</span><span class="fu">:</span> <span class="st">&quot;localhost&quot;</span><span class="fu">,</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;MSSQL_PORT&quot;</span><span class="fu">:</span> <span class="st">&quot;14330&quot;</span><span class="fu">,</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;MSSQL_DATABASE&quot;</span><span class="fu">:</span> <span class="st">&quot;master&quot;</span><span class="fu">,</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;MSSQL_WINDOWS_AUTH&quot;</span><span class="fu">:</span> <span class="st">&quot;true&quot;</span><span class="fu">,</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;MSSQL_ENCRYPT&quot;</span><span class="fu">:</span> <span class="st">&quot;false&quot;</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<p>שימו לב: <code>MSSQL_SERVER</code> הוא <code>localhost</code> בלבד
+(בלי <code>\SQLEXPRESS</code> — pymssql לא מפענח שמות Instance), הפורט
+נפרד, ואין <code>MSSQL_USER</code>/<code>MSSQL_PASSWORD</code> כי
+משתמשים באימות Windows. שאר השלבים, כולל תיקון שני הבאגים, זהים
+לחלוטין.</p>
+<p><strong>דף ה-Prompts (<code>PROMPTS_CHEATSHEET</code>) מכיל את שני
+ה-Prompts במלואם</strong>, מוכנים להעתקה, אם אתם מעדיפים לא לערוך
+ידנית.</p>
+<p>פתחו את Claude Code בתיקיית הפרויקט והדביקו את ה-Prompt הבא:</p>
+<blockquote class="prompt">
+<p>Set up the MSSQL MCP server for this project so you can talk to our
+Azure SQL database. Follow every step.</p>
+<ol type="1">
+<li><p><strong>Install <code>uv</code> if missing.</strong> Run
+<code>uvx --version</code>. If not found, run
+<code>winget install astral-sh.uv</code>. Note: after install,
+<code>uvx</code> will NOT be on this session’s PATH (Windows only
+refreshes PATH for new processes). In step 3 you will write the
+<strong>absolute path</strong> to <code>uvx.exe</code> into
+<code>.mcp.json</code>. Find it with: run this — it checks every place
+uv installs to, because the location varies by uv version:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode powershell"><code class="sourceCode powershell"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="va">$uvx</span> <span class="op">=</span> <span class="op">(</span><span class="fu">Get-Command</span> uvx <span class="op">-</span>EA SilentlyContinue<span class="op">).</span><span class="fu">Source</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(-not</span> <span class="va">$uvx</span><span class="op">)</span> <span class="op">{</span> <span class="va">$uvx</span> <span class="op">=</span> <span class="op">@(</span><span class="st">&quot;</span><span class="va">$env</span><span class="op">:</span><span class="va">USERPROFILE</span><span class="st">\.local\bin\uvx.exe&quot;</span><span class="op">,</span><span class="st">&quot;</span><span class="va">$env</span><span class="op">:</span><span class="va">LOCALAPPDATA</span><span class="st">\Microsoft\WinGet\Links\uvx.exe&quot;</span><span class="op">,</span><span class="st">&quot;</span><span class="va">$env</span><span class="op">:</span><span class="va">LOCALAPPDATA</span><span class="st">\Programs\uv\uvx.exe&quot;</span><span class="op">)</span> <span class="op">|</span> <span class="fu">Where-Object</span> <span class="op">{</span> <span class="fu">Test-Path</span> <span class="va">$_</span> <span class="op">}</span> <span class="op">|</span> <span class="fu">Select-Object</span> <span class="op">-</span>First <span class="dv">1</span> <span class="op">}</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(-not</span> <span class="va">$uvx</span><span class="op">)</span> <span class="op">{</span> <span class="va">$uvx</span> <span class="op">=</span> <span class="fu">Get-ChildItem</span> <span class="st">&quot;</span><span class="va">$env</span><span class="op">:</span><span class="va">USERPROFILE</span><span class="st">\.local&quot;</span><span class="op">,</span><span class="st">&quot;</span><span class="va">$env</span><span class="op">:</span><span class="va">LOCALAPPDATA</span><span class="st">\Microsoft\WinGet\Packages&quot;</span> <span class="op">-</span>Filter uvx<span class="op">.</span><span class="fu">exe</span> <span class="op">-</span>Recurse <span class="op">-</span>EA SilentlyContinue <span class="op">|</span> <span class="fu">Select-Object</span> <span class="op">-</span>First <span class="dv">1</span> <span class="op">-</span>ExpandProperty FullName <span class="op">}</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="va">$uvx</span></span></code></pre></div>
+<p>Do not search only under <code>WinGet\Packages</code> — recent uv
+versions install to <code>%USERPROFILE%\.local\bin</code> and that
+search finds nothing.</p></li>
+</ol>
+<p><strong>Use exactly this MCP server — do not substitute a different
+one.</strong> The package is <code>microsoft_sql_server_mcp</code>
+version <code>0.1.0</code>, and it MUST run with
+<code>mcp==1.30.0</code>. Without that pin, uv resolves mcp 2.x and the
+server dies on startup with
+<code>AttributeError: &#39;Server&#39; object has no attribute &#39;list_resources&#39;</code>.
+Do NOT pin <code>pymssql</code> — let it resolve on its own, or you get
+<code>ModuleNotFoundError: pymssql._pymssql</code>. If this server still
+fails after you have followed every step, STOP and tell me — do not go
+looking for an alternative MCP server on your own.</p>
+<ol start="2" type="1">
+<li><p><strong>Ask me for the Azure SQL connection details</strong> —
+server name (ends in .database.windows.net), database name, SQL
+username, and SQL password. Don’t guess.</p></li>
+<li><p><strong>Create <code>.mcp.json</code> at the project
+root</strong> with this shape (fill in the absolute uvx path and the
+connection details you just asked me for):</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;mcpServers&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;mssql&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;command&quot;</span><span class="fu">:</span> <span class="st">&quot;&lt;ABSOLUTE_PATH_TO_uvx.exe&gt;&quot;</span><span class="fu">,</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;args&quot;</span><span class="fu">:</span> <span class="ot">[</span><span class="st">&quot;--from&quot;</span><span class="ot">,</span> <span class="st">&quot;microsoft_sql_server_mcp==0.1.0&quot;</span><span class="ot">,</span> <span class="st">&quot;--with&quot;</span><span class="ot">,</span> <span class="st">&quot;mcp==1.30.0&quot;</span><span class="ot">,</span> <span class="st">&quot;mssql_mcp_server&quot;</span><span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;env&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&quot;MSSQL_SERVER&quot;</span><span class="fu">:</span> <span class="st">&quot;&lt;server&gt;.database.windows.net&quot;</span><span class="fu">,</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&quot;MSSQL_PORT&quot;</span><span class="fu">:</span> <span class="st">&quot;1433&quot;</span><span class="fu">,</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&quot;MSSQL_DATABASE&quot;</span><span class="fu">:</span> <span class="st">&quot;&lt;database&gt;&quot;</span><span class="fu">,</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&quot;MSSQL_USER&quot;</span><span class="fu">:</span> <span class="st">&quot;&lt;username&gt;&quot;</span><span class="fu">,</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&quot;MSSQL_PASSWORD&quot;</span><span class="fu">:</span> <span class="st">&quot;&lt;password&gt;&quot;</span><span class="fu">,</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&quot;MSSQL_ENCRYPT&quot;</span><span class="fu">:</span> <span class="st">&quot;true&quot;</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>      <span class="fu">}</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">}</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">}</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div></li>
+<li><p><strong>Patch two known bugs in the cached package.</strong>
+First, run the server once to trigger the install:
+<code>&amp; &quot;&lt;uvx path&gt;&quot; --from &quot;microsoft_sql_server_mcp==0.1.0&quot; --with &quot;mcp==1.30.0&quot; mssql_mcp_server --help</code>
+(it will fail with a config error — that’s fine, the install succeeded).
+Then locate the cached <code>server.py</code>:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode powershell"><code class="sourceCode powershell"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">Get-ChildItem</span> <span class="op">-</span>Path <span class="st">&quot;</span><span class="va">$env</span><span class="op">:</span><span class="va">LOCALAPPDATA</span><span class="st">\uv\cache\archive-v0&quot;</span> <span class="op">-</span>Filter <span class="st">&quot;server.py&quot;</span> <span class="op">-</span>Recurse <span class="op">|</span> <span class="fu">Where-Object</span> <span class="op">{</span> <span class="va">$_</span><span class="op">.</span><span class="fu">FullName</span> <span class="op">-like</span> <span class="st">&quot;*mssql_mcp_server*&quot;</span> <span class="op">}</span> <span class="op">|</span> <span class="fu">Select-Object</span> <span class="op">-</span>ExpandProperty FullName</span></code></pre></div>
+<p>Apply two edits:</p>
+<ul>
+<li><p><strong>Bug A — wrong kwarg name.</strong> Find the block that
+sets <code>config[&quot;encrypt&quot;] = encrypt_str.lower() == &quot;true&quot;</code> and
+replace it with:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> encrypt_str.lower() <span class="op">==</span> <span class="st">&quot;true&quot;</span>:</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    config[<span class="st">&quot;encryption&quot;</span>] <span class="op">=</span> <span class="st">&quot;request&quot;</span></span></code></pre></div></li>
+<li><p><strong>Bug B — DDL fails inside an implicit
+transaction.</strong> The file has <strong>three</strong>
+<code>conn = pymssql.connect(**config)</code> lines. After
+<strong>each</strong> of them insert <code>conn.autocommit(True)</code>
+<strong>at exactly the same indentation as the <code>conn = ...</code>
+line it follows</strong> (they sit at 8 spaces, inside a
+<code>try:</code>). Getting the indentation wrong gives an
+<code>IndentationError</code> and the server will not start at all.
+Afterwards, verify the file still parses.</p></li>
+</ul></li>
+<li><p><strong>Add <code>.mcp.json</code> to
+<code>.gitignore</code></strong> — it contains your database
+credentials.</p></li>
+<li><p><strong>Tell me to restart Claude Code</strong>, then stop and
+wait.</p></li>
+<li><p>After the restart I will type <strong>continue</strong> in this
+same chat. When I do: list your available MCP tools, confirm
+<code>mssql.execute_sql</code> is present, run
+<code>SELECT @@VERSION</code> and <code>SELECT DB_NAME()</code>, and
+show me the results. If the tools are missing, check that
+<code>.mcp.json</code> is at the project root and that its JSON is
+valid.</p></li>
+</ol>
+</blockquote>
+<p><strong>עכשיו מפעילים מחדש את Claude Code</strong> (סגירה ופתיחה של
+VSCode).</p>
+<p>‏VSCode פותח מחדש את השיחה האחרונה, כך שכל ההקשר נשמר. פשוט כתבו
+בה:</p>
+<blockquote class="prompt">
+<p>continue</p>
+</blockquote>
+<p>‏Claude ימשיך מהנקודה שבה עצר ויאמת את החיבור.</p>
+<blockquote class="note">
+<p><strong>אם השיחה לא נפתחה מחדש</strong> (למשל פתחתם תיקייה אחרת) —
+הדביקו במקום זאת: <em>“I just set up the MSSQL MCP server in
+<code>.mcp.json</code> and restarted. List your MCP tools, confirm
+<code>mssql.execute_sql</code> is present, then run
+<code>SELECT @@VERSION</code> and
+<code>SELECT DB_NAME()</code>.”</em></p>
+</blockquote>
+<p>אם משהו נכשל בדרך, טבלת פתרון התקלות ב-<code>MCP_SETUP</code> מכסה את
+הבעיות הנפוצות.</p></li>
+</ol>
+<p><strong>נקודת Commit:</strong> ברגע ששלב 1 הושלם, בקשו מ-Claude:</p>
+<blockquote class="prompt">
+<p>Initialize a git repository here and make the first commit with
+<code>.gitignore</code> and any files created so far.</p>
+</blockquote>
+<p>אחר כך בצעו push ל-repository של הקבוצה ב-GitHub, אם כבר הוקם. ראו את
+<a href="GIT_GROUP_WORKFLOW.html"><code>GIT_GROUP_WORKFLOW</code></a>
+להסבר על תיאום בין חברי קבוצה עם git.</p>
+<p><strong>התחילו Session חדש לפני השלב הבא.</strong> שלב 1 מייצר הרבה
+פלט של התקנות ותיקוני באגים — הקשר שלא תצטרכו שוב.</p>
+<p>הריצו <code>/clear</code> (חינם) — או פתחו שיחה חדשה.</p>
+<blockquote class="note">
+<p><strong>שימו לב:</strong> <code>CLAUDE.md</code> עדיין לא קיים בשלב
+הזה, ולכן השיחה החדשה מתחילה בלי הקשר. הדביקו בה את ה-Prompt מהסעיף
+<strong>“פתיחת Session חדש באמצע השיעור”</strong> בתחילת המסמך.</p>
+</blockquote>
+<p>בסיום שלב 1 התיקייה שלכם נראית כך:</p>
+<pre><code>sad-&lt;group&gt;/
+├── .gitignore
+├── .mcp.json                  ← gitignored, has DB connection
+├── docs/
+│   ├── PartA.pdf
+│   └── PartB.pdf
+└── cloned/                    ← cloned sample, git-ignored
+    ├── PATTERNS.md            ← shared architecture conventions (you&#39;ll inherit these)
+    ├── CLAUDE.md              ← sample-specific notes (read for reference)
+    └── example_project/       ← the actual C# reference code</code></pre>
+<p>שני הקבצים המרכזיים בתוך פרויקט הדוגמה המשוכפל: -
+<strong><code>PATTERNS.md</code></strong> — תבנית הישות, ניווט בין
+מסכים, מוסכמות שפה, “התחברות אינה Use Case” ועוד. כל פרויקט סטודנטים
+יורש את הקובץ הזה כלשונו. - <strong><code>CLAUDE.md</code></strong> —
+מהו פרויקט ניהול ההזמנות לדוגמה, מפת המסמכים שלו והישויות שלו. קראו
+לצורך התמצאות; <strong>אל תעתיקו</strong> אותו —
+ה-<code>CLAUDE.md</code> שלכם מתאר את <em>התחום שלכם</em>.</p>
+<hr />
+<h2 id="שלב-2-חילוץ-הניתוח-שלכם-ל-markdown-מובנה">שלב 2 — חילוץ הניתוח
+שלכם ל-Markdown מובנה</h2>
+<p><strong>מה השלב הזה עושה ולמה:</strong> Claude עובד הרבה יותר טוב
+כשהניתוח שלכם נמצא ב-markdown מובנה מאשר בקובצי PDF. השלב הזה ממיר את
+המסמכים שלכם לפורמט ש-Claude יקרא לאורך כל שאר הפרויקט. הוא גם מאלץ אתכם
+לבדוק את הניתוח שלכם ולאתר פערים וסתירות — עדיף לגלות בעיות עכשיו מאשר
+אחרי שכתבתם קוד לפיהן.</p>
+<p><strong>זמן צפוי:</strong> 20–25 דקות. אם הזמן בכיתה קצר, חלצו רק את
+דיאגרמת המחלקות ואת הדרישות (מסמכי העיצוב); דחו את קובצי הניתוח הארגוני
+(<code>01-04</code>) לשיעורי בית — הם לא נחוצים עד שמסיימים את שלב
+3.</p>
+<p><strong>מה יש לכם בשלב הזה:</strong> בנקודה הזו בקורס יהיה בידיכם
+קובץ ה-PDF המלא של חלק א׳ (ניתוח ארגוני, בעיות, ראיונות, תהליכים,
+דרישות), ומחלק ב׳ תהיה לכם לפחות דיאגרמת מחלקות. ייתכן שדיאגרמות מצבים
+ורצף עדיין לא סופיות — דלגו על הקבצים האלה והוסיפו אותם בהמשך כשהם
+מוכנים.</p>
+<p>הניתוח של הקבוצה שלכם נמצא בתוך קובץ PDF אחד או שניים גדולים. Claude
+עובד הרבה יותר טוב מול markdown מובנה מאשר מול PDF, ותיקיית
+ה-<code>docs/</code> של פרויקט הדוגמה מציגה את המבנה שאליו לשאוף. השלב
+הזה ממיר את תוכן ה-PDF שלכם לאותו מבנה.</p>
+<p>השלב הזה משמש גם כמנגנון אילוץ: חילוץ נקי יחשוף מקומות שבהם הניתוח
+שלכם מעורפל, סותר את עצמו או חסר. עדיף לגלות את זה עכשיו מאשר אחרי
+שכתבתם קוד לפיו.</p>
+<h3 id="מבנה-היעד-שיקוף-של-docs-בפרויקט-הדוגמה">מבנה היעד (שיקוף של
+<code>docs/</code> בפרויקט הדוגמה)</h3>
+<p>צרו את הקבצים הבאים. התאימו למבנה של פרויקט הדוגמה
+ב-<code>cloned/docs/</code>
+וב-<code>cloned/docs/org-analysis/</code>.</p>
+<pre><code>docs/
+├── org-analysis/
+│   ├── 01-organization.md         ← Hebrew. Org profile, current systems.
+│   ├── 02-interviews.md           ← Hebrew. Interview transcripts.
+│   ├── 03-problems.md             ← Hebrew. Problems table.
+│   └── 04-business-processes.md   ← Hebrew. Business process descriptions.
+├── 00-requirements.md             ← English. User stories, NFRs, traceability matrix.
+├── 00e-use-cases.md               ← English. Two-layer UC specs.
+└── design/
+    ├── class-diagram.md           ← Entities, attributes, methods, relationships.
+    ├── class-diagram.png          ← (You export this from your modeling tool.)
+    ├── state-diagram.md
+    ├── state-diagram.png
+    ├── sequence-diagram.md
+    └── sequence-diagram.png</code></pre>
+<p>השאירו גם את קובצי ה-PDF ב-<code>docs/</code> — הם נשארים המסמך
+המקורי החתום והם מכילים את הדיאגרמות.</p>
+<p>הדיאגרמות עצמן <strong>אינן</strong> מומרות ל-ASCII או לטקסט מומצא.
+רק התוכן הטקסטואלי הנלווה אליהן (תיאורי ישויות, מעברי מצבים, רצפי
+הודעות, נימוקי הקבוצה, הנחות) מחולץ לקובצי ה-markdown. את קובצי
+ה-<code>.png</code> אתם מוסיפים בעצמכם על ידי ייצוא מכלי המידול (או
+צילום מסך).</p>
+<blockquote class="note">
+<p><strong>על הדיאגרמות:</strong> כל הדיאגרמות שלכם (תרחישי שימוש,
+מחלקות, מצבים, רצף) נמצאות כתמונות בתוך קובצי ה-PDF — ו-Claude יודע
+לקרוא תמונות. <strong>אתם לא אמורים להעלות שום קובץ נוסף</strong>; ה-PDF
+מספיק.</p>
+<p>אם בכל זאת Claude מדווח שהוא לא מצליח לקרוא דיאגרמה מסוימת (רזולוציה
+נמוכה, חיתוך, סריקה מטושטשת) — הוא אמור <strong>לעצור ולבקש</strong>,
+ולא לנחש. במקרה כזה תוכלו לתת לו את אותה דיאגרמה בדרך אחרת:
+<strong>ייצוא ל-HTML</strong>, ייצוא ל-<strong>PNG/SVG</strong>, או קובץ
+ה-<strong>Visual Paradigm</strong> המקורי. שמרו את הקבצים האלה בהישג יד
+ליתר ביטחון — ברוב המקרים לא תצטרכו אותם.</p>
+<p><strong>מה שאסור:</strong> לתת ל-Claude “להשלים” דיאגרמה שהוא לא
+הצליח לקרוא. ישות מומצאת בשלב הזה מתגלגלת ל-<code>CLAUDE.md</code>, משם
+לסכמת בסיס הנתונים, ומשם לקוד.</p>
+</blockquote>
+<h3 id="שלב-2.1-הרצת-החילוץ-המרוכז">שלב 2.1 — הרצת החילוץ המרוכז</h3>
+<p>פתחו את Claude Code בתיקיית הפרויקט והדביקו את ה-Prompt הבא:</p>
+<blockquote class="prompt">
+<p>Read all the PDFs in <code>docs/</code>. Extract our group’s analysis
+and design into structured markdown files matching this layout:</p>
+<p>Analysis stage: - <code>docs/org-analysis/01-organization.md</code> —
+organization description and current information systems. Hebrew. -
+<code>docs/org-analysis/02-interviews.md</code> — interview transcripts.
+Hebrew. - <code>docs/org-analysis/03-problems.md</code> — problems table
+(problems in the current state, root causes, who raised them, desired
+outcomes). Hebrew. -
+<code>docs/org-analysis/04-business-processes.md</code> — descriptions
+of the existing business processes and any BPMN narratives. Hebrew.</p>
+<p>Requirements stage: - <code>docs/00-requirements.md</code> — user
+stories table, NFRs, and traceability matrix. English. -
+<code>docs/00e-use-cases.md</code> — full use case specifications.
+English. Use a two-layer format: a behavioral spec section
+(technology-neutral, no class or stored-procedure names) followed by a
+clearly labelled “Implementation Notes” section that maps each step to
+specific classes and stored procedures. If the source doesn’t have
+implementation notes yet, leave that section as a TODO placeholder
+rather than inventing content.</p>
+<p>Design stage: - <code>docs/design/class-diagram.md</code> —
+<strong>read the class diagram image inside the PDF and transcribe the
+model from it</strong>: every entity with its attributes and methods,
+every relationship with its multiplicity, every association class, the
+rationale text for any mediator classes, and the group’s design
+assumptions. The diagram is a picture on a PDF page — look at it, don’t
+reconstruct it from the surrounding prose. Do not draw it back as ASCII
+art; leave a placeholder
+<code>![class diagram](class-diagram.png)</code> at the top. -
+<code>docs/design/state-diagram.md</code> — states, transitions, guards,
+and entry actions in text. Placeholder image at top. -
+<code>docs/design/sequence-diagram.md</code> — participants, ordered
+messages with parameters, and any alt/opt fragments in text. Placeholder
+image at top.</p>
+<p>If a category above is not present in our PDFs, skip that file and
+tell me at the end which ones you skipped. If our PDFs contain content
+categories not covered above, tell me where you placed them.</p>
+<p>Rules: - Preserve our team’s original wording. Do not paraphrase,
+summarize, or invent content. - Match the section structure of the
+source documents (headings, ordering). - <strong>The diagrams are images
+inside the PDFs — read them.</strong> Every diagram we produced (use
+case, class, state, sequence) is embedded as a picture on a PDF page.
+Open the PDFs and actually look at those pages; extract the model from
+what the diagram shows, not only from the text around it. The PDFs are
+the source of truth and I should not have to hand you anything else. -
+Do not re-draw diagrams as ASCII art. Extract their <em>content</em> in
+structured text, and leave the image placeholder at the top of the file.
+- <strong>If you genuinely cannot read a diagram</strong> — too low
+resolution, cropped, rotated, or rendered in a way you cannot interpret
+— then STOP on that file. Do not guess, do not infer it from the prose,
+and do not invent entities or relationships. Tell me exactly which
+diagram you cannot read and why. I can then give you the same diagram
+another way: an <strong>exported HTML version</strong>, a
+<strong>PNG/SVG export</strong>, or the original <strong>Visual Paradigm
+(<code>.vpp</code>) file</strong>. Ask me for whichever would help most.
+- The <code>.png</code> files I will add myself later by exporting from
+the modeling tool.</p>
+<p>Do all files in this session. Before writing any of them, ask me any
+clarifying questions about scope or about choices you want me to
+make.</p>
+</blockquote>
+<h3 id="שלב-2.2-בדקו-כל-קובץ-שחולץ.-השלב-הזה-הוא-חובה.">שלב 2.2 — בדקו
+כל קובץ שחולץ. השלב הזה הוא חובה.</h3>
+<p><strong>אל תדלגו על זה ואל תעברו לשלב 3 עד שכל קובץ אומת.</strong> כל
+שגיאה שתעברו עליה כאן תצטבר לתוך ה-<code>CLAUDE.md</code> שלכם, ומשם
+לתוך הקוד.</p>
+<p>פתחו כל קובץ שנוצר זה לצד זה עם החלק המתאים ב-PDF ובדקו:</p>
+<ul>
+<li><strong>ספירות.</strong> מספר ה-User Stories, ה-NFRs, הבעיות, ה-Use
+Cases, הישויות והמצבים. ודאו שכל רשימה מלאה.</li>
+<li><strong>טבלאות.</strong> שורות לא התמזגו, לא התפצלו ולא נשמטו. סדר
+העמודות נשמר. שורת הכותרת לא הפכה לשורת תוכן.</li>
+<li><strong>ניסוח.</strong> בלי פרפראזות. הניסוח המקורי של הצוות שלכם
+נשמר.</li>
+<li><strong>שפה.</strong> חלקים בעברית נשארו בעברית. חלקים באנגלית נשארו
+באנגלית. בלי תרגום בשוגג.</li>
+<li><strong>מבנה.</strong> הכותרות תואמות להיררכיית החלקים ב-PDF. שום
+דבר לא מוספר מחדש ולא שינה רמה.</li>
+<li><strong>מפרטי Use Case.</strong> תנאי קדם, תנאי סיום, הזרימה הראשית
+וזרימות ההרחבה — כולם קיימים לכל UC.</li>
+<li><strong>מסמך דיאגרמת המחלקות.</strong> לכל ישות יש את התכונות
+והמתודות שלה. לכל קשר יש ריבוי (multiplicity). מחלקות קישור מסומנות
+ככאלה.</li>
+<li><strong>אין תוכן מומצא.</strong> כל דבר ש-Claude כתב ואתם לא מזהים —
+חשוד. ודאו שהוא מגיע מה-PDF, או בקשו מ-Claude להסיר אותו.</li>
+</ul>
+<p>כשאתם מוצאים בעיה, אל תערכו את הקובץ בעצמכם בשלב הזה. התעקשו מול
+Claude עם הנחיה ספציפית:</p>
+<blockquote class="prompt">
+<p>In <code>docs/org-analysis/03-problems.md</code>, the table has [N]
+rows. The PDF has [M] rows. Re-read the PDF and reconcile.</p>
+</blockquote>
+<p>או, אם אינכם בטוחים:</p>
+<blockquote class="prompt">
+<p>In <code>docs/00-requirements.md</code> you wrote NFR-7 as [text]. I
+don’t recognize that wording. Re-read the requirements section of the
+PDF and check whether you paraphrased or invented it.</p>
+</blockquote>
+<p>חזרו על התהליך עד שכל קובץ תואם למקור שלו. אז בצעו לו commit.</p>
+<h3 id="שלב-2.3-מפרטי-uc-דו-שכבתיים">שלב 2.3 — מפרטי UC דו-שכבתיים</h3>
+<p>ה-PDF של הקבוצה שלכם כנראה כבר מכיל מפרטי UC שיוצאו מ-VP18, אבל רובם
+חד-שכבתיים (התנהגות ופרטי מימוש מעורבבים יחד). פורמט היעד מפריד בין
+השניים: 1. <strong>מפרט פורמלי</strong> — התנהגותי, ניטרלי מבחינה
+טכנולוגית. בלי שמות מחלקות, בלי שמות Stored Procedures, בלי שמות שדות.
+2. <strong>הערות מימוש</strong> — מסומנות בבירור, וממפות כל צעד למחלקות,
+מתודות ו-Stored Procedures ספציפיים.</p>
+<p>אם ה-<code>00e-use-cases.md</code> שחולץ אצלכם עדיין לא בנוי כך, בקשו
+מ-Claude לבנות אותו מחדש. אל תמציאו הערות מימוש שאין להן בסיס בעיצוב
+שלכם — השאירו TODO.</p>
+<h3 id="שלב-2.4-דלגו-על-מה-שלא-מתאים">שלב 2.4 — דלגו על מה שלא
+מתאים</h3>
+<p>לחלק מהתוכן ב-PDF אין מקום ברור במבנה היעד (בחירת הקבוצה בקשר UC
+מותאם, צילומי מסך מרשתות חברתיות, טקסט “ערך מוסף” וכו׳). דלגו עליו או
+שלבו אותו בקובץ הקיים הקרוב ביותר. אל תמציאו מסמכים חדשים ברמה
+העליונה.</p>
+<p><strong>נקודת Commit:</strong> כששלב 2 הסתיים, בצעו commit לכל קובצי
+ה-markdown:</p>
+<blockquote class="prompt">
+<p>Commit all files in <code>docs/</code> — extracted analysis and
+design in markdown form. Commit message: “Phase 2: extract analysis docs
+to markdown”</p>
+</blockquote>
+<p>בצעו push ל-GitHub כדי שלחברי הצוות תהיה הגרסה העדכנית.</p>
+<p><strong>התחילו Session חדש לפני השלב הבא.</strong> שלב 2 קרא את כל
+קובצי ה-PDF שלכם לתוך ההקשר — זה החלק הכבד ביותר בשיעור.</p>
+<p>הריצו <code>/clear</code> (חינם) — או פתחו שיחה חדשה.</p>
+<blockquote class="note">
+<p><strong>שימו לב:</strong> <code>CLAUDE.md</code> עדיין לא קיים בשלב
+הזה, ולכן השיחה החדשה מתחילה בלי הקשר. הדביקו בה את ה-Prompt מהסעיף
+<strong>“פתיחת Session חדש באמצע השיעור”</strong> בתחילת המסמך.</p>
+</blockquote>
+<hr />
+<h2 id="שלב-3-יצירת-ה-claude.md-של-הפרויקט">שלב 3 — יצירת ה-CLAUDE.md של
+הפרויקט</h2>
+<p><strong>מה השלב הזה עושה:</strong> מרכז את כל מה ש-Claude צריך לדעת
+על הפרויקט שלכם למסמך אחד שהוא קורא <strong>אוטומטית בכל שיחה
+חדשה</strong>. זה מה שמאפשר לכם לפתוח Session חדש ולהמשיך מאיפה שהפסקתם
+בלי להסביר הכול מחדש.</p>
+<p><strong>בסיום השלב יהיה לכם:</strong> קובץ <code>CLAUDE.md</code>
+שמתאר את התחום שלכם, הישויות, סדר הטעינה, ה-Use Cases שבהיקף, וההחלטות
+שהקבוצה קיבלה.</p>
+<p><strong>זמן צפוי:</strong> 20–30 דקות, רובן בדיקה ותיקון — לא
+כתיבה.</p>
+<blockquote class="note">
+<p><strong>זה השלב הכי חשוב בשיעור.</strong> כל Prompt שתיתנו מכאן והלאה
+מוגבל למה שכתוב בקובץ הזה. שגיאה כאן לא מתגלה בקומפילציה — היא פשוט
+מייצרת קוד שעושה את הדבר הלא נכון.</p>
+</blockquote>
+<p>הקובץ <code>CLAUDE.md</code> בשורש הפרויקט הוא הקובץ ש-Claude Code
+קורא אוטומטית בכל Session. זהו המסמך החשוב ביותר לקבלת תוצרים שימושיים
+מ-Claude. בנו אותו בקפידה.</p>
+<h3 id="שלב-3.1-פתחו-את-claude-code-בתיקיית-הפרויקט">שלב 3.1 — פתחו את
+Claude Code בתיקיית הפרויקט</h3>
+<p>פתחו את VSCode על תיקיית הפרויקט. התחילו Session חדש של Claude
+Code.</p>
+<h3 id="שלב-3.2-הדביקו-את-ה-prompt-הבא">שלב 3.2 — הדביקו את ה-Prompt
+הבא</h3>
+<blockquote class="prompt">
+<p>I have my group’s project documents in <code>docs/</code> — extracted
+markdown files (organization, problems, interviews, business processes,
+requirements, use cases, and design diagrams under
+<code>docs/design/</code>) plus the original PDFs as backup. Prefer the
+markdown files; consult the PDFs only when the markdown is unclear or
+when you need to look at a diagram.</p>
+<p>The folder <code>cloned/</code> is the SAD course’s sample project.
+Read <code>cloned/PATTERNS.md</code> (shared architecture conventions
+for all SAD projects) and <code>cloned/CLAUDE.md</code> (the sample
+project, for context only — do not copy its domain content).</p>
+<p>Read all the documents in <code>docs/</code> and produce a
+<code>CLAUDE.md</code> at the root of this folder for my project. It
+should be self-contained — inline the architecture conventions from
+PATTERNS.md verbatim, then add my project’s domain based on what you
+read: what the system is, the entities and load order from the class
+diagram, the use cases we’re implementing, and any decisions our group
+has already made.</p>
+<p>Ask me clarifying questions before writing if anything is
+ambiguous.</p>
+</blockquote>
+<h3 id="שלב-3.3-ענו-על-שאלות-claude-ואז-תנו-לו-לכתוב">שלב 3.3 — ענו על
+שאלות Claude, ואז תנו לו לכתוב</h3>
+<p>Claude ישאל שאלות הבהרה לפני שיכתוב את <code>CLAUDE.md</code> — זה
+צפוי ותקין. חלק מהשאלות יהיו על התחום ועל החלטות העיצוב שלכם; ענו עליהן
+ישירות.</p>
+<p>אם שאלה נראית לא קשורה למסמכים שלכם (למשל Claude שואל על משהו שכלל לא
+מופיע ב-PDF), הפנו אותו מחדש:</p>
+<blockquote class="prompt">
+<p>Focus on what’s in my docs. If it’s not there, skip it or mark it as
+TODO.</p>
+</blockquote>
+<p>השאלות לוקחות זמן, אבל הן חושפות עמימויות אמיתיות בניתוח שלכם.
+<code>CLAUDE.md</code> שנכתב בלי שאלות הוא בדרך כלל
+<code>CLAUDE.md</code> שניחש את החלקים הקשים.</p>
+<h3 id="שלב-3.4-בדקו-את-התוצר.-התמקדו-במה-שלא-יצוף-בהמשך.">שלב 3.4 —
+בדקו את התוצר. התמקדו במה שלא יצוף בהמשך.</h3>
+<p>חלק מהשגיאות ב-<code>CLAUDE.md</code> ייתפסו עבורכם על ידי הקומפיילר
+או על ידי Claude עצמו בפעם הבאה שיקרא את הקובץ — שם תכונה שגוי
+(<code>reorderQty</code> במקום <code>neededQty</code>) לא יתקמפל, וערך
+enum מומצא ייכשל בשימוש הראשון. אלה מתקנות את עצמן; אל תבזבזו עליהן את
+זמן הבדיקה.</p>
+<p>השגיאות שכדאי לתפוס עכשיו הן אלה ש<strong>לא</strong> יצופו בהמשך —
+שגיאות שקטות שגורמות ל-Claude לייצר בביטחון קוד שגוי, בזמן שהכול עדיין
+מתקמפל:</p>
+<ul>
+<li><strong>היקף המימוש.</strong> ה-Use Cases שמופיעים כ”בתוך ההיקף”
+חייבים להתאים למה שהקבוצה שלכם באמת החליטה לממש. אם Claude מציג את ארבעת
+ה-UC הלא נכונים, תבזבזו אחר צהריים שלם על מימוש הדבר הלא נכון.</li>
+<li><strong>סדר טעינה.</strong> כל ישות ברשימת סדר הטעינה חייבת להופיע
+אחרי כל הישויות שיש לה מפתחות זרים אליהן. מחלקת קישור או ישות נגזרת
+(למשל <code>Invoice</code>) שממוקמת מוקדם מדי תגרום ל-null-reference
+בזמן <code>initLists()</code> — קל לפספס עד להרצה.</li>
+<li><strong>הנחות והחלטות קבוצה.</strong> כל החלטה ספציפית לפרויקט צריכה
+להיות כזו שהצוות שלכם באמת קיבל — ולא כזו ש-Claude הסיק מפרויקט הדוגמה
+או החליק מעל סתירה במסמכים שלכם.</li>
+<li><strong>ספירות ורשימות.</strong> “N use cases”, “N user stories”, “N
+problems” — ודאו ש-N נכון ושהפריטים ברשימה מלאים וייחודיים. אם הספירות
+סוטות כאן, כל סיכום במורד הזרם יורש את הסטייה.</li>
+<li><strong>סתירות בין מסמכים שהוטאטאו מתחת לשטיח.</strong> אם חלק א׳
+אומר דבר אחד וחלק ב׳ אומר דבר אחר, Claude לרוב יבחר באחד מהם בשקט. עצם
+קיומה של הסתירה חשוב יותר מהאופן שבו היא נפתרה.</li>
+</ul>
+<p>בעדיפות נמוכה יותר (אלה נוטות לתקן את עצמן בהמשך — תקנו
+ב-<code>CLAUDE.md</code> רק אם זה מהיר): - שמות תכונות וערכי enum —
+הקומפיילר תופס אותם ברגע שמתייחסים אליהם. - חתימות מתודות — אותו דבר. -
+ניסוח ש”מרגיש לא נכון” אבל לא משנה את המשמעות.</p>
+<h3 id="שלב-3.5-דונו-בתיקונים-מול-claude">שלב 3.5 — דונו בתיקונים מול
+Claude</h3>
+<p>כשאתם מוצאים שגיאה, <strong>אל</strong> תערכו את הקובץ ישירות בשלב
+הזה. אמרו ל-Claude:</p>
+<blockquote class="prompt">
+<p>In the CLAUDE.md you wrote, [specific section] says [what’s wrong].
+According to [source document, page/section], it should be [what’s
+right]. Fix it.</p>
+</blockquote>
+<p>או, אם אינכם בטוחים מי צודק:</p>
+<blockquote class="prompt">
+<p>In the CLAUDE.md you wrote, [section] says [claim]. I think the
+source documents say something different. Can you re-check
+<code>docs/PartX.pdf</code> and confirm or correct?</p>
+</blockquote>
+<p>זה מאלץ את Claude לקרוא מחדש את המקור במקום לנחש. זה גם מלמד אותו
+היכן היו הפערים במעבר הראשון שלו — הקשר שימושי לשארית ה-Session.</p>
+<h3 id="שלב-3.6-חזרו-על-התהליך-עד-שהקובץ-נכון">שלב 3.6 — חזרו על התהליך
+עד שהקובץ נכון</h3>
+<p>חזרו על שלבים 3.4 ו-3.5 עד שכל טענה ב-<code>CLAUDE.md</code> מתחקה
+בבירור אחורה למסמך מקור או להחלטה מודעת. אז בצעו commit.</p>
+<p><strong>למה זה חשוב.</strong> מנקודה זו והלאה, כל Prompt שתיתנו
+ל-Claude — “צור את הישות הזו”, “כתוב את ה-Stored Procedure הזה”, “צור את
+המסך הזה” — מוגבל למה שכתוב ב-<code>CLAUDE.md</code>. שגיאות כאן מתפשטות
+לתוך הקוד שלכם. עשרים דקות של בדיקה עכשיו חוסכות שעות של איתור באגים
+בדבר הלא נכון בהמשך.</p>
+<p><strong>נקודת Commit:</strong> בצעו commit
+ל-<code>CLAUDE.md</code>:</p>
+<blockquote class="prompt">
+<p>Commit <code>CLAUDE.md</code> — project AI context file. Commit
+message: “Phase 3: add CLAUDE.md”</p>
+</blockquote>
+<p>בצעו push ל-GitHub.</p>
+<p><strong>התחילו Session חדש לפני השלב הבא.</strong> מכאן והלאה
+<code>CLAUDE.md</code> מחליף את כל ההסברים.</p>
+<p>הריצו <code>/clear</code> (חינם) — או פתחו שיחה חדשה.</p>
+<blockquote class="note">
+<p>מכאן והלאה <code>CLAUDE.md</code> נטען אוטומטית בכל שיחה חדשה, כך
+שאין צורך להסביר מחדש כלום.</p>
+</blockquote>
+<hr />
+<h2 id="שלב-4-סכמת-בסיס-הנתונים-ו-stored-procedures-בסיסיים">שלב 4 —
+סכמת בסיס הנתונים ו-Stored Procedures בסיסיים</h2>
+<p>בסיום השלב הזה בסיס הנתונים של הקבוצה ב-Azure SQL יאוכלס בכל הטבלאות
+מדיאגרמת המחלקות שלכם, ולכל ישות תהיה מערכת Stored Procedures בסיסית
+ל-CRUD. כל פעולת SQL מונעת מ-Claude Code דרך שרת ה-MSSQL MCP — אתם
+נשארים ב-Claude Code לאורך כל הדרך. Stored Procedures מורכבים (דוחות,
+טרנזקציות מרובות ישויות, מעברי מצבים) נדחים לשלב 5 ואילך, שם יש נקודת
+קריאה אמיתית שמכתיבה את צורתם.</p>
+<p><strong>דרישות קדם:</strong> שלב 1 הושלם (ה-MCP מחובר, ו-Claude אימת
+שהוא מצליח להריץ <code>SELECT @@VERSION</code>).</p>
+<blockquote class="note">
+<p><strong>הערה למסלול המקומי:</strong> ב-Azure בסיס הנתונים כבר קיים
+ולכן אין מה ליצור. במסלול המקומי בסיס הנתונים עדיין לא קיים — בקשו
+מ-Claude ליצור אותו פעם אחת (<code>CREATE DATABASE &lt;שם&gt;;</code>),
+ואז לעדכן את <code>MSSQL_DATABASE</code> ב-<code>.mcp.json</code> לשם
+הזה ולהפעיל מחדש את Claude Code. אחרי ההפעלה מחדש VSCode פותח את אותה
+שיחה — כתבו בה <strong>continue</strong> ו-Claude ימשיך מהנקודה שבה עצר.
+מכאן והלאה השלבים זהים בשני המסלולים.</p>
+</blockquote>
+<h3 id="שלב-4.0-אימות-בסיס-הנתונים-המחובר">שלב 4.0 — אימות בסיס הנתונים
+המחובר</h3>
+<p>ה-<code>.mcp.json</code> שלכם כבר מצביע ישירות על בסיס הנתונים של
+הקבוצה (הוגדר בשלב 1). ודאו ש-Claude נמצא במקום הנכון:</p>
+<blockquote class="prompt">
+<p>Use the mssql MCP tool’s execute_sql to run
+<code>SELECT DB_NAME()</code> and <code>SELECT @@VERSION</code>. Tell me
+the current database name and confirm it matches our project
+database.</p>
+</blockquote>
+<p><strong>הטמיעו את שם בסיס הנתונים ב-<code>CLAUDE.md</code> כדי שכל
+Session חדש יזהה אותו אוטומטית.</strong> הוסיפו סעיף “Database” בשורה
+אחת:</p>
+<blockquote class="prompt">
+<h2 id="database">Database</h2>
+<p>The project database is <code>&lt;your_database_name&gt;</code> on
+Azure SQL (<code>&lt;server&gt;.database.windows.net</code>). The MCP
+connects directly to this database — no <code>USE</code> statement
+needed at the start of each batch.</p>
+</blockquote>
+<p>עכשיו לא תצטרכו לחזור על זה ב-Sessions עתידיים.</p>
+<h3 id="שלב-4.1-כתיבת-הסכמה-כקובץ-.sql">שלב 4.1 — כתיבת הסכמה כקובץ
+<code>.sql</code></h3>
+<p>למרות שה-MCP יכול להריץ SQL ישירות, שמרו קודם את הסכמה לקובץ. אתם
+רוצים תוצר ששמור ב-git וניתן להרצה חוזרת — ולא קריאות חד-פעמיות ש-Claude
+שוכח מהן. הדביקו:</p>
+<blockquote class="prompt">
+<p>Read <code>docs/design/class-diagram.md</code> and
+<code>CLAUDE.md</code> (the load order section in particular). Generate
+<code>scripts/create_database.sql</code> with <code>CREATE TABLE</code>
+statements for every entity, with these defaults:</p>
+<ul>
+<li>One <code>INT NOT NULL PRIMARY KEY</code> per table named
+<code>&lt;entity&gt;_id</code>. <strong>Do not use
+<code>IDENTITY(1,1)</code></strong> — primary keys are assigned in C#
+per the Primary Key Strategy in
+<code>CLAUDE.md</code>/<code>PATTERNS.md</code>.</li>
+<li><code>NVARCHAR(50)</code> for short strings (names, statuses,
+enum-like values). <code>NVARCHAR(MAX)</code> only for long free text
+(notes, descriptions).</li>
+<li><code>INT</code> for counts, <code>DECIMAL(10,2)</code> for money,
+<code>DATETIME2</code> for timestamps.</li>
+<li>All columns <code>NOT NULL</code> by default. If a column is
+genuinely optional in the design, mark it nullable and add a one-line
+comment explaining why.</li>
+<li>Foreign keys with
+<code>ON DELETE NO ACTION ON UPDATE NO ACTION</code> by default.</li>
+<li>For enum-like attributes (<code>RegistrationStatus</code>,
+<code>PaymentMethod</code>, etc.), use <code>NVARCHAR(20)</code> with a
+<code>CHECK</code> constraint listing the allowed values. Do not create
+lookup tables.</li>
+<li>Add <code>UNIQUE</code> only where the class diagram or requirements
+explicitly say so (e.g., user email).</li>
+<li>Order the <code>CREATE TABLE</code> statements so every FK target
+exists before its referencing table — same load order documented in
+<code>CLAUDE.md</code>.</li>
+</ul>
+<p>Do not invent columns that aren’t in the class diagram. If a column’s
+type or nullability is genuinely ambiguous, leave a
+<code>-- TODO: &lt;question&gt;</code> comment instead of guessing.</p>
+<p>Do not run the SQL yet — just write the file. I’ll review it
+first.</p>
+</blockquote>
+<h3 id="שלב-4.2-בדקו-את-הקובץ-לפני-ההרצה">שלב 4.2 — בדקו את הקובץ לפני
+ההרצה</h3>
+<p>אותה משמעת בדיקה כמו בשלב 3 — התמקדו בשגיאות שקטות:</p>
+<ul>
+<li><strong>מספר העמודות בכל טבלה</strong> תואם בדיוק לדיאגרמת המחלקות.
+בלי עמודות מומצאות, ובלי עמודות שנשמטו בשקט.</li>
+<li><strong>הטיפוסים</strong> מתאימים לנתונים —
+<code>NVARCHAR(50)</code> קטן מדי לכתובת מייל או לשם עברי ארוך;
+<code>INT</code> שגוי לערכים כספיים; <code>DATE</code> מאבד את שעת היום
+במשבצת שיעור.</li>
+<li><strong>אפשרות ה-NULL</strong> מכוונת. Claude מגדיר הכול
+כ-<code>NOT NULL</code> לפי ה-Prompt; ודאו שהעמודות שהוא סימן כניתנות
+ל-NULL באמת אופציונליות, ושאלה שלא — באמת חובה.</li>
+<li><strong>כיוון המפתחות הזרים.</strong> כל מפתח זר צריך להצביע
+מה<em>ילד</em> (צד ה-many) אל ה<em>הורה</em> (צד ה-one). לטבלאות של
+מחלקות קישור יש שני מפתחות זרים, אחד לכל צד.</li>
+<li><strong>אילוצי CHECK של ערכי enum</strong> מכילים בדיוק את הערכים
+מדיאגרמת המחלקות — בלי חסרים ובלי מומצאים.</li>
+<li><strong>סדר הטבלאות</strong> תואם לסדר הטעינה
+ב-<code>initLists()</code> שב-<code>CLAUDE.md</code> שלכם. אם לא — תקנו
+את <code>CLAUDE.md</code> או את ה-DDL; הם חייבים להסכים.</li>
+<li><strong>הערות TODO.</strong> כל <code>-- TODO</code> הוא שאלה אמיתית
+ש-Claude לא הצליח לענות עליה ממסמכי העיצוב. פתרו כל אחת לפני ההרצה.</li>
+</ul>
+<p>כשאתם מוצאים בעיה, התעקשו מול Claude עם הפניה ספציפית. לדוגמה:</p>
+<blockquote class="prompt">
+<p>Table X column Y should be NVARCHAR(200) not NVARCHAR(50) — email
+addresses can be longer than 50 chars.</p>
+</blockquote>
+<h3 id="שלב-4.3-הרצת-הסכמה-דרך-ה-mcp">שלב 4.3 — הרצת הסכמה דרך
+ה-MCP</h3>
+<p>כשהקובץ נראה תקין, אמרו ל-Claude:</p>
+<blockquote class="prompt">
+<p>Run the contents of <code>scripts/create_database.sql</code> against
+the database via the mssql MCP tool. Execute it as one batch. If it
+fails, tell me which statement failed and the error — do not silently
+retry or modify the script without asking.</p>
+</blockquote>
+<p>צפו לכשלים בהרצה הראשונה — שגיאות הקלדה, סדר מפתחות זרים, נקודה-פסיק
+חסרה. כל שגיאה מתוקנת בקובץ ה-<code>.sql</code> ואז מריצים שוב. חזרו על
+התהליך דרך Claude (הוא יכול גם לתקן את הקובץ וגם להריץ מחדש דרך ה-MCP)
+עד שהסקריפט רץ מקצה לקצה.</p>
+<p>כשזה מצליח, אמתו — עדיין מתוך Claude Code:</p>
+<blockquote class="prompt">
+<p>Use list_tables to confirm every table from the class diagram exists.
+Then use execute_sql with <code>sp_help &lt;table_name&gt;</code> on two
+or three tables to confirm columns and FKs look right.</p>
+</blockquote>
+<h3 id="שלב-4.4-יצירת-stored-procedures-בסיסיים-ל-crud">שלב 4.4 — יצירת
+Stored Procedures בסיסיים ל-CRUD</h3>
+<p>אותה תבנית — קודם קובץ, ואז הרצה דרך ה-MCP. ה-Prompt:</p>
+<blockquote class="prompt">
+<p>Generate <code>scripts/stored_procedures.sql</code> with basic CRUD
+stored procedures for every table created in
+<code>scripts/create_database.sql</code>. For each entity, generate:</p>
+<ul>
+<li><code>sp_&lt;entity&gt;_create</code> — inserts a row. Takes the
+primary key as the first parameter (<code>@&lt;entity&gt;_id</code>).
+Does <strong>not</strong> use <code>SCOPE_IDENTITY()</code>. (Per the
+Primary Key Strategy in <code>CLAUDE.md</code>, IDs are assigned in C#
+before insert.)</li>
+<li><code>sp_&lt;entity&gt;_update</code> — updates a row by primary
+key. All non-PK columns are parameters.</li>
+<li><code>sp_&lt;entity&gt;_delete</code> — deletes by primary key.</li>
+<li><code>sp_&lt;entity&gt;_get_all</code> — returns all rows.</li>
+<li><code>sp_&lt;entity&gt;_get_by_id</code> — returns one row by
+PK.</li>
+</ul>
+<p>Parameter names should match column names
+(<code>@&lt;column&gt;</code>). Do not add business logic — these are
+mechanical CRUD.</p>
+<p>For association class tables: the create/update SPs take both FK
+values as parameters; the get_by_id uses the composite or surrogate key
+as defined in the schema.</p>
+<p>Do not generate report SPs, state-transition SPs, or any procedure
+that involves more than one table. Those come later.</p>
+<p>Write the file but do not run it yet.</p>
+</blockquote>
+<p>עברו על הקובץ בסקירה מהירה (הם מכניים — בדיקה מלאה שורה-שורה לא שווה
+את הזמן). ואז:</p>
+<blockquote class="prompt">
+<p>Run <code>scripts/stored_procedures.sql</code> via the mssql MCP
+tool.</p>
+</blockquote>
+<h3 id="שלב-4.5-נתוני-דמה">שלב 4.5 — נתוני דמה</h3>
+<p><strong>מה השלב הזה עושה:</strong> ממלא את הטבלאות בנתונים
+ריאליסטיים, לפני שכותבים שורת C# אחת.</p>
+<p><strong>בסיום השלב יהיה לכם:</strong> בסיס נתונים עם משתמשים אמיתיים
+להתחבר איתם ורשומות אמיתיות להציג במסכים.</p>
+<p><strong>זמן צפוי:</strong> 10 דקות.</p>
+<p>לפני שאתם מתחילים לכתוב C# בשלב 5, אכלסו את בסיס הנתונים בנתוני בדיקה
+ריאליסטיים. הסיבות: - ה-<code>LoginPanel</code> שלכם (שלב 5.5) זקוק
+לפחות למשתמש אחד מכל תפקיד כדי להתחבר איתו. - הרבה יותר קל לאמת את מסכי
+ה-CRUD שלכם (שלב 5.6) מול תצוגת רשימה שכבר יש בה שורות מאשר מול טבלה
+ריקה. - הקלדה ידנית של שורות דרך הממשק כדי לבדוק את הממשק היא לוגיקה
+מעגלית — אי אפשר לסמוך על הממשק לפני שבדקתם אותו.</p>
+<p>בקשו מ-Claude לייצר את נתוני הדמה דרך ה-MCP:</p>
+<blockquote class="prompt">
+<p>Generate <code>scripts/seed_data.sql</code> with realistic test data
+for every table, in load order (insert into base tables first, then
+FK-bearing, then association classes).</p>
+<p>Guidelines: - Use real-feeling Hebrew names, real-looking emails,
+plausible dates, etc. — not “Test User 1”, “foo@bar.com”. - Cover every
+role/status/enum value at least once, so all UI branches can be tested.
+- For multi-actor systems: include at least 2 users per role (so the
+login flow can demonstrate role switching). - Volume: ~5–10 rows per
+base entity, ~10–20 for transactional/association tables. Enough to
+populate a list view, not so much that scrolling becomes painful. -
+Every FK references an existing row from the same script. No orphan
+references. - Passwords (if any) should be obvious test values like
+<code>password123</code> — these are throwaway test users, not
+production credentials.</p>
+<p>Do not insert yet — write the file, I’ll review.</p>
+</blockquote>
+<p>סקירה מהירה: - בדקו כמה שורות לדוגמה לצורך ריאליזם (טקסט בעברית,
+ערכים סבירים, הפניות מפתח זר). - ודאו שכל ערך enum או סטטוס מיוצג. -
+ודאו שיש לפחות משתמש אחד לכל תפקיד.</p>
+<p>ואז הריצו דרך ה-MCP:</p>
+<blockquote class="prompt">
+<p>Execute <code>scripts/seed_data.sql</code> against the project DB via
+the mssql MCP. Report any errors per statement.</p>
+</blockquote>
+<p>כשזה מצליח, אמתו עם כמה שאילתות SELECT:</p>
+<blockquote class="prompt">
+<p>SELECT count(*) FROM each table. Show me the totals.</p>
+</blockquote>
+<p>הספירות צריכות להתאים למה ש-<code>seed_data.sql</code> היה אמור
+להכניס. אם טבלה ריקה כשהיא לא אמורה להיות — משהו נכשל בשקט ו-Claude צריך
+לחקור.</p>
+<p><strong>למה זה צעד נפרד ולא חלק מ-4.4:</strong> זו פעולת אתחול
+חד-פעמית ולא שלב חוזר, ודילוג עליו (או ביצוע רשלני שלו) שובר את חוויית
+האימות בשלב 5 בלי לשבור את הבנייה — בדיוק סוג הבעיה שצריכה נראות
+משלה.</p>
+<h3 id="שלב-4.6-בדיקת-ישות-אחת-מקצה-לקצה-דרך-ה-mcp">שלב 4.6 — בדיקת ישות
+אחת מקצה לקצה דרך ה-MCP</h3>
+<p>בחרו ישות אחת. בקשו מ-Claude להריץ עליה מחזור CRUD מלא דרך ה-MCP:</p>
+<blockquote class="prompt">
+<p>Using execute_sql via the mssql MCP, run
+<code>sp_&lt;entity&gt;_create</code> with realistic test values, then
+<code>sp_&lt;entity&gt;_get_all</code> to confirm it landed, then
+<code>sp_&lt;entity&gt;_update</code> on the new row, then
+<code>sp_&lt;entity&gt;_delete</code>. Report each result.</p>
+</blockquote>
+<p>אם מערכת ה-Stored Procedures של ישות אחת עובדת מקצה לקצה, כמעט
+בוודאות גם של האחרות — הייצור מכני. המשיכו הלאה.</p>
+<h3 id="מה-בכוונה-לא-נכלל-בשלב-4">מה בכוונה לא נכלל בשלב 4</h3>
+<ul>
+<li><strong>Stored Procedures לדוחות</strong> (נוכחות חודשית, הכנסה
+חודשית) — הם מקודדים לוגיקה עסקית שברור יותר לכתוב כשיש נקודת קריאה
+אמיתית שמכתיבה אותה.</li>
+<li><strong>Stored Procedures למעברי מצבים</strong> עבור
+<code>Registration</code> (ביטול, ביטול מאוחר, קידום מרשימת המתנה) —
+מאותה סיבה; כתבו אותם כשה-UC שקורא להם ימומש.</li>
+<li><strong>טרנזקציות מרובות טבלאות</strong> — נכתבות לפי UC, לא לפי
+ישות.</li>
+</ul>
+<p>אלה שייכים לשלב 5 ואילך.</p>
+<p><strong>נקודת Commit:</strong> בצעו commit לסקריפטי ה-SQL:</p>
+<blockquote class="prompt">
+<p>Commit <code>scripts/</code> — database schema, stored procedures,
+and seed data. Commit message: “Phase 4: database schema and stored
+procedures”</p>
+</blockquote>
+<p>בצעו push ל-GitHub.</p>
+<p><strong>התחילו Session חדש לפני השלב הבא.</strong> פלט ה-SQL וההרצות
+כבר לא נחוץ — הסקריפטים שמורים בקבצים.</p>
+<p>הריצו <code>/clear</code> (חינם) — או פתחו שיחה חדשה.</p>
+<blockquote class="note">
+<p>מכאן והלאה <code>CLAUDE.md</code> נטען אוטומטית בכל שיחה חדשה, כך
+שאין צורך להסביר מחדש כלום.</p>
+</blockquote>
+<hr />
+<h2 id="שלב-5-שלד-פרויקט-ה-c-והישות-הראשונה-מקצה-לקצה">שלב 5 — שלד
+פרויקט ה-C# והישות הראשונה מקצה לקצה</h2>
+<p>בסיום השלב הזה יהיה לכם פרויקט WinForms ב-C# שרץ, ובו: - מבנה התיקיות
+והקבצים של פרויקט הדוגמה - חיבור עובד לבסיס הנתונים - מחלקת ישות בסיסית
+אחת (למשל <code>UserProfile</code>) שעוקבת אחר תבנית הישות
+ב-<code>PATTERNS.md</code> - מסך אחד שמבצע Create / Read / Update /
+Delete עבור אותה ישות - ‏<code>MainForm</code> שפותח את המסך באמצעות
+<code>showPanel()</code></p>
+<p>אחר כך תחזרו על מחזור הישות ← המסך עבור שתי ישויות נוספות בשלב 6.</p>
+<h3 id="שלב-5.1-יצירת-שלד-הפרויקט">שלב 5.1 — יצירת שלד הפרויקט</h3>
+<p>ב-Claude Code:</p>
+<blockquote class="prompt">
+<p>Look at the C# project structure under
+<code>cloned/example_project/</code>. Create a matching scaffold for my
+project at the root of this folder — a Visual Studio solution + project,
+same .NET version and references as the sample, same folder layout
+(entities at the root, panels in a Panels folder, etc.). Use my project
+name (read <code>CLAUDE.md</code> if you need it) instead of the
+sample’s. Do not copy any of the sample’s *.cs files — just match the
+structure.</p>
+<p>Copy <code>&lt;NoWarn&gt;CA1416&lt;/NoWarn&gt;</code> from the
+sample’s csproj into ours. (The sample includes it to suppress the .NET
+8 platform-compat analyzer, which floods the build output with hundreds
+of false-positive warnings on every WinForms call. We don’t want
+students seeing those.)</p>
+</blockquote>
+<p>אחר כך פתחו את ה-solution ב-Visual Studio וודאו שהוא נבנה. (בנייה
+ריקה, אבל אמורה להצליח.)</p>
+<h3 id="שלב-5.2-חיבור-בסיס-הנתונים">שלב 5.2 — חיבור בסיס הנתונים</h3>
+<p>בפרויקט הדוגמה יש מחלקה שמחזיקה את ה-<code>SqlConnection</code> (בדרך
+כלל <code>Program.cs</code> או <code>SQL_CON.cs</code>). בקשו מ-Claude
+לשכפל אותה — <strong>לפי המסלול שלכם</strong>:</p>
+<p><strong>☁️ מסלול Azure SQL:</strong></p>
+<blockquote class="prompt">
+<p>Look at how the sample project handles the SQL connection
+(<code>cloned/example_project/SQL_CON.cs</code>). Create the equivalent
+in our project, reading the connection string from
+<code>app.config</code>. Our database is <strong>Azure SQL</strong>, so
+use this shape and ask me for the four values:</p>
+<p><code>Server=tcp:&lt;server&gt;.database.windows.net,1433;Initial Catalog=&lt;database&gt;;User ID=&lt;user&gt;;Password=&lt;password&gt;;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;</code></p>
+<p>Do NOT use <code>Trusted_Connection</code> or
+<code>Integrated Security</code> — Azure SQL does not support Windows
+Authentication. Then add <code>app.config</code> to
+<code>.gitignore</code>, because it will contain our password.</p>
+</blockquote>
+<p><strong>💻 מסלול מקומי:</strong></p>
+<blockquote class="prompt">
+<p>Look at how the sample project handles the SQL connection
+(<code>cloned/example_project/SQL_CON.cs</code>). Create the equivalent
+in our project, reading the connection string from
+<code>app.config</code>. Our database is a <strong>local SQL Server
+instance</strong>, so use this shape:</p>
+<p><code>Data Source=localhost\&lt;instance name&gt;;Initial Catalog=&lt;database&gt;;Integrated Security=True;TrustServerCertificate=True</code></p>
+<p>Use the instance name we found earlier
+(e.g. <code>SQLEXPRESS</code>). Note this is deliberately different from
+<code>.mcp.json</code>: the C# SqlClient driver resolves named instances
+and supports Windows Authentication, so it uses the instance name and no
+port — unlike the MCP’s Python driver, which needs
+<code>localhost</code> plus the static port.</p>
+</blockquote>
+<blockquote class="note">
+<p><strong>למה מחרוזת החיבור שונה מ-<code>.mcp.json</code>?</strong>
+במסלול המקומי, ה-C# משתמש בדרייבר של מיקרוסופט שיודע לפענח שמות Instance
+ולעבוד עם אימות Windows — ולכן שם כותבים
+<code>localhost\SQLEXPRESS</code> בלי פורט. ה-MCP משתמש בדרייבר Python
+אחר שלא יודע לעשות את זה, ולכן שם כותבים <code>localhost</code> + פורט
+קבוע. שתי ההגדרות נכונות, כל אחת לכלי שלה.</p>
+<p><strong>שימו לב:</strong> עד עכשיו רק ה-MCP דיבר עם בסיס הנתונים.
+מכאן והלאה גם האפליקציה עצמה מתחברת אליו — ולכן צריך להגדיר את החיבור
+בשני מקומות נפרדים.</p>
+</blockquote>
+<p>בנו שוב. עדיין אין מה להריץ, אבל אין שגיאות.</p>
+<h3 id="שלב-5.3-יצירת-הישות-הראשונה">שלב 5.3 — יצירת הישות הראשונה</h3>
+<p>בחרו ישות בסיס (בלי מפתחות זרים — <code>UserProfile</code>,‏
+<code>Customer</code>,‏ <code>Worker</code> וכו׳, תלוי בתחום שלכם).
+ב-Claude Code:</p>
+<blockquote class="prompt">
+<p>Look at <code>cloned/example_project/Worker.cs</code> (or another
+base entity in the sample) and follow its pattern exactly. Generate
+<code>&lt;EntityName&gt;.cs</code> at the root of our project for the
+<code>&lt;EntityName&gt;</code> entity. Use the column names and types
+from <code>scripts/create_database.sql</code> and the stored procedure
+names from <code>scripts/stored_procedures.sql</code>. Follow the entity
+pattern in <code>CLAUDE.md</code> (sections inlined from
+<code>PATTERNS.md</code>): is_new constructor,
+createXyz/updateXyz/deleteXyz, static initXyzs, static seekXyz. Add to
+<code>Program.&lt;EntityName&gt;s</code> static list.</p>
+<p>Do not invent fields. Do not invent SP names. If anything is unclear,
+ask before writing.</p>
+</blockquote>
+<h3 id="שלב-5.4-בדיקת-הישות">שלב 5.4 — בדיקת הישות</h3>
+<p>אותה משמעת בדיקה. התמקדו ב: - חתימת הבנאי תואמת לתבנית
+ה-<code>is_new</code> של פרויקט הדוגמה - כל
+<code>createXyz/updateXyz/deleteXyz</code> משתמש ב-Stored Procedure
+המתאים מתוך <code>stored_procedures.sql</code> - שמות הפרמטרים תואמים
+בדיוק לשמות הפרמטרים ב-Stored Procedure - ‏<code>initXyzs</code> קורא
+ל-Stored Procedure מסוג <code>_get_all</code> וטוען מחדש עם
+<code>is_new = false</code> - הרשימה הסטטית
+<code>Program.&lt;entity&gt;s</code> נוספה ב-<code>Program.cs</code></p>
+<p>בנו ופתרו שגיאות קומפילציה דרך Claude.</p>
+<h3 id="שלב-5.5-עיצוב-ויצירת-מסך-הכניסה">שלב 5.5 — עיצוב ויצירת מסך
+הכניסה</h3>
+<p>פרויקט הדוגמה לא מגיע עם חוויית כניסה מלוטשת — הוא מתחיל
+ב-<code>mainForm</code> עם רשימת כפתורים שטוחה, בלי התחברות ובלי הפרדת
+תפקידים. לרוב פרויקטי הסטודנטים זה לא מספיק: יש לכם כמה שחקנים אנושיים
+(לקוח, מנהל וכו׳), לכל אחד ה-UC שלו והמסכים שלו, וחוויית הפעלה ראשונה
+אמיתית צריכה לשקף את זה.</p>
+<p>בשלב הזה Claude בוחן את השחקנים בפרויקט שלכם ומעצב מסך כניסה שמתאים
+<em>לתחום שלכם</em> — עוד לפני שקיים מסך CRUD ראשון. המסך הראשון בשלב
+5.6 יתחבר אז למקום הנכון תחת התפקיד הנכון.</p>
+<blockquote class="prompt">
+<p>Read <code>docs/design/class-diagram.md</code>,
+<code>docs/00e-use-cases.md</code>, and the UC and actor information in
+<code>CLAUDE.md</code>. Identify the human actors in this project.</p>
+<p><strong>Login is the first screen</strong> for multi-actor projects.
+Authentication is not in our requirements — the requirements describe
+what each actor <em>does</em>, not how the system identifies them.
+Derive the login design from the <strong>class diagram</strong>, not
+from the requirements: - Find every entity that has credential-like
+fields (<code>email</code>/<code>username</code> +
+<code>password</code>). There may be more than one — e.g.,
+<code>UserProfile</code> for customers, <code>Employee</code> for staff.
+Each one is a login source. - The role that the logged-in user has
+determines which home panel they land on after login. Map each
+credential-holding entity to its corresponding role home.</p>
+<p>Decide whether the entry flow should be: (a) <strong>Login → per-role
+home panels</strong> — when there are multiple human actors with
+distinct screens (e.g., Customer vs Manager). Each role gets its own
+home panel that hosts only the UCs that actor performs. (b) <strong>Flat
+menu on <code>mainForm</code></strong> — only when there’s a single
+human actor, no credentials on any entity, or no meaningful role
+distinction.</p>
+<p>Tell me which design you’ve chosen, name every credential-holding
+entity and the home panel each one routes to, and ask for my
+confirmation before generating any files.</p>
+<p>Once I confirm, generate the entry-flow files in one batch (so they
+compile together): - <code>mainForm.cs</code> (+ Designer + resx) —
+match the sample’s <code>cloned/example_project/mainForm.cs</code>
+pattern: hosts a single content area and a
+<code>showPanel(UserControl)</code> method.
+<strong><code>mainForm</code>’s entry point loads
+<code>LoginPanel</code> first</strong>, not a home panel directly. - If
+you chose (a): - <code>LoginPanel.cs</code> (+ Designer + resx) — email
++ password fields, login button, Hebrew error message for missing/wrong
+credentials. On click, iterate through every credential-holding entity’s
+in-memory list (<code>Program.Employees</code>,
+<code>Program.UserProfiles</code>, etc.) in priority order, match
+email+password, and
+<code>mainForm.showPanel(new &lt;Role&gt;Home())</code> on the first
+match. Show a Hebrew “wrong credentials” message if no match. Per
+<code>PATTERNS.md</code>, login is a technical artifact, not a UC —
+that’s fine here. - <strong>Optional dev shortcut</strong>: a small
+secondary button labelled “כניסת מפתח” (dev login) or similar that
+bypasses authentication and opens a debug panel listing every panel in
+the app. Useful for development; remove or hide before submission. - One
+<code>&lt;Role&gt;HomePanel.cs</code> (+ Designer + resx) per role
+identified. Each home panel has placeholder buttons for that role’s UCs
+(read them from the UC diagram). Buttons can be wired to
+<code>MessageBox.Show(&quot;TODO&quot;)</code> for now — they’ll get real handlers
+as later CRUD panels are added. - If you chose (b):
+<code>mainForm</code> opens directly to a flat menu with placeholder
+buttons for each UC.</p>
+<p>Add a short “Entry Flow” section to <code>CLAUDE.md</code>
+documenting the design you chose, including the list of
+credential-holding entities and which home each routes to.</p>
+</blockquote>
+<p>בדקו לפני שממשיכים: - זיהוי השחקנים תואם לדיאגרמת ה-UC (לא הומצאו
+שחקנים, ולא פוספסו). - מסך הבית של כל תפקיד מציג רק את ה-UC שאותו תפקיד
+באמת מבצע — אמתו מול דיאגרמת ה-UC שלכם. - ההתחברות (אם קיימת) מאמתת מול
+הישות הנכונה (<code>UserProfile</code> ללקוחות, <code>Employee</code>
+לעובדים — או מה שהעיצוב שלכם מגדיר). - התוויות בעברית נקראות כראוי. -
+הסעיף “Entry Flow” נוסף ל-<code>CLAUDE.md</code>.</p>
+<p>בנו (Ctrl+Shift+B). אמור לעבור בהצלחה. אתם אפילו יכולים ללחוץ F5 כאן
+כדי לראות את מסך ההתחברות ואת תפריט הבית — הכפתורים עדיין מציגים TODO,
+אבל חוויית הכניסה אמיתית.</p>
+<h3 id="שלב-5.6-יצירת-מסך-ה-crud-הראשון-מחובר-תחת-מסך-הבית-הנכון">שלב
+5.6 — יצירת מסך ה-CRUD הראשון, מחובר תחת מסך הבית הנכון</h3>
+<p>בחרו ישות בסיס מדרג 1 למסך הראשון — <code>UserProfile</code> אם
+לקוחות מנהלים את הפרופיל שלהם, או כל דבר שהוא הפשוט ביותר בתחום שלכם.
+טעינת מפתחות זרים אינה בעיה בדרג הזה.</p>
+<blockquote class="prompt">
+<p>Generate <code>&lt;EntityName&gt;Panel.cs</code> (UserControl +
+Designer + resx) — full CRUD for <code>&lt;EntityName&gt;</code>: list
+view of all rows, fields to view/edit one row, Save / Update / Delete /
+Back buttons. Hebrew UI text. Wire each button to the entity’s
+<code>createXyz / updateXyz / deleteXyz</code> methods.</p>
+<p>Then replace the TODO placeholder button in the appropriate role’s
+home panel (per the “Entry Flow” section in <code>CLAUDE.md</code>) so
+it now calls
+<code>mainForm.showPanel(new &lt;EntityName&gt;Panel())</code>. Back
+button on the CRUD panel returns to that role’s home.</p>
+<p>Match the sample’s panel patterns exactly — event-handler shape,
+return-to-home mechanism, Designer.cs structure.</p>
+</blockquote>
+<p>בדקו: - מטפלי האירועים של כפתורי המסך באמת קוראים למתודות הישות, ולא
+ל-placeholders. - כפתור מסך הבית מחובר עכשיו באמת (לא TODO). - כפתור
+החזרה מחזיר למסך הבית של התפקיד הנכון (לא להתחברות, ולא לשורש
+<code>mainForm</code>). - התוויות בעברית נכונות.</p>
+<h3 id="שלב-5.7-הריצו">שלב 5.7 — הריצו</h3>
+<p>בנו. אחר כך לחצו F5. עברו את המסלול: 1. מסך ההתחברות מופיע (באפשרות
+א׳). התחברו כמשתמש בדיקה של התפקיד הרלוונטי. 2. מסך הבית הנכון נפתח עבור
+אותו תפקיד. 3. לחצו על כפתור ישות ה-CRUD. המסך נפתח. 4. בצעו create /
+read / update / delete דרך הממשק. 5. כפתור החזרה מחזיר למסך הבית של
+התפקיד.</p>
+<p>ודאו שהשורות באמת נוספו או נמחקו על ידי בקשה מ-Claude:</p>
+<blockquote class="prompt">
+<p>Use the mssql MCP to run
+<code>SELECT * FROM &lt;entity_table&gt;</code>. Show me what’s in the
+DB right now.</p>
+</blockquote>
+<p>אם משהו נכשל: ל-Claude יש את כל ההקשר (פרויקט הדוגמה, הקוד שלכם, בסיס
+הנתונים). תארו את התסמין ותנו לו לאבחן.</p>
+<h3 id="מה-בכוונה-לא-נכלל-בשלב-5">מה בכוונה לא נכלל בשלב 5</h3>
+<ul>
+<li><strong>לוגיקת הרשאות מלאה</strong> — מסך ההתחברות שנוצר בשלב 5.5
+מאמת מול הרשימות בזיכרון בלבד. הצפנת סיסמאות, ניהול Session ונעילת חשבון
+הם NFR ולא Use Case, ולפי <code>PATTERNS.md</code> הם תוצר טכני שמתווסף
+בהמשך.</li>
+<li><strong>מסכים מרובי ישויות</strong> (למשל מסך שמציג לקוח יחד עם
+ההזמנות שלו) — שייכים לשלב 6.</li>
+<li><strong>דוחות</strong> — הם קוראים ל-Stored Procedures של דוחות
+שתכתבו בשלב מאוחר יותר, יחד עם מסך הדוח עצמו.</li>
+</ul>
+<p><strong>נקודת Commit:</strong> בצעו commit לכל קובצי ה-C# החדשים:</p>
+<blockquote class="prompt">
+<p>Commit all C# project files — scaffold, DB connection, first entity,
+entry flow, first CRUD panel. Commit message: “Phase 5: C# scaffold and
+first entity end-to-end”</p>
+</blockquote>
+<p>בצעו push ל-GitHub כדי שחברי הצוות יוכלו למשוך ולבנות.</p>
+<p><strong>התחילו Session חדש לפני השלב הבא.</strong> שלב 5 ארוך במיוחד.
+נקו לפני שלב 6, שבו נוצרים הרבה מסכים.</p>
+<p>הריצו <code>/clear</code> (חינם) — או פתחו שיחה חדשה.</p>
+<blockquote class="note">
+<p>מכאן והלאה <code>CLAUDE.md</code> נטען אוטומטית בכל שיחה חדשה, כך
+שאין צורך להסביר מחדש כלום.</p>
+</blockquote>
+<hr />
+<h2 id="שלב-6-יצירת-שאר-מסכי-ה-crud">שלב 6 — יצירת שאר מסכי ה-CRUD</h2>
+<p><strong>מה השלב הזה עושה:</strong> משכפל את התבנית שאומתה בשלב 5 לכל
+שאר הישויות. זה השלב שבו רואים בבירור מה סוכן AI נותן — מה שלקח לכם 40
+דקות לישות אחת לוקח דקות ל-8 ישויות.</p>
+<p><strong>בסיום השלב יהיה לכם:</strong> אפליקציה עם מסך CRUD לכל ישות,
+מחוברים למסכי הבית הנכונים.</p>
+<p><strong>זמן צפוי:</strong> 20–40 דקות, תלוי במסלול שתבחרו ובמספר
+הישויות.</p>
+<p>שלב 5 ייצר מסך CRUD אחד מקצה לקצה ואימת את התבנית. עכשיו מרחיבים לשאר
+הישויות — כל ישות בסיס, כל מחלקת קישור, וכל ישות שיש לה UC מסוג CRUD
+בהיקף שלכם.</p>
+<blockquote class="note">
+<p><strong>שימו לב: לכל ישות צריך גם מחלקה וגם מסך.</strong> בשלב 5.3
+יצרתם מחלקת ישות <strong>אחת</strong> בלבד. לשאר הישויות עדיין אין קובץ
+<code>.cs</code> ואין רשימה סטטית ב-<code>Program.cs</code> — ולכן כל
+מסך כאן נוצר יחד עם מחלקת הישות שמאחוריו. מסך שנוצר בלי המחלקה שלו פשוט
+לא יתקמפל.</p>
+</blockquote>
+<p>יש שתי דרכים. בחרו לפי מידת האמון שלכם בתבנית משלב 5 וכמה אתם נהנים
+מהדגמה טובה.</p>
+<h3 id="אפשרות-א-אחד-אחד-זהירה">אפשרות א׳ — אחד-אחד (זהירה)</h3>
+<p>צרו מסך אחד, בדקו, חברו אותו תחת מסך הבית של התפקיד הנכון, ובנו. אחר
+כך הבא בתור. חזרו עד שסיימתם.</p>
+<blockquote class="prompt">
+<p>For <code>&lt;EntityName&gt;</code>: first generate the entity class
+<code>&lt;EntityName&gt;.cs</code> if it doesn’t exist yet — same
+pattern as <code>&lt;AlreadyDoneEntity&gt;.cs</code>, using the columns
+from <code>scripts/create_database.sql</code> and the stored procedure
+names from <code>scripts/stored_procedures.sql</code>, and add its
+static list to <code>Program.cs</code> in the load order from
+<code>CLAUDE.md</code>.</p>
+<p>Then generate <code>&lt;EntityName&gt;Panel.cs</code> (+ Designer +
+resx), following the same pattern as
+<code>&lt;AlreadyDonePanel&gt;.cs</code>. Wire it under
+<code>&lt;RoleHomePanel&gt;</code> (replacing the TODO placeholder).
+Match the entity pattern, RTL settings, and Hebrew labels from existing
+panels.</p>
+</blockquote>
+<p>יתרונות: תופסים סטייה מהתבנית מוקדם. קל לבדוק כל מסך מול המקור.
+חסרונות: איטי יותר, יותר Prompts, יותר מעברי הקשר.</p>
+<h3 id="אפשרות-ב-הכול-בבת-אחת-מסלול-ה-וואו">אפשרות ב׳ — הכול בבת אחת
+(מסלול ה-“וואו”)</h3>
+<p>‏Prompt אחד שמייצר את כל מסכי ה-CRUD הנותרים, מחבר כל אחד תחת מסך הבית
+המתאים, ומדווח מה נבנה. צפו ב-Claude מייצר 8–10 מסכים במכה אחת.</p>
+<blockquote class="prompt">
+<p>For every entity in <code>CLAUDE.md</code> that doesn’t already have
+one, generate <strong>both</strong> its entity class and its CRUD panel.
+For each: - <strong>The entity class first</strong> —
+<code>&lt;EntityName&gt;.cs</code> following the same pattern as
+<code>&lt;AlreadyDoneEntity&gt;.cs</code>, using the columns from
+<code>scripts/create_database.sql</code> and the stored procedure names
+from <code>scripts/stored_procedures.sql</code>. Add each entity’s
+static list to <code>Program.cs</code> in the load order documented in
+<code>CLAUDE.md</code>. - Then the panel, following the same pattern as
+<code>&lt;AlreadyDonePanel&gt;.cs</code> exactly — entity-method wiring,
+RTL settings, Hebrew labels, Back-button mechanism. - Wire each panel
+under the role home panel whose actor owns that UC (read the UC diagram
+and <code>CLAUDE.md</code> to decide). - Replace each role home’s TODO
+placeholder buttons with real handlers as you go.</p>
+<p>Report at the end which entity classes and which panels you
+generated, and which role home each panel was wired under.</p>
+</blockquote>
+<p>יתרונות: דרמטי, מהיר, ומשיג את “מטרת השיעור” של שלב 5 בבת אחת. גם
+חסכוני יותר בטוקנים — ההקשר נקרא פעם אחת ולא עשר פעמים. חסרונות: אם
+Claude הבין את התבנית לא נכון בשלב 5, השגיאה מתפשטת לכל המסכים. שלב
+הבדיקה (הבא) חשוב יותר.</p>
+<h3 id="שלב-6.1-בדיקה-בכל-אחד-מהמסלולים">שלב 6.1 — בדיקה (בכל אחד
+מהמסלולים)</h3>
+<p>אחרי אפשרות א׳ או ב׳, בנו ועברו על כל מסך:</p>
+<ul>
+<li><strong>מחלקות הישויות:</strong> לכל ישות שקיבלה מסך יש גם קובץ
+<code>&lt;Entity&gt;.cs</code> ורשימה סטטית ב-<code>Program.cs</code>,
+וסדר הטעינה ב-<code>initLists()</code> עדיין תואם
+ל-<code>CLAUDE.md</code> (ישויות בסיס קודם, מחלקות קישור אחרונות).</li>
+<li><strong>בנייה:</strong> קומפילציה נקייה, בלי אזהרות חדשות מעבר
+ל-CA1416 (שעדיין מושתקת).</li>
+<li><strong>סריקה ויזואלית:</strong> לכל מסך — F5 ← התחברו כשחקן
+הרלוונטי ← היכנסו למסך ← ודאו שהתוויות בעברית נראות נכון (יישור לימין,
+בלי <code>?????</code>), שתצוגת הרשימה מציגה נתונים אמיתיים מנתוני הדמה,
+ושהכפתורים קיימים.</li>
+<li><strong>בדיקת חיווט מדגמית:</strong> צרו שורה, עדכנו שורה, מחקו שורה
+— בשניים-שלושה מסכים. אם שלוש הפעולות עובדות על ישות בסיס ועל מחלקת
+קישור, סביר מאוד שהשאר תקינים.</li>
+<li><strong>כיסוי מסכי הבית:</strong> מסך הבית של כל תפקיד צריך להכיל
+כפתורים מחוברים למסכים אמיתיים (בלי TODO שנותרו עבור UC שנמצאים
+בהיקף).</li>
+</ul>
+<p>כשאתם מוצאים בעיה שיטתית (למשל “כל המסכים משתמשים במוסכמת שמות שגויה
+ל-Stored Procedures”), התעקשו מול Claude עם Prompt אחד שמתקן הכול:</p>
+<blockquote class="prompt">
+<p>Every CRUD panel calls <code>&lt;wrong&gt;</code> instead of
+<code>&lt;right&gt;</code>. Fix all of them in one pass and rebuild.</p>
+</blockquote>
+<h3 id="מה-עדיין-לא-הושלם-אחרי-שלב-6">מה עדיין לא הושלם אחרי שלב 6</h3>
+<ul>
+<li><strong>מתודות מעבר מצבים</strong> לישויות עם מכונות מצבים (למשל
+לוגיקת ביטול / ביטול מאוחר / קידום מרשימת המתנה של
+<code>Registration</code>). מסך ה-CRUD מטפל רק ב-create/update/delete
+בסיסיים; מעברי המצבים הם מתודות ו-Stored Procedures נפרדים.</li>
+<li><strong>‏UC של דוחות</strong> (נוכחות חודשית, הכנסה חודשית וכו׳). הם
+קוראים ל-Stored Procedures מרובי טבלאות ויש להם מסכים לקריאה בלבד — צורה
+שונה מ-CRUD.</li>
+<li><strong>תרחישים חוצי ישויות</strong> (למשל “הרשמה לשיעור” נוגעת
+ב-Registration + ScheduleSlot + CustomerSubscription בטרנזקציה
+אחת).</li>
+</ul>
+<p>אלה “30% הנותרים” של פרויקטי סטודנטים אמיתיים — מתבצעים בזמנכם החופשי
+אחרי השיעור, עם Claude כסוכן. השיעור עצמו מסתיים כאן.</p>
+<p><strong>נקודת Commit:</strong> בצעו commit לכל המסכים החדשים:</p>
+<blockquote class="prompt">
+<p>Commit all new panel files and wired home panels. Commit message:
+“Phase 6: all CRUD panels”</p>
+</blockquote>
+<p>בצעו push ל-GitHub. זה רגע טוב לכל חברי הקבוצה למשוך ולבצע בנייה
+מלאה.</p>
+<p><strong>התחילו Session חדש לפני השלב הבא.</strong> סיימתם את החלק
+הנלמד בכיתה.</p>
+<p>הריצו <code>/clear</code> (חינם) — או פתחו שיחה חדשה.</p>
+<blockquote class="note">
+<p>מכאן והלאה <code>CLAUDE.md</code> נטען אוטומטית בכל שיחה חדשה, כך
+שאין צורך להסביר מחדש כלום.</p>
+</blockquote>
+<hr />
+<h2 id="שלב-7-מכונות-מצבים-הפיחו-חיים-בדיאגרמות-המצבים-שלכם">שלב 7 —
+מכונות מצבים: הפיחו חיים בדיאגרמות המצבים שלכם</h2>
+<p><strong>לא נלמד בשיעור.</strong> מתועד כאן כדי שתוכלו לבצע אותו
+בעצמכם.</p>
+<p><strong>מה השלב הזה עושה:</strong> מתרגם את דיאגרמות המצבים שלכם לקוד
+— הדבר הראשון בפרויקט שאינו CRUD.</p>
+<p><strong>בסיום השלב יהיה לכם:</strong> מתודות מעבר עם תנאי שמירה,
+Stored Procedures טרנזקציוניים, וכפתורי פעולה בממשק במקום כפתור Update
+גנרי.</p>
+<p>זה הדבר הראשון בפרויקט שלכם ש<strong>אינו CRUD</strong>. ציירתם
+דיאגרמות מצבים בעיצוב — כל מצב, כל מעבר, כל תנאי שמירה. השלב הזה מתרגם
+אותן לקוד, כך שהדיאגרמות מפסיקות להיות תיעוד והופכות ללוגיקה עצמה.</p>
+<h3 id="למה-מכונות-מצבים-ראויות-לשלב-משלהן">למה מכונות מצבים ראויות לשלב
+משלהן</h3>
+<p>‏CRUD מתייחס לכל ישות כאל אוסף שדות שאפשר לשנות בחופשיות. ישות עם
+מצבים אינה כזו — למחזור החיים שלה יש חוקים:</p>
+<ul>
+<li><strong>תנאי שמירה (Guards).</strong> לא כל מעבר חוקי תמיד. ביטול
+הרשמה פחות מ-24 שעות לפני השיעור מותר, אבל מפעיל מסלול אחר (ביטול מאוחר
++ חיוב) מאשר ביטול מוקדם יותר.</li>
+<li><strong>תופעות לוואי בישויות אחרות.</strong> ביטול הרשמה משחרר מקום
+ב-<code>ScheduleSlot</code>, מחזיר קרדיט
+ב-<code>CustomerSubscription</code>, ועשוי לקדם את הבא בתור מרשימת
+ההמתנה. פעולה אחת, כמה טבלאות.</li>
+<li><strong>אטומיות.</strong> תופעות הלוואי האלה חייבות להצליח או להיכשל
+יחד. הרשמות שבוטלו חלקית משבשות את התחום.</li>
+<li><strong>פעלים מתחום העיסוק, לא CRUD סימטרי.</strong>
+‏<code>cancel()</code>,‏ <code>lateCancel()</code>,‏
+<code>promoteFromWaitlist()</code>,‏ <code>confirm()</code> — אלה
+המתודות, ולא <code>update(status=&#39;Cancelled&#39;)</code>.</li>
+</ul>
+<p>אם סטודנט מנסה לממש את אלה כעדכוני CRUD, האפליקציה מתקמפלת ורצה — אבל
+הנתונים מתקלקלים בשקט. דיאגרמת המצבים היא התוצר שמונע את זה מלכתחילה;
+השלב הזה הוא המקום שבו היא משתלמת.</p>
+<h3 id="שלב-7.1-איתור-ישויות-עם-מצבים">שלב 7.1 — איתור ישויות עם
+מצבים</h3>
+<p>ב-Claude Code:</p>
+<blockquote class="prompt">
+<p>Read <code>docs/design/state-diagram.md</code> (and any other state
+diagrams in <code>docs/design/</code>). For each entity that has a
+non-trivial state machine, list: - The entity name - Every state in the
+diagram - Every transition, including the source state, target state,
+the trigger (event/method name), the guard (condition for the transition
+to fire), and any side effects in other entities</p>
+<p>Do not implement anything yet. Just produce the inventory and ask for
+confirmation that it matches my design.</p>
+</blockquote>
+<p>בדקו מול דיאגרמת המצבים שלכם. אם Claude פספס מעבר או המציא אחד — תקנו
+עכשיו, באותה משמעת בדיקה ותיגור כמו בשלב 3.</p>
+<h3 id="שלב-7.2-בחרו-את-מכונת-המצבים-הראשונה-למימוש">שלב 7.2 — בחרו את
+מכונת המצבים הראשונה למימוש</h3>
+<p>אותה לוגיקה כמו בבחירת מסך ה-CRUD הראשון: בחרו קודם את הישות עם
+המצבים הפשוטה ביותר. אמתו את התבנית, ואז הרחיבו.</p>
+<p>אם בפרויקט שלכם יש רק ישות אחת עם מצבים (מקרה נפוץ), השלב הזה
+טריוויאלי. אם יש יותר מאחת, התחילו עם זו שהמעברים שלה נוגעים בהכי מעט
+ישויות אחרות.</p>
+<h3 id="שלב-7.3-יצירת-מתודות-המעבר-וה-stored-procedures-יחד">שלב 7.3 —
+יצירת מתודות המעבר וה-Stored Procedures יחד</h3>
+<blockquote class="prompt">
+<p>For <code>&lt;EntityName&gt;</code>, read
+<code>docs/design/state-diagram.md</code> and enumerate the state
+transitions for this entity. Then generate the transition methods on the
+entity class and the matching stored procedures.</p>
+<p>For each transition: - Method on the entity class named after the
+domain verb (<code>cancel()</code>, <code>lateCancel()</code>,
+<code>promoteFromWaitlist()</code>) — NOT <code>update(...)</code>.
+Encode the guard inline; if the guard fails, throw or return false with
+a Hebrew message the UI can show. - Matching stored procedure
+(<code>sp_&lt;entity&gt;_&lt;verb&gt;</code>) that updates the state
+column and applies any side effects in other tables — all inside a
+<code>BEGIN TRAN ... COMMIT TRAN</code> block with <code>ROLLBACK</code>
+on error. This is the first time we use transactions; do it explicitly.
+- In-memory list updates that mirror the DB changes (so the running app
+sees consistent state without reloading).</p>
+<p>Append the SPs to <code>scripts/stored_procedures.sql</code> and run
+them against the DB via the mssql MCP. Then add the methods to the
+entity class.</p>
+<p>Do not change any existing CRUD methods (<code>create*</code>,
+<code>update*</code>, <code>delete*</code>) — state transitions are new
+methods alongside them.</p>
+</blockquote>
+<h3 id="שלב-7.4-בדיקת-קוד-מכונת-המצבים">שלב 7.4 — בדיקת קוד מכונת
+המצבים</h3>
+<p>התמקדו בשגיאות השקטות:</p>
+<ul>
+<li><strong>תנאי שמירה קיימים ונכונים.</strong> לכל מעבר שאמור להיות לו
+תנאי שמירה — יש אחד. ביטול מאוחר באמת בודק את גבול 24 השעות, ולא רק סומך
+על הקורא.</li>
+<li><strong>תופעות לוואי אטומיות.</strong> כל Stored Procedure של מעבר
+משתמש ב-<code>BEGIN TRAN ... COMMIT TRAN</code>. אם שחרור המקום או החזר
+הקרדיט נכשל, גם שינוי המצב מתבטל.</li>
+<li><strong>אין שינויי מצב דרך
+<code>update&lt;Entity&gt;(...)</code>.</strong> עדכון ה-CRUD הגנרי לא
+אמור לגעת בעמודת המצב. שינויי מצב עוברים אך ורק דרך מתודות המעבר
+הייעודיות. (אם לא תאכפו את זה, מישהו בסוף יבצע
+<code>reg.update(status=&#39;Cancelled&#39;)</code> ויעקוף בשקט כל תנאי
+שמירה.)</li>
+<li><strong>הרשימה בזיכרון משקפת את בסיס הנתונים.</strong> אחרי מעבר,
+מצב הישות ב-<code>Program.&lt;entity&gt;s</code> תואם למה שבבסיס
+הנתונים. דרך קלה לבדוק: הריצו SELECT על השורה דרך ה-MCP אחרי מעבר שבוצע
+מהממשק.</li>
+</ul>
+<h3 id="שלב-7.5-חיבור-כפתורי-ממשק-שמפעילים-מעברים-לא-עדכוני-crud">שלב
+7.5 — חיבור כפתורי ממשק שמפעילים מעברים, לא עדכוני CRUD</h3>
+<p>פתחו את מסך ה-CRUD הרלוונטי לישות עם המצבים. החליפו את כפתור
+ה-“Update” או ה-“Save” הגנרי ב<strong>כפתורי פעולה</strong> — אחד לכל
+מעבר שמופעל על ידי משתמש.</p>
+<blockquote class="prompt">
+<p>On <code>&lt;EntityName&gt;Panel.cs</code>, replace the generic
+Update button with verb buttons matching the user-triggered state
+transitions for this entity (read
+<code>docs/design/state-diagram.md</code> to enumerate them) — one
+button per transition, Hebrew label describing the verb. Each button
+calls the corresponding transition method on the entity, handles guard
+failures by showing the Hebrew error message in a
+<code>MessageBox</code>, and refreshes the list view on success.</p>
+</blockquote>
+<p>חלק מהמעברים מופעלים על ידי המערכת (<code>promoteFromWaitlist</code>
+רץ כשמתפנה מקום, לא מכפתור) — אלה לא מקבלים כפתורים בממשק; קוראים להם
+ממתודות מעבר אחרות.</p>
+<h3 id="שלב-7.6-עברו-על-מסלולי-המצבים">שלב 7.6 — עברו על מסלולי
+המצבים</h3>
+<p>לכל מעבר, הריצו אותו מקצה לקצה דרך הממשק:</p>
+<ol type="1">
+<li>הכינו שורה במצב המקור (דרך נתוני הדמה או דרך מעבר אחר).</li>
+<li>לחצו על כפתור הפעולה (או הפעילו את אירוע המערכת).</li>
+<li>ודאו שהשורה נמצאת עכשיו במצב היעד, ושתופעות הלוואי בטבלאות האחרות
+אכן קרו.</li>
+</ol>
+<p>למסלול הבדיקה המרכזי, בקשו מ-Claude:</p>
+<blockquote class="prompt">
+<p>Use the mssql MCP to verify the state machine end-to-end: 1. SELECT
+the relevant rows BEFORE the transition. 2. After I trigger the
+transition through the UI, SELECT them again. 3. Compare and confirm
+both the state change and every documented side effect happened.</p>
+</blockquote>
+<p>אם ההפרש לא תואם לדיאגרמת המצבים, המעבר באגי — תקנו את המתודה או את
+ה-Stored Procedure ובדקו שוב.</p>
+<h3 id="מה-בכוונה-לא-נכלל-בשלב-7">מה בכוונה לא נכלל בשלב 7</h3>
+<ul>
+<li><strong>‏UC של דוחות</strong> (נוכחות חודשית, הכנסה חודשית) — צורה
+שונה, ומקבלים שלב משלהם אם תגיעו לשם.</li>
+<li><strong>תרחישים חוצי אגרגטים</strong> (למשל פעולת משתמש אחת שעוברת
+דרך כמה מכונות מצבים בישויות שונות) — נדיר בפרויקטי סטודנטים; טפלו לפי
+מקרה.</li>
+</ul>
+<hr />
+<h2 id="שלב-8-דוחות-שיעורי-בית">שלב 8 — דוחות (שיעורי בית)</h2>
+<p><strong>לא נלמד בשיעור.</strong> אותו מבנה כמו שלבי השיעור — מתועד
+כאן כדי שתוכלו לבצע אותו בעצמכם.</p>
+<p><strong>מה השלב הזה עושה:</strong> בונה מסכים לקריאה בלבד עם נתונים
+מצטברים — צורה שונה לגמרי מ-CRUD.</p>
+<p><strong>בסיום השלב יהיה לכם:</strong> דוח עובד עם מסננים, שמבוסס על
+Stored Procedure עם <code>JOIN</code> ו-<code>GROUP BY</code>.</p>
+<p>לדוחות יש צורת ממשק שונה מ-CRUD: קריאה בלבד, עם פרמטרים (טווחי
+תאריכים, מסננים, רשימות נפתחות), והנתונים שהם מציגים
+<strong>מצטברים</strong> (ספירות, סכומים, אחוזים, קיבוצים) — לא שורות
+גולמיות. ה-Stored Procedure שמאחורי דוח משתמש ב-<code>JOIN</code>,
+ב-<code>GROUP BY</code> ובפונקציות חלון, ולא ב-SELECT מטבלה יחידה. במסך
+יש מסננים למעלה וטבלת תוצאות מתחת, בלי כפתורי Save/Update/Delete.</p>
+<h3 id="שלב-8.1-איתור-ה-uc-של-דוחות-בהיקף-שלכם">שלב 8.1 — איתור ה-UC של
+דוחות בהיקף שלכם</h3>
+<blockquote class="prompt">
+<p>Read <code>docs/00e-use-cases.md</code> and
+<code>docs/design/sequence-diagram.md</code> (or wherever your reports
+are specified). List every UC whose primary actor is a manager/admin and
+whose behavior is “view summarized data over some range.” For each,
+name: the input parameters (date range, filter values), the columns
+shown in the output, and any grouping or aggregation rules.</p>
+</blockquote>
+<p>בדקו את הרשימה מול כוונת הקבוצה שלכם. בחרו את הדוח הפשוט ביותר למימוש
+ראשון.</p>
+<h3 id="שלב-8.2-יצירת-ה-stored-procedure-של-הדוח">שלב 8.2 — יצירת
+ה-Stored Procedure של הדוח</h3>
+<blockquote class="prompt">
+<p>Generate <code>sp_&lt;reportName&gt;</code> and append it to
+<code>scripts/stored_procedures.sql</code>, then run it via the mssql
+MCP. The SP takes the report’s input parameters (use sensible SQL types
+— <code>DATETIME2</code> for dates, <code>NVARCHAR</code> for filter
+strings, etc.) and returns the aggregated rows defined in Step 8.1’s
+inventory. Use <code>JOIN</code> / <code>GROUP BY</code> as needed.
+Hebrew column aliases where the output is user-facing.</p>
+<p>Before running, show me the SP and let me review the joins and
+groupings.</p>
+</blockquote>
+<h3 id="שלב-8.3-יצירת-מסך-הדוח">שלב 8.3 — יצירת מסך הדוח</h3>
+<blockquote class="prompt">
+<p>Generate <code>&lt;ReportName&gt;Panel.cs</code> (+ Designer + resx)
+— a read-only panel with: filter controls at the top matching the SP’s
+input parameters (DateTimePickers, ComboBoxes, etc.), a “Generate”
+button, and a DataGridView below. On click, the panel calls the report
+SP with the user-entered parameters and binds the result set to the
+grid. RTL layout. Hebrew labels. No Save/Update/Delete buttons — this is
+read-only.</p>
+<p>Wire the panel into the appropriate manager role home (replacing a
+TODO button if one exists for this report).</p>
+</blockquote>
+<h3 id="שלב-8.4-אימות-הדוח">שלב 8.4 — אימות הדוח</h3>
+<p>הריצו אותו דרך הממשק. בדקו כמה שורות ידנית: - בחרו שורה אחת מפלט
+הדוח. - חזרו לנתוני המקור דרך ה-MCP
+(<code>SELECT * FROM &lt;table&gt; WHERE &lt;criteria&gt;</code>) וודאו
+ידנית שהחישוב המצטבר תואם.</p>
+<p>אם המספרים שגויים, הבאג כמעט תמיד נמצא ב-<code>GROUP BY</code> או
+ב-<code>JOIN</code> של ה-Stored Procedure. בקשו מ-Claude לגזור מחדש את
+ה-Stored Procedure מהדרישות ולהשוות לגרסה שהוא ייצר.</p>
+<hr />
+<h2 id="שלב-9-תרחישי-uc-מורכבים-שיעורי-בית">שלב 9 — תרחישי UC מורכבים
+(שיעורי בית)</h2>
+<p><strong>לא נלמד בשיעור.</strong> מתועד כאן כדי שתוכלו לבצע אותו
+בעצמכם.</p>
+<p>חלק מה-UC הם <strong>טרנזקציות מתוזמרות</strong> — פעולת משתמש אחת
+שנוגעת בכמה ישויות באופן אטומי. “הרשמה לשיעור” היא הדוגמה הקלאסית: היא
+מפחיתה קרדיטים ב-<code>CustomerSubscription</code>, מגדילה את
+<code>registrationCount</code> ב-<code>ScheduleSlot</code>, יוצרת שורת
+<code>Registration</code>, ומפעילה התראה. כל הארבע קורות, או שאף אחת
+לא.</p>
+<p>המבנה דומה למעבר במכונת מצבים (שלב 7), אבל ברמת ה-UC ולא קשור למחזור
+החיים של ישות בודדת. תשתמשו שוב באותה משמעת טרנזקציות.</p>
+<h3 id="שלב-9.1-איתור-התרחישים-המורכבים">שלב 9.1 — איתור התרחישים
+המורכבים</h3>
+<blockquote class="prompt">
+<p>Read <code>docs/00e-use-cases.md</code> and list every UC whose main
+scenario touches more than one entity in a single user action. For each,
+name: the entities involved, the operation on each, the order they must
+happen in, and any guards (preconditions that must be true before any
+side effect fires).</p>
+<p>Distinguish these from simple CRUD UCs (touch one entity) and
+state-machine transitions (touch one entity’s state column plus minor
+side effects).</p>
+</blockquote>
+<h3 id="שלב-9.2-בחרו-קודם-את-ה-uc-המרכזי-ביותר">שלב 9.2 — בחרו קודם את
+ה-UC המרכזי ביותר</h3>
+<p>“התרחיש הראשון שרץ מקצה לקצה” צריך להיות זה שמפעיל את החלק הגדול
+ביותר של התחום שלכם — בדרך כלל הפעולה הנפוצה ביותר של השחקן הראשי. ברגע
+שהוא עובד, השאר עוקבים אחר אותה תבנית.</p>
+<h3 id="שלב-9.3-יצירת-ה-stored-procedure-המתזמר">שלב 9.3 — יצירת
+ה-Stored Procedure המתזמר</h3>
+<blockquote class="prompt">
+<p>Generate <code>sp_&lt;flowName&gt;</code> and append to
+<code>scripts/stored_procedures.sql</code>. The SP takes the operation’s
+inputs as parameters, validates every guard (returns an error code or
+<code>RAISERROR</code> if any fails), then performs every entity update
+inside a single <code>BEGIN TRAN ... COMMIT TRAN</code> block with
+<code>ROLLBACK</code> on any error.</p>
+<p>Before running, show me the SP. I want to verify: every guard is
+enforced; the order of operations is correct; nothing is left for the
+application code to “remember” to do.</p>
+</blockquote>
+<h3 id="שלב-9.4-יצירת-המתודה-המתזמרת-בישות-המקור">שלב 9.4 — יצירת המתודה
+המתזמרת בישות המקור</h3>
+<blockquote class="prompt">
+<p>Add a domain-verb method to the originating entity (e.g.,
+<code>UserProfile.registerForClass(slotId)</code>). The method calls the
+SP, on success updates the in-memory state of every affected entity
+(<code>Program.Registrations</code> adds the new row, the affected
+<code>ScheduleSlot.registrationCount</code> increments, the affected
+<code>CustomerSubscription.remainingCredits</code> decrements), and on
+failure surfaces the SP’s error message to the caller as a Hebrew string
+the UI can show.</p>
+</blockquote>
+<h3 id="שלב-9.5-חיבור-הממשק-לתרחיש">שלב 9.5 — חיבור הממשק לתרחיש</h3>
+<blockquote class="prompt">
+<p>Add a button/control on the relevant panel that triggers this flow.
+On click, gather user input (the slot to register for, etc.), call the
+orchestrating method, show a Hebrew success or failure message, and
+refresh any visible lists so the change is immediately visible.</p>
+</blockquote>
+<h3 id="שלב-9.6-הריצו-את-התרחיש-מקצה-לקצה">שלב 9.6 — הריצו את התרחיש
+מקצה לקצה</h3>
+<p>לכל מקרה של תנאי שמירה (כל תרחיש של “מה אם זה נכשל”): 1. הכינו את
+תנאי הקדם (למשל רוקנו את הקרדיטים במנוי). 2. הפעילו את התרחיש דרך הממשק.
+3. ודאו: הודעת השגיאה הנכונה בעברית מופיעה, ו<strong>לא קרה שום שינוי
+מצב חלקי בבסיס הנתונים</strong> (הבדיקה החשובה ביותר — פתחו SSMS או
+השתמשו ב-MCP כדי לאמת).</p>
+<p>למקרה המוצלח: 1. הכינו תנאי קדם תקינים. 2. הפעילו את התרחיש. 3. ודאו
+שכל העדכונים הצפויים קרו בבסיס הנתונים, שכל רשימה בזיכרון שהושפעה עקבית,
+ושהממשק משקף את המצב החדש.</p>
+<hr />
+<h2 id="שלב-10-ליטוש-הממשק-עם-claude-שיעורי-בית">שלב 10 — ליטוש הממשק עם
+Claude (שיעורי בית)</h2>
+<p><strong>לא נלמד בשיעור.</strong> מתועד כאן כדי שתוכלו לבצע אותו
+בעצמכם.</p>
+<p>המסכים שנוצרו בשלבים 5–9 פונקציונליים אבל פשוטים ויזואלית — פקדים
+אפורים, גופני ברירת מחדל, בלי משמעת ריווח ובלי מיתוג. Claude יכול לקרוא
+את המסכים הקיימים ולהציע עיצובים עשירים יותר: פריסות טובות יותר, מערכות
+צבע, גופנים, אייקונים, מצבי hover ומשוב, ועיצובים ברמת wireframe אמיתי
+שמעוגנים בתחום של הפרויקט שלכם.</p>
+<p>זה גם המסלול ל<strong>סגירת הפער בין ה-wireframes של ה-UC שציירתם
+בעיצוב לבין איך שהאפליקציה באמת נראית.</strong> אם wireframe הגדיר תצוגת
+לשוניות או רשת כרטיסים, כאן מפיחים בו חיים.</p>
+<h3 id="שלב-10.1-החליטו-מה-ללטש">שלב 10.1 — החליטו מה ללטש</h3>
+<p>ליטוש הוא עניין של טעם. בחרו יעד: מסך אחד מרכזי (מסך הנחיתה או
+הדשבורד של התפקיד הראשי), או שדרוג ויזואלי עקבי בכל המסכים. אל תנסו
+לעשות את שניהם ב-Prompt אחד.</p>
+<h3 id="שלב-10.2-הזינו-ל-claude-את-חומרי-הגלם">שלב 10.2 — הזינו ל-Claude
+את חומרי הגלם</h3>
+<p>‏Claude מעצב טוב יותר כשהוא רואה מה אתם רוצים, ולא מה שיש לכם. תנו לו:
+- תיאור של התחום שלכם בשורה אחת (“אפליקציה לניהול סטודיו פילאטיס, אווירה
+אינטימית של קבוצות קטנות, קהל היעד נשים, צבעי המותג חמים ונשיים”). -
+צילום מסך של המסך הנוכחי (גררו לתוך שיחת Claude Code — הוא יודע לקרוא
+תמונות). - ה-wireframe המתאים מתוך
+<code>order_management_use_case_diagram.html</code> (או מחלון ה-UC
+שלכם), אם קיים. - מראה ייחוס שאתם אוהבים — צילום מסך מאפליקציה אחרת,
+מסגרת ב-Figma, קישור ל-Dribbble, כל דבר ש-Claude יכול לראות או
+להביא.</p>
+<h3 id="שלב-10.3-בקשו-עיצוב-מחדש-עם-אילוצים">שלב 10.3 — בקשו עיצוב מחדש
+עם אילוצים</h3>
+<blockquote class="prompt">
+<p>Read <code>&lt;EntityName&gt;Panel.cs</code> and
+<code>&lt;EntityName&gt;Panel.Designer.cs</code>. Propose a redesign of
+this panel that: - Keeps all the existing controls and event handlers
+wired exactly as they are (no behavior changes) - Improves visual
+hierarchy, spacing, font choices, and color usage - Stays RTL and Hebrew
+per <code>PATTERNS.md</code> - Targets the look-and-feel of [reference
+image or description]</p>
+<p>Show me the proposed Designer.cs changes first as a diff. Don’t write
+yet — I want to see the design choices and approve them before they
+land.</p>
+</blockquote>
+<h3 id="שלב-10.4-חזרו-ושפרו">שלב 10.4 — חזרו ושפרו</h3>
+<p>עיצוב ויזואלי כמעט אף פעם לא מדויק בניסיון הראשון. דיאלוג טיפוסי:
+“הכפתורים צמודים מדי”, “השתמש בגוון ורוד בהיר יותר”, “הגדל את הגופן
+בכותרות תצוגת הרשימה”. כל סבב זול כי ל-Claude כבר יש את כל ההקשר.</p>
+<h3 id="שלב-10.5-החילו-באופן-עקבי">שלב 10.5 — החילו באופן עקבי</h3>
+<p>ברגע שמסך אחד נראה נכון, הפכו את שפת העיצוב למפורשת כדי ששאר המסכים
+יירשו אותה:</p>
+<blockquote class="prompt">
+<p>Document the design choices we made for
+<code>&lt;EntityName&gt;Panel.cs</code> — color palette (hex values),
+font choices, spacing rules, button styling — as a short “Visual Design”
+section in <code>CLAUDE.md</code>. Then apply the same rules to all the
+other panels in one pass.</p>
+</blockquote>
+<p>אחרי זה, מסכים עתידיים ש-Claude ייצר יאמצו את שפת העיצוב בלי שתצטרכו
+לבקש שוב.</p>
+<h3 id="ממה-להימנע">ממה להימנע</h3>
+<ul>
+<li>אל תשברו התנהגות בשם המראה. העיצוב מחדש נוגע
+ל-<code>Designer.cs</code> (פריסה ועיצוב), לא ל-<code>.cs</code> של המסך
+(לוגיקה).</li>
+<li>אל תחליפו תשתית ממשק באמצע הפרויקט (בלי קפיצות מ-WinForms ל-WPF כאן
+— זו כתיבה מחדש; ראו <code>ROADMAP.md</code>).</li>
+<li>אל תכניסו ספריות ממשק של צד שלישי (Telerik,‏ DevExpress) לפני שבדקתם
+אם WinForms רגיל יכול לשאת את השאיפה הוויזואלית. רוב הזמן הוא יכול.</li>
+</ul>
+<hr />
+<h2 id="מה-באמת-מחוץ-להיקף">מה באמת מחוץ להיקף</h2>
+<p>מעבר לשלב 10, העבודה שנותרת בפרויקט סטודנטים כבר אינה מעקב אחר תבנית
+— אלה החלטות ספציפיות לפרויקט ועניינים תפעוליים:</p>
+<ul>
+<li><strong>פריסה לסביבת ייצור</strong> — הפרדה בין סביבות פיתוח, בדיקות
+וייצור, וניהול מחרוזות חיבור לכל סביבה.</li>
+<li><strong>שגרת git קבוצתית</strong> — ענפים, פתרון קונפליקטים, Pull
+Requests. ראו את <a href="GIT_GROUP_WORKFLOW.html"><code>GIT_GROUP_WORKFLOW</code></a>
+למדריך הבסיסי.</li>
+<li><strong>הכנת ההגשה</strong> — README, סרטון הדגמה, מסמך הליכה על
+המערכת.</li>
+<li><strong>כוונון ביצועים</strong>, אם איכשהו תייצרו מספיק נתונים כדי
+שיהיה בזה צורך (לא סביר בפרויקט לימודי).</li>
+</ul>
+<p>סטודנטים שהפנימו את שלבים 1–7 יעברו את שלבים 8–10 במהירות. סטודנטים
+שדילגו על שלבי הבדיקה יבלו את שארית הסמסטר באיתור שגיאות שקטות
+שהצטברו.</p>
+</main>
+</div>
+<script>
+(function () {
+  var COPY = 'העתק', DONE = 'הועתק';
+
+  function cleanText(el) {
+    var clone = el.cloneNode(true);
+    clone.querySelectorAll('.copy-btn').forEach(function (b) { b.remove(); });
+    return clone.innerText.trim();
+  }
+
+  function addCopy(el, source) {
+    var b = document.createElement('button');
+    b.className = 'copy-btn';
+    b.type = 'button';
+    b.textContent = COPY;
+    b.addEventListener('click', function () {
+      var text = cleanText(source);
+      var done = function () {
+        b.textContent = DONE;
+        b.classList.add('done');
+        setTimeout(function () { b.textContent = COPY; b.classList.remove('done'); }, 1400);
+      };
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(done, function () {});
+      } else {
+        var ta = document.createElement('textarea');
+        ta.value = text;
+        document.body.appendChild(ta);
+        ta.select();
+        try { document.execCommand('copy'); done(); } catch (e) {}
+        document.body.removeChild(ta);
+      }
+    });
+    el.appendChild(b);
+  }
+
+  document.querySelectorAll('main.page pre').forEach(function (pre) { addCopy(pre, pre); });
+  // blockquote.prompt / blockquote.note are assigned at build time, so the page
+  // reads correctly before this script runs - and if it never runs.
+  document.querySelectorAll('main.page blockquote.prompt').forEach(function (bq) { addCopy(bq, bq); });
+
+  // Highlight the TOC entry for the section currently on screen.
+  var links = Array.prototype.slice.call(document.querySelectorAll('#TOC a[href^="#"]'));
+  if (!links.length) return;
+  var byId = {}, targets = [];
+  links.forEach(function (a) {
+    var el = document.getElementById(decodeURIComponent(a.getAttribute('href').slice(1)));
+    if (el) { byId[el.id] = a; targets.push(el); }
+  });
+  var current = null;
+  function onScroll() {
+    var best = null;
+    for (var i = 0; i < targets.length; i++) {
+      if (targets[i].getBoundingClientRect().top <= 90) best = targets[i]; else break;
+    }
+    if (!best) best = targets[0];
+    if (best === current) return;
+    current = best;
+    links.forEach(function (a) { a.classList.remove('active'); });
+    if (byId[best.id]) byId[best.id].classList.add('active');
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+})();
+</script>
+</body>
+</html>

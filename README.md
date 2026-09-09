@@ -15,7 +15,7 @@
 - **הרצאה 3** — דרישות → [צפייה במצגת](https://dcodish.github.io/SAD-course-materials/lecture-03/) · [PDF להדפסה](Lectures%20PDF%20Format/lecture-03.pdf) · _עודכן 30.08.2026_
 - **הרצאה 4-5** — תרשים תרחישי שימוש — Use Case → [צפייה במצגת](https://dcodish.github.io/SAD-course-materials/lecture-04-05/) · [PDF להדפסה](Lectures%20PDF%20Format/lecture-04-05.pdf) · _עודכן 30.08.2026_
 - **הרצאה 6-7** — תרשים מחלקות — Class Diagram → [צפייה במצגת](https://dcodish.github.io/SAD-course-materials/lecture-06-07/) · [PDF להדפסה](Lectures%20PDF%20Format/lecture-06-07.pdf) · _עודכן 30.08.2026_
-- **הרצאה 8** — תרשים מצבים — State Diagram → [צפייה במצגת](https://dcodish.github.io/SAD-course-materials/lecture-08/) · [PDF להדפסה](Lectures%20PDF%20Format/lecture-08.pdf) · _עודכן 30.08.2026_
+- **הרצאה 8** — תרשים מצבים — State Diagram → [צפייה במצגת](https://dcodish.github.io/SAD-course-materials/lecture-08/) · [PDF להדפסה](Lectures%20PDF%20Format/lecture-08.pdf) · _עודכן 01.09.2026_
 - **הרצאה 10** — חקר ישימות והערכת חלופות → [צפייה במצגת](https://dcodish.github.io/SAD-course-materials/lecture-10/) · [PDF להדפסה](Lectures%20PDF%20Format/lecture-10.pdf) · _עודכן 30.08.2026_
 - **הרצאה 11** — מתודולוגיות פיתוח → [צפייה במצגת](https://dcodish.github.io/SAD-course-materials/lecture-11/) · [PDF להדפסה](Lectures%20PDF%20Format/lecture-11.pdf) · _עודכן 30.08.2026_
 

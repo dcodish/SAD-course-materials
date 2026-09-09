@@ -9,7 +9,7 @@
      `dist/`). If a handout changes there, re-run the build and re-copy the HTML here.
      Do not edit these HTML files by hand — they are generated. -->
 
-## 🛠️ סדנה: מניתוח ל-CRUD עובד עם Claude Code
+## 🛠️ סדנה: מניתוח לפיתוח עם Claude Code
 
 סדנה מעשית שבה כל קבוצה לוקחת את **הניתוח והעיצוב שלה** (חלק א׳ + חלק ב׳) והופכת אותם
 למערכת WinForms שרצה — בסיס נתונים, מסך התחברות ומסכי CRUD — כשכל העבודה מונעת מתוך
@@ -27,4 +27,16 @@ Claude Code.
   <sub>(הקובץ עצמו: [`סדנת-Claude-Code/PREREQS.html`](סדנת-Claude-Code/PREREQS.html) —
   קישור זה מציג את קוד המקור ב-GitHub, לא את המדריך.)</sub>
 
-_שאר חומרי הסדנה (מדריך השלבים המלא, דף ה-Prompts, מדריך ה-git והמצגת) יתווספו בהמשך._
+### חומרי הסדנה
+
+| קובץ | מה זה |
+|---|---|
+| [📊 מצגת השיעור](https://dcodish.github.io/SAD-course-materials/materials/6-%D7%A4%D7%99%D7%AA%D7%95%D7%97/%D7%A1%D7%93%D7%A0%D7%AA-Claude-Code/SLIDE_DECK.html) | מצגת ההרצאה. ניווט בחצים, `O` לסקירת השקפים, `F` למסך מלא |
+| [📘 שלבי השיעור — המדריך המלא](https://dcodish.github.io/SAD-course-materials/materials/6-%D7%A4%D7%99%D7%AA%D7%95%D7%97/%D7%A1%D7%93%D7%A0%D7%AA-Claude-Code/LESSON_STEPS.html) | כל שלב עם ההסברים, ה-Prompts ונקודות הבדיקה |
+| [⚡ דף ה-Prompts](https://dcodish.github.io/SAD-course-materials/materials/6-%D7%A4%D7%99%D7%AA%D7%95%D7%97/%D7%A1%D7%93%D7%A0%D7%AA-Claude-Code/PROMPTS_CHEATSHEET.html) | כל ה-Prompts להעתקה-הדבקה, לפי שלבים |
+| [🔀 עבודה עם git בקבוצה](https://dcodish.github.io/SAD-course-materials/materials/6-%D7%A4%D7%99%D7%AA%D7%95%D7%97/%D7%A1%D7%93%D7%A0%D7%AA-Claude-Code/GIT_GROUP_WORKFLOW.html) | שגרת pull/commit/push, חלוקת עבודה וקונפליקטים |
+
+<sub>הקישורים מובילים לאתר הקורס. הקבצים עצמם יושבים ב-`סדנת-Claude-Code/` — לחיצה עליהם
+ישירות ב-GitHub מציגה קוד מקור ולא את המסמך.</sub>
+
+בסדנה עוקבים אחרי **שלבי השיעור**, ודף ה-Prompts פתוח לצידו להעתקה.
