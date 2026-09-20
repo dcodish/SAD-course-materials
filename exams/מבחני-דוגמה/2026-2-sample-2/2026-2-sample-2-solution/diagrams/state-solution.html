@@ -117,8 +117,7 @@
     <line x1="40" y1="636" x2="260" y2="636" stroke="#3b82f6" stroke-width="1"/>
     <rect x="40" y="610" width="220" height="80" rx="18" ry="18" fill="none" stroke="#3b82f6" stroke-width="2"/>
     <text x="150" y="628" font-size="12" font-weight="700" fill="#1e293b" text-anchor="middle" font-family="'Noto Sans Hebrew',sans-serif">&#1489;&#1493;&#1496;&#1500;&#1492;</text>
-    <text x="50" y="656" font-size="10" fill="#334155" font-family="'IBM Plex Mono',monospace">entry / setStatus('CANCELLED');</text>
-    <text x="50" y="672" font-size="9" fill="#334155" font-family="'IBM Plex Mono',monospace">        setClosureReason('CANCELLED')</text>
+    <text x="50" y="656" font-size="10" fill="#334155" font-family="'IBM Plex Mono',monospace">entry / closeAsCancelled()</text>
   </g>
   <!-- EXPIRED (under WAITLISTED) -->
   <g data-state="st-expired">
@@ -128,8 +127,7 @@
     <line x1="660" y1="636" x2="880" y2="636" stroke="#3b82f6" stroke-width="1"/>
     <rect x="660" y="610" width="220" height="80" rx="18" ry="18" fill="none" stroke="#3b82f6" stroke-width="2"/>
     <text x="770" y="628" font-size="12" font-weight="700" fill="#1e293b" text-anchor="middle" font-family="'Noto Sans Hebrew',sans-serif">&#1508;&#1490;&#1514;-&#1514;&#1493;&#1511;&#1507;</text>
-    <text x="670" y="656" font-size="10" fill="#334155" font-family="'IBM Plex Mono',monospace">entry / setStatus('EXPIRED');</text>
-    <text x="670" y="672" font-size="9" fill="#334155" font-family="'IBM Plex Mono',monospace">        setClosureReason('EXPIRED')</text>
+    <text x="670" y="656" font-size="10" fill="#334155" font-family="'IBM Plex Mono',monospace">entry / closeAsExpired()</text>
   </g>
   <!-- SEATED (under CONFIRMED) -->
   <g data-state="st-seated">
@@ -149,8 +147,7 @@
     <line x1="1300" y1="636" x2="1520" y2="636" stroke="#3b82f6" stroke-width="1"/>
     <rect x="1300" y="610" width="220" height="80" rx="18" ry="18" fill="none" stroke="#3b82f6" stroke-width="2"/>
     <text x="1410" y="628" font-size="12" font-weight="700" fill="#1e293b" text-anchor="middle" font-family="'Noto Sans Hebrew',sans-serif">&#1500;&#1488; &#1492;&#1493;&#1508;&#1497;&#1506;&#1493;</text>
-    <text x="1310" y="656" font-size="10" fill="#334155" font-family="'IBM Plex Mono',monospace">entry / setStatus('NO_SHOW');</text>
-    <text x="1310" y="672" font-size="9" fill="#334155" font-family="'IBM Plex Mono',monospace">        setClosureReason('NO_SHOW')</text>
+    <text x="1310" y="656" font-size="10" fill="#334155" font-family="'IBM Plex Mono',monospace">entry / closeAsNoShow()</text>
   </g>
   <!-- COMPLETED (under SEATED) -->
   <g data-state="st-completed">
@@ -160,8 +157,7 @@
     <line x1="970" y1="796" x2="1190" y2="796" stroke="#3b82f6" stroke-width="1"/>
     <rect x="970" y="770" width="220" height="80" rx="18" ry="18" fill="none" stroke="#3b82f6" stroke-width="2"/>
     <text x="1080" y="788" font-size="12" font-weight="700" fill="#1e293b" text-anchor="middle" font-family="'Noto Sans Hebrew',sans-serif">&#1492;&#1493;&#1513;&#1500;&#1502;&#1492;</text>
-    <text x="980" y="816" font-size="10" fill="#334155" font-family="'IBM Plex Mono',monospace">entry / setStatus('COMPLETED');</text>
-    <text x="980" y="832" font-size="9" fill="#334155" font-family="'IBM Plex Mono',monospace">        setClosureReason('COMPLETED')</text>
+    <text x="980" y="816" font-size="10" fill="#334155" font-family="'IBM Plex Mono',monospace">entry / closeAsCompleted()</text>
   </g>
 
   <!-- ============ pseudostates ============ -->
@@ -326,11 +322,11 @@ const diagramModel = {
         ] },
       { kind: 'state', id: 'st-cancelled', name: 'בוטלה', isComposite: false,
         statusConstant: 'CANCELLED',
-        activities: { entry: ["setStatus('CANCELLED')", "setClosureReason('CANCELLED')"], exit: [], do: [] },
+        activities: { entry: ["closeAsCancelled()"], exit: [], do: [] },
         x: 40, y: 610, w: 220, h: 80, subElements: [] },
       { kind: 'state', id: 'st-expired', name: 'פגת-תוקף', isComposite: false,
         statusConstant: 'EXPIRED',
-        activities: { entry: ["setStatus('EXPIRED')", "setClosureReason('EXPIRED')"], exit: [], do: [] },
+        activities: { entry: ["closeAsExpired()"], exit: [], do: [] },
         x: 660, y: 610, w: 220, h: 80, subElements: [] },
       { kind: 'state', id: 'st-seated', name: 'פעילה', isComposite: false,
         statusConstant: 'SEATED',
@@ -338,11 +334,11 @@ const diagramModel = {
         x: 970, y: 610, w: 220, h: 80, subElements: [] },
       { kind: 'state', id: 'st-noshow', name: 'לא הופיעו', isComposite: false,
         statusConstant: 'NO_SHOW',
-        activities: { entry: ["setStatus('NO_SHOW')", "setClosureReason('NO_SHOW')"], exit: [], do: [] },
+        activities: { entry: ["closeAsNoShow()"], exit: [], do: [] },
         x: 1300, y: 610, w: 220, h: 80, subElements: [] },
       { kind: 'state', id: 'st-completed', name: 'הושלמה', isComposite: false,
         statusConstant: 'COMPLETED',
-        activities: { entry: ["setStatus('COMPLETED')", "setClosureReason('COMPLETED')"], exit: [], do: [] },
+        activities: { entry: ["closeAsCompleted()"], exit: [], do: [] },
         x: 970, y: 770, w: 220, h: 80, subElements: [] },
       { kind: 'state', id: 'st-archive', name: 'ארכיון', isComposite: false,
         statusConstant: 'ARCHIVED',

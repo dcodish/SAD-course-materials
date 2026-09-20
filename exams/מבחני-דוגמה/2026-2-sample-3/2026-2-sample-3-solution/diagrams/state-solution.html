@@ -78,8 +78,7 @@
     <line x1="165" y1="191" x2="390" y2="191" stroke="#3b82f6" stroke-width="1"/>
     <rect x="165" y="165" width="225" height="105" rx="18" ry="18" fill="none" stroke="#3b82f6" stroke-width="2"/>
     <text x="277.5" y="183" font-size="12" font-weight="700" fill="#1e293b" text-anchor="middle" font-family="'Noto Sans Hebrew',sans-serif">מוזמנת</text>
-    <text x="176" y="211" font-size="10" fill="#334155" font-family="'IBM Plex Mono',monospace">entry / setStatus('RESERVED');</text>
-    <text x="176" y="227" font-size="10" fill="#334155" font-family="'IBM Plex Mono',monospace">        startHoldTimer(3d)</text>
+    <text x="176" y="211" font-size="10" fill="#334155" font-family="'IBM Plex Mono',monospace">entry / placeHold()</text>
     <text x="176" y="243" font-size="10" fill="#334155" font-family="'IBM Plex Mono',monospace">exit / stopHoldTimer()</text>
   </g>
   <!-- מושאלת (ACTIVE) -->
@@ -90,8 +89,7 @@
     <line x1="545" y1="191" x2="770" y2="191" stroke="#3b82f6" stroke-width="1"/>
     <rect x="545" y="165" width="225" height="105" rx="18" ry="18" fill="none" stroke="#3b82f6" stroke-width="2"/>
     <text x="657.5" y="183" font-size="12" font-weight="700" fill="#1e293b" text-anchor="middle" font-family="'Noto Sans Hebrew',sans-serif">מושאלת</text>
-    <text x="556" y="211" font-size="10" fill="#334155" font-family="'IBM Plex Mono',monospace">entry / setStatus('ACTIVE');</text>
-    <text x="556" y="227" font-size="10" fill="#334155" font-family="'IBM Plex Mono',monospace">        setDueDate(+period)</text>
+    <text x="556" y="211" font-size="10" fill="#334155" font-family="'IBM Plex Mono',monospace">entry / startLoan()</text>
     <text x="556" y="243" font-size="10" fill="#334155" font-family="'IBM Plex Mono',monospace">do / trackRenewals()</text>
   </g>
   <!-- באיחור (OVERDUE) -->
@@ -102,8 +100,7 @@
     <line x1="950" y1="191" x2="1175" y2="191" stroke="#3b82f6" stroke-width="1"/>
     <rect x="950" y="165" width="225" height="105" rx="18" ry="18" fill="none" stroke="#3b82f6" stroke-width="2"/>
     <text x="1062.5" y="183" font-size="12" font-weight="700" fill="#1e293b" text-anchor="middle" font-family="'Noto Sans Hebrew',sans-serif">באיחור</text>
-    <text x="961" y="211" font-size="10" fill="#334155" font-family="'IBM Plex Mono',monospace">entry / setStatus('OVERDUE');</text>
-    <text x="961" y="227" font-size="10" fill="#334155" font-family="'IBM Plex Mono',monospace">        sendReminder()</text>
+    <text x="961" y="211" font-size="10" fill="#334155" font-family="'IBM Plex Mono',monospace">entry / markOverdue()</text>
     <text x="961" y="243" font-size="10" fill="#334155" font-family="'IBM Plex Mono',monospace">do / accrueOverdueDays()</text>
   </g>
 
@@ -116,9 +113,7 @@
     <line x1="40" y1="466" x2="300" y2="466" stroke="#3b82f6" stroke-width="1"/>
     <rect x="40" y="440" width="260" height="100" rx="18" ry="18" fill="none" stroke="#3b82f6" stroke-width="2"/>
     <text x="170" y="458" font-size="12" font-weight="700" fill="#1e293b" text-anchor="middle" font-family="'Noto Sans Hebrew',sans-serif">פקעה</text>
-    <text x="51" y="486" font-size="10" fill="#334155" font-family="'IBM Plex Mono',monospace">entry / setStatus('EXPIRED');</text>
-    <text x="51" y="502" font-size="10" fill="#334155" font-family="'IBM Plex Mono',monospace">        releaseToNextInQueue();</text>
-    <text x="51" y="518" font-size="10" fill="#334155" font-family="'IBM Plex Mono',monospace">        setClosureReason('EXPIRED')</text>
+    <text x="51" y="486" font-size="10" fill="#334155" font-family="'IBM Plex Mono',monospace">entry / expireHold()</text>
   </g>
   <!-- הוחזרה בזמן (RETURNED_ON_TIME) -->
   <g data-state="returned_on_time">
@@ -128,9 +123,7 @@
     <line x1="370" y1="466" x2="630" y2="466" stroke="#3b82f6" stroke-width="1"/>
     <rect x="370" y="440" width="260" height="100" rx="18" ry="18" fill="none" stroke="#3b82f6" stroke-width="2"/>
     <text x="500" y="458" font-size="12" font-weight="700" fill="#1e293b" text-anchor="middle" font-family="'Noto Sans Hebrew',sans-serif">הוחזרה בזמן</text>
-    <text x="381" y="486" font-size="10" fill="#334155" font-family="'IBM Plex Mono',monospace">entry / setStatus('RETURNED_ON_TIME');</text>
-    <text x="381" y="502" font-size="10" fill="#334155" font-family="'IBM Plex Mono',monospace">        setReturnDate(today);</text>
-    <text x="381" y="518" font-size="10" fill="#334155" font-family="'IBM Plex Mono',monospace">        setClosureReason('ON_TIME')</text>
+    <text x="381" y="486" font-size="10" fill="#334155" font-family="'IBM Plex Mono',monospace">entry / closeAsReturnedOnTime()</text>
   </g>
   <!-- הוחזרה באיחור (RETURNED_LATE) -->
   <g data-state="returned_late">
@@ -140,9 +133,7 @@
     <line x1="700" y1="466" x2="960" y2="466" stroke="#3b82f6" stroke-width="1"/>
     <rect x="700" y="440" width="260" height="100" rx="18" ry="18" fill="none" stroke="#3b82f6" stroke-width="2"/>
     <text x="830" y="458" font-size="12" font-weight="700" fill="#1e293b" text-anchor="middle" font-family="'Noto Sans Hebrew',sans-serif">הוחזרה באיחור</text>
-    <text x="711" y="486" font-size="10" fill="#334155" font-family="'IBM Plex Mono',monospace">entry / setStatus('RETURNED_LATE');</text>
-    <text x="711" y="502" font-size="10" fill="#334155" font-family="'IBM Plex Mono',monospace">        calculateFine();</text>
-    <text x="711" y="518" font-size="10" fill="#334155" font-family="'IBM Plex Mono',monospace">        setClosureReason('LATE')</text>
+    <text x="711" y="486" font-size="10" fill="#334155" font-family="'IBM Plex Mono',monospace">entry / closeAsReturnedLate()</text>
   </g>
   <!-- אבודה (LOST) -->
   <g data-state="lost">
@@ -152,9 +143,7 @@
     <line x1="1030" y1="466" x2="1290" y2="466" stroke="#3b82f6" stroke-width="1"/>
     <rect x="1030" y="440" width="260" height="100" rx="18" ry="18" fill="none" stroke="#3b82f6" stroke-width="2"/>
     <text x="1160" y="458" font-size="12" font-weight="700" fill="#1e293b" text-anchor="middle" font-family="'Noto Sans Hebrew',sans-serif">אבודה</text>
-    <text x="1041" y="486" font-size="10" fill="#334155" font-family="'IBM Plex Mono',monospace">entry / setStatus('LOST');</text>
-    <text x="1041" y="502" font-size="10" fill="#334155" font-family="'IBM Plex Mono',monospace">        chargeReplacementFee();</text>
-    <text x="1041" y="518" font-size="10" fill="#334155" font-family="'IBM Plex Mono',monospace">        setClosureReason('LOST')</text>
+    <text x="1041" y="486" font-size="10" fill="#334155" font-family="'IBM Plex Mono',monospace">entry / closeAsLost()</text>
   </g>
 
   <!-- ==== archive states (row 3) ==== -->
@@ -312,31 +301,31 @@ const diagramModel = {
       { kind: 'pseudostate', id: 'init', subKind: 'initial', x: 70, y: 217.5 },
       { kind: 'state', id: 'reserved', name: 'מוזמנת', isComposite: false,
         statusConstant: 'RESERVED',
-        activities: { entry: ["setStatus('RESERVED')", 'startHoldTimer(3d)'], exit: ['stopHoldTimer()'], do: [] },
+        activities: { entry: ["placeHold()"], exit: ['stopHoldTimer()'], do: [] },
         x: 165, y: 165, w: 225, h: 105, subElements: [] },
       { kind: 'state', id: 'active', name: 'מושאלת', isComposite: false,
         statusConstant: 'ACTIVE',
-        activities: { entry: ["setStatus('ACTIVE')", 'setDueDate(+period)'], exit: [], do: ['trackRenewals()'] },
+        activities: { entry: ["startLoan()"], exit: [], do: ['trackRenewals()'] },
         x: 545, y: 165, w: 225, h: 105, subElements: [] },
       { kind: 'state', id: 'overdue', name: 'באיחור', isComposite: false,
         statusConstant: 'OVERDUE',
-        activities: { entry: ["setStatus('OVERDUE')", 'sendReminder()'], exit: [], do: ['accrueOverdueDays()'] },
+        activities: { entry: ["markOverdue()"], exit: [], do: ['accrueOverdueDays()'] },
         x: 950, y: 165, w: 225, h: 105, subElements: [] },
       { kind: 'state', id: 'expired', name: 'פקעה', isComposite: false,
         statusConstant: 'EXPIRED',
-        activities: { entry: ["setStatus('EXPIRED')", 'releaseToNextInQueue()', "setClosureReason('EXPIRED')"], exit: [], do: [] },
+        activities: { entry: ["expireHold()"], exit: [], do: [] },
         x: 40, y: 440, w: 260, h: 100, subElements: [] },
       { kind: 'state', id: 'returned_on_time', name: 'הוחזרה בזמן', isComposite: false,
         statusConstant: 'RETURNED_ON_TIME',
-        activities: { entry: ["setStatus('RETURNED_ON_TIME')", 'setReturnDate(today)', "setClosureReason('ON_TIME')"], exit: [], do: [] },
+        activities: { entry: ["closeAsReturnedOnTime()"], exit: [], do: [] },
         x: 370, y: 440, w: 260, h: 100, subElements: [] },
       { kind: 'state', id: 'returned_late', name: 'הוחזרה באיחור', isComposite: false,
         statusConstant: 'RETURNED_LATE',
-        activities: { entry: ["setStatus('RETURNED_LATE')", 'calculateFine()', "setClosureReason('LATE')"], exit: [], do: [] },
+        activities: { entry: ["closeAsReturnedLate()"], exit: [], do: [] },
         x: 700, y: 440, w: 260, h: 100, subElements: [] },
       { kind: 'state', id: 'lost', name: 'אבודה', isComposite: false,
         statusConstant: 'LOST',
-        activities: { entry: ["setStatus('LOST')", 'chargeReplacementFee()', "setClosureReason('LOST')"], exit: [], do: [] },
+        activities: { entry: ["closeAsLost()"], exit: [], do: [] },
         x: 1030, y: 440, w: 260, h: 100, subElements: [] },
       { kind: 'state', id: 'archive_ops', name: 'ארכיון תפעולי', isComposite: false,
         statusConstant: 'ARCHIVED_OPS',

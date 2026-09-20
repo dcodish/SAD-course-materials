@@ -86,8 +86,8 @@
     <line x1="930" y1="196" x2="1150" y2="196" stroke="#3b82f6" stroke-width="1"/>
     <rect x="930" y="170" width="220" height="80" rx="18" ry="18" fill="none" stroke="#3b82f6" stroke-width="2"/>
     <text x="1040" y="188" font-size="12" font-weight="700" fill="#1e293b" text-anchor="middle" font-family="'Noto Sans Hebrew',sans-serif">נוצרה</text>
-    <text x="940" y="216" font-size="10" fill="#334155" font-family="'IBM Plex Mono',monospace">entry / setStatus('CREATED');</text>
-    <text x="985" y="232" font-size="10" fill="#334155" font-family="'IBM Plex Mono','Noto Sans Hebrew',monospace">פתיחת חשבון לראש המשלחת</text>
+    <text x="940" y="216" font-size="10" fill="#334155" font-family="'IBM Plex Mono',monospace">entry / openDelegationAccount()</text>
+    <text x="985" y="232" font-size="10" fill="#334155" font-family="'IBM Plex Mono','Noto Sans Hebrew',monospace">-- setStatus('CREATED'); פתיחת חשבון לראש המשלחת</text>
   </g>
   <!-- submitted -->
   <g data-state="st-submitted">
@@ -268,7 +268,7 @@ const diagramModel = {
           { kind: 'pseudostate', id: 'ps-initial-prep', subKind: 'initial', x: 1040, y: 145 },
           { kind: 'state', id: 'st-created', name: 'נוצרה', isComposite: false,
             statusConstant: 'CREATED',
-            activities: { entry: ["setStatus('CREATED')", 'פתיחת חשבון לראש המשלחת'], exit: [], do: [] },
+            activities: { entry: ['openDelegationAccount()'], exit: [], do: [] },
             x: 930, y: 170, w: 220, h: 80, subElements: [] },
           { kind: 'state', id: 'st-submitted', name: 'הוגשה לאישור', isComposite: false,
             statusConstant: 'SUBMITTED',

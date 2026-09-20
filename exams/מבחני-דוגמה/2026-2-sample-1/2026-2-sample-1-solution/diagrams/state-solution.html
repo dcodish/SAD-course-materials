@@ -171,8 +171,7 @@
       <rect x="1180" y="315" width="210" height="12" fill="#f3e8ff"/>
       <text x="1285" y="319" text-anchor="middle" font-size="14" font-weight="700" fill="#4c1d95" font-family="Noto Sans Hebrew, sans-serif">הסתיים</text>
       <line x1="1180" y1="327" x2="1390" y2="327" stroke="#7c3aed" stroke-width="1"/>
-      <text x="1190" y="346" font-size="9.3" font-style="italic" fill="#4c1d95" font-family="IBM Plex Mono">entry / setStatus('ENDED');</text>
-      <text x="1190" y="362" font-size="8.4" font-style="italic" fill="#4c1d95" font-family="IBM Plex Mono">        setClosureReason('ENDED')</text>
+      <text x="1190" y="346" font-size="9.3" font-style="italic" fill="#4c1d95" font-family="IBM Plex Mono">entry / closeAsEnded()</text>
     </g>
 
     <!-- ================= CANCELLED ================= -->
@@ -182,8 +181,7 @@
       <rect x="430" y="705" width="205" height="12" fill="#fee2e2"/>
       <text x="532.5" y="709" text-anchor="middle" font-size="14" font-weight="700" fill="#7f1d1d" font-family="Noto Sans Hebrew, sans-serif">בוטל</text>
       <line x1="430" y1="717" x2="635" y2="717" stroke="#b91c1c" stroke-width="1"/>
-      <text x="440" y="736" font-size="9.3" font-style="italic" fill="#7f1d1d" font-family="IBM Plex Mono">entry / setStatus('CANCELLED');</text>
-      <text x="440" y="752" font-size="8" font-style="italic" fill="#7f1d1d" font-family="IBM Plex Mono">        setClosureReason('CANCELLED')</text>
+      <text x="440" y="736" font-size="9.3" font-style="italic" fill="#7f1d1d" font-family="IBM Plex Mono">entry / closeAsCancelled()</text>
     </g>
 
     <!-- ================= ARCHIVE ================= -->
@@ -374,11 +372,11 @@ const diagramModel = {
         x: 830, y: 430, w: 225, h: 100, subElements: [] },
       { kind: 'state', id: 'ended', name: 'הסתיים', isComposite: false,
         statusConstant: 'ENDED',
-        activities: { entry: ["setStatus('ENDED')", "setClosureReason('ENDED')"], exit: [], do: [] },
+        activities: { entry: ["closeAsEnded()"], exit: [], do: [] },
         x: 1180, y: 300, w: 210, h: 80, subElements: [] },
       { kind: 'state', id: 'cancelled', name: 'בוטל', isComposite: false,
         statusConstant: 'CANCELLED',
-        activities: { entry: ["setStatus('CANCELLED')", "setClosureReason('CANCELLED')"], exit: [], do: [] },
+        activities: { entry: ["closeAsCancelled()"], exit: [], do: [] },
         x: 430, y: 690, w: 205, h: 80, subElements: [] },
       { kind: 'state', id: 'archive', name: 'ארכיון', isComposite: false,
         statusConstant: 'ARCHIVED',

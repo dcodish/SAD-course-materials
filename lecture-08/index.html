@@ -17,7 +17,7 @@
       <h1>תרשים מצבים — State Diagram</h1>
       <div class="lecture-no">הרצאה 8</div>
       <img class="cover-img" src="assets/title.png" alt="">
-      <div class="updated">עודכן: 01.09.2026</div>
+      <div class="updated">עודכן: 20.09.2026</div>
     </section>
     <section class="toc-slide" data-slug="toc">
       <h1>סדר היום</h1>
@@ -893,15 +893,14 @@
           <div class="ex">
             <div class="panel-title">כך נראה מצב בתרשים</div>
             <svg class="sd-svg" viewBox="0 0 470 205" xmlns="http://www.w3.org/2000/svg" role="img"
-                 aria-label="תיבת מצב: מוכנה, עם תא פעילות entry / setStatus('READY'); notifyStudent()">
+                 aria-label="תיבת מצב: מוכנה, עם תא פעילות ובו פעולה אחת: entry / setStatus('READY')">
               <!-- state box -->
               <rect x="16" y="14" width="310" height="150" rx="16" ry="16" fill="#fff" stroke="#3b82f6" stroke-width="2"/>
               <path d="M16,30 a16,16 0 0 1 16,-16 h278 a16,16 0 0 1 16,16 v34 h-310 z" fill="#eef4ff"/>
               <text x="171" y="48" direction="rtl" text-anchor="middle" font-size="21" font-weight="700" fill="#1e293b"
                     font-family="'Segoe UI',Arial,sans-serif">מוכנה</text>
               <line x1="16" y1="64" x2="326" y2="64" stroke="#3b82f6" stroke-width="1.6"/>
-              <text x="30" y="100" text-anchor="start" font-size="15" fill="#334155" font-family="Consolas,monospace">entry / setStatus('READY');</text>
-              <text x="30" y="126" text-anchor="start" font-size="15" fill="#334155" font-family="Consolas,monospace">        notifyStudent()</text>
+              <text x="30" y="112" text-anchor="start" font-size="15" fill="#334155" font-family="Consolas,monospace">entry / setStatus('READY')</text>
               <!-- annotations -->
               <line x1="326" y1="40" x2="356" y2="40" stroke="#94a3b8" stroke-width="1.2" stroke-dasharray="3 3"/>
               <text x="410" y="45" direction="rtl" text-anchor="middle" font-size="14.5" font-weight="700" fill="#004E8C"
@@ -1238,8 +1237,7 @@
               <text x="410" y="142" direction="rtl" text-anchor="middle" font-size="15" font-weight="700" fill="#1e293b"
                     font-family="'Segoe UI',Arial,sans-serif">ממתינה</text>
               <line x1="310" y1="151" x2="510" y2="151" stroke="#3b82f6" stroke-width="1.4"/>
-              <text x="320" y="172" text-anchor="start" font-size="11" fill="#334155" font-family="Consolas,monospace">entry / setStatus('PENDING');</text>
-              <text x="320" y="188" text-anchor="start" font-size="11" fill="#334155" font-family="Consolas,monospace">        notifyKitchen()</text>
+              <text x="320" y="180" text-anchor="start" font-size="11" fill="#334155" font-family="Consolas,monospace">entry / queueForKitchen()</text>
 
               <!-- transition ממתינה → בהכנה (leftwards, RTL reading) -->
               <line x1="310" y1="159" x2="232" y2="159" stroke="#334155" stroke-width="1.8" marker-end="url(#tr-arr)"/>
@@ -1281,7 +1279,7 @@
         ״תשלום אושר״ ו״תשלום נכשל״ — שני חצים, אחד ל-ממתינה ואחד חזרה (מעבר עצמי על ממתינה לתשלום).
         <b>המעבר העצמי</b> הוא הדבר שהכי מפתיע סטודנטים: ״אבל כלום לא השתנה!״ — המצב לא, הנתונים כן. שעת
         איסוף חדשה היא אירוע שההזמנה חייבת לקבל, והיא נשארת ממתינה. וה-<code>entry</code> רץ שוב — כאן
-        זה אומר שהמטבח מקבל הודעה מעודכנת (<code>notifyKitchen()</code>), וזה בדיוק מה שרוצים.
+        זה אומר ש-<code>queueForKitchen()</code> רץ שוב, ואיתו <code>notifyKitchen()</code> — המטבח מקבל הודעה מעודכנת, וזה בדיוק מה שרוצים.
         <b>מה עדיין לא כאן:</b> תנאי ואירוע-זמן — השקף הבא. כאן רק החץ והאירוע.
       </aside>
     </section>
@@ -1371,16 +1369,14 @@
               <text x="512" y="104" direction="rtl" text-anchor="middle" font-size="15" font-weight="700" fill="#1e293b"
                     font-family="'Segoe UI',Arial,sans-serif">מוכנה</text>
               <line x1="395" y1="113" x2="610" y2="113" stroke="#3b82f6" stroke-width="1.4"/>
-              <text x="405" y="134" text-anchor="start" font-size="11" fill="#334155" font-family="Consolas,monospace">entry / setStatus('READY');</text>
-              <text x="405" y="150" text-anchor="start" font-size="11" fill="#334155" font-family="Consolas,monospace">        notifyStudent()</text>
+              <text x="405" y="142" text-anchor="start" font-size="11" fill="#334155" font-family="Consolas,monospace">entry / announceReady()</text>
 
               <!-- נאספה (left) -->
               <rect x="20" y="80" width="200" height="82" rx="14" ry="14" fill="#fff" stroke="#3b82f6" stroke-width="1.8"/>
               <text x="120" y="104" direction="rtl" text-anchor="middle" font-size="15" font-weight="700" fill="#1e293b"
                     font-family="'Segoe UI',Arial,sans-serif">נאספה</text>
               <line x1="20" y1="113" x2="220" y2="113" stroke="#3b82f6" stroke-width="1.4"/>
-              <text x="30" y="134" text-anchor="start" font-size="11" fill="#334155" font-family="Consolas,monospace">entry / setStatus('COLLECTED');</text>
-              <text x="30" y="150" text-anchor="start" font-size="11" fill="#334155" font-family="Consolas,monospace">        setClosureReason('COLLECTED')</text>
+              <text x="30" y="142" text-anchor="start" font-size="11" fill="#334155" font-family="Consolas,monospace">entry / closeAsCollected()</text>
 
               <!-- guarded transition מוכנה → נאספה -->
               <line x1="395" y1="121" x2="222" y2="121" stroke="#334155" stroke-width="1.8" marker-end="url(#eg-arr)"/>
@@ -1407,8 +1403,7 @@
               <text x="512" y="238" direction="rtl" text-anchor="middle" font-size="15" font-weight="700" fill="#1e293b"
                     font-family="'Segoe UI',Arial,sans-serif">לא נאספה</text>
               <line x1="395" y1="247" x2="610" y2="247" stroke="#3b82f6" stroke-width="1.4"/>
-              <text x="405" y="268" text-anchor="start" font-size="10.5" fill="#334155" font-family="Consolas,monospace">entry / setStatus('NOT_COLLECTED');</text>
-              <text x="405" y="284" text-anchor="start" font-size="10.5" fill="#334155" font-family="Consolas,monospace">        setClosureReason('NOT_COLLECTED')</text>
+              <text x="405" y="276" text-anchor="start" font-size="10.5" fill="#334155" font-family="Consolas,monospace">entry / closeAsNotCollected()</text>
 
               <!-- side note on the left-bottom: what BR-2 is -->
               <text x="120" y="210" direction="rtl" text-anchor="middle" font-size="11.5" font-weight="700" fill="#0891b2"
@@ -1452,8 +1447,9 @@
     <div class="acro-footer"><span class="acro"><span class="en">AI</span> = <span class="en">Artificial Intelligence</span> · בינה מלאכותית</span></div>
     </section>
     <!-- B5 — פעולות במצב: entry / exit / do. REFRESH of the old `actions` (generic examples) onto the
-         campus order. Teaches: the three compartment lines; each kind at most once per state, several
-         actions in one clause separated by `;`; `entry / setStatus(...)` on EVERY state (the tracked
+         campus order. Teaches: the three compartment lines; each kind at most once per state AND one
+         action per kind, so two things on entry = ONE wrapper method (Visual Paradigm gives entry a
+         single field); `entry / setStatus(...)` on EVERY state (the tracked
          status); `do` only where something genuinely runs (בהכנה: `do / prepareItems()`); entry re-runs
          on re-entry (self-loop too); these lines ARE the class's methods — the diagram hands the
          developer a method list. SVG: מוכנה and בהכנה boxes with compartments. LTR guard first. -->
@@ -1518,8 +1514,9 @@
                       <code>do / prepareItems()</code>. ברוב המצבים <b>אין</b>.</td></tr>
             </table>
             <ul class="list">
-              <li><b>כל סוג לכל היותר פעם אחת</b> בכל מצב. שתי פעולות בכניסה? שורה אחת, מופרדות ב-<code>;</code>
-                — <span class="no">לא</span> שתי שורות <code>entry</code>.</li>
+              <li><b>כל סוג לכל היותר פעם אחת, ופעולה אחת בלבד.</b> שתי פעולות בכניסה? כותבים
+                <b>שיטת עטיפה</b> אחת שקוראת לשתיהן — <span class="no">לא</span> שתי שורות <code>entry</code>
+                ו<span class="no">לא</span> שתי קריאות באותה שורה. ל-<code>entry</code> יש שדה אחד בלבד.</li>
               <li><b>הסדר:</b> <code>exit</code> של המצב הישן ← פעולת המעבר (<code>/ action</code> על החץ) ←
                 <code>entry</code> של החדש.</li>
               <li><b>פעולה ≠ מצב:</b> ״נשלחה התראה״ אינה תיבה. היא <code>notifyStudent()</code> בכניסה למוכנה.</li>
@@ -1530,7 +1527,7 @@
           <div class="ex">
             <div class="panel-title">בהזמנה: בהכנה ומוכנה</div>
             <svg class="sd-svg" viewBox="0 0 520 206" xmlns="http://www.w3.org/2000/svg" role="img"
-                 aria-label="שתי תיבות מצב: בהכנה עם entry / setStatus('IN_PREPARATION') ו-do / prepareItems(); מוכנה עם entry / setStatus('READY'); notifyStudent()">
+                 aria-label="שתי תיבות מצב: בהכנה עם entry / setStatus('IN_PREPARATION') ו-do / prepareItems(); מוכנה עם entry / announceReady() — שיטת עטיפה הקוראת ל-setStatus ול-notifyStudent">
               <!-- בהכנה (right, RTL-first) -->
               <rect x="268" y="12" width="244" height="150" rx="16" ry="16" fill="#fff" stroke="#3b82f6" stroke-width="2"/>
               <text x="390" y="44" direction="rtl" text-anchor="middle" font-size="20" font-weight="700" fill="#1e293b"
@@ -1548,17 +1545,16 @@
               <text x="130" y="44" direction="rtl" text-anchor="middle" font-size="20" font-weight="700" fill="#1e293b"
                     font-family="'Segoe UI',Arial,sans-serif">מוכנה</text>
               <line x1="8" y1="58" x2="252" y2="58" stroke="#3b82f6" stroke-width="1.6"/>
-              <text x="20" y="92" text-anchor="start" font-size="14" fill="#334155" font-family="Consolas,monospace">entry / setStatus('READY');</text>
-              <text x="20" y="116" text-anchor="start" font-size="14" fill="#334155" font-family="Consolas,monospace">        notifyStudent()</text>
+              <text x="20" y="98" text-anchor="start" font-size="14" fill="#334155" font-family="Consolas,monospace">entry / announceReady()</text>
               <text x="130" y="182" direction="rtl" text-anchor="middle" font-size="12" fill="#555"
-                    font-family="'Segoe UI',Arial,sans-serif">שתי פעולות, שורת entry אחת,</text>
-              <text x="130" y="197" direction="rtl" text-anchor="middle" font-size="12" fill="#555"
-                    font-family="'Segoe UI',Arial,sans-serif">מופרדות ב-;</text>
+                    font-family="'Segoe UI',Arial,sans-serif">שתי פעולות בכניסה עטופות בשיטה אחת:</text>
+              <text x="130" y="197" text-anchor="middle" font-size="10" fill="#555"
+                    font-family="Consolas,monospace">announceReady() = setStatus('READY'); notifyStudent()</text>
             </svg>
             <div class="methods">
               <b>מה המפתח מקבל מכאן — רשימת שיטות למחלקה <span class="en">Order</span>:</b>
-              <code>setStatus()</code> · <code>notifyKitchen()</code> · <code>prepareItems()</code> · <code>notifyStudent()</code> ·
-              <code>markCollected()</code> · <code>refund()</code> · <code>archive()</code> · <code>purge()</code>
+              <code>announceReady()</code> · <code>setStatus()</code> · <code>notifyKitchen()</code> · <code>prepareItems()</code> ·
+              <code>notifyStudent()</code> · <code>markCollected()</code> · <code>refund()</code> · <code>archive()</code> · <code>purge()</code>
             </div>
           </div>
 
@@ -1582,7 +1578,10 @@
         <b>do הוא המקום שבו סטודנטים מגזימים:</b> ״do / waitForStudent()״ על מוכנה — לא. להמתין זה לא לרוץ.
         do הוא לפעילות שהמערכת או מישהו מבצע באופן פעיל לאורך המצב: בהכנה המטבח מכין. ובארכיון בוודאי אין do.
         <b>״פעם אחת מכל סוג״:</b> שתי שורות entry הן טעות סימון שה-AI עושה הרבה (ראו חידון ״מה לא בסדר״). התיקון
-        טכני — שורה אחת עם ; — אבל הוא מלמד לחשוב על ה-entry כעל <i>שיטה אחת</i> שעושה כמה דברים.
+        הוא <b>שיטת עטיפה</b>: שיטה אחת על שם הצעד העסקי (<code>announceReady()</code>) שבגופה קוראת
+        ל-setStatus ול-notifyStudent. שדה ה-entry בכלי מידול (Visual Paradigm) מקבל פעולה אחת, וגם
+        בקוד זה נכון יותר: שם לצעד, לא רשימת פקודות. מה שהעטיפה מסתירה — הגוף — נאמר ברשימת
+        השיטות שליד התרשים, לא בתוך התיבה.
         <b>entry רץ גם במעבר עצמי:</b> ממתינה חוזרת לממתינה אחרי עדכון שעת איסוף — ו-notifyKitchen() רץ שוב,
         כך שהמטבח רואה את השעה החדשה. זו לא תופעת לוואי, זו הסיבה שהמעבר העצמי נכון.
         <b>רשימת השיטות:</b> שווה להראות שהיא נגזרת ישירות מהתרשים ולא מהדמיון — כל שם שם מופיע בתא כלשהו או
@@ -2375,21 +2374,23 @@
                   <rect x="10" y="6" width="165" height="80" rx="14" ry="14" fill="#fff" stroke="#3b82f6" stroke-width="1.8"/>
                   <text x="92" y="24" direction="rtl" text-anchor="middle" font-size="15" font-weight="700" fill="#1e293b" font-family="'Segoe UI',Arial,sans-serif">נאספה</text>
                   <line x1="10" y1="30" x2="175" y2="30" stroke="#3b82f6" stroke-width="1.2"/>
-                  <text x="16" y="46">entry / setStatus('COLLECTED');</text>
-                  <text x="16" y="60">  setClosureReason('COLLECTED')</text>
+                  <text x="16" y="48" font-size="9.4">entry / closeAsCollected()</text>
+                  <text x="16" y="66" font-size="7.4" fill="#64748b">-- setStatus('COLLECTED')</text>
+                  <text x="16" y="77" font-size="7.4" fill="#64748b">-- setClosureReason('COLLECTED')</text>
 
                   <rect x="187" y="6" width="165" height="80" rx="14" ry="14" fill="#fff" stroke="#3b82f6" stroke-width="1.8"/>
                   <text x="269" y="24" direction="rtl" text-anchor="middle" font-size="15" font-weight="700" fill="#1e293b" font-family="'Segoe UI',Arial,sans-serif">בוטלה</text>
                   <line x1="187" y1="30" x2="352" y2="30" stroke="#3b82f6" stroke-width="1.2"/>
-                  <text x="193" y="46">entry / setStatus('CANCELLED');</text>
-                  <text x="193" y="60">  setClosureReason('CANCELLED');</text>
-                  <text x="193" y="74">  refund()</text>
+                  <text x="193" y="48" font-size="9.4">entry / closeAsCancelled()</text>
+                  <text x="193" y="66" font-size="7.4" fill="#64748b">-- setStatus('CANCELLED')</text>
+                  <text x="193" y="77" font-size="7.4" fill="#64748b">-- setClosureReason('CANCELLED'); refund()</text>
 
                   <rect x="364" y="6" width="165" height="80" rx="14" ry="14" fill="#fff" stroke="#3b82f6" stroke-width="1.8"/>
                   <text x="446" y="24" direction="rtl" text-anchor="middle" font-size="15" font-weight="700" fill="#1e293b" font-family="'Segoe UI',Arial,sans-serif">לא נאספה</text>
                   <line x1="364" y1="30" x2="529" y2="30" stroke="#3b82f6" stroke-width="1.2"/>
-                  <text x="370" y="46">entry / setStatus('NOT_COLLECTED');</text>
-                  <text x="370" y="60">  setClosureReason('NOT_COLLECTED')</text>
+                  <text x="370" y="48" font-size="9.4">entry / closeAsNotCollected()</text>
+                  <text x="370" y="66" font-size="7.4" fill="#64748b">-- setStatus('NOT_COLLECTED')</text>
+                  <text x="370" y="77" font-size="7.4" fill="#64748b">-- setClosureReason('NOT_COLLECTED')</text>
                 </g>
 
                 <!-- three arrows converge on ארכיון -->
@@ -2445,7 +2446,9 @@
         שנים. סטודנט שכותב <span class="en">after(X ימים)</span> לא קיבל החלטה, ובכלי זה נפסל. השתיקה
         של המפרט אינה רישיון להשאיר מציין-מקום — בוחרים שורה ומסבירים.
         <b>שתי דקויות לומר בקול:</b> (1) ה-entry של ארכיון דורס את <span class="en">status</span>, ולכן
-        הסיבה לסגירה נשמרת ב-<span class="en">closureReason</span> שנקבע כבר במצב התוצאה — השקף הבא. (2)
+        הסיבה לסגירה נשמרת ב-<span class="en">closureReason</span> שנקבע כבר במצב התוצאה — השקף הבא.
+        שימו לב שלכל תוצאה יש <b>פעולת כניסה אחת</b> — שיטת עטיפה — ושתי הפעולות יושבות בגוףה,
+        המודפס באפור כהערה (<code>--</code>) מתחת לשם — הערה, לא שורת פעולה נוספת. ל-<code>entry</code> יש שדה אחד, ולכן לא משרשרים שתי קריאות ב-<code>;</code>. (2)
         לארכיון אין <span class="en">do</span>: פעילות אינסופית היא גם באג (מעבר השלמה לא יורה לעולם).
         <b>אם שואלים ״ומה עם זכות למחיקה (פרטיות)?״</b> — חץ נוסף מארכיון ל-◎ עם אירוע אמיתי
         (<span class="en">בקשת מחיקה</span>) שעוקף את תקופת השמירה; לא נצייר אותו בקמפוס, אבל זה חוקי.
@@ -2546,9 +2549,8 @@
                 <text x="470" y="30" direction="rtl" text-anchor="middle" font-size="15" font-weight="700" fill="#1e293b">בוטלה</text>
                 <line x1="370" y1="37" x2="570" y2="37" stroke="#3b82f6" stroke-width="1.2"/>
                 <g font-size="9.5" fill="#334155" font-family="Consolas,monospace">
-                  <text x="377" y="52">entry / setStatus('CANCELLED');</text>
-                  <text x="377" y="66">  <tspan fill="#0e7490" font-weight="700">setClosureReason('CANCELLED')</tspan>;</text>
-                  <text x="377" y="80">  refund()</text>
+                  <text x="377" y="56">entry / closeAsCancelled()</text>
+                  <text x="377" y="72" font-size="7.6" fill="#64748b">-- setStatus('CANCELLED'); <tspan fill="#0e7490" font-weight="700">setClosureReason('CANCELLED')</tspan>; refund()</text>
                 </g>
 
                 <!-- בוטלה → ארכיון -->
@@ -2615,7 +2617,9 @@
          בהכנה / מוכנה — the ABSENCE is the rule (T6 leaves ממתינה only); BR-2 ⇒ a guard that CITES the catalog
          (`[BR-2: קוד תואם]`, T8) instead of restating it; BR-3 ⇒ a rule that was a HOLE since L3 (refund? charge?)
          and got DECIDED while designing (David, 2026-08-30: החיוב נשאר — ללא זיכוי) — shown as an ABSENT action:
-         לא נאספה's entry has no refund(), beside בוטלה's entry that has one; a UML note beside the state says why.
+         both outcomes now carry ONE entry action (a wrapper), so the rule lives one level down: the wrapper
+         bodies are printed under the boxes and closeAsNotCollected() has no refund() where closeAsCancelled()
+         does; a UML note beside the state says why.
          Three kinds: BR-4 = missing arrow · BR-2 = guard · BR-3 = missing action. A rule you can't find in the
          diagram was never decided — go get the decision, don't guess. Closing card: design does not create a second home for rules,
          it DISTRIBUTES enforcement (class diagram / state diagram / database / code), every rule written once
@@ -2730,7 +2734,7 @@
             <div class="h"><span class="id">BR-3</span> — חוק שהוכרע תוך כדי עיצוב: פעולה שחסרה</div>
             <div class="quote">הזמנה ששולמה ולא נאספה עד סוף חלון האיסוף — <span class="was">מדיניות טרם הוחלטה</span> <span class="now">החיוב נשאר, ללא זיכוי.</span></div>
             <svg viewBox="0 0 340 214" xmlns="http://www.w3.org/2000/svg" role="img"
-                 aria-label="Two outcome states side by side: Cancelled's entry ends with refund(), Not collected's entry has no refund() — BR-3 decided: no refund; a UML note beside Not collected says BR-3: no refund">
+                 aria-label="Two outcome states side by side, each with a single entry action: closeAsCancelled() vs closeAsNotCollected(). The wrapper bodies are listed under the boxes: the first ends with refund(), the second does not — BR-3 decided: no refund; a UML note beside Not collected says BR-3: no refund">
               <!-- the UML note (dog-eared), anchored to לא נאספה -->
               <path d="M255,34 V50" fill="none" stroke="#64748b" stroke-width="1.3" stroke-dasharray="4 3"/>
               <path d="M214,4 H324 L332,12 V34 H214 Z" fill="#fff7ed" stroke="#E86C00" stroke-width="1.5"/>
@@ -2740,32 +2744,32 @@
               <text x="105" y="24" direction="rtl" text-anchor="middle" font-size="10.5" fill="#64748b" font-family="'Segoe UI',Arial,sans-serif">פתק — מסביר, לא מעביר</text>
               <!-- two outcome states -->
               <g font-family="'Segoe UI',Arial,sans-serif" font-size="13.5" font-weight="700" fill="#1e293b">
-                <rect x="174" y="50" width="162" height="98" rx="12" ry="12" fill="#fff" stroke="#3b82f6" stroke-width="1.8"/>
+                <rect x="174" y="50" width="162" height="46" rx="12" ry="12" fill="#fff" stroke="#3b82f6" stroke-width="1.8"/>
                 <line x1="174" y1="72" x2="336" y2="72" stroke="#3b82f6" stroke-width="1"/>
                 <text x="255" y="66" direction="rtl" text-anchor="middle">לא נאספה</text>
-                <rect x="4" y="50" width="162" height="98" rx="12" ry="12" fill="#fff" stroke="#3b82f6" stroke-width="1.8"/>
+                <rect x="4" y="50" width="162" height="46" rx="12" ry="12" fill="#fff" stroke="#3b82f6" stroke-width="1.8"/>
                 <line x1="4" y1="72" x2="166" y2="72" stroke="#3b82f6" stroke-width="1"/>
                 <text x="85" y="66" direction="rtl" text-anchor="middle">בוטלה</text>
               </g>
               <!-- לא נאספה: entry WITHOUT refund() -->
-              <text x="181" y="86" font-size="9" font-weight="400" fill="#334155" font-family="Consolas,monospace">entry / setStatus(</text>
-              <text x="181" y="98" font-size="9" font-weight="400" fill="#334155" font-family="Consolas,monospace">  'NOT_COLLECTED');</text>
-              <text x="181" y="110" font-size="9" font-weight="400" fill="#334155" font-family="Consolas,monospace">  setClosureReason(</text>
-              <text x="181" y="122" font-size="9" font-weight="400" fill="#334155" font-family="Consolas,monospace">  'NOT_COLLECTED')</text>
-              <text x="196" y="138" font-size="9" font-weight="400" fill="#94a3b8" font-family="Consolas,monospace" text-decoration="line-through">refund()</text>
-              <text x="300" y="139" direction="rtl" text-anchor="middle" font-size="11" font-weight="700" fill="#E86C00" font-family="'Segoe UI',Arial,sans-serif">✗ אין</text>
+              <text x="181" y="89" font-size="9" font-weight="400" fill="#334155" font-family="Consolas,monospace">entry / closeAsNotCollected()</text>
+              <text x="181" y="114" font-size="8.5" font-weight="700" fill="#475569" font-family="Consolas,monospace">closeAsNotCollected():</text>
+              <text x="181" y="126" font-size="7.5" font-weight="400" fill="#334155" font-family="Consolas,monospace">  setStatus('NOT_COLLECTED')</text>
+              <text x="181" y="137" font-size="7.5" font-weight="400" fill="#334155" font-family="Consolas,monospace">  setClosureReason('NOT_COLLECTED')</text>
+              <text x="181" y="150" font-size="9" font-weight="400" fill="#94a3b8" font-family="Consolas,monospace" text-decoration="line-through">  refund()</text>
+              <text x="300" y="151" direction="rtl" text-anchor="middle" font-size="11" font-weight="700" fill="#E86C00" font-family="'Segoe UI',Arial,sans-serif">✗ אין</text>
               <!-- בוטלה: entry WITH refund() -->
-              <text x="11" y="86" font-size="9" font-weight="400" fill="#334155" font-family="Consolas,monospace">entry / setStatus(</text>
-              <text x="11" y="98" font-size="9" font-weight="400" fill="#334155" font-family="Consolas,monospace">  'CANCELLED');</text>
-              <text x="11" y="110" font-size="9" font-weight="400" fill="#334155" font-family="Consolas,monospace">  setClosureReason(</text>
-              <text x="11" y="122" font-size="9" font-weight="400" fill="#334155" font-family="Consolas,monospace">  'CANCELLED');</text>
-              <text x="26" y="138" font-size="9" font-weight="700" fill="#15803d" font-family="Consolas,monospace">refund()</text>
-              <text x="120" y="139" direction="rtl" text-anchor="middle" font-size="11" font-weight="700" fill="#15803d" font-family="'Segoe UI',Arial,sans-serif">✓ יש</text>
-              <text x="170" y="170" direction="rtl" text-anchor="middle" font-size="10.5" fill="#64748b" font-family="'Segoe UI',Arial,sans-serif">החוק הוא ההבדל בין שני ה-entry — פעולה שחסרה</text>
+              <text x="11" y="89" font-size="9" font-weight="400" fill="#334155" font-family="Consolas,monospace">entry / closeAsCancelled()</text>
+              <text x="11" y="114" font-size="8.5" font-weight="700" fill="#475569" font-family="Consolas,monospace">closeAsCancelled():</text>
+              <text x="11" y="126" font-size="7.5" font-weight="400" fill="#334155" font-family="Consolas,monospace">  setStatus('CANCELLED')</text>
+              <text x="11" y="137" font-size="7.5" font-weight="400" fill="#334155" font-family="Consolas,monospace">  setClosureReason('CANCELLED')</text>
+              <text x="11" y="150" font-size="9" font-weight="700" fill="#15803d" font-family="Consolas,monospace">  refund()</text>
+              <text x="120" y="151" direction="rtl" text-anchor="middle" font-size="11" font-weight="700" fill="#15803d" font-family="'Segoe UI',Arial,sans-serif">✓ יש</text>
+              <text x="170" y="170" direction="rtl" text-anchor="middle" font-size="10.5" fill="#64748b" font-family="'Segoe UI',Arial,sans-serif">שתי עטיפות זהות בתרשים; החוק הוא ההבדל בגוף — פעולה שחסרה</text>
               <text x="170" y="186" direction="rtl" text-anchor="middle" font-size="10.5" fill="#64748b" font-family="'Segoe UI',Arial,sans-serif">עד היום: חור פתוח מאז הרצאה 3 · הוכרע כשהתרשים דרש תשובה</text>
               <text x="170" y="202" direction="rtl" text-anchor="middle" font-size="10.5" fill="#64748b" font-family="'Segoe UI',Arial,sans-serif">בעלים: אגף שירותי קמפוס — הם הכריעו, לא המעצב</text>
             </svg>
-            <div class="so"><b>החוק = פעולה שחסרה.</b> בבוטלה יש <code>refund()</code>, בלא נאספה — אין. עד היום זה היה חור; התרשים הכריח את הקמפוס <b>להחליט</b> — המעצב השיג את ההחלטה, לא ניחש אותה.</div>
+            <div class="so"><b>החוק = פעולה שחסרה.</b> שני המצבים נראים זהה — פעולת כניסה אחת כל אחד — וההבדל הוא בגוף: ב<code>closeAsCancelled()</code> יש <code>refund()</code>, ב<code>closeAsNotCollected()</code> — אין. עד היום זה היה חור; התרשים הכריח את הקמפוס <b>להחליט</b> — המעצב השיג את ההחלטה, לא ניחש אותה.</div>
           </div>
 
         </div>
@@ -2801,7 +2805,9 @@
         נראה הגיוני — הבעלים הוא אגף שירותי קמפוס. מה שקרה: אי אפשר לכתוב את ה-entry של לא נאספה בלי לדעת אם יש
         refund(), אז הלכנו לבעלים וקיבלנו הכרעה — החיוב נשאר, ללא זיכוי. תוכנה לא יכולה להיות עמומה — הפרויקט
         מכריח החלטה שמעולם לא נדרשה; זה ערך של הניתוח. ואיך החוק נראה בתרשים? לא כחץ ולא כתנאי — כפעולה
-        <b>שחסרה</b>: בבוטלה ה-entry מסתיים ב-refund(), בלא נאספה לא. הפתק (UML note תקני) רק מסביר למה.
+        <b>שחסרה</b>: שתי התיבות נראות זהות — פעולת entry אחת, כי בכניסה מותרת פעולה אחת והשאר נכנס לעטיפה.
+        ההבדל נמצא בגוף שמתחת לתיבות: closeAsCancelled() מסתיים ב-refund(), closeAsNotCollected() לא.
+        זה המחיר של העטיפה, וגם הרווח: להחלטה העסקית יש עכשיו שם של שיטה. הפתק (UML note תקני) רק מסביר למה.
         הלקח לתרגיל ולמטלה: חוק שלא מוצאים בתרשים הוא חוק שטרם הוחלט — הולכים להשיג את ההחלטה, לא מנחשים.
         <b>הכרטיס הסוגר:</b> ״אז איפה החוק?״ — בקטלוג, פעם אחת. העיצוב מפזר את ה<b>אכיפה</b>: ריבוי/enum/אילוץ
         במחלקות, חצים ותנאים במצבים, <span class="en">NOT NULL/CHECK</span> במסד, וה-<span class="en">if</span>
@@ -3298,12 +3304,16 @@
     <div class="acro-footer"><span class="acro"><span class="en">UML</span> = <span class="en">Unified Modeling Language</span> · שפת מידול אחידה</span></div>
     </section>
     <!-- D5 — שלב 4: פעולות = שיטות. REFRESH of po-step4. Same layout; the arrows are static and the activity
-         compartments fill in as two fragments: first `entry / setStatus(...)` everywhere (fragment 1), then the
-         real work — notifyKitchen / notifyStudent / prepareItems (do) / refund / setClosureReason (fragment 2).
-         Right rail = the METHOD LIST the diagram hands the developer: events become public methods, entry/do
-         actions become their bodies. The notification is an entry (runs once), not a do (runs as long as).
-         BR-3 (decided 2026-08-30: no refund) is visible here as the ABSENT refund() in לא נאספה's entry, next to
-         בוטלה's entry that has one; the small UML note beside לא נאספה only explains why. -->
+         compartments fill in as two fragments: first every state's single entry action (fragment 1), then the
+         rail opens the wrappers, plus do / prepareItems (fragment 2).
+         ONE action per entry: a state that has to do more than set its status gets ONE wrapper method
+         (queueForKitchen / announceReady / closeAs...), whose body starts with the setStatus it replaced.
+         Never two calls chained with ';' and never a second `entry /` line: Visual Paradigm gives entry one field.
+         Right rail = the METHOD LIST the diagram hands the developer: events become public methods, the entry
+         wrappers and the do action are the private ones. The notification is an entry (runs once), not a do.
+         BR-3 (decided 2026-08-30: no refund) is no longer readable off the boxes (the wrappers hide it), so it
+         lives in the rail: closeAsCancelled() refunds, closeAsNotCollected() does not. The UML note beside
+         לא נאספה explains why. -->
     <section data-slug="order-step4" class="has-acro-footer">
       <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
       <style>
@@ -3347,17 +3357,19 @@
               <div><code>+ markNotCollected()</code><span><span class="en">after(60 דק׳)</span> — טיימר</span></div>
               <div><code>+ purge()</code><span><span class="en">after(7 שנים)</span> — טיימר</span></div>
             </div>
-            <div class="m-h">entry / do ← גוף השיטה (פרטי)</div>
-            <div class="ml sm">
-              <div><code>- setStatus(s)</code><span>בכל מצב</span></div>
-              <div><code>- notifyKitchen() · notifyStudent()</code></div>
+            <div class="m-h">entry ← פעולה אחת; צריך יותר? שיטת עטיפה (פרטית)</div>
+            <div class="ml sm fragment" data-fragment-index="2">
+              <div><code>- queueForKitchen()</code><span>setStatus + notifyKitchen</span></div>
+              <div><code>- announceReady()</code><span>setStatus + notifyStudent</span></div>
+              <div><code>- closeAsCollected()</code><span>setStatus + setClosureReason</span></div>
+              <div><code>- closeAsCancelled()</code><span>וגם <span class="en">refund()</span></span></div>
+              <div><code>- closeAsNotCollected()</code><span>ללא <span class="en">refund [BR-3]</span></span></div>
               <div><code>- prepareItems()</code><span>do — רץ לאורך המצב</span></div>
-              <div><code>- refund() · setClosureReason(r)</code></div>
             </div>
             <div class="m-note">📣 התראה נשלחת <b>פעם אחת</b> בכניסה = <span class="en">entry</span>, לא <span class="en">do</span>.</div>
           </div>
           <div class="fig">
-    <svg class="sd-svg" viewBox="0 0 930 516" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="מחזור חיי ההזמנה עם מדורי הפעילות מלאים: entry / setStatus בכל מצב, ופעולות נוספות"><defs><marker id="s4-arr" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L10,5 L0,10 z" fill="#334155"/></marker><marker id="s4-arrr" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L10,5 L0,10 z" fill="#C62828"/></marker></defs>
+    <svg class="sd-svg" viewBox="0 0 930 516" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="מחזור חיי ההזמנה עם מדורי הפעילות מלאים: פעולת entry אחת בכל מצב, שיטת עטיפה במצבים שעושים יותר מזה"><defs><marker id="s4-arr" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L10,5 L0,10 z" fill="#334155"/></marker><marker id="s4-arrr" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L10,5 L0,10 z" fill="#C62828"/></marker></defs>
     <g class="">
     <rect x="80" y="128" width="720" height="174" rx="20" ry="20" fill="#f0f7ff" stroke="#2563eb" stroke-width="2" stroke-dasharray="8 4"/>
     <text x="96" y="146" direction="rtl" text-anchor="end" font-size="14" font-weight="700" fill="#1e293b" font-family="Heebo,Assistant,'Segoe UI',Arial,sans-serif" >פעילה</text>
@@ -3368,8 +3380,7 @@
     <path d="M584,186 h152 a14,14 0 0 1 14,14 v12 h-180 v-12 a14,14 0 0 1 14,-14 z" fill="#eef4ff"/>
     <line x1="570" y1="212" x2="750" y2="212" stroke="#3b82f6" stroke-width="1.4"/>
     <text x="660.0" y="205" direction="rtl" text-anchor="middle" font-size="14" font-weight="700" fill="#1e293b" font-family="Heebo,Assistant,'Segoe UI',Arial,sans-serif" >ממתינה</text>
-    <g class="fragment" data-fragment-index="1"><text x="577" y="225" text-anchor="start" font-size="9.2" font-weight="400" fill="#334155" font-family="Consolas,'Courier New',monospace" >entry / setStatus('PENDING');</text></g>
-    <g class="fragment" data-fragment-index="2"><text x="577" y="238" text-anchor="start" font-size="9.2" font-weight="400" fill="#334155" font-family="Consolas,'Courier New',monospace" >  notifyKitchen()</text></g>
+    <g class="fragment" data-fragment-index="1"><text x="577" y="225" text-anchor="start" font-size="9.2" font-weight="400" fill="#334155" font-family="Consolas,'Courier New',monospace" >entry / queueForKitchen()</text></g>
     </g>
     <g class="">
     <rect x="330" y="186" width="180" height="92" rx="14" ry="14" fill="#fff" stroke="#3b82f6" stroke-width="1.8"/>
@@ -3385,25 +3396,21 @@
     <path d="M104,186 h152 a14,14 0 0 1 14,14 v12 h-180 v-12 a14,14 0 0 1 14,-14 z" fill="#eef4ff"/>
     <line x1="90" y1="212" x2="270" y2="212" stroke="#3b82f6" stroke-width="1.4"/>
     <text x="180.0" y="205" direction="rtl" text-anchor="middle" font-size="14" font-weight="700" fill="#1e293b" font-family="Heebo,Assistant,'Segoe UI',Arial,sans-serif" >מוכנה</text>
-    <g class="fragment" data-fragment-index="1"><text x="97" y="225" text-anchor="start" font-size="9.2" font-weight="400" fill="#334155" font-family="Consolas,'Courier New',monospace" >entry / setStatus('READY');</text></g>
-    <g class="fragment" data-fragment-index="2"><text x="97" y="238" text-anchor="start" font-size="9.2" font-weight="400" fill="#334155" font-family="Consolas,'Courier New',monospace" >  notifyStudent()</text></g>
+    <g class="fragment" data-fragment-index="1"><text x="97" y="225" text-anchor="start" font-size="9.2" font-weight="400" fill="#334155" font-family="Consolas,'Courier New',monospace" >entry / announceReady()</text></g>
     </g>
     <g class="">
     <rect x="90" y="346" width="180" height="80" rx="14" ry="14" fill="#fff" stroke="#3b82f6" stroke-width="1.8"/>
     <path d="M104,346 h152 a14,14 0 0 1 14,14 v12 h-180 v-12 a14,14 0 0 1 14,-14 z" fill="#eef4ff"/>
     <line x1="90" y1="372" x2="270" y2="372" stroke="#3b82f6" stroke-width="1.4"/>
     <text x="180.0" y="365" direction="rtl" text-anchor="middle" font-size="14" font-weight="700" fill="#1e293b" font-family="Heebo,Assistant,'Segoe UI',Arial,sans-serif" >נאספה</text>
-    <g class="fragment" data-fragment-index="1"><text x="97" y="385" text-anchor="start" font-size="9.2" font-weight="400" fill="#334155" font-family="Consolas,'Courier New',monospace" >entry / setStatus('COLLECTED');</text></g>
-    <g class="fragment" data-fragment-index="2"><text x="97" y="398" text-anchor="start" font-size="9.2" font-weight="400" fill="#334155" font-family="Consolas,'Courier New',monospace" >  setClosureReason('COLLECTED')</text></g>
+    <g class="fragment" data-fragment-index="1"><text x="97" y="385" text-anchor="start" font-size="9.2" font-weight="400" fill="#334155" font-family="Consolas,'Courier New',monospace" >entry / closeAsCollected()</text></g>
     </g>
     <g class="">
     <rect x="590" y="346" width="180" height="80" rx="14" ry="14" fill="#fff" stroke="#3b82f6" stroke-width="1.8"/>
     <path d="M604,346 h152 a14,14 0 0 1 14,14 v12 h-180 v-12 a14,14 0 0 1 14,-14 z" fill="#eef4ff"/>
     <line x1="590" y1="372" x2="770" y2="372" stroke="#3b82f6" stroke-width="1.4"/>
     <text x="680.0" y="365" direction="rtl" text-anchor="middle" font-size="14" font-weight="700" fill="#1e293b" font-family="Heebo,Assistant,'Segoe UI',Arial,sans-serif" >בוטלה</text>
-    <g class="fragment" data-fragment-index="1"><text x="597" y="385" text-anchor="start" font-size="9.2" font-weight="400" fill="#334155" font-family="Consolas,'Courier New',monospace" >entry / setStatus('CANCELLED');</text></g>
-    <g class="fragment" data-fragment-index="2"><text x="597" y="398" text-anchor="start" font-size="9.2" font-weight="400" fill="#334155" font-family="Consolas,'Courier New',monospace" >  setClosureReason('CANCELLED');</text></g>
-    <g class="fragment" data-fragment-index="2"><text x="597" y="411" text-anchor="start" font-size="9.2" font-weight="400" fill="#334155" font-family="Consolas,'Courier New',monospace" >  refund()</text></g>
+    <g class="fragment" data-fragment-index="1"><text x="597" y="385" text-anchor="start" font-size="9.2" font-weight="400" fill="#334155" font-family="Consolas,'Courier New',monospace" >entry / closeAsCancelled()</text></g>
     </g>
     <g class="">
     <rect x="570" y="32" width="180" height="60" rx="14" ry="14" fill="#fff" stroke="#3b82f6" stroke-width="1.8"/>
@@ -3418,9 +3425,7 @@
     <path d="M344,346 h152 a14,14 0 0 1 14,14 v12 h-180 v-12 a14,14 0 0 1 14,-14 z" fill="#eef4ff"/>
     <line x1="330" y1="372" x2="510" y2="372" stroke="#3b82f6" stroke-width="1.4"/>
     <text x="420.0" y="365" direction="rtl" text-anchor="middle" font-size="14" font-weight="700" fill="#1e293b" font-family="Heebo,Assistant,'Segoe UI',Arial,sans-serif" >לא נאספה</text>
-    <g class="fragment" data-fragment-index="1"><text x="337" y="385" text-anchor="start" font-size="9.2" font-weight="400" fill="#334155" font-family="Consolas,'Courier New',monospace" >entry / setStatus(</text></g>
-    <g class="fragment" data-fragment-index="1"><text x="337" y="398" text-anchor="start" font-size="9.2" font-weight="400" fill="#334155" font-family="Consolas,'Courier New',monospace" >  'NOT_COLLECTED');</text></g>
-    <g class="fragment" data-fragment-index="2"><text x="337" y="411" text-anchor="start" font-size="9.2" font-weight="400" fill="#334155" font-family="Consolas,'Courier New',monospace" >  setClosureReason('NOT_COLLECTED')</text></g>
+    <g class="fragment" data-fragment-index="1"><text x="337" y="385" text-anchor="start" font-size="9.2" font-weight="400" fill="#334155" font-family="Consolas,'Courier New',monospace" >entry / closeAsNotCollected()</text></g>
     </g>
     <g class="">
     <rect x="330" y="462" width="180" height="44" rx="14" ry="14" fill="#fff" stroke="#3b82f6" stroke-width="1.8"/>
@@ -3483,13 +3488,17 @@
     </svg>
           </div>
         </div>
-        <div class="cap">אירוע ← שיטה ציבורית · <span class="en">entry</span> / <span class="en">do</span> ← גוף השיטה · <span class="en">setStatus</span> בכל מצב, <span class="en">do</span> רק למה שבאמת רץ.</div>
+        <div class="cap">אירוע ← שיטה ציבורית · <span class="en">entry</span> ← שיטה <b>אחת</b>, ובה <span class="en">setStatus</span> · שתי פעולות בכניסה = שיטת עטיפה.</div>
       </div>
       <aside class="notes">
-    <b>שתי לחיצות:</b> קודם <code>entry / setStatus('…')</code> בכל מצב — זה חובה, בלי יוצא מן הכלל, כי זו
-        הדרך היחידה שבה התכונה <code>status</code> ממודל המחלקות מקבלת ערך. אחר כך העבודה האמיתית: notifyKitchen
-        בממתינה, notifyStudent במוכנה, refund בבוטלה, setClosureReason בשלוש התוצאות (הארכיון דורס את status
-        אבל <b>לא</b> את closureReason — ככה יודעים גם אחרי שנה למה ההזמנה נסגרה), ו-do / prepareItems() רק בבהכנה.
+    <b>שתי לחיצות:</b> קודם פעולת ה-<code>entry</code> של כל מצב. בכל מצב יש בדיוק אחת, והיא תמיד קובעת
+        את <code>status</code>: זו הדרך היחידה שבה התכונה ממודל המחלקות מקבלת ערך. אחר כך נפתחות העטיפות בפאנל הימני,
+        ונוסף do / prepareItems() בבהכנה.
+        <b>למה עטיפה?</b> ל-entry יש שדה אחד בלבד (כך זה גם ב-Visual Paradigm), אז אסור שתי שורות <code>entry /</code>
+        וגם לא שתי קריאות מופרדות ב-<code>;</code>. מצב שצריך יותר מ-setStatus מקבל שיטה אחת על שם הצעד העסקי
+        (<code>queueForKitchen()</code>, <code>closeAsCancelled()</code>), והשורה הראשונה בגוף שלה היא ה-setStatus שהייתה מופיעה שם.
+        בשלוש התוצאות העטיפה קובעת גם setClosureReason (הארכיון דורס את status אבל <b>לא</b> את closureReason,
+        כך יודעים גם אחרי שנה למה ההזמנה נסגרה).
         <b>למה ההתראה היא entry ולא do?</b> ״שלח התראה״ קורה פעם אחת ברגע הכניסה. do הוא משהו שרץ <b>כל עוד</b>
         האובייקט במצב — הכנת המנות כן, שליחת הודעה לא. סטודנטים כותבים do / sendNotification ומקבלים ספאם.
         <b>הפאנל הימני הוא הפאנץ׳ של השלב:</b> הרשימה הזאת היא בדיוק מה שמפתח (או ה-AI) צריך: כל אירוע = שיטה
@@ -3497,14 +3506,17 @@
         שקוראות ל-purge / markNotCollected. לא הוספנו <code>+ delete()</code> כשיטה על ההזמנה — זו פעולה של
         המאגר, לא של האובייקט.
         <b>ארכיון בלי do:</b> אין מה שרץ שם. רק entry.
-        <b>BR-3 נראה כאן בפעם הראשונה כחוק:</b> בבוטלה ה-entry מסתיים ב-refund(); בלא נאספה — לא. זו ההכרעה
-        (החיוב נשאר, ללא זיכוי) כפי שתרשים מצבים יודע להראות אותה: פעולה שחסרה. הפתק ליד המצב רק מסביר.
+        <b>BR-3 נראה כאן בפעם הראשונה כחוק:</b> שתי העטיפות נראות זהות בתרשים, וההבדל הוא בגוף:
+        <code>closeAsCancelled()</code> מסתיים ב-refund(), <code>closeAsNotCollected()</code> — לא. זו ההכרעה
+        (החיוב נשאר, ללא זיכוי). זה המחיר של העטיפה: מה שנראה קודם על הקופסה עובר לרשימת השיטות,
+        ולכן הפאנל הימני מציג את הגוףים. הפתק ליד המצב מסביר למה.
       </aside>
     <div class="acro-footer"><span class="acro"><span class="en">AI</span> = <span class="en">Artificial Intelligence</span> · בינה מלאכותית</span></div>
     </section>
     <!-- D6 — שלב 5: בדיקה. REFRESH of po-step5. The finished diagram (same layout, everything static) next to a
          checklist card: seven ✓ rows revealed one by one — the last one is BR-3, decided 2026-08-30 (ללא זיכוי) and
-         visible as the ABSENT refund() in לא נאספה's entry (a UML note beside the state says why). A red dashed 'ghost' arrow
+         visible as the ABSENT refund() inside closeAsNotCollected(), the wrapper that is לא נאספה's single
+         entry action (a UML note beside the state says why; the two bodies are compared on the BR-3 slide). A red dashed 'ghost' arrow
          with ✗ appears on the diagram for the BR-4 missing cancel arrow — the rule is the arrow that is NOT there.
          Bottom line closes the section: this is a state diagram, not a flowchart. -->
     <section data-slug="order-step5" class="has-acro-footer">
@@ -3544,7 +3556,7 @@
             <div class="row ok fragment"><b>תוצאות הן מצבים</b>: נאספה / בוטלה / לא נאספה — לא ◎</div>
             <div class="row ok fragment"><b>זנב ארכיון</b> עם תקופה קונקרטית: <span class="en">after(7 שנים)</span> — רשומה כספית</div>
             <div class="row ok fragment"><b><span class="en">BR-4</span> = החץ שחסר</b>: אין ביטול-סטודנט מבהכנה (ולא ממוכנה)</div>
-            <div class="row ok br3 fragment"><b><span class="en">BR-3</span> — הוכרע: ללא זיכוי</b>, ולכן אין <span class="en">refund()</span> בלא נאספה — חוק כפעולה שחסרה</div>
+            <div class="row ok br3 fragment"><b><span class="en">BR-3</span> — הוכרע: ללא זיכוי</b>, ולכן אין <span class="en">refund()</span> בתוך <span class="en">closeAsNotCollected()</span> — חוק כפעולה שחסרה</div>
           </div>
           <div class="fig">
     <svg class="sd-svg" viewBox="0 0 930 516" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="מחזור חיי ההזמנה המלא, עם חץ מקווקו אדום שמסמן את חץ הביטול שחסר בכוונה מבהכנה"><defs><marker id="s5-arr" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L10,5 L0,10 z" fill="#334155"/></marker><marker id="s5-arrr" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L10,5 L0,10 z" fill="#C62828"/></marker></defs>
@@ -3558,8 +3570,7 @@
     <path d="M584,186 h152 a14,14 0 0 1 14,14 v12 h-180 v-12 a14,14 0 0 1 14,-14 z" fill="#eef4ff"/>
     <line x1="570" y1="212" x2="750" y2="212" stroke="#3b82f6" stroke-width="1.4"/>
     <text x="660.0" y="205" direction="rtl" text-anchor="middle" font-size="14" font-weight="700" fill="#1e293b" font-family="Heebo,Assistant,'Segoe UI',Arial,sans-serif" >ממתינה</text>
-    <g><text x="577" y="225" text-anchor="start" font-size="9.2" font-weight="400" fill="#334155" font-family="Consolas,'Courier New',monospace" >entry / setStatus('PENDING');</text></g>
-    <g><text x="577" y="238" text-anchor="start" font-size="9.2" font-weight="400" fill="#334155" font-family="Consolas,'Courier New',monospace" >  notifyKitchen()</text></g>
+    <g><text x="577" y="225" text-anchor="start" font-size="9.2" font-weight="400" fill="#334155" font-family="Consolas,'Courier New',monospace" >entry / queueForKitchen()</text></g>
     </g>
     <g class="">
     <rect x="330" y="186" width="180" height="92" rx="14" ry="14" fill="#fff" stroke="#3b82f6" stroke-width="1.8"/>
@@ -3575,25 +3586,21 @@
     <path d="M104,186 h152 a14,14 0 0 1 14,14 v12 h-180 v-12 a14,14 0 0 1 14,-14 z" fill="#eef4ff"/>
     <line x1="90" y1="212" x2="270" y2="212" stroke="#3b82f6" stroke-width="1.4"/>
     <text x="180.0" y="205" direction="rtl" text-anchor="middle" font-size="14" font-weight="700" fill="#1e293b" font-family="Heebo,Assistant,'Segoe UI',Arial,sans-serif" >מוכנה</text>
-    <g><text x="97" y="225" text-anchor="start" font-size="9.2" font-weight="400" fill="#334155" font-family="Consolas,'Courier New',monospace" >entry / setStatus('READY');</text></g>
-    <g><text x="97" y="238" text-anchor="start" font-size="9.2" font-weight="400" fill="#334155" font-family="Consolas,'Courier New',monospace" >  notifyStudent()</text></g>
+    <g><text x="97" y="225" text-anchor="start" font-size="9.2" font-weight="400" fill="#334155" font-family="Consolas,'Courier New',monospace" >entry / announceReady()</text></g>
     </g>
     <g class="">
     <rect x="90" y="346" width="180" height="80" rx="14" ry="14" fill="#fff" stroke="#3b82f6" stroke-width="1.8"/>
     <path d="M104,346 h152 a14,14 0 0 1 14,14 v12 h-180 v-12 a14,14 0 0 1 14,-14 z" fill="#eef4ff"/>
     <line x1="90" y1="372" x2="270" y2="372" stroke="#3b82f6" stroke-width="1.4"/>
     <text x="180.0" y="365" direction="rtl" text-anchor="middle" font-size="14" font-weight="700" fill="#1e293b" font-family="Heebo,Assistant,'Segoe UI',Arial,sans-serif" >נאספה</text>
-    <g><text x="97" y="385" text-anchor="start" font-size="9.2" font-weight="400" fill="#334155" font-family="Consolas,'Courier New',monospace" >entry / setStatus('COLLECTED');</text></g>
-    <g><text x="97" y="398" text-anchor="start" font-size="9.2" font-weight="400" fill="#334155" font-family="Consolas,'Courier New',monospace" >  setClosureReason('COLLECTED')</text></g>
+    <g><text x="97" y="385" text-anchor="start" font-size="9.2" font-weight="400" fill="#334155" font-family="Consolas,'Courier New',monospace" >entry / closeAsCollected()</text></g>
     </g>
     <g class="">
     <rect x="590" y="346" width="180" height="80" rx="14" ry="14" fill="#fff" stroke="#3b82f6" stroke-width="1.8"/>
     <path d="M604,346 h152 a14,14 0 0 1 14,14 v12 h-180 v-12 a14,14 0 0 1 14,-14 z" fill="#eef4ff"/>
     <line x1="590" y1="372" x2="770" y2="372" stroke="#3b82f6" stroke-width="1.4"/>
     <text x="680.0" y="365" direction="rtl" text-anchor="middle" font-size="14" font-weight="700" fill="#1e293b" font-family="Heebo,Assistant,'Segoe UI',Arial,sans-serif" >בוטלה</text>
-    <g><text x="597" y="385" text-anchor="start" font-size="9.2" font-weight="400" fill="#334155" font-family="Consolas,'Courier New',monospace" >entry / setStatus('CANCELLED');</text></g>
-    <g><text x="597" y="398" text-anchor="start" font-size="9.2" font-weight="400" fill="#334155" font-family="Consolas,'Courier New',monospace" >  setClosureReason('CANCELLED');</text></g>
-    <g><text x="597" y="411" text-anchor="start" font-size="9.2" font-weight="400" fill="#334155" font-family="Consolas,'Courier New',monospace" >  refund()</text></g>
+    <g><text x="597" y="385" text-anchor="start" font-size="9.2" font-weight="400" fill="#334155" font-family="Consolas,'Courier New',monospace" >entry / closeAsCancelled()</text></g>
     </g>
     <g class="">
     <rect x="570" y="32" width="180" height="60" rx="14" ry="14" fill="#fff" stroke="#3b82f6" stroke-width="1.8"/>
@@ -3608,9 +3615,7 @@
     <path d="M344,346 h152 a14,14 0 0 1 14,14 v12 h-180 v-12 a14,14 0 0 1 14,-14 z" fill="#eef4ff"/>
     <line x1="330" y1="372" x2="510" y2="372" stroke="#3b82f6" stroke-width="1.4"/>
     <text x="420.0" y="365" direction="rtl" text-anchor="middle" font-size="14" font-weight="700" fill="#1e293b" font-family="Heebo,Assistant,'Segoe UI',Arial,sans-serif" >לא נאספה</text>
-    <g><text x="337" y="385" text-anchor="start" font-size="9.2" font-weight="400" fill="#334155" font-family="Consolas,'Courier New',monospace" >entry / setStatus(</text></g>
-    <g><text x="337" y="398" text-anchor="start" font-size="9.2" font-weight="400" fill="#334155" font-family="Consolas,'Courier New',monospace" >  'NOT_COLLECTED');</text></g>
-    <g><text x="337" y="411" text-anchor="start" font-size="9.2" font-weight="400" fill="#334155" font-family="Consolas,'Courier New',monospace" >  setClosureReason('NOT_COLLECTED')</text></g>
+    <g><text x="337" y="385" text-anchor="start" font-size="9.2" font-weight="400" fill="#334155" font-family="Consolas,'Courier New',monospace" >entry / closeAsNotCollected()</text></g>
     </g>
     <g class="">
     <rect x="330" y="462" width="180" height="44" rx="14" ry="14" fill="#fff" stroke="#3b82f6" stroke-width="1.8"/>
@@ -3688,9 +3693,9 @@
         שאחרי תחילת ההכנה הסטודנט לא מבטל. מאותה סיבה גם לא ממוכנה. החוק = היעדר החץ. במימוש זה יהיה <code>if</code>
         שזורק חריגה (שקף הקוד).
         <b>השורה האחרונה — BR-3, סוף-סוף ✓:</b> החוק היה פתוח מאז הרצאת החוקים (זיכוי? חיוב?). בניית התרשים
-        הכריחה להכריע — אי אפשר לכתוב את ה-entry של לא נאספה בלי לדעת אם יש refund(). ההחלטה של בעל התהליך
-        (אגף שירותי קמפוס): החיוב נשאר, ללא זיכוי. בתרשים היא נראית כפעולה שחסרה — בבוטלה יש refund(), בלא נאספה
-        אין — והפתק ליד המצב מסביר. הלקח: חוק שלא מוצאים בתרשים הוא חוק שטרם הוחלט; סוגרים אותו בהחלטה, לא בניחוש.
+        הכריחה להכריע — אי אפשר לכתוב את שיטת הכניסה של לא נאספה בלי לדעת אם יש בה refund(). ההחלטה של בעל התהליך
+        (אגף שירותי קמפוס): החיוב נשאר, ללא זיכוי. היא נראית כפעולה שחסרה בגוף העטיפה —
+        closeAsCancelled() מסתיים ב-refund(), closeAsNotCollected() לא — והפתק ליד המצב מסביר. הלקח: חוק שלא מוצאים בתרשים הוא חוק שטרם הוחלט; סוגרים אותו בהחלטה, לא בניחוש.
         <b>שורת המסקנה</b> מוליכה לשקף הבא: התרשים החי (הכלי מצייר בדיוק את זה).
       </aside>
     <div class="acro-footer"><span class="acro"><span class="en">AI</span> = <span class="en">Artificial Intelligence</span> · בינה מלאכותית</span></div>
@@ -3953,7 +3958,7 @@
               <tr class="fragment"><td class="k">אירוע</td><td>שיטה ציבורית — <code>public void Cancel()</code></td></tr>
               <tr class="fragment"><td class="k">תנאי <span class="en">[guard]</span></td><td><code>if</code> שזורק חריגה כשהוא נכשל</td></tr>
               <tr class="fragment"><td class="k">מעבר</td><td>השמה — <code>Status = OrderStatus.Cancelled</code></td></tr>
-              <tr class="fragment"><td class="k"><span class="en">entry</span> / <span class="en">exit</span></td><td>קוד בתוך השיטה, אחרי ההשמה</td></tr>
+              <tr class="fragment"><td class="k"><span class="en">entry</span> / <span class="en">exit</span></td><td>שיטה <b>אחת</b> שנקראת בכניסה (העטיפה), ובגופה ההשמה ל-<span class="en">Status</span> והשאר</td></tr>
               <tr class="fragment"><td class="k"><span class="en">do</span> · <span class="en">after(…)</span></td><td>משימה שרצה ברקע · משימה מתוזמנת (טיימר)</td></tr>
             </table>
           </div>
@@ -3975,9 +3980,14 @@
     {
         if (Status != OrderStatus.Pending)        // guard: BR-4
             throw new InvalidOperationException("BR-4");
-        Status = OrderStatus.Cancelled;           // transition
-        ClosureReason = "CANCELLED";              // entry
-        Refund();                                 // entry action
+        CloseAsCancelled();                       // the state's ONE entry action
+    }
+
+    private void CloseAsCancelled()               // entry / closeAsCancelled()
+    {
+        Status = OrderStatus.Cancelled;           // setStatus
+        ClosureReason = "CANCELLED";
+        Refund();
     }
     </code></pre>
           </div>
@@ -4012,7 +4022,7 @@
            · unlabeled arrow between two states      ⇒ every arrow except the initial carries an event
            · a flowchart diamond with כן/לא          ⇒ that is a flowchart — write event [guard]
            · a ◎ per outcome                          ⇒ outcomes are STATES → ארכיון → ◎ (the ◎ count is not the error — UML allows several)
-           · two entry lines + after(X ימים)          ⇒ one entry clause with ';', a concrete period
+           · two entry lines + after(X ימים)          ⇒ ONE entry action (a wrapper method), a concrete period
            · "הכנה" written on an arrow               ⇒ an activity is not an event (תחילת הכנה / do)
            · a ביטול arrow out of בהכנה               ⇒ BR-4 — the rule IS the missing arrow
          Mixed order on purpose (same rule as the L6-7 quizzes) and the fronts show the fragment only —
@@ -4166,8 +4176,8 @@
             </div>
             <div class="face back">
               <div class="vd">שתי טעויות: <span class="en">entry</span> כפול, ו-<span class="en">X</span> שאינו מספר</div>
-              <div class="rule"><b>הכלל:</b> <span class="en">entry</span> / <span class="en">exit</span> / <span class="en">do</span> — כל אחד <b>לכל היותר פעם אחת</b> במצב; כמה פעולות מופרדות ב-<code class="en">;</code>. ותקופת שמירה היא <b>החלטה עם בסיס</b>, לא מציין מקום.</div>
-              <div class="fix"><b>התיקון:</b> <code>entry / setStatus('ARCHIVED'); logArchive()</code>, והחץ: <code>after(7 שנים) / purge()</code> — רשומה כספית ⇐ חובת שמירה 7 שנים.</div>
+              <div class="rule"><b>הכלל:</b> <span class="en">entry</span> / <span class="en">exit</span> / <span class="en">do</span> — כל אחד <b>לכל היותר פעם אחת</b> במצב, ועם <b>פעולה אחת</b>; צריך שתיים? <b>שיטת עטיפה</b> שקוראת לשתיהן. ותקופת שמירה היא <b>החלטה עם בסיס</b>, לא מציין מקום.</div>
+              <div class="fix"><b>התיקון:</b> <code>entry / archiveOrder()</code> שבגופה <code>setStatus('ARCHIVED'); logArchive()</code>, והחץ: <code>after(7 שנים) / purge()</code> — רשומה כספית ⇐ חובת שמירה 7 שנים.</div>
             </div>
           </div></div>
 
@@ -4407,7 +4417,7 @@
               <h3>מה תרשים המצבים <b>החזיר</b> לנו</h3>
               <ul>
                 <li><b>ה-<span class="en">enum</span> גדל:</b> <code>AWAITING_PAYMENT</code>, <code>NOT_COLLECTED</code>, <code>ARCHIVED</code> — ותכונה חדשה <code>closureReason</code>. תרשים המחלקות מתעדכן.</li>
-                <li><b>רשימת השיטות של <span class="en">Order</span>:</b> <code>recordPayment()</code> · <code>notifyKitchen()</code> · <code>prepareItems()</code> · <code>notifyStudent()</code> · <code>markCollected()</code> · <code>refund()</code> · <code>archive()</code> · <code>purge()</code> — כל פעולה בתרשים היא שיטה.</li>
+                <li><b>רשימת השיטות של <span class="en">Order</span>:</b> <code>recordPayment()</code> · <code>queueForKitchen()</code> · <code>prepareItems()</code> · <code>announceReady()</code> · <code>markCollected()</code> · <code>closeAsCancelled()</code> · <code>archive()</code> · <code>purge()</code> — כל פעולה בתרשים היא שיטה, ופעולת כניסה שעושה שני דברים היא שיטת עטיפה אחת.</li>
                 <li><b>הכרעה שהתרשים כפה:</b> <span class="en">BR-3</span> — הזמנה ששולמה ולא נאספה: ללא זיכוי. פתוח מאז הרצאה 3, ונראה בתרשים כ-<code>refund()</code> שחסר.</li>
               </ul>
             </div>
