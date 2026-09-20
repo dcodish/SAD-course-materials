@@ -36,22 +36,44 @@
 
 ## 🔌 חיבור ל-MCP של הקורס (sad-mcp)
 
-דרך ה-MCP של הקורס תיפגשו ב-Claude את בעלי העניין של הדוגמה הרצה (כמו שמעון, מנהל הקפיטריה), תתרגלו ראיונות לאיסוף דרישות ותקבלו גישה לחומרי הקורס ולכלי התרשימים. **התקנה בלחיצה אחת:**
+דרך ה-MCP של הקורס תיפגשו ב-Claude את בעלי העניין של הדוגמה הרצה (כמו שמעון, מנהל הקפיטריה), תתרגלו ראיונות לאיסוף דרישות ותקבלו גישה לחומרי הקורס ולכלי התרשימים.
 
-1. ודאו ש-[Claude Desktop](https://claude.ai/download) מותקן (אין צורך בשום דבר אחר — לא Node ולא עריכת קבצים).
-2. הורידו את [`sad-mcp.mcpb`](downloads/sad-mcp.mcpb).
-3. ב-Claude Desktop פתחו **הגדרות (Settings) → Extensions** וגררו את הקובץ שהורדתם לתוך העמוד (או: Advanced settings → Install extension… ובחרו אותו). אשרו את ההתקנה.
-4. זהו — אין שלב הזדהות. חומרי הקורס נטענים אוטומטית בשימוש הראשון.
+**מה שצריך:** [Claude Desktop](https://claude.ai/download) ו-[Node.js](https://nodejs.org) (גרסת LTS). את השאר Claude יעשה בשבילכם.
 
-בדיקה שהכול עובד: שאלו את Claude "אילו כלים יש ב-sad-mcp?" — אם מופיעה רשימת הכלים של הקורס, אתם מחוברים.
+### ההתקנה — העתיקו את הבקשה הזו ושלחו ל-Claude Desktop
 
-<details><summary>התקנה ידנית (חלופה, למתקדמים)</summary>
+```text
+אני סטודנט בקורס ניתוח ועיצוב מערכות מידע. תתקין לי בבקשה את ה-MCP של הקורס.
 
-הוסיפו ל-`claude_desktop_config.json` (דורש Node.js 18+):
+מה שצריך לעשות:
+1. לוודא שמותקן Node.js. אם לא — תגיד לי להוריד מ-https://nodejs.org (גרסת LTS) ולעצור כאן.
+2. למצוא את claude_desktop_config.json. הוא באחד משני המקומות:
+   %LOCALAPPDATA%\Packages\Claude_pzs8sxrjxfjjc\LocalCache\Roaming\Claude\
+   %APPDATA%\Claude\
+   אם שניהם קיימים — עדכן את שניהם.
+3. לגבות את הקובץ לפני שינוי.
+4. להוסיף למפתח mcpServers את הרשומה הזו, בלי למחוק שרתים אחרים שכבר מוגדרים:
+   "sad-mcp": { "command": "npx", "args": ["-y", "sad-mcp@latest"] }
+5. להגיד לי לסגור לגמרי את Claude Desktop (Quit מהאייקון ליד השעון) ולפתוח מחדש.
 
-```json
-{ "mcpServers": { "sad-mcp": { "command": "npx", "args": ["-y", "sad-mcp@latest"] } } }
+אם אין לך גישה לקבצים במחשב שלי — תגיד לי את זה, ותן לי במקום את הפקודה להריץ ב-PowerShell.
 ```
+
+**אם Claude עונה שאין לו גישה לקבצים** — הריצו את זה ב-PowerShell:
+
+```powershell
+irm https://dcodish.github.io/SAD-course-materials/install.ps1 | iex
+```
+
+בסוף שאלו את Claude: **"מה הגרסה של sad-mcp?"** — התשובה צריכה להיות `sad-mcp@2.12.0` או גבוה יותר. אם קיבלתם מספר נמוך יותר, סגרו את Claude Desktop לגמרי ופתחו מחדש.
+
+> **למה דווקא ככה:** ההתקנה הזו מגדירה את Claude להריץ את השרת דרך `npx` עם התג `@latest`, כך שבכל פתיחה של Claude אתם מקבלים את הגרסה האחרונה. **לא תצטרכו להתקין שוב אף פעם** — גם כשנוסיף כלים או נעדכן חומר במהלך הסמסטר.
+
+<details><summary>חלופה: התקנה בלחיצה אחת (בלי Node, אבל לא מתעדכנת לבד)</summary>
+
+הורידו את [`sad-mcp.mcpb`](downloads/sad-mcp.mcpb) וגררו אותו ב-Claude Desktop אל **Settings → Extensions**.
+
+**שימו לב:** תוסף שמותקן כך נשאר על הגרסה שהורדתם ואינו מתעדכן. כדי לקבל עדכון תצטרכו להסיר אותו ולהתקין מחדש. עדיף להשתמש בבקשה שלמעלה.
 
 </details>
 
