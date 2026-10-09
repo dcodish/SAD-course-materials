@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>פתרון שאלה 1, חידוש רישיון שנתי (טסט) לרכב צי מול מכון רישוי חיצוני — BPMN 1.0</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Hebrew:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; padding: 0; background: #eef2f6;
+      font-family: 'Noto Sans Hebrew', -apple-system, BlinkMacSystemFont, sans-serif;
+      direction: rtl; }
+    .header-bar { padding: 14px 20px; background: linear-gradient(135deg, #37474f, #546e7a);
+      color: #fff; display: flex; align-items: baseline; gap: 16px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
+    .header-bar h1 { margin: 0; font-size: 18px; font-weight: 600; }
+    .header-bar .en { font-size: 13px; opacity: 0.8; font-weight: 400; }
+    .header-bar .badge { margin-inline-start: auto; background: rgba(255,255,255,0.15);
+      padding: 3px 10px; border-radius: 10px; font-size: 11px; letter-spacing: 0.5px; }
+    .stats-bar { padding: 8px 20px; background: #ffffff; font-size: 12px; color: #546e7a;
+      border-bottom: 1px solid #cfd8dc; }
+    .stats-bar span { margin-inline-end: 16px; }
+    .svg-wrapper { overflow: auto; background: #f8fafc; padding: 20px; min-height: calc(100vh - 120px); }
+    svg { display: block; background: #f8fafc; }
+    .bpmn-element { cursor: pointer; }
+    /* Flow hover: a wide invisible hit-area makes thin lines easy to grab; the
+       line then brightens + thickens (and is lifted to the front by JS) so it
+       can be tracked unbroken through crossings. Dash patterns are preserved. */
+    .bpmn-flow { cursor: pointer; }
+    .bpmn-flow-hit { stroke: transparent; fill: none; stroke-width: 16; pointer-events: stroke; }
+    .bpmn-flow-line { transition: stroke 0.05s, stroke-width 0.05s; }
+    .bpmn-flow.bpmn-hl .bpmn-flow-line { stroke: #e6007e !important; stroke-width: 3.4 !important; }
+    .bpmn-tooltip { display: none; position: fixed; background: #1a1a2e; color: #fff;
+      padding: 9px 13px; border-radius: 6px; font-size: 12px; max-width: 280px;
+      z-index: 500; direction: rtl; pointer-events: none; line-height: 1.5;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+    .bpmn-tooltip strong { color: #ffd54f; }
+    .vp-export-btn { position: fixed; bottom: 20px; left: 20px; z-index: 1000;
+      background: #1e40af; color: #fff; border: none; border-radius: 6px;
+      padding: 9px 16px; font-size: 13px; cursor: pointer;
+      font-family: 'Noto Sans Hebrew', sans-serif; box-shadow: 0 2px 6px rgba(0,0,0,0.15); }
+    .vp-export-btn:hover { background: #1e3a8a; }
+    .assumptions-btn { position: fixed; top: 12px; left: 12px; z-index: 1000;
+      background: #37474f; color: #fff; border: none; border-radius: 6px;
+      padding: 7px 13px; font-size: 12px; cursor: pointer;
+      font-family: 'Noto Sans Hebrew', sans-serif; }
+    .assumptions-panel { position: fixed; top: 54px; left: 12px; z-index: 1000;
+      background: #ffffff; border: 1px solid #b0bec5; border-radius: 8px; padding: 14px;
+      max-width: 340px; max-height: 70vh; overflow-y: auto; direction: rtl;
+      font-family: 'Noto Sans Hebrew', sans-serif; font-size: 13px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.18); display: none; }
+    .assumptions-panel h4 { margin: 0 0 10px; color: #37474f; }
+    .assumptions-panel ul { margin: 4px 0 10px; padding-inline-start: 18px; }
+  </style>
+</head>
+<body>
+  <div class="header-bar">
+    <h1>פתרון שאלה 1, חידוש רישיון שנתי (טסט) לרכב צי מול מכון רישוי חיצוני</h1>
+    <span class="en">Annual vehicle licence (roadworthiness) renewal with an external testing institute</span>
+    <span class="badge">BPMN 1.0</span>
+  </div>
+  <div class="stats-bar">
+    <span>2 מאגרים</span>
+    <span>2 נתיבים</span>
+    <span>10 משימות</span>
+    <span>7 שערים</span>
+    <span>5 אירועים</span>
+    <span>1 פריטי נתונים</span>
+    <span>30 זרימות</span>
+  </div>
+  <div class="svg-wrapper">
+    <svg width="4037.6" height="660"
+         viewBox="0 0 4037.6 660"
+         xmlns="http://www.w3.org/2000/svg">
+      
+    <defs>
+      <pattern id="dot-grid" x="0" y="0" width="24" height="24" patternUnits="userSpaceOnUse">
+        <circle cx="1" cy="1" r="0.8" fill="#cbd5e1"/>
+      </pattern>
+      <!-- markerUnits=userSpaceOnUse: arrowheads keep ONE size regardless of each
+           flow's stroke-width (default strokeWidth units made seq arrows ~45%
+           bigger than data-association arrows) -->
+      <marker id="arrow-seq" viewBox="0 0 10 10" refX="10" refY="5"
+              markerWidth="12" markerHeight="12" markerUnits="userSpaceOnUse" orient="auto-start-reverse">
+        <path d="M 0 0 L 10 5 L 0 10 Z" fill="#455a64"/>
+      </marker>
+      <marker id="msg-start" viewBox="-10 -10 20 20" refX="0" refY="0"
+              markerWidth="12" markerHeight="12" markerUnits="userSpaceOnUse" orient="auto">
+        <circle cx="0" cy="0" r="4" fill="#ffffff" stroke="#37474f" stroke-width="1.2"/>
+      </marker>
+      <marker id="msg-end" viewBox="0 0 10 10" refX="9" refY="5"
+              markerWidth="12" markerHeight="12" markerUnits="userSpaceOnUse" orient="auto-start-reverse">
+        <path d="M 0 0 L 10 5 L 0 10 Z" fill="#37474f"/>
+      </marker>
+      <marker id="arrow-data" viewBox="0 0 10 10" refX="9" refY="5"
+              markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto-start-reverse">
+        <path d="M 0 0 L 10 5 L 0 10 Z" fill="#7986cb"/>
+      </marker>
+    </defs>
+      <rect x="0" y="0" width="4037.6" height="660" fill="#f8fafc"/>
+    <rect x="0" y="0" width="4037.6" height="660" fill="url(#dot-grid)"/>
+      
+    <!-- pool: licensing -->
+    <g class="bpmn-pool" data-pool="licensing">
+      <rect x="20" y="72" width="3977.6" height="440"
+            fill="#ffffff" stroke="#455a64" stroke-width="1.5"/>
+      <rect x="20" y="72" width="30" height="440"
+            fill="#37474f" stroke="#455a64" stroke-width="1.5"/>
+      <text x="35" y="292" text-anchor="middle"
+            dominant-baseline="middle"
+            transform="rotate(-90, 35, 292)"
+            fill="#ffffff" font-size="12" font-weight="600"
+            direction="rtl">מחלקת הרישוי</text>
+      <line x1="50" y1="72" x2="50" y2="512"
+            stroke="#455a64" stroke-width="1"/>
+    </g>
+
+    <!-- pool: institute -->
+    <g class="bpmn-pool" data-pool="institute">
+      <rect x="20" y="528" width="3977.6" height="96"
+            fill="#faf7f2" stroke="#8d6e63" stroke-width="1.5"/>
+      <rect x="20" y="528" width="30" height="96"
+            fill="#6d4c41" stroke="#8d6e63" stroke-width="1.5"/>
+      <text x="29" y="576" text-anchor="middle"
+            dominant-baseline="middle"
+            transform="rotate(-90, 29, 576)"
+            fill="#ffffff" font-size="11" font-weight="600"
+            direction="rtl">מכון רישוי</text>
+      <text x="41" y="576" text-anchor="middle"
+            dominant-baseline="middle"
+            transform="rotate(-90, 41, 576)"
+            fill="#ffffff" font-size="11" font-weight="600"
+            direction="rtl">חיצוני</text>
+      <line x1="50" y1="528" x2="50" y2="624"
+            stroke="#8d6e63" stroke-width="1"/>
+    </g>
+      
+    <g class="bpmn-lane" data-lane="sys">
+      <rect x="74" y="72" width="3923.6" height="168"
+            fill="#fafafa" fill-opacity="0.6" stroke="none"/>
+      <rect x="50" y="72" width="24" height="168"
+            fill="#546e7a" stroke="#455a64" stroke-width="1"/>
+      <text x="62" y="156" text-anchor="middle"
+            dominant-baseline="middle"
+            transform="rotate(-90, 62, 156)"
+            fill="#ffffff" font-size="11" font-weight="500"
+            direction="rtl">מערכת הרישוי</text>
+      
+    </g>
+
+    <g class="bpmn-lane" data-lane="coord">
+      <rect x="74" y="240" width="3923.6" height="272"
+            fill="#fafafa" fill-opacity="0.6" stroke="none"/>
+      <rect x="50" y="240" width="24" height="272"
+            fill="#546e7a" stroke="#455a64" stroke-width="1"/>
+      <text x="62" y="376" text-anchor="middle"
+            dominant-baseline="middle"
+            transform="rotate(-90, 62, 376)"
+            fill="#ffffff" font-size="11" font-weight="500"
+            direction="rtl">רכז הרישוי</text>
+      <line x1="50" y1="240" x2="3997.6" y2="240"
+              stroke="#90a4ae" stroke-width="1" stroke-dasharray="4 3"/>
+    </g>
+      
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf1">
+      <path class="bpmn-flow-hit" d="M 162.0 128.0 L 286.0 128.0" fill="none"/>
+      <path class="bpmn-flow-line" d="M 162.0 128.0 L 286.0 128.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf2">
+      <path class="bpmn-flow-hit" d="M 426.0 128.0 L 544.0 128.0" fill="none"/>
+      <path class="bpmn-flow-line" d="M 426.0 128.0 L 544.0 128.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf3">
+      <path class="bpmn-flow-hit" d="M 568.0 152.0 L 568.0 290.0 L 817.6 290.0 L 817.6 316.0" fill="none"/>
+      <path class="bpmn-flow-line" d="M 568.0 152.0 L 568.0 290.0 L 817.6 290.0 L 817.6 316.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    <g class="bpmn-flow-label">
+      <rect x="442.16" y="210" width="115.6" height="14"
+            rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"/>
+      <text x="499.96000000000004" y="217" text-anchor="middle" dominant-baseline="middle"
+            font-size="11" fill="#263238" direction="rtl">כן, מסומן לגריטה</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf4">
+      <path class="bpmn-flow-hit" d="M 887.6 348.0 L 985.6 348.0 L 985.6 400.0 L 1011.6 400.0" fill="none"/>
+      <path class="bpmn-flow-line" d="M 887.6 348.0 L 985.6 348.0 L 985.6 400.0 L 1011.6 400.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf5">
+      <path class="bpmn-flow-hit" d="M 592.0 128.0 L 793.6 128.0" fill="none"/>
+      <path class="bpmn-flow-line" d="M 592.0 128.0 L 793.6 128.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    <g class="bpmn-flow-label">
+      <rect x="640.48" y="104.75" width="24" height="14"
+            rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"/>
+      <text x="652.48" y="111.75" text-anchor="middle" dominant-baseline="middle"
+            font-size="11" fill="#263238" direction="rtl">לא</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf6">
+      <path class="bpmn-flow-hit" d="M 817.6 152.0 L 817.6 238.0 L 1022.6 238.0 L 1022.6 264.0" fill="none"/>
+      <path class="bpmn-flow-line" d="M 817.6 152.0 L 817.6 238.0 L 1022.6 238.0 L 1022.6 264.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    <g class="bpmn-flow-label">
+      <rect x="746.6800000000001" y="201.2" width="62.8" height="14"
+            rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"/>
+      <text x="778.08" y="208.2" text-anchor="middle" dominant-baseline="middle"
+            font-size="11" fill="#263238" direction="rtl">לא בתוקף</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf7">
+      <path class="bpmn-flow-hit" d="M 1036.6 264.0 L 1036.6 178.0 L 1234.6 178.0 L 1234.6 145.0" fill="none"/>
+      <path class="bpmn-flow-line" d="M 1036.6 264.0 L 1036.6 178.0 L 1234.6 178.0 L 1234.6 145.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf8">
+      <path class="bpmn-flow-hit" d="M 841.6 128.0 L 1217.6 128.0" fill="none"/>
+      <path class="bpmn-flow-line" d="M 841.6 128.0 L 1217.6 128.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    <g class="bpmn-flow-label">
+      <rect x="932.9" y="104.75" width="43" height="14"
+            rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"/>
+      <text x="954.4" y="111.75" text-anchor="middle" dominant-baseline="middle"
+            font-size="11" fill="#263238" direction="rtl">בתוקף</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf9">
+      <path class="bpmn-flow-hit" d="M 1248.6 145.0 L 1248.6 290.0 L 1453.6 290.0 L 1453.6 316.0" fill="none"/>
+      <path class="bpmn-flow-line" d="M 1248.6 145.0 L 1248.6 290.0 L 1453.6 290.0 L 1453.6 316.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf10">
+      <path class="bpmn-flow-hit" d="M 1523.6 348.0 L 1641.6 348.0" fill="none"/>
+      <path class="bpmn-flow-line" d="M 1523.6 348.0 L 1641.6 348.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf11">
+      <path class="bpmn-flow-hit" d="M 1689.6 348.0 L 1859.6 348.0" fill="none"/>
+      <path class="bpmn-flow-line" d="M 1689.6 348.0 L 1859.6 348.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf12">
+      <path class="bpmn-flow-hit" d="M 1895.6 348.0 L 2065.6 348.0" fill="none"/>
+      <path class="bpmn-flow-line" d="M 1895.6 348.0 L 2065.6 348.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf13">
+      <path class="bpmn-flow-hit" d="M 2113.6 348.0 L 2275.6 348.0 L 2275.6 296.0 L 2301.6 296.0" fill="none"/>
+      <path class="bpmn-flow-line" d="M 2113.6 348.0 L 2275.6 348.0 L 2275.6 296.0 L 2301.6 296.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    <g class="bpmn-flow-label">
+      <rect x="2081.2999999999997" y="324.75" width="161.79999999999998" height="14"
+            rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"/>
+      <text x="2162.2" y="331.75" text-anchor="middle" dominant-baseline="middle"
+            font-size="11" fill="#263238" direction="rtl">לא, המועד מאוחר מהפקיעה</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf14">
+      <path class="bpmn-flow-hit" d="M 2441.6 296.0 L 2457.6 296.0 L 2457.6 250.0 L 1957.8 250.0 L 1957.8 298.0 L 1665.6 298.0 L 1665.6 324.0" fill="none"/>
+      <path class="bpmn-flow-line" d="M 2441.6 296.0 L 2457.6 296.0 L 2457.6 250.0 L 1957.8 250.0 L 1957.8 298.0 L 1665.6 298.0 L 1665.6 324.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf15">
+      <path class="bpmn-flow-hit" d="M 2089.6 372.0 L 2089.6 400.0 L 2301.6 400.0" fill="none"/>
+      <path class="bpmn-flow-line" d="M 2089.6 372.0 L 2089.6 400.0 L 2301.6 400.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    <g class="bpmn-flow-label">
+      <rect x="1970.625" y="375" width="109" height="14"
+            rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"/>
+      <text x="2025.125" y="382" text-anchor="middle" dominant-baseline="middle"
+            font-size="11" fill="#263238" direction="rtl">כן, המועד מתאים</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf16">
+      <path class="bpmn-flow-hit" d="M 2441.6 400.0 L 2533.6 400.0 L 2533.6 348.0 L 2559.6 348.0" fill="none"/>
+      <path class="bpmn-flow-line" d="M 2441.6 400.0 L 2533.6 400.0 L 2533.6 348.0 L 2559.6 348.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf17">
+      <path class="bpmn-flow-hit" d="M 2607.6 348.0 L 2777.6 348.0" fill="none"/>
+      <path class="bpmn-flow-line" d="M 2607.6 348.0 L 2777.6 348.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf18">
+      <path class="bpmn-flow-hit" d="M 2813.6 348.0 L 2983.6 348.0" fill="none"/>
+      <path class="bpmn-flow-line" d="M 2813.6 348.0 L 2983.6 348.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf19">
+      <path class="bpmn-flow-hit" d="M 3024.6 355.0 L 3123.6 355.0 L 3123.6 348.0 L 3149.6 348.0" fill="none"/>
+      <path class="bpmn-flow-line" d="M 3024.6 355.0 L 3123.6 355.0 L 3123.6 348.0 L 3149.6 348.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    <g class="bpmn-flow-label">
+      <rect x="3036.1" y="358.25" width="36.4" height="14"
+            rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"/>
+      <text x="3054.2999999999997" y="365.25" text-anchor="middle" dominant-baseline="middle"
+            font-size="11" fill="#263238" direction="rtl">נכשל</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf20">
+      <path class="bpmn-flow-hit" d="M 3289.6 348.0 L 3305.6 348.0 L 3305.6 398.0 L 2583.6 398.0 L 2583.6 372.0" fill="none"/>
+      <path class="bpmn-flow-line" d="M 3289.6 348.0 L 3305.6 348.0 L 3305.6 398.0 L 2583.6 398.0 L 2583.6 372.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf21">
+      <path class="bpmn-flow-hit" d="M 3024.6 341.0 L 3133.6 341.0 L 3133.6 186.0 L 3219.6 186.0 L 3219.6 160.0" fill="none"/>
+      <path class="bpmn-flow-line" d="M 3024.6 341.0 L 3133.6 341.0 L 3133.6 186.0 L 3219.6 186.0 L 3219.6 160.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    <g class="bpmn-flow-label">
+      <rect x="3086" y="317.75" width="29.799999999999997" height="14"
+            rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"/>
+      <text x="3100.9" y="324.75" text-anchor="middle" dominant-baseline="middle"
+            font-size="11" fill="#263238" direction="rtl">עבר</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf22">
+      <path class="bpmn-flow-hit" d="M 3289.6 128.0 L 3361.6 128.0" fill="none"/>
+      <path class="bpmn-flow-line" d="M 3289.6 128.0 L 3361.6 128.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf23">
+      <path class="bpmn-flow-hit" d="M 3501.6 128.0 L 3573.6 128.0" fill="none"/>
+      <path class="bpmn-flow-line" d="M 3501.6 128.0 L 3573.6 128.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf24">
+      <path class="bpmn-flow-hit" d="M 3713.6 128.0 L 3837.6 128.0" fill="none"/>
+      <path class="bpmn-flow-line" d="M 3713.6 128.0 L 3837.6 128.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    </g>
+      
+    <g class="bpmn-flow bpmn-message" data-flow="mf1">
+      <path class="bpmn-flow-hit" d="M 1453.6 380.0 L 1453.6 528.0" fill="none"/>
+      <path class="bpmn-flow-line" d="M 1453.6 380.0 L 1453.6 528.0" fill="none" stroke="#37474f" stroke-width="1.3"
+            stroke-dasharray="10 5"
+            marker-start="url(#msg-start)" marker-end="url(#msg-end)"/>
+      
+    <g class="bpmn-flow-label">
+      <rect x="1293.435" y="443" width="148.6" height="14"
+            rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"/>
+      <text x="1367.735" y="450" text-anchor="middle" dominant-baseline="middle"
+            font-size="11" fill="#263238" direction="rtl">טופס בקשת מועד לבדיקה</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-message" data-flow="mf2">
+      <path class="bpmn-flow-hit" d="M 1877.6 528.0 L 1877.6 366.0" fill="none"/>
+      <path class="bpmn-flow-line" d="M 1877.6 528.0 L 1877.6 366.0" fill="none" stroke="#37474f" stroke-width="1.3"
+            stroke-dasharray="10 5"
+            marker-start="url(#msg-start)" marker-end="url(#msg-end)"/>
+      
+    <g class="bpmn-flow-label">
+      <rect x="1799.8149999999998" y="436" width="69.4" height="14"
+            rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"/>
+      <text x="1834.5149999999999" y="443" text-anchor="middle" dominant-baseline="middle"
+            font-size="11" fill="#263238" direction="rtl">מועד מוצע</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-message" data-flow="mf3">
+      <path class="bpmn-flow-hit" d="M 2371.6 328.0 L 2371.6 355.0 L 2285.6 355.0 L 2285.6 502.0 L 2347.6 502.0 L 2347.6 528.0" fill="none"/>
+      <path class="bpmn-flow-line" d="M 2371.6 328.0 L 2371.6 355.0 L 2285.6 355.0 L 2285.6 502.0 L 2347.6 502.0 L 2347.6 528.0" fill="none" stroke="#37474f" stroke-width="1.3"
+            stroke-dasharray="10 5"
+            marker-start="url(#msg-start)" marker-end="url(#msg-end)"/>
+      
+    <g class="bpmn-flow-label">
+      <rect x="2381.8399999999997" y="330.5" width="115.6" height="14"
+            rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"/>
+      <text x="2439.64" y="337.5" text-anchor="middle" dominant-baseline="middle"
+            font-size="11" fill="#263238" direction="rtl">בקשה למועד חלופי</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-message" data-flow="mf4">
+      <path class="bpmn-flow-hit" d="M 2371.6 432.0 L 2371.6 502.0 L 2395.6 502.0 L 2395.6 528.0" fill="none"/>
+      <path class="bpmn-flow-line" d="M 2371.6 432.0 L 2371.6 502.0 L 2395.6 502.0 L 2395.6 528.0" fill="none" stroke="#37474f" stroke-width="1.3"
+            stroke-dasharray="10 5"
+            marker-start="url(#msg-start)" marker-end="url(#msg-end)"/>
+      
+    <g class="bpmn-flow-label">
+      <rect x="2385.2850000000003" y="456" width="201.39999999999998" height="14"
+            rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"/>
+      <text x="2485.985" y="463" text-anchor="middle" dominant-baseline="middle"
+            font-size="11" fill="#263238" direction="rtl">אישור הגעה ושליחת הרכב לבדיקה</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-message" data-flow="mf5">
+      <path class="bpmn-flow-hit" d="M 3219.6 380.0 L 3219.6 528.0" fill="none"/>
+      <path class="bpmn-flow-line" d="M 3219.6 380.0 L 3219.6 528.0" fill="none" stroke="#37474f" stroke-width="1.3"
+            stroke-dasharray="10 5"
+            marker-start="url(#msg-start)" marker-end="url(#msg-end)"/>
+      
+    <g class="bpmn-flow-label">
+      <rect x="3045.705" y="443" width="161.79999999999998" height="14"
+            rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"/>
+      <text x="3126.605" y="450" text-anchor="middle" dominant-baseline="middle"
+            font-size="11" fill="#263238" direction="rtl">קביעת מועד לבדיקה חוזרת</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-message" data-flow="mf6">
+      <path class="bpmn-flow-hit" d="M 2795.6 528.0 L 2795.6 366.0" fill="none"/>
+      <path class="bpmn-flow-line" d="M 2795.6 528.0 L 2795.6 366.0" fill="none" stroke="#37474f" stroke-width="1.3"
+            stroke-dasharray="10 5"
+            marker-start="url(#msg-start)" marker-end="url(#msg-end)"/>
+      
+    <g class="bpmn-flow-label">
+      <rect x="2621.705" y="436" width="161.79999999999998" height="14"
+            rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"/>
+      <text x="2702.605" y="443" text-anchor="middle" dominant-baseline="middle"
+            font-size="11" fill="#263238" direction="rtl">תוצאת הטסט (עבר / נכשל)</text>
+    </g>
+    </g>
+      
+    <g class="bpmn-flow bpmn-data-assoc" data-flow="da1" data-dir="read">
+      <path class="bpmn-flow-hit" d="M 1886.8 190.0 L 1886.8 176.0 L 1241.6 176.0 L 1241.6 186.0 L 356.0 186.0 L 356.0 160.0" fill="none"/>
+      <path class="bpmn-flow-line" d="M 1886.8 190.0 L 1886.8 176.0 L 1241.6 176.0 L 1241.6 186.0 L 356.0 186.0 L 356.0 160.0" fill="none" stroke="#7986cb" stroke-width="1.1"
+            stroke-dasharray="4 3" marker-end="url(#arrow-data)"/>
+    </g>
+
+    <g class="bpmn-flow bpmn-data-assoc" data-flow="da2" data-dir="write">
+      <path class="bpmn-flow-hit" d="M 3431.6 160.0 L 3431.6 174.0 L 1900.8 174.0 L 1900.8 190.0" fill="none"/>
+      <path class="bpmn-flow-line" d="M 3431.6 160.0 L 3431.6 174.0 L 1900.8 174.0 L 1900.8 190.0" fill="none" stroke="#7986cb" stroke-width="1.1"
+            stroke-dasharray="4 3" marker-end="url(#arrow-data)"/>
+    </g>
+      
+    <g class="bpmn-element bpmn-event" id="s_start" data-kind="event" data-event="start">
+      <circle cx="144" cy="128" r="18" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2"/>
+      <text text-anchor="middle" font-size="11" fill="#37474f" direction="rtl"
+             font-weight="500"><tspan x="144" y="160">זוהה בסריקה יומית</tspan><tspan x="144" y="172">רכב שרישיונו יפוג…</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-task" id="s_fetch" data-kind="task">
+      <rect x="286" y="96" width="140" height="64"
+            rx="8" ry="8" fill="#ffffff" stroke="#546e7a" stroke-width="1.5"/>
+      <text text-anchor="middle" dominant-baseline="middle"
+            font-size="11.5" font-weight="500"
+            fill="#1a1a2e" direction="rtl"><tspan x="356" y="121">שליפת תיק הרכב</tspan><tspan x="356" y="135">ממאגר הרכבים</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-gateway" id="s_scrap_q" data-kind="gateway" data-gw="XOR">
+      <text text-anchor="middle" font-size="11" fill="#37474f" direction="rtl"
+             font-weight="500"><tspan x="568" y="94">האם הרכב מסומן לגריטה?</tspan></text>
+      <rect x="551" y="111" width="34" height="34"
+            fill="#fff8e1" stroke="#f9a825" stroke-width="2"
+            transform="rotate(45, 568, 128)"/>
+      
+      <line x1="560" y1="120" x2="576" y2="136"
+            stroke="#e65100" stroke-width="3" stroke-linecap="round"/>
+      <line x1="576" y1="120" x2="560" y2="136"
+            stroke="#e65100" stroke-width="3" stroke-linecap="round"/>
+    </g>
+
+    <g class="bpmn-element bpmn-gateway" id="s_ins_q" data-kind="gateway" data-gw="XOR">
+      <text text-anchor="middle" font-size="11" fill="#37474f" direction="rtl"
+             font-weight="500"><tspan x="817.6" y="94">האם ביטוח הרכב בתוקף?</tspan></text>
+      <rect x="800.6" y="111" width="34" height="34"
+            fill="#fff8e1" stroke="#f9a825" stroke-width="2"
+            transform="rotate(45, 817.6, 128)"/>
+      
+      <line x1="809.6" y1="120" x2="825.6" y2="136"
+            stroke="#e65100" stroke-width="3" stroke-linecap="round"/>
+      <line x1="825.6" y1="120" x2="809.6" y2="136"
+            stroke="#e65100" stroke-width="3" stroke-linecap="round"/>
+    </g>
+
+    <g class="bpmn-element bpmn-gateway" id="s_ins_merge" data-kind="gateway" data-gw="XOR">
+      
+      <rect x="1224.6" y="111" width="34" height="34"
+            fill="#fff8e1" stroke="#f9a825" stroke-width="2"
+            transform="rotate(45, 1241.6, 128)"/>
+      
+      <line x1="1233.6" y1="120" x2="1249.6" y2="136"
+            stroke="#e65100" stroke-width="3" stroke-linecap="round"/>
+      <line x1="1249.6" y1="120" x2="1233.6" y2="136"
+            stroke="#e65100" stroke-width="3" stroke-linecap="round"/>
+    </g>
+
+    <g class="bpmn-element bpmn-task" id="s_issue" data-kind="task">
+      <rect x="3149.6" y="96" width="140" height="64"
+            rx="8" ry="8" fill="#ffffff" stroke="#546e7a" stroke-width="1.5"/>
+      <text text-anchor="middle" dominant-baseline="middle"
+            font-size="11.5" font-weight="500"
+            fill="#1a1a2e" direction="rtl"><tspan x="3219.6" y="121">הפקת רישיון</tspan><tspan x="3219.6" y="135">מעודכן</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-task" id="s_update" data-kind="task">
+      <rect x="3361.6" y="96" width="140" height="64"
+            rx="8" ry="8" fill="#ffffff" stroke="#546e7a" stroke-width="1.5"/>
+      <text text-anchor="middle" dominant-baseline="middle"
+            font-size="11.5" font-weight="500"
+            fill="#1a1a2e" direction="rtl"><tspan x="3431.6" y="114">עדכון סטטוס</tspan><tspan x="3431.6" y="128">הרישיון ל&quot;בתוקף&quot;</tspan><tspan x="3431.6" y="142">במאגר הרכבים</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-task" id="s_notify" data-kind="task">
+      <rect x="3573.6" y="96" width="140" height="64"
+            rx="8" ry="8" fill="#ffffff" stroke="#546e7a" stroke-width="1.5"/>
+      <text text-anchor="middle" dominant-baseline="middle"
+            font-size="11.5" font-weight="500"
+            fill="#1a1a2e" direction="rtl"><tspan x="3643.6" y="114">שליחת הודעה</tspan><tspan x="3643.6" y="128">למחלקה שהרכב חזר</tspan><tspan x="3643.6" y="142">לשירות</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-event" id="s_end_ok" data-kind="event" data-event="end">
+      <circle cx="3855.6" cy="128" r="18" fill="#ffebee" stroke="#c62828" stroke-width="3.5"/>
+      <text text-anchor="middle" font-size="11" fill="#37474f" direction="rtl"
+             font-weight="500"><tspan x="3855.6" y="160">הרכב קיבל רישיון</tspan><tspan x="3855.6" y="172">מחודש</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-task" id="c_scrap" data-kind="task">
+      <rect x="747.6" y="316" width="140" height="64"
+            rx="8" ry="8" fill="#ffffff" stroke="#546e7a" stroke-width="1.5"/>
+      <text text-anchor="middle" dominant-baseline="middle"
+            font-size="11.5" font-weight="500"
+            fill="#1a1a2e" direction="rtl"><tspan x="817.6" y="341">העברת הרכב</tspan><tspan x="817.6" y="355">לתהליך גריטה</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-task" id="c_renew_ins" data-kind="task">
+      <rect x="959.5999999999999" y="264" width="140" height="64"
+            rx="8" ry="8" fill="#ffffff" stroke="#546e7a" stroke-width="1.5"/>
+      <text text-anchor="middle" dominant-baseline="middle"
+            font-size="11.5" font-weight="500"
+            fill="#1a1a2e" direction="rtl"><tspan x="1029.6" y="296">חידוש ביטוח הרכב</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-event" id="c_end_scrap" data-kind="event" data-event="end">
+      <circle cx="1029.6" cy="400" r="18" fill="#ffebee" stroke="#c62828" stroke-width="3.5"/>
+      <text text-anchor="middle" font-size="11" fill="#37474f" direction="rtl"
+             font-weight="500"><tspan x="1029.6" y="432">הרכב יצא מהתהליך</tspan><tspan x="1029.6" y="444">ללא חידוש רישיון</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-task" id="c_form" data-kind="task">
+      <rect x="1383.6" y="316" width="140" height="64"
+            rx="8" ry="8" fill="#ffffff" stroke="#546e7a" stroke-width="1.5"/>
+      <text text-anchor="middle" dominant-baseline="middle"
+            font-size="11.5" font-weight="500"
+            fill="#1a1a2e" direction="rtl"><tspan x="1453.6" y="334">מילוי טופס בקשת</tspan><tspan x="1453.6" y="348">מועד לבדיקה</tspan><tspan x="1453.6" y="362">ושליחתו למכון</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-gateway" id="c_slot_merge" data-kind="gateway" data-gw="XOR">
+      
+      <rect x="1648.6" y="331" width="34" height="34"
+            fill="#fff8e1" stroke="#f9a825" stroke-width="2"
+            transform="rotate(45, 1665.6, 348)"/>
+      
+      <line x1="1657.6" y1="340" x2="1673.6" y2="356"
+            stroke="#e65100" stroke-width="3" stroke-linecap="round"/>
+      <line x1="1673.6" y1="340" x2="1657.6" y2="356"
+            stroke="#e65100" stroke-width="3" stroke-linecap="round"/>
+    </g>
+
+    <g class="bpmn-element bpmn-event" id="c_wait_slot" data-kind="event" data-event="intermediate">
+      
+      <circle cx="1877.6" cy="348" r="18" fill="#ffffff" stroke="#1565c0" stroke-width="2"/>
+      <circle cx="1877.6" cy="348" r="13.5" fill="none" stroke="#1565c0" stroke-width="1.2"/>
+      <text text-anchor="middle" font-size="11" fill="#37474f" direction="rtl"
+             font-weight="500"><tspan x="1877.6" y="380">המתנה למועד המוצע</tspan><tspan x="1877.6" y="392">מהמכון</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-gateway" id="c_slot_q" data-kind="gateway" data-gw="XOR">
+      <text text-anchor="middle" font-size="11" fill="#37474f" direction="rtl"
+             font-weight="500"><tspan x="2089.6" y="301">האם המועד המוצע חל</tspan><tspan x="2089.6" y="314">לפני מועד פקיעת…</tspan></text>
+      <rect x="2072.6" y="331" width="34" height="34"
+            fill="#fff8e1" stroke="#f9a825" stroke-width="2"
+            transform="rotate(45, 2089.6, 348)"/>
+      
+      <line x1="2081.6" y1="340" x2="2097.6" y2="356"
+            stroke="#e65100" stroke-width="3" stroke-linecap="round"/>
+      <line x1="2097.6" y1="340" x2="2081.6" y2="356"
+            stroke="#e65100" stroke-width="3" stroke-linecap="round"/>
+    </g>
+
+    <g class="bpmn-element bpmn-task" id="c_alt_slot" data-kind="task">
+      <rect x="2301.6" y="264" width="140" height="64"
+            rx="8" ry="8" fill="#ffffff" stroke="#546e7a" stroke-width="1.5"/>
+      <text text-anchor="middle" dominant-baseline="middle"
+            font-size="11.5" font-weight="500"
+            fill="#1a1a2e" direction="rtl"><tspan x="2371.6" y="289">שליחת בקשה למועד</tspan><tspan x="2371.6" y="303">חלופי</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-task" id="c_confirm" data-kind="task">
+      <rect x="2301.6" y="368" width="140" height="64"
+            rx="8" ry="8" fill="#ffffff" stroke="#546e7a" stroke-width="1.5"/>
+      <text text-anchor="middle" dominant-baseline="middle"
+            font-size="11.5" font-weight="500"
+            fill="#1a1a2e" direction="rtl"><tspan x="2371.6" y="386">אישור הגעה</tspan><tspan x="2371.6" y="400">ושליחת הרכב</tspan><tspan x="2371.6" y="414">לבדיקה במכון</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-gateway" id="c_result_merge" data-kind="gateway" data-gw="XOR">
+      
+      <rect x="2566.6" y="331" width="34" height="34"
+            fill="#fff8e1" stroke="#f9a825" stroke-width="2"
+            transform="rotate(45, 2583.6, 348)"/>
+      
+      <line x1="2575.6" y1="340" x2="2591.6" y2="356"
+            stroke="#e65100" stroke-width="3" stroke-linecap="round"/>
+      <line x1="2591.6" y1="340" x2="2575.6" y2="356"
+            stroke="#e65100" stroke-width="3" stroke-linecap="round"/>
+    </g>
+
+    <g class="bpmn-element bpmn-event" id="c_wait_result" data-kind="event" data-event="intermediate">
+      
+      <circle cx="2795.6" cy="348" r="18" fill="#ffffff" stroke="#1565c0" stroke-width="2"/>
+      <circle cx="2795.6" cy="348" r="13.5" fill="none" stroke="#1565c0" stroke-width="1.2"/>
+      <text text-anchor="middle" font-size="11" fill="#37474f" direction="rtl"
+             font-weight="500"><tspan x="2795.6" y="380">המתנה לתוצאת הטסט</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-gateway" id="c_result_q" data-kind="gateway" data-gw="XOR">
+      <text text-anchor="middle" font-size="11" fill="#37474f" direction="rtl"
+             font-weight="500"><tspan x="3007.6" y="314">האם הרכב עבר את הטסט?</tspan></text>
+      <rect x="2990.6" y="331" width="34" height="34"
+            fill="#fff8e1" stroke="#f9a825" stroke-width="2"
+            transform="rotate(45, 3007.6, 348)"/>
+      
+      <line x1="2999.6" y1="340" x2="3015.6" y2="356"
+            stroke="#e65100" stroke-width="3" stroke-linecap="round"/>
+      <line x1="3015.6" y1="340" x2="2999.6" y2="356"
+            stroke="#e65100" stroke-width="3" stroke-linecap="round"/>
+    </g>
+
+    <g class="bpmn-element bpmn-task" id="c_fix" data-kind="task">
+      <rect x="3149.6" y="316" width="140" height="64"
+            rx="8" ry="8" fill="#ffffff" stroke="#546e7a" stroke-width="1.5"/>
+      <text text-anchor="middle" dominant-baseline="middle"
+            font-size="11.5" font-weight="500"
+            fill="#1a1a2e" direction="rtl"><tspan x="3219.6" y="334">הזמנת תיקון</tspan><tspan x="3219.6" y="348">ליקויים וקביעת</tspan><tspan x="3219.6" y="362">מועד לבדיקה…</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-data-store" id="ds_vehicles" data-kind="dataStore">
+      <path d="M 1865.8 196 L 1865.8 228
+               A 28 6 0 0 0 1921.8 228
+               L 1921.8 196
+               A 28 6 0 0 0 1865.8 196 Z"
+            fill="#ffffff" stroke="#2e7d32" stroke-width="1.4"/>
+      <path d="M 1865.8 196
+               A 28 6 0 0 0 1921.8 196"
+            fill="none" stroke="#2e7d32" stroke-width="1.4"/>
+      <text x="1893.8" y="248" text-anchor="middle"
+            font-size="11" fill="#263238"
+            direction="rtl">מאגר הרכבים</text>
+    </g>
+    </svg>
+  </div>
+  <div id="bpmn-tooltip" class="bpmn-tooltip"></div>
+  
+    <button class="assumptions-btn" onclick="toggleAssumptions()">ℹ️ הנחות ושאלות</button>
+    <div id="assumptions-panel" class="assumptions-panel">
+      <h4>הנחות ושאלות פתוחות</h4>
+      <strong>הנחות:</strong><ul><li>מערכת הרישוי ורכז הרישוי הם שני מבצעים בתוך אותו משתתף עסקי, מחלקת הרישוי, ולכן הם שני Lanes בתוך Pool אחד ולא שני Pools. המעבר ביניהם הוא Sequence Flow רגיל.</li><li>מכון הרישוי החיצוני מצויר כ-Pool ריק (black-box): הוא מריץ תהליך משלו שאיננו מנהלים ואיננו מכירים, ולכן מוחלפים עמו Message Flows בלבד.</li><li>מאגר הרכבים אינו שלב בתהליך אלא נתונים מתמידים, ולכן הוא מיוצג בסמל Data Store ומחובר ב-Association: קריאה בשליפת תיק הרכב וכתיבה בעדכון סטטוס הרישיון.</li><li>ההמתנה למועד המוצע וההמתנה לתוצאת הטסט הן פרקי זמן שבהם הרכז אינו מבצע דבר, ולכן הן אירועי ביניים ולא משימות.</li><li>שתי הלולאות חוזרות אל שער XOR של מיזוג הממוקם לפני אירוע ההמתנה, ולא ישירות אל אירוע ההמתנה, כדי שלא ייכנסו אליו שני חצים.</li><li>ההודעה למחלקה המחזיקה ברכב ממודלת כפעילות מערכת. הוספת Pool ריק שלישי, &quot;המחלקה המחזיקה ברכב&quot;, כיעד להודעה זו היא וריאנט תקין ואינה נדרשת.</li></ul>
+      <strong>שאלות פתוחות:</strong><ul><li>התיאור אינו קובע גבול למספר סבבי הבדיקה החוזרת. בפועל ארגון היה קובע מכסה (למשל שני כשלונות) שמעבר לה הרכב מועבר להחלטת גריטה. סטודנט שהוסיף ענף כזה נתן תשובה סבירה לא פחות.</li></ul>
+    </div>
+  <button class="vp-export-btn" onclick="exportBPMN()">Download .bpmn (Visual Paradigm)</button>
+  <script>
+  (function() {
+    const TOOLTIPS = {"s_start":"<strong>אירוע התחלה</strong><div>זוהה בסריקה יומית רכב שרישיונו יפוג בתוך 30 יום</div>","s_fetch":"<strong>שליפת תיק הרכב ממאגר הרכבים</strong><div>מאגר: מחלקת הרישוי · נתיב: מערכת הרישוי</div><div>קורא: מאגר הרכבים</div>","s_scrap_q":"<strong>XOR (בלעדי) — פיצול</strong><div>האם הרכב מסומן לגריטה?</div><div>שאלה: האם הרכב מסומן כמיועד לגריטה?</div><div>ענפים:</div><ul style=\"margin:4px 0 0;padding-right:18px\"><li>כן, מסומן לגריטה ← העברת הרכב לתהליך גריטה</li><li>לא ← האם ביטוח הרכב בתוקף?</li></ul>","s_ins_q":"<strong>XOR (בלעדי) — פיצול</strong><div>האם ביטוח הרכב בתוקף?</div><div>שאלה: האם ביטוח הרכב בתוקף?</div><div>ענפים:</div><ul style=\"margin:4px 0 0;padding-right:18px\"><li>לא בתוקף ← חידוש ביטוח הרכב</li><li>בתוקף ← s_ins_merge</li></ul>","s_ins_merge":"<strong>XOR (בלעדי) — איחוד</strong>","s_issue":"<strong>הפקת רישיון מעודכן</strong><div>מאגר: מחלקת הרישוי · נתיב: מערכת הרישוי</div>","s_update":"<strong>עדכון סטטוס הרישיון ל&quot;בתוקף&quot; במאגר הרכבים</strong><div>מאגר: מחלקת הרישוי · נתיב: מערכת הרישוי</div><div>כותב: מאגר הרכבים</div>","s_notify":"<strong>שליחת הודעה למחלקה שהרכב חזר לשירות</strong><div>מאגר: מחלקת הרישוי · נתיב: מערכת הרישוי</div>","s_end_ok":"<strong>אירוע סיום</strong><div>הרכב קיבל רישיון מחודש</div>","c_scrap":"<strong>העברת הרכב לתהליך גריטה</strong><div>מאגר: מחלקת הרישוי · נתיב: רכז הרישוי</div>","c_end_scrap":"<strong>אירוע סיום</strong><div>הרכב יצא מהתהליך ללא חידוש רישיון</div>","c_renew_ins":"<strong>חידוש ביטוח הרכב</strong><div>מאגר: מחלקת הרישוי · נתיב: רכז הרישוי</div>","c_form":"<strong>מילוי טופס בקשת מועד לבדיקה ושליחתו למכון</strong><div>מאגר: מחלקת הרישוי · נתיב: רכז הרישוי</div>","c_slot_merge":"<strong>XOR (בלעדי) — איחוד</strong>","c_wait_slot":"<strong>אירוע ביניים</strong><div>המתנה למועד המוצע מהמכון</div>","c_slot_q":"<strong>XOR (בלעדי) — פיצול</strong><div>האם המועד המוצע חל לפני מועד פקיעת הרישיון?</div><div>שאלה: האם המועד שהמכון הציע חל לפני מועד פקיעת הרישיון?</div><div>ענפים:</div><ul style=\"margin:4px 0 0;padding-right:18px\"><li>לא, המועד מאוחר מהפקיעה ← שליחת בקשה למועד חלופי</li><li>כן, המועד מתאים ← אישור הגעה ושליחת הרכב לבדיקה במכון</li></ul>","c_alt_slot":"<strong>שליחת בקשה למועד חלופי</strong><div>מאגר: מחלקת הרישוי · נתיב: רכז הרישוי</div>","c_confirm":"<strong>אישור הגעה ושליחת הרכב לבדיקה במכון</strong><div>מאגר: מחלקת הרישוי · נתיב: רכז הרישוי</div>","c_result_merge":"<strong>XOR (בלעדי) — איחוד</strong>","c_wait_result":"<strong>אירוע ביניים</strong><div>המתנה לתוצאת הטסט</div>","c_result_q":"<strong>XOR (בלעדי) — פיצול</strong><div>האם הרכב עבר את הטסט?</div><div>שאלה: האם הרכב עבר את הבדיקה במכון?</div><div>ענפים:</div><ul style=\"margin:4px 0 0;padding-right:18px\"><li>נכשל ← הזמנת תיקון ליקויים וקביעת מועד לבדיקה חוזרת</li><li>עבר ← הפקת רישיון מעודכן</li></ul>","c_fix":"<strong>הזמנת תיקון ליקויים וקביעת מועד לבדיקה חוזרת</strong><div>מאגר: מחלקת הרישוי · נתיב: רכז הרישוי</div>","ds_vehicles":"<strong>מאגר נתונים: מאגר הרכבים</strong><div>נקרא ע״י: שליפת תיק הרכב ממאגר הרכבים</div><div>נכתב ע״י: עדכון סטטוס הרישיון ל&quot;בתוקף&quot; במאגר הרכבים</div>"};
+    const tip = document.getElementById('bpmn-tooltip');
+    document.querySelectorAll('.bpmn-element').forEach(function(g) {
+      g.addEventListener('mouseenter', function() {
+        const id = g.getAttribute('id');
+        const content = TOOLTIPS[id];
+        if (!content) return;
+        tip.innerHTML = content;
+        tip.style.display = 'block';
+      });
+      g.addEventListener('mousemove', function(e) {
+        tip.style.top = (e.clientY + 14) + 'px';
+        tip.style.left = (e.clientX + 14) + 'px';
+      });
+      g.addEventListener('mouseleave', function() { tip.style.display = 'none'; });
+    });
+
+    // Flow highlight: brighten and draw an unbroken copy on top of crossings.
+    // The hovered element itself is NEVER moved in the DOM — moving the node
+    // under the pointer can swallow the browser's mouseleave and leave the
+    // highlight stuck. A pointer-transparent clone gives the same z-lift safely.
+    document.querySelectorAll('.bpmn-flow').forEach(function(g) {
+      let ghost = null;
+      g.addEventListener('mouseenter', function() {
+        g.classList.add('bpmn-hl');
+        ghost = g.cloneNode(true);
+        ghost.removeAttribute('id');
+        ghost.style.pointerEvents = 'none';
+        g.ownerSVGElement.appendChild(ghost);  // unbroken copy on top
+      });
+      g.addEventListener('mouseleave', function() {
+        g.classList.remove('bpmn-hl');
+        if (ghost) { ghost.remove(); ghost = null; }
+      });
+    });
+  })();
+
+  
+  function toggleAssumptions() {
+    const p = document.getElementById('assumptions-panel');
+    p.style.display = p.style.display === 'block' ? 'none' : 'block';
+  }
+
+  // Precomputed BPMN 2.0 XML — server generated from the layout
+  const BPMN_XML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<bpmn:definitions xmlns:bpmn=\"http://www.omg.org/spec/BPMN/20100524/MODEL\"\n  xmlns:bpmndi=\"http://www.omg.org/spec/BPMN/20100524/DI\"\n  xmlns:dc=\"http://www.omg.org/spec/DD/20100524/DC\"\n  xmlns:di=\"http://www.omg.org/spec/DD/20100524/DI\"\n  xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n  id=\"Definitions_1\" targetNamespace=\"http://bpmn.io/schema/bpmn\">\n  <bpmn:process id=\"process_1\" name=\"מחלקת הרישוי\" isExecutable=\"false\">\n      <bpmn:laneSet id=\"process_1_laneset\">\n        <bpmn:lane id=\"sys\" name=\"מערכת הרישוי\">\n          <bpmn:flowNodeRef>s_start</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>s_fetch</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>s_scrap_q</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>s_ins_q</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>s_ins_merge</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>s_issue</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>s_update</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>s_notify</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>s_end_ok</bpmn:flowNodeRef>\n        </bpmn:lane>\n        <bpmn:lane id=\"coord\" name=\"רכז הרישוי\">\n          <bpmn:flowNodeRef>c_scrap</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>c_end_scrap</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>c_renew_ins</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>c_form</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>c_slot_merge</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>c_wait_slot</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>c_slot_q</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>c_alt_slot</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>c_confirm</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>c_result_merge</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>c_wait_result</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>c_result_q</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>c_fix</bpmn:flowNodeRef>\n        </bpmn:lane>\n      </bpmn:laneSet>\n      <bpmn:startEvent id=\"s_start\" name=\"זוהה בסריקה יומית רכב שרישיונו יפוג בתוך 30 יום\"/>\n      <bpmn:task id=\"s_fetch\" name=\"שליפת תיק הרכב ממאגר הרכבים\"/>\n      <bpmn:exclusiveGateway id=\"s_scrap_q\" name=\"האם הרכב מסומן לגריטה?\"/>\n      <bpmn:exclusiveGateway id=\"s_ins_q\" name=\"האם ביטוח הרכב בתוקף?\"/>\n      <bpmn:exclusiveGateway id=\"s_ins_merge\" name=\"\"/>\n      <bpmn:task id=\"s_issue\" name=\"הפקת רישיון מעודכן\"/>\n      <bpmn:task id=\"s_update\" name=\"עדכון סטטוס הרישיון ל&quot;בתוקף&quot; במאגר הרכבים\"/>\n      <bpmn:task id=\"s_notify\" name=\"שליחת הודעה למחלקה שהרכב חזר לשירות\"/>\n      <bpmn:endEvent id=\"s_end_ok\" name=\"הרכב קיבל רישיון מחודש\"/>\n      <bpmn:task id=\"c_scrap\" name=\"העברת הרכב לתהליך גריטה\"/>\n      <bpmn:endEvent id=\"c_end_scrap\" name=\"הרכב יצא מהתהליך ללא חידוש רישיון\"/>\n      <bpmn:task id=\"c_renew_ins\" name=\"חידוש ביטוח הרכב\"/>\n      <bpmn:task id=\"c_form\" name=\"מילוי טופס בקשת מועד לבדיקה ושליחתו למכון\"/>\n      <bpmn:exclusiveGateway id=\"c_slot_merge\" name=\"\"/>\n      <bpmn:intermediateCatchEvent id=\"c_wait_slot\" name=\"המתנה למועד המוצע מהמכון\"/>\n      <bpmn:exclusiveGateway id=\"c_slot_q\" name=\"האם המועד המוצע חל לפני מועד פקיעת הרישיון?\"/>\n      <bpmn:task id=\"c_alt_slot\" name=\"שליחת בקשה למועד חלופי\"/>\n      <bpmn:task id=\"c_confirm\" name=\"אישור הגעה ושליחת הרכב לבדיקה במכון\"/>\n      <bpmn:exclusiveGateway id=\"c_result_merge\" name=\"\"/>\n      <bpmn:intermediateCatchEvent id=\"c_wait_result\" name=\"המתנה לתוצאת הטסט\"/>\n      <bpmn:exclusiveGateway id=\"c_result_q\" name=\"האם הרכב עבר את הטסט?\"/>\n      <bpmn:task id=\"c_fix\" name=\"הזמנת תיקון ליקויים וקביעת מועד לבדיקה חוזרת\"/>\n      <bpmn:dataStoreReference id=\"ds_vehicles\" name=\"מאגר הרכבים\"/>\n      <bpmn:sequenceFlow id=\"sf1\" sourceRef=\"s_start\" targetRef=\"s_fetch\"/>\n      <bpmn:sequenceFlow id=\"sf2\" sourceRef=\"s_fetch\" targetRef=\"s_scrap_q\"/>\n      <bpmn:sequenceFlow id=\"sf3\" sourceRef=\"s_scrap_q\" targetRef=\"c_scrap\" name=\"כן, מסומן לגריטה\"/>\n      <bpmn:sequenceFlow id=\"sf4\" sourceRef=\"c_scrap\" targetRef=\"c_end_scrap\"/>\n      <bpmn:sequenceFlow id=\"sf5\" sourceRef=\"s_scrap_q\" targetRef=\"s_ins_q\" name=\"לא\"/>\n      <bpmn:sequenceFlow id=\"sf6\" sourceRef=\"s_ins_q\" targetRef=\"c_renew_ins\" name=\"לא בתוקף\"/>\n      <bpmn:sequenceFlow id=\"sf7\" sourceRef=\"c_renew_ins\" targetRef=\"s_ins_merge\"/>\n      <bpmn:sequenceFlow id=\"sf8\" sourceRef=\"s_ins_q\" targetRef=\"s_ins_merge\" name=\"בתוקף\"/>\n      <bpmn:sequenceFlow id=\"sf9\" sourceRef=\"s_ins_merge\" targetRef=\"c_form\"/>\n      <bpmn:sequenceFlow id=\"sf10\" sourceRef=\"c_form\" targetRef=\"c_slot_merge\"/>\n      <bpmn:sequenceFlow id=\"sf11\" sourceRef=\"c_slot_merge\" targetRef=\"c_wait_slot\"/>\n      <bpmn:sequenceFlow id=\"sf12\" sourceRef=\"c_wait_slot\" targetRef=\"c_slot_q\"/>\n      <bpmn:sequenceFlow id=\"sf13\" sourceRef=\"c_slot_q\" targetRef=\"c_alt_slot\" name=\"לא, המועד מאוחר מהפקיעה\"/>\n      <bpmn:sequenceFlow id=\"sf14\" sourceRef=\"c_alt_slot\" targetRef=\"c_slot_merge\"/>\n      <bpmn:sequenceFlow id=\"sf15\" sourceRef=\"c_slot_q\" targetRef=\"c_confirm\" name=\"כן, המועד מתאים\"/>\n      <bpmn:sequenceFlow id=\"sf16\" sourceRef=\"c_confirm\" targetRef=\"c_result_merge\"/>\n      <bpmn:sequenceFlow id=\"sf17\" sourceRef=\"c_result_merge\" targetRef=\"c_wait_result\"/>\n      <bpmn:sequenceFlow id=\"sf18\" sourceRef=\"c_wait_result\" targetRef=\"c_result_q\"/>\n      <bpmn:sequenceFlow id=\"sf19\" sourceRef=\"c_result_q\" targetRef=\"c_fix\" name=\"נכשל\"/>\n      <bpmn:sequenceFlow id=\"sf20\" sourceRef=\"c_fix\" targetRef=\"c_result_merge\"/>\n      <bpmn:sequenceFlow id=\"sf21\" sourceRef=\"c_result_q\" targetRef=\"s_issue\" name=\"עבר\"/>\n      <bpmn:sequenceFlow id=\"sf22\" sourceRef=\"s_issue\" targetRef=\"s_update\"/>\n      <bpmn:sequenceFlow id=\"sf23\" sourceRef=\"s_update\" targetRef=\"s_notify\"/>\n      <bpmn:sequenceFlow id=\"sf24\" sourceRef=\"s_notify\" targetRef=\"s_end_ok\"/>\n  </bpmn:process>\n  <bpmn:process id=\"process_2\" name=\"מכון רישוי חיצוני\" isExecutable=\"false\">\n\n      <bpmn:dataStoreReference id=\"ds_vehicles\" name=\"מאגר הרכבים\"/>\n  </bpmn:process>\n  <bpmn:collaboration id=\"collab_1\">\n    <bpmn:participant id=\"licensing\" name=\"מחלקת הרישוי\" processRef=\"process_1\"/>\n    <bpmn:participant id=\"institute\" name=\"מכון רישוי חיצוני\" processRef=\"process_2\"/>\n    <bpmn:messageFlow id=\"mf1\" sourceRef=\"c_form\" targetRef=\"institute\" name=\"טופס בקשת מועד לבדיקה\"/>\n    <bpmn:messageFlow id=\"mf2\" sourceRef=\"institute\" targetRef=\"c_wait_slot\" name=\"מועד מוצע\"/>\n    <bpmn:messageFlow id=\"mf3\" sourceRef=\"c_alt_slot\" targetRef=\"institute\" name=\"בקשה למועד חלופי\"/>\n    <bpmn:messageFlow id=\"mf4\" sourceRef=\"c_confirm\" targetRef=\"institute\" name=\"אישור הגעה ושליחת הרכב לבדיקה\"/>\n    <bpmn:messageFlow id=\"mf5\" sourceRef=\"c_fix\" targetRef=\"institute\" name=\"קביעת מועד לבדיקה חוזרת\"/>\n    <bpmn:messageFlow id=\"mf6\" sourceRef=\"institute\" targetRef=\"c_wait_result\" name=\"תוצאת הטסט (עבר / נכשל)\"/>\n  </bpmn:collaboration>\n  <bpmndi:BPMNDiagram id=\"BPMNDiagram_1\">\n    <bpmndi:BPMNPlane id=\"BPMNPlane_1\" bpmnElement=\"collab_1\">\n      <bpmndi:BPMNShape id=\"licensing_di\" bpmnElement=\"licensing\" isHorizontal=\"true\">\n        <dc:Bounds x=\"20\" y=\"72\" width=\"3978\" height=\"440\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"sys_di\" bpmnElement=\"sys\" isHorizontal=\"true\">\n        <dc:Bounds x=\"50\" y=\"72\" width=\"3948\" height=\"168\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"coord_di\" bpmnElement=\"coord\" isHorizontal=\"true\">\n        <dc:Bounds x=\"50\" y=\"240\" width=\"3948\" height=\"272\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"institute_di\" bpmnElement=\"institute\" isHorizontal=\"true\">\n        <dc:Bounds x=\"20\" y=\"528\" width=\"3978\" height=\"96\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"s_start_di\" bpmnElement=\"s_start\">\n        <dc:Bounds x=\"126\" y=\"110\" width=\"36\" height=\"36\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"s_fetch_di\" bpmnElement=\"s_fetch\">\n        <dc:Bounds x=\"286\" y=\"96\" width=\"140\" height=\"64\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"s_scrap_q_di\" bpmnElement=\"s_scrap_q\">\n        <dc:Bounds x=\"544\" y=\"104\" width=\"48\" height=\"48\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"s_ins_q_di\" bpmnElement=\"s_ins_q\">\n        <dc:Bounds x=\"794\" y=\"104\" width=\"48\" height=\"48\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"s_ins_merge_di\" bpmnElement=\"s_ins_merge\">\n        <dc:Bounds x=\"1218\" y=\"104\" width=\"48\" height=\"48\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"s_issue_di\" bpmnElement=\"s_issue\">\n        <dc:Bounds x=\"3150\" y=\"96\" width=\"140\" height=\"64\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"s_update_di\" bpmnElement=\"s_update\">\n        <dc:Bounds x=\"3362\" y=\"96\" width=\"140\" height=\"64\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"s_notify_di\" bpmnElement=\"s_notify\">\n        <dc:Bounds x=\"3574\" y=\"96\" width=\"140\" height=\"64\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"s_end_ok_di\" bpmnElement=\"s_end_ok\">\n        <dc:Bounds x=\"3838\" y=\"110\" width=\"36\" height=\"36\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"c_scrap_di\" bpmnElement=\"c_scrap\">\n        <dc:Bounds x=\"748\" y=\"316\" width=\"140\" height=\"64\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"c_renew_ins_di\" bpmnElement=\"c_renew_ins\">\n        <dc:Bounds x=\"960\" y=\"264\" width=\"140\" height=\"64\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"c_end_scrap_di\" bpmnElement=\"c_end_scrap\">\n        <dc:Bounds x=\"1012\" y=\"382\" width=\"36\" height=\"36\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"c_form_di\" bpmnElement=\"c_form\">\n        <dc:Bounds x=\"1384\" y=\"316\" width=\"140\" height=\"64\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"c_slot_merge_di\" bpmnElement=\"c_slot_merge\">\n        <dc:Bounds x=\"1642\" y=\"324\" width=\"48\" height=\"48\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"c_wait_slot_di\" bpmnElement=\"c_wait_slot\">\n        <dc:Bounds x=\"1860\" y=\"330\" width=\"36\" height=\"36\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"c_slot_q_di\" bpmnElement=\"c_slot_q\">\n        <dc:Bounds x=\"2066\" y=\"324\" width=\"48\" height=\"48\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"c_alt_slot_di\" bpmnElement=\"c_alt_slot\">\n        <dc:Bounds x=\"2302\" y=\"264\" width=\"140\" height=\"64\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"c_confirm_di\" bpmnElement=\"c_confirm\">\n        <dc:Bounds x=\"2302\" y=\"368\" width=\"140\" height=\"64\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"c_result_merge_di\" bpmnElement=\"c_result_merge\">\n        <dc:Bounds x=\"2560\" y=\"324\" width=\"48\" height=\"48\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"c_wait_result_di\" bpmnElement=\"c_wait_result\">\n        <dc:Bounds x=\"2778\" y=\"330\" width=\"36\" height=\"36\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"c_result_q_di\" bpmnElement=\"c_result_q\">\n        <dc:Bounds x=\"2984\" y=\"324\" width=\"48\" height=\"48\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"c_fix_di\" bpmnElement=\"c_fix\">\n        <dc:Bounds x=\"3150\" y=\"316\" width=\"140\" height=\"64\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"ds_vehicles_di\" bpmnElement=\"ds_vehicles\">\n        <dc:Bounds x=\"1866\" y=\"190\" width=\"56\" height=\"44\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNEdge id=\"sf1_di\" bpmnElement=\"sf1\">\n        <di:waypoint x=\"162\" y=\"128\"/>\n        <di:waypoint x=\"286\" y=\"128\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf2_di\" bpmnElement=\"sf2\">\n        <di:waypoint x=\"426\" y=\"128\"/>\n        <di:waypoint x=\"544\" y=\"128\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf3_di\" bpmnElement=\"sf3\">\n        <di:waypoint x=\"568\" y=\"152\"/>\n        <di:waypoint x=\"568\" y=\"290\"/>\n        <di:waypoint x=\"818\" y=\"290\"/>\n        <di:waypoint x=\"818\" y=\"316\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf4_di\" bpmnElement=\"sf4\">\n        <di:waypoint x=\"888\" y=\"348\"/>\n        <di:waypoint x=\"986\" y=\"348\"/>\n        <di:waypoint x=\"986\" y=\"400\"/>\n        <di:waypoint x=\"1012\" y=\"400\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf5_di\" bpmnElement=\"sf5\">\n        <di:waypoint x=\"592\" y=\"128\"/>\n        <di:waypoint x=\"794\" y=\"128\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf6_di\" bpmnElement=\"sf6\">\n        <di:waypoint x=\"818\" y=\"152\"/>\n        <di:waypoint x=\"818\" y=\"238\"/>\n        <di:waypoint x=\"1023\" y=\"238\"/>\n        <di:waypoint x=\"1023\" y=\"264\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf7_di\" bpmnElement=\"sf7\">\n        <di:waypoint x=\"1037\" y=\"264\"/>\n        <di:waypoint x=\"1037\" y=\"178\"/>\n        <di:waypoint x=\"1235\" y=\"178\"/>\n        <di:waypoint x=\"1235\" y=\"145\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf8_di\" bpmnElement=\"sf8\">\n        <di:waypoint x=\"842\" y=\"128\"/>\n        <di:waypoint x=\"1218\" y=\"128\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf9_di\" bpmnElement=\"sf9\">\n        <di:waypoint x=\"1249\" y=\"145\"/>\n        <di:waypoint x=\"1249\" y=\"290\"/>\n        <di:waypoint x=\"1454\" y=\"290\"/>\n        <di:waypoint x=\"1454\" y=\"316\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf10_di\" bpmnElement=\"sf10\">\n        <di:waypoint x=\"1524\" y=\"348\"/>\n        <di:waypoint x=\"1642\" y=\"348\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf11_di\" bpmnElement=\"sf11\">\n        <di:waypoint x=\"1690\" y=\"348\"/>\n        <di:waypoint x=\"1860\" y=\"348\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf12_di\" bpmnElement=\"sf12\">\n        <di:waypoint x=\"1896\" y=\"348\"/>\n        <di:waypoint x=\"2066\" y=\"348\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf13_di\" bpmnElement=\"sf13\">\n        <di:waypoint x=\"2114\" y=\"348\"/>\n        <di:waypoint x=\"2276\" y=\"348\"/>\n        <di:waypoint x=\"2276\" y=\"296\"/>\n        <di:waypoint x=\"2302\" y=\"296\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf14_di\" bpmnElement=\"sf14\">\n        <di:waypoint x=\"2442\" y=\"296\"/>\n        <di:waypoint x=\"2458\" y=\"296\"/>\n        <di:waypoint x=\"2458\" y=\"250\"/>\n        <di:waypoint x=\"1958\" y=\"250\"/>\n        <di:waypoint x=\"1958\" y=\"298\"/>\n        <di:waypoint x=\"1666\" y=\"298\"/>\n        <di:waypoint x=\"1666\" y=\"324\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf15_di\" bpmnElement=\"sf15\">\n        <di:waypoint x=\"2090\" y=\"372\"/>\n        <di:waypoint x=\"2090\" y=\"400\"/>\n        <di:waypoint x=\"2302\" y=\"400\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf16_di\" bpmnElement=\"sf16\">\n        <di:waypoint x=\"2442\" y=\"400\"/>\n        <di:waypoint x=\"2534\" y=\"400\"/>\n        <di:waypoint x=\"2534\" y=\"348\"/>\n        <di:waypoint x=\"2560\" y=\"348\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf17_di\" bpmnElement=\"sf17\">\n        <di:waypoint x=\"2608\" y=\"348\"/>\n        <di:waypoint x=\"2778\" y=\"348\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf18_di\" bpmnElement=\"sf18\">\n        <di:waypoint x=\"2814\" y=\"348\"/>\n        <di:waypoint x=\"2984\" y=\"348\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf19_di\" bpmnElement=\"sf19\">\n        <di:waypoint x=\"3025\" y=\"355\"/>\n        <di:waypoint x=\"3124\" y=\"355\"/>\n        <di:waypoint x=\"3124\" y=\"348\"/>\n        <di:waypoint x=\"3150\" y=\"348\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf20_di\" bpmnElement=\"sf20\">\n        <di:waypoint x=\"3290\" y=\"348\"/>\n        <di:waypoint x=\"3306\" y=\"348\"/>\n        <di:waypoint x=\"3306\" y=\"398\"/>\n        <di:waypoint x=\"2584\" y=\"398\"/>\n        <di:waypoint x=\"2584\" y=\"372\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf21_di\" bpmnElement=\"sf21\">\n        <di:waypoint x=\"3025\" y=\"341\"/>\n        <di:waypoint x=\"3134\" y=\"341\"/>\n        <di:waypoint x=\"3134\" y=\"186\"/>\n        <di:waypoint x=\"3220\" y=\"186\"/>\n        <di:waypoint x=\"3220\" y=\"160\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf22_di\" bpmnElement=\"sf22\">\n        <di:waypoint x=\"3290\" y=\"128\"/>\n        <di:waypoint x=\"3362\" y=\"128\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf23_di\" bpmnElement=\"sf23\">\n        <di:waypoint x=\"3502\" y=\"128\"/>\n        <di:waypoint x=\"3574\" y=\"128\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf24_di\" bpmnElement=\"sf24\">\n        <di:waypoint x=\"3714\" y=\"128\"/>\n        <di:waypoint x=\"3838\" y=\"128\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"mf1_di\" bpmnElement=\"mf1\">\n        <di:waypoint x=\"1454\" y=\"380\"/>\n        <di:waypoint x=\"1454\" y=\"528\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"mf2_di\" bpmnElement=\"mf2\">\n        <di:waypoint x=\"1878\" y=\"528\"/>\n        <di:waypoint x=\"1878\" y=\"366\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"mf3_di\" bpmnElement=\"mf3\">\n        <di:waypoint x=\"2372\" y=\"328\"/>\n        <di:waypoint x=\"2372\" y=\"355\"/>\n        <di:waypoint x=\"2286\" y=\"355\"/>\n        <di:waypoint x=\"2286\" y=\"502\"/>\n        <di:waypoint x=\"2348\" y=\"502\"/>\n        <di:waypoint x=\"2348\" y=\"528\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"mf4_di\" bpmnElement=\"mf4\">\n        <di:waypoint x=\"2372\" y=\"432\"/>\n        <di:waypoint x=\"2372\" y=\"502\"/>\n        <di:waypoint x=\"2396\" y=\"502\"/>\n        <di:waypoint x=\"2396\" y=\"528\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"mf5_di\" bpmnElement=\"mf5\">\n        <di:waypoint x=\"3220\" y=\"380\"/>\n        <di:waypoint x=\"3220\" y=\"528\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"mf6_di\" bpmnElement=\"mf6\">\n        <di:waypoint x=\"2796\" y=\"528\"/>\n        <di:waypoint x=\"2796\" y=\"366\"/>\n      </bpmndi:BPMNEdge>\n    </bpmndi:BPMNPlane>\n  </bpmndi:BPMNDiagram>\n</bpmn:definitions>";
+  const BPMN_FILENAME = "Annual_vehicle_licence_roadworthiness_renewal_with_an_extern.bpmn";
+  function exportBPMN() {
+    const blob = new Blob([BPMN_XML], { type: 'application/xml' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = BPMN_FILENAME;
+    document.body.appendChild(a); a.click();
+    setTimeout(function() { URL.revokeObjectURL(url); a.remove(); }, 1000);
+  }
+  </script>
+</body>
+</html>

@@ -1,0 +1,1687 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>פתרון מלא, 2026 סמסטר ב' מועד ב' — "נעים בדרכים" (ניהול קריאות טיפול לצי רכב)</title>
+<style>
+:root{
+  --ink:#1a2332; --muted:#5b6b7f; --line:#dfe5ec; --bg:#f7f9fb; --card:#fff;
+  --accent:#1d4ed8; --accent-soft:#eff4ff;
+  --ans:#065f46; --ans-bg:#ecfdf5; --ans-line:#6ee7b7;
+  --warn:#8a3d12; --warn-bg:#fff5ed; --warn-line:#f7b98a;
+}
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--bg); color:var(--ink); direction:rtl;
+  font-family:"Segoe UI","Noto Sans Hebrew",Arial,sans-serif;
+  font-size:16px; line-height:1.75;
+}
+.wrap{max-width:1180px; margin:0 auto; padding:32px 20px 80px}
+header.page{
+  background:linear-gradient(135deg,#1e3a8a,#1d4ed8); color:#fff;
+  border-radius:14px; padding:28px 30px; margin-bottom:28px;
+}
+header.page h1{margin:0 0 6px; font-size:1.75rem; letter-spacing:-.01em}
+header.page p{margin:0; opacity:.92; font-size:.95rem}
+.meta{margin-top:16px; display:flex; flex-wrap:wrap; gap:8px}
+.chip{background:rgba(255,255,255,.16); border:1px solid rgba(255,255,255,.28);
+  padding:4px 12px; border-radius:999px; font-size:.82rem}
+
+section.q{background:var(--card); border:1px solid var(--line); border-radius:12px;
+  padding:24px 26px; margin-bottom:22px; scroll-margin-top:16px}
+section.q > h2{
+  margin:0 0 4px; font-size:1.28rem; color:var(--accent);
+  border-bottom:2px solid var(--accent-soft); padding-bottom:10px;
+}
+.pts{float:left; font-size:.85rem; font-weight:600; color:var(--muted);
+  background:var(--bg); border:1px solid var(--line); border-radius:999px; padding:2px 11px}
+
+.qtext{color:var(--muted); font-size:.95rem; margin:14px 0}
+.box{background:var(--bg); border:1px solid var(--line); border-right:4px solid var(--accent);
+  border-radius:8px; padding:14px 18px; margin:14px 0; font-size:.93rem; color:#374a5e}
+.box p{margin:.5em 0}
+.box.goldrule{background:var(--accent-soft); border-color:#c7d7fe; border-right-color:#1e3a8a;
+  font-size:.94rem; margin:0 0 26px}
+
+h3.sub{margin:26px 0 8px; font-size:1.02rem; color:var(--ink);
+  background:var(--accent-soft); border-radius:6px; padding:8px 12px}
+h4{margin:16px 0 4px; font-size:.96rem; color:var(--ink)}
+
+.answer{background:var(--ans-bg); border:1px solid var(--ans-line); border-radius:8px;
+  padding:14px 18px; margin:10px 0}
+.answer::before{content:"תשובה"; display:block; font-weight:700; font-size:.78rem;
+  letter-spacing:.06em; color:var(--ans); margin-bottom:6px}
+.answer p:last-child, .answer ul:last-child, .answer ol:last-child{margin-bottom:0}
+.answer p:first-of-type{margin-top:0}
+
+.mistake{background:var(--warn-bg); border:1px solid var(--warn-line); border-radius:8px;
+  padding:12px 18px; margin:10px 0; font-size:.92rem; color:#5c2c0d}
+.mistake::before{content:"טעות נפוצה"; display:block; font-weight:700; font-size:.78rem;
+  letter-spacing:.06em; color:var(--warn); margin-bottom:5px}
+.mistake p:first-of-type{margin-top:0} .mistake p:last-child{margin-bottom:0}
+.alt{font-size:.9rem; color:var(--muted); margin:8px 0 0; padding-right:2px}
+.alt b{color:var(--ink)}
+.alt p{margin:.35em 0}
+
+/* direction:ltr on the FIGURE too, an RTL scroll container starts pinned to the
+   right, which hides the left edge of any diagram wider than the page. */
+figure.diagram{margin:18px 0 6px; border:1px solid var(--line); border-radius:10px;
+  background:#fff; padding:12px; overflow-x:auto; direction:ltr}
+/* Never shrink a diagram below legibility: scroll sideways instead. */
+/* direction:ltr is REQUIRED, the page is RTL, and inheriting that into the SVG
+   flips how text-anchor:start resolves, throwing every label out of its box. */
+figure.diagram svg{display:block; width:100%; height:auto; min-width:1040px; direction:ltr}
+figure.diagram.wide svg{min-width:1500px}
+.scrollhint{font-size:.78rem; color:var(--muted); margin:0 0 6px; display:none}
+figure.diagram.wide + .scrollhint{display:block}
+figcaption{margin-top:8px; font-size:.85rem; color:var(--muted); text-align:center; direction:rtl}
+.difflink{margin:8px 0 0; font-size:.88rem}
+.difflink a{display:inline-flex; align-items:center; gap:6px; text-decoration:none;
+  color:var(--accent); background:var(--accent-soft); border:1px solid #c7d7fe;
+  border-radius:999px; padding:5px 14px; font-weight:600}
+.difflink a:hover{background:#dbe6ff}
+.difflink small{color:var(--muted); font-weight:400; margin-inline-start:8px}
+
+ul,ol{margin:.4em 0; padding-right:1.2em}
+li{margin:.3em 0}
+code{background:#eef2f7; border:1px solid var(--line); border-radius:4px;
+  padding:1px 5px; font-family:"Consolas","IBM Plex Mono",monospace;
+  font-size:.88em; direction:ltr; display:inline-block}
+.en{direction:ltr; unicode-bidi:embed; display:inline-block}
+
+.tablewrap{overflow-x:auto; margin:12px 0}
+table{border-collapse:collapse; width:100%; font-size:.9rem; background:#fff}
+th,td{border:1px solid var(--line); padding:7px 10px; text-align:right; vertical-align:top}
+th{background:var(--accent-soft); font-weight:700; color:var(--ink)}
+.answer table{background:#fff}
+
+footer{color:var(--muted); font-size:.85rem; text-align:center; margin-top:34px}
+
+@media print{
+  body{background:#fff}
+  section.q{break-inside:avoid; border:none; padding:0; margin-bottom:26px}
+  header.page{background:#1e3a8a !important; -webkit-print-color-adjust:exact; print-color-adjust:exact}
+  figure.diagram{overflow:visible}
+  figure.diagram svg, figure.diagram.wide svg{min-width:0}
+  .scrollhint{display:none !important}
+}
+@media (max-width:640px){ .wrap{padding:16px 10px 50px} section.q{padding:16px 14px} }
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="page">
+  <h1>פתרון מלא, 2026 סמסטר ב' מועד ב' — "נעים בדרכים" (ניהול קריאות טיפול לצי רכב)</h1>
+  <p>ניתוח ועיצוב מערכות מידע (364-1-1411)</p>
+  <div class="meta">
+    <span class="chip">100 נקודות</span>
+    <span class="chip">8 שאלות</span>
+    <span class="chip">4 תרשימים</span>
+    <span class="chip">ד״ר דוד קודיש | מר איציק גורביץ</span>
+  </div>
+</header>
+<div class="box goldrule">
+<p><b>מה יש כאן.</b> תשובות מודל מלאות לשמונה השאלות (100 נק׳), ולצדן טעויות נפוצות וחלופות מקובלות. ארבעת התרשימים הפתורים (BPMN, Use Case, מחלקות, מצבים) מצורפים כקבצים אינטראקטיביים נפרדים ומקושרים בראש העמוד.</p>
+</div>
+<section class="q" id="q1">
+<h2><span class="pts">15 נק׳</span>שאלה 1: תרשים BPMN: חידוש רישיון שנתי (טסט) לרכב צי</h2>
+
+<p class="qtext">לפניכם תיאור המפרט את תהליך העבודה. תארו תהליך עסקי זה באמצעות תרשים BPMN. בתשובה לשאלה זו יש להסתמך רק על חלק זה ללא קשר לסיפור המסגרת.</p>
+<div class="box">
+<p><b>תהליך: חידוש רישיון שנתי (טסט) לרכב צי מול מכון רישוי חיצוני.</b> התהליך מתבצע על ידי <b>מחלקת הרישוי</b> מול <b>מכון רישוי חיצוני</b>. הוא מתחיל כאשר מערכת הרישוי מזהה בסריקה יומית רכב שרישיונו יפוג בתוך 30 יום, ומסתיים כאשר הרכב מקבל רישיון מחודש והודעה על כך נשלחת למחלקה המחזיקה בו, או לחלופין, כאשר רכב שסומן לגריטה מוצא מן התהליך.</p>
+<p>עם זיהוי הרכב שולפת המערכת ממאגר הרכבים את תיק הרכב, הכולל את סטטוס הרכב ואת תוקף הביטוח. אם הרכב מסומן כמיועד לגריטה, מעביר רכז הרישוי את הרכב לתהליך גריטה והתהליך מסתיים. אחרת נבדק אם ביטוח הרכב בתוקף; אם אינו בתוקף, מחדש הרכז את הביטוח, ורק אז נמשך התהליך.</p>
+<p>הרכז ממלא טופס בקשת מועד לבדיקה ושולח אותו למכון הרישוי, והמכון מחזיר מועד מוצע. אם המועד המוצע חל לאחר מועד פקיעת הרישיון, שולח הרכז למכון בקשה למועד חלופי וממתין למועד חדש, וכך עד שמתקבל מועד מתאים. משהתקבל מועד מתאים, מאשר הרכז את ההגעה ושולח את הרכב לבדיקה במכון.</p>
+<p>בתום הבדיקה שולח המכון את תוצאת הטסט. אם הרכב נכשל, מזמין הרכז תיקון של הליקויים וקובע מול המכון מועד לבדיקה חוזרת, וכך עד שהרכב עובר את הבדיקה. משעבר הרכב, מפיקה המערכת רישיון מעודכן, מעדכנת במאגר הרכבים את סטטוס הרישיון ל"בתוקף" ושולחת הודעה למחלקה שהרכב חזר לשירות.</p>
+</div>
+<h3 class="sub">1.1 (6 נק׳): התרשים</h3>
+<p class="qtext">הכינו תרשים BPMN המתאר את התהליך שלעיל. התרשים עצמו נבדק בצורה כללית, לבחינת השימוש הנכון בסימונים ובהבנת מהות התרשים.</p>
+<figure class="diagram wide"><svg width="4037.6" height="660" viewBox="0 0 4037.6 660" xmlns="http://www.w3.org/2000/svg">
+      
+    <defs>
+      <pattern id="bpmn0-dot-grid" x="0" y="0" width="24" height="24" patternUnits="userSpaceOnUse">
+        <circle cx="1" cy="1" r="0.8" fill="#cbd5e1"></circle>
+      </pattern>
+      <!-- markerUnits=userSpaceOnUse: arrowheads keep ONE size regardless of each
+           flow's stroke-width (default strokeWidth units made seq arrows ~45%
+           bigger than data-association arrows) -->
+      <marker id="bpmn0-arrow-seq" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="12" markerHeight="12" markerUnits="userSpaceOnUse" orient="auto-start-reverse">
+        <path d="M 0 0 L 10 5 L 0 10 Z" fill="#455a64"></path>
+      </marker>
+      <marker id="bpmn0-msg-start" viewBox="-10 -10 20 20" refX="0" refY="0" markerWidth="12" markerHeight="12" markerUnits="userSpaceOnUse" orient="auto">
+        <circle cx="0" cy="0" r="4" fill="#ffffff" stroke="#37474f" stroke-width="1.2"></circle>
+      </marker>
+      <marker id="bpmn0-msg-end" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="12" markerHeight="12" markerUnits="userSpaceOnUse" orient="auto-start-reverse">
+        <path d="M 0 0 L 10 5 L 0 10 Z" fill="#37474f"></path>
+      </marker>
+      <marker id="bpmn0-arrow-data" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto-start-reverse">
+        <path d="M 0 0 L 10 5 L 0 10 Z" fill="#7986cb"></path>
+      </marker>
+    </defs>
+      <rect x="0" y="0" width="4037.6" height="660" fill="#f8fafc"></rect>
+    <rect x="0" y="0" width="4037.6" height="660" fill="url(#bpmn0-dot-grid)"></rect>
+      
+    <!-- pool: licensing -->
+    <g class="bpmn-pool" data-pool="licensing">
+      <rect x="20" y="72" width="3977.6" height="440" fill="#ffffff" stroke="#455a64" stroke-width="1.5"></rect>
+      <rect x="20" y="72" width="30" height="440" fill="#37474f" stroke="#455a64" stroke-width="1.5"></rect>
+      <text x="35" y="292" text-anchor="middle" dominant-baseline="middle" transform="rotate(-90, 35, 292)" fill="#ffffff" font-size="12" font-weight="600" direction="rtl">מחלקת הרישוי</text>
+      <line x1="50" y1="72" x2="50" y2="512" stroke="#455a64" stroke-width="1"></line>
+    </g>
+
+    <!-- pool: institute -->
+    <g class="bpmn-pool" data-pool="institute">
+      <rect x="20" y="528" width="3977.6" height="96" fill="#faf7f2" stroke="#8d6e63" stroke-width="1.5"></rect>
+      <rect x="20" y="528" width="30" height="96" fill="#6d4c41" stroke="#8d6e63" stroke-width="1.5"></rect>
+      <text x="29" y="576" text-anchor="middle" dominant-baseline="middle" transform="rotate(-90, 29, 576)" fill="#ffffff" font-size="11" font-weight="600" direction="rtl">מכון רישוי</text>
+      <text x="41" y="576" text-anchor="middle" dominant-baseline="middle" transform="rotate(-90, 41, 576)" fill="#ffffff" font-size="11" font-weight="600" direction="rtl">חיצוני</text>
+      <line x1="50" y1="528" x2="50" y2="624" stroke="#8d6e63" stroke-width="1"></line>
+    </g>
+      
+    <g class="bpmn-lane" data-lane="sys">
+      <rect x="74" y="72" width="3923.6" height="168" fill="#fafafa" fill-opacity="0.6" stroke="none"></rect>
+      <rect x="50" y="72" width="24" height="168" fill="#546e7a" stroke="#455a64" stroke-width="1"></rect>
+      <text x="62" y="156" text-anchor="middle" dominant-baseline="middle" transform="rotate(-90, 62, 156)" fill="#ffffff" font-size="11" font-weight="500" direction="rtl">מערכת הרישוי</text>
+      
+    </g>
+
+    <g class="bpmn-lane" data-lane="coord">
+      <rect x="74" y="240" width="3923.6" height="272" fill="#fafafa" fill-opacity="0.6" stroke="none"></rect>
+      <rect x="50" y="240" width="24" height="272" fill="#546e7a" stroke="#455a64" stroke-width="1"></rect>
+      <text x="62" y="376" text-anchor="middle" dominant-baseline="middle" transform="rotate(-90, 62, 376)" fill="#ffffff" font-size="11" font-weight="500" direction="rtl">רכז הרישוי</text>
+      <line x1="50" y1="240" x2="3997.6" y2="240" stroke="#90a4ae" stroke-width="1" stroke-dasharray="4 3"></line>
+    </g>
+      
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf1">
+      <path class="bpmn-flow-hit" d="M 162.0 128.0 L 286.0 128.0" fill="none"></path>
+      <path class="bpmn-flow-line" d="M 162.0 128.0 L 286.0 128.0" fill="none" stroke="#455a64" stroke-width="1.6" marker-end="url(#bpmn0-arrow-seq)"></path>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf2">
+      <path class="bpmn-flow-hit" d="M 426.0 128.0 L 544.0 128.0" fill="none"></path>
+      <path class="bpmn-flow-line" d="M 426.0 128.0 L 544.0 128.0" fill="none" stroke="#455a64" stroke-width="1.6" marker-end="url(#bpmn0-arrow-seq)"></path>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf3">
+      <path class="bpmn-flow-hit" d="M 568.0 152.0 L 568.0 290.0 L 817.6 290.0 L 817.6 316.0" fill="none"></path>
+      <path class="bpmn-flow-line" d="M 568.0 152.0 L 568.0 290.0 L 817.6 290.0 L 817.6 316.0" fill="none" stroke="#455a64" stroke-width="1.6" marker-end="url(#bpmn0-arrow-seq)"></path>
+      
+      
+    <g class="bpmn-flow-label">
+      <rect x="442.16" y="210" width="115.6" height="14" rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"></rect>
+      <text x="499.96000000000004" y="217" text-anchor="middle" dominant-baseline="middle" font-size="11" fill="#263238" direction="rtl">כן, מסומן לגריטה</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf4">
+      <path class="bpmn-flow-hit" d="M 887.6 348.0 L 985.6 348.0 L 985.6 400.0 L 1011.6 400.0" fill="none"></path>
+      <path class="bpmn-flow-line" d="M 887.6 348.0 L 985.6 348.0 L 985.6 400.0 L 1011.6 400.0" fill="none" stroke="#455a64" stroke-width="1.6" marker-end="url(#bpmn0-arrow-seq)"></path>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf5">
+      <path class="bpmn-flow-hit" d="M 592.0 128.0 L 793.6 128.0" fill="none"></path>
+      <path class="bpmn-flow-line" d="M 592.0 128.0 L 793.6 128.0" fill="none" stroke="#455a64" stroke-width="1.6" marker-end="url(#bpmn0-arrow-seq)"></path>
+      
+      
+    <g class="bpmn-flow-label">
+      <rect x="640.48" y="104.75" width="24" height="14" rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"></rect>
+      <text x="652.48" y="111.75" text-anchor="middle" dominant-baseline="middle" font-size="11" fill="#263238" direction="rtl">לא</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf6">
+      <path class="bpmn-flow-hit" d="M 817.6 152.0 L 817.6 238.0 L 1022.6 238.0 L 1022.6 264.0" fill="none"></path>
+      <path class="bpmn-flow-line" d="M 817.6 152.0 L 817.6 238.0 L 1022.6 238.0 L 1022.6 264.0" fill="none" stroke="#455a64" stroke-width="1.6" marker-end="url(#bpmn0-arrow-seq)"></path>
+      
+      
+    <g class="bpmn-flow-label">
+      <rect x="746.6800000000001" y="201.2" width="62.8" height="14" rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"></rect>
+      <text x="778.08" y="208.2" text-anchor="middle" dominant-baseline="middle" font-size="11" fill="#263238" direction="rtl">לא בתוקף</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf7">
+      <path class="bpmn-flow-hit" d="M 1036.6 264.0 L 1036.6 178.0 L 1234.6 178.0 L 1234.6 145.0" fill="none"></path>
+      <path class="bpmn-flow-line" d="M 1036.6 264.0 L 1036.6 178.0 L 1234.6 178.0 L 1234.6 145.0" fill="none" stroke="#455a64" stroke-width="1.6" marker-end="url(#bpmn0-arrow-seq)"></path>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf8">
+      <path class="bpmn-flow-hit" d="M 841.6 128.0 L 1217.6 128.0" fill="none"></path>
+      <path class="bpmn-flow-line" d="M 841.6 128.0 L 1217.6 128.0" fill="none" stroke="#455a64" stroke-width="1.6" marker-end="url(#bpmn0-arrow-seq)"></path>
+      
+      
+    <g class="bpmn-flow-label">
+      <rect x="932.9" y="104.75" width="43" height="14" rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"></rect>
+      <text x="954.4" y="111.75" text-anchor="middle" dominant-baseline="middle" font-size="11" fill="#263238" direction="rtl">בתוקף</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf9">
+      <path class="bpmn-flow-hit" d="M 1248.6 145.0 L 1248.6 290.0 L 1453.6 290.0 L 1453.6 316.0" fill="none"></path>
+      <path class="bpmn-flow-line" d="M 1248.6 145.0 L 1248.6 290.0 L 1453.6 290.0 L 1453.6 316.0" fill="none" stroke="#455a64" stroke-width="1.6" marker-end="url(#bpmn0-arrow-seq)"></path>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf10">
+      <path class="bpmn-flow-hit" d="M 1523.6 348.0 L 1641.6 348.0" fill="none"></path>
+      <path class="bpmn-flow-line" d="M 1523.6 348.0 L 1641.6 348.0" fill="none" stroke="#455a64" stroke-width="1.6" marker-end="url(#bpmn0-arrow-seq)"></path>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf11">
+      <path class="bpmn-flow-hit" d="M 1689.6 348.0 L 1859.6 348.0" fill="none"></path>
+      <path class="bpmn-flow-line" d="M 1689.6 348.0 L 1859.6 348.0" fill="none" stroke="#455a64" stroke-width="1.6" marker-end="url(#bpmn0-arrow-seq)"></path>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf12">
+      <path class="bpmn-flow-hit" d="M 1895.6 348.0 L 2065.6 348.0" fill="none"></path>
+      <path class="bpmn-flow-line" d="M 1895.6 348.0 L 2065.6 348.0" fill="none" stroke="#455a64" stroke-width="1.6" marker-end="url(#bpmn0-arrow-seq)"></path>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf13">
+      <path class="bpmn-flow-hit" d="M 2113.6 348.0 L 2275.6 348.0 L 2275.6 296.0 L 2301.6 296.0" fill="none"></path>
+      <path class="bpmn-flow-line" d="M 2113.6 348.0 L 2275.6 348.0 L 2275.6 296.0 L 2301.6 296.0" fill="none" stroke="#455a64" stroke-width="1.6" marker-end="url(#bpmn0-arrow-seq)"></path>
+      
+      
+    <g class="bpmn-flow-label">
+      <rect x="2081.2999999999997" y="324.75" width="161.79999999999998" height="14" rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"></rect>
+      <text x="2162.2" y="331.75" text-anchor="middle" dominant-baseline="middle" font-size="11" fill="#263238" direction="rtl">לא, המועד מאוחר מהפקיעה</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf14">
+      <path class="bpmn-flow-hit" d="M 2441.6 296.0 L 2457.6 296.0 L 2457.6 250.0 L 1957.8 250.0 L 1957.8 298.0 L 1665.6 298.0 L 1665.6 324.0" fill="none"></path>
+      <path class="bpmn-flow-line" d="M 2441.6 296.0 L 2457.6 296.0 L 2457.6 250.0 L 1957.8 250.0 L 1957.8 298.0 L 1665.6 298.0 L 1665.6 324.0" fill="none" stroke="#455a64" stroke-width="1.6" marker-end="url(#bpmn0-arrow-seq)"></path>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf15">
+      <path class="bpmn-flow-hit" d="M 2089.6 372.0 L 2089.6 400.0 L 2301.6 400.0" fill="none"></path>
+      <path class="bpmn-flow-line" d="M 2089.6 372.0 L 2089.6 400.0 L 2301.6 400.0" fill="none" stroke="#455a64" stroke-width="1.6" marker-end="url(#bpmn0-arrow-seq)"></path>
+      
+      
+    <g class="bpmn-flow-label">
+      <rect x="1970.625" y="375" width="109" height="14" rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"></rect>
+      <text x="2025.125" y="382" text-anchor="middle" dominant-baseline="middle" font-size="11" fill="#263238" direction="rtl">כן, המועד מתאים</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf16">
+      <path class="bpmn-flow-hit" d="M 2441.6 400.0 L 2533.6 400.0 L 2533.6 348.0 L 2559.6 348.0" fill="none"></path>
+      <path class="bpmn-flow-line" d="M 2441.6 400.0 L 2533.6 400.0 L 2533.6 348.0 L 2559.6 348.0" fill="none" stroke="#455a64" stroke-width="1.6" marker-end="url(#bpmn0-arrow-seq)"></path>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf17">
+      <path class="bpmn-flow-hit" d="M 2607.6 348.0 L 2777.6 348.0" fill="none"></path>
+      <path class="bpmn-flow-line" d="M 2607.6 348.0 L 2777.6 348.0" fill="none" stroke="#455a64" stroke-width="1.6" marker-end="url(#bpmn0-arrow-seq)"></path>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf18">
+      <path class="bpmn-flow-hit" d="M 2813.6 348.0 L 2983.6 348.0" fill="none"></path>
+      <path class="bpmn-flow-line" d="M 2813.6 348.0 L 2983.6 348.0" fill="none" stroke="#455a64" stroke-width="1.6" marker-end="url(#bpmn0-arrow-seq)"></path>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf19">
+      <path class="bpmn-flow-hit" d="M 3024.6 355.0 L 3123.6 355.0 L 3123.6 348.0 L 3149.6 348.0" fill="none"></path>
+      <path class="bpmn-flow-line" d="M 3024.6 355.0 L 3123.6 355.0 L 3123.6 348.0 L 3149.6 348.0" fill="none" stroke="#455a64" stroke-width="1.6" marker-end="url(#bpmn0-arrow-seq)"></path>
+      
+      
+    <g class="bpmn-flow-label">
+      <rect x="3036.1" y="358.25" width="36.4" height="14" rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"></rect>
+      <text x="3054.2999999999997" y="365.25" text-anchor="middle" dominant-baseline="middle" font-size="11" fill="#263238" direction="rtl">נכשל</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf20">
+      <path class="bpmn-flow-hit" d="M 3289.6 348.0 L 3305.6 348.0 L 3305.6 398.0 L 2583.6 398.0 L 2583.6 372.0" fill="none"></path>
+      <path class="bpmn-flow-line" d="M 3289.6 348.0 L 3305.6 348.0 L 3305.6 398.0 L 2583.6 398.0 L 2583.6 372.0" fill="none" stroke="#455a64" stroke-width="1.6" marker-end="url(#bpmn0-arrow-seq)"></path>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf21">
+      <path class="bpmn-flow-hit" d="M 3024.6 341.0 L 3133.6 341.0 L 3133.6 186.0 L 3219.6 186.0 L 3219.6 160.0" fill="none"></path>
+      <path class="bpmn-flow-line" d="M 3024.6 341.0 L 3133.6 341.0 L 3133.6 186.0 L 3219.6 186.0 L 3219.6 160.0" fill="none" stroke="#455a64" stroke-width="1.6" marker-end="url(#bpmn0-arrow-seq)"></path>
+      
+      
+    <g class="bpmn-flow-label">
+      <rect x="3086" y="317.75" width="29.799999999999997" height="14" rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"></rect>
+      <text x="3100.9" y="324.75" text-anchor="middle" dominant-baseline="middle" font-size="11" fill="#263238" direction="rtl">עבר</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf22">
+      <path class="bpmn-flow-hit" d="M 3289.6 128.0 L 3361.6 128.0" fill="none"></path>
+      <path class="bpmn-flow-line" d="M 3289.6 128.0 L 3361.6 128.0" fill="none" stroke="#455a64" stroke-width="1.6" marker-end="url(#bpmn0-arrow-seq)"></path>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf23">
+      <path class="bpmn-flow-hit" d="M 3501.6 128.0 L 3573.6 128.0" fill="none"></path>
+      <path class="bpmn-flow-line" d="M 3501.6 128.0 L 3573.6 128.0" fill="none" stroke="#455a64" stroke-width="1.6" marker-end="url(#bpmn0-arrow-seq)"></path>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf24">
+      <path class="bpmn-flow-hit" d="M 3713.6 128.0 L 3837.6 128.0" fill="none"></path>
+      <path class="bpmn-flow-line" d="M 3713.6 128.0 L 3837.6 128.0" fill="none" stroke="#455a64" stroke-width="1.6" marker-end="url(#bpmn0-arrow-seq)"></path>
+      
+      
+    </g>
+      
+    <g class="bpmn-flow bpmn-message" data-flow="mf1">
+      <path class="bpmn-flow-hit" d="M 1453.6 380.0 L 1453.6 528.0" fill="none"></path>
+      <path class="bpmn-flow-line" d="M 1453.6 380.0 L 1453.6 528.0" fill="none" stroke="#37474f" stroke-width="1.3" stroke-dasharray="10 5" marker-start="url(#bpmn0-msg-start)" marker-end="url(#bpmn0-msg-end)"></path>
+      
+    <g class="bpmn-flow-label">
+      <rect x="1293.435" y="443" width="148.6" height="14" rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"></rect>
+      <text x="1367.735" y="450" text-anchor="middle" dominant-baseline="middle" font-size="11" fill="#263238" direction="rtl">טופס בקשת מועד לבדיקה</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-message" data-flow="mf2">
+      <path class="bpmn-flow-hit" d="M 1877.6 528.0 L 1877.6 366.0" fill="none"></path>
+      <path class="bpmn-flow-line" d="M 1877.6 528.0 L 1877.6 366.0" fill="none" stroke="#37474f" stroke-width="1.3" stroke-dasharray="10 5" marker-start="url(#bpmn0-msg-start)" marker-end="url(#bpmn0-msg-end)"></path>
+      
+    <g class="bpmn-flow-label">
+      <rect x="1799.8149999999998" y="436" width="69.4" height="14" rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"></rect>
+      <text x="1834.5149999999999" y="443" text-anchor="middle" dominant-baseline="middle" font-size="11" fill="#263238" direction="rtl">מועד מוצע</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-message" data-flow="mf3">
+      <path class="bpmn-flow-hit" d="M 2371.6 328.0 L 2371.6 355.0 L 2285.6 355.0 L 2285.6 502.0 L 2347.6 502.0 L 2347.6 528.0" fill="none"></path>
+      <path class="bpmn-flow-line" d="M 2371.6 328.0 L 2371.6 355.0 L 2285.6 355.0 L 2285.6 502.0 L 2347.6 502.0 L 2347.6 528.0" fill="none" stroke="#37474f" stroke-width="1.3" stroke-dasharray="10 5" marker-start="url(#bpmn0-msg-start)" marker-end="url(#bpmn0-msg-end)"></path>
+      
+    <g class="bpmn-flow-label">
+      <rect x="2381.8399999999997" y="330.5" width="115.6" height="14" rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"></rect>
+      <text x="2439.64" y="337.5" text-anchor="middle" dominant-baseline="middle" font-size="11" fill="#263238" direction="rtl">בקשה למועד חלופי</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-message" data-flow="mf4">
+      <path class="bpmn-flow-hit" d="M 2371.6 432.0 L 2371.6 502.0 L 2395.6 502.0 L 2395.6 528.0" fill="none"></path>
+      <path class="bpmn-flow-line" d="M 2371.6 432.0 L 2371.6 502.0 L 2395.6 502.0 L 2395.6 528.0" fill="none" stroke="#37474f" stroke-width="1.3" stroke-dasharray="10 5" marker-start="url(#bpmn0-msg-start)" marker-end="url(#bpmn0-msg-end)"></path>
+      
+    <g class="bpmn-flow-label">
+      <rect x="2385.2850000000003" y="456" width="201.39999999999998" height="14" rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"></rect>
+      <text x="2485.985" y="463" text-anchor="middle" dominant-baseline="middle" font-size="11" fill="#263238" direction="rtl">אישור הגעה ושליחת הרכב לבדיקה</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-message" data-flow="mf5">
+      <path class="bpmn-flow-hit" d="M 3219.6 380.0 L 3219.6 528.0" fill="none"></path>
+      <path class="bpmn-flow-line" d="M 3219.6 380.0 L 3219.6 528.0" fill="none" stroke="#37474f" stroke-width="1.3" stroke-dasharray="10 5" marker-start="url(#bpmn0-msg-start)" marker-end="url(#bpmn0-msg-end)"></path>
+      
+    <g class="bpmn-flow-label">
+      <rect x="3045.705" y="443" width="161.79999999999998" height="14" rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"></rect>
+      <text x="3126.605" y="450" text-anchor="middle" dominant-baseline="middle" font-size="11" fill="#263238" direction="rtl">קביעת מועד לבדיקה חוזרת</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-message" data-flow="mf6">
+      <path class="bpmn-flow-hit" d="M 2795.6 528.0 L 2795.6 366.0" fill="none"></path>
+      <path class="bpmn-flow-line" d="M 2795.6 528.0 L 2795.6 366.0" fill="none" stroke="#37474f" stroke-width="1.3" stroke-dasharray="10 5" marker-start="url(#bpmn0-msg-start)" marker-end="url(#bpmn0-msg-end)"></path>
+      
+    <g class="bpmn-flow-label">
+      <rect x="2621.705" y="436" width="161.79999999999998" height="14" rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"></rect>
+      <text x="2702.605" y="443" text-anchor="middle" dominant-baseline="middle" font-size="11" fill="#263238" direction="rtl">תוצאת הטסט (עבר / נכשל)</text>
+    </g>
+    </g>
+      
+    <g class="bpmn-flow bpmn-data-assoc" data-flow="da1" data-dir="read">
+      <path class="bpmn-flow-hit" d="M 1886.8 190.0 L 1886.8 176.0 L 1241.6 176.0 L 1241.6 186.0 L 356.0 186.0 L 356.0 160.0" fill="none"></path>
+      <path class="bpmn-flow-line" d="M 1886.8 190.0 L 1886.8 176.0 L 1241.6 176.0 L 1241.6 186.0 L 356.0 186.0 L 356.0 160.0" fill="none" stroke="#7986cb" stroke-width="1.1" stroke-dasharray="4 3" marker-end="url(#bpmn0-arrow-data)"></path>
+    </g>
+
+    <g class="bpmn-flow bpmn-data-assoc" data-flow="da2" data-dir="write">
+      <path class="bpmn-flow-hit" d="M 3431.6 160.0 L 3431.6 174.0 L 1900.8 174.0 L 1900.8 190.0" fill="none"></path>
+      <path class="bpmn-flow-line" d="M 3431.6 160.0 L 3431.6 174.0 L 1900.8 174.0 L 1900.8 190.0" fill="none" stroke="#7986cb" stroke-width="1.1" stroke-dasharray="4 3" marker-end="url(#bpmn0-arrow-data)"></path>
+    </g>
+      
+    <g class="bpmn-element bpmn-event" id="bpmn0-s_start" data-kind="event" data-event="start">
+      <circle cx="144" cy="128" r="18" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2"></circle>
+      <text text-anchor="middle" font-size="11" fill="#37474f" direction="rtl" font-weight="500"><tspan x="144" y="160">זוהה בסריקה יומית</tspan><tspan x="144" y="172">רכב שרישיונו יפוג…</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-task" id="bpmn0-s_fetch" data-kind="task">
+      <rect x="286" y="96" width="140" height="64" rx="8" ry="8" fill="#ffffff" stroke="#546e7a" stroke-width="1.5"></rect>
+      <text text-anchor="middle" dominant-baseline="middle" font-size="11.5" font-weight="500" fill="#1a1a2e" direction="rtl"><tspan x="356" y="121">שליפת תיק הרכב</tspan><tspan x="356" y="135">ממאגר הרכבים</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-gateway" id="bpmn0-s_scrap_q" data-kind="gateway" data-gw="XOR">
+      <text text-anchor="middle" font-size="11" fill="#37474f" direction="rtl" font-weight="500"><tspan x="568" y="94">האם הרכב מסומן לגריטה?</tspan></text>
+      <rect x="551" y="111" width="34" height="34" fill="#fff8e1" stroke="#f9a825" stroke-width="2" transform="rotate(45, 568, 128)"></rect>
+      
+      <line x1="560" y1="120" x2="576" y2="136" stroke="#e65100" stroke-width="3" stroke-linecap="round"></line>
+      <line x1="576" y1="120" x2="560" y2="136" stroke="#e65100" stroke-width="3" stroke-linecap="round"></line>
+    </g>
+
+    <g class="bpmn-element bpmn-gateway" id="bpmn0-s_ins_q" data-kind="gateway" data-gw="XOR">
+      <text text-anchor="middle" font-size="11" fill="#37474f" direction="rtl" font-weight="500"><tspan x="817.6" y="94">האם ביטוח הרכב בתוקף?</tspan></text>
+      <rect x="800.6" y="111" width="34" height="34" fill="#fff8e1" stroke="#f9a825" stroke-width="2" transform="rotate(45, 817.6, 128)"></rect>
+      
+      <line x1="809.6" y1="120" x2="825.6" y2="136" stroke="#e65100" stroke-width="3" stroke-linecap="round"></line>
+      <line x1="825.6" y1="120" x2="809.6" y2="136" stroke="#e65100" stroke-width="3" stroke-linecap="round"></line>
+    </g>
+
+    <g class="bpmn-element bpmn-gateway" id="bpmn0-s_ins_merge" data-kind="gateway" data-gw="XOR">
+      
+      <rect x="1224.6" y="111" width="34" height="34" fill="#fff8e1" stroke="#f9a825" stroke-width="2" transform="rotate(45, 1241.6, 128)"></rect>
+      
+      <line x1="1233.6" y1="120" x2="1249.6" y2="136" stroke="#e65100" stroke-width="3" stroke-linecap="round"></line>
+      <line x1="1249.6" y1="120" x2="1233.6" y2="136" stroke="#e65100" stroke-width="3" stroke-linecap="round"></line>
+    </g>
+
+    <g class="bpmn-element bpmn-task" id="bpmn0-s_issue" data-kind="task">
+      <rect x="3149.6" y="96" width="140" height="64" rx="8" ry="8" fill="#ffffff" stroke="#546e7a" stroke-width="1.5"></rect>
+      <text text-anchor="middle" dominant-baseline="middle" font-size="11.5" font-weight="500" fill="#1a1a2e" direction="rtl"><tspan x="3219.6" y="121">הפקת רישיון</tspan><tspan x="3219.6" y="135">מעודכן</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-task" id="bpmn0-s_update" data-kind="task">
+      <rect x="3361.6" y="96" width="140" height="64" rx="8" ry="8" fill="#ffffff" stroke="#546e7a" stroke-width="1.5"></rect>
+      <text text-anchor="middle" dominant-baseline="middle" font-size="11.5" font-weight="500" fill="#1a1a2e" direction="rtl"><tspan x="3431.6" y="114">עדכון סטטוס</tspan><tspan x="3431.6" y="128">הרישיון ל"בתוקף"</tspan><tspan x="3431.6" y="142">במאגר הרכבים</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-task" id="bpmn0-s_notify" data-kind="task">
+      <rect x="3573.6" y="96" width="140" height="64" rx="8" ry="8" fill="#ffffff" stroke="#546e7a" stroke-width="1.5"></rect>
+      <text text-anchor="middle" dominant-baseline="middle" font-size="11.5" font-weight="500" fill="#1a1a2e" direction="rtl"><tspan x="3643.6" y="114">שליחת הודעה</tspan><tspan x="3643.6" y="128">למחלקה שהרכב חזר</tspan><tspan x="3643.6" y="142">לשירות</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-event" id="bpmn0-s_end_ok" data-kind="event" data-event="end">
+      <circle cx="3855.6" cy="128" r="18" fill="#ffebee" stroke="#c62828" stroke-width="3.5"></circle>
+      <text text-anchor="middle" font-size="11" fill="#37474f" direction="rtl" font-weight="500"><tspan x="3855.6" y="160">הרכב קיבל רישיון</tspan><tspan x="3855.6" y="172">מחודש</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-task" id="bpmn0-c_scrap" data-kind="task">
+      <rect x="747.6" y="316" width="140" height="64" rx="8" ry="8" fill="#ffffff" stroke="#546e7a" stroke-width="1.5"></rect>
+      <text text-anchor="middle" dominant-baseline="middle" font-size="11.5" font-weight="500" fill="#1a1a2e" direction="rtl"><tspan x="817.6" y="341">העברת הרכב</tspan><tspan x="817.6" y="355">לתהליך גריטה</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-task" id="bpmn0-c_renew_ins" data-kind="task">
+      <rect x="959.5999999999999" y="264" width="140" height="64" rx="8" ry="8" fill="#ffffff" stroke="#546e7a" stroke-width="1.5"></rect>
+      <text text-anchor="middle" dominant-baseline="middle" font-size="11.5" font-weight="500" fill="#1a1a2e" direction="rtl"><tspan x="1029.6" y="296">חידוש ביטוח הרכב</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-event" id="bpmn0-c_end_scrap" data-kind="event" data-event="end">
+      <circle cx="1029.6" cy="400" r="18" fill="#ffebee" stroke="#c62828" stroke-width="3.5"></circle>
+      <text text-anchor="middle" font-size="11" fill="#37474f" direction="rtl" font-weight="500"><tspan x="1029.6" y="432">הרכב יצא מהתהליך</tspan><tspan x="1029.6" y="444">ללא חידוש רישיון</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-task" id="bpmn0-c_form" data-kind="task">
+      <rect x="1383.6" y="316" width="140" height="64" rx="8" ry="8" fill="#ffffff" stroke="#546e7a" stroke-width="1.5"></rect>
+      <text text-anchor="middle" dominant-baseline="middle" font-size="11.5" font-weight="500" fill="#1a1a2e" direction="rtl"><tspan x="1453.6" y="334">מילוי טופס בקשת</tspan><tspan x="1453.6" y="348">מועד לבדיקה</tspan><tspan x="1453.6" y="362">ושליחתו למכון</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-gateway" id="bpmn0-c_slot_merge" data-kind="gateway" data-gw="XOR">
+      
+      <rect x="1648.6" y="331" width="34" height="34" fill="#fff8e1" stroke="#f9a825" stroke-width="2" transform="rotate(45, 1665.6, 348)"></rect>
+      
+      <line x1="1657.6" y1="340" x2="1673.6" y2="356" stroke="#e65100" stroke-width="3" stroke-linecap="round"></line>
+      <line x1="1673.6" y1="340" x2="1657.6" y2="356" stroke="#e65100" stroke-width="3" stroke-linecap="round"></line>
+    </g>
+
+    <g class="bpmn-element bpmn-event" id="bpmn0-c_wait_slot" data-kind="event" data-event="intermediate">
+      
+      <circle cx="1877.6" cy="348" r="18" fill="#ffffff" stroke="#1565c0" stroke-width="2"></circle>
+      <circle cx="1877.6" cy="348" r="13.5" fill="none" stroke="#1565c0" stroke-width="1.2"></circle>
+      <text text-anchor="middle" font-size="11" fill="#37474f" direction="rtl" font-weight="500"><tspan x="1877.6" y="380">המתנה למועד המוצע</tspan><tspan x="1877.6" y="392">מהמכון</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-gateway" id="bpmn0-c_slot_q" data-kind="gateway" data-gw="XOR">
+      <text text-anchor="middle" font-size="11" fill="#37474f" direction="rtl" font-weight="500"><tspan x="2089.6" y="301">האם המועד המוצע חל</tspan><tspan x="2089.6" y="314">לפני מועד פקיעת…</tspan></text>
+      <rect x="2072.6" y="331" width="34" height="34" fill="#fff8e1" stroke="#f9a825" stroke-width="2" transform="rotate(45, 2089.6, 348)"></rect>
+      
+      <line x1="2081.6" y1="340" x2="2097.6" y2="356" stroke="#e65100" stroke-width="3" stroke-linecap="round"></line>
+      <line x1="2097.6" y1="340" x2="2081.6" y2="356" stroke="#e65100" stroke-width="3" stroke-linecap="round"></line>
+    </g>
+
+    <g class="bpmn-element bpmn-task" id="bpmn0-c_alt_slot" data-kind="task">
+      <rect x="2301.6" y="264" width="140" height="64" rx="8" ry="8" fill="#ffffff" stroke="#546e7a" stroke-width="1.5"></rect>
+      <text text-anchor="middle" dominant-baseline="middle" font-size="11.5" font-weight="500" fill="#1a1a2e" direction="rtl"><tspan x="2371.6" y="289">שליחת בקשה למועד</tspan><tspan x="2371.6" y="303">חלופי</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-task" id="bpmn0-c_confirm" data-kind="task">
+      <rect x="2301.6" y="368" width="140" height="64" rx="8" ry="8" fill="#ffffff" stroke="#546e7a" stroke-width="1.5"></rect>
+      <text text-anchor="middle" dominant-baseline="middle" font-size="11.5" font-weight="500" fill="#1a1a2e" direction="rtl"><tspan x="2371.6" y="386">אישור הגעה</tspan><tspan x="2371.6" y="400">ושליחת הרכב</tspan><tspan x="2371.6" y="414">לבדיקה במכון</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-gateway" id="bpmn0-c_result_merge" data-kind="gateway" data-gw="XOR">
+      
+      <rect x="2566.6" y="331" width="34" height="34" fill="#fff8e1" stroke="#f9a825" stroke-width="2" transform="rotate(45, 2583.6, 348)"></rect>
+      
+      <line x1="2575.6" y1="340" x2="2591.6" y2="356" stroke="#e65100" stroke-width="3" stroke-linecap="round"></line>
+      <line x1="2591.6" y1="340" x2="2575.6" y2="356" stroke="#e65100" stroke-width="3" stroke-linecap="round"></line>
+    </g>
+
+    <g class="bpmn-element bpmn-event" id="bpmn0-c_wait_result" data-kind="event" data-event="intermediate">
+      
+      <circle cx="2795.6" cy="348" r="18" fill="#ffffff" stroke="#1565c0" stroke-width="2"></circle>
+      <circle cx="2795.6" cy="348" r="13.5" fill="none" stroke="#1565c0" stroke-width="1.2"></circle>
+      <text text-anchor="middle" font-size="11" fill="#37474f" direction="rtl" font-weight="500"><tspan x="2795.6" y="380">המתנה לתוצאת הטסט</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-gateway" id="bpmn0-c_result_q" data-kind="gateway" data-gw="XOR">
+      <text text-anchor="middle" font-size="11" fill="#37474f" direction="rtl" font-weight="500"><tspan x="3007.6" y="314">האם הרכב עבר את הטסט?</tspan></text>
+      <rect x="2990.6" y="331" width="34" height="34" fill="#fff8e1" stroke="#f9a825" stroke-width="2" transform="rotate(45, 3007.6, 348)"></rect>
+      
+      <line x1="2999.6" y1="340" x2="3015.6" y2="356" stroke="#e65100" stroke-width="3" stroke-linecap="round"></line>
+      <line x1="3015.6" y1="340" x2="2999.6" y2="356" stroke="#e65100" stroke-width="3" stroke-linecap="round"></line>
+    </g>
+
+    <g class="bpmn-element bpmn-task" id="bpmn0-c_fix" data-kind="task">
+      <rect x="3149.6" y="316" width="140" height="64" rx="8" ry="8" fill="#ffffff" stroke="#546e7a" stroke-width="1.5"></rect>
+      <text text-anchor="middle" dominant-baseline="middle" font-size="11.5" font-weight="500" fill="#1a1a2e" direction="rtl"><tspan x="3219.6" y="334">הזמנת תיקון</tspan><tspan x="3219.6" y="348">ליקויים וקביעת</tspan><tspan x="3219.6" y="362">מועד לבדיקה…</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-data-store" id="bpmn0-ds_vehicles" data-kind="dataStore">
+      <path d="M 1865.8 196 L 1865.8 228
+               A 28 6 0 0 0 1921.8 228
+               L 1921.8 196
+               A 28 6 0 0 0 1865.8 196 Z" fill="#ffffff" stroke="#2e7d32" stroke-width="1.4"></path>
+      <path d="M 1865.8 196
+               A 28 6 0 0 0 1921.8 196" fill="none" stroke="#2e7d32" stroke-width="1.4"></path>
+      <text x="1893.8" y="248" text-anchor="middle" font-size="11" fill="#263238" direction="rtl">מאגר הרכבים</text>
+    </g>
+    </svg>
+<figcaption>פתרון לדוגמה: שני מסלולים (Pools) — מחלקת הרישוי עם שני נתיבים (מערכת הרישוי, רכז הרישוי), ומכון הרישוי החיצוני כמסלול ריק (black-box); ארבעה שערי XOR, שתי לולאות החוזרות לשער מיזוג, שני אירועי המתנה, מאגר הרכבים המחובר ב-Association בקריאה ובכתיבה, ושני אירועי סיום מובחנים.</figcaption>
+</figure>
+<p class="scrollhint">↔ התרשים רחב מן העמוד, ניתן לגלול אותו לצדדים.</p>
+<p class="difflink"><a href="diagrams/bpmn-solution.html" target="_blank" rel="noopener">↗ פתחו את תרשים ה-BPMN המלא</a><small>עמוד נפרד, ניתן להגדלה ולהדפסה</small></p>
+<div class="answer">
+<h4>תשובה קצרה</h4>
+<p><b>שני Pools:</b></p>
+<ul>
+<li><b>Pool A — מחלקת הרישוי</b> (הארגון שמנהל את התהליך), מחולק לשני <b>Lanes</b>: <b>מערכת הרישוי</b> (הפעולות הממוחשבות) ו<b>רכז הרישוי</b> (הפעולות שאדם מבצע).</li>
+<li><b>Pool B — מכון הרישוי החיצוני</b>, מצויר כ<b>Pool ריק (black-box)</b>: המכון מריץ תהליך משלו שאיננו מנהלים ואיננו מכירים, ולכן מוחלפים עמו <b>Message Flows</b> בלבד ואין בתוכו פעילויות.</li>
+</ul>
+<p><b>מאגר נתונים אחד:</b> <b>מאגר הרכבים</b>, מצויר בסמל <b>Data Store</b>, מחובר ב-<b>Association</b> בשני מקומות: <b>קריאה</b> מפעילות שליפת תיק הרכב, ו<b>כתיבה</b> מפעילות עדכון סטטוס הרישיון.</p>
+<h4>המפרט המלא של התרשים</h4>
+<p><b>Lane "מערכת הרישוי" (Pool A):</b></p>
+<ol>
+<li><b>Start Event</b> — "זוהה בסריקה יומית רכב שרישיונו יפוג בתוך 30 יום".</li>
+<li>פעילות: <b>שליפת תיק הרכב ממאגר הרכבים</b> — Association של <b>קריאה</b> מן ה-Data Store.</li>
+<li><b>G1 (XOR split): "האם הרכב מסומן לגריטה?"</b> — <b>כן</b> → ל-Lane של הרכז; <b>לא</b> → G2.</li>
+<li><b>G2 (XOR split): "האם ביטוח הרכב בתוקף?"</b> — <b>לא בתוקף</b> → ל-Lane של הרכז (חידוש ביטוח); <b>בתוקף</b> → ישירות ל-<b>XOR merge</b>.</li>
+<li>פעילות: <b>הפקת רישיון מעודכן</b>.</li>
+<li>פעילות: <b>עדכון סטטוס הרישיון ל"בתוקף" במאגר הרכבים</b> — Association של <b>כתיבה</b> אל ה-Data Store.</li>
+<li>פעילות: <b>שליחת הודעה למחלקה שהרכב חזר לשירות</b>.</li>
+<li><b>End Event 1</b> — "הרכב קיבל רישיון מחודש".</li>
+</ol>
+<p><b>Lane "רכז הרישוי" (Pool A):</b></p>
+<ol>
+<li>פעילות: <b>העברת הרכב לתהליך גריטה</b> → <b>End Event 2</b> — "הרכב יצא מהתהליך ללא חידוש רישיון".</li>
+<li>פעילות: <b>חידוש ביטוח הרכב</b> → XOR merge (מתאחד עם ענף "הביטוח בתוקף").</li>
+<li>פעילות: <b>מילוי טופס בקשת מועד לבדיקה ושליחתו למכון</b> → <b>Message Flow החוצה</b>.</li>
+<li><b>XOR merge</b> (נקודת החזרה של לולאה 1) → <b>אירוע ביניים: המתנה למועד המוצע מהמכון</b> ← <b>Message Flow פנימה</b>.</li>
+<li><b>G3 (XOR split): "האם המועד המוצע חל לפני מועד פקיעת הרישיון?"</b><ul>
+<li><b>לא, המועד מאוחר מהפקיעה</b> → פעילות <b>שליחת בקשה למועד חלופי</b> (<b>Message Flow החוצה</b>) → <b>חזרה ל-XOR merge</b> = <b>לולאה 1</b>.</li>
+<li><b>כן, המועד מתאים</b> → המשך.</li>
+</ul>
+</li>
+<li>פעילות: <b>אישור הגעה ושליחת הרכב לבדיקה במכון</b> → <b>Message Flow החוצה</b>.</li>
+<li><b>XOR merge</b> (נקודת החזרה של לולאה 2) → <b>אירוע ביניים: המתנה לתוצאת הטסט</b> ← <b>Message Flow פנימה</b>.</li>
+<li><b>G4 (XOR split): "האם הרכב עבר את הטסט?"</b><ul>
+<li><b>נכשל</b> → פעילות <b>הזמנת תיקון ליקויים וקביעת מועד לבדיקה חוזרת</b> (<b>Message Flow החוצה</b>) → <b>חזרה ל-XOR merge</b> = <b>לולאה 2 (reject-and-resubmit)</b>.</li>
+<li><b>עבר</b> → חזרה ל-Lane של המערכת (הפקת רישיון מעודכן).</li>
+</ul>
+</li>
+</ol>
+<p><b>Message Flows (Pool A ↔ Pool B), שישה בסך הכול:</b></p>
+<div class="tablewrap"><table>
+<thead><tr><th>כיוון</th><th>תוכן ההודעה</th></tr></thead>
+<tbody>
+<tr><td>החוצה למכון</td><td>טופס בקשת מועד לבדיקה</td></tr>
+<tr><td>פנימה מהמכון</td><td>מועד מוצע</td></tr>
+<tr><td>החוצה למכון</td><td>בקשה למועד חלופי</td></tr>
+<tr><td>החוצה למכון</td><td>אישור הגעה ושליחת הרכב לבדיקה</td></tr>
+<tr><td>החוצה למכון</td><td>קביעת מועד לבדיקה חוזרת</td></tr>
+<tr><td>פנימה מהמכון</td><td>תוצאת הטסט (עבר / נכשל)</td></tr>
+</tbody></table></div>
+</div>
+<div class="mistake">
+<p><b>מה מוריד נקודות בשער:</b> לולאה החוזרת אל פעילות בלי שער מיזוג (שני חצים נכנסים לאותה פעילות = שגיאת תחביר) · משימה בשם "המתנה" במקום אירוע ביניים · Sequence Flow החוצה למכון הרישוי · Lane ריק · יותר מאירוע התחלה אחד ב-Pool של מחלקת הרישוי · שערים ללא תוויות על הענפים.</p>
+</div>
+<div class="alt">
+<p><b>וריאנטים מקובלים במלואם:</b> איחוד "הפקת רישיון" ו"עדכון סטטוס" לפעילות אחת · הוספת Pool ריק שלישי, "המחלקה המחזיקה ברכב", כיעד להודעת החזרה לשירות · הוספת Data Object (תיק הרכב / הרישיון המעודכן) לצד ה-Data Store.</p>
+</div>
+<h3 class="sub">1.2 (3 נק׳): חלוקת האחריות בין המערכת לבין הרכז</h3>
+<p class="qtext">בתהליך יש פעולות שמערכת הרישוי מבצעת ללא מעורבות אדם (למשל שליפת תיק הרכב ועדכון סטטוס הרישיון), לצד פעולות שרכז הרישוי מבצע בעצמו (למשל חידוש הביטוח ומילוי טופס בקשת המועד). כיצד ייצגתם בתרשים שלכם את חלוקת האחריות בין שני המבצעים הללו, ומדוע בחרתם בייצוג זה ולא בחלופה אחרת?</p>
+<div class="answer">
+<p><b>תשובת מודל:</b></p>
+<ol>
+<li>שני המבצעים שייכים לאותו <b>משתתף עסקי</b> — מחלקת הרישוי — ולכן שניהם נמצאים <b>בתוך Pool אחד</b>.</li>
+<li>ההפרדה ביניהם נעשית בשני <b>Lanes</b> בתוך אותו Pool ("מערכת הרישוי" ו"רכז הרישוי"), וכל פעילות ממוקמת ב-Lane של מי שמבצע אותה בפועל: שליפת תיק הרכב, הפקת הרישיון, עדכון הסטטוס ושליחת ההודעה ב-Lane של המערכת; חידוש הביטוח, מילוי הטופס, אישור ההגעה והזמנת התיקון ב-Lane של הרכז.</li>
+<li><b>נימוק, ומדוע לא החלופה:</b> Lane מייצג <b>תפקיד או אחריות בתוך ארגון</b>, ולכן המעבר בין ה-Lanes נעשה ב-<b>Sequence Flow</b> רגיל — זרימת רצף חוצה Lanes אך אינה חוצה Pools. החלופה, לצייר את המערכת כ-Pool נפרד, הייתה מחייבת <b>Message Flow</b> בכל מעבר בין המערכת לרכז ומציגה את המערכת כמשתתף עסקי עצמאי, בעוד שכאן מדובר בכלי שהמחלקה מפעילה, ולא בגוף שמנהל תהליך משלו.</li>
+</ol>
+</div>
+<div class="alt">
+<p><b>חלופה מזכה במלוא הניקוד:</b> סטודנט שצייר את מערכת הרישוי כ-<b>Pool נפרד</b> מקבל 3 נק׳ <b>רק אם התרשים עקבי לחלוטין</b> — כל מעבר בין המערכת לרכז מצויר כ-<b>Message Flow</b> (חץ מקווקו), והנימוק מציג את המערכת כמשתתף נפרד. אין עקביות →.</p>
+</div>
+<div class="mistake">
+<p><b>הסתירה:</b> (א) Pool אחד ללא כל הפרדה בין המערכת לרכז — אין על מה להצביע בתרשים על זיהוי מילולי של החלוקה. (ב) טענה ש"המערכת היא משתתף נפרד" אך בתרשים נמתח <b>Sequence Flow</b> בין המערכת לרכז — הנימוק סותר את התרשים.</p>
+</div>
+<div class="alt">
+<p><b>אין לדרוש</b> את המונח "black-box" באנגלית ואין לדרוש מונחי BPMN 2.0; הקורס מלמד BPMN 1.0 ונבדק <b>הנימוק</b>, לא אוצר המילים.</p>
+</div>
+<h3 class="sub">1.3 (3 נק׳): ייצוג מאגר הרכבים וסוג החיבור אליו</h3>
+<p class="qtext">בתחילת התהליך נשלפים פרטי הרכב מתוך מאגר הרכבים, ובסופו נשמר בו סטטוס הרישיון המעודכן. כיצד ייצגתם את המאגר עצמו בתרשים שלכם, ובאיזה סוג חיבור קישרתם אותו אל הפעילויות שמשתמשות בו? הסבירו מדוע חיבור זה מתאים כאן, ובמה הוא נבדל מהחיבור שבו קישרתם שתי פעילויות עוקבות.</p>
+<div class="answer">
+<p><b>תשובת מודל:</b></p>
+<ol>
+<li>מאגר הרכבים מיוצג בסמל <b>מאגר נתונים (Data Store)</b> נפרד — לא כפעילות ("בדיקת המאגר"), לא כאירוע ולא כ-Pool.</li>
+<li>הקישור אל הפעילויות הוא <b>Association (קו מקווקו)</b>, <b>בשני מקומות</b>: מן המאגר אל פעילות שליפת תיק הרכב (<b>קריאה</b>), ומפעילות עדכון סטטוס הרישיון אל המאגר (<b>כתיבה</b>).</li>
+<li><b>ההבחנה מן החיבור שבין שתי פעילויות עוקבות:</b> Association מציין <b>שימוש בנתונים</b> — מי קורא ומי כותב — ואינו מקדם את התהליך; <b>Sequence Flow</b> מציין <b>סדר ביצוע</b> בין פעילויות. המאגר <b>אינו שלב בתהליך</b>: הוא אינו "מתבצע" ואין לו רגע התחלה וסיום, ולכן לא ניתן לחבר אליו זרימת רצף.</li>
+</ol>
+</div>
+<div class="alt">
+<p><b>מזכה גם:</b> הוספת <b>Data Object</b> (תיק הרכב / הרישיון המעודכן) לצד ה-Data Store — אין הורדת נקודות, כל עוד המאגר המתמיד קיים ומחובר ב-Association.</p>
+</div>
+<div class="mistake">
+<p><b>הסתירה:</b> (א) אין סמל מאגר והמאגר "מיוצג" כפעילות בלבד. (ב) חץ <b>Sequence Flow</b> אל המאגר וממנו → הנימוק סותר את התרשים, המאגר מוצג כשלב שמתבצע. (ג) <b>Message Flow</b> אל המאגר → שגוי, המאגר אינו משתתף ואינו Pool.</p>
+</div>
+<h3 class="sub">1.4 (3 נק׳): הסיומים העסקיים של התהליך</h3>
+<p class="qtext">לא כל רכב שנכנס לתהליך יוצא ממנו עם רישיון מחודש. אילו סיומים עסקיים אפשריים יש לתהליך לפי התיאור, וכיצד ייצגתם בתרשים שלכם את סופו של כל אחד מהמסלולים הללו? נמקו את הבחירה.</p>
+<div class="answer">
+<p><b>תשובת מודל:</b></p>
+<ol>
+<li>לפי התיאור יש <b>שני</b> סיומים עסקיים:<ul>
+<li><b>(א) הצלחה</b> — הופק רישיון מחודש, הסטטוס עודכן במאגר הרכבים והודעה נשלחה למחלקה המחזיקה ברכב.</li>
+<li><b>(ב) יציאה ללא חידוש</b> — רכב שסומן כמיועד לגריטה הועבר לתהליך גריטה ויצא מן התהליך.</li>
+</ul>
+</li>
+<li>בתרשים כל מסלול מסתיים ב-<b>End Event נפרד משלו</b> — שני אירועי סיום מובחנים, ולא איחוד של שני המסלולים לאירוע סיום יחיד.</li>
+<li><b>נימוק הבחירה:</b> אירועי סיום נפרדים מבטאים <b>תוצאות עסקיות שונות</b>, ומאפשרים לראות מן התרשים באיזו תוצאה הסתיים מופע התהליך. איחודם לאירוע אחד היה מטשטש את ההבחנה בין רכב שרישיונו חודש לבין רכב שיצא מן הצי — שתי מציאויות ארגוניות שונות לחלוטין.</li>
+</ol>
+</div>
+<div class="alt">
+<p><b>חלופה מזכה חלקית:</b> <b>אירוע סיום יחיד</b> שאליו מתנקזים שני המסלולים, אך שתי התוצאות זוהו נכון — <b>עד 2 נק׳</b> (רכיבים 1 ו-3 בלבד), ובלבד שהנימוק אינו טוען שהתרשים מבחין ביניהן.</p>
+</div>
+<div class="mistake">
+<p><b>הסתירה:</b> לא צויר כלל מסלול לרכב המסומן לגריטה (הוזרם בחזרה לתהליך או הושמט) — אין מסלול שני להצביע עליו.</p>
+</div>
+</section>
+<section class="q" id="q2">
+<h2><span class="pts">8 נק׳</span>שאלה 2: ניתוח שורש (RCA)</h2>
+
+<p class="qtext">מנהל הצי מתאר כי כיום הטיפול בתקלות ובטיפולים התקופתיים מתנהל בטפסים ידניים ובשיחות טלפון, וכי מצב זה גורם לעיכובים, לרכבים מושבתים שלא לצורך ולחוסר מעקב. לפני שמגדירים מערכת, עלינו לוודא שאנו פותרים את הבעיה העסקית האמיתית ולא רק את התסמינים שמנהל הצי מתאר. לשם כך נדרש ניתוח שורש (Root Cause Analysis).</p>
+<h3 class="sub">2א (4 נק׳): שתי שיטות לניתוח שורש</h3>
+<p class="qtext">הציגו שתי שיטות שונות לניתוח שורש הבעיה (RCA). לכל שיטה ציינו את שמה והסבירו במשפט-שניים מהו רעיון השיטה וכיצד היא מסייעת לדייק את הבעיה העסקית של "נעים בדרכים". שימו לב: נדרשות שיטות לניתוח שורש, ולא שיטות לאיסוף מידע או לאיסוף דרישות.</p>
+<div class="answer">
+<p><b>1. 5 Whys ("חמשת הלמה").</b> הרעיון: שואלים "למה?" שוב ושוב, כשכל שאלה נשענת על התשובה הקודמת, עד שמגיעים לסיבה <b>בת-טיפול</b> ולא לתסמין נוסף. ב"נעים בדרכים" השיטה תפרק את האמירה "רכבים מושבתים שלא לצורך" עד לגורם ארגוני מוגדר — למשל, שאיש אינו יודע באיזו קריאה לטפל קודם — במקום להסתפק באמירה "אין לנו מערכת".</p>
+<p><b>2. תרשים איכיקאווה (Ishikawa / עצם הדג / CED).</b> הרעיון: פירוק שיטתי של הסיבות האפשריות ל<b>קטגוריות</b> קבועות (אדם, שיטה/תהליך, ציוד, חומר, סביבה, מדידה), כדי לא לפספס מוקדי סיבה שלמים. ב"נעים בדרכים" הוא מבטיח שלא נתרכז רק בקטגוריית "שיטה" (טפסים ידניים), אלא נבדוק גם ציוד (זמינות חלקים במחסן), אדם (מספר המכונאים ותחומי ההתמחות שלהם) ומדידה (אין מדידה של זמן השבתה, ולכן אין דרך לדעת היכן הבעיה חמורה).</p>
+<p><b>3. ניתוח Pareto.</b> הרעיון: <b>כימות</b> הסיבות לפי שכיחות או עלות ודירוגן, כדי לזהות את המיעוט שגורם לרוב הנזק (עקרון 80/20). ב"נעים בדרכים" נדרג את סיבות ההשבתה לפי <b>ימי השבתה מצטברים</b> — המתנה לחלק, המתנה לאישור חריגת עלות, המתנה לשיבוץ מכונאי — ונגלה על מה כדאי שהמערכת תתמקד קודם.</p>
+</div>
+<div class="mistake">
+<p><b>לא מזכה:</b> ראיון, שאלון, תצפית, סדנת JAD, סקירת מסמכים, סיעור מוחות ללא מיפוי סיבות — אלו שיטות <b>איסוף מידע/דרישות</b> ולא ניתוח שורש. זו הטעות הנפוצה.</p>
+<p>שם השיטה בלבד ללא הסבר, או הסבר שגוי ("Pareto = לטפל קודם בבעיה הגדולה" ללא רעיון הדירוג הכמותי).</p>
+<p>שתי וריאציות של אותה שיטה ("5 Whys" ו-"למה-למה") → נספרות כשיטה אחת.</p>
+</div>
+<h3 class="sub">2ב (4 נק׳): יישום 5 Whys על "רכבים מושבתים שלא לצורך"</h3>
+<p class="qtext">בחרו אחת מהשיטות שציינתם בסעיף א ויישמו אותה על התסמין "רכבים מושבתים שלא לצורך". הציגו את היישום בפורמט המקובל של השיטה שבחרתם, ולא כפסקה חופשית, הגיעו לגורם שורש אפשרי אחד, והסבירו במשפט אחד מדוע זהו גורם שורש ולא תסמין נוסף.</p>
+<div class="answer">
+<p><b>היישום, במבנה השיטה:</b></p>
+<div class="tablewrap"><table>
+<thead><tr><th>#</th><th>שאלה</th><th>תשובה</th></tr></thead>
+<tbody>
+<tr><td>1</td><td>למה רכבים מושבתים שלא לצורך?</td><td>כי קריאת טיפול נשארת פתוחה ימים ארוכים גם כשהעבודה עצמה קצרה.</td></tr>
+<tr><td>2</td><td>למה הקריאה נשארת פתוחה ימים ארוכים?</td><td>כי ברוב המקרים היא ממתינה לחלק שאינו במלאי.</td></tr>
+<tr><td>3</td><td>למה היא ממתינה לחלק?</td><td>כי ההזמנה מהספק מתחילה רק <b>אחרי</b> שהמכונאי פתח את הרכב וגילה שהחלק חסר.</td></tr>
+<tr><td>4</td><td>למה ההזמנה מתחילה רק אז?</td><td>כי אין לאיש נראות למלאי המחסן לפני האבחון, וגם דוח האבחון עצמו נמסר בטלפון ואינו רשום במקום שפקיד המחסן רואה.</td></tr>
+<tr><td>5</td><td>למה אין נראות כזו?</td><td>כי רמת המלאי מנוהלת בנפרד מן הקריאות, ואין שום נקודה בתהליך שבה החלקים הצפויים לקריאה נבדקים מול המלאי.</td></tr>
+</tbody></table></div>
+<p><b>גורם השורש:</b> אין נקודת בקרה שבה החלקים הנדרשים לקריאה נבדקים מול רמת המלאי, ולכן הזמנת חלק מתחילה מאוחר מדי — רק לאחר שהמכונאי גילה בפועל שהוא חסר.</p>
+<p><b>למה זהו שורש ולא תסמין נוסף:</b> אפשר לטפל בו ישירות — הצמדת בדיקת מלאי לדוח האבחון תקצר את ההמתנה — ואפשר גם לאמת אותו בנתונים: אם נמדוד כמה ימים חולפים בין פתיחת הקריאה להזמנת החלק, נראה אם זהו אכן הגורם למרבית ימי ההשבתה.</p>
+</div>
+<div class="mistake">
+<p><b>לא מזכה:</b> "גורם שורש" שהוא למעשה <b>פתרון</b> ("אין מערכת ממוחשבת", "צריך מערכת מרכזית", "אין דיגיטציה"). שרשרת שחוזרת על התסמין במילים אחרות. שיטה שונה מזו שנבחרה בסעיף א', או פסקה חופשית שאינה במבנה השיטה.</p>
+</div>
+</section>
+<section class="q" id="q3">
+<h2><span class="pts">12 נק׳</span>שאלה 3: חלופות מימוש וישימות</h2>
+
+<p class="qtext">הנהלת "נעים בדרכים" מתלבטת כיצד להשיג את מערכת ניהול קריאות הטיפול עבור צי של מאות כלי רכב הפרוס על פני כמה מוסכים ומחלקות, ומבקשת מכם להשוות חלופות מימוש ולבחון את ישימותן.</p>
+<h3 class="sub">3א (4 נק׳): שלוש חלופות מימוש ומאפיין מבחין לכל אחת</h3>
+<p class="qtext">הציגו שלוש חלופות מימוש ריאליות ושונות זו מזו למערכת. לכל חלופה ציינו מאפיין מבחין אחד — כלומר במה היא נבדלת מן האחרות מבחינת אופן ההשגה של המערכת (ולא מבחינת הטכנולוגיה או התשתית שבהן תיכתב).</p>
+<div class="answer">
+<div class="tablewrap"><table>
+<thead><tr><th>חלופה</th><th>מאפיין מבחין (אופן ההשגה)</th></tr></thead>
+<tbody>
+<tr><td><b>פיתוח ייעודי (bespoke)</b>, פנימי או במיקור-חוץ</td><td>המערכת נבנית מאפס לפי תהליך הטיפול של "נעים בדרכים"; <b>רמת ההתאמה מלאה, זמן ההקמה הארוך ביותר</b>, והבעלות על הקוד בידי החברה.</td></tr>
+<tr><td><b>רכישת חבילת מדף (COTS) לניהול תחזוקת צי, עם התאמות</b></td><td>קונים מוצר קיים ומתאימים אותו; <b>התהליך של החברה מתכופף במידה מסוימת אל המוצר</b>, בתמורה לזמן הקמה קצר ולפונקציונליות שכבר נבדקה בשטח. תלות בספק בגרסאות ובתמיכה.</td></tr>
+<tr><td><b>שכירת מערכת בענן (SaaS) במנוי חודשי</b></td><td>לא רוכשים ולא בונים אלא <b>שוכרים שירות</b>; אין השקעה ראשונית משמעותית ואין תחזוקת תשתית, אך יכולת ההתאמה מוגבלת למה שהספק מאפשר, והעלות היא זרם תשלומים מתמשך.</td></tr>
+</tbody></table></div>
+<p>חלופות נוספות שהיו מתקבלות: הרחבת מודול תחזוקה במערכת ERP קיימת של החברה; המשך העבודה הידנית כחלופת בסיס (baseline) — <b>רק</b> אם הוצגה ככזו במפורש.</p>
+</div>
+<div class="mistake">
+<p><b>לא מזכה:</b> בחירות טכנולוגיה/תשתית שאינן חלופת השגה — "C# מול Java", "שרת מקומי מול ענן" כשלעצמו, "אפליקציה סלולרית מול דסקטופ". שתי חלופות שהן אותה חלופה בניסוח שונה ("לקנות תוכנה" / "לרכוש מוצר מדף") → נספרות כאחת.</p>
+</div>
+<h3 class="sub">3ב (5 נק׳): השוואה מול שלושת המאפיינים, ובחירה</h3>
+<p class="qtext">השוו בין שלוש החלופות שהצגתם מול שלושת המאפיינים הבאים: (1) ייחודיות ומורכבות תהליך קריאת הטיפול — מסלול רב-שלבי הכולל אישורים, המתנות והרשאות שינוי סטטוס שונות לכל תפקיד; (2) הצורך להתממשק אל מערכת חיצונית של ספק החלקים, המודיעה למערכת כאשר חלק שהוזמן הגיע; (3) היקף ופריסה ארגונית — מאות כלי רכב, כמה מוסכים, ארבעה סוגי משתמשים ולוח זמנים להעלאת המערכת לאוויר. עבור כל מאפיין ציינו איזו חלופה מתמודדת איתו טוב יותר ומדוע. לסיום בחרו חלופה אחת ונמקו את בחירתכם.</p>
+<div class="answer">
+<div class="tablewrap"><table>
+<thead><tr><th>מאפיין המערכת</th><th>החלופה שמתמודדת איתו טוב יותר</th><th>מדוע</th></tr></thead>
+<tbody>
+<tr><td><b>ייחודיות ומורכבות תהליך קריאת הטיפול</b> (אישורים, המתנות, הרשאות שינוי סטטוס שונות לכל תפקיד)</td><td><b>פיתוח ייעודי</b>, ואחריו COTS עם התאמות</td><td>הכלל "נהג רשאי לבטל רק לפני האבחון, פקיד המחסן משחרר רק קריאות ממתינות לחלקים, מנהל הצי רשאי לכול" הוא כלל <b>מותאם-ארגון</b>. ב-SaaS סטנדרטי לרוב לא ניתן להגדיר מטריצת הרשאות ברמת מעבר-סטטוס, ותהליך האישור מעל סף עלות אינו חלק מכל מוצר מדף.</td></tr>
+<tr><td><b>התממשקות אל מערכת ספק החלקים</b> (הספק מודיע כשחלק הגיע)</td><td><b>COTS עם ממשקי API פתוחים</b>, ואחריו פיתוח ייעודי</td><td>מוצר בשל מגיע עם שכבת ממשקים ותקן הודעות מוכן, ולכן חוסך את בניית הממשק כולו מאפס; SaaS <b>סגור</b> הוא החלופה הגרועה כאן, כי הוא כובל אותנו ליכולות האינטגרציה שהספק מוכן לפתוח, ומול צד שלישי חיצוני זו נקודת כשל.</td></tr>
+<tr><td><b>היקף ופריסה ארגונית ולוח זמנים</b> (מאות רכבים, כמה מוסכים, ארבעה סוגי משתמשים)</td><td><b>SaaS</b>, ואחריו COTS</td><td>שניהם עולים לאוויר תוך שבועות-חודשים, נבדקו כבר בעומס דומה, ואינם דורשים מהחברה לגייס צוות פיתוח ותפעול. פיתוח ייעודי הוא החלופה האיטית ביותר בדיוק כשהלחץ הוא לוח זמנים.</td></tr>
+</tbody></table></div>
+<p><b>הבחירה: חבילת מדף לניהול תחזוקת צי עם התאמות (COTS + customization).</b></p>
+<p><b>נימוק:</b> היא היחידה שנותנת מענה סביר ל<b>שניים</b> מהמאפיינים הקריטיים גם יחד — היא מגיעה עם ממשקים פתוחים לספקי חלקים (מאפיין 2), ועולה לאוויר במאות רכבים ובכמה מוסכים בלוח זמנים ריאלי (מאפיין 3) — ובמאפיין 1 היא מאפשרת להתאים את מסלול הסטטוסים וההרשאות במקום שבו התהליך אכן ייחודי.</p>
+<p><b>הוויתור שאנו מודעים לו:</b> לא נקבל התאמה מושלמת לתהליך. חלק מכללי ההרשאות יצטרכו להתכופף אל המודל של המוצר, כל התאמה מייקרת את השדרוג לגרסה הבאה, ואנו נכנסים לתלות בספק — בתמחור, בתמיכה ובקצב הגרסאות.</p>
+</div>
+<div class="mistake">
+<p><b>לא מזכה:</b> יתרונות/חסרונות כלליים של "לקנות מול לפתח" (זול/יקר, מהיר/איטי) ללא קישור למאפיין הספציפי. טבלת ✓/✗ ללא משפט נימוק. בחירה המנומקת רק ב"הכי זול" או "הכי מהיר".</p>
+</div>
+<h3 class="sub">3ג (3 נק׳): התנגשות בין שני סוגי ישימות</h3>
+<p class="qtext">תארו מקרה קונקרטי אחד בפרויקט זה שבו שני סוגי ישימות (feasibility) מתנגשים זה עם זה. בתשובתכם: נקבו בשם שני סוגי הישימות (technological / economic / operational / schedule), הסבירו מה כל אחד מהם מכתיב במקרה שתיארתם, וקבעו כיצד תאזנו ביניהם — כלומר על מה תוותרו ומה תשמרו.</p>
+<div class="answer">
+<p><b>המקרה:</b> הממשק המקוון אל מערכת ספק החלקים, שמודיעה למערכת שלנו כשחלק שהוזמן הגיע.</p>
+<ul>
+<li><b>ישימות טכנולוגית</b> מכתיבה שהדבר <b>אפשרי ורצוי</b>: הספק חושף ממשק, ועדכון אוטומטי ומיידי על הגעת חלק הוא בדיוק מה שמקצר את זמן ההשבתה — הקריאה הממתינה משתחררת באותו רגע, בלי שאיש יצטרך להרים טלפון.</li>
+<li><b>ישימות כלכלית</b> מכתיבה בדיוק את ההפך במקרה הזה: פיתוח הממשק, בדיקתו ותחזוקתו לאורך שנים (כל שינוי בצד הספק שובר אותו) יקרים ביחס להיקף — מדובר בעשרות הזמנות חלקים בחודש, וכל אחת מהן ניתנת להזנה ידנית בדקה.</li>
+</ul>
+<p><b>האיזון — על מה מוותרים ומה שומרים:</b> בשלב א' <b>מוותרים על העדכון האוטומטי המיידי</b>: פקיד המחסן יזין ידנית את הגעת החלק, והמערכת תשחרר את הקריאה הממתינה. <b>שומרים</b> את המנגנון הפנימי שלנו — קליטת חלק, עדכון מלאי ושחרור הקריאה — כך שיהיה מוכן לקבל טריגר גם ממקור חיצוני. במקביל <b>נמדוד</b> כמה זמן חולף בין הגעת החלק בפועל לבין הזנתו במערכת. אם המדידה תראה עיכוב ממשי בימי השבתה, יפותח הממשק האוטומטי בשלב ב', כשהתועלת כבר מכומתת ולא משוערת.</p>
+</div>
+<div class="mistake">
+<p><b>לא מזכה:</b> "יש התנגשות בין טכנולוגית לכלכלית כי טכנולוגיה עולה כסף" ללא מקרה מהמערכת הזו. "נאזן לפי סדר עדיפויות ההנהלה" / "נעשה ניתוח עלות-תועלת" ללא ציון מה מוותרים. שני סוגים שאינם באמת מתנגשים ("טכנולוגית מול טכנית").</p>
+</div>
+</section>
+<section class="q" id="q4">
+<h2><span class="pts">8 נק׳</span>שאלה 4: מתודולוגיות פיתוח</h2>
+
+<p class="qtext">בפגישת ההיערכות לפרויקט טוען אחד מחברי הצוות: "Agile זו גישה גמישה, אז פשוט נעבוד Agile ונהיה מסודרים".</p>
+<h3 class="sub">4א (5 נק׳): שלוש סיבות מדוע Agile "טהור" עלול שלא להתאים כאן</h3>
+<p class="qtext">ציינו והסבירו שלוש סיבות מדוע דווקא בפרויקט הזה עבודה בגישת Agile "טהורה" עלולה שלא להתאים או להיכשל. כל סיבה חייבת לכלול מאפיין ספציפי של הפרויקט וגם הסבר כיצד אותו מאפיין מתנגש עם עיקרון מעקרונות Agile. בנוסף, עבור הסיבה שנראית לכם החמורה ביותר, הסבירו מה בפועל עלול להשתבש בפרויקט אם בכל זאת ייבחר Agile טהור.</p>
+<div class="answer">
+<p><b>סיבה 1 — תהליך הטיפול וההרשאות ידועים ויציבים.</b> הסיפור מגיע כבר מפורט: מסלול הקריאה (פתיחה, אבחון, אישור מעל סף, המתנה לחלקים, השלמה, החזרה לשירות), מי רשאי לשנות איזה סטטוס, ומה <b>לא</b> נדרש (תשלומים, רישיונות נהיגה). <b>ההתנגשות:</b> היתרון המרכזי של Agile — ספיגת אי-ודאות בדרישות דרך משוב מהיר — כמעט אינו נדרש כאן, בעוד המחיר שלו (חוזה גמיש, תקורת ספרינטים, תכנון-מחדש מתמיד) נותר במלואו.</p>
+<p><b>סיבה 2 — ההתממשקות אל מערכת ספק החלקים.</b> הממשק מחייב סיכום מפרט מוקדם ומחייב מול <b>גורם חיצוני</b> — פורמט ההודעה, זיהוי ההזמנה, טיפול בכשלים. <b>ההתנגשות:</b> Agile מניח לקוח/שותף זמין לאיטרציות ומפרט שמתגבש תוך כדי; הספק אינו כפוף לצוות, אינו זמין לספרינט דו-שבועי, ושינוי במפרט אצלו הוא משא ומתן חוזי ולא "פריט בבקלוג".</p>
+<p><b>סיבה 3 — המשתמשים מפוזרים בין מוסכים ומחלקות ועיקר עבודתם בשטח.</b> מכונאים עומדים ליד רכב, פקידי מחסן במחסן, נהגים בדרכים. <b>ההתנגשות:</b> Agile נשען על <b>נציג לקוח זמין ומעורב באופן רציף</b> ועל משוב מהיר על גרסאות תכופות; כאן אין מי שיישב עם הצוות ברציפות, ומחזור משוב של שבועיים הופך למחזור של חודשים — כלומר Agile בלי המנגנון שמצדיק אותו.</p>
+<p><b>סיבה נוספת שהייתה מתקבלת:</b> דרישות התיעוד והבקרה על טיפולים בכלי רכב מחייבות מפרט ותיעוד פורמליים, בעוד Agile מעדיף "תוכנה עובדת על פני תיעוד מקיף".</p>
+<p><b>הסיבה החמורה ביותר — ומה בפועל ישתבש (2 נק׳):</b> <b>ההתממשקות אל מערכת הספק.</b> ב-Agile טהור הממשק היה נדחה לספרינט מאוחר, כי הוא אינו מספק "ערך למשתמש" בספרינטים הראשונים. או אז יתגלה שהספק שולח הודעה ברמת <b>הזמנה</b> ולא ברמת <b>פריט</b>, בעוד שהמערכת שלנו בנתה את מצב "ממתינה לחלקים" ברמת החלק הבודד בקריאה. התיקון אינו מקומי: יידרש עיצוב מחדש של מנגנון ההמתנה והשחרור, של קליטת החלק ושל עדכון המלאי — כלומר של הרכיב שכבר נבנה, נבדק והוצג ללקוח — והעלייה לאוויר תידחה. תרחיש כזה מתגלה מוקדם דווקא כשמפרט הממשק נסגר מראש.</p>
+</div>
+<div class="mistake">
+<p><b>לא מזכה כסיבה:</b> "אין מספיק זמן" / "הצוות לא מכיר את השיטה" / "הפרויקט גדול". ביקורת כללית על Agile מהספר ("אין תיעוד", "קשה לתכנן תקציב") ללא הצמדה למאפיין של "נעים בדרכים".</p>
+</div>
+<h3 class="sub">4ב (3 נק׳): שילוב שתי מתודולוגיות</h3>
+<p class="qtext">האם הייתם משלבים שתי מתודולוגיות בפיתוח המערכת של "נעים בדרכים"? קבעו החלטה ונקבו בשמן של שתי המתודולוגיות (או בשמה של המתודולוגיה היחידה, אם החלטתם שלא לשלב). פרטו איזה חלק ספציפי במערכת יפותח בכל אחת מהן, ונמקו מדוע דווקא כך.</p>
+<div class="answer">
+<p><b>ההחלטה: כן, אשלב — Waterfall (plan-driven) יחד עם פיתוח איטרטיבי/Agile.</b></p>
+<ul>
+<li><b>בגישה מונחית-תכנון (Waterfall) יפותחו:</b> מודל הנתונים המרכזי (רכב, קריאת טיפול, חלק, מלאי) ו<b>הממשק אל מערכת ספק החלקים</b>, וכן מטריצת ההרשאות של מעברי הסטטוס. <b>הנימוק:</b> אלה חלקים שהמפרט שלהם נסגר מול <b>גורם חיצוני או מול כלל ארגוני מחייב</b>, ושינוי בהם בדיעבד יקר ומשפיע על כל שאר המערכת — בדיוק המאפיינים שגישה מונחית-תכנון בנויה עבורם: הגדרה מלאה מראש, אימות, ואז מימוש.</li>
+<li><b>בגישה איטרטיבית (Agile/Scrum) יפותחו:</b> מסכי המכונאי (אבחון, רישום חלקים, דיווח שעות), מסכי פקיד המחסן, והדוחות והתיעדוף למנהל הצי. <b>הנימוק:</b> אלה חלקים שאיש אינו יודע מראש איך ייראו נכון — ניסוח נכון של מסך שמכונאי ממלא כשידיו מלוכלכות מתגבש רק מול המשתמש בשטח, ומחיר הטעות בהם נמוך ומקומי. זהו בדיוק המקרה שבו העיקרון "משוב מהיר על תוכנה עובדת" נותן תשואה.</li>
+</ul>
+</div>
+<div class="mistake">
+<p><b>לא מזכה:</b> "אשלב Agile עם Scrum" — Scrum הוא מימוש של Agile ולא מתודולוגיה שנייה. "כן, אשלב Waterfall ו-Agile כדי לקבל גם סדר וגם גמישות", ללא הצמדת חלקים; זו התשובה החלקית הנפוצה. הצמדה הפוכה שאינה מנומקת (עם נימוק משכנע — מזכה).</p>
+</div>
+</section>
+<section class="q" id="q5">
+<h2><span class="pts">10 נק׳</span>שאלה 5: ניסוח דרישות</h2>
+
+<p class="qtext">שימו לב שבשאלה זו הניקוד יינתן רק על כתיבה מדויקת. הקפידו על ניסוח ברור לפי העקרונות שנלמדו. כל הסעיפים נגזרים מסיפור המסגרת, ולא מהתהליך שבשאלה 1.</p>
+<div class="alt">
+<p><b>הערה:</b> השאלה מציינת במפורש שהניקוד ניתן <b>רק על דיוק הניסוח</b>. אין להוריד על אורך, על סדר, או על בחירת דרישה "פחות מעניינת".</p>
+</div>
+<h3 class="sub">5א (4 נק׳): שתי דרישות פונקציונליות</h3>
+<p class="qtext">נסחו בצורה מדויקת ככל האפשר 2 דרישות פונקציונליות למערכת מתוך התיאור שמופיע בשאלה (לא מתוך החלק של ה-BPMN).</p>
+<div class="answer">
+<ol>
+<li><b>המערכת תעביר קריאת טיפול שהעלות המשוערת בדוח האבחון שלה חורגת מהסף שנקבע למצב "ממתינה לאישור מנהל הצי", ולא תאפשר את תחילת הטיפול לפני קבלת האישור.</b></li>
+<li><b>המערכת תאפשר למכונאי לרשום עבור קריאת טיפול חלק שנוצל ואת הכמות שנוצלה, ותשמור את מחיר החלק כפי שהיה במועד הרישום.</b></li>
+</ol>
+<p><b>מה הופך אותן לתקינות:</b> כל אחת מתארת <b>התנהגות אחת</b> של המערכת; מנוסחת בלשון עתיד פעילה ("המערכת תעביר / תאפשר"); נוקבת ב<b>בעל תפקיד</b>, ב<b>אובייקט</b> וב<b>תנאי או מגבלה</b>; וניתנת לבדיקה חד-משמעית — אפשר לכתוב עבורה מקרה בדיקה שהתשובה עליו כן/לא.</p>
+<p><b>דרישות נוספות שהיו מתקבלות במלואן:</b> "המערכת תאפשר לנהג לפתוח קריאת טיפול עבור רכב, ובה סוג הטיפול ורמת העדיפות." · "המערכת תאפשר למנהל המוסך לשבץ מכונאי אחד או יותר לקריאת טיפול." · "המערכת תפתח באופן אוטומטי קריאת טיפול מסוג 'תקופתי' לרכב שהגיע מועד הטיפול התקופתי שלו."</p>
+<p><b>ניסוחים פסולים ולמה:</b></p>
+<ul>
+<li>"המערכת תנהל את קריאות הטיפול" — מטרה, לא דרישה; אינה בת-בדיקה.</li>
+<li>"המערכת תאפשר לפתוח קריאה <b>וגם</b> לבטלה <b>וגם</b> לשבץ מכונאי" — שלוש דרישות באחת; אם שתיים עובדות ואחת לא, מה מצב הדרישה?</li>
+<li>"המערכת תציג מסך עם טבלת קריאות ותשמור אותן ב-SQL" — תיאור פתרון וטכנולוגיה, לא דרישה.</li>
+<li>"המערכת תהיה נוחה למכונאים" — דרישה לא-פונקציונלית, ובנוסף אינה מדידה.</li>
+</ul>
+</div>
+<div class="mistake">
+<p><b>פסילה (0 לאותה דרישה):</b> דרישה מתהליך שאלה 1 · דרישה לא-פונקציונלית שהוצגה כפונקציונלית · ניסוח כללי-מטרתי · תיאור מסך/טכנולוגיה.</p>
+</div>
+<h3 class="sub">5ב (2 נק׳): User Story אחד</h3>
+<p class="qtext">נסחו בצורה מדויקת ככל האפשר 1 user story למערכת מתוך התיאור שמופיע בשאלה (לא מתוך החלק של ה-BPMN).</p>
+<div class="answer">
+<p>שלושת חלקי התבנית קיימים: <b>תפקיד</b> קיים בסיפור (מנהל צי), <b>יכולת יחידה</b> וממוקדת (לראות את הקריאות הממתינות לאישורו), <b>ותועלת עסקית אמיתית</b> (קיצור זמן ההשבתה) שאינה חזרה על היכולת.</p>
+<p><b>דוגמאות נוספות מזכות:</b> "כפקיד מחסן, אני רוצה לראות אילו קריאות ממתינות לאילו חלקים, כדי להזמין את החלק הנכון מיד ולא להמתין לשיחת טלפון מהמוסך." · "כמכונאי, אני רוצה לרשום את החלקים שניצלתי ישירות בקריאה, כדי שעלות הטיפול תהיה מדויקת ולא אצטרך למלא טופס נוסף."</p>
+</div>
+<div class="box">
+<p><b>כמנהל צי, אני רוצה לראות את כל קריאות הטיפול הממתינות לאישורי, כדי לאשר או לדחות אותן במהירות ולקצר את זמן ההשבתה של הרכב.</b></p>
+</div>
+<h3 class="sub">5ג (2 נק׳): דרישה לא-פונקציונלית אחת</h3>
+<p class="qtext">נסחו בצורה מדויקת ככל האפשר 1 דרישה לא-פונקציונלית למערכת מתוך התיאור שמופיע בשאלה (לא מתוך החלק של ה-BPMN).</p>
+<div class="answer">
+<p><b>סיווג:</b> דרישת <b>ביצועים (performance)</b> — היא אינה מתארת פעולה חדשה שהמערכת מבצעת, אלא <b>איכות</b> של פעולה קיימת. <b>מדידות:</b> יש בה סף כמותי חד-משמעי (3 שניות) ותנאי עומס מוגדר (200 משתמשים במקביל), ולכן ניתן לבדוק אותה בבדיקת עומס ולקבל תשובה כן/לא.</p>
+<p><b>דוגמאות נוספות מזכות:</b> "המערכת תהיה זמינה 99% משעות הפעילות של המוסכים (07:00–19:00)." (זמינות) · "מכונאי חדש יוכל לפתוח קריאה ולרשום חלקים לאחר הדרכה של עד 15 דקות." (שמישות) · "רק משתמש הנושא תפקיד 'מנהל צי' יוכל לאשר קריאה שעלותה חורגת מהסף, וכל ניסיון אחר יידחה ויירשם ביומן." (אבטחה והרשאות)</p>
+</div>
+<div class="box">
+<p><b>המערכת תציג למכונאי את רשימת הקריאות הפתוחות של המוסך שלו תוך 3 שניות לכל היותר, בעומס של 200 משתמשים בו-זמנית.</b></p>
+</div>
+<h3 class="sub">5ד (2 נק׳): זיהוי מידע חסר וטיפול בו</h3>
+<p class="qtext">בסיפור המעשה נאמר כי קריאת טיפול תקופתי נפתחת אוטומטית "לרכב שהגיע מועד הטיפול התקופתי שלו". כדי לממש כלל זה במערכת נדרש מידע שאינו מופיע בסיפור. ציינו פריט מידע חסר אחד כזה, הסבירו במשפט מדוע בלעדיו לא ניתן לממש את הכלל, ותארו כיצד יש לנהוג בשלב הניתוח כשמתגלה חסר כזה.</p>
+<div class="answer">
+<p><b>תשובה קצרה.</b> המידע החסר הוא <b>הכלל הקובע את מועד הטיפול התקופתי</b> — האם הוא נגזר מזמן שחלף מאז הטיפול הקודם, מקילומטראז' שנצבר, או משילוב של השניים ("המוקדם מביניהם"), ומהו הערך המספרי לכל סוג רכב. בלעדיו אי אפשר לממש את הפתיחה האוטומטית, משום שאין תנאי שהמערכת יכולה להעריך: היא יודעת מהו הקילומטראז' הנוכחי, אך לא מהו הסף שממנו והלאה יש לפתוח קריאה. הטיפול הנכון בשלב הניתוח הוא <b>לתעד את החסר כהנחה מפורשת ולהביא אותו לאישור הלקוח</b> לפני המימוש, ולא להשלים אותו בניחוש שקט בתוך הקוד.</p>
+<p><b>הסבר מורחב.</b> זהו טיפוס הבעיה שמנתח נדרש לזהות: הסיפור נשמע שלם, ואף מונה תכונה רלוונטית (קילומטראז'), אך <b>הכלל העסקי שמחבר בין הנתון לבין ההתנהגות חסר</b>. ההבדל בין שתי החלופות אינו טכני אלא עסקי-ממשי: כלל מבוסס-זמן פותח קריאה למלגזה שכמעט לא עבדה, וכלל מבוסס-קילומטראז' לא יפתח קריאה למשאית שעמדה שנה במגרש והתיישנה. מנתח שמכריע בשקט לטובת אחת האפשרויות מקבע החלטה עסקית שאינה שלו.</p>
+<p><b>התנהלות מקצועית מזכה:</b> רישום ההנחה במסמך הדרישות בצורה גלויה ("מונח כי מועד הטיפול נקבע לפי המוקדם מבין 10,000 ק"מ או 12 חודשים; טעון אישור"), העלאתה בפגישת האימות הקרובה עם מנהל הצי, וסימון הדרישה כ<b>חסומה לאישור</b> עד שתתקבל תשובה.</p>
+<p><b>פריטים חסרים נוספים המזכים במלוא הניקוד:</b> תדירות הטיפול התקופתי <b>לכל סוג רכב</b> בנפרד (למלגזה ולמשאית לא יהיה אותו מרווח) · מי בארגון מוסמך לקבוע ולשנות את הכלל · מה קורה כאשר מגיע מועד טיפול לרכב שכבר יש עליו קריאה פתוחה · האם הקילומטראז' מתעדכן אוטומטית או מוזן ידנית, ובאיזו תדירות — שכן כלל מבוסס-קילומטראז' אינו שווה יותר מטריות הנתון שעליו הוא נשען.</p>
+</div>
+<div class="alt">
+<p><b>הערה למרצה — זהו חסר שהושאר בסיפור במכוון.</b> הסיפור אומר שהמערכת שומרת קילומטראז' לכל רכב, ושהקריאה התקופתית נפתחת "בהגיע מועד הטיפול", אך <b>אינו אומר מה קובע את המועד הזה</b>. שאר הסיפור נוקה מאי-בהירויות מסוג "האם החברה מחזיקה את זה או שוכרת" בדיוק כדי שהחסר היחיד שנותר יהיה החסר הנבחן כאן.</p>
+</div>
+<div class="mistake">
+<p><b>לא מזכה:</b> פריט שהסיפור <b>כן</b> מציין (מספר רישוי, סוג הרכב, המחלקה המשויכת, סוג הטיפול, רמת העדיפות). חסר שהסיפור הוציא במפורש מההיקף (תשלומים וחיובים בין מחלקות, ניהול נהגים ורישיונות נהיגה), שכן היעדרו הוא החלטת היקף מוצהרת ולא חסר. "חסר תקציב", "חסר זמן", "חסרים משאבים". תשובה שמכריעה בעצמה מהו הכלל בלי לציין שמדובר בהנחה הטעונה אישור (זיהה את החסר, לא ידע מה עושים איתו).</p>
+</div>
+</section>
+<section class="q" id="q6">
+<h2><span class="pts">15 נק׳</span>שאלה 6: תרשים Use Case</h2>
+
+<p class="qtext">הכינו תרשים Use Case עבור המערכת מתוך המתואר בסיפור המעשה. שימו לב שאין להתייחס למופיע בשאלה 1.</p>
+<h3 class="sub">6.1 (6 נק׳): התרשים</h3>
+<p class="qtext">הכינו תרשים Use Case עבור המערכת מתוך המתואר בסיפור המעשה. יש להשתמש ב-include אחד לפחות. התרשים עצמו נבדק בצורה כללית, לבחינת השימוש הנכון בסימונים ובהבנת מהות התרשים.</p>
+<figure class="diagram wide"><svg id="usecase0-diagram-svg-0" viewBox="0 0 1800 950" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <pattern id="usecase0-dots0" width="24" height="24" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="0.8" fill="#cbd5e1"></circle></pattern>
+        <marker id="usecase0-arrow-include0" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polyline points="0 0, 9 3.5, 0 7" fill="none" stroke="#7c3aed" stroke-width="1.2"></polyline></marker>
+      </defs>
+      <rect x="0" y="0" width="1800" height="900" fill="#f8fafc"></rect>
+      <rect x="0" y="0" width="1800" height="900" fill="url(#usecase0-dots0)"></rect>
+
+      <rect class="system-boundary" x="380" y="70" width="1060" height="760" rx="12" fill="#ffffff" stroke="#3b82f6" stroke-width="2.5"></rect>
+      <rect x="380" y="70" width="1060" height="44" rx="12" fill="#1e40af"></rect>
+      <rect x="380" y="96" width="1060" height="18" fill="#1e40af"></rect>
+      <text x="910" y="99" text-anchor="middle" fill="#ffffff" font-size="14" font-weight="700" font-family="'Noto Sans Hebrew',sans-serif">מערכת ניהול קריאות טיפול, תפעול</text>
+
+      <g id="usecase0-assocLayer0">
+        <line class="assoc-line" data-conn-from="driver" data-conn-to="uc-open-call" x1="300" y1="207" x2="429.0778063647893" y2="176.82664928906294" stroke="#334155" stroke-width="1.8"></line>
+        <line class="assoc-line" data-conn-from="driver" data-conn-to="uc-cancel-call" x1="300" y1="207" x2="433.01792823341214" y2="237.17335071093706" stroke="#334155" stroke-width="1.8"></line>
+        <line class="assoc-line" data-conn-from="deptRep" data-conn-to="uc-open-call" x1="300" y1="357" x2="447.14484034977863" y2="191.01317548528797" stroke="#334155" stroke-width="1.8"></line>
+        <line class="assoc-line" data-conn-from="deptRep" data-conn-to="uc-cancel-call" x1="300" y1="357" x2="441.0503713920876" y2="255.9571914792263" stroke="#334155" stroke-width="1.8"></line>
+        <line class="assoc-line" data-conn-from="mechanic" data-conn-to="uc-diagnose" x1="300" y1="507" x2="441.2879885511567" y2="331.5468038116271" stroke="#334155" stroke-width="1.8"></line>
+        <line class="assoc-line" data-conn-from="mechanic" data-conn-to="uc-record-parts" x1="300" y1="507" x2="423.6801526395421" y2="396.83997032008904" stroke="#334155" stroke-width="1.8"></line>
+        <line class="assoc-line" data-conn-from="mechanic" data-conn-to="uc-report-hours" x1="300" y1="507" x2="419.0067470044816" y2="459.4243815245892" stroke="#334155" stroke-width="1.8"></line>
+        <line class="assoc-line" data-conn-from="mechanic" data-conn-to="uc-complete" x1="300" y1="507" x2="432.19044692758496" y2="519.9058814492342" stroke="#334155" stroke-width="1.8"></line>
+        <line class="assoc-line" data-conn-from="fleetManager" data-conn-to="uc-approve" x1="1520" y1="207" x2="1408.643679062991" y2="176.69006904741764" stroke="#334155" stroke-width="1.8"></line>
+        <line class="assoc-line" data-conn-from="fleetManager" data-conn-to="uc-return-service" x1="1520" y1="207" x2="1390.89798923868" y2="237.30993095258236" stroke="#334155" stroke-width="1.8"></line>
+        <line class="assoc-line" data-conn-from="garageManager" data-conn-to="uc-assign-mechanics" x1="1520" y1="357" x2="1407.7883380596832" y2="317.97559192734633" stroke="#334155" stroke-width="1.8"></line>
+        <line class="assoc-line" data-conn-from="warehouseClerk" data-conn-to="uc-order-part" x1="1520" y1="507" x2="1382.393519293414" y2="396.5253226654702" stroke="#334155" stroke-width="1.8"></line>
+        <line class="assoc-line" data-conn-from="warehouseClerk" data-conn-to="uc-receive-part" x1="1520" y1="507" x2="1391.292564144638" y2="459.222727474681" stroke="#334155" stroke-width="1.8"></line>
+        <line class="conn-hitbox" data-conn-id="a-clerk-receive" data-hitbox-from="warehouseClerk" data-hitbox-to="uc-receive-part" x1="1520" y1="507" x2="1391.292564144638" y2="459.222727474681" stroke="transparent" stroke-width="14" data-hover-wired="1"></line>
+      </g>
+
+      <g id="usecase0-includeLayer0">
+        <line class="include-line" data-conn-from="uc-record-parts" data-conn-to="uc-update-stock" x1="579.9810256689265" y1="369.16111299663424" x2="853.6793162207157" y2="184.83888700336576" stroke="#7c3aed" stroke-width="1.6" stroke-dasharray="6 4" marker-end="url(#usecase0-arrow-include0)"></line>
+        <text data-label-for="uc-record-parts uc-update-stock" x="716.830170944821" y="269" text-anchor="middle" font-size="9.5" fill="#7c3aed" font-family="'IBM Plex Mono',monospace">«include»</text>
+        <line class="include-line" data-conn-from="uc-receive-part" data-conn-to="uc-update-stock" x1="1248.090824320742" y1="436.1299773548716" x2="956.4318817594434" y2="187.87002264512842" stroke="#7c3aed" stroke-width="1.6" stroke-dasharray="6 4" marker-end="url(#usecase0-arrow-include0)"></line>
+        <text data-label-for="uc-receive-part uc-update-stock" x="1102.2613530400927" y="304" text-anchor="middle" font-size="9.5" fill="#7c3aed" font-family="'IBM Plex Mono',monospace">«include»</text>
+      </g>
+
+      <g id="usecase0-ucLayer0">
+        <g class="uc-group" id="usecase0-uc-group-uc-open-call" data-uc-id="uc-open-call"><ellipse cx="500" cy="172" rx="72" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"></ellipse><text x="500" y="176" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">פתיחת קריאת טיפול</text></g>
+        <g class="uc-group" id="usecase0-uc-group-uc-cancel-call" data-uc-id="uc-cancel-call"><ellipse cx="500" cy="242" rx="68" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"></ellipse><text x="500" y="246" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">ביטול קריאת טיפול</text></g>
+        <g class="uc-group" id="usecase0-uc-group-uc-diagnose" data-uc-id="uc-diagnose"><ellipse cx="500" cy="312" rx="82" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"></ellipse><text x="500" y="316" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">ביצוע אבחון ורישום דוח</text></g>
+        <g class="uc-group" id="usecase0-uc-group-uc-record-parts" data-uc-id="uc-record-parts"><ellipse cx="500" cy="382" rx="90" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"></ellipse><text x="500" y="386" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">רישום חלקים שנוצלו בטיפול</text></g>
+        <g class="uc-group" id="usecase0-uc-group-uc-report-hours" data-uc-id="uc-report-hours"><ellipse cx="500" cy="452" rx="84" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"></ellipse><text x="500" y="456" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">דיווח שעות עבודה בקריאה</text></g>
+        <g class="uc-group" id="usecase0-uc-group-uc-complete" data-uc-id="uc-complete"><ellipse cx="500" cy="522" rx="68" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"></ellipse><text x="500" y="526" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">סימון השלמת הטיפול</text></g>
+        <g class="uc-group" id="usecase0-uc-group-uc-update-stock" data-uc-id="uc-update-stock"><ellipse cx="907" cy="172" rx="60" ry="28" fill="#ece3fb" stroke="#7c3aed" stroke-width="2"></ellipse><text x="907" y="176" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">עדכון רמת מלאי</text></g>
+        <g class="uc-group" id="usecase0-uc-group-uc-approve" data-uc-id="uc-approve"><ellipse cx="1314" cy="172" rx="96" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"></ellipse><text x="1314" y="176" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">אישור או דחיית קריאה חורגת</text></g>
+        <g class="uc-group" id="usecase0-uc-group-uc-return-service" data-uc-id="uc-return-service"><ellipse cx="1314" cy="242" rx="78" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"></ellipse><text x="1314" y="246" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">החזרת רכב לשירות</text></g>
+        <g class="uc-group" id="usecase0-uc-group-uc-assign-mechanics" data-uc-id="uc-assign-mechanics"><ellipse cx="1314" cy="312" rx="96" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"></ellipse><text x="1314" y="316" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">שיבוץ מכונאים לקריאת טיפול</text></g>
+        <g class="uc-group" id="usecase0-uc-group-uc-order-part" data-uc-id="uc-order-part"><ellipse cx="1314" cy="382" rx="80" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"></ellipse><text x="1314" y="386" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">הזמנת חלק מספק חיצוני</text></g>
+        <g class="uc-group" id="usecase0-uc-group-uc-receive-part" data-uc-id="uc-receive-part"><ellipse cx="1314" cy="452" rx="80" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"></ellipse><text x="1314" y="456" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">קליטת חלק שהגיע מהספק</text></g>
+      </g>
+
+      <g id="usecase0-actorLayer0">
+        <g id="usecase0-actor-group-driver" data-actor-id="driver" transform="translate(300,207)">
+          <circle cx="0" cy="-60" r="14" fill="#e0f0ff" stroke="#334155" stroke-width="2"></circle><line x1="0" y1="-46" x2="0" y2="-10" stroke="#334155" stroke-width="2"></line><line x1="-18" y1="-36" x2="18" y2="-36" stroke="#334155" stroke-width="2"></line><line x1="0" y1="-10" x2="-14" y2="14" stroke="#334155" stroke-width="2"></line><line x1="0" y1="-10" x2="14" y2="14" stroke="#334155" stroke-width="2"></line>
+          <text x="0" y="30" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b" font-family="'Noto Sans Hebrew',sans-serif">נהג</text>
+        </g>
+        <g id="usecase0-actor-group-deptRep" data-actor-id="deptRep" transform="translate(300,357)">
+          <circle cx="0" cy="-60" r="14" fill="#e0f0ff" stroke="#334155" stroke-width="2"></circle><line x1="0" y1="-46" x2="0" y2="-10" stroke="#334155" stroke-width="2"></line><line x1="-18" y1="-36" x2="18" y2="-36" stroke="#334155" stroke-width="2"></line><line x1="0" y1="-10" x2="-14" y2="14" stroke="#334155" stroke-width="2"></line><line x1="0" y1="-10" x2="14" y2="14" stroke="#334155" stroke-width="2"></line>
+          <text x="0" y="30" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b" font-family="'Noto Sans Hebrew',sans-serif">נציג מחלקה</text>
+        </g>
+        <g id="usecase0-actor-group-mechanic" data-actor-id="mechanic" transform="translate(300,507)">
+          <circle cx="0" cy="-60" r="14" fill="#e0f0ff" stroke="#334155" stroke-width="2"></circle><line x1="0" y1="-46" x2="0" y2="-10" stroke="#334155" stroke-width="2"></line><line x1="-18" y1="-36" x2="18" y2="-36" stroke="#334155" stroke-width="2"></line><line x1="0" y1="-10" x2="-14" y2="14" stroke="#334155" stroke-width="2"></line><line x1="0" y1="-10" x2="14" y2="14" stroke="#334155" stroke-width="2"></line>
+          <text x="0" y="30" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b" font-family="'Noto Sans Hebrew',sans-serif">מכונאי</text>
+        </g>
+        <g id="usecase0-actor-group-fleetManager" data-actor-id="fleetManager" transform="translate(1520,207)">
+          <circle cx="0" cy="-60" r="14" fill="#e0f0ff" stroke="#334155" stroke-width="2"></circle><line x1="0" y1="-46" x2="0" y2="-10" stroke="#334155" stroke-width="2"></line><line x1="-18" y1="-36" x2="18" y2="-36" stroke="#334155" stroke-width="2"></line><line x1="0" y1="-10" x2="-14" y2="14" stroke="#334155" stroke-width="2"></line><line x1="0" y1="-10" x2="14" y2="14" stroke="#334155" stroke-width="2"></line>
+          <text x="0" y="30" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b" font-family="'Noto Sans Hebrew',sans-serif">מנהל צי</text>
+        </g>
+        <g id="usecase0-actor-group-garageManager" data-actor-id="garageManager" transform="translate(1520,357)">
+          <circle cx="0" cy="-60" r="14" fill="#e0f0ff" stroke="#334155" stroke-width="2"></circle><line x1="0" y1="-46" x2="0" y2="-10" stroke="#334155" stroke-width="2"></line><line x1="-18" y1="-36" x2="18" y2="-36" stroke="#334155" stroke-width="2"></line><line x1="0" y1="-10" x2="-14" y2="14" stroke="#334155" stroke-width="2"></line><line x1="0" y1="-10" x2="14" y2="14" stroke="#334155" stroke-width="2"></line>
+          <text x="0" y="30" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b" font-family="'Noto Sans Hebrew',sans-serif">מנהל מוסך</text>
+        </g>
+        <g id="usecase0-actor-group-warehouseClerk" data-actor-id="warehouseClerk" transform="translate(1520,507)">
+          <circle cx="0" cy="-60" r="14" fill="#e0f0ff" stroke="#334155" stroke-width="2"></circle><line x1="0" y1="-46" x2="0" y2="-10" stroke="#334155" stroke-width="2"></line><line x1="-18" y1="-36" x2="18" y2="-36" stroke="#334155" stroke-width="2"></line><line x1="0" y1="-10" x2="-14" y2="14" stroke="#334155" stroke-width="2"></line><line x1="0" y1="-10" x2="14" y2="14" stroke="#334155" stroke-width="2"></line>
+          <text x="0" y="30" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b" font-family="'Noto Sans Hebrew',sans-serif">פקיד מחסן</text>
+        </g>
+      </g>
+    </svg>
+<figcaption>חלק 1 מתוך 3: תפעול קריאות הטיפול — נהג, נציג מחלקה, מכונאי, מנהל צי, מנהל מוסך ופקיד מחסן. שימו לב ל-«include» היחיד, "עדכון רמת מלאי", המחובר לשני מקרי שימוש בסיסיים ואינו תלוי בשום שחקן.</figcaption>
+</figure>
+<p class="scrollhint">↔ התרשים רחב מן העמוד, ניתן לגלול אותו לצדדים.</p>
+<figure class="diagram wide"><svg id="usecase1-diagram-svg-1" viewBox="0 0 1500 750" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <pattern id="usecase1-dots1" width="24" height="24" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="0.8" fill="#cbd5e1"></circle></pattern>
+      </defs>
+      <rect x="0" y="0" width="1500" height="700" fill="#f8fafc"></rect>
+      <rect x="0" y="0" width="1500" height="700" fill="url(#usecase1-dots1)"></rect>
+
+      <rect class="system-boundary" x="380" y="70" width="820" height="560" rx="12" fill="#ffffff" stroke="#3b82f6" stroke-width="2.5"></rect>
+      <rect x="380" y="70" width="820" height="44" rx="12" fill="#1e40af"></rect>
+      <rect x="380" y="96" width="820" height="18" fill="#1e40af"></rect>
+      <text x="790" y="99" text-anchor="middle" fill="#ffffff" font-size="14" font-weight="700" font-family="'Noto Sans Hebrew',sans-serif">מערכת ניהול קריאות טיפול, ניהול נתוני-אב</text>
+
+      <g id="usecase1-assocLayer1">
+        <line class="assoc-line" data-conn-from="sysadmin" data-conn-to="uc-manage-vehicles" x1="300" y1="347" x2="451.13110723254294" y2="189.43065984300307" stroke="#334155" stroke-width="1.8"></line>
+        <line class="assoc-line" data-conn-from="sysadmin" data-conn-to="uc-manage-departments" x1="300" y1="347" x2="440.58166867503616" y2="254.06042841401828" stroke="#334155" stroke-width="1.8"></line>
+        <line class="assoc-line" data-conn-from="sysadmin" data-conn-to="uc-manage-garages" x1="300" y1="347" x2="433.09293304251" y2="316.3992213645837" stroke="#334155" stroke-width="1.8"></line>
+        <line class="assoc-line" data-conn-from="sysadmin" data-conn-to="uc-manage-parts" x1="300" y1="347" x2="421.24196936648866" y2="377.6007786354163" stroke="#334155" stroke-width="1.8"></line>
+        <line class="assoc-line" data-conn-from="sysadmin" data-conn-to="uc-manage-specialties" x1="300" y1="347" x2="429.751896221632" y2="439.93957158598175" stroke="#334155" stroke-width="1.8"></line>
+        <line class="assoc-line" data-conn-from="sysadmin" data-conn-to="uc-manage-users" x1="300" y1="347" x2="433.9138840406786" y2="504.56934015699693" stroke="#334155" stroke-width="1.8"></line>
+      </g>
+
+      <g id="usecase1-ucLayer1">
+        <g class="uc-group" id="usecase1-uc-group-uc-manage-vehicles" data-uc-id="uc-manage-vehicles"><ellipse cx="520" cy="172" rx="88" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"></ellipse><text x="520" y="176" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">ניהול כלי רכב</text></g>
+        <g class="uc-group" id="usecase1-uc-group-uc-manage-departments" data-uc-id="uc-manage-departments"><ellipse cx="520" cy="242" rx="88" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"></ellipse><text x="520" y="246" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">ניהול מחלקות</text></g>
+        <g class="uc-group" id="usecase1-uc-group-uc-manage-garages" data-uc-id="uc-manage-garages"><ellipse cx="520" cy="312" rx="88" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"></ellipse><text x="520" y="316" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">ניהול מוסכים</text></g>
+        <g class="uc-group" id="usecase1-uc-group-uc-manage-parts" data-uc-id="uc-manage-parts"><ellipse cx="520" cy="382" rx="100" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"></ellipse><text x="520" y="386" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">ניהול קטלוג החלקים</text></g>
+        <g class="uc-group" id="usecase1-uc-group-uc-manage-specialties" data-uc-id="uc-manage-specialties"><ellipse cx="520" cy="452" rx="100" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"></ellipse><text x="520" y="456" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">ניהול תחומי התמחות</text></g>
+        <g class="uc-group" id="usecase1-uc-group-uc-manage-users" data-uc-id="uc-manage-users"><ellipse cx="520" cy="522" rx="110" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"></ellipse><text x="520" y="526" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">ניהול משתמשים ותפקידים</text></g>
+      </g>
+
+      <g id="usecase1-actorLayer1">
+        <g id="usecase1-actor-group-sysadmin" data-actor-id="sysadmin" transform="translate(300,347)">
+          <circle cx="0" cy="-60" r="14" fill="#e0f0ff" stroke="#334155" stroke-width="2"></circle><line x1="0" y1="-46" x2="0" y2="-10" stroke="#334155" stroke-width="2"></line><line x1="-18" y1="-36" x2="18" y2="-36" stroke="#334155" stroke-width="2"></line><line x1="0" y1="-10" x2="-14" y2="14" stroke="#334155" stroke-width="2"></line><line x1="0" y1="-10" x2="14" y2="14" stroke="#334155" stroke-width="2"></line>
+          <text x="0" y="30" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b" font-family="'Noto Sans Hebrew',sans-serif">מנהל מערכת</text>
+        </g>
+      </g>
+    </svg>
+<figcaption>חלק 2 מתוך 3: ניהול המערכת ונתוני-אב — מנהל המערכת לבדו, עם Use Case ניהול ייעודי לכל ישות: כלי רכב, מחלקות, מוסכים, קטלוג החלקים, תחומי התמחות ומשתמשים ותפקידים.</figcaption>
+</figure>
+<p class="scrollhint">↔ התרשים רחב מן העמוד, ניתן לגלול אותו לצדדים.</p>
+<figure class="diagram"><svg id="usecase2-diagram-svg-2" viewBox="0 0 1400 590" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <pattern id="usecase2-dots2" width="24" height="24" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="0.8" fill="#cbd5e1"></circle></pattern>
+      </defs>
+      <rect x="0" y="0" width="1400" height="560" fill="#f8fafc"></rect>
+      <rect x="0" y="0" width="1400" height="560" fill="url(#usecase2-dots2)"></rect>
+
+      <rect class="system-boundary" x="380" y="70" width="620" height="400" rx="12" fill="#ffffff" stroke="#3b82f6" stroke-width="2.5"></rect>
+      <rect x="380" y="70" width="620" height="44" rx="12" fill="#1e40af"></rect>
+      <rect x="380" y="96" width="620" height="18" fill="#1e40af"></rect>
+      <text x="690" y="99" text-anchor="middle" fill="#ffffff" font-size="14" font-weight="700" font-family="'Noto Sans Hebrew',sans-serif">מערכת ניהול קריאות טיפול, אוטומציה וממשקים</text>
+
+      <g id="usecase2-assocLayer2">
+        <line class="assoc-line" data-conn-from="timeActor" data-conn-to="uc-periodic-open" x1="300" y1="174" x2="422" y2="174" stroke="#334155" stroke-width="1.8"></line>
+        <line class="conn-hitbox" data-conn-id="a-time-periodic" data-hitbox-from="timeActor" data-hitbox-to="uc-periodic-open" x1="300" y1="174" x2="422" y2="174" stroke="transparent" stroke-width="14" data-hover-wired="1"></line>
+        <line class="assoc-line" data-conn-from="supplierSystem" data-conn-to="uc-part-arrival-notice" x1="300" y1="324" x2="416.05042507154855" y2="257.5622913807167" stroke="#334155" stroke-width="1.8"></line>
+        <line class="conn-hitbox" data-conn-id="a-supplier-arrival" data-hitbox-from="supplierSystem" data-hitbox-to="uc-part-arrival-notice" x1="300" y1="324" x2="416.05042507154855" y2="257.5622913807167" stroke="transparent" stroke-width="14" data-hover-wired="1"></line>
+      </g>
+
+      <g id="usecase2-ucLayer2">
+        <g class="uc-group" id="usecase2-uc-group-uc-periodic-open" data-uc-id="uc-periodic-open"><ellipse cx="526" cy="174" rx="104" ry="30" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"></ellipse><text x="526" y="178" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">פתיחת קריאת טיפול תקופתית</text></g>
+        <g class="uc-group" id="usecase2-uc-group-uc-part-arrival-notice" data-uc-id="uc-part-arrival-notice"><ellipse cx="526" cy="248" rx="116" ry="30" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"></ellipse><text x="526" y="252" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">קליטת הודעת הגעת חלק מהספק</text></g>
+      </g>
+
+      <g id="usecase2-actorLayer2">
+        <g id="usecase2-actor-group-timeActor" data-actor-id="timeActor" transform="translate(300,174)">
+          <circle cx="0" cy="-60" r="14" fill="#fef3c7" stroke="#334155" stroke-width="2"></circle><line x1="0" y1="-46" x2="0" y2="-10" stroke="#334155" stroke-width="2"></line><line x1="-18" y1="-36" x2="18" y2="-36" stroke="#334155" stroke-width="2"></line><line x1="0" y1="-10" x2="-14" y2="14" stroke="#334155" stroke-width="2"></line><line x1="0" y1="-10" x2="14" y2="14" stroke="#334155" stroke-width="2"></line>
+          <text x="0" y="30" text-anchor="middle" font-size="9" font-style="italic" fill="#64748b" font-family="'IBM Plex Mono',monospace">«system»</text>
+          <text x="0" y="44" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b" font-family="'Noto Sans Hebrew',sans-serif">שחקן זמן</text>
+          <text x="0" y="58" text-anchor="middle" font-size="9.5" fill="#64748b" font-family="'Noto Sans Hebrew',sans-serif">(טריגר תזמון)</text>
+        </g>
+        <g id="usecase2-actor-group-supplierSystem" data-actor-id="supplierSystem" transform="translate(300,324)">
+          <circle cx="0" cy="-60" r="14" fill="#fef3c7" stroke="#334155" stroke-width="2"></circle><line x1="0" y1="-46" x2="0" y2="-10" stroke="#334155" stroke-width="2"></line><line x1="-18" y1="-36" x2="18" y2="-36" stroke="#334155" stroke-width="2"></line><line x1="0" y1="-10" x2="-14" y2="14" stroke="#334155" stroke-width="2"></line><line x1="0" y1="-10" x2="14" y2="14" stroke="#334155" stroke-width="2"></line>
+          <text x="0" y="30" text-anchor="middle" font-size="9" font-style="italic" fill="#64748b" font-family="'IBM Plex Mono',monospace">«system»</text>
+          <text x="0" y="44" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b" font-family="'Noto Sans Hebrew',sans-serif">מערכת הספק</text>
+          <text x="0" y="58" text-anchor="middle" font-size="9.5" fill="#64748b" font-family="'Noto Sans Hebrew',sans-serif">(חיצונית, יוזמת)</text>
+        </g>
+      </g>
+    <g class="timing-label"><rect x="240.5" y="166" width="241" height="16" fill="white" stroke="#334155" stroke-width="0.8" rx="3"></rect><text x="361" y="178" font-size="10" text-anchor="middle" fill="#334155" font-family="'Noto Sans Hebrew', sans-serif" direction="rtl">בהגיע מועד הטיפול התקופתי של הרכב</text></g></svg>
+<figcaption>חלק 3 מתוך 3: תהליכים אוטומטיים וממשקים — שחקן הזמן (סטריאוטיפ «system», תווית תזמון על הקשר) ומערכת הספק כשחקן חיצוני יוזם. התרשים פוצל לפי תחומי אחריות לשם קריאוּת; פתרון בעמוד אחד תקין באותה מידה.</figcaption>
+</figure>
+<p class="scrollhint">↔ התרשים רחב מן העמוד, ניתן לגלול אותו לצדדים.</p>
+<p class="difflink"><a href="diagrams/usecase-solution.html" target="_blank" rel="noopener">↗ פתחו את תרשים ה-Use Case המלא</a><small>לחיצה על Use Case פותחת תיעוד מלא: תנאים, תרחיש ומסלולים חלופיים</small></p>
+<div class="answer">
+<p>התרשים מחולק לשלושה אזורי אחריות של אותה מערכת (20 מקרי שימוש, מעל סף הפיצול):</p>
+<p><b>לשונית א' — תפעול קריאות הטיפול (12 מקרי שימוש, 6 שחקנים אנושיים):</b></p>
+<div class="tablewrap"><table>
+<thead><tr><th>שחקן</th><th>מקרי השימוש</th></tr></thead>
+<tbody>
+<tr><td><b>נהג</b>, <b>נציג מחלקה</b></td><td>פתיחת קריאת טיפול · ביטול קריאת טיפול</td></tr>
+<tr><td><b>מכונאי</b></td><td>ביצוע אבחון ורישום דוח · רישום חלקים שנוצלו בטיפול · דיווח שעות עבודה בקריאה · סימון השלמת הטיפול</td></tr>
+<tr><td><b>מנהל צי</b></td><td>אישור או דחיית קריאה חורגת · החזרת רכב לשירות</td></tr>
+<tr><td><b>מנהל מוסך</b></td><td>שיבוץ מכונאים לקריאת טיפול</td></tr>
+<tr><td><b>פקיד מחסן</b></td><td>הזמנת חלק מספק חיצוני · קליטת חלק שהגיע מהספק</td></tr>
+<tr><td><b>(ללא שחקן)</b></td><td><b>עדכון רמת מלאי</b> — יעד «include»</td></tr>
+</tbody></table></div>
+<p>שני קשרי <b>«include»</b>: <b>רישום חלקים שנוצלו בטיפול</b> → <b>עדכון רמת מלאי</b>, ו<b>קליטת חלק שהגיע מהספק</b> → <b>עדכון רמת מלאי</b>.</p>
+<p><b>לשונית ב' — ניהול המערכת ונתוני-אב (6 מקרי שימוש, שחקן אחד):</b> מנהל המערכת לבדו — ניהול כלי רכב · ניהול מחלקות · ניהול מוסכים · ניהול קטלוג החלקים · ניהול תחומי התמחות · ניהול משתמשים ותפקידים.</p>
+<p><b>לשונית ג' — תהליכים אוטומטיים וממשקים (2 מקרי שימוש, 2 שחקני «system»):</b></p>
+<ul>
+<li><b>שחקן זמן</b> «system» → <b>פתיחת קריאת טיפול תקופתית</b>, ועל הקשר <b>תווית תזמון</b>: "בהגיע מועד הטיפול התקופתי של הרכב".</li>
+<li><b>מערכת הספק</b> «system», שחקן <b>יוזם</b> → <b>קליטת הודעת הגעת חלק מהספק</b>.</li>
+</ul>
+</div>
+<div class="mistake">
+<p><b>מוריד נקודות:</b> מקרי שימוש שהם למעשה מסכים או שדות · קשר בין שני שחקנים · חץ «include» בכיוון הפוך (מהמוכלל אל הבסיס) · שחקן בתוך גבול המערכת · מקרי שימוש כלליים מסוג "ניהול נתונים" ללא ציון הישות.</p>
+</div>
+<div class="alt">
+<p><b>אין להוריד:</b> על מספר לשוניות או על תרשים אחד גדול · על היעדר מחלקות/מקרי שימוש לכרטיסי דלק — היעדרם הוא ברירת המחדל הצפויה (ראו 6.4) · על צירוף נהג ונציג מחלקה לשחקן אחד או על קשירתם בהתמחות (generalization) · על ייצוג הרשאתו הגורפת של מנהל הצי ככלל הרשאות ולא כ-Use Case נוסף.</p>
+</div>
+<h3 class="sub">6.2 (3 נק׳): שתי הדרכים שבהן נפתחת קריאה, וההבדל בין הייצוגים</h3>
+<p class="qtext">הסיפור מתאר שתי דרכים שבהן נפתחת קריאת טיפול: אחת כאשר מתגלה תקלה, והשנייה כאשר מגיע מועד הטיפול התקופתי של הרכב. כיצד ייצגתם בתרשים שלכם כל אחת משתי הדרכים, ובמה נבדלים שני הייצוגים זה מזה? ציינו גם כיצד ניתן ללמוד מהתרשים שלכם באיזה עיתוי נפתחת הקריאה בדרך השנייה.</p>
+<div class="answer">
+<p><b>תשובת מודל:</b></p>
+<ol>
+<li><b>הדרך הראשונה</b> מיוצגת כ-Use Case <b>פתיחת קריאת טיפול</b> המחובר ל<b>שחקנים אנושיים</b> — נהג ונציג מחלקה — שהם היוזמים.</li>
+<li><b>ההבדל:</b> את הדרך השנייה (<b>פתיחת קריאת טיפול תקופתית</b>) אין מי מהמשתמשים האנושיים יוזם, ולכן היא מחוברת ל<b>שחקן שאינו אנושי — שחקן זמן (שעון המערכת)</b>. הטריגר הוא <b>הגעת המועד</b> ולא פעולה של אדם; זהו ההבדל המהותי בין שני הייצוגים.</li>
+<li><b>העיתוי נלמד מן התרשים</b> מ<b>תווית התזמון</b> שעל הקשר בין שחקן הזמן ל-Use Case: "בהגיע מועד הטיפול התקופתי של הרכב". בלעדיה התרשים מראה מי מפעיל אך לא מתי.</li>
+</ol>
+</div>
+<div class="alt">
+<p><b>חלופה מזכה במלואה:</b> שחקן המסומן כמערכת/שעון פנימי בשם אחר, כל עוד הוא אינו אחד ממשתמשי המערכת והתווית קיימת. <b>אין לדרוש את הסטריאוטיפ «system» כתנאי לניקוד</b> — הוא מוסכמת שרטוט, לא ידע נבחן. כן מזכה גם מי שייצג את שתי הדרכים ב-Use Case <b>אחד</b> עם שני שחקנים, ובלבד שהסביר את ההבדל בין היוזמים ושהעיתוי מופיע על קשר שחקן הזמן.</p>
+</div>
+<div class="mistake">
+<p><b>הסתירה (0–1 נק׳):</b> תליית הפתיחה התקופתית בנהג, בנציג מחלקה או במכונאי — סותרת את הסיפור, שבו איש אינו פועל ברגע זה. סטודנט שכך ייצג ונימק זאת במפורש ("הנחתי שהמכונאי סורק את הרשימה") מקבל <b>1 נק׳</b> על הנימוק הקוהרנטי, ולא יותר.</p>
+</div>
+<div class="mistake">
+<p><b>הורדה של 1 נק׳:</b> פיצול התגובה האוטומטית לשני Use Cases ("זיהוי מועד הטיפול" + "פתיחת קריאה") — טריגר יחיד עם תגובה אוטומטית רציפה אחת = <b>Use Case אחד</b> · היעדר תווית תזמון.</p>
+</div>
+<h3 class="sub">6.3 (3 נק׳): היכן משתנה רמת המלאי, וכיצד ייוצג העדכון</h3>
+<p class="qtext">רמת המלאי של חלק במחסן חייבת להישאר עדכנית לאורך כל הפעילות במערכת. באילו ממקרי השימוש שבתרשים שלכם משתנה רמת המלאי, וכיצד ייצגתם בתרשים את עדכון המלאי עצמו? נמקו את בחירתכם.</p>
+<div class="answer">
+<p><b>תשובת מודל:</b></p>
+<ol>
+<li><b>איתור המקרים:</b> רמת המלאי משתנה ב<b>שני</b> מקרי שימוש — <b>רישום חלקים שנוצלו בטיפול</b> (המלאי יורד) ו<b>קליטת חלק שהגיע מהספק</b> (המלאי עולה).</li>
+<li><b>הייצוג:</b> עדכון המלאי חולץ ל-Use Case <b>אחד</b> בשם "עדכון רמת מלאי", המופיע בתרשים פעם אחת ומחובר ב-<b>«include»</b> משני הבסיסים, כשהחץ מכוון <b>מהבסיס אל המוכלל</b>.</li>
+<li><b>הנימוק:</b> העדכון מתבצע <b>תמיד</b> בשני התהליכים ואינו מותנה בדבר — ולכן «include» ולא «extend», שמסמן התנהגות מותנית. החילוץ מונע כפילות ומרכז שינוי עתידי בנקודה אחת: אם ייווסף כלל מלאי חדש (למשל התרעה מתחת למינימום), נשנה מקום אחד ולא שניים.</li>
+</ol>
+</div>
+<div class="alt">
+<p><b>חלופה מזכה במלואה:</b> שני המקרים אותרו, והעדכון מיוצג כ<b>פעולה פנימית של המערכת</b> ולא כ-Use Case נפרד — ובלבד שהסטודנט מנמק מדוע אינו רואה בו מקרה שימוש (אין שחקן שיוזם אותו; הוא שלב בתוך תהליך אחר) <b>ומציין את מחיר הבחירה</b>: הכלל מתואר פעמיים ושינוי עתידי נוגע בשני מקומות.</p>
+</div>
+<div class="mistake">
+<p><b>הסתירה:</b> «extend» — מסמן התנהגות מותנית, בעוד שכאן העדכון מתבצע תמיד · חיבור ה-Use Case המוכלל ל<b>בסיס יחיד</b> בעוד הסטודנט עצמו מנה שני מקרים · שכפול הפעולה כשני Use Cases נפרדים בעלי אותו תוכן.</p>
+</div>
+<h3 class="sub">6.4 (3 נק׳): האם יש Use Case למעקב אחר כרטיסי דלק</h3>
+<p class="qtext">מנהל הצי ביקש שהמערכת תעקוב גם אחר כרטיסי הדלק ואחר ההוצאות החודשיות על תדלוק לכל רכב. האם קיים Use Case כזה בתרשים שלכם? נמקו את ההכרעה במשפט אחד וציינו את מחירה.</p>
+<div class="answer">
+<p><b>ההכרעה בפתרון הבית: לא — אין Use Case כזה בתרשים.</b></p>
+<p><b>תשובת מודל:</b></p>
+<ol>
+<li><b>הכרעה מפורשת</b> ("לא") <b>התואמת את התרשים שצויר</b>.</li>
+<li><b>נימוק הנשען על הסיפור:</b> ייעוד המערכת הוא ניהול קריאות הטיפול על הצי, והסיפור קובע במפורש שהמערכת <b>אינה מנהלת תשלומים או חיובים</b>. מעקב הוצאות תדלוק הוא תחום נפרד שאינו נדרש לאף אחד מתהליכי הטיפול — אף לא אחד מ-20 מקרי השימוש בתרשים ניזון ממנו או מזין אותו.</li>
+<li><b>המחיר:</b> הבקשה הועלתה על ידי הלקוח עצמו (מנהל הצי), ולכן אין "להשתיק" אותה — יש להחזירה אליו במפורש כדרישה <b>מחוץ להיקף</b>, שתטופל כמודול או כשלב נפרד. המחיר של ההכרעה הזו הוא שהלקוח לא יקבל בשלב זה תמונת עלות מלאה לרכב (טיפולים <b>ועוד</b> דלק), ויצטרך להמשיך להצליב נתונים משני מקורות.</li>
+</ol>
+</div>
+</section>
+<section class="q" id="q7">
+<h2><span class="pts">20 נק׳</span>שאלה 7: תרשים מחלקות</h2>
+
+<p class="qtext">הכינו תרשים מחלקות מקיף עבור המערכת המתוארת בסיפור המעשה (שוב, אין להתייחס למופיע בשאלה 1).</p>
+<h3 class="sub">7.1 (8 נק׳): התרשים</h3>
+<p class="qtext">הכינו תרשים מחלקות מקיף עבור המערכת. על התרשים לכלול שימוש נכון ב-enumerator, מאפיינים מהותיים וכן קרדינליות הקשרים. יש לציין את המאפיינים כפי שתוארו בשאלה, אך אין צורך לציין סוגי משתנים או הגדרות private/public. שיטות רלוונטיות יש להציג. עבור תרשים לא מסודר וקשרים מיותרים או לא יעילים יורדו נקודות.</p>
+<figure class="diagram wide"><svg id="class0-diagram-svg" xmlns="http://www.w3.org/2000/svg" width="1480" height="782" viewBox="0 0 1480 782"><defs>
+    <pattern id="class0-dotgrid" width="24" height="24" patternUnits="userSpaceOnUse">
+      <circle cx="12" cy="12" r="0.8" fill="#cbd5e1"></circle>
+    </pattern>
+    <marker id="class0-genHollow" markerWidth="12" markerHeight="10" refX="10" refY="5" orient="auto">
+      <polygon points="0,0 10,5 0,10" fill="white" stroke="#334155" stroke-width="1.5"></polygon>
+    </marker>
+    <marker id="class0-arrOpen" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <polyline points="0,0 9,4 0,8" fill="none" stroke="#334155" stroke-width="1.5"></polyline>
+    </marker>
+    <marker id="class0-compFill" markerWidth="14" markerHeight="10" refX="1" refY="5" orient="auto">
+      <polygon points="0,5 7,0 14,5 7,10" fill="#1e40af" stroke="#1e40af"></polygon>
+    </marker>
+    <marker id="class0-aggHollow" markerWidth="14" markerHeight="10" refX="1" refY="5" orient="auto">
+      <polygon points="0,5 7,0 14,5 7,10" fill="white" stroke="#334155"></polygon>
+    </marker>
+  </defs><rect width="1480" height="782" fill="url(#class0-dotgrid)"></rect><polyline points="400,230 400,118" fill="none" stroke="#334155" stroke-width="1.8"></polyline><text x="410" y="215" text-anchor="middle" fill="#64748b" font-size="9.5" font-family="IBM Plex Mono, monospace" style="direction:ltr;unicode-bidi:isolate">0..*</text><text x="390" y="139" text-anchor="middle" fill="#64748b" font-size="9.5" font-family="IBM Plex Mono, monospace" style="direction:ltr;unicode-bidi:isolate">1..*</text><text x="400" y="112" text-anchor="middle" fill="#64748b" font-size="9.5" font-family="IBM Plex Mono, monospace">נושא תפקיד</text><polyline points="330,264 213,264" fill="none" stroke="#334155" stroke-width="1.8"></polyline><text x="312" y="257" text-anchor="middle" fill="#64748b" font-size="9.5" font-family="IBM Plex Mono, monospace" style="direction:ltr;unicode-bidi:isolate">0..*</text><text x="231" y="277" text-anchor="middle" fill="#64748b" font-size="9.5" font-family="IBM Plex Mono, monospace" style="direction:ltr;unicode-bidi:isolate">0..1</text><text x="213" y="258" text-anchor="middle" fill="#64748b" font-size="9.5" font-family="IBM Plex Mono, monospace">עובד במוסך</text><polyline points="380,326 380,500 157,500 157,430" fill="none" stroke="#334155" stroke-width="1.8"></polyline><text x="370" y="347" text-anchor="middle" fill="#64748b" font-size="9.5" font-family="IBM Plex Mono, monospace" style="direction:ltr;unicode-bidi:isolate">0..*</text><text x="147" y="451" text-anchor="middle" fill="#64748b" font-size="9.5" font-family="IBM Plex Mono, monospace" style="direction:ltr;unicode-bidi:isolate">0..*</text><text x="157" y="494" text-anchor="middle" fill="#64748b" font-size="9.5" font-family="IBM Plex Mono, monospace">מתמחה ב</text><polyline points="640,441.5 400,441.5 400,326" fill="none" stroke="#334155" stroke-width="1.8"></polyline><text x="622" y="434.5" text-anchor="middle" fill="#64748b" font-size="9.5" font-family="IBM Plex Mono, monospace" style="direction:ltr;unicode-bidi:isolate">0..*</text><text x="390" y="347" text-anchor="middle" fill="#64748b" font-size="9.5" font-family="IBM Plex Mono, monospace" style="direction:ltr;unicode-bidi:isolate">0..*</text><text x="400" y="435.5" text-anchor="middle" fill="#64748b" font-size="9.5" font-family="IBM Plex Mono, monospace">משובץ ל</text><polyline points="660,330 660,190 157,190 157,230" fill="none" stroke="#334155" stroke-width="1.8"></polyline><text x="670" y="315" text-anchor="middle" fill="#64748b" font-size="9.5" font-family="IBM Plex Mono, monospace" style="direction:ltr;unicode-bidi:isolate">0..*</text><text x="167" y="215" text-anchor="middle" fill="#64748b" font-size="9.5" font-family="IBM Plex Mono, monospace" style="direction:ltr;unicode-bidi:isolate">1</text><text x="157" y="184" text-anchor="middle" fill="#64748b" font-size="9.5" font-family="IBM Plex Mono, monospace">מטופלת ב</text><polyline points="470,278 755.5,278 755.5,330" fill="none" stroke="#334155" stroke-width="1.8"></polyline><text x="488" y="291" text-anchor="middle" fill="#64748b" font-size="9.5" font-family="IBM Plex Mono, monospace" style="direction:ltr;unicode-bidi:isolate">0..1</text><text x="765.5" y="315" text-anchor="middle" fill="#64748b" font-size="9.5" font-family="IBM Plex Mono, monospace" style="direction:ltr;unicode-bidi:isolate">0..*</text><text x="755.5" y="272" text-anchor="middle" fill="#64748b" font-size="9.5" font-family="IBM Plex Mono, monospace">פתח את הקריאה</text><polyline points="920,94 799,94" fill="none" stroke="#334155" stroke-width="1.8"></polyline><text x="902" y="87" text-anchor="middle" fill="#64748b" font-size="9.5" font-family="IBM Plex Mono, monospace" style="direction:ltr;unicode-bidi:isolate">0..*</text><text x="817" y="107" text-anchor="middle" fill="#64748b" font-size="9.5" font-family="IBM Plex Mono, monospace" style="direction:ltr;unicode-bidi:isolate">1</text><text x="799" y="88" text-anchor="middle" fill="#64748b" font-size="9.5" font-family="IBM Plex Mono, monospace">משויך ל</text><polyline points="1000,179 1000,300 800,300 800,330" fill="none" stroke="#334155" stroke-width="1.8"></polyline><text x="990" y="200" text-anchor="middle" fill="#64748b" font-size="9.5" font-family="IBM Plex Mono, monospace" style="direction:ltr;unicode-bidi:isolate">1</text><text x="810" y="315" text-anchor="middle" fill="#64748b" font-size="9.5" font-family="IBM Plex Mono, monospace" style="direction:ltr;unicode-bidi:isolate">0..*</text><text x="800" y="294" text-anchor="middle" fill="#64748b" font-size="9.5" font-family="IBM Plex Mono, monospace">נפתחת עבור</text><polyline points="726,553 726,620" fill="none" stroke="#334155" stroke-width="1.8" marker-start="url(#class0-compFill)"></polyline><text x="716" y="574" text-anchor="middle" fill="#64748b" font-size="9.5" font-family="IBM Plex Mono, monospace" style="direction:ltr;unicode-bidi:isolate">1</text><text x="736" y="605" text-anchor="middle" fill="#64748b" font-size="9.5" font-family="IBM Plex Mono, monospace" style="direction:ltr;unicode-bidi:isolate">0..1</text><text x="726" y="614" text-anchor="middle" fill="#64748b" font-size="9.5" font-family="IBM Plex Mono, monospace">כוללת</text><polyline points="871,385.5 980,385.5" fill="none" stroke="#334155" stroke-width="1.8"></polyline><text x="889" y="398.5" text-anchor="middle" fill="#64748b" font-size="9.5" font-family="IBM Plex Mono, monospace" style="direction:ltr;unicode-bidi:isolate">0..*</text><text x="962" y="378.5" text-anchor="middle" fill="#64748b" font-size="9.5" font-family="IBM Plex Mono, monospace" style="direction:ltr;unicode-bidi:isolate">0..*</text><text x="980" y="379.5" text-anchor="middle" fill="#64748b" font-size="9.5" font-family="IBM Plex Mono, monospace">מנצלת</text><rect x="330" y="50" width="159" height="68" fill="white" stroke="#3b82f6" stroke-width="2" rx="2"></rect><rect x="330" y="50" width="159" height="28" fill="#1e40af" rx="2"></rect><text x="409.5" y="68" text-anchor="middle" fill="white" font-size="11" font-weight="700" font-family="IBM Plex Mono, monospace" style="">Role</text><line x1="330" y1="78" x2="489" y2="78" stroke="#3b82f6" stroke-width="1"></line><text x="336" y="94" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ roleName : String</text><text x="336" y="108" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ permissions : String</text><rect x="330" y="230" width="140" height="96" fill="white" stroke="#3b82f6" stroke-width="2" rx="2"></rect><rect x="330" y="230" width="140" height="28" fill="#1e40af" rx="2"></rect><text x="400" y="248" text-anchor="middle" fill="white" font-size="11" font-weight="700" font-family="IBM Plex Mono, monospace" style="">User</text><line x1="330" y1="258" x2="470" y2="258" stroke="#3b82f6" stroke-width="1"></line><text x="336" y="274" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ userId : String</text><text x="336" y="288" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ fullName : String</text><text x="336" y="302" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ phone : String</text><text x="336" y="316" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ email : String</text><rect x="60" y="230" width="153" height="68" fill="white" stroke="#3b82f6" stroke-width="2" rx="2"></rect><rect x="60" y="230" width="153" height="28" fill="#1e40af" rx="2"></rect><text x="136.5" y="248" text-anchor="middle" fill="white" font-size="11" font-weight="700" font-family="IBM Plex Mono, monospace" style="">Garage</text><line x1="60" y1="258" x2="213" y2="258" stroke="#3b82f6" stroke-width="1"></line><text x="66" y="274" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ garageName : String</text><text x="66" y="288" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ location : String</text><rect x="60" y="430" width="172" height="54" fill="white" stroke="#3b82f6" stroke-width="2" rx="2"></rect><rect x="60" y="430" width="172" height="28" fill="#1e40af" rx="2"></rect><text x="146" y="448" text-anchor="middle" fill="white" font-size="11" font-weight="700" font-family="IBM Plex Mono, monospace" style="">Specialty</text><line x1="60" y1="458" x2="232" y2="458" stroke="#3b82f6" stroke-width="1"></line><text x="66" y="474" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ specialtyName : String</text><rect x="460" y="470" width="159" height="68" fill="white" stroke="#3b82f6" stroke-width="2" rx="2"></rect><rect x="460" y="470" width="159" height="28" fill="#1e40af" rx="2"></rect><text x="539.5" y="488" text-anchor="middle" fill="white" font-size="11" font-weight="700" font-family="IBM Plex Mono, monospace" style="">MechanicAssignment</text><line x1="460" y1="498" x2="619" y2="498" stroke="#3b82f6" stroke-width="1"></line><text x="466" y="514" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ assignedDate : Date</text><text x="466" y="528" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ hoursWorked : Number</text><rect x="620" y="60" width="179" height="68" fill="white" stroke="#3b82f6" stroke-width="2" rx="2"></rect><rect x="620" y="60" width="179" height="28" fill="#1e40af" rx="2"></rect><text x="709.5" y="78" text-anchor="middle" fill="white" font-size="11" font-weight="700" font-family="IBM Plex Mono, monospace" style="">Department</text><line x1="620" y1="88" x2="799" y2="88" stroke="#3b82f6" stroke-width="1"></line><text x="626" y="104" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ departmentName : String</text><text x="626" y="118" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ contactPhone : String</text><rect x="920" y="40" width="192" height="139" fill="white" stroke="#3b82f6" stroke-width="2" rx="2"></rect><rect x="920" y="40" width="192" height="28" fill="#1e40af" rx="2"></rect><text x="1016" y="58" text-anchor="middle" fill="white" font-size="11" font-weight="700" font-family="IBM Plex Mono, monospace" style="">Vehicle</text><line x1="920" y1="68" x2="1112" y2="68" stroke="#3b82f6" stroke-width="1"></line><text x="926" y="84" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ licensePlate : String</text><text x="926" y="98" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ vehicleType : VehicleType</text><text x="926" y="112" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ model : String</text><text x="926" y="126" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ mileage : Integer</text><text x="926" y="140" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ nextServiceDate : Date</text><line x1="920" y1="144" x2="1112" y2="144" stroke="#3b82f6" stroke-width="1"></line><text x="926" y="160" text-anchor="start" fill="#2563eb" font-size="10.5" font-style="italic" font-family="IBM Plex Mono, monospace">+ isDueForService()</text><text x="926" y="174" text-anchor="start" fill="#2563eb" font-size="10.5" font-style="italic" font-family="IBM Plex Mono, monospace">+ returnToService()</text><rect x="640" y="330" width="231" height="223" fill="white" stroke="#3b82f6" stroke-width="2" rx="2"></rect><rect x="640" y="330" width="231" height="28" fill="#1e40af" rx="2"></rect><text x="755.5" y="348" text-anchor="middle" fill="white" font-size="11" font-weight="700" font-family="IBM Plex Mono, monospace" style="">WorkOrder</text><line x1="640" y1="358" x2="871" y2="358" stroke="#3b82f6" stroke-width="1"></line><text x="646" y="374" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ openDate : Date</text><text x="646" y="388" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ serviceType : ServiceType</text><text x="646" y="402" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ priority : PriorityLevel</text><text x="646" y="416" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ faultDescription : String</text><text x="646" y="430" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ repairSummary : Text</text><text x="646" y="444" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ status : WorkOrderStatus</text><text x="646" y="458" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ closureReason : WorkOrderStatus</text><line x1="640" y1="462" x2="871" y2="462" stroke="#3b82f6" stroke-width="1"></line><text x="646" y="478" text-anchor="start" fill="#2563eb" font-size="10.5" font-style="italic" font-family="IBM Plex Mono, monospace">+ recordDiagnosis()</text><text x="646" y="492" text-anchor="start" fill="#2563eb" font-size="10.5" font-style="italic" font-family="IBM Plex Mono, monospace">+ approve()</text><text x="646" y="506" text-anchor="start" fill="#2563eb" font-size="10.5" font-style="italic" font-family="IBM Plex Mono, monospace">+ reject()</text><text x="646" y="520" text-anchor="start" fill="#2563eb" font-size="10.5" font-style="italic" font-family="IBM Plex Mono, monospace">+ complete()</text><text x="646" y="534" text-anchor="start" fill="#2563eb" font-size="10.5" font-style="italic" font-family="IBM Plex Mono, monospace">+ cancel()</text><text x="646" y="548" text-anchor="start" fill="#2563eb" font-size="10.5" font-style="italic" font-family="IBM Plex Mono, monospace">+ totalCost()</text><rect x="640" y="620" width="172" height="82" fill="white" stroke="#3b82f6" stroke-width="2" rx="2"></rect><rect x="640" y="620" width="172" height="28" fill="#1e40af" rx="2"></rect><text x="726" y="638" text-anchor="middle" fill="white" font-size="11" font-weight="700" font-family="IBM Plex Mono, monospace" style="">DiagnosisReport</text><line x1="640" y1="648" x2="812" y2="648" stroke="#3b82f6" stroke-width="1"></line><text x="646" y="664" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ findings : Text</text><text x="646" y="678" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ estimatedCost : Number</text><text x="646" y="692" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ reportDate : Date</text><rect x="980" y="330" width="172" height="111" fill="white" stroke="#3b82f6" stroke-width="2" rx="2"></rect><rect x="980" y="330" width="172" height="28" fill="#1e40af" rx="2"></rect><text x="1066" y="348" text-anchor="middle" fill="white" font-size="11" font-weight="700" font-family="IBM Plex Mono, monospace" style="">Part</text><line x1="980" y1="358" x2="1152" y2="358" stroke="#3b82f6" stroke-width="1"></line><text x="986" y="374" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ catalogNumber : String</text><text x="986" y="388" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ partName : String</text><text x="986" y="402" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ stockLevel : Integer</text><text x="986" y="416" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ currentPrice : Number</text><line x1="980" y1="420" x2="1152" y2="420" stroke="#3b82f6" stroke-width="1"></line><text x="986" y="436" text-anchor="start" fill="#2563eb" font-size="10.5" font-style="italic" font-family="IBM Plex Mono, monospace">+ updateStockLevel()</text><rect x="980" y="520" width="153" height="83" fill="white" stroke="#3b82f6" stroke-width="2" rx="2"></rect><rect x="980" y="520" width="153" height="28" fill="#1e40af" rx="2"></rect><text x="1056.5" y="538" text-anchor="middle" fill="white" font-size="11" font-weight="700" font-family="IBM Plex Mono, monospace" style="">PartUsage</text><line x1="980" y1="548" x2="1133" y2="548" stroke="#3b82f6" stroke-width="1"></line><text x="986" y="564" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ quantity : Integer</text><text x="986" y="578" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ priceAtUse : Number</text><line x1="980" y1="582" x2="1133" y2="582" stroke="#3b82f6" stroke-width="1"></line><text x="986" y="598" text-anchor="start" fill="#2563eb" font-size="10.5" font-style="italic" font-family="IBM Plex Mono, monospace">+ lineTotal()</text><rect x="1300" y="40" width="120" height="106" fill="#f8fafc" stroke="#94a3b8" stroke-width="2" stroke-dasharray="5 3" rx="2"></rect><rect x="1300" y="40" width="120" height="38" fill="#475569" rx="2"></rect><text x="1360" y="53" text-anchor="middle" fill="white" font-size="9" font-family="IBM Plex Mono, monospace">«enumeration»</text><text x="1360" y="70" text-anchor="middle" fill="white" font-size="11" font-weight="700" font-family="IBM Plex Mono, monospace" style="">VehicleType</text><line x1="1300" y1="78" x2="1420" y2="78" stroke="#94a3b8" stroke-width="1"></line><text x="1306" y="94" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">PrivateCar</text><text x="1306" y="108" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">Pickup</text><text x="1306" y="122" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">Truck</text><text x="1306" y="136" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">Forklift</text><rect x="1300" y="200" width="120" height="92" fill="#f8fafc" stroke="#94a3b8" stroke-width="2" stroke-dasharray="5 3" rx="2"></rect><rect x="1300" y="200" width="120" height="38" fill="#475569" rx="2"></rect><text x="1360" y="213" text-anchor="middle" fill="white" font-size="9" font-family="IBM Plex Mono, monospace">«enumeration»</text><text x="1360" y="230" text-anchor="middle" fill="white" font-size="11" font-weight="700" font-family="IBM Plex Mono, monospace" style="">ServiceType</text><line x1="1300" y1="238" x2="1420" y2="238" stroke="#94a3b8" stroke-width="1"></line><text x="1306" y="254" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">Periodic</text><text x="1306" y="268" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">FaultRepair</text><text x="1306" y="282" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">Inspection</text><rect x="1300" y="340" width="120" height="106" fill="#f8fafc" stroke="#94a3b8" stroke-width="2" stroke-dasharray="5 3" rx="2"></rect><rect x="1300" y="340" width="120" height="38" fill="#475569" rx="2"></rect><text x="1360" y="353" text-anchor="middle" fill="white" font-size="9" font-family="IBM Plex Mono, monospace">«enumeration»</text><text x="1360" y="370" text-anchor="middle" fill="white" font-size="11" font-weight="700" font-family="IBM Plex Mono, monospace" style="">PriorityLevel</text><line x1="1300" y1="378" x2="1420" y2="378" stroke="#94a3b8" stroke-width="1"></line><text x="1306" y="394" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">Low</text><text x="1306" y="408" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">Normal</text><text x="1306" y="422" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">High</text><text x="1306" y="436" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">Urgent</text><rect x="1300" y="500" width="120" height="190" fill="#f8fafc" stroke="#94a3b8" stroke-width="2" stroke-dasharray="5 3" rx="2"></rect><rect x="1300" y="500" width="120" height="38" fill="#475569" rx="2"></rect><text x="1360" y="513" text-anchor="middle" fill="white" font-size="9" font-family="IBM Plex Mono, monospace">«enumeration»</text><text x="1360" y="530" text-anchor="middle" fill="white" font-size="11" font-weight="700" font-family="IBM Plex Mono, monospace" style="">WorkOrderStatus</text><line x1="1300" y1="538" x2="1420" y2="538" stroke="#94a3b8" stroke-width="1"></line><text x="1306" y="554" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">Opened</text><text x="1306" y="568" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">Assigned</text><text x="1306" y="582" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">InDiagnosis</text><text x="1306" y="596" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">WaitingApproval</text><text x="1306" y="610" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">InService</text><text x="1306" y="624" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">WaitingForParts</text><text x="1306" y="638" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">Completed</text><text x="1306" y="652" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">Rejected</text><text x="1306" y="666" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">Cancelled</text><text x="1306" y="680" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">Archived</text><text x="16" y="742" fill="#64748b" font-size="9" font-family="IBM Plex Mono, monospace">── Association  ◇── Aggregation  ◆── Composition  ──▷ Generalization  |  קרדינליות בשני קצות הקשר  |  --- association-class tether</text><line x1="925.5" y1="385.5" x2="1025.6" y2="520.0" stroke="#334155" stroke-width="1.3" stroke-dasharray="4 3" fill="none"></line><line x1="462.25" y1="441.5" x2="497.5" y2="470.0" stroke="#334155" stroke-width="1.3" stroke-dasharray="4 3" fill="none"></line></svg>
+<figcaption>פתרון לדוגמה: 11 מחלקות וארבעה אנומרטורים. **PartUsage** נושאת את הכמות ואת המחיר-בעת-השימוש על הקשר רבים-לרבים שבין הקריאה לחלק, ו-**MechanicAssignment** נושאת את שעות העבודה על הקשר רבים-לרבים שבין הקריאה למכונאי. **Specialty** היא מחלקת קטלוג (ולא enum), ואילו ארבעת האנומרטורים מוצגים כתיבות עצמאיות ללא קווי אסוציאציה. אין בתרשים מפתחות ראשיים או זרים; המספרים העסקיים שהסיפור נוקב בהם (מספר רישוי, מק"ט) כן מופיעים.</figcaption>
+</figure>
+<p class="scrollhint">↔ התרשים רחב מן העמוד, ניתן לגלול אותו לצדדים.</p>
+<p class="difflink"><a href="diagrams/class-solution.html" target="_blank" rel="noopener">↗ פתחו את תרשים המחלקות המלא</a><small>עמוד נפרד, ניתן להגדלה ולהדפסה</small></p>
+<div class="answer">
+<p><b>המחלקות (12) ומאפייניהן המהותיים:</b></p>
+<div class="tablewrap"><table>
+<thead><tr><th>מחלקה</th><th>מאפיינים</th><th>שיטות</th></tr></thead>
+<tbody>
+<tr><td><b>User</b></td><td>userId · fullName · phone · email</td><td>—</td></tr>
+<tr><td><b>Role</b></td><td>roleName · permissions</td><td>—</td></tr>
+<tr><td><b>Garage</b></td><td>garageName · location</td><td>—</td></tr>
+<tr><td><b>Specialty</b></td><td>specialtyName</td><td>—</td></tr>
+<tr><td><b>Department</b></td><td>departmentName · contactPhone</td><td>—</td></tr>
+<tr><td><b>Vehicle</b></td><td>licensePlate · vehicleType · model · mileage · nextServiceDate</td><td>isDueForService() · returnToService()</td></tr>
+<tr><td><b>WorkOrder</b></td><td>openDate · serviceType · priority · faultDescription · repairSummary · status · closureReason</td><td>recordDiagnosis() · approve() · reject() · complete() · cancel() · totalCost()</td></tr>
+<tr><td><b>DiagnosisReport</b></td><td>findings · estimatedCost · reportDate</td><td>—</td></tr>
+<tr><td><b>Part</b></td><td>catalogNumber · partName · stockLevel · currentPrice</td><td>updateStockLevel()</td></tr>
+<tr><td><b>PartUsage</b> <b>(מחלקת קשר)</b></td><td>quantity · priceAtUse</td><td>lineTotal()</td></tr>
+<tr><td><b>MechanicAssignment</b> <b>(מחלקת קשר)</b></td><td>assignedDate · hoursWorked</td><td>—</td></tr>
+</tbody></table></div>
+<p><b>האנומרטורים (4), מצוירים בנפרד ואינם מחוברים בקו קשר לאף מחלקה:</b></p>
+<ul>
+<li><code>«enumeration» VehicleType</code> — PrivateCar, Pickup, Truck, Forklift</li>
+<li><code>«enumeration» ServiceType</code> — Periodic, FaultRepair, Inspection</li>
+<li><code>«enumeration» PriorityLevel</code> — Low, Normal, High, Urgent</li>
+<li><code>«enumeration» WorkOrderStatus</code> — Opened, Assigned, InDiagnosis, WaitingApproval, InService, WaitingForParts, Completed, Rejected, Cancelled, Archived</li>
+</ul>
+<p><b>הקשרים והקרדינליות:</b></p>
+<div class="tablewrap"><table>
+<thead><tr><th>קשר</th><th>קרדינליות</th><th>הסבר</th></tr></thead>
+<tbody>
+<tr><td>User — Role</td><td><code>0..*</code> בצד User, <code>1..*</code> בצד Role</td><td>לכל משתמש תפקיד אחד לפחות, ותפקיד מוחזק בידי משתמשים רבים. הקשר רבים-לרבים הוא שמאפשר מכונאי שהוא גם מנהל מוסך.</td></tr>
+<tr><td>User — Garage</td><td><code>0..*</code> בצד User, <code>0..1</code> בצד Garage</td><td>מכונאי עובד במוסך אחד; משתמש שאינו מכונאי אינו משויך למוסך כלל, ומכאן <code>0..1</code>.</td></tr>
+<tr><td>User — Specialty</td><td><code>0..*</code> — <code>0..*</code></td><td>רבים-לרבים: למכונאי התמחות אחת או יותר, ולהתמחות מכונאים רבים. משתמש שאינו מכונאי מחזיק אפס התמחויות.</td></tr>
+<tr><td>WorkOrder — User (שיבוץ)</td><td><code>0..*</code> — <code>0..*</code>, עם מחלקת הקשר <b>MechanicAssignment</b></td><td>לקריאה משובץ מכונאי אחד או יותר; כל שיבוץ נושא את שעות העבודה של אותו מכונאי. זהו קשר <b>שני ונפרד</b> בין אותן שתי מחלקות, בנוסף לקשר "פתח את הקריאה" — ולכן שם התפקיד על הקו הוא שמבחין ביניהם.</td></tr>
+<tr><td>WorkOrder — Garage</td><td><code>0..*</code> בצד WorkOrder, <code>1</code> בצד Garage</td><td>הטיפול מתבצע באחד ממוסכי החברה.</td></tr>
+<tr><td>User — WorkOrder ("פתח את הקריאה")</td><td><code>0..1</code> בצד User, <code>0..*</code> בצד WorkOrder</td><td><code>0..1</code> ולא <code>1</code>: קריאה תקופתית נפתחת בידי המערכת, וללא משתמש פותח.</td></tr>
+<tr><td>Vehicle — Department</td><td><code>0..*</code> בצד Vehicle, <code>1</code> בצד Department</td><td>כל רכב משויך למחלקה אחת.</td></tr>
+<tr><td>Vehicle — WorkOrder</td><td><code>1</code> בצד Vehicle, <code>0..*</code> בצד WorkOrder</td><td>ראו 7.3.</td></tr>
+<tr><td>WorkOrder ◆— DiagnosisReport</td><td><code>1</code> — <code>0..1</code>, composition</td><td>דוח האבחון אינו קיים בלי הקריאה; לפני האבחון עדיין אין דוח.</td></tr>
+<tr><td>WorkOrder — Part</td><td><code>0..*</code> — <code>0..*</code>, עם מחלקת הקשר <b>PartUsage</b></td><td>ראו 7.2.</td></tr>
+</tbody></table></div>
+</div>
+<div class="mistake">
+<p><b>מוריד נקודות:</b> מפתח ראשי או מפתח זר כמאפיין (<code>workOrderId</code> על PartUsage, <code>vehicleId</code> על WorkOrder) — <b>קו הקשר הוא ההפניה</b>, ומפתחות שייכים לנושא המיפוי לבסיס נתונים יחסי · קרדינליות חסרה בקצה אחד · <b>סימון ריבוי בסגנון ERD</b> (זוגות אותיות משני צדי נקודתיים) במקום סימון ה-UML הנלמד (<code>1</code>, <code>*</code>, <code>0..1</code>, <code>1..*</code>) · קשר היוצא מ-enumerator · קשר ישיר בין שתי מחלקות שכבר מחוברות דרך שלישית ללא ערך מוסף · מחלקה עבור ישות שהסיפור הוציא מההיקף.</p>
+</div>
+<div class="alt">
+<p><b>אין להוריד:</b> על <b>היעדר</b> מחלקות לכרטיסי דלק ולהוצאות תדלוק — זו ברירת המחדל הצפויה; וגם לא על <b>נוכחותן</b>, אם התרשים קוהרנטי (הפריט נבחן ב-6.4 בלבד) · על היעדר או נוכחות של סיכום התיקון — הפריט נבחן ב-7.5 בלבד, ושתי ההכרעות תקפות · על שמות המחלקות בעברית או באנגלית · על מספר עסקי שהסיפור לא נקב בו והושמט (מספר קריאה); מספר רישוי ומספר מק"ט, שהסיפור <b>כן</b> נוקב בהם, מצופים.</p>
+</div>
+<div class="alt">
+<p><b>הערה על הירושה — הפתרון עודכן לדוקטרינה החדשה (2026-08-15).</b> בגרסה מוקדמת של פתרון זה הופיעה מחלקת <code>Mechanic</code> היורשת מ-<code>User</code>. היא <b>הוסרה</b>: תכונה נוספת או פעולה נוספת אינן עילה לירושה, ואין לייצר הכללה עבור <b>תפקיד</b> — מכונאי הוא תפקיד, התפקידים כבר מיוצגים בקשר <code>User</code>–<code>Role</code>, ומופע אינו יכול להחליף מחלקה כשהוא מתקדם בתפקידו. <code>Employee → Manager / Cashier / Chef</code> היא הטעות הנפוצה ביותר מסוג זה. המוסך, ההתמחויות והשיבוץ לקריאה מחוברים לפיכך ישירות ל-<code>User</code>, והמגבלה "רק מי שנושא תפקיד מכונאי משובץ לקריאה" היא <b>כלל עסקי ולא מבנה</b>. באותה רוח: <b>אגרגציה (◇) אינה מיוצרת כלל</b> — כל קשר שאינו הרכבה (◆) הוא אסוציאציה פשוטה, והרכבה מחייבת גם שהחלק ימות עם השלם וגם שיהיה לו בעלים יחיד.</p>
+<p><b>לגריעת נקודות בסמסטר זה:</b> נושא הירושה והאגרגציה <b>לא הודגש</b> בהוראה בסמסטר ב' 2026, ולכן תרשים סטודנט הכולל <code>Mechanic</code> היורשת מ-<code>User</code>, או אגרגציה במקום אסוציאציה, <b>אינו מוריד נקודות בשער 7.1</b>. ההנחיה שלעיל מתארת את הפתרון המלמד ואת הסטנדרט לסמסטרים הבאים.</p>
+</div>
+<h3 class="sub">7.2 (3 נק׳): היכן נשמרים הכמות והמחיר-בעת-השימוש</h3>
+<p class="qtext">במהלך הטיפול רושם המכונאי אילו חלקים נוצלו בקריאה ובאיזו כמות, והמחיר של החלק נשמר כפי שהיה בעת השימוש (מחיר החלק במחסן עשוי להשתנות בהמשך). היכן בתרשים שלכם נשמרים הכמות והמחיר-בעת-השימוש, ומדוע דווקא שם?</p>
+<div class="answer">
+<p><b>תשובת מודל:</b></p>
+<ol>
+<li>הכמות והמחיר-בעת-השימוש יושבים על <b>מחלקת קשר (Association Class) בשם <code>PartUsage</code></b>, התלויה על הקשר שבין <code>WorkOrder</code> ל-<code>Part</code>, ובה <code>quantity</code> ו-<code>priceAtUse</code>.</li>
+<li>הקרדינליות: הקשר בין הקריאה לחלק הוא <b>רבים-לרבים</b> (<code>0..*</code> — <code>0..*</code>) — קריאה מנצלת כמה חלקים, וחלק מנוצל בקריאות רבות.</li>
+<li><b>ומדוע דווקא שם:</b> הכמות <b>אינה תכונה של החלק</b> — אותו חלק מנוצל בכמויות שונות בקריאות שונות; והיא <b>אינה תכונה של הקריאה</b> — באותה קריאה יש כמויות שונות לחלקים שונים. זהו נתון של ה<b>צמד</b> (קריאה × חלק), ולכן מקומו במבנה שמייצג את הצמד. בנוסף, המחיר חייב להישמר כ<b>ערך היסטורי של רגע השימוש</b>, שכן <code>currentPrice</code> של החלק במחסן ישתנה בהמשך, וגזירת עלות הקריאה ממנו הייתה משנה בדיעבד את עלות טיפולים שכבר בוצעו.</li>
+</ol>
+</div>
+<div class="alt">
+<p><b>חלופה מזכה במלואה:</b> <b>מחלקה מתווכת</b> מפורשת (<code>PartUsage</code> המחוברת בשני קשרי <code>1</code> — <code>*</code>) במקום מחלקת קשר — עקבי עם סולם ההוראה: קשר רגיל ← מחלקת קשר ← מחלקה מתווכת ← קשר טרנרי (שממנו יש להימנע).</p>
+</div>
+<div class="mistake">
+<p><b>הסתירה:</b> <code>quantity</code>/<code>price</code> כתכונה של <code>Part</code> — אותו חלק לא יוכל להופיע בכמויות שונות בקריאות שונות, והמחיר ההיסטורי נדרס · כתכונה של <code>WorkOrder</code> — לא ניתן לדעת לאיזה חלק הכמות שייכת · קשר רבים-לרבים ללא נושא נתונים — אין היכן לשמור את השניים.</p>
+</div>
+<div class="alt">
+<p><b>אין להוריד</b> על שם המחלקה, <b>ואין לדרוש מפתחות</b> (<code>partId</code> / <code>workOrderId</code>) — הקשר עצמו הוא ההפניה.</p>
+</div>
+<h3 class="sub">7.3 (3 נק׳): הקרדינליות בין הרכב לקריאת הטיפול</h3>
+<p class="qtext">כל קריאת טיפול נפתחת עבור רכב מסוים, ורכב צובר קריאות לאורך שנות שירותו בצי. אילו ערכי קרדינליות רשמתם בשני קצות הקשר בין הרכב לקריאת הטיפול, ומה כל אחד מהם קובע לגבי רכב שזה עתה נקלט בצי וטרם נפתחה עבורו קריאה?</p>
+<div class="answer">
+<p><b>תשובת מודל:</b></p>
+<ol>
+<li>בצד ה<b>רכב</b>: <b><code>1</code></b> — כל קריאת טיפול מתייחסת לרכב <b>אחד בדיוק</b>, ואין קריאה בלי רכב.</li>
+<li>בצד ה<b>קריאה</b>: <code>0..*</code> (או <code>*</code>) — לרכב עשויות להיות קריאות רבות לאורך שנות שירותו, <b>ובכללן אפס</b>.</li>
+<li><b>מה זה קובע לגבי רכב שזה עתה נקלט בצי:</b> הצד <code>0..*</code> הוא שמאפשר לרשום אותו — הוא קיים במערכת אף שטרם נפתחה עבורו ולו קריאה אחת. אילו נכתב <code>1..*</code> בצד הקריאה, המודל היה קובע שרכב <b>חייב</b> קריאה אחת לפחות, ולא ניתן היה לרשום רכב חדש בלי להמציא עבורו קריאת דמה. הצד <code>1</code> בצד הרכב קובע שכל קריאה שנפתחת — גם הראשונה של אותו רכב — משויכת לרכב מזוהה אחד.</li>
+</ol>
+</div>
+<div class="mistake">
+<p><b>הסתירה:</b> <code>1..*</code> בצד הקריאה — לפי התרשים לא ניתן לרשום רכב חדש, בסתירה לתשובה עצמה · <code>0..1</code> בצד הרכב — קריאה ללא רכב · <code>*</code> בצד הרכב — קריאה אחת על כמה רכבים, שאין לה משמעות עסקית.</p>
+</div>
+<div class="mistake">
+<p><b>פסילת סימון:</b> יש להשתמש בסימון ה-UML הנלמד בלבד — <code>1</code>, <code>*</code>, <code>0..1</code>, <code>1..*</code>. <b>סימון ריבוי בסגנון ERD אינו מתקבל</b> (הורדה של 1 נק׳).</p>
+</div>
+<div class="alt">
+<p><b>הערה:</b> תשובה נכונה שאינה מזכירה במפורש את הרכב החדש —; הרכיב השלישי הוא הפרשנות העסקית של הסימון.</p>
+</div>
+<h3 class="sub">7.4 (3 נק׳): סוג הטיפול מול תחום ההתמחות</h3>
+<p class="qtext">לכל קריאת טיפול מוגדר סוג הטיפול — תקופתי, תיקון תקלה או בדיקה. לכל מכונאי תחום התמחות אחד או יותר, כגון מנועים, חשמל או מרכב. כיצד ייצגתם כל אחד משני הנתונים הללו בתרשים, וכיצד כל אחד מהם קשור לשאר התרשים?</p>
+<div class="answer">
+<p><b>תשובת מודל:</b></p>
+<ol>
+<li><b>סוג טיפול = enumerator.</b> <code>«enumeration» ServiceType</code> עם שלושת הערכים Periodic / FaultRepair / Inspection, המשמש כ<b>טיפוס של תכונה</b> ב-<code>WorkOrder</code> (<code>serviceType : ServiceType</code>). כך גם <code>PriorityLevel</code> עבור רמת העדיפות. זו קבוצת ערכים <b>סגורה וקבועה</b>, ולקריאה יש בדיוק ערך אחד ממנה.</li>
+<li><b>מוסכמת החיבור:</b> תיבת ה-enumerator מצוירת <b>בנפרד ואינה מחוברת בקו קשר</b> לאף מחלקה. היא טיפוס ערכים ולא ישות בעלת מופעים ברי-קישור; הקישור לשאר התרשים נעשה דרך <b>שם הטיפוס בתכונה</b> ולא דרך קו. קו אסוציאציה היוצא מ-enum הוא טעות.</li>
+<li><b>התמחות = מחלקה.</b> <code>Specialty</code> היא מחלקת קטלוג (נתוני-אב) המקושרת ל-<code>User</code> בקשר <b>רבים-לרבים</b> (<code>0..*</code> — <code>0..*</code>) — למכונאי התמחות אחת או יותר, ולהתמחות מכונאים רבים. enumerator לא היה מספיק כאן משתי סיבות: הוא <b>אינו יכול להשתתף בקשר</b>, ולכן לא ניתן להחזיק בו ריבוי ערכים למופע; והוא אינו מאפשר לנהל את הקטלוג — להוסיף התמחות חדשה או לתלות בה נתונים משלה.</li>
+</ol>
+</div>
+<div class="alt">
+<p><b>חלופה מזכה במלואה:</b> התמחות כ<b>תכונה רב-ערכית מטיפוס enum</b> — <b>רק</b> אם הסטודנט מנמק שאין צורך לנהל את קטלוג ההתמחויות במערכת <b>ומציין את המחיר</b>: לא ניתן להוסיף התמחות חדשה בזמן ריצה (נדרש שינוי בקוד), ולא ניתן לתלות בהתמחות נתונים משלה. בלי המחיר — 2 נק׳.</p>
+</div>
+<div class="mistake">
+<p><b>הסתירה:</b> ייצוג זהה לשני הנתונים ללא אבחנה · enum המחובר בקו קשר למכונאי — enum אינו משתתף בקשרים, ולא ניתן יהיה לנהל את הקטלוג ולא לשייך מספר התמחויות לאותו מכונאי.</p>
+</div>
+<h3 class="sub">7.5 (3 נק׳): סיכום התיקון החופשי</h3>
+<p class="qtext">מנהל הצי ביקש לוותר על הקלדת סיכום התיקון החופשי שכותב המכונאי בסיום הטיפול, שכן המחלקה מקבלת את עיקרי הדברים בשיחה. האם קיימים בתרשים שלכם מחלקה או מאפיין עבור סיכום זה? נמקו את ההכרעה, וציינו מחיר אחד שלה.</p>
+<div class="answer">
+<p><b>ההכרעה בפתרון הבית: כן — הסיכום מיוצג במערכת</b>, כתכונה <code>repairSummary : Text</code> על <code>WorkOrder</code>.</p>
+<p><b>תשובת מודל:</b></p>
+<ol>
+<li><b>הכרעה מפורשת התואמת את התרשים:</b> קיים מאפיין <code>repairSummary</code> על <code>WorkOrder</code>, והוא נכתב במסגרת <b>סימון השלמת הטיפול</b> בתרשים ה-Use Case.</li>
+<li><b>הנימוק:</b> זו <b>דרישה בעייתית</b>. משתמשים נוטים להיצמד לכלים שכבר יש להם — כאן הטלפון — ומבקשים מהמערכת לא לעשות מה שהם רגילים לעשות בעצמם. תפקידו של מנתח המערכות להעביר את התקשורת הזו <b>אל תוך המערכת</b>, שכן מטרת הפרויקט המוצהרת היא <b>שקיפות ומעקב</b>, ותוכן השיחה שאיש אינו רושם הוא בדיוק המידע שאובד היום.</li>
+<li><b>המחיר:</b> זו <b>חריגה מדרישה מפורשת של הלקוח</b>, ולכן אין להכניסה בשקט — יש להציג אותה למנהל הצי ולקבל את אישורו. בנוסף היא מטילה <b>עומס תיעוד נוסף על המכונאי</b>, ואם לא ילווה בהטמעה, שדה הסיכום יתמלא ב"בוצע תיקון" ויאבד את ערכו.</li>
+</ol>
+</div>
+</section>
+<section class="q" id="q8">
+<h2><span class="pts">12 נק׳</span>שאלה 8: תרשים מצבים של קריאת הטיפול</h2>
+
+<p class="qtext">הכינו state diagram עבור המצבים השונים שאובייקט קריאת הטיפול (WorkOrder) יכול להיות בהם, ממועד פתיחת הקריאה ועד לסיום מחזור החיים שלה.</p>
+<h3 class="sub">8.1 (6 נק׳): התרשים</h3>
+<p class="qtext">הכינו state diagram עבור המצבים השונים שאובייקט קריאת הטיפול (WorkOrder) יכול להיות בהם. במידת הצורך, ניתן להשתמש בידע והיגיון לגבי מצבים אפשריים במערכת כזו. התרשים עצמו נבדק בצורה כללית, לבחינת השימוש הנכון בסימונים ובהבנת מהות התרשים.</p>
+<figure class="diagram"><svg id="state0-diagram" viewBox="0 0 1360 1040" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <marker id="state0-arrow-slate" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="#334155"></polygon></marker>
+      <marker id="state0-arrow-blue" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="#334155"></polygon></marker>
+      <marker id="state0-arrow-green" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="#15803d"></polygon></marker>
+      <marker id="state0-arrow-orange" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="#c2410c"></polygon></marker>
+      <marker id="state0-arrow-red" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="#b91c1c"></polygon></marker>
+      <marker id="state0-arrow-purple" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="#7c3aed"></polygon></marker>
+      <marker id="state0-arrow-teal" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="#0891b2"></polygon></marker>
+      <filter id="state0-shadow" x="-5%" y="-5%" width="110%" height="110%"><fedropshadow dx="0" dy="1" stdDeviation="2" flood-opacity="0.12"></fedropshadow></filter>
+      <pattern id="state0-dotgrid" width="24" height="24" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r="0.8" fill="#cbd5e1"></circle></pattern>
+    </defs>
+
+    <rect x="0" y="0" width="1360" height="1040" fill="#f8fafc"></rect>
+    <rect x="0" y="0" width="1360" height="1040" fill="url(#state0-dotgrid)"></rect>
+
+    <g id="state0-composite-preDiag">
+      <rect x="50" y="50" width="340" height="280" rx="20" ry="20" fill="#f0f7ff" stroke="#3b82f6" stroke-width="2" stroke-dasharray="8 4"></rect>
+      <text x="69" y="76" font-size="10.5" font-style="italic" fill="#7c3aed" font-family="IBM Plex Mono">«composite»</text>
+      <text x="69" y="100" font-size="15" font-weight="800" fill="#1e293b" font-family="Noto Sans Hebrew, sans-serif">קריאה טרם אובחנה</text>
+      <line x1="60" y1="110" x2="380" y2="110" stroke="#3b82f6" stroke-width="1"></line>
+      <line x1="60" y1="121" x2="380" y2="121" stroke="#94a3b8" stroke-width="1" stroke-dasharray="6 3"></line>
+    </g>
+
+    <path d="M 210 28 L 210 50" fill="none" stroke="#334155" stroke-width="1.9" marker-end="url(#state0-arrow-slate)"></path>
+    <g font-family="IBM Plex Mono">
+      <rect x="154.9" y="22.0" width="110.1" height="13.5" fill="white" opacity="0.94" rx="3"></rect>
+      <text x="210" y="32" text-anchor="middle" font-size="9.5" fill="#334155">פתיחת קריאת טיפול</text>
+      <rect x="127.7" y="36.0" width="164.6" height="13.5" fill="white" opacity="0.94" rx="3"></rect>
+      <text x="210" y="46" text-anchor="middle" font-size="8.6" fill="#7c3aed">[נהג / נציג מחלקה / שחקן זמן]</text>
+    </g>
+    <path d="M 103 146 L 140 146" fill="none" stroke="#334155" stroke-width="1.9" marker-end="url(#state0-arrow-slate)"></path>
+    <path d="M 255 177 L 255 225" fill="none" stroke="#334155" stroke-width="1.9" marker-end="url(#state0-arrow-slate)"></path>
+    <g font-family="IBM Plex Mono">
+      <rect x="199.9" y="184.0" width="110.1" height="13.5" fill="white" opacity="0.94" rx="3"></rect>
+      <text x="255" y="194" text-anchor="middle" font-size="9.5" fill="#334155">שיבוץ מכונאי מטפל</text>
+      <rect x="220.7" y="198.0" width="68.7" height="13.5" fill="white" opacity="0.94" rx="3"></rect>
+      <text x="255" y="208" text-anchor="middle" font-size="8.6" fill="#7c3aed">[מנהל מוסך]</text>
+    </g>
+    <path d="M 255 287 L 255 390" fill="none" stroke="#0891b2" stroke-width="1.9" marker-end="url(#state0-arrow-teal)"></path>
+    <g font-family="IBM Plex Mono">
+      <rect x="217.6" y="321.5" width="74.8" height="13.5" fill="white" opacity="0.94" rx="3"></rect>
+      <text x="255" y="331.5" text-anchor="middle" font-size="9.5" fill="#0891b2">תחילת אבחון</text>
+      <rect x="228.7" y="335.5" width="52.7" height="13.5" fill="white" opacity="0.94" rx="3"></rect>
+      <text x="255" y="345.5" text-anchor="middle" font-size="8.6" fill="#7c3aed">[מכונאי]</text>
+    </g>
+    <path d="M 390 190 L 850 190" fill="none" stroke="#b91c1c" stroke-width="1.9" marker-end="url(#state0-arrow-red)"></path>
+    <g font-family="IBM Plex Mono">
+      <rect x="579.7" y="166.0" width="80.7" height="13.5" fill="white" opacity="0.94" rx="3"></rect>
+      <text x="620" y="176" text-anchor="middle" font-size="9.5" fill="#b91c1c">ביטול הקריאה</text>
+      <rect x="571.4" y="180.0" width="97.3" height="13.5" fill="white" opacity="0.94" rx="3"></rect>
+      <text x="620" y="190" text-anchor="middle" font-size="8.8" fill="#0891b2">[טרם החל האבחון]</text>
+      <rect x="567.0" y="194.0" width="106.0" height="13.5" fill="white" opacity="0.94" rx="3"></rect>
+      <text x="620" y="204" text-anchor="middle" font-size="8.6" fill="#7c3aed">[נהג / נציג מחלקה]</text>
+    </g>
+    <path d="M 370 421 L 470 421" fill="none" stroke="#c2410c" stroke-width="1.9" marker-end="url(#state0-arrow-orange)"></path>
+    <g font-family="IBM Plex Mono">
+      <rect x="370.8" y="397.0" width="98.3" height="13.5" fill="white" opacity="0.94" rx="3"></rect>
+      <text x="420" y="407" text-anchor="middle" font-size="9.5" fill="#c2410c">רישום דוח אבחון</text>
+      <rect x="344.1" y="411.0" width="151.9" height="13.5" fill="white" opacity="0.94" rx="3"></rect>
+      <text x="420" y="421" text-anchor="middle" font-size="8.8" fill="#0891b2">[העלות המשוערת חורגת מהסף]</text>
+      <rect x="393.7" y="425.0" width="52.7" height="13.5" fill="white" opacity="0.94" rx="3"></rect>
+      <text x="420" y="435" text-anchor="middle" font-size="8.6" fill="#7c3aed">[מכונאי]</text>
+    </g>
+    <path d="M 300 468 L 300 575 L 470 575" fill="none" stroke="#0891b2" stroke-width="1.9" marker-end="url(#state0-arrow-teal)"></path>
+    <g font-family="IBM Plex Mono">
+      <rect x="335.8" y="551.0" width="98.3" height="13.5" fill="white" opacity="0.94" rx="3"></rect>
+      <text x="385" y="561" text-anchor="middle" font-size="9.5" fill="#0891b2">רישום דוח אבחון</text>
+      <rect x="295.4" y="565.0" width="179.1" height="13.5" fill="white" opacity="0.94" rx="3"></rect>
+      <text x="385" y="575" text-anchor="middle" font-size="8.8" fill="#0891b2">[העלות המשוערת אינה חורגת מהסף]</text>
+      <rect x="358.7" y="579.0" width="52.7" height="13.5" fill="white" opacity="0.94" rx="3"></rect>
+      <text x="385" y="589" text-anchor="middle" font-size="8.6" fill="#7c3aed">[מכונאי]</text>
+    </g>
+    <path d="M 595 452 L 595 560" fill="none" stroke="#15803d" stroke-width="1.9" marker-end="url(#state0-arrow-green)"></path>
+    <g font-family="IBM Plex Mono">
+      <rect x="554.7" y="489.0" width="80.7" height="13.5" fill="white" opacity="0.94" rx="3"></rect>
+      <text x="595" y="499" text-anchor="middle" font-size="9.5" fill="#15803d">אישור הקריאה</text>
+      <rect x="566.0" y="503.0" width="58.0" height="13.5" fill="white" opacity="0.94" rx="3"></rect>
+      <text x="595" y="513" text-anchor="middle" font-size="8.6" fill="#7c3aed">[מנהל צי]</text>
+    </g>
+    <path d="M 720 421 L 850 421" fill="none" stroke="#c2410c" stroke-width="1.9" marker-end="url(#state0-arrow-orange)"></path>
+    <g font-family="IBM Plex Mono">
+      <rect x="744.7" y="404.0" width="80.7" height="13.5" fill="white" opacity="0.94" rx="3"></rect>
+      <text x="785" y="414" text-anchor="middle" font-size="9.5" fill="#c2410c">דחיית הקריאה</text>
+      <rect x="756.0" y="418.0" width="58.0" height="13.5" fill="white" opacity="0.94" rx="3"></rect>
+      <text x="785" y="428" text-anchor="middle" font-size="8.6" fill="#7c3aed">[מנהל צי]</text>
+    </g>
+    <path d="M 595 622 L 595 720" fill="none" stroke="#c2410c" stroke-width="1.9" marker-end="url(#state0-arrow-orange)"></path>
+    <g font-family="IBM Plex Mono">
+      <rect x="545.8" y="654.0" width="98.3" height="13.5" fill="white" opacity="0.94" rx="3"></rect>
+      <text x="595" y="664" text-anchor="middle" font-size="9.5" fill="#c2410c">דיווח חוסר בחלק</text>
+      <rect x="568.7" y="668.0" width="52.7" height="13.5" fill="white" opacity="0.94" rx="3"></rect>
+      <text x="595" y="678" text-anchor="middle" font-size="8.6" fill="#7c3aed">[מכונאי]</text>
+    </g>
+    <path d="M 680 720 L 770 720 L 770 622 L 680 622" fill="none" stroke="#0891b2" stroke-width="1.9" marker-end="url(#state0-arrow-teal)"></path>
+    <g font-family="IBM Plex Mono">
+      <rect x="700.2" y="647.0" width="139.6" height="13.5" fill="white" opacity="0.94" rx="3"></rect>
+      <text x="770" y="657" text-anchor="middle" font-size="9.5" fill="#0891b2">החלק נקלט במחסן ושוחרר</text>
+      <rect x="735.7" y="661.0" width="68.7" height="13.5" fill="white" opacity="0.94" rx="3"></rect>
+      <text x="770" y="671" text-anchor="middle" font-size="8.6" fill="#7c3aed">[פקיד מחסן]</text>
+      <rect x="655.6" y="675.0" width="228.7" height="13.5" fill="white" opacity="0.94" rx="3"></rect>
+      <text x="770" y="685" text-anchor="middle" font-size="8.4" fill="#64748b">מעבר חוזר, ניתן לעבור בו שוב בכל חוסר נוסף</text>
+    </g>
+    <path d="M 720 600 L 790 600 L 790 225 L 850 225" fill="none" stroke="#b91c1c" stroke-width="1.9" marker-end="url(#state0-arrow-red)"></path>
+    <g font-family="IBM Plex Mono">
+      <rect x="749.7" y="388.5" width="80.7" height="13.5" fill="white" opacity="0.94" rx="3"></rect>
+      <text x="790" y="398.5" text-anchor="middle" font-size="9.5" fill="#b91c1c">ביטול הקריאה</text>
+      <rect x="708.6" y="402.5" width="162.8" height="13.5" fill="white" opacity="0.94" rx="3"></rect>
+      <text x="790" y="412.5" text-anchor="middle" font-size="8.8" fill="#0891b2">[הרשאה גורפת, ללא הגבלת שלב]</text>
+      <rect x="761.0" y="416.5" width="58.0" height="13.5" fill="white" opacity="0.94" rx="3"></rect>
+      <text x="790" y="426.5" text-anchor="middle" font-size="8.6" fill="#7c3aed">[מנהל צי]</text>
+    </g>
+    <path d="M 470 605 L 420 605 L 420 919 L 470 919" fill="none" stroke="#7c3aed" stroke-width="1.9" marker-end="url(#state0-arrow-purple)"></path>
+    <g font-family="IBM Plex Mono">
+      <rect x="362.0" y="745.0" width="116.0" height="13.5" fill="white" opacity="0.94" rx="3"></rect>
+      <text x="420" y="755" text-anchor="middle" font-size="9.5" fill="#7c3aed">סימון השלמת הטיפול</text>
+      <rect x="393.7" y="759.0" width="52.7" height="13.5" fill="white" opacity="0.94" rx="3"></rect>
+      <text x="420" y="769" text-anchor="middle" font-size="8.6" fill="#7c3aed">[מכונאי]</text>
+    </g>
+    <path d="M 720 919 L 790 919 L 790 651 L 850 651" fill="none" stroke="#334155" stroke-width="1.9" marker-end="url(#state0-arrow-slate)"></path>
+    <g font-family="IBM Plex Mono">
+      <rect x="734.9" y="761.0" width="110.1" height="13.5" fill="white" opacity="0.94" rx="3"></rect>
+      <text x="790" y="771" text-anchor="middle" font-size="9.5" fill="#334155">החזרת הרכב לשירות</text>
+      <rect x="735.9" y="775.0" width="108.2" height="13.5" fill="white" opacity="0.94" rx="3"></rect>
+      <text x="790" y="785" text-anchor="middle" font-size="8.8" fill="#15803d" style="direction:ltr;unicode-bidi:isolate">/ closeWorkOrder()</text>
+      <rect x="761.0" y="789.0" width="58.0" height="13.5" fill="white" opacity="0.94" rx="3"></rect>
+      <text x="790" y="799" text-anchor="middle" font-size="8.6" fill="#7c3aed">[מנהל צי]</text>
+    </g>
+    <path d="M 975 452 L 975 620" fill="none" stroke="#334155" stroke-width="1.9" marker-end="url(#state0-arrow-slate)"></path>
+    <g font-family="IBM Plex Mono">
+      <rect x="934.7" y="519.0" width="80.7" height="13.5" fill="white" opacity="0.94" rx="3"></rect>
+      <text x="975" y="529" text-anchor="middle" font-size="9.5" fill="#334155">סגירת הקריאה</text>
+      <rect x="873.7" y="533.0" width="202.7" height="13.5" fill="white" opacity="0.94" rx="3"></rect>
+      <text x="975" y="543" text-anchor="middle" font-size="8.4" fill="#64748b">הטיפול לא בוצע, אך הדחייה עצמה מתועדת</text>
+    </g>
+    <path d="M 1100 210 L 1180 210 L 1180 651 L 1130 651" fill="none" stroke="#334155" stroke-width="1.9" marker-end="url(#state0-arrow-slate)"></path>
+    <g font-family="IBM Plex Mono">
+      <rect x="1139.7" y="420.5" width="80.7" height="13.5" fill="white" opacity="0.94" rx="3"></rect>
+      <text x="1180" y="430.5" text-anchor="middle" font-size="9.5" fill="#334155">סגירת הקריאה</text>
+    </g>
+    <path d="M 990 682 L 990 788" fill="none" stroke="#334155" stroke-width="1.9" marker-end="url(#state0-arrow-slate)"></path>
+    <g font-family="IBM Plex Mono">
+      <rect x="946.7" y="711.0" width="86.6" height="13.5" fill="white" opacity="0.94" rx="3"></rect>
+      <text x="990" y="721" text-anchor="middle" font-size="9.5" fill="#334155">after(7 שנים)</text>
+      <rect x="870.4" y="725.0" width="239.2" height="13.5" fill="white" opacity="0.94" rx="3"></rect>
+      <text x="990" y="735" text-anchor="middle" font-size="8.8" fill="#0891b2">[הרכב נגרע מהצי ואין בקרה או מחלוקת פתוחה]</text>
+      <rect x="960.4" y="739.0" width="59.1" height="13.5" fill="white" opacity="0.94" rx="3"></rect>
+      <text x="990" y="749" text-anchor="middle" font-size="8.8" fill="#15803d" style="direction:ltr;unicode-bidi:isolate">/ purge()</text>
+    </g>
+
+    <g id="state0-state-opened" filter="url(#state0-shadow)">
+      <rect x="140" y="115" width="230" height="62" rx="18" ry="18" fill="#ffffff" stroke="#3b82f6" stroke-width="2"></rect>
+      <rect x="140" y="115" width="230" height="27" rx="18" ry="18" fill="#eef4ff"></rect>
+      <rect x="140" y="130" width="230" height="12" fill="#eef4ff"></rect>
+      <text x="255" y="134" text-anchor="middle" font-size="13" font-weight="700" fill="#1e293b" font-family="Noto Sans Hebrew, sans-serif">קריאה נפתחה</text>
+      <line x1="140" y1="142" x2="370" y2="142" stroke="#3b82f6" stroke-width="1"></line>
+      <text x="150" y="161" font-size="9.3" font-style="italic" fill="#1e293b" font-family="IBM Plex Mono" style="direction:ltr;unicode-bidi:isolate">entry / setStatus('Opened')</text>
+    </g>
+    <g id="state0-state-assigned" filter="url(#state0-shadow)">
+      <rect x="140" y="225" width="230" height="62" rx="18" ry="18" fill="#ffffff" stroke="#3b82f6" stroke-width="2"></rect>
+      <rect x="140" y="225" width="230" height="27" rx="18" ry="18" fill="#eef4ff"></rect>
+      <rect x="140" y="240" width="230" height="12" fill="#eef4ff"></rect>
+      <text x="255" y="244" text-anchor="middle" font-size="13" font-weight="700" fill="#1e293b" font-family="Noto Sans Hebrew, sans-serif">קריאה שובצה למכונאי</text>
+      <line x1="140" y1="252" x2="370" y2="252" stroke="#3b82f6" stroke-width="1"></line>
+      <text x="150" y="271" font-size="9.3" font-style="italic" fill="#1e293b" font-family="IBM Plex Mono" style="direction:ltr;unicode-bidi:isolate">entry / setStatus('Assigned')</text>
+    </g>
+    <g id="state0-state-inDiagnosis" filter="url(#state0-shadow)">
+      <rect x="140" y="390" width="230" height="78" rx="18" ry="18" fill="#ecfeff" stroke="#0891b2" stroke-width="2"></rect>
+      <rect x="140" y="390" width="230" height="27" rx="18" ry="18" fill="#cffafe"></rect>
+      <rect x="140" y="405" width="230" height="12" fill="#cffafe"></rect>
+      <text x="255" y="409" text-anchor="middle" font-size="13" font-weight="700" fill="#164e63" font-family="Noto Sans Hebrew, sans-serif">קריאה באבחון</text>
+      <line x1="140" y1="417" x2="370" y2="417" stroke="#0891b2" stroke-width="1"></line>
+      <text x="150" y="436" font-size="9.3" font-style="italic" fill="#164e63" font-family="IBM Plex Mono" style="direction:ltr;unicode-bidi:isolate">entry / setStatus('InDiagnosis')</text>
+      <text x="150" y="452" font-size="9.3" font-style="italic" fill="#164e63" font-family="IBM Plex Mono" style="direction:ltr;unicode-bidi:isolate">do / recordFindingsAndEstimate()</text>
+    </g>
+    <g id="state0-state-waitingApproval" filter="url(#state0-shadow)">
+      <rect x="470" y="390" width="250" height="62" rx="18" ry="18" fill="#fff7ed" stroke="#c2410c" stroke-width="2"></rect>
+      <rect x="470" y="390" width="250" height="27" rx="18" ry="18" fill="#ffedd5"></rect>
+      <rect x="470" y="405" width="250" height="12" fill="#ffedd5"></rect>
+      <text x="595" y="409" text-anchor="middle" font-size="13" font-weight="700" fill="#7c2d12" font-family="Noto Sans Hebrew, sans-serif">קריאה ממתינה לאישור</text>
+      <line x1="470" y1="417" x2="720" y2="417" stroke="#c2410c" stroke-width="1"></line>
+      <text x="480" y="436" font-size="8.4" font-style="italic" fill="#7c2d12" font-family="IBM Plex Mono" style="direction:ltr;unicode-bidi:isolate">entry / setStatus('WaitingApproval')</text>
+    </g>
+    <g id="state0-state-inService" filter="url(#state0-shadow)">
+      <rect x="470" y="560" width="250" height="62" rx="18" ry="18" fill="#ecfeff" stroke="#0891b2" stroke-width="2"></rect>
+      <rect x="470" y="560" width="250" height="27" rx="18" ry="18" fill="#cffafe"></rect>
+      <rect x="470" y="575" width="250" height="12" fill="#cffafe"></rect>
+      <text x="595" y="579" text-anchor="middle" font-size="13" font-weight="700" fill="#164e63" font-family="Noto Sans Hebrew, sans-serif">קריאה בטיפול</text>
+      <line x1="470" y1="587" x2="720" y2="587" stroke="#0891b2" stroke-width="1"></line>
+      <text x="480" y="606" font-size="9.3" font-style="italic" fill="#164e63" font-family="IBM Plex Mono" style="direction:ltr;unicode-bidi:isolate">entry / setStatus('InService')</text>
+    </g>
+    <g id="state0-state-waitingParts" filter="url(#state0-shadow)">
+      <rect x="470" y="720" width="250" height="62" rx="18" ry="18" fill="#fff7ed" stroke="#c2410c" stroke-width="2"></rect>
+      <rect x="470" y="720" width="250" height="27" rx="18" ry="18" fill="#ffedd5"></rect>
+      <rect x="470" y="735" width="250" height="12" fill="#ffedd5"></rect>
+      <text x="595" y="739" text-anchor="middle" font-size="13" font-weight="700" fill="#7c2d12" font-family="Noto Sans Hebrew, sans-serif">קריאה ממתינה לחלקים</text>
+      <line x1="470" y1="747" x2="720" y2="747" stroke="#c2410c" stroke-width="1"></line>
+      <text x="480" y="766" font-size="8.4" font-style="italic" fill="#7c2d12" font-family="IBM Plex Mono" style="direction:ltr;unicode-bidi:isolate">entry / setStatus('WaitingForParts')</text>
+    </g>
+    <g id="state0-state-completed" filter="url(#state0-shadow)">
+      <rect x="470" y="880" width="250" height="62" rx="18" ry="18" fill="#faf5ff" stroke="#7c3aed" stroke-width="2"></rect>
+      <rect x="470" y="880" width="250" height="27" rx="18" ry="18" fill="#f3e8ff"></rect>
+      <rect x="470" y="895" width="250" height="12" fill="#f3e8ff"></rect>
+      <text x="595" y="899" text-anchor="middle" font-size="13" font-weight="700" fill="#4c1d95" font-family="Noto Sans Hebrew, sans-serif">קריאה הושלמה</text>
+      <line x1="470" y1="907" x2="720" y2="907" stroke="#7c3aed" stroke-width="1"></line>
+      <text x="480" y="926" font-size="9.3" font-style="italic" fill="#4c1d95" font-family="IBM Plex Mono" style="direction:ltr;unicode-bidi:isolate">entry / closeAsCompleted()</text>
+    </g>
+    <g id="state0-state-rejected" filter="url(#state0-shadow)">
+      <rect x="850" y="390" width="250" height="62" rx="18" ry="18" fill="#fff7ed" stroke="#c2410c" stroke-width="2"></rect>
+      <rect x="850" y="390" width="250" height="27" rx="18" ry="18" fill="#ffedd5"></rect>
+      <rect x="850" y="405" width="250" height="12" fill="#ffedd5"></rect>
+      <text x="975" y="409" text-anchor="middle" font-size="13" font-weight="700" fill="#7c2d12" font-family="Noto Sans Hebrew, sans-serif">קריאה נדחתה</text>
+      <line x1="850" y1="417" x2="1100" y2="417" stroke="#c2410c" stroke-width="1"></line>
+      <text x="860" y="436" font-size="9.3" font-style="italic" fill="#7c2d12" font-family="IBM Plex Mono" style="direction:ltr;unicode-bidi:isolate">entry / closeAsRejected()</text>
+    </g>
+    <g id="state0-state-cancelled" filter="url(#state0-shadow)">
+      <rect x="850" y="170" width="250" height="62" rx="18" ry="18" fill="#fef2f2" stroke="#b91c1c" stroke-width="2"></rect>
+      <rect x="850" y="170" width="250" height="27" rx="18" ry="18" fill="#fee2e2"></rect>
+      <rect x="850" y="185" width="250" height="12" fill="#fee2e2"></rect>
+      <text x="975" y="189" text-anchor="middle" font-size="13" font-weight="700" fill="#7f1d1d" font-family="Noto Sans Hebrew, sans-serif">קריאה בוטלה</text>
+      <line x1="850" y1="197" x2="1100" y2="197" stroke="#b91c1c" stroke-width="1"></line>
+      <text x="860" y="216" font-size="9.3" font-style="italic" fill="#7f1d1d" font-family="IBM Plex Mono" style="direction:ltr;unicode-bidi:isolate">entry / closeAsCancelled()</text>
+    </g>
+    <g id="state0-state-archive" filter="url(#state0-shadow)">
+      <rect x="850" y="620" width="280" height="62" rx="18" ry="18" fill="#ffffff" stroke="#475569" stroke-width="2"></rect>
+      <rect x="850" y="620" width="280" height="27" rx="18" ry="18" fill="#f1f5f9"></rect>
+      <rect x="850" y="635" width="280" height="12" fill="#f1f5f9"></rect>
+      <text x="990" y="639" text-anchor="middle" font-size="13" font-weight="700" fill="#1e293b" font-family="Noto Sans Hebrew, sans-serif">קריאה בארכיון הטיפולים</text>
+      <line x1="850" y1="647" x2="1130" y2="647" stroke="#475569" stroke-width="1"></line>
+      <text x="860" y="666" font-size="9.3" font-style="italic" fill="#1e293b" font-family="IBM Plex Mono" style="direction:ltr;unicode-bidi:isolate">entry / setStatus('Archived')</text>
+    </g>
+
+    <circle id="state0-pseudo-i1" cx="210" cy="20" r="8" fill="#1e293b"></circle>
+    <circle id="state0-pseudo-i2" cx="95" cy="146" r="8" fill="#1e293b"></circle>
+    <g id="state0-pseudo-fin"><circle cx="990" cy="800" r="12" fill="none" stroke="#1e293b" stroke-width="2"></circle><circle cx="990" cy="800" r="7" fill="#1e293b"></circle></g>
+
+      <text x="20" y="980" font-size="10" fill="#64748b" font-family="Noto Sans Hebrew, sans-serif">כל חץ נושא: אירוע [תנאי] / פעולה, ובסוגריים מרובעים סגולים, בעל התפקיד הרשאי להפעילו.</text>
+      <text x="20" y="995" font-size="10" fill="#64748b" font-family="Noto Sans Hebrew, sans-serif">מצב-העל "קריאה טרם אובחנה" מקבץ את המצבים שמהם נהג רשאי לבטל. מעבר היוצא מגבול מצב-העל חל על כל המצבים שבתוכו.</text>
+      <text x="20" y="1010" font-size="10" fill="#64748b" font-family="Noto Sans Hebrew, sans-serif">ארכיון אינו מצב סיום. מצב הסיום (◎) פירושו שרשומת הקריאה נגרעה מהמערכת בתום תקופת השמירה.</text>
+      <text x="20" y="1025" font-size="10" fill="#64748b" font-family="Noto Sans Hebrew, sans-serif">מצבי הרכב עצמו ("מושבת" / "בשירות") אינם מצבים של הקריאה ואינם מופיעים כאן.</text>
+      <text x="20" y="1040" font-size="10" fill="#64748b" font-family="Noto Sans Hebrew, sans-serif">לכל מצב פעולת כניסה אחת בלבד. מצב שצריך יותר מ-setStatus מקבל שיטת עטיפה אחת (למשל closeAs…), ובגופה setStatus והפעולות הנוספות. שם העטיפה נושא את ערך ה-status (closeAsRejected ⇐ setStatus('Rejected')).</text>
+  </svg>
+<figcaption>פתרון לדוגמה: מצב-העל "קריאה טרם אובחנה" מקבץ את המצבים שמהם נהג רשאי לבטל, כך שמעבר הביטול יוצא מגבולו בחץ אחד; לצדו מעבר ביטול נוסף של מנהל הצי היוצא ממצב מאוחר. שימו לב למעגל "בטיפול ↔ ממתינה לחלקים" שניתן לעבור בו כמה פעמים, ולזנב ארכיון ← מצב סיום בתום תקופת השמירה.</figcaption>
+</figure>
+<p class="scrollhint">↔ התרשים רחב מן העמוד, ניתן לגלול אותו לצדדים.</p>
+<p class="difflink"><a href="diagrams/state-solution.html" target="_blank" rel="noopener">↗ פתחו את תרשים המצבים המלא</a><small>עמוד נפרד, ניתן להגדלה ולהדפסה</small></p>
+<div class="answer">
+<p><b>המצבים (10) ומצב-על אחד:</b></p>
+<div class="tablewrap"><table>
+<thead><tr><th>מצב</th><th>נכנסים אליו</th><th>יוצאים ממנו</th></tr></thead>
+<tbody>
+<tr><td><b>קריאה נפתחה</b></td><td>פתיחת הקריאה (נהג / נציג מחלקה / שחקן זמן)</td><td>שיבוץ מכונאי מטפל [מנהל מוסך]</td></tr>
+<tr><td><b>קריאה שובצה למכונאי</b></td><td>שיבוץ</td><td>תחילת אבחון [מכונאי]</td></tr>
+<tr><td><b>מצב-על: קריאה טרם אובחנה</b> (מכיל את שני המצבים שלמעלה)</td><td>—</td><td>ביטול הקריאה [נהג / נציג מחלקה]</td></tr>
+<tr><td><b>קריאה באבחון</b></td><td>תחילת אבחון</td><td>רישום דוח אבחון [מכונאי] — מסתעף לפי הסף</td></tr>
+<tr><td><b>קריאה ממתינה לאישור</b></td><td>רישום דוח אבחון <code>[העלות המשוערת חורגת מהסף]</code></td><td>אישור [מנהל צי] / דחייה [מנהל צי]</td></tr>
+<tr><td><b>קריאה בטיפול</b></td><td>רישום דוח אבחון <code>[אינה חורגת מהסף]</code> · אישור מנהל הצי · שחרור החלק</td><td>דיווח חוסר בחלק · סימון השלמה · ביטול [מנהל צי]</td></tr>
+<tr><td><b>קריאה ממתינה לחלקים</b></td><td>דיווח חוסר בחלק [מכונאי]</td><td>החלק נקלט במחסן ושוחרר [פקיד מחסן] → <b>חזרה ל"קריאה בטיפול"</b></td></tr>
+<tr><td><b>קריאה נדחתה</b></td><td>דחיית הקריאה [מנהל צי]</td><td>סגירת הקריאה → ארכיון</td></tr>
+<tr><td><b>קריאה בוטלה</b></td><td>ביטול [נהג, לפני אבחון] · ביטול [מנהל צי, בכל שלב]</td><td>סגירת הקריאה → ארכיון</td></tr>
+<tr><td><b>קריאה הושלמה</b></td><td>סימון השלמת הטיפול [מכונאי]</td><td>החזרת הרכב לשירות [מנהל צי] → ארכיון</td></tr>
+<tr><td><b>קריאה בארכיון הטיפולים</b></td><td>סגירה מכל אחד ממצבי התוצאה</td><td><code>after(7 שנים)</code> <code>[הרכב נגרע מהצי ואין בקרה או מחלוקת פתוחה]</code> / purge() → <b>◎</b></td></tr>
+</tbody></table></div>
+<p><b>מצב סיום אחד (◎)</b>, ומגיעים אליו רק מן הארכיון ורק בתום תקופת השמירה.</p>
+</div>
+<div class="mistake">
+<p><b>מוריד נקודות:</b> מצבים של ה<b>רכב</b> ("מושבת", "בשירות") שהוצגו כמצבי הקריאה — ההורדה נעשית <b>כאן בלבד</b>, ואין להוריד עליה שוב ב-8.4 · מעברים ללא אירוע · תרשים זרימה מחופש למצבים (מצב נפרד לכל סבב) · היעדר מצב סיום.</p>
+</div>
+<div class="alt">
+<p><b>וריאנטים מקובלים במלואם:</b> ללא המצב "קריאה שובצה למכונאי" (השיבוץ כפעולה בתוך "נפתחה") · ללא מצב-על, כשההגבלה על הביטול מבוטאת בתנאי על המעבר · מיזוג "נדחתה" ו"בוטלה" למצב תוצאה אחד עם <code>closureReason</code> מבחין · מעבר ישיר מ"הושלמה" אל ◎ המתויג בתקופת שמירה קונקרטית, ללא מצב ארכיון נפרד.</p>
+</div>
+<h3 class="sub">8.2 (2 נק׳): ההגבלה על הביטול בידי הנהג</h3>
+<p class="qtext">נהג רשאי לבטל קריאה שפתח כל עוד לא החל האבחון, ואילו מנהל הצי רשאי לבצע כל שינוי סטטוס בכל שלב. כיצד ייצגתם בתרשים שלכם את ההגבלה החלה על הביטול בידי הנהג, ובמה היא נבדלת מהאפשרות הנתונה למנהל הצי?</p>
+<div class="answer">
+<p><b>תשובת מודל:</b></p>
+<ol>
+<li>מעבר הביטול של הנהג יוצא <b>רק מהמצבים שלפני תחילת האבחון</b> — בתרשים הוא יוצא מגבול <b>מצב-העל "קריאה טרם אובחנה"</b>, המקבץ את "קריאה נפתחה" ו"קריאה שובצה למכונאי" — והוא מתויג באירוע, בתנאי ובשם המבצע: <code>ביטול הקריאה [טרם החל האבחון] [נהג / נציג מחלקה]</code>. מרגע שהקריאה עברה ל"קריאה באבחון" היא כבר מחוץ למצב-העל, ולכן אין לנהג מעבר לבצע.</li>
+<li><b>ההבדל ממנהל הצי מיוצג בתרשים עצמו:</b> למנהל הצי יש מעבר ביטול <b>נוסף, היוצא ממצב מאוחר יותר</b> — "קריאה בטיפול" — המתויג <code>ביטול הקריאה [הרשאה גורפת, ללא הגבלת שלב] [מנהל צי]</code>. כלומר ההגבלה על מצב המקור חלה על הנהג ואינה חלה עליו; ההרשאה נגזרת מן התפקיד ולא מן השלב.</li>
+</ol>
+</div>
+<div class="alt">
+<p><b>חלופה מזכה במלואה:</b> מעבר יחיד המתויג באופן חד-משמעי <code>ביטול [נהג: לפני אבחון / מנהל צי: בכל שלב]</code>, ובלבד שהתיוג קריא. מזכה גם: מעבר ביטול היוצא מהמצב "קריאה נפתחה" בלבד ומתויג בתנאי, ללא מצב-על.</p>
+</div>
+<div class="mistake">
+<p><b>הסתירה:</b> מעבר ביטול יחיד מכל מצב וללא תנאי או שם מבצע — לפי התרשים נהג רשאי לבטל קריאה שכבר בטיפול, בסתירה לנתון · היעדר מעבר ביטול כלל.</p>
+</div>
+<div class="alt">
+<p><b>אין לדרוש</b> את המונח "guard"; תיאור התנאי במילים מזכה במלואו. אין לדרוש מצב-על.</p>
+</div>
+<h3 class="sub">8.3 (2 נק׳): ההמתנה לחלקים והחזרה עליה</h3>
+<p class="qtext">כאשר מתגלה חוסר בחלק, הקריאה ממתינה עד שהחלק זמין ואז הטיפול נמשך; ייתכן שבאותה קריאה יתגלה חוסר יותר מפעם אחת. כיצד ייצגתם בתרשים שלכם את ההמתנה ואת האפשרות שהיא תחזור על עצמה?</p>
+<div class="answer">
+<p><b>תשובת מודל:</b></p>
+<ol>
+<li>יש <b>מצב ייעודי אחד — "קריאה ממתינה לחלקים"</b> — שאליו עוברים מ"קריאה בטיפול" באירוע <code>דיווח חוסר בחלק [מכונאי]</code>.</li>
+<li>ממנו יוצא <b>מעבר חוזר</b> אל "קריאה בטיפול" באירוע <code>החלק נקלט במחסן ושוחרר [פקיד מחסן]</code>. שני המעברים יוצרים <b>מעגל</b>, וניתן לעבור בו כמה פעמים באותה קריאה — ולכן אין צורך במצב חדש לכל סבב המתנה: החזרה על ההמתנה היא <b>מסלול חוזר בתרשים</b>, לא מצבים נוספים.</li>
+</ol>
+</div>
+<div class="mistake">
+<p><b>הסתירה:</b> שרשרת קווית ללא חץ חוזר · מצב נפרד לכל סבב ("המתנה 1", "המתנה 2") — תרשים זרימה מחופש למצבים · מעבר מ"ממתינה לחלקים" ישירות ל"הושלמה", העוקף את המשך הטיפול.</p>
+</div>
+<h3 class="sub">8.4 (2 נק׳): חיי הקריאה לאחר השלמת הטיפול, וקץ מחזור החיים</h3>
+<p class="qtext">לאחר שהמכונאי מסמן שהקריאה הושלמה ומנהל הצי מחזיר את הרכב לשירות, רשומת הקריאה עדיין דרושה להיסטוריית הטיפולים של הרכב ולבקרה. כיצד ייצגתם את שלב חייה של הקריאה שלאחר השלמת הטיפול, ומה מסמן בתרשים את קץ מחזור החיים שלה?</p>
+<div class="answer">
+<p><b>תשובת מודל:</b></p>
+<ol>
+<li><b>הקריאה אינה נעלמת עם השלמת הטיפול.</b> מ"קריאה הושלמה" היא עוברת, באירוע <code>החזרת הרכב לשירות [מנהל צי]</code>, אל מצב <b>"קריאה בארכיון הטיפולים"</b>: הרשומה נשמרת לקריאה בלבד ומשרתת את היסטוריית הטיפולים של הרכב ואת הבקרה. <code>closureReason</code> נשמר עוד בכניסה למצב התוצאה, כי הכניסה לארכיון דורסת את <code>status</code>.</li>
+<li>קץ מחזור החיים מסומן ב<b>מצב הסיום (◎)</b>, ומגיעים אליו רק בתום תקופת השמירה: <code>after(7 שנים) [הרכב נגרע מהצי ואין בקרה או מחלוקת פתוחה] / purge()</code>. מצב הסיום פירושו שרשומת הקריאה <b>חדלה להתקיים במערכת</b> — ולא ש"התהליך הסתיים". "הושלמה" היא <b>תוצאה</b>, לא סוף חיים.</li>
+</ol>
+</div>
+<div class="alt">
+<p><b>חלופה מזכה במלואה:</b> מעבר ישיר מ"הושלמה" אל מצב הסיום המתויג בתקופת שמירה קונקרטית, ללא מצב ארכיון נפרד.</p>
+</div>
+<div class="mistake">
+<p><b>הסתירה:</b> אין מצב סיום כלל — מחזור חיים שאינו נגמר (0–1 נק׳) · מעבר ל-◎ <b>מיד</b> עם השלמת הטיפול — סותר את הצורך בהיסטוריה שנאמר בשאלה עצמה (1 נק׳ לכל היותר).</p>
+</div>
+<div class="alt">
+<p><b>הערת מנקד:</b> החזרת הרכב לשירות היא <b>אירוע על הקריאה</b> (סגירתה). מצבים של הרכב עצמו ("מושבת" / "בשירות") אינם מצבים של הקריאה; אם הופיעו כמצבי הקריאה, ההורדה נעשית ב<b>שער 8.1 בלבד</b> ואין להוריד עליה שוב כאן.</p>
+</div>
+</section>
+<section class="q" id="s9">
+<h2>הערות עקביות בין השאלות (למרצה ולבודק)</h2>
+
+<div class="box">
+<p><b>הערה 1 — עובדה אחת נבחנת בשאלה אחת.</b> להלן העובדות המשותפות והשאלה שבה הן מוכרעות.</p>
+<div class="tablewrap"><table>
+<thead><tr><th>עובדה בסיפור</th><th>נבחנת ב</th><th>הרעיון הנבחן</th></tr></thead>
+<tbody>
+<tr><td>פתיחה אוטומטית בהגיע מועד טיפול תקופתי</td><td>6.2</td><td>שחקן שאינו אנושי + תווית תזמון</td></tr>
+<tr><td>הכלל הקובע את מועד הטיפול התקופתי (חסר במכוון)</td><td>5ד</td><td>זיהוי מידע חסר וטיפול מקצועי בו</td></tr>
+<tr><td>רמת מלאי עדכנית בשני מקרים</td><td>6.3</td><td>«include» עם שני בסיסים לפחות</td></tr>
+<tr><td>מעקב כרטיסי דלק</td><td>6.4</td><td>תיחום היקף</td></tr>
+<tr><td>כמות חלקים + מחיר בעת השימוש</td><td>7.2</td><td>קידום נתון-צמד למחלקת קשר</td></tr>
+<tr><td>רכב מול קריאות לאורך חייו</td><td>7.3</td><td>קרדינליות ומשמעותה העסקית</td></tr>
+<tr><td>סוג טיפול מול תחום התמחות</td><td>7.4</td><td>enum מול מחלקה + מוסכמת החיבור</td></tr>
+<tr><td>סיכום תיקון שאינו נשמר</td><td>7.5</td><td>דרישה בעייתית + מחיר</td></tr>
+<tr><td>ביטול בידי נהג מול מנהל הצי</td><td>8.2</td><td>מעבר מוגבל במצב ובשחקן</td></tr>
+<tr><td>חוסר חלק חוזר</td><td>8.3</td><td>מעגל במחזור החיים</td></tr>
+<tr><td>שמירת הרשומה לאחר סיום הטיפול</td><td>8.4</td><td>מצב סיום = הרשומה מוסרת</td></tr>
+</tbody></table></div>
+</div>
+<div class="box">
+<p><b>הערה 2 — שתי הבקשות של מנהל הצי, ומדוע ההכרעה בהן שונה.</b> לכאורה יש כאן חוסר עקביות: ב-6.4 אנחנו מקבלים את גבול ההיקף שהלקוח קבע ודוחים את מעקב הדלק, וב-7.5 אנחנו חורגים מבקשתו ושומרים את סיכום התיקון. ההבחנה עקרונית ושווה להסבירה לסטודנטים: <b>גבולות ההיקף הם של הלקוח</b> — הוא זה שקובע אילו תחומים עסקיים המערכת מכסה, ומעקב תדלוק הוא תחום נוסף (הסיפור אף מוציא במפורש תשלומים וחיובים). לעומת זאת <b>איכות התיעוד בתוך ההיקף היא של המנתח</b> — ברגע שניהול קריאות הטיפול נמצא בהיקף, ומטרת המערכת המוצהרת היא שקיפות ומעקב, המלצה למחוק דווקא את המידע שמתאר מה בוצע בפועל היא דרישה בעייתית שיש להתעמת איתה. <b>שתי ההכרעות ההפוכות מזכות בניקוד מלא בכל אחת מהשאלות, כשהן מנומקות ומצוין מחירן</b> — אין לצפות מהסטודנט לאותה הכרעה שבפתרון כאן.</p>
+</div>
+<div class="box">
+<p><b>הערה 3 — הרשאתו הגורפת של מנהל הצי.</b> בתרשים ה-Use Case היא מיוצגת ככלל הרשאות בתוך מקרי השימוש הקיימים ולא כ-Use Case נוסף, ובתרשים המצבים היא מיוצגת במפורש כמעבר ביטול היוצא גם ממצב מאוחר. שני הייצוגים משלימים ואינם סותרים. סטודנט שקשר את מנהל הצי גם ל-Use Case "ביטול קריאת טיפול" נתן תשובה תקינה לא פחות.</p>
+</div>
+</section>
+<section class="q" id="s10">
+<h2>נספח: פירוט הניקוד (100 נק׳)</h2>
+
+<div class="tablewrap"><table>
+<thead><tr><th>שאלה</th><th>תת-שאלה</th><th>נק׳</th><th>מה נדרש</th></tr></thead>
+<tbody>
+<tr><td><b>1</b></td><td>1.1 שער BPMN</td><td>6</td><td>תרשים תקין: 2 Pools (אחד ריק), 2 Lanes, 4 שערי XOR, 2 לולאות עם שער מיזוג, 2 אירועי המתנה, Data Store ב-Association, 2 אירועי סיום</td></tr>
+<tr><td></td><td>1.2 Lane = אחריות</td><td>3</td><td>Pool אחד (1) + שני Lanes לפי המבצע (1) + נימוק Lane מול Pool ו-Sequence מול Message (1)</td></tr>
+<tr><td></td><td>1.3 Data Store + Association</td><td>3</td><td>סמל מאגר (1) + Association קריאה <b>וגם</b> כתיבה (1) + ההבחנה מ-Sequence Flow (1)</td></tr>
+<tr><td></td><td>1.4 אירועי סיום מובחנים</td><td>3</td><td>שני הסיומים (1) + End Event נפרד לכל אחד (1) + נימוק תוצאות עסקיות (1)</td></tr>
+<tr><td><b>2</b></td><td>2א שתי שיטות RCA</td><td>4</td><td>2 × (שם 1 + רעיון 1)</td></tr>
+<tr><td></td><td>2ב יישום</td><td>4</td><td>יישום במבנה השיטה (2) + גורם שורש (1) + מדוע שורש ולא תסמין (1)</td></tr>
+<tr><td><b>3</b></td><td>3א שלוש חלופות</td><td>4</td><td>3 חלופות (3) + מאפיין מבחין לכל השלוש (1)</td></tr>
+<tr><td></td><td>3ב השוואה ובחירה</td><td>5</td><td>3 מאפיינים (3) + בחירה מפורשת (1) + נימוק על ≥2 מאפיינים + ויתור (1)</td></tr>
+<tr><td></td><td>3ג התנגשות ישימות</td><td>3</td><td>שני סוגים בשמם (1) + מקרה קונקרטי ומה כל סוג מכתיב (1) + הכרעה שמציינת על מה מוותרים (1)</td></tr>
+<tr><td><b>4</b></td><td>4א Agile טהור</td><td>5</td><td>3 סיבות עם מאפיין + מנגנון (3) + תרחיש כשל קונקרטי לחמורה (2)</td></tr>
+<tr><td></td><td>4ב שילוב מתודולוגיות</td><td>3</td><td>החלטה + שתי מתודולוגיות (1) + הצמדת חלקים (1) + נימוק מאפיין↔עיקרון (1)</td></tr>
+<tr><td><b>5</b></td><td>5א שתי דרישות פונקציונליות</td><td>4</td><td>2 × (תוכן 1 + ניסוח 1)</td></tr>
+<tr><td></td><td>5ב user story</td><td>2</td><td>תבנית מלאה (1) + תוכן (1)</td></tr>
+<tr><td></td><td>5ג דרישה לא-פונקציונלית</td><td>2</td><td>סיווג (1) + מדידות (1)</td></tr>
+<tr><td></td><td>5ד זיהוי מידע חסר</td><td>2</td><td>פריט חסר אמיתי + מדוע (1) + תיעוד כהנחה ואימות מול הלקוח (1)</td></tr>
+<tr><td><b>6</b></td><td>6.1 שער Use Case</td><td>6</td><td>תרשים תקין עם «include» אחד לפחות</td></tr>
+<tr><td></td><td>6.2 שחקן זמן</td><td>3</td><td>שחקן שאינו אנושי (1) + תווית תזמון (1) + נימוק אין יוזם אנושי (1)</td></tr>
+<tr><td></td><td>6.3 «include»</td><td>3</td><td>UC משותף אחד (1) + «include» משני בסיסים בכיוון הנכון (1) + נימוק "תמיד" ומניעת כפילות (1)</td></tr>
+<tr><td></td><td>6.4 כרטיסי דלק</td><td>3</td><td>הכרעה (1) + נימוק (1) + מחיר (1) — <b>שני מסלולים</b></td></tr>
+<tr><td><b>7</b></td><td>7.1 שער מחלקות</td><td>8</td><td>תרשים תקין: enumerator, מאפיינים, קרדינליות בשני הקצוות, ללא מפתחות</td></tr>
+<tr><td></td><td>7.2 כמות ומחיר-בעת-השימוש</td><td>3</td><td>מחלקת קשר (1) + רבים-לרבים (1) + נימוק נתון-הצמד וההיסטוריות (1)</td></tr>
+<tr><td></td><td>7.3 קרדינליות רכב–קריאה</td><td>3</td><td><code>1</code> בצד הרכב (1) + <code>0..*</code> בצד הקריאה (1) + הפרשנות לרכב חדש (1)</td></tr>
+<tr><td></td><td>7.4 enum מול מחלקה</td><td>3</td><td>סוג טיפול = enum (1) + enum אינו מחובר בקו (1) + התמחות = מחלקה ברבים-לרבים (1)</td></tr>
+<tr><td></td><td>7.5 סיכום התיקון</td><td>3</td><td>הכרעה (1) + נימוק (1) + מחיר (1) — <b>שני מסלולים</b></td></tr>
+<tr><td><b>8</b></td><td>8.1 שער מצבים</td><td>6</td><td>תרשים תקין: מצבים ולא שלבים, אירועים על המעברים, מעגל, מצב סיום</td></tr>
+<tr><td></td><td>8.2 הגבלת הביטול</td><td>2</td><td>מעבר ממצבי טרום-אבחון עם מבצע/תנאי (1) + מעבר נוסף ממצב מאוחר למנהל הצי (1)</td></tr>
+<tr><td></td><td>8.3 המתנה חוזרת</td><td>2</td><td>מצב ייעודי אחד (1) + מעבר חוזר היוצר מעגל (1)</td></tr>
+<tr><td></td><td>8.4 קץ מחזור החיים</td><td>2</td><td>הרשומה נשמרת (ארכיון) (1) + מצב סיום בתום תקופת שמירה קונקרטית (1)</td></tr>
+<tr><td></td><td><b>סה"כ</b></td><td><b>100</b></td><td></td></tr>
+</tbody></table></div>
+</section>
+
+<footer>
+  פתרון לדוגמה | מנקדים את המשפט מול התרשים שהסטודנט צייר, נימוק קוהרנטי של עיצוב שונה-אך-סביר מזכה בניקוד מלא.
+</footer>
+</div>
+</body>
+</html>

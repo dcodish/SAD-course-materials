@@ -1,0 +1,3523 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>נעים בדרכים, Use Case Diagram (פתרון שאלה 6)</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Hebrew:wght@400;600&family=IBM+Plex+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+/* inlined uc-diagram-common.css */
+/* uc-diagram-common.css — SAD MCP shared styles for use case diagrams */
+
+/* ── Base layout ─────────────────────────────────────────────────────────── */
+body { margin: 0; padding: 20px 0; background: #f8fafc;
+  font-family: 'Noto Sans Hebrew', sans-serif; color: #1e293b; }
+h1.page-title { text-align: center; font-size: 18px; color: #1e40af;
+  margin: 0 0 10px; font-weight: 700; }
+.diagram-part { display: flex; justify-content: center; }
+
+/* ── Tab bar ─────────────────────────────────────────────────────────────── */
+.tab-bar { display: flex; justify-content: center; gap: 8px; margin: 12px 0 4px; }
+.tab { padding: 7px 20px; border: 1px solid #cbd5e1; background: #f8fafc;
+  color: #475569; font-size: 13px; font-weight: 600; cursor: pointer;
+  border-radius: 6px; font-family: 'Noto Sans Hebrew', sans-serif; }
+.tab.active { background: #1e40af; color: #fff; border-color: #1e40af; }
+.split-rationale { text-align: center; font-size: 11px; color: #64748b;
+  margin: 0 0 8px; font-style: italic; }
+
+/* ── Buttons ─────────────────────────────────────────────────────────────── */
+.fix-btn { padding: 8px 20px; border: 1px solid #3b82f6; background: #eff6ff;
+  color: #1e40af; font-size: 12px; font-weight: 600; cursor: pointer;
+  border-radius: 6px; font-family: 'Noto Sans Hebrew', sans-serif; }
+.fix-btn:hover { background: #dbeafe; }
+.vp-export-btn { position: fixed; bottom: 20px; right: 20px; z-index: 1000;
+  background: #1e40af; color: #fff; border: none; border-radius: 6px;
+  padding: 8px 16px; font-size: 13px; cursor: pointer;
+  font-family: 'IBM Plex Mono', monospace; }
+.vp-export-btn:hover { background: #1e3a8a; }
+
+/* ── Assumptions panel ───────────────────────────────────────────────────── */
+.assumptions-panel { display: flex; gap: 24px; max-width: 1000px;
+  margin: 20px auto; padding: 16px 20px; background: #fff;
+  border: 1px solid #cbd5e1; border-radius: 8px; direction: rtl; }
+.assumptions-col { flex: 1; min-width: 0; }
+.assumptions-col h3 { margin: 0 0 6px; font-size: 13px; font-weight: 600; color: #1e40af; }
+.assumptions-col ul { margin: 0; padding-right: 18px; }
+.assumptions-col li { color: #334155; font-size: 12px; line-height: 1.6; }
+
+/* ── User stories summary panel ──────────────────────────────────────────── */
+.user-stories-panel { max-width: 1000px; margin: 12px auto 20px; padding: 16px 20px;
+  background: #fff; border: 1px solid #cbd5e1; border-radius: 8px; direction: rtl; }
+.user-stories-panel h3 { margin: 0 0 8px; font-size: 13px; font-weight: 600; color: #1e40af; }
+.user-stories-panel ul { margin: 0; padding-right: 18px; }
+.user-stories-panel li { color: #334155; font-size: 12px; line-height: 1.7; }
+
+/* ── UC modal ────────────────────────────────────────────────────────────── */
+body.uc-modal-open { overflow: hidden; }
+.uc-modal[hidden] { display: none !important; }
+.uc-modal { position: fixed; inset: 0; z-index: 2000; display: flex;
+  align-items: flex-start; justify-content: center; padding: 40px 20px;
+  overflow-y: auto; direction: rtl; font-family: 'Noto Sans Hebrew', sans-serif; }
+.uc-modal-backdrop { position: absolute; inset: 0; background: rgba(15,23,42,0.55); }
+.uc-modal-body { position: relative; z-index: 1; width: 100%; max-width: 960px;
+  background: #fff; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,.25);
+  padding: 28px 32px 32px; color: #1e293b; }
+.uc-modal-close { position: absolute; top: 10px; left: 14px; background: none;
+  border: none; font-size: 24px; color: #64748b; cursor: pointer; }
+.uc-modal-body header { border-bottom: 1px solid #e2e8f0; padding-bottom: 12px;
+  margin-bottom: 18px; }
+.uc-modal-body .uc-id { display: inline-block; font-family: 'IBM Plex Mono',monospace;
+  font-size: 11px; color: #64748b; background: #f1f5f9; padding: 2px 8px;
+  border-radius: 4px; margin-bottom: 6px; }
+.uc-modal-body .uc-name { margin: 0 0 4px; font-size: 20px; color: #1e40af; font-weight: 700; }
+.uc-modal-body .uc-primary { font-size: 13px; color: #334155; }
+.uc-modal-body .uc-primary-label { color: #64748b; margin-left: 6px; }
+.uc-modal-body .uc-primary-link { color: #1e40af; cursor: pointer; font-weight: 600;
+  text-decoration: underline dotted; }
+.uc-description { margin-bottom: 20px; font-size: 14px; line-height: 1.7; color: #334155; }
+.uc-scenarios h3 { font-size: 14px; color: #1e40af; margin: 18px 0 6px;
+  border-right: 3px solid #3b82f6; padding-right: 10px; }
+.uc-scenarios ol { margin: 0 0 14px; padding-right: 22px; }
+.uc-scenarios ol li { color: #1e293b; font-size: 13px; line-height: 1.9; }
+.step-actor { color: #1e40af; font-weight: 600; cursor: pointer; text-decoration: underline dotted; }
+.step-system { color: #475569; font-style: italic; }
+.step-include { color: #7c3aed; font-family: 'IBM Plex Mono', monospace; font-size: 11px; }
+.step-uc-ref { color: #7c3aed; cursor: pointer; text-decoration: underline; }
+
+/* ── Flow of events (§4.4a / NOTATION §11b) ──────────────────────────────
+   Step labels are printed by the JS, not by list-style, so the number a reader
+   sees always matches what an extension's "חזרה לשלב 2.1" points at. */
+.uc-scenarios ul.flow { list-style: none; margin: 0 0 14px; padding: 0; }
+.uc-scenarios ul.flow ul.flow { margin: 4px 0 6px; padding-right: 14px;
+  border-right: 2px solid #e2e8f0; }
+.flow-step { color: #1e293b; font-size: 13px; line-height: 1.9; }
+.step-label { display: inline-block; min-width: 34px; color: #64748b;
+  font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600; }
+
+/* loop / alt — control structures read as keywords, not as prose */
+.flow-loop > .ctrl-kw, .flow-alt > .ctrl-kw { font-weight: 700; font-size: 11px;
+  padding: 1px 7px; border-radius: 10px; letter-spacing: .02em; }
+.flow-loop > .ctrl-kw { color: #0369a1; background: #e0f2fe; }
+.flow-alt  > .ctrl-kw { color: #92400e; background: #fef3c7; }
+.ctrl-cond { color: #334155; font-style: italic; }
+.flow-loop > ul.flow { border-right-color: #7dd3fc; }
+.flow-alt  > ul.flow, .flow-branches { border-right-color: #fcd34d; }
+.flow-branches { list-style: none; margin: 4px 0 6px; padding-right: 14px;
+  border-right: 2px solid #fcd34d; }
+.flow-branch { font-size: 13px; line-height: 1.9; }
+.branch-label { color: #92400e; font-weight: 600; font-size: 12px;
+  background: #fffbeb; border: 1px solid #fde68a; border-radius: 4px; padding: 0 6px; }
+.flow-branch > ul.flow { border-right-color: #fde68a; }
+
+/* «extend» hook marker (§3.3) — a step declaring an extension point */
+.ext-point-badge { font-size: 11.5px; color: #7c3aed; background: #f5f3ff;
+  border: 1px solid #ddd6fe; border-radius: 4px; padding: 1px 8px;
+  margin: 2px 0 2px 0; display: inline-block; line-height: 1.7; }
+.ext-point-cond { color: #6d28d9; font-size: 11px; }
+
+/* extensions — the not-happy path */
+.ext-holder { list-style: none; }
+.ext-list { list-style: none; margin: 2px 0 8px; padding-right: 34px; }
+.ext-inline, .ext-sub { list-style: none; color: #64748b; font-size: 12px;
+  padding-right: 24px; line-height: 1.7; }
+.ext-sub { padding-right: 0; border-right: 2px solid #fecaca; padding-right: 10px;
+  margin-bottom: 4px; }
+.ext-label { color: #b91c1c; min-width: 42px; }
+.ext-steps { list-style: none; margin: 2px 0; padding-right: 12px; }
+.ext-steps li { font-size: 12px; color: #64748b; line-height: 1.7; }
+.ext-steps .step-label { min-width: 48px; color: #94a3b8; }
+.ext-outcome { font-size: 11.5px; font-weight: 600; margin: 2px 0 2px 0;
+  padding-right: 12px; }
+.ext-resume { color: #0f766e; }
+.ext-terminate { color: #b91c1c; }
+.uc-prepostuser { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 18px;
+  margin: 18px 0 20px; }
+.uc-prepostuser > div { background: #f8fafc; border: 1px solid #e2e8f0;
+  border-radius: 8px; padding: 12px 14px; }
+.uc-prepostuser h4 { margin: 0 0 6px; font-size: 12px; color: #1e40af; font-weight: 600; }
+.uc-prepostuser ul { margin: 0; padding-right: 18px; font-size: 12px;
+  color: #334155; line-height: 1.7; }
+.uc-wireframe { border-top: 1px dashed #cbd5e1; padding-top: 16px; margin-top: 6px; }
+.uc-wireframe:empty, .uc-wireframe[hidden] { display: none; }
+
+/* ── Actor pulse ─────────────────────────────────────────────────────────── */
+.actor-pulse { animation: actor-pulse 0.6s ease-in-out 3; }
+@keyframes actor-pulse {
+  0%, 100% { filter: none; }
+  50%      { filter: drop-shadow(0 0 8px #3b82f6); }
+}
+
+/* ── Wireframe scoped theme (wf-*) ───────────────────────────────────────── */
+.wf-screen { background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px;
+  padding: 18px 20px; font-family: 'Noto Sans Hebrew', sans-serif;
+  color: #1e293b; direction: rtl; max-width: 760px; margin: 0 auto; }
+.wf-heading { margin: 0 0 14px; font-size: 15px; color: #1e40af; font-weight: 700;
+  border-bottom: 1px solid #e2e8f0; padding-bottom: 6px; }
+.wf-section { margin: 14px 0; }
+.wf-row { display: flex; gap: 10px; align-items: center; margin: 6px 0; }
+.wf-label { font-size: 12px; color: #475569; min-width: 120px; }
+.wf-input, .wf-textarea, .wf-select { flex: 1; background: #fff;
+  border: 1px solid #cbd5e1; border-radius: 4px; padding: 6px 8px;
+  font-size: 12px; color: #334155; }
+.wf-textarea { min-height: 60px; }
+.wf-table { width: 100%; border-collapse: collapse; margin: 10px 0; font-size: 12px; }
+.wf-table th, .wf-table td { border: 1px solid #cbd5e1; padding: 6px 8px; text-align: right; }
+.wf-table th { background: #e2e8f0; color: #1e40af; font-weight: 600; }
+.wf-actions { display: flex; gap: 8px; margin-top: 12px; justify-content: flex-start; }
+.wf-button { background: #fff; border: 1px solid #64748b; border-radius: 4px;
+  padding: 6px 14px; font-size: 12px; color: #334155; cursor: default; }
+.wf-primary { background: #1e40af; color: #fff; border-color: #1e40af; }
+.wf-image-box { border: 1px dashed #94a3b8; background: #f1f5f9; color: #64748b;
+  text-align: center; padding: 24px; border-radius: 4px; font-size: 12px; margin: 10px 0; }
+.wf-hint { font-size: 11px; color: #64748b; font-style: italic; margin: 6px 0; }
+.wf-badge { display: inline-block; background: #e0f2fe; color: #0369a1;
+  padding: 2px 8px; border-radius: 999px; font-size: 10px; font-weight: 600; }
+
+/* REQUIRED for tab switching: this sheet sets display:flex on .diagram-part,
+   which overrides the browser default [hidden]{display:none}. */
+[hidden] { display: none !important; }
+
+  </style>
+</head>
+<body>
+  <div class="solution-head">
+    <h1>פתרון שאלה 6, תרשים Use Case, מערכת ניהול קריאות טיפול לצי רכב</h1>
+    <p>מודל פתרון להוראה, ניתוח ועיצוב מערכות מידע (364-1-1411), 2026 סמסטר ב' מועד ב'. לחיצה על Use Case פותחת את התיעוד המלא; לחיצה על שחקן מציגה תיאור. <b>שלושה אזורי אחריות של אותה מערכת:</b> תפעול קריאות הטיפול, ניהול נתוני-אב (מנהל המערכת לבדו), ותהליכים אוטומטיים וממשקים (שחקן זמן ומערכת הספק). <b>נקודות המפתח:</b> «include» יחיד ל"עדכון רמת מלאי" משני בסיסים; פתיחת הקריאה התקופתית היא Use Case אחד המופעל בידי שחקן זמן, ועל הקשר מופיעה תווית התזמון; ואין Use Case למעקב אחר כרטיסי דלק, שהוא מחוץ להיקף שהוגדר בסיפור.</p>
+  </div>
+
+  <div class="tab-bar">
+    <button class="tab active" onclick="showDiagram(0)">תפעול קריאות הטיפול</button>
+    <button class="tab" onclick="showDiagram(1)">ניהול המערכת ונתוני-אב</button>
+    <button class="tab" onclick="showDiagram(2)">תהליכים אוטומטיים וממשקים</button>
+  </div>
+  <div class="split-rationale">פוצל לשלושה אזורי אחריות: 20 Use Cases &gt; סף 8. ניהול נתוני-האב מקבל תרשים משלו, ותהליכים אוטומטיים וממשקים מקבלים תרשים משלהם — אין לערבב שחקנים שאינם אנושיים עם מקרי שימוש של ניהול נתוני-אב.</div>
+  <div style="text-align:center;margin:8px 0;">
+    <button onclick="fixLayout(currentLayout())" class="fix-btn">Fix Layout</button>
+  </div>
+
+  <div class="diagram-part" id="diagram-0">
+    <svg id="diagram-svg-0" viewBox="0 0 1800 900" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <pattern id="dots0" width="24" height="24" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="0.8" fill="#cbd5e1"/></pattern>
+        <marker id="arrow-include0" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polyline points="0 0, 9 3.5, 0 7" fill="none" stroke="#7c3aed" stroke-width="1.2"/></marker>
+      </defs>
+      <rect x="0" y="0" width="1800" height="900" fill="#f8fafc"/>
+      <rect x="0" y="0" width="1800" height="900" fill="url(#dots0)"/>
+
+      <rect class="system-boundary" x="380" y="70" width="1060" height="760" rx="12" fill="#ffffff" stroke="#3b82f6" stroke-width="2.5"/>
+      <rect x="380" y="70" width="1060" height="44" rx="12" fill="#1e40af"/>
+      <rect x="380" y="96" width="1060" height="18" fill="#1e40af"/>
+      <text x="910" y="99" text-anchor="middle" fill="#ffffff" font-size="14" font-weight="700" font-family="'Noto Sans Hebrew',sans-serif">מערכת ניהול קריאות טיפול, תפעול</text>
+
+      <g id="assocLayer0">
+        <line class="assoc-line" data-conn-from="driver" data-conn-to="uc-open-call" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+        <line class="assoc-line" data-conn-from="driver" data-conn-to="uc-cancel-call" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+        <line class="assoc-line" data-conn-from="deptRep" data-conn-to="uc-open-call" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+        <line class="assoc-line" data-conn-from="deptRep" data-conn-to="uc-cancel-call" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+        <line class="assoc-line" data-conn-from="mechanic" data-conn-to="uc-diagnose" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+        <line class="assoc-line" data-conn-from="mechanic" data-conn-to="uc-record-parts" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+        <line class="assoc-line" data-conn-from="mechanic" data-conn-to="uc-report-hours" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+        <line class="assoc-line" data-conn-from="mechanic" data-conn-to="uc-complete" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+        <line class="assoc-line" data-conn-from="fleetManager" data-conn-to="uc-approve" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+        <line class="assoc-line" data-conn-from="fleetManager" data-conn-to="uc-return-service" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+        <line class="assoc-line" data-conn-from="garageManager" data-conn-to="uc-assign-mechanics" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+        <line class="assoc-line" data-conn-from="warehouseClerk" data-conn-to="uc-order-part" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+        <line class="assoc-line" data-conn-from="warehouseClerk" data-conn-to="uc-receive-part" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+        <line class="conn-hitbox" data-conn-id="a-clerk-receive" data-hitbox-from="warehouseClerk" data-hitbox-to="uc-receive-part" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('a-clerk-receive','assoc',event)"/>
+      </g>
+
+      <g id="includeLayer0">
+        <line class="include-line" data-conn-from="uc-record-parts" data-conn-to="uc-update-stock" x1="0" y1="0" x2="0" y2="0" stroke="#7c3aed" stroke-width="1.6" stroke-dasharray="6 4" marker-end="url(#arrow-include0)"/>
+        <text data-label-for="uc-record-parts uc-update-stock" x="0" y="0" text-anchor="middle" font-size="9.5" fill="#7c3aed" font-family="'IBM Plex Mono',monospace">«include»</text>
+        <line class="include-line" data-conn-from="uc-receive-part" data-conn-to="uc-update-stock" x1="0" y1="0" x2="0" y2="0" stroke="#7c3aed" stroke-width="1.6" stroke-dasharray="6 4" marker-end="url(#arrow-include0)"/>
+        <text data-label-for="uc-receive-part uc-update-stock" x="0" y="0" text-anchor="middle" font-size="9.5" fill="#7c3aed" font-family="'IBM Plex Mono',monospace">«include»</text>
+      </g>
+
+      <g id="ucLayer0">
+        <g class="uc-group" id="uc-group-uc-open-call" data-uc-id="uc-open-call" onclick="showDesc('uc-open-call','uc',event)" style="cursor:pointer"><ellipse cx="560" cy="180" rx="72" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/><text x="560" y="184" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">פתיחת קריאת טיפול</text></g>
+        <g class="uc-group" id="uc-group-uc-cancel-call" data-uc-id="uc-cancel-call" onclick="showDesc('uc-cancel-call','uc',event)" style="cursor:pointer"><ellipse cx="560" cy="310" rx="68" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/><text x="560" y="314" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">ביטול קריאת טיפול</text></g>
+        <g class="uc-group" id="uc-group-uc-diagnose" data-uc-id="uc-diagnose" onclick="showDesc('uc-diagnose','uc',event)" style="cursor:pointer"><ellipse cx="560" cy="490" rx="82" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/><text x="560" y="494" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">ביצוע אבחון ורישום דוח</text></g>
+        <g class="uc-group" id="uc-group-uc-record-parts" data-uc-id="uc-record-parts" onclick="showDesc('uc-record-parts','uc',event)" style="cursor:pointer"><ellipse cx="560" cy="630" rx="90" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/><text x="560" y="634" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">רישום חלקים שנוצלו בטיפול</text></g>
+        <g class="uc-group" id="uc-group-uc-report-hours" data-uc-id="uc-report-hours" onclick="showDesc('uc-report-hours','uc',event)" style="cursor:pointer"><ellipse cx="560" cy="760" rx="84" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/><text x="560" y="764" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">דיווח שעות עבודה בקריאה</text></g>
+        <g class="uc-group" id="uc-group-uc-complete" data-uc-id="uc-complete" onclick="showDesc('uc-complete','uc',event)" style="cursor:pointer"><ellipse cx="900" cy="490" rx="68" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/><text x="900" y="494" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">סימון השלמת הטיפול</text></g>
+        <g class="uc-group" id="uc-group-uc-update-stock" data-uc-id="uc-update-stock" onclick="showDesc('uc-update-stock','uc',event)" style="cursor:pointer"><ellipse cx="900" cy="690" rx="60" ry="28" fill="#ece3fb" stroke="#7c3aed" stroke-width="2"/><text x="900" y="694" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">עדכון רמת מלאי</text></g>
+        <g class="uc-group" id="uc-group-uc-approve" data-uc-id="uc-approve" onclick="showDesc('uc-approve','uc',event)" style="cursor:pointer"><ellipse cx="1200" cy="180" rx="96" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/><text x="1200" y="184" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">אישור או דחיית קריאה חורגת</text></g>
+        <g class="uc-group" id="uc-group-uc-return-service" data-uc-id="uc-return-service" onclick="showDesc('uc-return-service','uc',event)" style="cursor:pointer"><ellipse cx="1200" cy="320" rx="78" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/><text x="1200" y="324" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">החזרת רכב לשירות</text></g>
+        <g class="uc-group" id="uc-group-uc-assign-mechanics" data-uc-id="uc-assign-mechanics" onclick="showDesc('uc-assign-mechanics','uc',event)" style="cursor:pointer"><ellipse cx="1200" cy="460" rx="96" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/><text x="1200" y="464" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">שיבוץ מכונאים לקריאת טיפול</text></g>
+        <g class="uc-group" id="uc-group-uc-order-part" data-uc-id="uc-order-part" onclick="showDesc('uc-order-part','uc',event)" style="cursor:pointer"><ellipse cx="1200" cy="620" rx="80" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/><text x="1200" y="624" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">הזמנת חלק מספק חיצוני</text></g>
+        <g class="uc-group" id="uc-group-uc-receive-part" data-uc-id="uc-receive-part" onclick="showDesc('uc-receive-part','uc',event)" style="cursor:pointer"><ellipse cx="1200" cy="760" rx="80" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/><text x="1200" y="764" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">קליטת חלק שהגיע מהספק</text></g>
+      </g>
+
+      <g id="actorLayer0">
+        <g id="actor-group-driver" data-actor-id="driver" onclick="showDesc('driver','actor',event)" style="cursor:pointer" transform="translate(290,190)">
+          <circle cx="0" cy="-60" r="14" fill="#e0f0ff" stroke="#334155" stroke-width="2"/><line x1="0" y1="-46" x2="0" y2="-10" stroke="#334155" stroke-width="2"/><line x1="-18" y1="-36" x2="18" y2="-36" stroke="#334155" stroke-width="2"/><line x1="0" y1="-10" x2="-14" y2="14" stroke="#334155" stroke-width="2"/><line x1="0" y1="-10" x2="14" y2="14" stroke="#334155" stroke-width="2"/>
+          <text x="0" y="30" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b" font-family="'Noto Sans Hebrew',sans-serif">נהג</text>
+        </g>
+        <g id="actor-group-deptRep" data-actor-id="deptRep" onclick="showDesc('deptRep','actor',event)" style="cursor:pointer" transform="translate(290,330)">
+          <circle cx="0" cy="-60" r="14" fill="#e0f0ff" stroke="#334155" stroke-width="2"/><line x1="0" y1="-46" x2="0" y2="-10" stroke="#334155" stroke-width="2"/><line x1="-18" y1="-36" x2="18" y2="-36" stroke="#334155" stroke-width="2"/><line x1="0" y1="-10" x2="-14" y2="14" stroke="#334155" stroke-width="2"/><line x1="0" y1="-10" x2="14" y2="14" stroke="#334155" stroke-width="2"/>
+          <text x="0" y="30" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b" font-family="'Noto Sans Hebrew',sans-serif">נציג מחלקה</text>
+        </g>
+        <g id="actor-group-mechanic" data-actor-id="mechanic" onclick="showDesc('mechanic','actor',event)" style="cursor:pointer" transform="translate(290,630)">
+          <circle cx="0" cy="-60" r="14" fill="#e0f0ff" stroke="#334155" stroke-width="2"/><line x1="0" y1="-46" x2="0" y2="-10" stroke="#334155" stroke-width="2"/><line x1="-18" y1="-36" x2="18" y2="-36" stroke="#334155" stroke-width="2"/><line x1="0" y1="-10" x2="-14" y2="14" stroke="#334155" stroke-width="2"/><line x1="0" y1="-10" x2="14" y2="14" stroke="#334155" stroke-width="2"/>
+          <text x="0" y="30" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b" font-family="'Noto Sans Hebrew',sans-serif">מכונאי</text>
+        </g>
+        <g id="actor-group-fleetManager" data-actor-id="fleetManager" onclick="showDesc('fleetManager','actor',event)" style="cursor:pointer" transform="translate(1620,250)">
+          <circle cx="0" cy="-60" r="14" fill="#e0f0ff" stroke="#334155" stroke-width="2"/><line x1="0" y1="-46" x2="0" y2="-10" stroke="#334155" stroke-width="2"/><line x1="-18" y1="-36" x2="18" y2="-36" stroke="#334155" stroke-width="2"/><line x1="0" y1="-10" x2="-14" y2="14" stroke="#334155" stroke-width="2"/><line x1="0" y1="-10" x2="14" y2="14" stroke="#334155" stroke-width="2"/>
+          <text x="0" y="30" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b" font-family="'Noto Sans Hebrew',sans-serif">מנהל צי</text>
+        </g>
+        <g id="actor-group-garageManager" data-actor-id="garageManager" onclick="showDesc('garageManager','actor',event)" style="cursor:pointer" transform="translate(1620,460)">
+          <circle cx="0" cy="-60" r="14" fill="#e0f0ff" stroke="#334155" stroke-width="2"/><line x1="0" y1="-46" x2="0" y2="-10" stroke="#334155" stroke-width="2"/><line x1="-18" y1="-36" x2="18" y2="-36" stroke="#334155" stroke-width="2"/><line x1="0" y1="-10" x2="-14" y2="14" stroke="#334155" stroke-width="2"/><line x1="0" y1="-10" x2="14" y2="14" stroke="#334155" stroke-width="2"/>
+          <text x="0" y="30" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b" font-family="'Noto Sans Hebrew',sans-serif">מנהל מוסך</text>
+        </g>
+        <g id="actor-group-warehouseClerk" data-actor-id="warehouseClerk" onclick="showDesc('warehouseClerk','actor',event)" style="cursor:pointer" transform="translate(1620,700)">
+          <circle cx="0" cy="-60" r="14" fill="#e0f0ff" stroke="#334155" stroke-width="2"/><line x1="0" y1="-46" x2="0" y2="-10" stroke="#334155" stroke-width="2"/><line x1="-18" y1="-36" x2="18" y2="-36" stroke="#334155" stroke-width="2"/><line x1="0" y1="-10" x2="-14" y2="14" stroke="#334155" stroke-width="2"/><line x1="0" y1="-10" x2="14" y2="14" stroke="#334155" stroke-width="2"/>
+          <text x="0" y="30" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b" font-family="'Noto Sans Hebrew',sans-serif">פקיד מחסן</text>
+        </g>
+      </g>
+    </svg>
+  </div>
+
+  <div class="diagram-part" id="diagram-1" hidden>
+    <svg id="diagram-svg-1" viewBox="0 0 1500 700" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <pattern id="dots1" width="24" height="24" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="0.8" fill="#cbd5e1"/></pattern>
+      </defs>
+      <rect x="0" y="0" width="1500" height="700" fill="#f8fafc"/>
+      <rect x="0" y="0" width="1500" height="700" fill="url(#dots1)"/>
+
+      <rect class="system-boundary" x="380" y="70" width="820" height="560" rx="12" fill="#ffffff" stroke="#3b82f6" stroke-width="2.5"/>
+      <rect x="380" y="70" width="820" height="44" rx="12" fill="#1e40af"/>
+      <rect x="380" y="96" width="820" height="18" fill="#1e40af"/>
+      <text x="790" y="99" text-anchor="middle" fill="#ffffff" font-size="14" font-weight="700" font-family="'Noto Sans Hebrew',sans-serif">מערכת ניהול קריאות טיפול, ניהול נתוני-אב</text>
+
+      <g id="assocLayer1">
+        <line class="assoc-line" data-conn-from="sysadmin" data-conn-to="uc-manage-vehicles" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+        <line class="assoc-line" data-conn-from="sysadmin" data-conn-to="uc-manage-departments" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+        <line class="assoc-line" data-conn-from="sysadmin" data-conn-to="uc-manage-garages" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+        <line class="assoc-line" data-conn-from="sysadmin" data-conn-to="uc-manage-parts" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+        <line class="assoc-line" data-conn-from="sysadmin" data-conn-to="uc-manage-specialties" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+        <line class="assoc-line" data-conn-from="sysadmin" data-conn-to="uc-manage-users" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+      </g>
+
+      <g id="ucLayer1">
+        <g class="uc-group" id="uc-group-uc-manage-vehicles" data-uc-id="uc-manage-vehicles" onclick="showDesc('uc-manage-vehicles','uc',event)" style="cursor:pointer"><ellipse cx="560" cy="180" rx="88" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/><text x="560" y="184" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">ניהול כלי רכב</text></g>
+        <g class="uc-group" id="uc-group-uc-manage-departments" data-uc-id="uc-manage-departments" onclick="showDesc('uc-manage-departments','uc',event)" style="cursor:pointer"><ellipse cx="560" cy="330" rx="88" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/><text x="560" y="334" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">ניהול מחלקות</text></g>
+        <g class="uc-group" id="uc-group-uc-manage-garages" data-uc-id="uc-manage-garages" onclick="showDesc('uc-manage-garages','uc',event)" style="cursor:pointer"><ellipse cx="560" cy="480" rx="88" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/><text x="560" y="484" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">ניהול מוסכים</text></g>
+        <g class="uc-group" id="uc-group-uc-manage-parts" data-uc-id="uc-manage-parts" onclick="showDesc('uc-manage-parts','uc',event)" style="cursor:pointer"><ellipse cx="1000" cy="180" rx="100" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/><text x="1000" y="184" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">ניהול קטלוג החלקים</text></g>
+        <g class="uc-group" id="uc-group-uc-manage-specialties" data-uc-id="uc-manage-specialties" onclick="showDesc('uc-manage-specialties','uc',event)" style="cursor:pointer"><ellipse cx="1000" cy="330" rx="100" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/><text x="1000" y="334" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">ניהול תחומי התמחות</text></g>
+        <g class="uc-group" id="uc-group-uc-manage-users" data-uc-id="uc-manage-users" onclick="showDesc('uc-manage-users','uc',event)" style="cursor:pointer"><ellipse cx="1000" cy="480" rx="110" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/><text x="1000" y="484" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">ניהול משתמשים ותפקידים</text></g>
+      </g>
+
+      <g id="actorLayer1">
+        <g id="actor-group-sysadmin" data-actor-id="sysadmin" onclick="showDesc('sysadmin','actor',event)" style="cursor:pointer" transform="translate(290,330)">
+          <circle cx="0" cy="-60" r="14" fill="#e0f0ff" stroke="#334155" stroke-width="2"/><line x1="0" y1="-46" x2="0" y2="-10" stroke="#334155" stroke-width="2"/><line x1="-18" y1="-36" x2="18" y2="-36" stroke="#334155" stroke-width="2"/><line x1="0" y1="-10" x2="-14" y2="14" stroke="#334155" stroke-width="2"/><line x1="0" y1="-10" x2="14" y2="14" stroke="#334155" stroke-width="2"/>
+          <text x="0" y="30" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b" font-family="'Noto Sans Hebrew',sans-serif">מנהל מערכת</text>
+        </g>
+      </g>
+    </svg>
+  </div>
+
+  <div class="diagram-part" id="diagram-2" hidden>
+    <svg id="diagram-svg-2" viewBox="0 0 1400 560" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <pattern id="dots2" width="24" height="24" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="0.8" fill="#cbd5e1"/></pattern>
+      </defs>
+      <rect x="0" y="0" width="1400" height="560" fill="#f8fafc"/>
+      <rect x="0" y="0" width="1400" height="560" fill="url(#dots2)"/>
+
+      <rect class="system-boundary" x="380" y="70" width="620" height="400" rx="12" fill="#ffffff" stroke="#3b82f6" stroke-width="2.5"/>
+      <rect x="380" y="70" width="620" height="44" rx="12" fill="#1e40af"/>
+      <rect x="380" y="96" width="620" height="18" fill="#1e40af"/>
+      <text x="690" y="99" text-anchor="middle" fill="#ffffff" font-size="14" font-weight="700" font-family="'Noto Sans Hebrew',sans-serif">מערכת ניהול קריאות טיפול, אוטומציה וממשקים</text>
+
+      <g id="assocLayer2">
+        <line class="assoc-line" data-conn-from="timeActor" data-conn-to="uc-periodic-open" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+        <line class="conn-hitbox" data-conn-id="a-time-periodic" data-hitbox-from="timeActor" data-hitbox-to="uc-periodic-open" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('a-time-periodic','assoc',event)"/>
+        <line class="assoc-line" data-conn-from="supplierSystem" data-conn-to="uc-part-arrival-notice" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+        <line class="conn-hitbox" data-conn-id="a-supplier-arrival" data-hitbox-from="supplierSystem" data-hitbox-to="uc-part-arrival-notice" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('a-supplier-arrival','assoc',event)"/>
+      </g>
+
+      <g id="ucLayer2">
+        <g class="uc-group" id="uc-group-uc-periodic-open" data-uc-id="uc-periodic-open" onclick="showDesc('uc-periodic-open','uc',event)" style="cursor:pointer"><ellipse cx="690" cy="200" rx="104" ry="30" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/><text x="690" y="204" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">פתיחת קריאת טיפול תקופתית</text></g>
+        <g class="uc-group" id="uc-group-uc-part-arrival-notice" data-uc-id="uc-part-arrival-notice" onclick="showDesc('uc-part-arrival-notice','uc',event)" style="cursor:pointer"><ellipse cx="690" cy="370" rx="116" ry="30" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/><text x="690" y="374" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">קליטת הודעת הגעת חלק מהספק</text></g>
+      </g>
+
+      <g id="actorLayer2">
+        <g id="actor-group-timeActor" data-actor-id="timeActor" onclick="showDesc('timeActor','actor',event)" style="cursor:pointer" transform="translate(280,220)">
+          <circle cx="0" cy="-60" r="14" fill="#fef3c7" stroke="#334155" stroke-width="2"/><line x1="0" y1="-46" x2="0" y2="-10" stroke="#334155" stroke-width="2"/><line x1="-18" y1="-36" x2="18" y2="-36" stroke="#334155" stroke-width="2"/><line x1="0" y1="-10" x2="-14" y2="14" stroke="#334155" stroke-width="2"/><line x1="0" y1="-10" x2="14" y2="14" stroke="#334155" stroke-width="2"/>
+          <text x="0" y="30" text-anchor="middle" font-size="9" font-style="italic" fill="#64748b" font-family="'IBM Plex Mono',monospace">«system»</text>
+          <text x="0" y="44" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b" font-family="'Noto Sans Hebrew',sans-serif">שחקן זמן</text>
+          <text x="0" y="58" text-anchor="middle" font-size="9.5" fill="#64748b" font-family="'Noto Sans Hebrew',sans-serif">(טריגר תזמון)</text>
+        </g>
+        <g id="actor-group-supplierSystem" data-actor-id="supplierSystem" onclick="showDesc('supplierSystem','actor',event)" style="cursor:pointer" transform="translate(280,400)">
+          <circle cx="0" cy="-60" r="14" fill="#fef3c7" stroke="#334155" stroke-width="2"/><line x1="0" y1="-46" x2="0" y2="-10" stroke="#334155" stroke-width="2"/><line x1="-18" y1="-36" x2="18" y2="-36" stroke="#334155" stroke-width="2"/><line x1="0" y1="-10" x2="-14" y2="14" stroke="#334155" stroke-width="2"/><line x1="0" y1="-10" x2="14" y2="14" stroke="#334155" stroke-width="2"/>
+          <text x="0" y="30" text-anchor="middle" font-size="9" font-style="italic" fill="#64748b" font-family="'IBM Plex Mono',monospace">«system»</text>
+          <text x="0" y="44" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b" font-family="'Noto Sans Hebrew',sans-serif">מערכת הספק</text>
+          <text x="0" y="58" text-anchor="middle" font-size="9.5" fill="#64748b" font-family="'Noto Sans Hebrew',sans-serif">(חיצונית, יוזמת)</text>
+        </g>
+      </g>
+    </svg>
+  </div>
+
+  <div id="assumptions-panel" class="assumptions-panel" hidden>
+    <div class="assumptions-col" id="assumptions-col"><h3>הנחות</h3><ul id="assumptions-list"></ul></div>
+    <div class="assumptions-col" id="open-questions-col"><h3>שאלות פתוחות</h3><ul id="open-questions-list"></ul></div>
+  </div>
+
+  <div id="user-stories-panel" class="user-stories-panel" hidden>
+    <h3>סיפורי משתמש</h3>
+    <ul id="user-stories-list"></ul>
+  </div>
+
+  <div id="uc-modal" class="uc-modal" hidden role="dialog" aria-modal="true">
+    <div class="uc-modal-backdrop" onclick="closeUcModal()"></div>
+    <div class="uc-modal-body"></div>
+  </div>
+
+  <button class="vp-export-btn" onclick="exportXMI()">Download .xmi (Visual Paradigm)</button>
+
+  <script>
+  var actorDescriptions = {
+  "driver": {
+    "name": "נהג",
+    "desc": "נוהג ברכב הצי. פותח קריאת טיפול כאשר מתגלה תקלה, ורשאי לבטל קריאה שפתח כל עוד לא החל האבחון. אינו מנהל את הרכב ואינו משנה סטטוסים אחרים."
+  },
+  "deptRep": {
+    "name": "נציג מחלקה",
+    "desc": "נציג המחלקה שאליה משויך הרכב. פותח ומבטל קריאות טיפול עבור רכבי המחלקה, בדיוק כמו הנהג. שני התפקידים חולקים את אותה קבוצת מקרי שימוש."
+  },
+  "mechanic": {
+    "name": "מכונאי",
+    "desc": "משויך למוסך אחד ובעל תחום התמחות אחד או יותר. מבצע אבחון ורושם דוח אבחון, מדווח את שעות עבודתו בקריאה, רושם את החלקים שנוצלו, ומסמן את השלמת הטיפול."
+  },
+  "garageManager": {
+    "name": "מנהל מוסך",
+    "desc": "מנהל את עומס העבודה במוסך ומשבץ לכל קריאת טיפול מכונאי מטפל, ולעיתים יותר ממכונאי אחד. לרוב הוא גם מכונאי, ולכן מדובר במשתמש בעל שני תפקידים ולא בשני משתמשים."
+  },
+  "fleetManager": {
+    "name": "מנהל צי",
+    "desc": "אחראי על הצי כולו. מאשר או דוחה קריאה שעלותה המשוערת חורגת מהסף, ומחזיר את הרכב לשירות בתום הטיפול. רשאי לבצע כל שינוי סטטוס בכל שלב — הרשאה גורפת הנגזרת מתפקידו ואינה מקרה שימוש נפרד."
+  },
+  "warehouseClerk": {
+    "name": "פקיד מחסן",
+    "desc": "מנהל את מלאי החלקים בפועל. מזמין חלקים חסרים מספק חיצוני, קולט אותם למחסן עם הגעתם, ובכך משחרר את הקריאות הממתינות לאותו חלק."
+  },
+  "sysadmin": {
+    "name": "מנהל מערכת",
+    "desc": "מנהל את נתוני-האב של המערכת: כלי רכב, מחלקות, מוסכים, קטלוג החלקים, תחומי התמחות ומשתמשים ותפקידים. אינו עוסק בקריאות הטיפול עצמן."
+  },
+  "timeActor": {
+    "name": "שחקן זמן «system»",
+    "desc": "שעון המערכת. אינו משתמש אנושי. מפעיל את פתיחת קריאת הטיפול התקופתית כאשר מגיע מועד הטיפול התקופתי של רכב, ללא כל פעולה של נהג, נציג מחלקה או מכונאי."
+  },
+  "supplierSystem": {
+    "name": "מערכת הספק «system»",
+    "desc": "מערכת חיצונית של ספק החלקים. יוזמת פנייה אל המערכת שלנו ומודיעה כאשר חלק שהוזמן הגיע. איננו מנהלים אותה ואיננו מכירים את תהליכיה הפנימיים."
+  }
+};
+
+  var assocDescriptions = {
+  "a-time-periodic": {
+    "name": "שחקן זמן - פתיחת קריאת טיפול תקופתית",
+    "desc": "אין ל-Use Case זה יוזם אנושי: הטריגר הוא הגעת מועד הטיפול התקופתי של הרכב, ולכן השחקן הוא שחקן זמן. תווית התזמון על הקשר היא שקובעת מתי הוא מופעל, ובלעדיה התרשים אינו אומר מתי המערכת פועלת."
+  },
+  "a-supplier-arrival": {
+    "name": "מערכת הספק - קליטת הודעת הגעת חלק",
+    "desc": "מערכת הספק היא השחקן ה<b>יוזם</b> כאן: היא זו שפונה אלינו ומודיעה שהחלק הגיע. זהו ההבדל מן המקרה שבו המערכת שלנו פונה החוצה, ואז המערכת החיצונית היא שחקן מקבל."
+  },
+  "a-clerk-receive": {
+    "name": "פקיד מחסן - קליטת חלק שהגיע מהספק",
+    "desc": "קליטת החלק הפיזי למחסן היא פעולה של פקיד המחסן, ובעקבותיה משתחררות הקריאות הממתינות לאותו חלק. היא נפרדת מקליטת ההודעה ממערכת הספק, שהיא ממשק ולא פעולה במחסן."
+  }
+};
+
+  var useCaseDocs = {
+  "uc-open-call": {
+    "id": "uc-open-call",
+    "name": "פתיחת קריאת טיפול",
+    "primaryActor": "driver",
+    "secondaryActors": [
+      "deptRep"
+    ],
+    "description": "נהג או נציג מחלקה פותח קריאת טיפול לרכב כאשר מתגלה תקלה. בקריאה נקבעים סוג הטיפול ורמת העדיפות, והיא מגיעה למוסך המטפל.",
+    "preconditions": [
+      "המשתמש מזוהה במערכת והרכב רשום בצי."
+    ],
+    "postconditions": [
+      "נוצרה קריאת טיפול במצב \"נפתחה\", המשויכת לרכב ולמוסך."
+    ],
+    "scenarios": [
+      {
+        "id": "sc-happy",
+        "name": "מסלול מרכזי",
+        "flow": [
+          {
+            "kind": "actor",
+            "actor": "driver",
+            "text": "בוחר את הרכב ומתאר את התקלה שהתגלתה"
+          },
+          {
+            "kind": "actor",
+            "actor": "driver",
+            "text": "בוחר את סוג הטיפול (תיקון תקלה או בדיקה) ואת רמת העדיפות"
+          },
+          {
+            "kind": "system",
+            "text": "יוצר קריאת טיפול במצב \"נפתחה\" ומשייך אותה לרכב ולמוסך"
+          }
+        ],
+        "extensions": [
+          {
+            "at": 1,
+            "text": "אם כבר קיימת קריאה פתוחה לאותו רכב, המערכת מציגה אותה והמשתמש יכול להוסיף לתיאור במקום לפתוח קריאה נוספת."
+          }
+        ]
+      }
+    ],
+    "userStories": [
+      {
+        "role": "נהג",
+        "want": "לפתוח קריאת טיפול לרכב שבו התגלתה תקלה",
+        "so": "התקלה תטופל בלי שאצטרך לרדוף אחרי טפסים ושיחות טלפון"
+      }
+    ]
+  },
+  "uc-cancel-call": {
+    "id": "uc-cancel-call",
+    "name": "ביטול קריאת טיפול",
+    "primaryActor": "driver",
+    "secondaryActors": [
+      "deptRep"
+    ],
+    "description": "מי שפתח את הקריאה מבטל אותה כל עוד לא החל האבחון, למשל כשהתקלה נפתרה מאליה או שנפתחה קריאה כפולה.",
+    "preconditions": [
+      "קיימת קריאה שטרם החל בה אבחון."
+    ],
+    "postconditions": [
+      "הקריאה עברה למצב \"בוטלה\" ואינה ממתינה עוד לטיפול במוסך."
+    ],
+    "scenarios": [
+      {
+        "id": "sc-happy",
+        "name": "מסלול מרכזי",
+        "flow": [
+          {
+            "kind": "actor",
+            "actor": "driver",
+            "text": "בוחר קריאה פתוחה שפתח ומבקש לבטלה"
+          },
+          {
+            "kind": "system",
+            "text": "בודק שטרם החל אבחון בקריאה"
+          },
+          {
+            "kind": "system",
+            "text": "מעביר את הקריאה למצב \"בוטלה\" ומודיע למוסך"
+          }
+        ],
+        "extensions": [
+          {
+            "at": 2,
+            "text": "אם האבחון כבר החל, הביטול נחסם בפני הנהג; רק מנהל הצי, שהרשאתו גורפת, יכול לבטל בשלב זה."
+          }
+        ]
+      }
+    ],
+    "userStories": [
+      {
+        "role": "נציג מחלקה",
+        "want": "לבטל קריאה שנפתחה בטעות לפני שהמוסך התחיל לעבוד עליה",
+        "so": "לא נבזבז זמן מכונאי על תקלה שאינה קיימת"
+      }
+    ]
+  },
+  "uc-diagnose": {
+    "id": "uc-diagnose",
+    "name": "ביצוע אבחון ורישום דוח",
+    "primaryActor": "mechanic",
+    "secondaryActors": [],
+    "description": "המכונאי בודק את הרכב ורושם דוח אבחון הכולל את הממצאים ואת העלות המשוערת של הטיפול. העלות המשוערת היא שקובעת אם נדרש אישור מנהל הצי.",
+    "preconditions": [
+      "קיימת קריאת טיפול פתוחה ששובץ אליה מכונאי."
+    ],
+    "postconditions": [
+      "נשמר דוח אבחון עם ממצאים ועלות משוערת, והקריאה עברה לטיפול או להמתנה לאישור."
+    ],
+    "scenarios": [
+      {
+        "id": "sc-happy",
+        "name": "מסלול מרכזי",
+        "flow": [
+          {
+            "kind": "actor",
+            "actor": "mechanic",
+            "text": "פותח את הקריאה ומתחיל אבחון"
+          },
+          {
+            "kind": "actor",
+            "actor": "mechanic",
+            "text": "רושם את הממצאים ואת העלות המשוערת"
+          },
+          {
+            "kind": "system",
+            "text": "משווה את העלות המשוערת לסף שנקבע ומנתב את הקריאה לטיפול או להמתנה לאישור מנהל הצי"
+          }
+        ],
+        "extensions": [
+          {
+            "at": 3,
+            "text": "אם העלות המשוערת חורגת מהסף, הקריאה ממתינה לאישור מנהל הצי ולא ניתן להתחיל בטיפול."
+          }
+        ]
+      }
+    ],
+    "userStories": [
+      {
+        "role": "מכונאי",
+        "want": "לרשום את ממצאי האבחון ואת העלות המשוערת",
+        "so": "מנהל הצי יוכל להכריע על סמך נתונים ולא בשיחת טלפון"
+      }
+    ]
+  },
+  "uc-record-parts": {
+    "id": "uc-record-parts",
+    "name": "רישום חלקים שנוצלו בטיפול",
+    "primaryActor": "mechanic",
+    "secondaryActors": [],
+    "description": "במהלך הטיפול רושם המכונאי אילו חלקים נוצלו בקריאה ובאיזו כמות. מחיר החלק נשמר כפי שהיה בעת השימוש, ורמת המלאי במחסן מתעדכנת בהתאם.",
+    "preconditions": [
+      "הקריאה נמצאת בטיפול."
+    ],
+    "postconditions": [
+      "נרשמו שורות ניצול חלקים עם כמות ומחיר בעת השימוש, ורמת המלאי של כל חלק עודכנה."
+    ],
+    "scenarios": [
+      {
+        "id": "sc-happy",
+        "name": "מסלול מרכזי",
+        "flow": [
+          {
+            "kind": "actor",
+            "actor": "mechanic",
+            "text": "בוחר חלק מקטלוג החלקים ומזין את הכמות שנוצלה"
+          },
+          {
+            "kind": "system",
+            "text": "שומר את הכמות ואת מחיר החלק כפי שהוא ברגע השימוש"
+          },
+          {
+            "kind": "include",
+            "uc": "uc-update-stock",
+            "text": "עדכון רמת המלאי של החלק"
+          }
+        ],
+        "extensions": [
+          {
+            "at": 1,
+            "text": "אם רמת המלאי אינה מספיקה, המכונאי מדווח על חוסר והקריאה עוברת להמתנה לחלקים."
+          }
+        ]
+      }
+    ],
+    "userStories": [
+      {
+        "role": "מכונאי",
+        "want": "לרשום אילו חלקים ניצלתי ובאיזו כמות",
+        "so": "עלות הטיפול תהיה מדויקת והמחסן יידע מה נותר במלאי"
+      }
+    ]
+  },
+  "uc-report-hours": {
+    "id": "uc-report-hours",
+    "name": "דיווח שעות עבודה בקריאה",
+    "primaryActor": "mechanic",
+    "secondaryActors": [],
+    "description": "כל מכונאי המשובץ לקריאה מדווח על מספר שעות העבודה שהשקיע באותה קריאה. כשמשובצים כמה מכונאים, כל אחד מדווח את שעותיו שלו.",
+    "preconditions": [
+      "המכונאי משובץ לקריאה."
+    ],
+    "postconditions": [
+      "מספר השעות נשמר על השיבוץ של אותו מכונאי לאותה קריאה."
+    ],
+    "scenarios": [
+      {
+        "id": "sc-happy",
+        "name": "מסלול מרכזי",
+        "flow": [
+          {
+            "kind": "actor",
+            "actor": "mechanic",
+            "text": "בוחר את הקריאה שעבד עליה ומזין את מספר השעות"
+          },
+          {
+            "kind": "system",
+            "text": "שומר את השעות על השיבוץ של המכונאי לקריאה"
+          }
+        ],
+        "extensions": []
+      }
+    ],
+    "userStories": [
+      {
+        "role": "מכונאי",
+        "want": "לדווח את שעות העבודה שהשקעתי בכל קריאה",
+        "so": "עלות העבודה תיזקף לקריאה הנכונה ולא תיאבד"
+      }
+    ]
+  },
+  "uc-complete": {
+    "id": "uc-complete",
+    "name": "סימון השלמת הטיפול",
+    "primaryActor": "mechanic",
+    "secondaryActors": [],
+    "description": "בתום העבודה כותב המכונאי את סיכום התיקון החופשי ומסמן שהקריאה הושלמה. הסימון סוגר את שלב הביצוע ומעביר את ההחלטה על החזרת הרכב לשירות למנהל הצי. שמירת הסיכום במערכת היא הכרעת מנתח המערכות, בניגוד לבקשת מנהל הצי לעדכן את המחלקה טלפונית בלבד — ראו הנימוק ומחירו בפתרון שאלה 7.5.",
+    "preconditions": [
+      "הקריאה בטיפול ואינה ממתינה לחלקים."
+    ],
+    "postconditions": [
+      "נשמר סיכום התיקון, הקריאה עברה למצב \"הושלמה\" והועברה לאישור מנהל הצי להחזרת הרכב לשירות."
+    ],
+    "scenarios": [
+      {
+        "id": "sc-happy",
+        "name": "מסלול מרכזי",
+        "flow": [
+          {
+            "kind": "actor",
+            "actor": "mechanic",
+            "text": "כותב את סיכום התיקון: מה בוצע בפועל בקריאה"
+          },
+          {
+            "kind": "actor",
+            "actor": "mechanic",
+            "text": "מסמן שהטיפול הושלם"
+          },
+          {
+            "kind": "system",
+            "text": "שומר את הסיכום, מעביר את הקריאה למצב \"הושלמה\" ומודיע למנהל הצי ולמחלקה המחזיקה ברכב"
+          }
+        ],
+        "extensions": [
+          {
+            "at": 1,
+            "text": "אם עדיין חסר חלק, לא ניתן לסמן השלמה; הקריאה נשארת בהמתנה לחלקים."
+          }
+        ]
+      }
+    ],
+    "userStories": [
+      {
+        "role": "מכונאי",
+        "want": "לסמן שסיימתי את הטיפול בקריאה",
+        "so": "הרכב יוחזר לשירות מהר ולא יעמוד מושבת שלא לצורך"
+      },
+      {
+        "role": "נציג מחלקה",
+        "want": "לקרוא במערכת מה בוצע בפועל ברכב שלי",
+        "so": "לא אצטרך להסתמך על שיחת טלפון שאיש אינו זוכר"
+      }
+    ]
+  },
+  "uc-update-stock": {
+    "id": "uc-update-stock",
+    "name": "עדכון רמת מלאי",
+    "primaryActor": "",
+    "secondaryActors": [],
+    "description": "התנהגות משותפת המעדכנת את רמת המלאי של חלק במחסן. היא מתבצעת תמיד בשני הקשרים שונים: כשחלק נוצל בטיפול (גריעה) וכשחלק שהוזמן נקלט מהספק (הוספה). אינה מופעלת ישירות על ידי שחקן, אלא נקראת מתוך שני מקרי השימוש הבסיסיים.",
+    "preconditions": [
+      "קיים חלק בקטלוג החלקים והתקבלה תנועת מלאי עבורו."
+    ],
+    "postconditions": [
+      "רמת המלאי העדכנית של החלק נשמרה."
+    ],
+    "scenarios": [
+      {
+        "id": "sc-happy",
+        "name": "מסלול מרכזי",
+        "flow": [
+          {
+            "kind": "system",
+            "text": "מקבל את החלק ואת כמות התנועה (גריעה או הוספה)"
+          },
+          {
+            "kind": "system",
+            "text": "מחשב את רמת המלאי החדשה ושומר אותה על החלק"
+          }
+        ],
+        "extensions": []
+      }
+    ],
+    "userStories": []
+  },
+  "uc-approve": {
+    "id": "uc-approve",
+    "name": "אישור או דחיית קריאה חורגת",
+    "primaryActor": "fleetManager",
+    "secondaryActors": [],
+    "description": "כאשר העלות המשוערת בדוח האבחון חורגת מהסף שנקבע, הקריאה ממתינה להכרעת מנהל הצי, שרשאי לאשר את ביצוע הטיפול או לדחות את הקריאה.",
+    "preconditions": [
+      "קיים דוח אבחון שעלותו המשוערת חורגת מהסף, והקריאה ממתינה לאישור."
+    ],
+    "postconditions": [
+      "הקריאה אושרה ועברה לטיפול, או נדחתה ונסגרה."
+    ],
+    "scenarios": [
+      {
+        "id": "sc-happy",
+        "name": "מסלול מרכזי",
+        "flow": [
+          {
+            "kind": "actor",
+            "actor": "fleetManager",
+            "text": "פותח את רשימת הקריאות הממתינות לאישורו"
+          },
+          {
+            "kind": "actor",
+            "actor": "fleetManager",
+            "text": "בוחן את דוח האבחון ואת העלות המשוערת"
+          },
+          {
+            "kind": "actor",
+            "actor": "fleetManager",
+            "text": "מאשר או דוחה את הקריאה"
+          },
+          {
+            "kind": "system",
+            "text": "מעביר את הקריאה לטיפול או למצב \"נדחתה\""
+          }
+        ],
+        "extensions": []
+      }
+    ],
+    "userStories": [
+      {
+        "role": "מנהל צי",
+        "want": "לראות את כל הקריאות הממתינות לאישורי",
+        "so": "אוכל לאשר או לדחות אותן במהירות ולקצר את זמן ההשבתה של הרכב"
+      }
+    ]
+  },
+  "uc-return-service": {
+    "id": "uc-return-service",
+    "name": "החזרת רכב לשירות",
+    "primaryActor": "fleetManager",
+    "secondaryActors": [],
+    "description": "לאחר שהמכונאי סימן שהקריאה הושלמה, מנהל הצי מחזיר את הרכב לשירות. זו הפעולה שסוגרת את הקריאה ומשחררת את הרכב חזרה למחלקה.",
+    "preconditions": [
+      "הקריאה במצב \"הושלמה\"."
+    ],
+    "postconditions": [
+      "הרכב חזר לשירות והקריאה נסגרה ונשמרת בהיסטוריית הטיפולים של הרכב."
+    ],
+    "scenarios": [
+      {
+        "id": "sc-happy",
+        "name": "מסלול מרכזי",
+        "flow": [
+          {
+            "kind": "actor",
+            "actor": "fleetManager",
+            "text": "בוחר קריאה שהושלמה ומאשר את החזרת הרכב לשירות"
+          },
+          {
+            "kind": "system",
+            "text": "סוגר את הקריאה, משחרר את הרכב ומודיע למחלקה המחזיקה בו"
+          }
+        ],
+        "extensions": []
+      }
+    ],
+    "userStories": [
+      {
+        "role": "מנהל צי",
+        "want": "להחזיר רכב לשירות מיד עם השלמת הטיפול",
+        "so": "זמן ההשבתה של הרכב יהיה הקצר ביותר האפשרי"
+      }
+    ]
+  },
+  "uc-assign-mechanics": {
+    "id": "uc-assign-mechanics",
+    "name": "שיבוץ מכונאים לקריאת טיפול",
+    "primaryActor": "garageManager",
+    "secondaryActors": [],
+    "description": "מנהל המוסך משבץ לקריאת טיפול מכונאי מטפל, ולעיתים יותר ממכונאי אחד, בהתאם לתחומי ההתמחות הנדרשים ולעומס במוסך.",
+    "preconditions": [
+      "קיימת קריאה פתוחה במוסך שבניהולו."
+    ],
+    "postconditions": [
+      "לקריאה משויכים מכונאי אחד או יותר, וכל שיבוץ מוכן לקליטת דיווח שעות."
+    ],
+    "scenarios": [
+      {
+        "id": "sc-happy",
+        "name": "מסלול מרכזי",
+        "flow": [
+          {
+            "kind": "actor",
+            "actor": "garageManager",
+            "text": "בוחר קריאה פתוחה במוסך שבניהולו"
+          },
+          {
+            "kind": "actor",
+            "actor": "garageManager",
+            "text": "בוחר מכונאי אחד או יותר לפי תחום ההתמחות הנדרש"
+          },
+          {
+            "kind": "system",
+            "text": "יוצר שיבוץ לכל מכונאי ומודיע לו"
+          }
+        ],
+        "extensions": []
+      }
+    ],
+    "userStories": [
+      {
+        "role": "מנהל מוסך",
+        "want": "לשבץ לקריאה יותר ממכונאי אחד כשצריך",
+        "so": "טיפול מורכב יטופל במקביל ולא ימתין למכונאי יחיד"
+      }
+    ]
+  },
+  "uc-order-part": {
+    "id": "uc-order-part",
+    "name": "הזמנת חלק מספק חיצוני",
+    "primaryActor": "warehouseClerk",
+    "secondaryActors": [],
+    "description": "כאשר קריאה ממתינה לחלק שאינו במלאי, פקיד המחסן מזמין את החלק מספק חיצוני ומקשר את ההזמנה לקריאה הממתינה.",
+    "preconditions": [
+      "קיימת קריאה במצב \"ממתינה לחלקים\" שחסר בה חלק מסוים."
+    ],
+    "postconditions": [
+      "נרשמה הזמנת חלק מספק, המקושרת לקריאה הממתינה."
+    ],
+    "scenarios": [
+      {
+        "id": "sc-happy",
+        "name": "מסלול מרכזי",
+        "flow": [
+          {
+            "kind": "actor",
+            "actor": "warehouseClerk",
+            "text": "מאתר את הקריאות הממתינות לחלקים ואת החלקים החסרים"
+          },
+          {
+            "kind": "actor",
+            "actor": "warehouseClerk",
+            "text": "מזמין את החלק מספק חיצוני ומזין את פרטי ההזמנה"
+          },
+          {
+            "kind": "system",
+            "text": "שומר את ההזמנה ומקשר אותה לקריאה הממתינה"
+          }
+        ],
+        "extensions": []
+      }
+    ],
+    "userStories": [
+      {
+        "role": "פקיד מחסן",
+        "want": "לראות אילו קריאות ממתינות לאילו חלקים",
+        "so": "אזמין את החלק הנכון מיד ולא אחכה לשיחת טלפון מהמוסך"
+      }
+    ]
+  },
+  "uc-receive-part": {
+    "id": "uc-receive-part",
+    "name": "קליטת חלק שהגיע מהספק",
+    "primaryActor": "warehouseClerk",
+    "secondaryActors": [],
+    "description": "פקיד המחסן קולט למחסן את החלק שהגיע מהספק, רמת המלאי מתעדכנת, והקריאות שהמתינו לאותו חלק משתחררות להמשך טיפול.",
+    "preconditions": [
+      "התקבלה הודעה שהחלק שהוזמן הגיע."
+    ],
+    "postconditions": [
+      "רמת המלאי של החלק עודכנה, והקריאות שהמתינו לו חזרו למצב טיפול."
+    ],
+    "scenarios": [
+      {
+        "id": "sc-happy",
+        "name": "מסלול מרכזי",
+        "flow": [
+          {
+            "kind": "actor",
+            "actor": "warehouseClerk",
+            "text": "בוחר את ההזמנה שהגיעה ומאשר את הכמות שנקלטה"
+          },
+          {
+            "kind": "include",
+            "uc": "uc-update-stock",
+            "text": "עדכון רמת המלאי של החלק"
+          },
+          {
+            "kind": "system",
+            "text": "משחרר את הקריאות שהמתינו לאותו חלק וממשיך אותן לטיפול"
+          }
+        ],
+        "extensions": [
+          {
+            "at": 1,
+            "text": "אם הגיעה כמות חלקית, נקלטת הכמות שהגיעה ורק חלק מהקריאות הממתינות משתחרר."
+          }
+        ]
+      }
+    ],
+    "userStories": [
+      {
+        "role": "פקיד מחסן",
+        "want": "לקלוט את החלק שהגיע ולשחרר בכך את הקריאות שהמתינו לו",
+        "so": "המכונאי ימשיך בטיפול בלי שאצטרך לאתר אותו בטלפון"
+      }
+    ]
+  },
+  "uc-manage-vehicles": {
+    "id": "uc-manage-vehicles",
+    "name": "ניהול כלי רכב",
+    "primaryActor": "sysadmin",
+    "secondaryActors": [],
+    "description": "הקמה, עדכון וגריעה של כלי רכב בצי: מספר רישוי, סוג, דגם, קילומטראז', מועד הטיפול התקופתי הבא, והמחלקה שאליה הרכב משויך.",
+    "preconditions": [
+      "למשתמש הרשאת ניהול מערכת."
+    ],
+    "postconditions": [
+      "רשימת כלי הרכב ופרטיהם עודכנו."
+    ],
+    "scenarios": [
+      {
+        "id": "sc-happy",
+        "name": "מסלול מרכזי",
+        "flow": [
+          {
+            "kind": "actor",
+            "actor": "sysadmin",
+            "text": "מקים או מעדכן רכב ומזין את פרטיו"
+          },
+          {
+            "kind": "actor",
+            "actor": "sysadmin",
+            "text": "משייך את הרכב למחלקה"
+          },
+          {
+            "kind": "system",
+            "text": "שומר את השינוי"
+          }
+        ],
+        "extensions": []
+      }
+    ],
+    "userStories": [
+      {
+        "role": "מנהל מערכת",
+        "want": "לרשום רכב חדש בצי ולשייכו למחלקה",
+        "so": "אפשר יהיה לפתוח עבורו קריאות טיפול מהיום הראשון"
+      }
+    ]
+  },
+  "uc-manage-departments": {
+    "id": "uc-manage-departments",
+    "name": "ניהול מחלקות",
+    "primaryActor": "sysadmin",
+    "secondaryActors": [],
+    "description": "ניהול רשימת המחלקות בחברה ופרטי ההתקשרות שלהן. המחלקות משמשות לשיוך כלי רכב ולזיהוי נציגי המחלקות.",
+    "preconditions": [
+      "למשתמש הרשאת ניהול מערכת."
+    ],
+    "postconditions": [
+      "רשימת המחלקות עודכנה."
+    ],
+    "scenarios": [
+      {
+        "id": "sc-happy",
+        "name": "מסלול מרכזי",
+        "flow": [
+          {
+            "kind": "actor",
+            "actor": "sysadmin",
+            "text": "מוסיף או מעדכן מחלקה ואת פרטי ההתקשרות שלה"
+          },
+          {
+            "kind": "system",
+            "text": "שומר את השינוי"
+          }
+        ],
+        "extensions": []
+      }
+    ],
+    "userStories": []
+  },
+  "uc-manage-garages": {
+    "id": "uc-manage-garages",
+    "name": "ניהול מוסכים",
+    "primaryActor": "sysadmin",
+    "secondaryActors": [],
+    "description": "הקמה ועדכון של מוסכי החברה ושיוך המכונאים לכל מוסך. כל מכונאי משויך למוסך אחד.",
+    "preconditions": [
+      "למשתמש הרשאת ניהול מערכת."
+    ],
+    "postconditions": [
+      "רשימת המוסכים ושיוכי המכונאים עודכנו."
+    ],
+    "scenarios": [
+      {
+        "id": "sc-happy",
+        "name": "מסלול מרכזי",
+        "flow": [
+          {
+            "kind": "actor",
+            "actor": "sysadmin",
+            "text": "מקים או מעדכן מוסך"
+          },
+          {
+            "kind": "actor",
+            "actor": "sysadmin",
+            "text": "משייך מכונאים למוסך"
+          },
+          {
+            "kind": "system",
+            "text": "שומר את השינוי"
+          }
+        ],
+        "extensions": []
+      }
+    ],
+    "userStories": []
+  },
+  "uc-manage-parts": {
+    "id": "uc-manage-parts",
+    "name": "ניהול קטלוג החלקים",
+    "primaryActor": "sysadmin",
+    "secondaryActors": [],
+    "description": "ניהול החלקים במחסן: מספר מק\"ט, שם החלק ומחירו העדכני. רמת המלאי עצמה מתעדכנת מתוך תנועות המלאי ולא ידנית מכאן.",
+    "preconditions": [
+      "למשתמש הרשאת ניהול מערכת."
+    ],
+    "postconditions": [
+      "קטלוג החלקים עודכן."
+    ],
+    "scenarios": [
+      {
+        "id": "sc-happy",
+        "name": "מסלול מרכזי",
+        "flow": [
+          {
+            "kind": "actor",
+            "actor": "sysadmin",
+            "text": "מוסיף או מעדכן חלק, מספר מק\"ט, שם ומחיר"
+          },
+          {
+            "kind": "system",
+            "text": "שומר את השינוי"
+          }
+        ],
+        "extensions": []
+      }
+    ],
+    "userStories": []
+  },
+  "uc-manage-specialties": {
+    "id": "uc-manage-specialties",
+    "name": "ניהול תחומי התמחות",
+    "primaryActor": "sysadmin",
+    "secondaryActors": [],
+    "description": "ניהול קטלוג תחומי ההתמחות של המכונאים (מנועים, חשמל, מרכב ועוד) ושיוך תחומי ההתמחות לכל מכונאי. מכונאי יכול להחזיק יותר מתחום אחד.",
+    "preconditions": [
+      "למשתמש הרשאת ניהול מערכת."
+    ],
+    "postconditions": [
+      "קטלוג תחומי ההתמחות ושיוכי המכונאים עודכנו."
+    ],
+    "scenarios": [
+      {
+        "id": "sc-happy",
+        "name": "מסלול מרכזי",
+        "flow": [
+          {
+            "kind": "actor",
+            "actor": "sysadmin",
+            "text": "מוסיף או מעדכן תחום התמחות"
+          },
+          {
+            "kind": "actor",
+            "actor": "sysadmin",
+            "text": "משייך תחומי התמחות למכונאי"
+          },
+          {
+            "kind": "system",
+            "text": "שומר את השינוי"
+          }
+        ],
+        "extensions": []
+      }
+    ],
+    "userStories": [
+      {
+        "role": "מנהל מערכת",
+        "want": "להוסיף תחום התמחות חדש בלי שינוי בקוד",
+        "so": "המערכת תלווה שינויים בצי ובטכנולוגיה של כלי הרכב"
+      }
+    ]
+  },
+  "uc-manage-users": {
+    "id": "uc-manage-users",
+    "name": "ניהול משתמשים ותפקידים",
+    "primaryActor": "sysadmin",
+    "secondaryActors": [],
+    "description": "יצירה, עדכון והשבתה של משתמשים, ושיוך תפקידים למשתמש. ההרשאות נגזרות מהתפקידים, ומשתמש יכול לשאת יותר מתפקיד אחד — למשל מכונאי שהוא גם מנהל מוסך.",
+    "preconditions": [
+      "למשתמש הרשאת ניהול מערכת."
+    ],
+    "postconditions": [
+      "המשתמש והתפקידים המשויכים לו עודכנו, וההרשאות נגזרות מהם."
+    ],
+    "scenarios": [
+      {
+        "id": "sc-happy",
+        "name": "מסלול מרכזי",
+        "flow": [
+          {
+            "kind": "actor",
+            "actor": "sysadmin",
+            "text": "יוצר או מאתר משתמש ומזין פרטים מזהים ודרכי קשר"
+          },
+          {
+            "kind": "actor",
+            "actor": "sysadmin",
+            "text": "משייך למשתמש תפקיד אחד או יותר"
+          },
+          {
+            "kind": "system",
+            "text": "שומר ומחיל את ההרשאות הנגזרות"
+          }
+        ],
+        "extensions": []
+      }
+    ],
+    "userStories": [
+      {
+        "role": "מנהל מערכת",
+        "want": "לשייך למשתמש יותר מתפקיד אחד",
+        "so": "מכונאי שהוא גם מנהל מוסך יעבוד עם חשבון אחד"
+      }
+    ]
+  },
+  "uc-periodic-open": {
+    "id": "uc-periodic-open",
+    "name": "פתיחת קריאת טיפול תקופתית",
+    "primaryActor": "timeActor",
+    "secondaryActors": [],
+    "description": "כאשר מגיע מועד הטיפול התקופתי של רכב, המערכת פותחת עבורו קריאת טיפול מסוג \"תקופתי\" ללא כל פעולה של נהג, נציג מחלקה או מכונאי. הטריגר הוא הגעת המועד, ולכן השחקן הוא שחקן זמן.",
+    "preconditions": [
+      "לרכב מוגדר מועד טיפול תקופתי, והוא פעיל בצי."
+    ],
+    "postconditions": [
+      "נוצרה קריאת טיפול מסוג \"תקופתי\" במצב \"נפתחה\", ללא משתמש פותח."
+    ],
+    "scenarios": [
+      {
+        "id": "sc-happy",
+        "name": "מסלול מרכזי",
+        "flow": [
+          {
+            "kind": "actor",
+            "actor": "timeActor",
+            "text": "הגיע מועד הטיפול התקופתי של הרכב"
+          },
+          {
+            "kind": "system",
+            "text": "פותח קריאת טיפול מסוג \"תקופתי\" לרכב, קובע את רמת העדיפות ומשייך אותה למוסך"
+          },
+          {
+            "kind": "system",
+            "text": "מודיע למחלקה המחזיקה ברכב ולמוסך"
+          }
+        ],
+        "extensions": [
+          {
+            "at": 2,
+            "text": "אם כבר קיימת לרכב קריאה תקופתית פתוחה, לא נפתחת קריאה נוספת."
+          }
+        ]
+      }
+    ],
+    "userStories": []
+  },
+  "uc-part-arrival-notice": {
+    "id": "uc-part-arrival-notice",
+    "name": "קליטת הודעת הגעת חלק מהספק",
+    "primaryActor": "supplierSystem",
+    "secondaryActors": [
+      "warehouseClerk"
+    ],
+    "description": "מערכת הספק פונה אל המערכת שלנו ומודיעה שחלק שהוזמן הגיע. המערכת מסמנת את ההזמנה כ\"הגיעה\" ומתריעה לפקיד המחסן שיש לקלוט את החלק. זהו ממשק אל מערכת חיצונית ולא פעולה של משתמש.",
+    "preconditions": [
+      "קיימת הזמנת חלק פתוחה מול הספק."
+    ],
+    "postconditions": [
+      "ההזמנה סומנה כ\"הגיעה\" ונשלחה התרעה לפקיד המחסן."
+    ],
+    "scenarios": [
+      {
+        "id": "sc-happy",
+        "name": "מסלול מרכזי",
+        "flow": [
+          {
+            "kind": "actor",
+            "actor": "supplierSystem",
+            "text": "שולחת הודעה שהחלק שהוזמן הגיע"
+          },
+          {
+            "kind": "system",
+            "text": "מאתר את ההזמנה המתאימה ומסמן אותה כ\"הגיעה\""
+          },
+          {
+            "kind": "system",
+            "text": "מתריע לפקיד המחסן ולמכונאי של הקריאה הממתינה"
+          }
+        ],
+        "extensions": [
+          {
+            "at": 2,
+            "text": "אם לא נמצאה הזמנה תואמת, ההודעה נרשמת ביומן ממשקים לטיפול ידני של פקיד המחסן."
+          }
+        ]
+      }
+    ],
+    "userStories": []
+  }
+};
+
+  var diagramLayouts = [
+  {
+    "svgId": "diagram-svg-0",
+    "boundary": {
+      "x": 380,
+      "y": 70,
+      "width": 1060,
+      "height": 760
+    },
+    "actors": [
+      {
+        "id": "driver",
+        "label": "נהג",
+        "side": "left",
+        "x": 290,
+        "y": 190,
+        "ucIds": [
+          "uc-open-call",
+          "uc-cancel-call"
+        ]
+      },
+      {
+        "id": "deptRep",
+        "label": "נציג מחלקה",
+        "side": "left",
+        "x": 290,
+        "y": 330,
+        "ucIds": [
+          "uc-open-call",
+          "uc-cancel-call"
+        ]
+      },
+      {
+        "id": "mechanic",
+        "label": "מכונאי",
+        "side": "left",
+        "x": 290,
+        "y": 630,
+        "ucIds": [
+          "uc-diagnose",
+          "uc-record-parts",
+          "uc-report-hours",
+          "uc-complete"
+        ]
+      },
+      {
+        "id": "fleetManager",
+        "label": "מנהל צי",
+        "side": "right",
+        "x": 1620,
+        "y": 250,
+        "ucIds": [
+          "uc-approve",
+          "uc-return-service"
+        ]
+      },
+      {
+        "id": "garageManager",
+        "label": "מנהל מוסך",
+        "side": "right",
+        "x": 1620,
+        "y": 460,
+        "ucIds": [
+          "uc-assign-mechanics"
+        ]
+      },
+      {
+        "id": "warehouseClerk",
+        "label": "פקיד מחסן",
+        "side": "right",
+        "x": 1620,
+        "y": 700,
+        "ucIds": [
+          "uc-order-part",
+          "uc-receive-part"
+        ]
+      }
+    ],
+    "useCases": [
+      {
+        "id": "uc-open-call",
+        "cx": 560,
+        "cy": 180,
+        "rx": 72,
+        "ry": 28
+      },
+      {
+        "id": "uc-cancel-call",
+        "cx": 560,
+        "cy": 310,
+        "rx": 68,
+        "ry": 28
+      },
+      {
+        "id": "uc-diagnose",
+        "cx": 560,
+        "cy": 490,
+        "rx": 82,
+        "ry": 28
+      },
+      {
+        "id": "uc-record-parts",
+        "cx": 560,
+        "cy": 630,
+        "rx": 90,
+        "ry": 28
+      },
+      {
+        "id": "uc-report-hours",
+        "cx": 560,
+        "cy": 760,
+        "rx": 84,
+        "ry": 28
+      },
+      {
+        "id": "uc-complete",
+        "cx": 900,
+        "cy": 490,
+        "rx": 68,
+        "ry": 28
+      },
+      {
+        "id": "uc-update-stock",
+        "cx": 900,
+        "cy": 690,
+        "rx": 60,
+        "ry": 28
+      },
+      {
+        "id": "uc-approve",
+        "cx": 1200,
+        "cy": 180,
+        "rx": 96,
+        "ry": 28
+      },
+      {
+        "id": "uc-return-service",
+        "cx": 1200,
+        "cy": 320,
+        "rx": 78,
+        "ry": 28
+      },
+      {
+        "id": "uc-assign-mechanics",
+        "cx": 1200,
+        "cy": 460,
+        "rx": 96,
+        "ry": 28
+      },
+      {
+        "id": "uc-order-part",
+        "cx": 1200,
+        "cy": 620,
+        "rx": 80,
+        "ry": 28
+      },
+      {
+        "id": "uc-receive-part",
+        "cx": 1200,
+        "cy": 760,
+        "rx": 80,
+        "ry": 28
+      }
+    ],
+    "connections": []
+  },
+  {
+    "svgId": "diagram-svg-1",
+    "boundary": {
+      "x": 380,
+      "y": 70,
+      "width": 820,
+      "height": 560
+    },
+    "actors": [
+      {
+        "id": "sysadmin",
+        "label": "מנהל מערכת",
+        "side": "left",
+        "x": 290,
+        "y": 330,
+        "ucIds": [
+          "uc-manage-vehicles",
+          "uc-manage-departments",
+          "uc-manage-garages",
+          "uc-manage-parts",
+          "uc-manage-specialties",
+          "uc-manage-users"
+        ]
+      }
+    ],
+    "useCases": [
+      {
+        "id": "uc-manage-vehicles",
+        "cx": 560,
+        "cy": 180,
+        "rx": 88,
+        "ry": 28
+      },
+      {
+        "id": "uc-manage-departments",
+        "cx": 560,
+        "cy": 330,
+        "rx": 88,
+        "ry": 28
+      },
+      {
+        "id": "uc-manage-garages",
+        "cx": 560,
+        "cy": 480,
+        "rx": 88,
+        "ry": 28
+      },
+      {
+        "id": "uc-manage-parts",
+        "cx": 1000,
+        "cy": 180,
+        "rx": 100,
+        "ry": 28
+      },
+      {
+        "id": "uc-manage-specialties",
+        "cx": 1000,
+        "cy": 330,
+        "rx": 100,
+        "ry": 28
+      },
+      {
+        "id": "uc-manage-users",
+        "cx": 1000,
+        "cy": 480,
+        "rx": 110,
+        "ry": 28
+      }
+    ],
+    "connections": []
+  },
+  {
+    "svgId": "diagram-svg-2",
+    "boundary": {
+      "x": 380,
+      "y": 70,
+      "width": 620,
+      "height": 400
+    },
+    "actors": [
+      {
+        "id": "timeActor",
+        "label": "שחקן זמן",
+        "side": "left",
+        "x": 280,
+        "y": 220,
+        "ucIds": [
+          "uc-periodic-open"
+        ]
+      },
+      {
+        "id": "supplierSystem",
+        "label": "מערכת הספק",
+        "side": "left",
+        "x": 280,
+        "y": 400,
+        "ucIds": [
+          "uc-part-arrival-notice"
+        ]
+      }
+    ],
+    "useCases": [
+      {
+        "id": "uc-periodic-open",
+        "cx": 690,
+        "cy": 200,
+        "rx": 104,
+        "ry": 30
+      },
+      {
+        "id": "uc-part-arrival-notice",
+        "cx": 690,
+        "cy": 370,
+        "rx": 116,
+        "ry": 30
+      }
+    ],
+    "connections": [
+      {
+        "from": "timeActor",
+        "to": "uc-periodic-open",
+        "type": "association",
+        "timing": "בהגיע מועד הטיפול התקופתי של הרכב"
+      }
+    ]
+  }
+];
+
+  var diagramModel = {
+  "kind": "use-case",
+  "title": "נעים בדרכים, Use Case",
+  "parts": [
+    {
+      "id": "part-a",
+      "label": "תפעול קריאות הטיפול",
+      "splitRationale": "פוצל לפי מספר Use Cases: 20 > 8.",
+      "elements": [
+        {
+          "kind": "actor",
+          "id": "driver",
+          "name": "נהג",
+          "actorType": "human",
+          "side": "left"
+        },
+        {
+          "kind": "actor",
+          "id": "deptRep",
+          "name": "נציג מחלקה",
+          "actorType": "human",
+          "side": "left"
+        },
+        {
+          "kind": "actor",
+          "id": "mechanic",
+          "name": "מכונאי",
+          "actorType": "human",
+          "side": "left"
+        },
+        {
+          "kind": "actor",
+          "id": "fleetManager",
+          "name": "מנהל צי",
+          "actorType": "human",
+          "side": "right"
+        },
+        {
+          "kind": "actor",
+          "id": "garageManager",
+          "name": "מנהל מוסך",
+          "actorType": "human",
+          "side": "right"
+        },
+        {
+          "kind": "actor",
+          "id": "warehouseClerk",
+          "name": "פקיד מחסן",
+          "actorType": "human",
+          "side": "right"
+        },
+        {
+          "kind": "useCase",
+          "id": "uc-open-call",
+          "name": "פתיחת קריאת טיפול",
+          "description": "נהג או נציג מחלקה פותח קריאת טיפול לרכב כאשר מתגלה תקלה. בקריאה נקבעים סוג הטיפול ורמת העדיפות, והיא מגיעה למוסך המטפל.",
+          "primaryActor": "driver",
+          "secondaryActors": [
+            "deptRep"
+          ],
+          "preconditions": [
+            "המשתמש מזוהה במערכת והרכב רשום בצי."
+          ],
+          "postconditions": [
+            "נוצרה קריאת טיפול במצב \"נפתחה\", המשויכת לרכב ולמוסך."
+          ],
+          "scenarios": [
+            {
+              "id": "sc-happy",
+              "name": "מסלול מרכזי",
+              "flow": [
+                {
+                  "kind": "actor",
+                  "actor": "driver",
+                  "text": "בוחר את הרכב ומתאר את התקלה שהתגלתה"
+                },
+                {
+                  "kind": "actor",
+                  "actor": "driver",
+                  "text": "בוחר את סוג הטיפול (תיקון תקלה או בדיקה) ואת רמת העדיפות"
+                },
+                {
+                  "kind": "system",
+                  "text": "יוצר קריאת טיפול במצב \"נפתחה\" ומשייך אותה לרכב ולמוסך"
+                }
+              ],
+              "extensions": [
+                {
+                  "at": 1,
+                  "text": "אם כבר קיימת קריאה פתוחה לאותו רכב, המערכת מציגה אותה והמשתמש יכול להוסיף לתיאור במקום לפתוח קריאה נוספת."
+                }
+              ]
+            }
+          ],
+          "userStories": [
+            {
+              "role": "נהג",
+              "want": "לפתוח קריאת טיפול לרכב שבו התגלתה תקלה",
+              "so": "התקלה תטופל בלי שאצטרך לרדוף אחרי טפסים ושיחות טלפון"
+            }
+          ],
+          "wireframe": ""
+        },
+        {
+          "kind": "useCase",
+          "id": "uc-cancel-call",
+          "name": "ביטול קריאת טיפול",
+          "description": "מי שפתח את הקריאה מבטל אותה כל עוד לא החל האבחון, למשל כשהתקלה נפתרה מאליה או שנפתחה קריאה כפולה.",
+          "primaryActor": "driver",
+          "secondaryActors": [
+            "deptRep"
+          ],
+          "preconditions": [
+            "קיימת קריאה שטרם החל בה אבחון."
+          ],
+          "postconditions": [
+            "הקריאה עברה למצב \"בוטלה\" ואינה ממתינה עוד לטיפול במוסך."
+          ],
+          "scenarios": [
+            {
+              "id": "sc-happy",
+              "name": "מסלול מרכזי",
+              "flow": [
+                {
+                  "kind": "actor",
+                  "actor": "driver",
+                  "text": "בוחר קריאה פתוחה שפתח ומבקש לבטלה"
+                },
+                {
+                  "kind": "system",
+                  "text": "בודק שטרם החל אבחון בקריאה"
+                },
+                {
+                  "kind": "system",
+                  "text": "מעביר את הקריאה למצב \"בוטלה\" ומודיע למוסך"
+                }
+              ],
+              "extensions": [
+                {
+                  "at": 2,
+                  "text": "אם האבחון כבר החל, הביטול נחסם בפני הנהג; רק מנהל הצי, שהרשאתו גורפת, יכול לבטל בשלב זה."
+                }
+              ]
+            }
+          ],
+          "userStories": [
+            {
+              "role": "נציג מחלקה",
+              "want": "לבטל קריאה שנפתחה בטעות לפני שהמוסך התחיל לעבוד עליה",
+              "so": "לא נבזבז זמן מכונאי על תקלה שאינה קיימת"
+            }
+          ],
+          "wireframe": ""
+        },
+        {
+          "kind": "useCase",
+          "id": "uc-diagnose",
+          "name": "ביצוע אבחון ורישום דוח",
+          "description": "המכונאי בודק את הרכב ורושם דוח אבחון הכולל את הממצאים ואת העלות המשוערת של הטיפול. העלות המשוערת היא שקובעת אם נדרש אישור מנהל הצי.",
+          "primaryActor": "mechanic",
+          "secondaryActors": [],
+          "preconditions": [
+            "קיימת קריאת טיפול פתוחה ששובץ אליה מכונאי."
+          ],
+          "postconditions": [
+            "נשמר דוח אבחון עם ממצאים ועלות משוערת, והקריאה עברה לטיפול או להמתנה לאישור."
+          ],
+          "scenarios": [
+            {
+              "id": "sc-happy",
+              "name": "מסלול מרכזי",
+              "flow": [
+                {
+                  "kind": "actor",
+                  "actor": "mechanic",
+                  "text": "פותח את הקריאה ומתחיל אבחון"
+                },
+                {
+                  "kind": "actor",
+                  "actor": "mechanic",
+                  "text": "רושם את הממצאים ואת העלות המשוערת"
+                },
+                {
+                  "kind": "system",
+                  "text": "משווה את העלות המשוערת לסף שנקבע ומנתב את הקריאה לטיפול או להמתנה לאישור מנהל הצי"
+                }
+              ],
+              "extensions": [
+                {
+                  "at": 3,
+                  "text": "אם העלות המשוערת חורגת מהסף, הקריאה ממתינה לאישור מנהל הצי ולא ניתן להתחיל בטיפול."
+                }
+              ]
+            }
+          ],
+          "userStories": [
+            {
+              "role": "מכונאי",
+              "want": "לרשום את ממצאי האבחון ואת העלות המשוערת",
+              "so": "מנהל הצי יוכל להכריע על סמך נתונים ולא בשיחת טלפון"
+            }
+          ],
+          "wireframe": ""
+        },
+        {
+          "kind": "useCase",
+          "id": "uc-record-parts",
+          "name": "רישום חלקים שנוצלו בטיפול",
+          "description": "במהלך הטיפול רושם המכונאי אילו חלקים נוצלו בקריאה ובאיזו כמות. מחיר החלק נשמר כפי שהיה בעת השימוש, ורמת המלאי במחסן מתעדכנת בהתאם.",
+          "primaryActor": "mechanic",
+          "secondaryActors": [],
+          "preconditions": [
+            "הקריאה נמצאת בטיפול."
+          ],
+          "postconditions": [
+            "נרשמו שורות ניצול חלקים עם כמות ומחיר בעת השימוש, ורמת המלאי של כל חלק עודכנה."
+          ],
+          "scenarios": [
+            {
+              "id": "sc-happy",
+              "name": "מסלול מרכזי",
+              "flow": [
+                {
+                  "kind": "actor",
+                  "actor": "mechanic",
+                  "text": "בוחר חלק מקטלוג החלקים ומזין את הכמות שנוצלה"
+                },
+                {
+                  "kind": "system",
+                  "text": "שומר את הכמות ואת מחיר החלק כפי שהוא ברגע השימוש"
+                },
+                {
+                  "kind": "include",
+                  "uc": "uc-update-stock",
+                  "text": "עדכון רמת המלאי של החלק"
+                }
+              ],
+              "extensions": [
+                {
+                  "at": 1,
+                  "text": "אם רמת המלאי אינה מספיקה, המכונאי מדווח על חוסר והקריאה עוברת להמתנה לחלקים."
+                }
+              ]
+            }
+          ],
+          "userStories": [
+            {
+              "role": "מכונאי",
+              "want": "לרשום אילו חלקים ניצלתי ובאיזו כמות",
+              "so": "עלות הטיפול תהיה מדויקת והמחסן יידע מה נותר במלאי"
+            }
+          ],
+          "wireframe": ""
+        },
+        {
+          "kind": "useCase",
+          "id": "uc-report-hours",
+          "name": "דיווח שעות עבודה בקריאה",
+          "description": "כל מכונאי המשובץ לקריאה מדווח על מספר שעות העבודה שהשקיע באותה קריאה. כשמשובצים כמה מכונאים, כל אחד מדווח את שעותיו שלו.",
+          "primaryActor": "mechanic",
+          "secondaryActors": [],
+          "preconditions": [
+            "המכונאי משובץ לקריאה."
+          ],
+          "postconditions": [
+            "מספר השעות נשמר על השיבוץ של אותו מכונאי לאותה קריאה."
+          ],
+          "scenarios": [
+            {
+              "id": "sc-happy",
+              "name": "מסלול מרכזי",
+              "flow": [
+                {
+                  "kind": "actor",
+                  "actor": "mechanic",
+                  "text": "בוחר את הקריאה שעבד עליה ומזין את מספר השעות"
+                },
+                {
+                  "kind": "system",
+                  "text": "שומר את השעות על השיבוץ של המכונאי לקריאה"
+                }
+              ],
+              "extensions": []
+            }
+          ],
+          "userStories": [
+            {
+              "role": "מכונאי",
+              "want": "לדווח את שעות העבודה שהשקעתי בכל קריאה",
+              "so": "עלות העבודה תיזקף לקריאה הנכונה ולא תיאבד"
+            }
+          ],
+          "wireframe": ""
+        },
+        {
+          "kind": "useCase",
+          "id": "uc-complete",
+          "name": "סימון השלמת הטיפול",
+          "description": "בתום העבודה כותב המכונאי את סיכום התיקון החופשי ומסמן שהקריאה הושלמה. הסימון סוגר את שלב הביצוע ומעביר את ההחלטה על החזרת הרכב לשירות למנהל הצי. שמירת הסיכום במערכת היא הכרעת מנתח המערכות, בניגוד לבקשת מנהל הצי לעדכן את המחלקה טלפונית בלבד — ראו הנימוק ומחירו בפתרון שאלה 7.5.",
+          "primaryActor": "mechanic",
+          "secondaryActors": [],
+          "preconditions": [
+            "הקריאה בטיפול ואינה ממתינה לחלקים."
+          ],
+          "postconditions": [
+            "נשמר סיכום התיקון, הקריאה עברה למצב \"הושלמה\" והועברה לאישור מנהל הצי להחזרת הרכב לשירות."
+          ],
+          "scenarios": [
+            {
+              "id": "sc-happy",
+              "name": "מסלול מרכזי",
+              "flow": [
+                {
+                  "kind": "actor",
+                  "actor": "mechanic",
+                  "text": "כותב את סיכום התיקון: מה בוצע בפועל בקריאה"
+                },
+                {
+                  "kind": "actor",
+                  "actor": "mechanic",
+                  "text": "מסמן שהטיפול הושלם"
+                },
+                {
+                  "kind": "system",
+                  "text": "שומר את הסיכום, מעביר את הקריאה למצב \"הושלמה\" ומודיע למנהל הצי ולמחלקה המחזיקה ברכב"
+                }
+              ],
+              "extensions": [
+                {
+                  "at": 1,
+                  "text": "אם עדיין חסר חלק, לא ניתן לסמן השלמה; הקריאה נשארת בהמתנה לחלקים."
+                }
+              ]
+            }
+          ],
+          "userStories": [
+            {
+              "role": "מכונאי",
+              "want": "לסמן שסיימתי את הטיפול בקריאה",
+              "so": "הרכב יוחזר לשירות מהר ולא יעמוד מושבת שלא לצורך"
+            },
+            {
+              "role": "נציג מחלקה",
+              "want": "לקרוא במערכת מה בוצע בפועל ברכב שלי",
+              "so": "לא אצטרך להסתמך על שיחת טלפון שאיש אינו זוכר"
+            }
+          ],
+          "wireframe": ""
+        },
+        {
+          "kind": "useCase",
+          "id": "uc-update-stock",
+          "name": "עדכון רמת מלאי",
+          "description": "התנהגות משותפת המעדכנת את רמת המלאי של חלק במחסן. היא מתבצעת תמיד בשני הקשרים שונים: כשחלק נוצל בטיפול (גריעה) וכשחלק שהוזמן נקלט מהספק (הוספה). אינה מופעלת ישירות על ידי שחקן, אלא נקראת מתוך שני מקרי השימוש הבסיסיים.",
+          "primaryActor": "",
+          "secondaryActors": [],
+          "preconditions": [
+            "קיים חלק בקטלוג החלקים והתקבלה תנועת מלאי עבורו."
+          ],
+          "postconditions": [
+            "רמת המלאי העדכנית של החלק נשמרה."
+          ],
+          "scenarios": [
+            {
+              "id": "sc-happy",
+              "name": "מסלול מרכזי",
+              "flow": [
+                {
+                  "kind": "system",
+                  "text": "מקבל את החלק ואת כמות התנועה (גריעה או הוספה)"
+                },
+                {
+                  "kind": "system",
+                  "text": "מחשב את רמת המלאי החדשה ושומר אותה על החלק"
+                }
+              ],
+              "extensions": []
+            }
+          ],
+          "userStories": [],
+          "wireframe": ""
+        },
+        {
+          "kind": "useCase",
+          "id": "uc-approve",
+          "name": "אישור או דחיית קריאה חורגת",
+          "description": "כאשר העלות המשוערת בדוח האבחון חורגת מהסף שנקבע, הקריאה ממתינה להכרעת מנהל הצי, שרשאי לאשר את ביצוע הטיפול או לדחות את הקריאה.",
+          "primaryActor": "fleetManager",
+          "secondaryActors": [],
+          "preconditions": [
+            "קיים דוח אבחון שעלותו המשוערת חורגת מהסף, והקריאה ממתינה לאישור."
+          ],
+          "postconditions": [
+            "הקריאה אושרה ועברה לטיפול, או נדחתה ונסגרה."
+          ],
+          "scenarios": [
+            {
+              "id": "sc-happy",
+              "name": "מסלול מרכזי",
+              "flow": [
+                {
+                  "kind": "actor",
+                  "actor": "fleetManager",
+                  "text": "פותח את רשימת הקריאות הממתינות לאישורו"
+                },
+                {
+                  "kind": "actor",
+                  "actor": "fleetManager",
+                  "text": "בוחן את דוח האבחון ואת העלות המשוערת"
+                },
+                {
+                  "kind": "actor",
+                  "actor": "fleetManager",
+                  "text": "מאשר או דוחה את הקריאה"
+                },
+                {
+                  "kind": "system",
+                  "text": "מעביר את הקריאה לטיפול או למצב \"נדחתה\""
+                }
+              ],
+              "extensions": []
+            }
+          ],
+          "userStories": [
+            {
+              "role": "מנהל צי",
+              "want": "לראות את כל הקריאות הממתינות לאישורי",
+              "so": "אוכל לאשר או לדחות אותן במהירות ולקצר את זמן ההשבתה של הרכב"
+            }
+          ],
+          "wireframe": ""
+        },
+        {
+          "kind": "useCase",
+          "id": "uc-return-service",
+          "name": "החזרת רכב לשירות",
+          "description": "לאחר שהמכונאי סימן שהקריאה הושלמה, מנהל הצי מחזיר את הרכב לשירות. זו הפעולה שסוגרת את הקריאה ומשחררת את הרכב חזרה למחלקה.",
+          "primaryActor": "fleetManager",
+          "secondaryActors": [],
+          "preconditions": [
+            "הקריאה במצב \"הושלמה\"."
+          ],
+          "postconditions": [
+            "הרכב חזר לשירות והקריאה נסגרה ונשמרת בהיסטוריית הטיפולים של הרכב."
+          ],
+          "scenarios": [
+            {
+              "id": "sc-happy",
+              "name": "מסלול מרכזי",
+              "flow": [
+                {
+                  "kind": "actor",
+                  "actor": "fleetManager",
+                  "text": "בוחר קריאה שהושלמה ומאשר את החזרת הרכב לשירות"
+                },
+                {
+                  "kind": "system",
+                  "text": "סוגר את הקריאה, משחרר את הרכב ומודיע למחלקה המחזיקה בו"
+                }
+              ],
+              "extensions": []
+            }
+          ],
+          "userStories": [
+            {
+              "role": "מנהל צי",
+              "want": "להחזיר רכב לשירות מיד עם השלמת הטיפול",
+              "so": "זמן ההשבתה של הרכב יהיה הקצר ביותר האפשרי"
+            }
+          ],
+          "wireframe": ""
+        },
+        {
+          "kind": "useCase",
+          "id": "uc-assign-mechanics",
+          "name": "שיבוץ מכונאים לקריאת טיפול",
+          "description": "מנהל המוסך משבץ לקריאת טיפול מכונאי מטפל, ולעיתים יותר ממכונאי אחד, בהתאם לתחומי ההתמחות הנדרשים ולעומס במוסך.",
+          "primaryActor": "garageManager",
+          "secondaryActors": [],
+          "preconditions": [
+            "קיימת קריאה פתוחה במוסך שבניהולו."
+          ],
+          "postconditions": [
+            "לקריאה משויכים מכונאי אחד או יותר, וכל שיבוץ מוכן לקליטת דיווח שעות."
+          ],
+          "scenarios": [
+            {
+              "id": "sc-happy",
+              "name": "מסלול מרכזי",
+              "flow": [
+                {
+                  "kind": "actor",
+                  "actor": "garageManager",
+                  "text": "בוחר קריאה פתוחה במוסך שבניהולו"
+                },
+                {
+                  "kind": "actor",
+                  "actor": "garageManager",
+                  "text": "בוחר מכונאי אחד או יותר לפי תחום ההתמחות הנדרש"
+                },
+                {
+                  "kind": "system",
+                  "text": "יוצר שיבוץ לכל מכונאי ומודיע לו"
+                }
+              ],
+              "extensions": []
+            }
+          ],
+          "userStories": [
+            {
+              "role": "מנהל מוסך",
+              "want": "לשבץ לקריאה יותר ממכונאי אחד כשצריך",
+              "so": "טיפול מורכב יטופל במקביל ולא ימתין למכונאי יחיד"
+            }
+          ],
+          "wireframe": ""
+        },
+        {
+          "kind": "useCase",
+          "id": "uc-order-part",
+          "name": "הזמנת חלק מספק חיצוני",
+          "description": "כאשר קריאה ממתינה לחלק שאינו במלאי, פקיד המחסן מזמין את החלק מספק חיצוני ומקשר את ההזמנה לקריאה הממתינה.",
+          "primaryActor": "warehouseClerk",
+          "secondaryActors": [],
+          "preconditions": [
+            "קיימת קריאה במצב \"ממתינה לחלקים\" שחסר בה חלק מסוים."
+          ],
+          "postconditions": [
+            "נרשמה הזמנת חלק מספק, המקושרת לקריאה הממתינה."
+          ],
+          "scenarios": [
+            {
+              "id": "sc-happy",
+              "name": "מסלול מרכזי",
+              "flow": [
+                {
+                  "kind": "actor",
+                  "actor": "warehouseClerk",
+                  "text": "מאתר את הקריאות הממתינות לחלקים ואת החלקים החסרים"
+                },
+                {
+                  "kind": "actor",
+                  "actor": "warehouseClerk",
+                  "text": "מזמין את החלק מספק חיצוני ומזין את פרטי ההזמנה"
+                },
+                {
+                  "kind": "system",
+                  "text": "שומר את ההזמנה ומקשר אותה לקריאה הממתינה"
+                }
+              ],
+              "extensions": []
+            }
+          ],
+          "userStories": [
+            {
+              "role": "פקיד מחסן",
+              "want": "לראות אילו קריאות ממתינות לאילו חלקים",
+              "so": "אזמין את החלק הנכון מיד ולא אחכה לשיחת טלפון מהמוסך"
+            }
+          ],
+          "wireframe": ""
+        },
+        {
+          "kind": "useCase",
+          "id": "uc-receive-part",
+          "name": "קליטת חלק שהגיע מהספק",
+          "description": "פקיד המחסן קולט למחסן את החלק שהגיע מהספק, רמת המלאי מתעדכנת, והקריאות שהמתינו לאותו חלק משתחררות להמשך טיפול.",
+          "primaryActor": "warehouseClerk",
+          "secondaryActors": [],
+          "preconditions": [
+            "התקבלה הודעה שהחלק שהוזמן הגיע."
+          ],
+          "postconditions": [
+            "רמת המלאי של החלק עודכנה, והקריאות שהמתינו לו חזרו למצב טיפול."
+          ],
+          "scenarios": [
+            {
+              "id": "sc-happy",
+              "name": "מסלול מרכזי",
+              "flow": [
+                {
+                  "kind": "actor",
+                  "actor": "warehouseClerk",
+                  "text": "בוחר את ההזמנה שהגיעה ומאשר את הכמות שנקלטה"
+                },
+                {
+                  "kind": "include",
+                  "uc": "uc-update-stock",
+                  "text": "עדכון רמת המלאי של החלק"
+                },
+                {
+                  "kind": "system",
+                  "text": "משחרר את הקריאות שהמתינו לאותו חלק וממשיך אותן לטיפול"
+                }
+              ],
+              "extensions": [
+                {
+                  "at": 1,
+                  "text": "אם הגיעה כמות חלקית, נקלטת הכמות שהגיעה ורק חלק מהקריאות הממתינות משתחרר."
+                }
+              ]
+            }
+          ],
+          "userStories": [
+            {
+              "role": "פקיד מחסן",
+              "want": "לקלוט את החלק שהגיע ולשחרר בכך את הקריאות שהמתינו לו",
+              "so": "המכונאי ימשיך בטיפול בלי שאצטרך לאתר אותו בטלפון"
+            }
+          ],
+          "wireframe": ""
+        }
+      ],
+      "relationships": [
+        {
+          "kind": "actorAssoc",
+          "id": "as-driver-uc-open-call",
+          "actorId": "driver",
+          "ucId": "uc-open-call",
+          "role": "initiator"
+        },
+        {
+          "kind": "actorAssoc",
+          "id": "as-driver-uc-cancel-call",
+          "actorId": "driver",
+          "ucId": "uc-cancel-call",
+          "role": "initiator"
+        },
+        {
+          "kind": "actorAssoc",
+          "id": "as-deptRep-uc-open-call",
+          "actorId": "deptRep",
+          "ucId": "uc-open-call",
+          "role": "initiator"
+        },
+        {
+          "kind": "actorAssoc",
+          "id": "as-deptRep-uc-cancel-call",
+          "actorId": "deptRep",
+          "ucId": "uc-cancel-call",
+          "role": "initiator"
+        },
+        {
+          "kind": "actorAssoc",
+          "id": "as-mechanic-uc-diagnose",
+          "actorId": "mechanic",
+          "ucId": "uc-diagnose",
+          "role": "initiator"
+        },
+        {
+          "kind": "actorAssoc",
+          "id": "as-mechanic-uc-record-parts",
+          "actorId": "mechanic",
+          "ucId": "uc-record-parts",
+          "role": "initiator"
+        },
+        {
+          "kind": "actorAssoc",
+          "id": "as-mechanic-uc-report-hours",
+          "actorId": "mechanic",
+          "ucId": "uc-report-hours",
+          "role": "initiator"
+        },
+        {
+          "kind": "actorAssoc",
+          "id": "as-mechanic-uc-complete",
+          "actorId": "mechanic",
+          "ucId": "uc-complete",
+          "role": "initiator"
+        },
+        {
+          "kind": "actorAssoc",
+          "id": "as-fleetManager-uc-approve",
+          "actorId": "fleetManager",
+          "ucId": "uc-approve",
+          "role": "initiator"
+        },
+        {
+          "kind": "actorAssoc",
+          "id": "as-fleetManager-uc-return-service",
+          "actorId": "fleetManager",
+          "ucId": "uc-return-service",
+          "role": "initiator"
+        },
+        {
+          "kind": "actorAssoc",
+          "id": "as-garageManager-uc-assign-mechanics",
+          "actorId": "garageManager",
+          "ucId": "uc-assign-mechanics",
+          "role": "initiator"
+        },
+        {
+          "kind": "actorAssoc",
+          "id": "as-warehouseClerk-uc-order-part",
+          "actorId": "warehouseClerk",
+          "ucId": "uc-order-part",
+          "role": "initiator"
+        },
+        {
+          "kind": "actorAssoc",
+          "id": "as-warehouseClerk-uc-receive-part",
+          "actorId": "warehouseClerk",
+          "ucId": "uc-receive-part",
+          "role": "initiator"
+        },
+        {
+          "kind": "include",
+          "id": "inc-part-a-0",
+          "from": "uc-record-parts",
+          "to": "uc-update-stock"
+        },
+        {
+          "kind": "include",
+          "id": "inc-part-a-1",
+          "from": "uc-receive-part",
+          "to": "uc-update-stock"
+        }
+      ]
+    },
+    {
+      "id": "part-b",
+      "label": "ניהול המערכת ונתוני-אב",
+      "splitRationale": "מנהל המערכת מקבל תרשים משלו: נתוני-האב אינם חלק מתפעול הקריאות, ואין לערבב אותם עם שחקנים שאינם אנושיים.",
+      "elements": [
+        {
+          "kind": "actor",
+          "id": "sysadmin",
+          "name": "מנהל מערכת",
+          "actorType": "human",
+          "side": "left"
+        },
+        {
+          "kind": "useCase",
+          "id": "uc-manage-vehicles",
+          "name": "ניהול כלי רכב",
+          "description": "הקמה, עדכון וגריעה של כלי רכב בצי: מספר רישוי, סוג, דגם, קילומטראז', מועד הטיפול התקופתי הבא, והמחלקה שאליה הרכב משויך.",
+          "primaryActor": "sysadmin",
+          "secondaryActors": [],
+          "preconditions": [
+            "למשתמש הרשאת ניהול מערכת."
+          ],
+          "postconditions": [
+            "רשימת כלי הרכב ופרטיהם עודכנו."
+          ],
+          "scenarios": [
+            {
+              "id": "sc-happy",
+              "name": "מסלול מרכזי",
+              "flow": [
+                {
+                  "kind": "actor",
+                  "actor": "sysadmin",
+                  "text": "מקים או מעדכן רכב ומזין את פרטיו"
+                },
+                {
+                  "kind": "actor",
+                  "actor": "sysadmin",
+                  "text": "משייך את הרכב למחלקה"
+                },
+                {
+                  "kind": "system",
+                  "text": "שומר את השינוי"
+                }
+              ],
+              "extensions": []
+            }
+          ],
+          "userStories": [
+            {
+              "role": "מנהל מערכת",
+              "want": "לרשום רכב חדש בצי ולשייכו למחלקה",
+              "so": "אפשר יהיה לפתוח עבורו קריאות טיפול מהיום הראשון"
+            }
+          ],
+          "wireframe": ""
+        },
+        {
+          "kind": "useCase",
+          "id": "uc-manage-departments",
+          "name": "ניהול מחלקות",
+          "description": "ניהול רשימת המחלקות בחברה ופרטי ההתקשרות שלהן. המחלקות משמשות לשיוך כלי רכב ולזיהוי נציגי המחלקות.",
+          "primaryActor": "sysadmin",
+          "secondaryActors": [],
+          "preconditions": [
+            "למשתמש הרשאת ניהול מערכת."
+          ],
+          "postconditions": [
+            "רשימת המחלקות עודכנה."
+          ],
+          "scenarios": [
+            {
+              "id": "sc-happy",
+              "name": "מסלול מרכזי",
+              "flow": [
+                {
+                  "kind": "actor",
+                  "actor": "sysadmin",
+                  "text": "מוסיף או מעדכן מחלקה ואת פרטי ההתקשרות שלה"
+                },
+                {
+                  "kind": "system",
+                  "text": "שומר את השינוי"
+                }
+              ],
+              "extensions": []
+            }
+          ],
+          "userStories": [],
+          "wireframe": ""
+        },
+        {
+          "kind": "useCase",
+          "id": "uc-manage-garages",
+          "name": "ניהול מוסכים",
+          "description": "הקמה ועדכון של מוסכי החברה ושיוך המכונאים לכל מוסך. כל מכונאי משויך למוסך אחד.",
+          "primaryActor": "sysadmin",
+          "secondaryActors": [],
+          "preconditions": [
+            "למשתמש הרשאת ניהול מערכת."
+          ],
+          "postconditions": [
+            "רשימת המוסכים ושיוכי המכונאים עודכנו."
+          ],
+          "scenarios": [
+            {
+              "id": "sc-happy",
+              "name": "מסלול מרכזי",
+              "flow": [
+                {
+                  "kind": "actor",
+                  "actor": "sysadmin",
+                  "text": "מקים או מעדכן מוסך"
+                },
+                {
+                  "kind": "actor",
+                  "actor": "sysadmin",
+                  "text": "משייך מכונאים למוסך"
+                },
+                {
+                  "kind": "system",
+                  "text": "שומר את השינוי"
+                }
+              ],
+              "extensions": []
+            }
+          ],
+          "userStories": [],
+          "wireframe": ""
+        },
+        {
+          "kind": "useCase",
+          "id": "uc-manage-parts",
+          "name": "ניהול קטלוג החלקים",
+          "description": "ניהול החלקים במחסן: מספר מק\"ט, שם החלק ומחירו העדכני. רמת המלאי עצמה מתעדכנת מתוך תנועות המלאי ולא ידנית מכאן.",
+          "primaryActor": "sysadmin",
+          "secondaryActors": [],
+          "preconditions": [
+            "למשתמש הרשאת ניהול מערכת."
+          ],
+          "postconditions": [
+            "קטלוג החלקים עודכן."
+          ],
+          "scenarios": [
+            {
+              "id": "sc-happy",
+              "name": "מסלול מרכזי",
+              "flow": [
+                {
+                  "kind": "actor",
+                  "actor": "sysadmin",
+                  "text": "מוסיף או מעדכן חלק, מספר מק\"ט, שם ומחיר"
+                },
+                {
+                  "kind": "system",
+                  "text": "שומר את השינוי"
+                }
+              ],
+              "extensions": []
+            }
+          ],
+          "userStories": [],
+          "wireframe": ""
+        },
+        {
+          "kind": "useCase",
+          "id": "uc-manage-specialties",
+          "name": "ניהול תחומי התמחות",
+          "description": "ניהול קטלוג תחומי ההתמחות של המכונאים (מנועים, חשמל, מרכב ועוד) ושיוך תחומי ההתמחות לכל מכונאי. מכונאי יכול להחזיק יותר מתחום אחד.",
+          "primaryActor": "sysadmin",
+          "secondaryActors": [],
+          "preconditions": [
+            "למשתמש הרשאת ניהול מערכת."
+          ],
+          "postconditions": [
+            "קטלוג תחומי ההתמחות ושיוכי המכונאים עודכנו."
+          ],
+          "scenarios": [
+            {
+              "id": "sc-happy",
+              "name": "מסלול מרכזי",
+              "flow": [
+                {
+                  "kind": "actor",
+                  "actor": "sysadmin",
+                  "text": "מוסיף או מעדכן תחום התמחות"
+                },
+                {
+                  "kind": "actor",
+                  "actor": "sysadmin",
+                  "text": "משייך תחומי התמחות למכונאי"
+                },
+                {
+                  "kind": "system",
+                  "text": "שומר את השינוי"
+                }
+              ],
+              "extensions": []
+            }
+          ],
+          "userStories": [
+            {
+              "role": "מנהל מערכת",
+              "want": "להוסיף תחום התמחות חדש בלי שינוי בקוד",
+              "so": "המערכת תלווה שינויים בצי ובטכנולוגיה של כלי הרכב"
+            }
+          ],
+          "wireframe": ""
+        },
+        {
+          "kind": "useCase",
+          "id": "uc-manage-users",
+          "name": "ניהול משתמשים ותפקידים",
+          "description": "יצירה, עדכון והשבתה של משתמשים, ושיוך תפקידים למשתמש. ההרשאות נגזרות מהתפקידים, ומשתמש יכול לשאת יותר מתפקיד אחד — למשל מכונאי שהוא גם מנהל מוסך.",
+          "primaryActor": "sysadmin",
+          "secondaryActors": [],
+          "preconditions": [
+            "למשתמש הרשאת ניהול מערכת."
+          ],
+          "postconditions": [
+            "המשתמש והתפקידים המשויכים לו עודכנו, וההרשאות נגזרות מהם."
+          ],
+          "scenarios": [
+            {
+              "id": "sc-happy",
+              "name": "מסלול מרכזי",
+              "flow": [
+                {
+                  "kind": "actor",
+                  "actor": "sysadmin",
+                  "text": "יוצר או מאתר משתמש ומזין פרטים מזהים ודרכי קשר"
+                },
+                {
+                  "kind": "actor",
+                  "actor": "sysadmin",
+                  "text": "משייך למשתמש תפקיד אחד או יותר"
+                },
+                {
+                  "kind": "system",
+                  "text": "שומר ומחיל את ההרשאות הנגזרות"
+                }
+              ],
+              "extensions": []
+            }
+          ],
+          "userStories": [
+            {
+              "role": "מנהל מערכת",
+              "want": "לשייך למשתמש יותר מתפקיד אחד",
+              "so": "מכונאי שהוא גם מנהל מוסך יעבוד עם חשבון אחד"
+            }
+          ],
+          "wireframe": ""
+        }
+      ],
+      "relationships": [
+        {
+          "kind": "actorAssoc",
+          "id": "as-sysadmin-uc-manage-vehicles",
+          "actorId": "sysadmin",
+          "ucId": "uc-manage-vehicles",
+          "role": "initiator"
+        },
+        {
+          "kind": "actorAssoc",
+          "id": "as-sysadmin-uc-manage-departments",
+          "actorId": "sysadmin",
+          "ucId": "uc-manage-departments",
+          "role": "initiator"
+        },
+        {
+          "kind": "actorAssoc",
+          "id": "as-sysadmin-uc-manage-garages",
+          "actorId": "sysadmin",
+          "ucId": "uc-manage-garages",
+          "role": "initiator"
+        },
+        {
+          "kind": "actorAssoc",
+          "id": "as-sysadmin-uc-manage-parts",
+          "actorId": "sysadmin",
+          "ucId": "uc-manage-parts",
+          "role": "initiator"
+        },
+        {
+          "kind": "actorAssoc",
+          "id": "as-sysadmin-uc-manage-specialties",
+          "actorId": "sysadmin",
+          "ucId": "uc-manage-specialties",
+          "role": "initiator"
+        },
+        {
+          "kind": "actorAssoc",
+          "id": "as-sysadmin-uc-manage-users",
+          "actorId": "sysadmin",
+          "ucId": "uc-manage-users",
+          "role": "initiator"
+        }
+      ]
+    },
+    {
+      "id": "part-c",
+      "label": "תהליכים אוטומטיים וממשקים",
+      "splitRationale": "הטריגרים שאין להם יוזם אנושי מרוכזים בתרשים נפרד: שחקן זמן ומערכת הספק אינם משתמשים, ואין לערבב אותם עם מקרי שימוש של משתמשים או של ניהול נתוני-אב.",
+      "elements": [
+        {
+          "kind": "actor",
+          "id": "timeActor",
+          "name": "שחקן זמן",
+          "actorType": "system",
+          "side": "left"
+        },
+        {
+          "kind": "actor",
+          "id": "supplierSystem",
+          "name": "מערכת הספק",
+          "actorType": "system",
+          "side": "left"
+        },
+        {
+          "kind": "useCase",
+          "id": "uc-periodic-open",
+          "name": "פתיחת קריאת טיפול תקופתית",
+          "description": "כאשר מגיע מועד הטיפול התקופתי של רכב, המערכת פותחת עבורו קריאת טיפול מסוג \"תקופתי\" ללא כל פעולה של נהג, נציג מחלקה או מכונאי. הטריגר הוא הגעת המועד, ולכן השחקן הוא שחקן זמן.",
+          "primaryActor": "timeActor",
+          "secondaryActors": [],
+          "preconditions": [
+            "לרכב מוגדר מועד טיפול תקופתי, והוא פעיל בצי."
+          ],
+          "postconditions": [
+            "נוצרה קריאת טיפול מסוג \"תקופתי\" במצב \"נפתחה\", ללא משתמש פותח."
+          ],
+          "scenarios": [
+            {
+              "id": "sc-happy",
+              "name": "מסלול מרכזי",
+              "flow": [
+                {
+                  "kind": "actor",
+                  "actor": "timeActor",
+                  "text": "הגיע מועד הטיפול התקופתי של הרכב"
+                },
+                {
+                  "kind": "system",
+                  "text": "פותח קריאת טיפול מסוג \"תקופתי\" לרכב, קובע את רמת העדיפות ומשייך אותה למוסך"
+                },
+                {
+                  "kind": "system",
+                  "text": "מודיע למחלקה המחזיקה ברכב ולמוסך"
+                }
+              ],
+              "extensions": [
+                {
+                  "at": 2,
+                  "text": "אם כבר קיימת לרכב קריאה תקופתית פתוחה, לא נפתחת קריאה נוספת."
+                }
+              ]
+            }
+          ],
+          "userStories": [],
+          "wireframe": ""
+        },
+        {
+          "kind": "useCase",
+          "id": "uc-part-arrival-notice",
+          "name": "קליטת הודעת הגעת חלק מהספק",
+          "description": "מערכת הספק פונה אל המערכת שלנו ומודיעה שחלק שהוזמן הגיע. המערכת מסמנת את ההזמנה כ\"הגיעה\" ומתריעה לפקיד המחסן שיש לקלוט את החלק. זהו ממשק אל מערכת חיצונית ולא פעולה של משתמש.",
+          "primaryActor": "supplierSystem",
+          "secondaryActors": [
+            "warehouseClerk"
+          ],
+          "preconditions": [
+            "קיימת הזמנת חלק פתוחה מול הספק."
+          ],
+          "postconditions": [
+            "ההזמנה סומנה כ\"הגיעה\" ונשלחה התרעה לפקיד המחסן."
+          ],
+          "scenarios": [
+            {
+              "id": "sc-happy",
+              "name": "מסלול מרכזי",
+              "flow": [
+                {
+                  "kind": "actor",
+                  "actor": "supplierSystem",
+                  "text": "שולחת הודעה שהחלק שהוזמן הגיע"
+                },
+                {
+                  "kind": "system",
+                  "text": "מאתר את ההזמנה המתאימה ומסמן אותה כ\"הגיעה\""
+                },
+                {
+                  "kind": "system",
+                  "text": "מתריע לפקיד המחסן ולמכונאי של הקריאה הממתינה"
+                }
+              ],
+              "extensions": [
+                {
+                  "at": 2,
+                  "text": "אם לא נמצאה הזמנה תואמת, ההודעה נרשמת ביומן ממשקים לטיפול ידני של פקיד המחסן."
+                }
+              ]
+            }
+          ],
+          "userStories": [],
+          "wireframe": ""
+        }
+      ],
+      "relationships": [
+        {
+          "kind": "actorAssoc",
+          "id": "as-timeActor-uc-periodic-open",
+          "actorId": "timeActor",
+          "ucId": "uc-periodic-open",
+          "role": "initiator"
+        },
+        {
+          "kind": "actorAssoc",
+          "id": "as-supplierSystem-uc-part-arrival-notice",
+          "actorId": "supplierSystem",
+          "ucId": "uc-part-arrival-notice",
+          "role": "initiator"
+        }
+      ]
+    }
+  ],
+  "assumptions": [
+    "ההזדהות במערכת היא תנאי מוקדם לכל מקרה שימוש ואינה מקרה שימוש בפני עצמה.",
+    "מנהל הצי רשאי לבצע כל שינוי סטטוס בכל שלב. זו הרשאה גורפת הנגזרת מתפקידו, והיא מיוצגת ככלל הרשאות בתוך מקרי השימוש הקיימים ולא כמקרה שימוש נוסף. בתרשים המצבים (שאלה 8) היא מיוצגת במפורש כמעבר היוצא גם ממצבים מאוחרים.",
+    "נהג ונציג מחלקה הם שני תפקידים החולקים בדיוק את אותה קבוצת מקרי שימוש (פתיחה וביטול של קריאה). הם צוירו כשני שחקנים נפרדים משום שהסיפור מונה אותם בנפרד; מי שאיחד אותם לשחקן אחד או קשר ביניהם בהתמחות (generalization) נתן תשובה תקינה לא פחות.",
+    "משתמש בעל יותר מתפקיד אחד (למשל מכונאי שהוא גם מנהל מוסך) אינו שחקן נוסף בתרשים: הוא משתמש יחיד הנושא שני תפקידים, ולכן הוא מופיע בשני קווי אסוציאציה נפרדים.",
+    "ספק החלקים עצמו אינו משתמש במערכת ואין לו גישה אליה. רק מערכת הספק מתממשקת אלינו, ולכן היא מצוירת כשחקן «system» ולא כאדם. אם המערכת החיצונית לא הייתה קיימת, פקיד המחסן היה מזין את ההגעה ידנית.",
+    "המערכת אינה מנהלת תשלומים או חיובים בין המחלקות ואינה מנהלת נהגים ורישיונות נהיגה, ולכן אין מקרי שימוש בתחומים אלו.",
+    "מעקב אחר כרטיסי דלק והוצאות תדלוק אינו מיוצג בתרשים: מדובר בבקשה החורגת מהיקף המערכת שהוגדר בסיפור. הבקשה מוחזרת ללקוח כדרישה למודול או לשלב נפרד ואינה \"מושתקת\". סטודנט שצייר Use Case כזה ונימק שזוהי הרחבת היקף הטעונה אישור הלקוח מקבל אף הוא ניקוד מלא.",
+    "סיכום התיקון החופשי כן נכתב במערכת, כשלב בתוך \"סימון השלמת הטיפול\", בהתאם להכרעה שבשאלה 7.5: זו חריגה מודעת מבקשת מנהל הצי, שיש להציגה ולאשרה מולו. מי שנצמד לבקשת הלקוח והשמיט את הסיכום לחלוטין נתן תשובה מזכה במלואה, ובלבד שציין את מחירה (אובדן תיעוד)."
+  ],
+  "openQuestions": [
+    "האם רצוי ש\"קליטת הודעת הגעת חלק מהספק\" תשחרר אוטומטית את הקריאה הממתינה, או שתמיד יידרש אישור פיזי של פקיד המחסן? כאן נבחרה האפשרות השנייה: ההודעה מתריעה, והקליטה הפיזית היא שמעדכנת מלאי ומשחררת."
+  ]
+};
+  </script>
+  <script>
+/* inlined uc-diagram-common.js */
+/* uc-diagram-common.js — SAD MCP shared runtime for use case diagrams
+   Depends on globals defined in the inline <script> of each diagram:
+   diagramLayouts, actorDescriptions, assocDescriptions, useCaseDocs, diagramModel
+
+   This file is deployed by hand to themathbible.com (see CLAUDE.md → Static Assets).
+   Keep UC_RUNTIME_VERSION in sync with package.json on every deploy — it prints to the
+   browser console so you can confirm which runtime is actually live vs. the repo.
+*/
+const UC_RUNTIME_VERSION = '2.9.6';
+if (typeof console !== 'undefined') console.info('[sad-mcp] uc-diagram runtime v' + UC_RUNTIME_VERSION);
+
+// ── fixLayout constants ───────────────────────────────────────────────────
+const HEADER_H  = 44;
+const UC_PAD    = 30;
+const UC_GAP    = 14;
+const ACTOR_PAD = 80;
+
+// ── fixLayout ─────────────────────────────────────────────────────────────
+function fixLayout(layout) {
+  const svg = document.getElementById(layout.svgId);
+  if (!svg) return;
+  const b = layout.boundary;
+
+  // Step 1 — Group UCs by the side of their owning actor.
+  const ucSide = {};
+  layout.actors.forEach(a =>
+    a.ucIds.forEach(uid => {
+      ucSide[uid] = ucSide[uid] && ucSide[uid] !== a.side ? 'center' : a.side;
+    })
+  );
+  const cols = { left: [], right: [], center: [] };
+  layout.useCases.forEach(uc => cols[ucSide[uc.id] || 'center'].push(uc));
+
+  // Step 2 — Sort each column by actor order (top-to-bottom on that side).
+  function sortCol(ucs, side) {
+    const ordered = layout.actors.filter(a => a.side === side).sort((a, bb) => a.y - bb.y);
+    ucs.sort((a, bb) => {
+      const ai = ordered.findIndex(act => act.ucIds.includes(a.id));
+      const bi = ordered.findIndex(act => act.ucIds.includes(bb.id));
+      return (ai < 0 ? 999 : ai) - (bi < 0 ? 999 : bi);
+    });
+  }
+  sortCol(cols.left,  'left');
+  sortCol(cols.right, 'right');
+
+  // Step 3 — Adaptive column X positions. Widen boundary if needed.
+  const COL_GAP = 30;
+  const maxRx = ucs => (ucs.length ? Math.max(...ucs.map(u => u.rx)) : 0);
+  const lRx = maxRx(cols.left), cRx = maxRx(cols.center), rRx = maxRx(cols.right);
+  const gaps = (cRx ? 2 * COL_GAP : (lRx && rRx ? 2 * COL_GAP : 0));
+  const needed = 2 * UC_PAD + 2 * lRx + 2 * cRx + 2 * rRx + gaps;
+  if (b.width < needed) b.width = needed;
+
+  const leftX   = b.x + UC_PAD + lRx;
+  const rightX  = b.x + b.width - UC_PAD - rRx;
+  const centerX = (leftX + rightX) / 2;
+
+  function place(ucs, colX, colName) {
+    ucs.forEach((uc, i) => {
+      uc.cy = b.y + HEADER_H + UC_PAD + uc.ry + i * (uc.ry * 2 + UC_GAP);
+      uc.cx = colX;
+      uc.col = colName;
+    });
+  }
+  place(cols.left,   leftX,   'left');
+  place(cols.right,  rightX,  'right');
+  place(cols.center, centerX, 'center');
+
+  // Step 4 — Clamp and resolve overlaps. Idempotent fixed-point loop.
+  const minX = b.x + UC_PAD;
+  const maxX = b.x + b.width - UC_PAD;
+  const minY = b.y + HEADER_H + UC_PAD;
+  let changed = true, iter = 0;
+  while (changed && iter++ < 40) {
+    changed = false;
+    for (const uc of layout.useCases) {
+      const nx = Math.max(minX + uc.rx, Math.min(maxX - uc.rx, uc.cx));
+      if (nx !== uc.cx) { uc.cx = nx; changed = true; }
+      const ny = Math.max(minY + uc.ry, uc.cy);
+      if (ny !== uc.cy) { uc.cy = ny; changed = true; }
+    }
+    for (const col of Object.values(cols)) {
+      col.sort((a, bb) => a.cy - bb.cy);
+      for (let i = 1; i < col.length; i++) {
+        const prev = col[i - 1], cur = col[i];
+        const nd = prev.cy + prev.ry + UC_GAP + cur.ry;
+        if (cur.cy < nd) { cur.cy = nd; changed = true; }
+      }
+    }
+  }
+
+  // Step 5 — Expand boundary height to fit all UCs.
+  const maxBottom = Math.max(...layout.useCases.map(uc => uc.cy + uc.ry));
+  b.height = Math.max(b.height, maxBottom - b.y + UC_PAD);
+
+  // Step 6 — Re-center actors on their UC group; push bottom actors below boundary.
+  layout.actors.forEach(actor => {
+    const myUCs = layout.useCases.filter(u => actor.ucIds.includes(u.id));
+    if (actor.side === 'left' || actor.side === 'right') {
+      if (myUCs.length) actor.y = myUCs.reduce((s, u) => s + u.cy, 0) / myUCs.length;
+      actor.x = actor.side === 'left' ? b.x - ACTOR_PAD : b.x + b.width + ACTOR_PAD;
+    } else if (actor.side === 'bottom') {
+      actor.y = b.y + b.height + ACTOR_PAD;
+    }
+  });
+
+  // Step 6b — Enforce a minimum vertical gap between actors on the same side.
+  // Step 6 centers each actor on its UCs' mean cy, which can place two single-UC
+  // actors barely one row apart (~UC_GAP) so their stick figures + labels overlap.
+  // Push later actors down to keep centers at least ACTOR_MIN_GAP apart (CR #6).
+  const ACTOR_MIN_GAP = 150;
+  ['left', 'right'].forEach(side => {
+    const col = layout.actors.filter(a => a.side === side).sort((a, bb) => a.y - bb.y);
+    for (let i = 1; i < col.length; i++) {
+      const need = col[i - 1].y + ACTOR_MIN_GAP;
+      if (col[i].y < need) col[i].y = need;
+    }
+  });
+
+  // Step 7 — Write UC positions to the SVG (absolute attributes).
+  layout.useCases.forEach(uc => {
+    const g = svg.querySelector('[id="uc-group-' + uc.id + '"]');
+    if (!g) return;
+    const el = g.querySelector('ellipse');
+    if (!el) return;
+    const dx = uc.cx - parseFloat(el.getAttribute('cx'));
+    const dy = uc.cy - parseFloat(el.getAttribute('cy'));
+    el.setAttribute('cx', uc.cx);
+    el.setAttribute('cy', uc.cy);
+    g.querySelectorAll('text').forEach(t => {
+      t.setAttribute('x', parseFloat(t.getAttribute('x') || 0) + dx);
+      t.setAttribute('y', parseFloat(t.getAttribute('y') || 0) + dy);
+    });
+    g.removeAttribute('transform');
+  });
+  layout.actors.forEach(actor => {
+    // Scope to THIS svg: a shared actor id (e.g. 'head') repeats across tabs, so
+    // document.getElementById returns the first tab's figure and moves the wrong
+    // one — leaving this tab's figure detached from its (correctly placed) line.
+    const g = svg.querySelector('[id="actor-group-' + actor.id + '"]');
+    if (g) g.setAttribute('transform', `translate(${actor.x},${actor.y})`);
+  });
+
+  // Step 8 — Recalculate every connection line endpoint.
+  svg.querySelectorAll('[data-conn-from][data-conn-to]').forEach(line => {
+    const fId = line.getAttribute('data-conn-from');
+    const tId = line.getAttribute('data-conn-to');
+    const fUC = layout.useCases.find(u => u.id === fId);
+    const fAc = layout.actors.find(a => a.id === fId);
+    const tUC = layout.useCases.find(u => u.id === tId);
+    const tAc = layout.actors.find(a => a.id === tId);
+    const from = fAc ? { x: fAc.x, y: fAc.y } : fUC ? { x: fUC.cx, y: fUC.cy } : null;
+    const to   = tAc ? { x: tAc.x, y: tAc.y } : tUC ? { x: tUC.cx, y: tUC.cy } : null;
+    if (!from || !to) return;
+    let x1 = from.x, y1 = from.y, x2 = to.x, y2 = to.y;
+    if (fUC) { const a = Math.atan2(to.y - fUC.cy, to.x - fUC.cx);     x1 = fUC.cx + fUC.rx * Math.cos(a); y1 = fUC.cy + fUC.ry * Math.sin(a); }
+    if (tUC) { const a = Math.atan2(from.y - tUC.cy, from.x - tUC.cx); x2 = tUC.cx + tUC.rx * Math.cos(a); y2 = tUC.cy + tUC.ry * Math.sin(a); }
+    line.setAttribute('x1', x1); line.setAttribute('y1', y1);
+    line.setAttribute('x2', x2); line.setAttribute('y2', y2);
+
+    const hitbox = svg.querySelector(
+      `.conn-hitbox[data-hitbox-from="${fId}"][data-hitbox-to="${tId}"]`);
+    if (hitbox) {
+      hitbox.setAttribute('x1', x1); hitbox.setAttribute('y1', y1);
+      hitbox.setAttribute('x2', x2); hitbox.setAttribute('y2', y2);
+    }
+
+    // Reposition «include»/«extend» text label associated with this line.
+    const lbl = svg.querySelector(`[data-label-for="${fId} ${tId}"]`);
+    if (lbl) {
+      lbl.setAttribute('x', (x1 + x2) / 2);
+      lbl.setAttribute('y', (y1 + y2) / 2 - 8);
+    }
+  });
+
+  // Step 9 — Resize boundary rect and SVG viewBox (both width and height).
+  const br = svg.querySelector('.system-boundary, rect[rx="12"]');
+  if (br) { br.setAttribute('width', b.width); br.setAttribute('height', b.height); }
+  const vb = svg.getAttribute('viewBox');
+  if (vb) {
+    const p = vb.split(/\s+/);
+    p[3] = Math.max(parseFloat(p[3]), b.y + b.height + 120);
+    const ACTOR_LABEL_MARGIN = 120;
+    const maxActorX = layout.actors.length
+      ? Math.max(...layout.actors.map(a => a.x))
+      : b.x + b.width;
+    p[2] = Math.max(parseFloat(p[2]), maxActorX + ACTOR_LABEL_MARGIN);
+    svg.setAttribute('viewBox', p.join(' '));
+  }
+
+  // Step 10 — Timing labels + «extend» condition/point notes.
+  renderTimingLabels(layout);
+  renderExtendNotes(layout);
+}
+
+// ── renderTimingLabels ────────────────────────────────────────────────────
+function renderTimingLabels(layout) {
+  const svg = document.getElementById(layout.svgId);
+  if (!svg) return;
+  svg.querySelectorAll('.timing-label').forEach(el => el.remove());
+  const NS = 'http://www.w3.org/2000/svg';
+  (layout.connections || []).forEach(conn => {
+    if (!conn.timing) return;
+    const line = svg.querySelector(
+      `[data-conn-from="${conn.from}"][data-conn-to="${conn.to}"]`);
+    if (!line) return;
+    const x1 = +line.getAttribute('x1'), y1 = +line.getAttribute('y1');
+    const x2 = +line.getAttribute('x2'), y2 = +line.getAttribute('y2');
+    const mx = (x1 + x2) / 2, my = (y1 + y2) / 2;
+    const w = 10 + conn.timing.length * 7, h = 16;
+    const g = document.createElementNS(NS, 'g');
+    g.setAttribute('class', 'timing-label');
+    const rect = document.createElementNS(NS, 'rect');
+    rect.setAttribute('x', mx - w / 2); rect.setAttribute('y', my - h / 2);
+    rect.setAttribute('width', w);      rect.setAttribute('height', h);
+    rect.setAttribute('fill', 'white'); rect.setAttribute('stroke', '#334155');
+    rect.setAttribute('stroke-width', '0.8'); rect.setAttribute('rx', '3');
+    const text = document.createElementNS(NS, 'text');
+    text.setAttribute('x', mx); text.setAttribute('y', my + 4);
+    text.setAttribute('font-size', '10'); text.setAttribute('text-anchor', 'middle');
+    text.setAttribute('fill', '#334155');
+    text.setAttribute('font-family', "'Noto Sans Hebrew', sans-serif");
+    text.setAttribute('direction', 'rtl');
+    text.textContent = conn.timing;
+    g.appendChild(rect); g.appendChild(text);
+    svg.appendChild(g);
+  });
+}
+
+// ── renderExtendNotes ─────────────────────────────────────────────────────
+// UML puts the {condition} and the extension point on every Extend — a bare
+// «extend» label cannot answer "when does this fire?". Data comes from
+// diagramModel.relationships (kind: 'extend'); rendered like timing labels:
+// re-created on every fixLayout pass at the arrow midpoint, below the line
+// (the static «extend» label sits above it).
+function renderExtendNotes(layout) {
+  const svg = document.getElementById(layout.svgId);
+  if (!svg || typeof diagramModel === 'undefined') return;
+  svg.querySelectorAll('.extend-note').forEach(el => el.remove());
+  const NS = 'http://www.w3.org/2000/svg';
+  const rels = (diagramModel.parts || []).flatMap(p => p.relationships || []);
+  rels.filter(r => r.kind === 'extend' && (r.condition || r.extensionPoint)).forEach(r => {
+    const line = svg.querySelector(`[data-conn-from="${r.from}"][data-conn-to="${r.to}"]`);
+    if (!line) return;  // this tab does not draw the arrow
+    const x1 = +line.getAttribute('x1'), y1 = +line.getAttribute('y1');
+    const x2 = +line.getAttribute('x2'), y2 = +line.getAttribute('y2');
+    const mx = (x1 + x2) / 2, my = (y1 + y2) / 2;
+    const rows = [];
+    if (r.condition)      rows.push('{' + r.condition + '}');
+    if (r.extensionPoint) rows.push('📍 ' + r.extensionPoint);
+    const LINE_H = 13;
+    const w = 14 + Math.max(...rows.map(t => t.length)) * 6;
+    const h = rows.length * LINE_H + 7;
+    const g = document.createElementNS(NS, 'g');
+    g.setAttribute('class', 'extend-note');
+    const rect = document.createElementNS(NS, 'rect');
+    rect.setAttribute('x', mx - w / 2); rect.setAttribute('y', my + 5);
+    rect.setAttribute('width', w);      rect.setAttribute('height', h);
+    rect.setAttribute('fill', 'white'); rect.setAttribute('stroke', '#7c3aed');
+    rect.setAttribute('stroke-width', '0.8'); rect.setAttribute('rx', '3');
+    g.appendChild(rect);
+    rows.forEach((t, i) => {
+      const text = document.createElementNS(NS, 'text');
+      text.setAttribute('x', mx); text.setAttribute('y', my + 5 + LINE_H * (i + 1));
+      text.setAttribute('font-size', '9.5'); text.setAttribute('text-anchor', 'middle');
+      text.setAttribute('fill', '#7c3aed');
+      text.setAttribute('font-family', "'Noto Sans Hebrew', sans-serif");
+      text.setAttribute('direction', 'rtl');
+      text.textContent = t;
+      g.appendChild(text);
+    });
+    svg.appendChild(g);
+  });
+}
+
+// ── Tabs ──────────────────────────────────────────────────────────────────
+let activeTab = 0;
+function currentLayout() { return diagramLayouts[activeTab]; }
+function showDiagram(index) {
+  activeTab = index;
+  document.querySelectorAll('.diagram-part').forEach((p, i) => p.hidden = i !== index);
+  document.querySelectorAll('.tab').forEach((t, i) => t.classList.toggle('active', i === index));
+  fixLayout(diagramLayouts[index]);
+}
+
+// ── Small popup (actors & associations) ───────────────────────────────────
+function showDesc(id, type, event) {
+  if (type === 'uc') { openUcModal(id); event.stopPropagation(); return; }
+  showPopup(id, type, event);
+}
+
+function showPopup(id, type, event) {
+  hideDesc();
+  const data = type === 'actor' ? actorDescriptions[id]
+             : type === 'assoc' ? assocDescriptions[id]
+             : null;
+  if (!data) return;
+  const panel = document.createElement('div');
+  panel.id = 'desc-panel';
+  panel.innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+      <strong style="font-size:12px;color:#1e40af;direction:rtl;">${data.name}</strong>
+      <span onclick="hideDesc()" style="cursor:pointer;color:#94a3b8;font-size:18px;line-height:1;margin-right:6px;">×</span>
+    </div>
+    <div style="font-size:11px;color:#334155;line-height:1.6;direction:rtl;">${data.desc}</div>`;
+  Object.assign(panel.style, {
+    position:'fixed', background:'#fff', border:'1.5px solid #2980b9',
+    borderRadius:'8px', padding:'12px 16px', maxWidth:'300px',
+    boxShadow:'0 4px 14px rgba(0,0,0,.15)', zIndex:'1000',
+    left: event.clientX + 'px', top: event.clientY + 'px'
+  });
+  document.body.appendChild(panel);
+  const r = panel.getBoundingClientRect();
+  if (r.right  > window.innerWidth)  panel.style.left = (window.innerWidth  - r.width  - 10) + 'px';
+  if (r.bottom > window.innerHeight) panel.style.top  = (event.clientY - r.height - 10) + 'px';
+  event.stopPropagation();
+}
+
+function hideDesc() { document.getElementById('desc-panel')?.remove(); }
+
+document.addEventListener('click', e => {
+  if (!e.target.closest('[data-uc-id]') &&
+      !e.target.closest('[data-actor-id]') &&
+      !e.target.closest('[data-conn-id]')) hideDesc();
+});
+
+// ── UC modal ──────────────────────────────────────────────────────────────
+function wireframeSafe(html) {
+  const forbidden = [/<script\b/i, /\son\w+\s*=/i, /<iframe\b/i,
+    /src\s*=\s*["']https?:/i, /href\s*=\s*["']https?:/i, /@import\b/i, /<style\b/i];
+  return !forbidden.some(rx => rx.test(html));
+}
+
+// Flow of events (§4.4a / NOTATION §11b). The flow is a tree: actor/system/
+// include are leaves, `loop` and `alt` nest one level deeper. Step labels are
+// computed here rather than left to <ol> numbering, because extensions and
+// `resume` outcomes reference them by name — CSS counters would let the rendered
+// number drift away from "חזרה לשלב 2.1" and nobody would notice.
+function ucEsc(s) {
+  return String(s == null ? '' : s)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function ucOutcomeHtml(outcome) {
+  if (!outcome) return '';
+  if (outcome.kind === 'resume')
+    return `<div class="ext-outcome ext-resume">↩ חזרה לשלב ${ucEsc(outcome.at)}</div>`;
+  if (outcome.kind === 'terminate')
+    return `<div class="ext-outcome ext-terminate">⛔ המקרה מסתיים ללא הצלחה${
+      outcome.text ? ' — ' + ucEsc(outcome.text) : ''}</div>`;
+  return '';
+}
+
+function ucExtensionHtml(ext, label, letter) {
+  // Legacy extensions (text-only, pre-2.6) carry the whole sentence in `text`
+  // and already read as prose — don't prefix them with "אם".
+  const structured = Array.isArray(ext.steps) || !!ext.outcome;
+  const head = structured
+    ? `אם ${ucEsc(ext.text)}:`
+    : ucEsc(ext.text);
+  const subSteps = (ext.steps || []).length
+    ? `<ul class="ext-steps">${(ext.steps || []).map((s, k) =>
+        `<li><span class="step-label">${label}${letter}${k + 1}</span>${ucEsc(s)}</li>`).join('')}</ul>`
+    : '';
+  return `<li class="ext-sub"><span class="step-label ext-label">${label}${letter}</span>${head}` +
+         `${subSteps}${ucOutcomeHtml(ext.outcome)}</li>`;
+}
+
+function ucStepBodyHtml(step, ctx) {
+  if (step.kind === 'actor')
+    return `<strong class="step-actor" data-actor-id="${ucEsc(step.actor)}">${ucEsc(ctx.actorName(step.actor))}</strong>: ${ucEsc(step.text)}`;
+  if (step.kind === 'system')
+    return `<em class="step-system">המערכת</em>: ${ucEsc(step.text)}`;
+  if (step.kind === 'include')
+    return `<span class="step-include">«include» </span><a class="step-uc-ref" data-uc-ref="${ucEsc(step.uc)}">${ucEsc(ctx.ucName(step.uc))}</a>${step.text ? ' — ' + ucEsc(step.text) : ''}`;
+  if (step.kind === 'extension')  // legacy inline extension pseudo-step
+    return ucEsc(step.text);
+  return ucEsc(step.text);
+}
+
+// «extend» hook marker (§3.3). A step carrying `extensionPoint` is the named
+// location where an extension may fire — mark it in the base's modal, naming the
+// extension(s) that hook here and their {condition}, so the reader can answer
+// "at what point does it fire?" from the base's own flow.
+function ucPointBadgeHtml(step, ctx) {
+  const pt = step && step.extensionPoint;
+  if (!pt) return '';
+  const rels = (diagramModel.parts || []).flatMap(p => p.relationships || []);
+  const hooks = rels
+    .filter(r => r.kind === 'extend' && r.to === ctx.ucId && r.extensionPoint === pt)
+    .map(r =>
+      `<a class="step-uc-ref" data-uc-ref="${ucEsc(r.from)}">${ucEsc(ctx.ucName(r.from))}</a>` +
+      (r.condition ? ` <span class="ext-point-cond">{${ucEsc(r.condition)}}</span>` : ''));
+  return `<div class="ext-point-badge">📍 נקודת הרחבה ״${ucEsc(pt)}״` +
+         (hooks.length ? ` — «extend» ${hooks.join(' · ')}` : '') + `</div>`;
+}
+
+function ucFlowHtml(flow, prefix, extByAt, ctx) {
+  let html = '<ul class="flow">';
+  (flow || []).forEach((step, i) => {
+    const label = `${prefix}${i + 1}`;
+    const badge = ucPointBadgeHtml(step, ctx);
+
+    if (step.kind === 'loop') {
+      html += `<li class="flow-step flow-loop"><span class="step-label">${label}</span>` +
+              `<span class="ctrl-kw">חזור</span> <span class="ctrl-cond">${ucEsc(step.condition)}</span>:` +
+              badge + ucFlowHtml(step.steps, `${label}.`, extByAt, ctx) + '</li>';
+    } else if (step.kind === 'alt') {
+      let branches = '<ul class="flow-branches">';
+      (step.branches || []).forEach((b, bi) => {
+        const bLabel = `${label}.${bi + 1}`;
+        branches += `<li class="flow-branch"><span class="step-label">${bLabel}</span>` +
+                    `<span class="branch-label">${ucEsc(b.label)}</span>` +
+                    ucFlowHtml(b.steps, `${bLabel}.`, extByAt, ctx) + '</li>';
+      });
+      branches += '</ul>';
+      html += `<li class="flow-step flow-alt"><span class="step-label">${label}</span>` +
+              `<span class="ctrl-kw">לפי</span> <span class="ctrl-cond">${ucEsc(step.condition)}</span>:` +
+              badge + branches + '</li>';
+    } else if (step.kind === 'extension') {
+      html += `<li class="ext-inline">${step.at ? ucEsc(step.at) + 'a. ' : ''}${ucEsc(step.text)}</li>`;
+    } else {
+      html += `<li class="flow-step"><span class="step-label">${label}</span>${ucStepBodyHtml(step, ctx)}${badge}</li>`;
+    }
+
+    const exts = extByAt.get(label) || [];
+    if (exts.length)
+      html += '<li class="ext-holder"><ul class="ext-list">' +
+              exts.map((e, j) => ucExtensionHtml(e, label, String.fromCharCode(97 + j))).join('') +
+              '</ul></li>';
+  });
+  return html + '</ul>';
+}
+
+// Modal header "who" line. Course doctrine: שחקן = מי שיוזם — an actor is whoever
+// initiates. Two UC kinds legitimately have ZERO actor associations, each with its
+// own wording because their invocation mechanism differs:
+//   «include» target (CR #4)  — nobody initiates it, it is CALLED by its bases.
+//   «extend» extension (§3.3) — nothing calls it EITHER: it fires on its own when
+//     the base reaches the named extension point and the condition holds. Naming
+//     the base + point here is what answers "at what point does it run?".
+// An extension WITH an actor shows the actor line AND its base/point line.
+function ucWhoHtml(id, doc, actorName, esc) {
+  const rels = (diagramModel.parts || []).flatMap(p => p.relationships || []);
+  const els  = (diagramModel.parts || []).flatMap(p => p.elements || []);
+  const nameOf = eid => { const el = els.find(e => e.id === eid); return esc(el ? el.name : eid); };
+  const extendsOf = rels.filter(r => r.kind === 'extend' && r.from === id)
+    .map(r => nameOf(r.to) + (r.extensionPoint ? ', בנקודת ״' + esc(r.extensionPoint) + '״' : ''));
+  const extendLine = extendsOf.length
+    ? `<div class="uc-primary uc-called">
+        <span class="uc-primary-label">הרחבה של:</span>
+        <b class="uc-callers">${extendsOf.join(' · ')}</b>
+      </div>`
+    : '';
+
+  const hasActor = rels.some(r => r.kind === 'actorAssoc' && r.ucId === id);
+  if (hasActor) {
+    return `<div class="uc-primary">
+        <span class="uc-primary-label">שחקן:</span>
+        <a class="uc-primary-link" data-actor-pulse="${esc(doc.primaryActor)}">${esc(actorName(doc.primaryActor))}</a>
+      </div>` + extendLine;
+  }
+  if (extendsOf.length) {
+    return `<div class="uc-primary uc-called">
+        <span class="uc-primary-label">אין שחקן — הרחבה של:</span>
+        <b class="uc-callers">${extendsOf.join(' · ')}</b>
+      </div>`;
+  }
+  const callers = rels.filter(r => r.kind === 'include' && r.to === id).map(r => nameOf(r.from));
+  return `<div class="uc-primary uc-called">
+      <span class="uc-primary-label">אין שחקן — נקראת מתוך:</span>
+      <b class="uc-callers">${callers.join(' · ')}</b>
+    </div>`;
+}
+
+function openUcModal(id) {
+  const doc = useCaseDocs[id];
+  if (!doc) return;
+  const actorName = aid => (actorDescriptions[aid]?.name) || aid;
+  const ucName    = uid => (useCaseDocs[uid]?.name) || uid;
+  const ctx = { actorName, ucName, ucId: id };
+  const esc = ucEsc;
+
+  let scenariosHtml = '';
+  (doc.scenarios || []).forEach(sce => {
+    // `at` is a dot-numbered label; legacy models used a plain step number.
+    const extByAt = new Map();
+    (sce.extensions || []).forEach(e => {
+      const at = String(e.at == null ? '' : e.at);
+      if (!extByAt.has(at)) extByAt.set(at, []);
+      extByAt.get(at).push(e);
+    });
+    scenariosHtml += `<h3>${esc(sce.name || sce.id)}</h3>` +
+                     ucFlowHtml(sce.flow, '', extByAt, ctx);
+  });
+
+  const listItems = items => (items || []).map(s => `<li>${esc(s)}</li>`).join('');
+  const usItems   = (doc.userStories || []).map(us =>
+    `<li>${esc('בתור ' + us.role + ', אני רוצה ' + us.want + ', כדי ש' + us.so)}</li>`).join('');
+
+  const wfHtml = (doc.wireframe && wireframeSafe(doc.wireframe))
+    ? `<section class="uc-wireframe">${doc.wireframe}</section>` : '';
+  if (doc.wireframe && !wireframeSafe(doc.wireframe))
+    console.warn(`Wireframe for ${id} failed safety check.`);
+
+  // Single innerHTML write — avoids silent failures in sandboxed iframe environments.
+  const body = document.querySelector('#uc-modal .uc-modal-body');
+  body.innerHTML = `
+    <button class="uc-modal-close" onclick="closeUcModal()" aria-label="Close">×</button>
+    <header>
+      <span class="uc-id">${esc(doc.id)}</span>
+      <h2 class="uc-name">${esc(doc.name)}</h2>
+      ${ucWhoHtml(id, doc, actorName, esc)}
+    </header>
+    <section class="uc-description">${esc(doc.description || '')}</section>
+    <section class="uc-scenarios">${scenariosHtml}</section>
+    <section class="uc-prepostuser">
+      <div class="uc-pre"><h4>תנאים מוקדמים</h4><ul>${listItems(doc.preconditions)}</ul></div>
+      <div class="uc-post"><h4>תנאים סופיים</h4><ul>${listItems(doc.postconditions)}</ul></div>
+      <div class="uc-stories"><h4>סיפורי משתמש</h4><ul>${usItems}</ul></div>
+    </section>
+    ${wfHtml}`;
+
+  // An actorless «include» target renders no .uc-primary-link — guard before wiring.
+  const primaryLink = body.querySelector('.uc-primary-link');
+  if (primaryLink) primaryLink.onclick = () => { closeUcModal(); pulseActor(doc.primaryActor); };
+  body.querySelectorAll('.step-actor').forEach(el => {
+    el.onclick = () => { closeUcModal(); pulseActor(el.dataset.actorId); };
+  });
+  body.querySelectorAll('.step-uc-ref').forEach(el => {
+    el.onclick = () => openUcModal(el.dataset.ucRef);
+  });
+
+  const modal = document.getElementById('uc-modal');
+  modal.hidden = false;
+  document.body.classList.add('uc-modal-open');
+}
+
+function closeUcModal() {
+  const modal = document.getElementById('uc-modal');
+  if (modal) modal.hidden = true;
+  document.body.classList.remove('uc-modal-open');
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeUcModal(); });
+
+function pulseActor(actorId) {
+  const g = document.getElementById('actor-group-' + actorId);
+  if (!g) return;
+  g.classList.add('actor-pulse');
+  setTimeout(() => g.classList.remove('actor-pulse'), 2000);
+}
+
+// ── Assumptions panel ─────────────────────────────────────────────────────
+function renderAssumptions() {
+  const a = (diagramModel && diagramModel.assumptions)   || [];
+  const q = (diagramModel && diagramModel.openQuestions) || [];
+  const panel = document.getElementById('assumptions-panel');
+  if (!panel) return;
+  if (!a.length && !q.length) { panel.hidden = true; return; }
+  panel.hidden = false;
+  const fillList = (listEl, items) => {
+    listEl.innerHTML = '';
+    items.forEach(s => { const li = document.createElement('li'); li.textContent = s; listEl.appendChild(li); });
+  };
+  fillList(document.getElementById('assumptions-list'),    a);
+  fillList(document.getElementById('open-questions-list'), q);
+  document.getElementById('assumptions-col').hidden    = !a.length;
+  document.getElementById('open-questions-col').hidden = !q.length;
+}
+
+// ── XMI export ────────────────────────────────────────────────────────────
+function xmlEscape(s) {
+  return String(s == null ? '' : s)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;').replace(/'/g,'&apos;');
+}
+
+function downloadFile(filename, mimeType, content) {
+  const blob = new Blob([content], { type: mimeType });
+  const url  = URL.createObjectURL(blob);
+  const a = Object.assign(document.createElement('a'), { href: url, download: filename });
+  document.body.appendChild(a); a.click();
+  setTimeout(() => { URL.revokeObjectURL(url); a.remove(); }, 1000);
+}
+
+function xmiBody(elements, rels) {
+  const lines = [];
+  function flowText(uc) {
+    const actorName = id => (elements.find(e => e.kind === 'actor'   && e.id === id) || {}).name || id;
+    const ucName    = id => (elements.find(e => e.kind === 'useCase' && e.id === id) || {}).name || id;
+    const out = [];
+
+    // VP stores Flow of Events as an OpaqueBehavior text body, so the loop/alt
+    // structure round-trips as indented prose rather than as UML activity nodes.
+    const emit = (flow, prefix, indent, extByAt) => {
+      (flow || []).forEach((step, i) => {
+        const label = prefix + (i + 1);
+        const pad = '  '.repeat(indent);
+        // §3.3 — a step that declares an extension point is the named hook; the
+        // exported flow must show it or the correspondence lives only on-screen.
+        const pt = step.extensionPoint ? ' — 📍 נקודת הרחבה: ' + step.extensionPoint : '';
+        if (step.kind === 'loop') {
+          out.push(pad + label + '. חזור ' + (step.condition || '') + ':' + pt);
+          emit(step.steps, label + '.', indent + 1, extByAt);
+        } else if (step.kind === 'alt') {
+          out.push(pad + label + '. לפי ' + (step.condition || '') + ':' + pt);
+          (step.branches || []).forEach((b, bi) => {
+            const bLabel = label + '.' + (bi + 1);
+            out.push('  '.repeat(indent + 1) + bLabel + ' [' + (b.label || '') + ']');
+            emit(b.steps, bLabel + '.', indent + 2, extByAt);
+          });
+        } else if (step.kind === 'actor')     out.push(pad + label + '. ' + actorName(step.actor) + ': ' + step.text + pt);
+        else if (step.kind === 'system')      out.push(pad + label + '. System: ' + step.text + pt);
+        else if (step.kind === 'include')     out.push(pad + label + '. «include» ' + ucName(step.uc) + (step.text ? ' — ' + step.text : '') + pt);
+        else if (step.kind === 'extension')   out.push(pad + label + 'a. ' + step.text);
+
+        (extByAt.get(label) || []).forEach((e, j) => {
+          const letter = String.fromCharCode(97 + j);
+          const structured = Array.isArray(e.steps) || !!e.outcome;
+          out.push(pad + '  ' + label + letter + '. ' + (structured ? 'אם ' + e.text + ':' : e.text));
+          (e.steps || []).forEach((s, k) => {
+            out.push(pad + '    ' + label + letter + (k + 1) + '. ' + s);
+          });
+          if (e.outcome && e.outcome.kind === 'resume')
+            out.push(pad + '    ↩ חזרה לשלב ' + e.outcome.at);
+          else if (e.outcome && e.outcome.kind === 'terminate')
+            out.push(pad + '    ⛔ המקרה מסתיים ללא הצלחה' + (e.outcome.text ? ' — ' + e.outcome.text : ''));
+        });
+      });
+    };
+
+    (uc.scenarios || []).forEach(sc => {
+      out.push((sc.name || sc.id) + ':');
+      const extByAt = new Map();
+      (sc.extensions || []).forEach(e => {
+        const at = String(e.at == null ? '' : e.at);
+        if (!extByAt.has(at)) extByAt.set(at, []);
+        extByAt.get(at).push(e);
+      });
+      emit(sc.flow, '', 1, extByAt);
+    });
+    return out.join('\n');
+  }
+
+  for (const el of elements) {
+    if (el.kind === 'useCase') {
+      const hasDocs = (el.preconditions  && el.preconditions.length)
+                   || (el.postconditions && el.postconditions.length)
+                   || (el.scenarios      && el.scenarios.length);
+      if (!hasDocs) {
+        lines.push('    <packagedElement xmi:type="uml:UseCase" xmi:id="' + el.id + '" name="' + xmlEscape(el.name) + '"/>');
+      } else {
+        lines.push('    <packagedElement xmi:type="uml:UseCase" xmi:id="' + el.id + '" name="' + xmlEscape(el.name) + '">');
+        (el.preconditions || []).forEach((p, i) => {
+          lines.push('      <precondition xmi:type="uml:Constraint" xmi:id="' + el.id + '-pre-' + (i+1) + '" name="pre-' + (i+1) + '">');
+          lines.push('        <specification xmi:type="uml:OpaqueExpression" xmi:id="' + el.id + '-pre-' + (i+1) + '-s"><body>' + xmlEscape(p) + '</body></specification>');
+          lines.push('      </precondition>');
+        });
+        (el.postconditions || []).forEach((p, i) => {
+          lines.push('      <postcondition xmi:type="uml:Constraint" xmi:id="' + el.id + '-post-' + (i+1) + '" name="post-' + (i+1) + '">');
+          lines.push('        <specification xmi:type="uml:OpaqueExpression" xmi:id="' + el.id + '-post-' + (i+1) + '-s"><body>' + xmlEscape(p) + '</body></specification>');
+          lines.push('      </postcondition>');
+        });
+        if (el.scenarios && el.scenarios.length) {
+          lines.push('      <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="' + el.id + '-flow" name="Flow of Events">');
+          lines.push('        <body>' + xmlEscape(flowText(el)) + '</body>');
+          lines.push('      </ownedBehavior>');
+        }
+        lines.push('    </packagedElement>');
+      }
+    }
+    if (el.kind === 'actor')
+      lines.push('    <packagedElement xmi:type="uml:Actor" xmi:id="' + el.id + '" name="' + xmlEscape(el.name) + '"/>');
+  }
+  for (const r of rels) {
+    if (r.kind === 'actorAssoc') {
+      lines.push('    <packagedElement xmi:type="uml:Association" xmi:id="' + r.id + '">');
+      lines.push('      <ownedEnd xmi:type="uml:Property" xmi:id="' + r.id + '-e1" association="' + r.id + '" type="' + r.actorId + '"/>');
+      lines.push('      <ownedEnd xmi:type="uml:Property" xmi:id="' + r.id + '-e2" association="' + r.id + '" type="' + r.ucId   + '"/>');
+      lines.push('    </packagedElement>');
+    }
+    if (r.kind === 'include')
+      lines.push('    <packagedElement xmi:type="uml:Include" xmi:id="' + r.id + '" includingCase="' + r.from + '" addition="' + r.to + '"/>');
+    if (r.kind === 'extend')
+      lines.push('    <packagedElement xmi:type="uml:Extend"  xmi:id="' + r.id + '" extendedCase="'  + r.to   + '" extension="' + r.from + '"/>');
+    if (r.kind === 'generalization')
+      lines.push('    <packagedElement xmi:type="uml:Generalization" xmi:id="' + r.id + '" specific="' + r.from + '" general="' + r.to + '"/>');
+  }
+  return lines.join('\n');
+}
+
+function exportXMI() {
+  const m     = diagramModel;
+  const title = xmlEscape(m.title || 'diagram');
+  const body  = xmiBody(m.parts.flatMap(p => p.elements), m.parts.flatMap(p => p.relationships));
+  const xmi   =
+    '<?xml version="1.0" encoding="UTF-8"?>\n' +
+    '<xmi:XMI xmi:version="2.1"\n' +
+    '  xmlns:xmi="http://www.omg.org/XMI"\n' +
+    '  xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML">\n' +
+    '  <uml:Model xmi:id="model_1" name="' + title + '">\n' +
+    body + '\n' +
+    '  </uml:Model>\n' +
+    '</xmi:XMI>';
+  downloadFile(title.replace(/\s+/g, '_') + '.xmi', 'application/xml', xmi);
+}
+
+// ── User stories summary panel ────────────────────────────────────────────
+function renderUserStoriesSummary() {
+  const panel = document.getElementById('user-stories-panel');
+  if (!panel) return;
+  const seen = new Set();
+  const stories = [];
+  Object.values(useCaseDocs).forEach(doc => {
+    (doc.userStories || []).forEach(us => {
+      const key = us.role + '|' + us.want + '|' + us.so;
+      if (!seen.has(key)) { seen.add(key); stories.push(us); }
+    });
+  });
+  if (!stories.length) { panel.hidden = true; return; }
+  panel.hidden = false;
+  const list = document.getElementById('user-stories-list');
+  if (!list) return;
+  list.innerHTML = '';
+  stories.forEach(us => {
+    const li = document.createElement('li');
+    li.textContent = 'בתור ' + us.role + ', אני רוצה ' + us.want + ', כדי ש' + us.so;
+    list.appendChild(li);
+  });
+}
+
+// ── Hover highlight ────────────────────────────────────────────────────────
+// Point at any association / «include» / «extend» line to trace it through
+// crossings: it brightens to magenta, thickens, and lifts to the front,
+// restoring on mouse-out. Reuses the existing wide .conn-hitbox targets (kept in
+// sync by fixLayout), so no extra geometry and it works on every tab.
+function wireUcHover() {
+  document.querySelectorAll('.conn-hitbox').forEach(hit => {
+    if (hit.dataset.hoverWired) return;
+    hit.dataset.hoverWired = '1';
+    hit.style.cursor = 'pointer';
+    const svg = hit.ownerSVGElement;
+    const fId = hit.getAttribute('data-hitbox-from');
+    const tId = hit.getAttribute('data-hitbox-to');
+    const line = svg && svg.querySelector(
+      `[data-conn-from="${fId}"][data-conn-to="${tId}"]`);
+    if (!line) return;
+    let slot = null;
+    hit.addEventListener('mouseenter', () => {
+      const s0 = line.getAttribute('stroke') || '#334155';
+      const w0 = line.getAttribute('stroke-width') || '1.5';
+      line.dataset.s0 = s0; line.dataset.w0 = w0;
+      slot = document.createComment('e'); line.parentNode.insertBefore(slot, line);
+      line.parentNode.appendChild(line); // lift to front
+      line.setAttribute('stroke', '#e6007e');
+      line.setAttribute('stroke-width', String(Math.max(3.2, parseFloat(w0) + 1.6)));
+    });
+    hit.addEventListener('mouseleave', () => {
+      line.setAttribute('stroke', line.dataset.s0 || '#334155');
+      line.setAttribute('stroke-width', line.dataset.w0 || '1.5');
+      if (slot && slot.parentNode) { slot.parentNode.insertBefore(line, slot); slot.remove(); }
+      slot = null;
+    });
+  });
+}
+
+// ── Init ──────────────────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  diagramLayouts.forEach(l => fixLayout(l));
+  renderAssumptions();
+  renderUserStoriesSummary();
+});
+// Wired independently so a hiccup in the layout/summary init above never skips
+// it (hover doesn't depend on layout — it only attaches listeners).
+document.addEventListener('DOMContentLoaded', wireUcHover);
+
+</script>
+</body>
+</html>

@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="he">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>נעים בדרכים, Class Diagram (פתרון שאלה 7)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,700;1,400&family=Rubik:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; padding: 24px; background: #eef2f7; font-family: 'Rubik', sans-serif; color: #1e293b; }
+  .page { max-width: 1560px; margin: 0 auto; }
+  header.top {
+    background: #1e40af; color: #fff; border-radius: 10px 10px 0 0;
+    padding: 18px 26px; direction: rtl; text-align: right;
+  }
+  header.top h1 { margin: 0 0 4px 0; font-size: 20px; font-weight: 700; }
+  header.top p { margin: 0; font-size: 13px; color: #dbeafe; line-height: 1.7; }
+  .diagram-wrap {
+    background: #fff; border: 1px solid #cbd5e1; border-top: none;
+    border-radius: 0 0 10px 10px; padding: 10px; overflow-x: auto; direction: ltr;
+  }
+  svg { display: block; }
+  .vp-export-btn {
+    position: fixed; bottom: 20px; right: 20px; z-index: 1000;
+    background: #1e40af; color: #fff; border: none; border-radius: 6px;
+    padding: 8px 16px; font-size: 13px; cursor: pointer;
+    font-family: 'IBM Plex Mono', monospace;
+  }
+  .vp-export-btn:hover { background: #1e3a8a; }
+</style>
+</head>
+<body>
+<div class="page">
+  <header class="top">
+    <h1>פתרון שאלה 7, תרשים מחלקות, מערכת ניהול קריאות טיפול לצי רכב</h1>
+    <p>מודל פתרון להוראה, ניתוח ועיצוב מערכות מידע (364-1-1411), 2026 סמסטר ב' מועד ב'. <b>נקודות ההכרעה בתרשים:</b> (א) הכמות והמחיר-בעת-השימוש יושבים על <code>PartUsage</code>, מחלקת קשר על הקשר רבים-לרבים שבין <code>WorkOrder</code> ל-<code>Part</code>, כי הם נתון של הצמד ולא של אף אחד מהצדדים; (ב) שעות העבודה יושבות על <code>MechanicAssignment</code>, מחלקת קשר על הקשר רבים-לרבים שבין הקריאה למכונאי, כי כל מכונאי מדווח את שעותיו שלו באותה קריאה; (ג) <b>סוג טיפול הוא enumerator</b> המשמש כטיפוס של תכונה ואינו מחובר בקו קשר לאף מחלקה, ואילו <b>התמחות היא מחלקה</b> הקשורה למשתמש בקשר רבים-לרבים, כי היא קטלוג נתוני-אב שמכונאי מחזיק כמה מערכיו; (ד) הקשר רכב–קריאה הוא <code>1</code> מול <code>0..*</code>, כדי שרכב חדש שטרם נפתחה עבורו קריאה יוכל להירשם; (ה) <b>אין מפתחות</b> בתרשים: קו הקשר הוא ההפניה. המספרים העסקיים שהסיפור נוקב בהם — מספר רישוי ומספר מק"ט — כן מופיעים כתכונות. (ו) סיכום התיקון החופשי <b>כן</b> מיוצג במערכת (<code>repairSummary</code> על <code>WorkOrder</code>) בניגוד לבקשת מנהל הצי; מחיר ההכרעה ומסלול חלופי מזכה מוסברים בפתרון שאלה 7.5. אין מחלקות לכרטיסי דלק ולהוצאות תדלוק — נושא זה מחוץ להיקף שהוגדר בסיפור (ראו 6.4). (ז) <b>אין מחלקת <code>Mechanic</code> היורשת מ-<code>User</code>.</b> מכונאי הוא <b>תפקיד</b>, והתפקידים כבר מיוצגים בקשר <code>User</code>–<code>Role</code> רבים-לרבים; ירושה לפי תפקיד הייתה מחייבת שמשתמש שהוא גם מכונאי וגם מנהל מוסך יהיה מופע של שתי מחלקות, ומשתמש שמתקדם בתפקידו היה צריך להימחק ולהיווצר מחדש. תכונה או פעולה נוספות אינן עילה לירושה. לכן המוסך, ההתמחויות והשיבוץ לקריאה מחוברים ישירות ל-<code>User</code>, והמגבלה "רק בעל תפקיד מכונאי משובץ לקריאה" היא כלל עסקי ולא מבנה.</p>
+  </header>
+  <div class="diagram-wrap">
+    <svg id="diagram-svg" xmlns="http://www.w3.org/2000/svg"></svg>
+  </div>
+</div>
+
+<button class="vp-export-btn" onclick="exportXMI()">Download .xmi (Visual Paradigm)</button>
+
+<script>
+/* ── 1. DATA (routed offline by render_class.mjs) ────────────────────────── */
+
+const CLASSES = [
+  {
+    "id": "Role",
+    "name": "Role",
+    "isEnum": false,
+    "attrs": [
+      "+ roleName : String",
+      "+ permissions : String"
+    ],
+    "ops": [],
+    "x": 330,
+    "y": 50
+  },
+  {
+    "id": "User",
+    "name": "User",
+    "isEnum": false,
+    "attrs": [
+      "+ userId : String",
+      "+ fullName : String",
+      "+ phone : String",
+      "+ email : String"
+    ],
+    "ops": [],
+    "x": 330,
+    "y": 230
+  },
+  {
+    "id": "Garage",
+    "name": "Garage",
+    "isEnum": false,
+    "attrs": [
+      "+ garageName : String",
+      "+ location : String"
+    ],
+    "ops": [],
+    "x": 60,
+    "y": 230
+  },
+  {
+    "id": "Specialty",
+    "name": "Specialty",
+    "isEnum": false,
+    "attrs": [
+      "+ specialtyName : String"
+    ],
+    "ops": [],
+    "x": 60,
+    "y": 430
+  },
+  {
+    "id": "MechanicAssignment",
+    "name": "MechanicAssignment",
+    "isEnum": false,
+    "attrs": [
+      "+ assignedDate : Date",
+      "+ hoursWorked : Number"
+    ],
+    "ops": [],
+    "x": 460,
+    "y": 470
+  },
+  {
+    "id": "Department",
+    "name": "Department",
+    "isEnum": false,
+    "attrs": [
+      "+ departmentName : String",
+      "+ contactPhone : String"
+    ],
+    "ops": [],
+    "x": 620,
+    "y": 60
+  },
+  {
+    "id": "Vehicle",
+    "name": "Vehicle",
+    "isEnum": false,
+    "attrs": [
+      "+ licensePlate : String",
+      "+ vehicleType : VehicleType",
+      "+ model : String",
+      "+ mileage : Integer",
+      "+ nextServiceDate : Date"
+    ],
+    "ops": [
+      "+ isDueForService()",
+      "+ returnToService()"
+    ],
+    "x": 920,
+    "y": 40
+  },
+  {
+    "id": "WorkOrder",
+    "name": "WorkOrder",
+    "isEnum": false,
+    "attrs": [
+      "+ openDate : Date",
+      "+ serviceType : ServiceType",
+      "+ priority : PriorityLevel",
+      "+ faultDescription : String",
+      "+ repairSummary : Text",
+      "+ status : WorkOrderStatus",
+      "+ closureReason : WorkOrderStatus"
+    ],
+    "ops": [
+      "+ recordDiagnosis()",
+      "+ approve()",
+      "+ reject()",
+      "+ complete()",
+      "+ cancel()",
+      "+ totalCost()"
+    ],
+    "x": 640,
+    "y": 330
+  },
+  {
+    "id": "DiagnosisReport",
+    "name": "DiagnosisReport",
+    "isEnum": false,
+    "attrs": [
+      "+ findings : Text",
+      "+ estimatedCost : Number",
+      "+ reportDate : Date"
+    ],
+    "ops": [],
+    "x": 640,
+    "y": 620
+  },
+  {
+    "id": "Part",
+    "name": "Part",
+    "isEnum": false,
+    "attrs": [
+      "+ catalogNumber : String",
+      "+ partName : String",
+      "+ stockLevel : Integer",
+      "+ currentPrice : Number"
+    ],
+    "ops": [
+      "+ updateStockLevel()"
+    ],
+    "x": 980,
+    "y": 330
+  },
+  {
+    "id": "PartUsage",
+    "name": "PartUsage",
+    "isEnum": false,
+    "attrs": [
+      "+ quantity : Integer",
+      "+ priceAtUse : Number"
+    ],
+    "ops": [
+      "+ lineTotal()"
+    ],
+    "x": 980,
+    "y": 520
+  },
+  {
+    "id": "VehicleType",
+    "name": "VehicleType",
+    "stereotype": "«enumeration»",
+    "isEnum": true,
+    "attrs": [
+      "PrivateCar",
+      "Pickup",
+      "Truck",
+      "Forklift"
+    ],
+    "ops": [],
+    "x": 1300,
+    "y": 40
+  },
+  {
+    "id": "ServiceType",
+    "name": "ServiceType",
+    "stereotype": "«enumeration»",
+    "isEnum": true,
+    "attrs": [
+      "Periodic",
+      "FaultRepair",
+      "Inspection"
+    ],
+    "ops": [],
+    "x": 1300,
+    "y": 200
+  },
+  {
+    "id": "PriorityLevel",
+    "name": "PriorityLevel",
+    "stereotype": "«enumeration»",
+    "isEnum": true,
+    "attrs": [
+      "Low",
+      "Normal",
+      "High",
+      "Urgent"
+    ],
+    "ops": [],
+    "x": 1300,
+    "y": 340
+  },
+  {
+    "id": "WorkOrderStatus",
+    "name": "WorkOrderStatus",
+    "stereotype": "«enumeration»",
+    "isEnum": true,
+    "attrs": [
+      "Opened",
+      "Assigned",
+      "InDiagnosis",
+      "WaitingApproval",
+      "InService",
+      "WaitingForParts",
+      "Completed",
+      "Rejected",
+      "Cancelled",
+      "Archived"
+    ],
+    "ops": [],
+    "x": 1300,
+    "y": 500
+  }
+];
+
+const RELS = [
+  {
+    "id": "r_user_role",
+    "type": "assoc",
+    "from": "User",
+    "to": "Role",
+    "fromMult": "0..*",
+    "toMult": "1..*",
+    "label": "נושא תפקיד",
+    "points": [
+      [
+        400,
+        230
+      ],
+      [
+        400,
+        118
+      ]
+    ]
+  },
+  {
+    "id": "r_mechanic_garage",
+    "type": "assoc",
+    "from": "User",
+    "to": "Garage",
+    "fromMult": "0..*",
+    "toMult": "0..1",
+    "label": "עובד במוסך",
+    "points": [
+      [
+        330,
+        264
+      ],
+      [
+        213,
+        264
+      ]
+    ]
+  },
+  {
+    "id": "r_mechanic_specialty",
+    "type": "assoc",
+    "from": "User",
+    "to": "Specialty",
+    "fromMult": "0..*",
+    "toMult": "0..*",
+    "label": "מתמחה ב",
+    "points": [
+      [
+        380,
+        326
+      ],
+      [
+        380,
+        500
+      ],
+      [
+        157,
+        500
+      ],
+      [
+        157,
+        430
+      ]
+    ]
+  },
+  {
+    "id": "r_wo_mechanic",
+    "type": "assoc",
+    "from": "WorkOrder",
+    "to": "User",
+    "fromMult": "0..*",
+    "toMult": "0..*",
+    "label": "משובץ ל",
+    "points": [
+      [
+        640,
+        441.5
+      ],
+      [
+        400,
+        441.5
+      ],
+      [
+        400,
+        326
+      ]
+    ]
+  },
+  {
+    "id": "r_wo_garage",
+    "type": "assoc",
+    "from": "WorkOrder",
+    "to": "Garage",
+    "fromMult": "0..*",
+    "toMult": "1",
+    "label": "מטופלת ב",
+    "points": [
+      [
+        660,
+        330
+      ],
+      [
+        660,
+        190
+      ],
+      [
+        157,
+        190
+      ],
+      [
+        157,
+        230
+      ]
+    ]
+  },
+  {
+    "id": "r_wo_opener",
+    "type": "assoc",
+    "from": "User",
+    "to": "WorkOrder",
+    "fromMult": "0..1",
+    "toMult": "0..*",
+    "label": "פתח את הקריאה",
+    "points": [
+      [
+        470,
+        278
+      ],
+      [
+        755.5,
+        278
+      ],
+      [
+        755.5,
+        330
+      ]
+    ]
+  },
+  {
+    "id": "r_vehicle_department",
+    "type": "assoc",
+    "from": "Vehicle",
+    "to": "Department",
+    "fromMult": "0..*",
+    "toMult": "1",
+    "label": "משויך ל",
+    "points": [
+      [
+        920,
+        94
+      ],
+      [
+        799,
+        94
+      ]
+    ]
+  },
+  {
+    "id": "r_vehicle_wo",
+    "type": "assoc",
+    "from": "Vehicle",
+    "to": "WorkOrder",
+    "fromMult": "1",
+    "toMult": "0..*",
+    "label": "נפתחת עבור",
+    "points": [
+      [
+        1000,
+        179
+      ],
+      [
+        1000,
+        300
+      ],
+      [
+        800,
+        300
+      ],
+      [
+        800,
+        330
+      ]
+    ]
+  },
+  {
+    "id": "r_wo_diagnosis",
+    "type": "comp",
+    "from": "WorkOrder",
+    "to": "DiagnosisReport",
+    "fromMult": "1",
+    "toMult": "0..1",
+    "label": "כוללת",
+    "points": [
+      [
+        726,
+        553
+      ],
+      [
+        726,
+        620
+      ]
+    ]
+  },
+  {
+    "id": "r_wo_part",
+    "type": "assoc",
+    "from": "WorkOrder",
+    "to": "Part",
+    "fromMult": "0..*",
+    "toMult": "0..*",
+    "label": "מנצלת",
+    "points": [
+      [
+        871,
+        385.5
+      ],
+      [
+        980,
+        385.5
+      ]
+    ]
+  }
+];
+
+const ASSOC_CLASSES = [
+  {
+    "classId": "PartUsage",
+    "assocId": "r_wo_part"
+  },
+  {
+    "classId": "MechanicAssignment",
+    "assocId": "r_wo_mechanic"
+  }
+];
+
+/* ── 2. ENGINE (SAD MCP uml-class-diagram §9d) ───────────────────────────── */
+
+const HDR_H = 28, PAD = 6, LINE_H = 14, DIV_H = 1;
+const FM = 'font-family="IBM Plex Mono, monospace"';
+
+function escXml(s) {
+  return String(s)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+function boxH(cls) {
+  const hdrH = cls.stereotype ? 38 : HDR_H;
+  return hdrH + PAD + cls.attrs.length * LINE_H +
+    (cls.ops.length > 0 ? DIV_H + cls.ops.length * LINE_H : 0) + PAD;
+}
+
+function boxW(cls) {
+  const longest = [...cls.attrs, ...cls.ops, cls.name]
+    .reduce((m, s) => Math.max(m, s.length), 0);
+  return Math.max(120, Math.ceil(longest * 6.5) + 16);
+}
+
+function svgBox(cls) {
+  const w = boxW(cls), h = boxH(cls), { x, y } = cls;
+  const hdrH = cls.stereotype ? 38 : HDR_H;
+  const border   = cls.isEnum ? '#94a3b8' : '#3b82f6';
+  const hdrFill  = cls.isEnum ? '#475569' : '#1e40af';
+  const bodyFill = cls.isEnum ? '#f8fafc' : 'white';
+  const dash     = cls.isEnum ? 'stroke-dasharray="5 3"' : '';
+
+  let s = `<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="${bodyFill}" stroke="${border}" stroke-width="2" ${dash} rx="2"/>`;
+  s += `<rect x="${x}" y="${y}" width="${w}" height="${hdrH}" fill="${hdrFill}" rx="2"/>`;
+
+  if (cls.stereotype) {
+    s += `<text x="${x + w/2}" y="${y + 13}" text-anchor="middle" fill="white" font-size="9" ${FM}>${escXml(cls.stereotype)}</text>`;
+  }
+  const nameStyle = cls.isAbstract ? 'font-style:italic' : '';
+  const nameY = cls.stereotype ? y + hdrH - 8 : y + hdrH / 2 + 4;
+  s += `<text x="${x + w/2}" y="${nameY}" text-anchor="middle" fill="white" font-size="11" font-weight="700" ${FM} style="${nameStyle}">${escXml(cls.name)}</text>`;
+
+  const divY = y + hdrH;
+  s += `<line x1="${x}" y1="${divY}" x2="${x + w}" y2="${divY}" stroke="${border}" stroke-width="1"/>`;
+
+  let curY = divY + PAD + 10;
+  for (const a of cls.attrs) {
+    s += `<text x="${x + 6}" y="${curY}" text-anchor="start" fill="#1e293b" font-size="10.5" ${FM}>${escXml(a)}</text>`;
+    curY += LINE_H;
+  }
+  if (cls.ops.length > 0) {
+    const opDivY = divY + PAD + cls.attrs.length * LINE_H;
+    s += `<line x1="${x}" y1="${opDivY}" x2="${x + w}" y2="${opDivY}" stroke="${border}" stroke-width="1"/>`;
+    curY = opDivY + PAD + 10;
+    for (const o of cls.ops) {
+      s += `<text x="${x + 6}" y="${curY}" text-anchor="start" fill="#2563eb" font-size="10.5" font-style="italic" ${FM}>${escXml(o)}</text>`;
+      curY += LINE_H;
+    }
+  }
+  return s;
+}
+
+function svgRel(rel) {
+  const pts = rel.points.map(([px, py]) => `${px},${py}`).join(' ');
+  let mS = '', mE = '', dash = '';
+  if (rel.type === 'comp') mS = 'marker-start="url(#compFill)"';
+  if (rel.type === 'agg')  mS = 'marker-start="url(#aggHollow)"';
+  if (rel.type === 'gen')  mE = 'marker-end="url(#genHollow)"';
+  if (rel.type === 'dep')  { mE = 'marker-end="url(#arrOpen)"'; dash = 'stroke-dasharray="6 3"'; }
+
+  let s = `<polyline points="${pts}" fill="none" stroke="#334155" stroke-width="1.8" ${dash} ${mS} ${mE}/>`;
+  const multLabel = (end, adj, txt) => {
+    const dx = adj[0] - end[0], dy = adj[1] - end[1];
+    const L = Math.hypot(dx, dy) || 1, ux = dx / L, uy = dy / L;
+    const x = end[0] + ux * 18 - uy * 10, y = end[1] + uy * 18 + ux * 10 + 3;
+    return `<text x="${x}" y="${y}" text-anchor="middle" fill="#64748b" font-size="9.5" ${FM} style="direction:ltr;unicode-bidi:isolate">${escXml(txt)}</text>`;
+  };
+  if (rel.fromMult) s += multLabel(rel.points[0], rel.points[1], rel.fromMult);
+  if (rel.toMult) {
+    const n = rel.points.length;
+    s += multLabel(rel.points[n - 1], rel.points[n - 2], rel.toMult);
+  }
+  if (rel.label) {
+    const mid = rel.points[Math.floor(rel.points.length / 2)];
+    s += `<text x="${mid[0]}" y="${mid[1] - 6}" text-anchor="middle" fill="#64748b" font-size="9.5" ${FM}>${escXml(rel.label)}</text>`;
+  }
+  return s;
+}
+
+function render() {
+  let maxX = 600, maxY = 400;
+  for (const cls of CLASSES) {
+    maxX = Math.max(maxX, cls.x + boxW(cls) + 60);
+    maxY = Math.max(maxY, cls.y + boxH(cls) + 80);
+  }
+
+  const defs = `<defs>
+    <pattern id="dotgrid" width="24" height="24" patternUnits="userSpaceOnUse">
+      <circle cx="12" cy="12" r="0.8" fill="#cbd5e1"/>
+    </pattern>
+    <marker id="genHollow" markerWidth="12" markerHeight="10" refX="10" refY="5" orient="auto">
+      <polygon points="0,0 10,5 0,10" fill="white" stroke="#334155" stroke-width="1.5"/>
+    </marker>
+    <marker id="arrOpen" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <polyline points="0,0 9,4 0,8" fill="none" stroke="#334155" stroke-width="1.5"/>
+    </marker>
+    <marker id="compFill" markerWidth="14" markerHeight="10" refX="1" refY="5" orient="auto">
+      <polygon points="0,5 7,0 14,5 7,10" fill="#1e40af" stroke="#1e40af"/>
+    </marker>
+    <marker id="aggHollow" markerWidth="14" markerHeight="10" refX="1" refY="5" orient="auto">
+      <polygon points="0,5 7,0 14,5 7,10" fill="white" stroke="#334155"/>
+    </marker>
+  </defs>`;
+
+  const bg    = `<rect width="${maxX}" height="${maxY}" fill="url(#dotgrid)"/>`;
+  const rels  = RELS.map(svgRel).join('');
+  const boxes = CLASSES.map(svgBox).join('');
+  const legend = `<text x="16" y="${maxY - 40}" fill="#64748b" font-size="9" ${FM}>── Association  ◇── Aggregation  ◆── Composition  ──▷ Generalization  |  קרדינליות בשני קצות הקשר  |  --- association-class tether</text>`;
+
+  const svg = document.getElementById('diagram-svg');
+  svg.setAttribute('width',   maxX);
+  svg.setAttribute('height',  maxY);
+  svg.setAttribute('viewBox', `0 0 ${maxX} ${maxY}`);
+  svg.innerHTML = defs + bg + rels + boxes + legend;
+}
+
+/* association-class tethers: dashed line from the association midpoint to the
+   nearest edge of the association class, so the box can sit on any side of the
+   line without the tether cutting through it */
+function addTethers() {
+  const svg = document.getElementById('diagram-svg');
+  const out = ASSOC_CLASSES.map(({ classId, assocId }) => {
+    const base = RELS.find(r => r.id === assocId);
+    const cls  = CLASSES.find(c => c.id === classId);
+    if (!base || !cls) return '';
+    // midpoint ALONG the polyline — the chord midpoint of an L-shaped route
+    // floats in empty space, leaving the tether disconnected from the line
+    const p = base.points;
+    let total = 0;
+    const seg = [];
+    for (let i = 0; i < p.length - 1; i++) {
+      const L = Math.hypot(p[i + 1][0] - p[i][0], p[i + 1][1] - p[i][1]);
+      seg.push(L); total += L;
+    }
+    let half = total / 2, mx = p[0][0], my = p[0][1];
+    for (let i = 0; i < seg.length; i++) {
+      if (half <= seg[i]) {
+        const t = seg[i] ? half / seg[i] : 0;
+        mx = p[i][0] + (p[i + 1][0] - p[i][0]) * t;
+        my = p[i][1] + (p[i + 1][1] - p[i][1]) * t;
+        break;
+      }
+      half -= seg[i];
+    }
+
+    const w = boxW(cls), h = boxH(cls);
+    const cx = cls.x + w / 2, cy = cls.y + h / 2;
+    // clip the midpoint→centre segment at the box boundary
+    const dx = mx - cx, dy = my - cy;
+    let tx = cx, ty = cy;
+    if (dx !== 0 || dy !== 0) {
+      const sx = dx === 0 ? Infinity : (w / 2) / Math.abs(dx);
+      const sy = dy === 0 ? Infinity : (h / 2) / Math.abs(dy);
+      const s = Math.min(sx, sy);
+      tx = cx + dx * s;
+      ty = cy + dy * s;
+    }
+    return `<line x1="${mx}" y1="${my}" x2="${tx.toFixed(1)}" y2="${ty.toFixed(1)}" stroke="#334155" stroke-width="1.3" stroke-dasharray="4 3" fill="none"/>`;
+  }).join('');
+  if (out) svg.insertAdjacentHTML('beforeend', out);
+}
+
+/* ── 3. diagramModel (model-shape.md, kind:'class') ──────────────────────── */
+
+function buildModel() {
+  const parseMember = (s) => {
+    const m = s.match(/^([+\-#])?\s*([^:()]+?)\s*(\([^)]*\))?\s*(?::\s*(.+))?\s*$/);
+    return {
+      visibility: m && m[1] ? m[1] : '+',
+      name: m ? m[2].trim() : s,
+      type: m && m[4] ? m[4].trim() : null,
+      isOp: !!(m && m[3])
+    };
+  };
+  const elements = CLASSES.map(c => {
+    if (c.isEnum) {
+      return { kind: 'class', id: c.id, name: c.name, isAbstract: false,
+        stereotype: 'enumeration',
+        attributes: c.attrs.map(v => ({ visibility: '', name: v, type: null, defaultValue: null, constraint: null })),
+        operations: [], x: c.x, y: c.y, w: boxW(c), h: boxH(c) };
+    }
+    return { kind: 'class', id: c.id, name: c.name, isAbstract: !!c.isAbstract,
+      stereotype: c.stereotype ? c.stereotype.replace(/[«»]/g, '').trim() : null,
+      attributes: c.attrs.map(a => { const p = parseMember(a);
+        return { visibility: p.visibility, name: p.name, type: p.type, defaultValue: null, constraint: null }; }),
+      operations: c.ops.map(o => { const p = parseMember(o);
+        return { visibility: p.visibility, name: p.name, params: [], returnType: p.type }; }),
+      x: c.x, y: c.y, w: boxW(c), h: boxH(c) };
+  });
+
+  const relationships = [];
+  RELS.forEach((r, i) => {
+    if (r.type === 'gen') {
+      relationships.push({ kind: 'generalization', id: r.id || ('gen_' + i), from: r.from, to: r.to });
+      return;
+    }
+    relationships.push({ kind: 'association', id: r.id || ('assoc_' + i),
+      from: r.from, to: r.to, multFrom: r.fromMult, multTo: r.toMult,
+      roleFrom: r.fromRole || null, roleTo: r.toRole || null, directed: false,
+      aggregation: r.type === 'agg', composition: r.type === 'comp' });
+  });
+  ASSOC_CLASSES.forEach(ac => {
+    relationships.push({ kind: 'associationClass', id: 'ac_' + ac.classId, classId: ac.classId, assocId: ac.assocId });
+  });
+
+  return {
+    kind: 'class',
+    title: "נעים בדרכים, Class Diagram",
+    parts: [ { id: 'part-1', label: "Fleet Maintenance", splitRationale: '', elements, relationships } ]
+  };
+}
+
+const diagramModel = buildModel();
+
+/* ── 4. VP export ────────────────────────────────────────────────────────── */
+
+function xmlEscape(s) {
+  return String(s ?? '')
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;').replace(/'/g, '&apos;');
+}
+
+function downloadFile(filename, mimeType, content) {
+  const blob = new Blob([content], { type: mimeType });
+  const url  = URL.createObjectURL(blob);
+  const a    = Object.assign(document.createElement('a'), { href: url, download: filename });
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(() => { URL.revokeObjectURL(url); a.remove(); }, 1000);
+}
+
+function xmiBody(elements, rels) {
+  const lines = [];
+  for (const el of elements) {
+    if (el.kind === 'class') {
+      const isEnum = el.stereotype === 'enumeration';
+      const tag = isEnum ? 'uml:Enumeration' : 'uml:Class';
+      lines.push(`    <packagedElement xmi:type="${tag}" xmi:id="${el.id}" name="${xmlEscape(el.name)}"${el.isAbstract ? ' isAbstract="true"' : ''}>`);
+      if (isEnum) {
+        for (const a of el.attributes)
+          lines.push(`      <ownedLiteral xmi:id="${el.id}_${a.name}" name="${xmlEscape(a.name)}"/>`);
+      } else {
+        for (const a of el.attributes)
+          lines.push(`      <ownedAttribute xmi:id="${el.id}_${a.name}" name="${xmlEscape(a.name)}" visibility="${a.visibility === '+' ? 'public' : a.visibility === '-' ? 'private' : 'protected'}"/>`);
+        for (const op of el.operations)
+          lines.push(`      <ownedOperation xmi:id="${el.id}_${op.name}" name="${xmlEscape(op.name)}"/>`);
+      }
+      lines.push(`    </packagedElement>`);
+    }
+  }
+  for (const r of rels) {
+    if (r.kind === 'generalization')
+      lines.push(`    <packagedElement xmi:type="uml:Generalization" xmi:id="${r.id}" specific="${r.from}" general="${r.to}"/>`);
+    if (r.kind === 'association')
+      lines.push(`    <packagedElement xmi:type="uml:Association" xmi:id="${r.id}" memberEnd="${r.from}_end ${r.to}_end"/>`);
+    if (r.kind === 'associationClass')
+      lines.push(`    <packagedElement xmi:type="uml:AssociationClass" xmi:id="${r.id}" name="${xmlEscape(r.classId)}"/>`);
+  }
+  return lines.join('\n');
+}
+
+function exportXMI() {
+  const m = diagramModel;
+  const title = xmlEscape(m.title || 'diagram');
+  const allElements = m.parts.flatMap(p => p.elements);
+  const allRelationships = m.parts.flatMap(p => p.relationships);
+  const body = xmiBody(allElements, allRelationships);
+
+  const xmi = `<?xml version="1.0" encoding="UTF-8"?>
+<xmi:XMI xmi:version="2.1"
+  xmlns:xmi="http://www.omg.org/XMI"
+  xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML">
+  <uml:Model xmi:id="model_1" name="${title}">
+${body}
+  </uml:Model>
+</xmi:XMI>`;
+
+  downloadFile(title.replace(/\s+/g, '_') + '.xmi', 'application/xml', xmi);
+}
+
+document.addEventListener('DOMContentLoaded', () => { render(); addTethers(); });
+</script>
+</body>
+</html>
