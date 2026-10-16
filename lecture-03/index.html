@@ -16,7 +16,7 @@
       <div class="course">ניתוח ועיצוב מערכות מידע</div>
       <h1>דרישות</h1>
       <div class="lecture-no">הרצאה 3</div>
-      <div class="updated">עודכן: 30.08.2026</div>
+      <div class="updated">עודכן: 10.10.2026</div>
     </section>
     <section class="toc-slide" data-slug="toc">
       <h1>סדר היום</h1>
@@ -2140,7 +2140,7 @@
           רק אחרי שההנהלה תחליט. לא "חור בדרישות" — החלטה עסקית פתוחה, מתועדת.
         </div>
 
-        <p class="src fragment" style="margin:2px 0 0; text-align:center; font-size:12.5px;">📁 הקטלוג המלא — כל חוקי הקפיטריה, איך כותבים ומתעדים — בחומרי הקורס:
+        <p class="src fragment" style="margin:2px 0 0; text-align:center; font-size:12.5px;">📁 <b>הקטלוג המלא, אחד עשר החוקים, בשקף הבא</b> · והמסמך עצמו בחומרי הקורס:
           <span class="en">SAD-course-materials</span> · תיקיית <b>3-ניתוח-דרישות</b></p>
 
         <p class="bottom-line fragment">דרישה עונה "מה המערכת תעשה" · חוק עסקי עונה "<b>למה</b>" — קטלגו אותו, תנו לו בעלים, והפנו אליו.</p>
@@ -2164,6 +2164,68 @@
           <b>ומה קורה בסוף (הוכרע 2026-08-30, מוצג בהרצאה 8):</b> בניית תרשים המצבים של ההזמנה מכריחה את ההכרעה,
           והקמפוס מחליט — <b>החיוב נשאר, ללא זיכוי</b>. בשקף הזה BR-3 נשאר ״טרם הוחלט״ בכוונה: זה המצב הנכון
           בשלב הדרישות, וזה מה שמלמד את הקטגוריה. ההכרעה מגיעה בעיצוב, וזה בדיוק הסיפור.
+        </aside>
+
+      </div>
+    <div class="acro-footer"><span class="acro"><span class="en">FR</span> = <span class="en">Functional Requirement</span> · דרישה פונקציונלית</span></div>
+    </section>
+    <!-- E.1 — The FULL campus business-rule catalog (NEW 2026-10-10, David: "in lecture 3 we
+         introduce them so we should have at least 8-10 BR in that lecture so it also serves as
+         an example for that lesson"). The previous slide teaches the concept on a 4-row sample;
+         this one is the worked example: all 11 rules of the campus case, the three sources
+         side by side, and the two rules that break the usual shape (BR-10 has no FR and is
+         enforced by the design; BR-11 is an authority rule). Same catalog as
+         materials/3-ניתוח-דרישות/תוצר-מאומת/מסמך-דרישות-קמפוס, and every transition in L8's
+         state diagram points at a row here. -->
+    <section data-slug="business-rules-catalog" class="has-acro-footer">
+      <div class="sdlc-chip" title="שלב 3 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>ניתוח דרישות</div>
+      <style>
+        section[data-slug="business-rules-catalog"] table.sad { font-size:13.5px; }
+        section[data-slug="business-rules-catalog"] table.sad th { padding:4px 8px; font-size:13px; }
+        section[data-slug="business-rules-catalog"] table.sad td { padding:3px 8px; line-height:1.26; vertical-align:middle; }
+        section[data-slug="business-rules-catalog"] td.br-id { font-family:'IBM Plex Mono',monospace; font-weight:700; color:var(--dark-blue); white-space:nowrap; text-align:center; }
+        section[data-slug="business-rules-catalog"] td.br-fr { font-family:'IBM Plex Mono',monospace; color:#475569; text-align:center; font-size:12.5px; }
+        section[data-slug="business-rules-catalog"] td.or { text-align:center; font-weight:700; white-space:nowrap; }
+        section[data-slug="business-rules-catalog"] td.or.ex { color:#475569; }
+        section[data-slug="business-rules-catalog"] td.or.nw { color:#2E7D32; }
+        section[data-slug="business-rules-catalog"] td.or.op { color:var(--orange); }
+        section[data-slug="business-rules-catalog"] td .open { color:var(--orange); font-weight:700; }
+        section[data-slug="business-rules-catalog"] tr.odd td { background:#f8fafc; }
+      </style>
+      <h1>הקטלוג המלא: אחד עשר החוקים של הקמפוס</h1>
+      <div class="subtitle">זה מה שנראה קטלוג חוקים בפרויקט שלכם · שלושת המקורות זה לצד זה, ולכל חוק <b>בעלים</b> ו<b>מי שאוכף</b></div>
+      <div class="body">
+
+        <table class="sad">
+          <tr><th style="width:52px;">מזהה</th><th>החוק העסקי</th><th style="width:84px;">מקור</th><th style="width:126px;">בעלים</th><th style="width:150px;">נאכף ע"י</th></tr>
+          <tr><td class="br-id">BR-1</td><td>שינוי תפריט, מלאי וזמינות בסמכות מנהל קפיטריה בלבד.</td><td class="or ex">קיים</td><td>הנהלת הקפיטריות</td><td class="br-fr">FR-4.4 · FR-6.3</td></tr>
+          <tr class="odd"><td class="br-id">BR-2</td><td>הזמנה נמסרת אך ורק למי שהזמין ושילם.</td><td class="or ex">קיים</td><td>הנהלת הקפיטריות</td><td class="br-fr">FR-3.2</td></tr>
+          <tr><td class="br-id">BR-3</td><td>הזמנה ששולמה ולא נאספה עד סוף חלון האיסוף: <span class="open">מדיניות טרם הוחלטה</span>.</td><td class="or op">טרם הוחלט</td><td>אגף שירותי קמפוס</td><td class="br-fr">ממתין להחלטה</td></tr>
+          <tr class="odd"><td class="br-id">BR-4</td><td>ביטול הזמנה מותר עד שהיא עוברת ל״בהכנה״, לא אחריה.</td><td class="or nw">חדש</td><td>הנהלת הקפיטריות</td><td class="br-fr">FR-3.5</td></tr>
+          <tr><td class="br-id">BR-5</td><td>הכנה מתחילה רק לאחר שהתשלום אושר. אין תשלום בדלפק.</td><td class="or nw">חדש</td><td>הנהלת הקפיטריות</td><td class="br-fr">FR-9.3 · FR-9.4 · FR-10.1</td></tr>
+          <tr class="odd"><td class="br-id">BR-6</td><td>חלון האיסוף הוא <b>60 דקות</b> מרגע סימון ״מוכנה״.</td><td class="or nw">חדש</td><td>אגף שירותי קמפוס</td><td class="br-fr">FR-12.1 · FR-2.1</td></tr>
+          <tr><td class="br-id">BR-7</td><td>הזמנה מתקבלת רק בשעות הפעילות, וקפיטריה ״סגורה זמנית״ אינה מקבלת הזמנות.</td><td class="or ex">קיים</td><td>אגף שירותי קמפוס</td><td class="br-fr">FR-8.5 · FR-9.2</td></tr>
+          <tr class="odd"><td class="br-id">BR-8</td><td>הזמנה מראש היא <b>לאותו יום בלבד</b>.</td><td class="or nw">חדש</td><td>הנהלת הקפיטריות</td><td class="br-fr">FR-9.2</td></tr>
+          <tr><td class="br-id">BR-9</td><td>פריט שאזל <b>אינו נמחק</b> אלא מסומן, ואינו ניתן להזמנה כל עוד הוא מסומן כך.</td><td class="or ex">קיים</td><td>מנהל קפיטריה</td><td class="br-fr">FR-4.1 · FR-4.2 · FR-11.3</td></tr>
+          <tr class="odd"><td class="br-id">BR-10</td><td>רשומות הזמנה ותשלום נשמרות <b>שבע שנים</b> מתום שנת הכספים, ואחריהן נמחקות.</td><td class="or ex">קיים</td><td>אגף הכספים</td><td class="br-fr">אין FR · נאכף בעיצוב</td></tr>
+          <tr><td class="br-id">BR-11</td><td>סימון ״מוכנה״ בסמכות עובד מטבח בלבד, ורק אחרי שכל עמדות ההכנה סיימו.</td><td class="or ex">קיים</td><td>מנהל קפיטריה</td><td class="br-fr">FR-10.3 · FR-10.4</td></tr>
+        </table>
+
+        <p class="src" style="margin:6px 0 0;">שתי שורות יוצאות מהתבנית, ובכוונה: <b>BR-10</b> הוא חוק <b>בלי דרישה פונקציונלית</b>, והוא נאכף בעיצוב, בזנב הארכיון של תרשים המצבים (הרצאה 8) · <b>BR-11</b> הוא חוק <b>סמכות</b>, ולכן הוא מופיע שם כשומר על המעבר ל״מוכנה״, לא כנוסחה.</p>
+
+        <p class="bottom-line">אחד עשר חוקים, שלושה מקורות, ולכל אחד בעלים שמוסמך לשנות אותו · בהרצאה 8 <b>כל מעבר</b> בתרשים המצבים יצביע על שורה כאן.</p>
+
+        <aside class="notes">
+          זה השקף שעונה על ״כמה חוקים מצפים מאיתנו?״ בפרויקט. הרף בהנחיות הוא 6, וכאן יש 11
+          למערכת בסדר גודל של תרגיל כיתה, כלומר הרף הוא רצפה ולא יעד.
+          <b>מה כדאי להראות על הטבלה הזאת:</b> ששת החוקים מסוג ״קיים״ הם מה שהארגון עשה לפנינו
+          ואיש לא כתב, וכולם יצאו מראיון או מתצפית, לא מהדמיון שלנו. ארבעת ה״חדש״ הם מדיניות
+          שהתהליך החדש מחייב (תשלום לפני הכנה, חלון איסוף, ביטול עד ״בהכנה״, הזמנה לאותו יום),
+          וכל אחד מהם <b>דורש אישור של בעל תפקיד</b>. ו-BR-3 היחיד שנשאר פתוח, וזה בכוונה.
+          <b>החיבור קדימה:</b> BR-6 (60 דקות) ו-BR-10 (שבע שנים) הם שני החוקים שמייצרים את
+          הזמנים בתרשים המצבים. סטודנט שלא קטלג אותם ימצא את עצמו בהרצאה 8 ממציא מספרים.
+          <b>שאלה לכיתה:</b> איזה מהאחד עשר היה נעלם אם לא היינו בונים מערכת? (BR-4 ו-BR-6:
+          בלי מעקב סטטוס ובלי חותמת זמן אין להם רגע להיתלות עליו.)
         </aside>
 
       </div>

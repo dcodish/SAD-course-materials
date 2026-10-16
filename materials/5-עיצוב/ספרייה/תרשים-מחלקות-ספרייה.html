@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="he">
+<head>
+  <meta charset="UTF-8">
+  <title>Eshkol Library Network: Class Diagram</title>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    body { margin: 0; background: #f1f5f9; font-family: 'IBM Plex Mono', monospace; }
+    .tab-bar { display: flex; flex-wrap: wrap; gap: 4px; padding: 8px; background: #e2e8f0; }
+    .tab-btn { padding: 4px 12px; border: 1px solid #cbd5e1; background: white; cursor: pointer; border-radius: 4px; font-family: inherit; font-size: 12px; }
+    .tab-btn.active { background: #1e40af; color: white; }
+    .diagram-title { font-size: 15px; font-weight: 700; color: #1e293b; padding: 8px 8px 0; }
+    .split-rationale { font-size: 11px; color: #64748b; padding: 4px 8px; }
+    svg { display: block; }
+    .vp-export-btn {
+      position: fixed; bottom: 20px; right: 20px; z-index: 1000;
+      background: #1e40af; color: #fff; border: none; border-radius: 6px;
+      padding: 8px 16px; font-size: 13px; cursor: pointer;
+      font-family: 'IBM Plex Mono', monospace;
+    }
+    .vp-export-btn:hover { background: #1e3a8a; }
+  </style>
+</head>
+<body>
+  <div class="tab-bar" id="tab-bar"></div>
+  <div class="diagram-title" id="diagram-title"></div>
+  <div class="split-rationale" id="split-rationale"></div>
+
+  <svg id="diagram-svg" xmlns="http://www.w3.org/2000/svg"></svg>
+
+  <button class="vp-export-btn" onclick="exportXMI()">Download .xmi (Visual Paradigm)</button>
+
+  <script>
+    /* 1. DATA: one entry per part (split by domain, see splitRationale) */
+    const TITLE = 'Eshkol Library Network: Class Diagram';
+    const PARTS = [{"id": "part-1", "label": "Part 1: Overview", "splitRationale": "Split by domain: 24 classes > 8 threshold. This overview shows every class (names only) grouped by domain, with all associations, compositions, generalizations and the association class; attributes, enumerations and external systems are in Parts 2-6.", "packages": [{"name": "Acquisition (Part 5)", "x": 30, "y": 130, "w": 360, "h": 670, "tab": "tl"}, {"name": "Members & Circulation (Part 2)", "x": 430, "y": 130, "w": 560, "h": 250, "tab": "tr"}, {"name": "Fines & Payments (Part 3)", "x": 1030, "y": 130, "w": 480, "h": 270, "tab": "tl"}, {"name": "Catalog & Branches (Part 4)", "x": 430, "y": 460, "w": 560, "h": 340, "tab": "bl"}, {"name": "Staff, Events & Policy (Part 6)", "x": 1030, "y": 460, "w": 480, "h": 420, "tab": "tr"}], "classes": [{"id": "Supplier", "name": "Supplier", "stereotype": null, "isEnum": false, "isExternal": false, "isAbstract": false, "attrs": [], "ops": [], "x": 50, "y": 150}, {"id": "PurchaseOrder", "name": "PurchaseOrder", "stereotype": null, "isEnum": false, "isExternal": false, "isAbstract": false, "attrs": [], "ops": [], "x": 240, "y": 150}, {"id": "AcquisitionBudget", "name": "AcquisitionBudget", "stereotype": null, "isEnum": false, "isExternal": false, "isAbstract": false, "attrs": [], "ops": [], "x": 60, "y": 250}, {"id": "PurchaseOrderLine", "name": "PurchaseOrderLine", "stereotype": null, "isEnum": false, "isExternal": false, "isAbstract": false, "attrs": [], "ops": [], "x": 240, "y": 520}, {"id": "AcquisitionSuggestion", "name": "AcquisitionSuggestion", "stereotype": null, "isEnum": false, "isExternal": false, "isAbstract": false, "attrs": [], "ops": [], "x": 50, "y": 690}, {"id": "Notification", "name": "Notification", "stereotype": null, "isEnum": false, "isExternal": false, "isAbstract": false, "attrs": [], "ops": [], "x": 450, "y": 150}, {"id": "Member", "name": "Member", "stereotype": null, "isEnum": false, "isExternal": false, "isAbstract": false, "attrs": [], "ops": [], "x": 640, "y": 150}, {"id": "MembershipTier", "name": "MembershipTier", "stereotype": null, "isEnum": false, "isExternal": false, "isAbstract": false, "attrs": [], "ops": [], "x": 840, "y": 150}, {"id": "Reservation", "name": "Reservation", "stereotype": null, "isEnum": false, "isExternal": false, "isAbstract": false, "attrs": [], "ops": [], "x": 480, "y": 300}, {"id": "Loan", "name": "Loan", "stereotype": null, "isEnum": false, "isExternal": false, "isAbstract": false, "attrs": [], "ops": [], "x": 690, "y": 300}, {"id": "Fine", "name": "Fine", "stereotype": null, "isEnum": false, "isExternal": false, "isAbstract": false, "attrs": [], "ops": [], "x": 1050, "y": 150}, {"id": "Payment", "name": "Payment", "stereotype": null, "isEnum": false, "isExternal": false, "isAbstract": false, "attrs": [], "ops": [], "x": 1290, "y": 150}, {"id": "DeskPayment", "name": "DeskPayment", "stereotype": null, "isEnum": false, "isExternal": false, "isAbstract": false, "attrs": [], "ops": [], "x": 1200, "y": 330}, {"id": "OnlinePayment", "name": "OnlinePayment", "stereotype": null, "isEnum": false, "isExternal": false, "isAbstract": false, "attrs": [], "ops": [], "x": 1360, "y": 330}, {"id": "Title", "name": "Title", "stereotype": null, "isEnum": false, "isExternal": false, "isAbstract": false, "attrs": [], "ops": [], "x": 460, "y": 520}, {"id": "ItemType", "name": "ItemType", "stereotype": null, "isEnum": false, "isExternal": false, "isAbstract": false, "attrs": [], "ops": [], "x": 460, "y": 680}, {"id": "Copy", "name": "Copy", "stereotype": null, "isEnum": false, "isExternal": false, "isAbstract": false, "attrs": [], "ops": [], "x": 640, "y": 520}, {"id": "Branch", "name": "Branch", "stereotype": null, "isEnum": false, "isExternal": false, "isAbstract": false, "attrs": [], "ops": [], "x": 840, "y": 520}, {"id": "Transfer", "name": "Transfer", "stereotype": null, "isEnum": false, "isExternal": false, "isAbstract": false, "attrs": [], "ops": [], "x": 720, "y": 680}, {"id": "StaffUser", "name": "StaffUser", "stereotype": null, "isEnum": false, "isExternal": false, "isAbstract": false, "attrs": [], "ops": [], "x": 1140, "y": 520}, {"id": "Event", "name": "Event", "stereotype": null, "isEnum": false, "isExternal": false, "isAbstract": false, "attrs": [], "ops": [], "x": 1060, "y": 650}, {"id": "Registration", "name": "Registration", "stereotype": null, "isEnum": false, "isExternal": false, "isAbstract": false, "attrs": [], "ops": [], "x": 1290, "y": 650}, {"id": "Policy", "name": "Policy", "stereotype": null, "isEnum": false, "isExternal": false, "isAbstract": false, "attrs": [], "ops": [], "x": 1380, "y": 820}, {"id": "PaymentAllocation", "name": "PaymentAllocation", "stereotype": "«association class»", "isEnum": false, "isExternal": false, "isAbstract": false, "attrs": [], "ops": [], "x": 1160, "y": 230}], "rels": [{"id": "r32", "type": "assoc", "from": "Supplier", "to": "PurchaseOrder", "fromMult": "1", "toMult": "0..*", "fromRole": null, "toRole": null, "label": null, "points": [[170, 170], [240, 170]]}, {"id": "r35", "type": "assoc", "from": "PurchaseOrder", "to": "AcquisitionBudget", "fromMult": "0..*", "toMult": "1", "fromRole": null, "toRole": null, "label": null, "points": [[260, 190], [260, 270], [187, 270]]}, {"id": "r33", "type": "comp", "from": "PurchaseOrder", "to": "PurchaseOrderLine", "fromMult": "1", "toMult": "1..*", "fromRole": null, "toRole": null, "label": null, "points": [[330, 190], [330, 520]]}, {"id": "r34", "type": "assoc", "from": "PurchaseOrderLine", "to": "Title", "fromMult": "0..*", "toMult": "1", "fromRole": null, "toRole": null, "label": null, "points": [[367, 540], [460, 540]]}, {"id": "r31", "type": "assoc", "from": "Copy", "to": "PurchaseOrderLine", "fromMult": "0..*", "toMult": "0..1", "fromRole": null, "toRole": null, "label": null, "points": [[680, 560], [680, 780], [300, 780], [300, 560]]}, {"id": "r8", "type": "assoc", "from": "AcquisitionSuggestion", "to": "Member", "fromMult": "0..*", "toMult": "0..1", "fromRole": null, "toRole": null, "label": null, "points": [[203, 700], [410, 700], [410, 104], [680, 104], [680, 150]]}, {"id": "r38", "type": "assoc", "from": "AcquisitionSuggestion", "to": "StaffUser", "fromMult": "0..*", "toMult": "0..1", "fromRole": null, "toRole": null, "label": "decided by", "points": [[90, 730], [90, 850], [700, 850], [1220, 850], [1220, 560]]}, {"id": "r37", "type": "assoc", "from": "AcquisitionSuggestion", "to": "StaffUser", "fromMult": "0..*", "toMult": "0..1", "fromRole": null, "toRole": null, "label": "proposed by", "points": [[140, 730], [140, 835], [700, 835], [1185, 835], [1185, 560]]}, {"id": "r4", "type": "assoc", "from": "Member", "to": "Notification", "fromMult": "1", "toMult": "0..*", "fromRole": null, "toRole": null, "label": null, "points": [[640, 170], [570, 170]]}, {"id": "r1", "type": "assoc", "from": "Member", "to": "MembershipTier", "fromMult": "0..*", "toMult": "1", "fromRole": null, "toRole": null, "label": null, "points": [[760, 170], [840, 170]]}, {"id": "r3", "type": "assoc", "from": "Member", "to": "Reservation", "fromMult": "1", "toMult": "0..*", "fromRole": null, "toRole": null, "label": null, "points": [[660, 190], [660, 250], [540, 250], [540, 300]]}, {"id": "r2", "type": "assoc", "from": "Member", "to": "Loan", "fromMult": "1", "toMult": "0..*", "fromRole": null, "toRole": null, "label": null, "points": [[720, 190], [720, 300]]}, {"id": "r5", "type": "assoc", "from": "Member", "to": "Fine", "fromMult": "1", "toMult": "0..*", "fromRole": null, "toRole": null, "label": null, "points": [[740, 150], [740, 100], [1010, 100], [1010, 165], [1050, 165]]}, {"id": "r6", "type": "assoc", "from": "Member", "to": "Payment", "fromMult": "1", "toMult": "0..*", "fromRole": null, "toRole": null, "label": null, "points": [[720, 150], [720, 88], [1320, 88], [1320, 150]]}, {"id": "r14", "type": "assoc", "from": "Fine", "to": "Loan", "fromMult": "0..*", "toMult": "0..1", "fromRole": null, "toRole": null, "label": null, "points": [[1090, 190], [1090, 320], [810, 320]]}, {"id": "r7", "type": "assoc", "from": "Registration", "to": "Member", "fromMult": "0..*", "toMult": "1", "fromRole": null, "toRole": null, "label": null, "points": [[1350, 650], [1350, 600], [1010, 600], [1010, 230], [755, 230], [755, 190]]}, {"id": "r16", "type": "assoc", "from": "Fine", "to": "Payment", "fromMult": "0..*", "toMult": "0..*", "fromRole": null, "toRole": null, "label": null, "points": [[1170, 170], [1290, 170]]}, {"id": "r16c", "type": "assocClass", "from": "PaymentAllocation", "to": "PaymentAllocation", "fromMult": null, "toMult": null, "fromRole": null, "toRole": null, "label": null, "points": [[1230, 170], [1230, 230]], "assocId": "r16"}, {"id": "r18", "type": "gen", "from": "DeskPayment", "to": "Payment", "fromMult": null, "toMult": null, "fromRole": null, "toRole": null, "label": null, "points": [[1260, 330], [1260, 305], [1350, 305], [1350, 190]]}, {"id": "r19", "type": "gen", "from": "OnlinePayment", "to": "Payment", "fromMult": null, "toMult": null, "fromRole": null, "toRole": null, "label": null, "points": [[1420, 330], [1420, 305], [1350, 305], [1350, 190]]}, {"id": "r15", "type": "assoc", "from": "Fine", "to": "StaffUser", "fromMult": "0..*", "toMult": "0..1", "fromRole": null, "toRole": null, "label": null, "points": [[1150, 190], [1150, 520]]}, {"id": "r17", "type": "assoc", "from": "DeskPayment", "to": "StaffUser", "fromMult": "0..*", "toMult": "1", "fromRole": null, "toRole": null, "label": null, "points": [[1240, 370], [1240, 520]]}, {"id": "r23", "type": "assoc", "from": "Title", "to": "ItemType", "fromMult": "0..*", "toMult": "1", "fromRole": null, "toRole": null, "label": null, "points": [[520, 560], [520, 680]]}, {"id": "r24", "type": "comp", "from": "Title", "to": "Copy", "fromMult": "1", "toMult": "0..*", "fromRole": null, "toRole": null, "label": null, "points": [[580, 540], [640, 540]]}, {"id": "r25", "type": "assoc", "from": "Copy", "to": "Branch", "fromMult": "0..*", "toMult": "1", "fromRole": null, "toRole": null, "label": null, "points": [[760, 540], [840, 540]]}, {"id": "r26", "type": "assoc", "from": "Transfer", "to": "Copy", "fromMult": "0..*", "toMult": "1", "fromRole": null, "toRole": null, "label": null, "points": [[740, 680], [740, 560]]}, {"id": "r27", "type": "assoc", "from": "Transfer", "to": "Branch", "fromMult": "0..*", "toMult": "1", "fromRole": null, "toRole": null, "label": "from", "points": [[840, 688], [872, 688], [872, 688], [900, 688], [900, 560]]}, {"id": "r28", "type": "assoc", "from": "Transfer", "to": "Branch", "fromMult": "0..*", "toMult": "1", "fromRole": null, "toRole": null, "label": "to", "points": [[840, 714], [896, 714], [896, 714], [935, 714], [935, 560]]}, {"id": "r9", "type": "assoc", "from": "Loan", "to": "Copy", "fromMult": "0..*", "toMult": "1", "fromRole": null, "toRole": null, "label": null, "points": [[730, 340], [730, 520]]}, {"id": "r10", "type": "assoc", "from": "Loan", "to": "Branch", "fromMult": "0..*", "toMult": "1", "fromRole": null, "toRole": null, "label": null, "points": [[790, 340], [790, 440], [860, 440], [860, 520]]}, {"id": "r11", "type": "assoc", "from": "Reservation", "to": "Title", "fromMult": "0..*", "toMult": "1", "fromRole": null, "toRole": null, "label": null, "points": [[500, 340], [500, 520]]}, {"id": "r13", "type": "assoc", "from": "Reservation", "to": "Copy", "fromMult": "0..1", "toMult": "0..1", "fromRole": null, "toRole": null, "label": null, "points": [[560, 340], [560, 470], [660, 470], [660, 520]]}, {"id": "r12", "type": "assoc", "from": "Reservation", "to": "Branch", "fromMult": "0..*", "toMult": "1", "fromRole": null, "toRole": null, "label": null, "points": [[600, 320], [620, 320], [620, 420], [950, 420], [950, 520]]}, {"id": "r29", "type": "assoc", "from": "Transfer", "to": "Reservation", "fromMult": "0..*", "toMult": "0..1", "fromRole": null, "toRole": null, "label": null, "points": [[720, 700], [590, 700], [590, 340]]}, {"id": "r39", "type": "assoc", "from": "StaffUser", "to": "Branch", "fromMult": "0..*", "toMult": "1", "fromRole": null, "toRole": null, "label": "works at", "points": [[1140, 532], [1050.0, 532.0], [960, 532]]}, {"id": "r40", "type": "assoc", "from": "Branch", "to": "StaffUser", "fromMult": "0..1", "toMult": "1", "fromRole": null, "toRole": null, "label": "managed by", "points": [[960, 550], [1050.0, 550.0], [1140, 550]]}, {"id": "r41", "type": "assoc", "from": "Event", "to": "Branch", "fromMult": "0..*", "toMult": "1", "fromRole": null, "toRole": null, "label": null, "points": [[1060, 670], [955, 670], [955, 560]]}, {"id": "r42", "type": "assoc", "from": "Event", "to": "StaffUser", "fromMult": "0..*", "toMult": "1", "fromRole": null, "toRole": null, "label": null, "points": [[1160, 650], [1160, 560]]}, {"id": "r43", "type": "comp", "from": "Event", "to": "Registration", "fromMult": "1", "toMult": "0..*", "fromRole": null, "toRole": null, "label": null, "points": [[1180, 670], [1290, 670]]}, {"id": "r30", "type": "assoc", "from": "Transfer", "to": "StaffUser", "fromMult": "0..*", "toMult": "0..1", "fromRole": null, "toRole": null, "label": null, "points": [[780, 720], [780, 760], [1250, 760], [1250, 560]]}]}, {"id": "part-2", "label": "Part 2: Members & Circulation", "splitRationale": "Split by domain: 24 classes > 8 threshold. Part 1 is the overview of all classes and the relationships between the domains; Parts 2-6 show one domain each with full attributes. A class drawn as a stub '(→ Part N)' is detailed in Part N.", "packages": [], "classes": [{"id": "Payment", "name": "Payment", "stereotype": "(→ Part 3)", "isEnum": false, "isExternal": false, "isAbstract": false, "attrs": [], "ops": [], "x": 300, "y": 80}, {"id": "Fine", "name": "Fine", "stereotype": "(→ Part 3)", "isEnum": false, "isExternal": false, "isAbstract": false, "attrs": [], "ops": [], "x": 560, "y": 80}, {"id": "Member", "name": "Member", "stereotype": null, "isEnum": false, "isExternal": false, "isAbstract": false, "attrs": ["+ memberNumber : String", "+ fullName : String", "+ idNumber : String", "+ phone : String", "+ email : String", "+ address : String", "+ joinDate : Date", "+ membershipExpiry : Date", "+ status : MemberStatus", "+ preferredChannel : ReminderChannel", "+ /fineBalance : Money"], "ops": [], "x": 300, "y": 190}, {"id": "MembershipTier", "name": "MembershipTier", "stereotype": null, "isEnum": false, "isExternal": false, "isAbstract": false, "attrs": ["+ name : String", "+ annualFee : Money", "+ maxLoans : Integer", "+ maxReservations : Integer"], "ops": [], "x": 40, "y": 214}, {"id": "Loan", "name": "Loan", "stereotype": null, "isEnum": false, "isExternal": false, "isAbstract": false, "attrs": ["+ loanDate : DateTime", "+ dueDate : Date", "+ returnDate : DateTime", "+ renewalCount : Integer", "+ status : LoanStatus"], "ops": [], "x": 720, "y": 160}, {"id": "Reservation", "name": "Reservation", "stereotype": null, "isEnum": false, "isExternal": false, "isAbstract": false, "attrs": ["+ reservationDate : DateTime", "+ /queuePosition : Integer", "+ status : ReservationStatus", "+ holdExpiryDate : Date"], "ops": [], "x": 720, "y": 400}, {"id": "Copy", "name": "Copy", "stereotype": "(→ Part 4)", "isEnum": false, "isExternal": false, "isAbstract": false, "attrs": [], "ops": [], "x": 1000, "y": 300}, {"id": "Branch", "name": "Branch", "stereotype": "(→ Part 4)", "isEnum": false, "isExternal": false, "isAbstract": false, "attrs": [], "ops": [], "x": 1200, "y": 165}, {"id": "Title", "name": "Title", "stereotype": "(→ Part 4)", "isEnum": false, "isExternal": false, "isAbstract": false, "attrs": [], "ops": [], "x": 700, "y": 580}, {"id": "Transfer", "name": "Transfer", "stereotype": "(→ Part 4)", "isEnum": false, "isExternal": false, "isAbstract": false, "attrs": [], "ops": [], "x": 860, "y": 580}, {"id": "Registration", "name": "Registration", "stereotype": "(→ Part 6)", "isEnum": false, "isExternal": false, "isAbstract": false, "attrs": [], "ops": [], "x": 60, "y": 330}, {"id": "AcquisitionSuggestion", "name": "AcquisitionSuggestion", "stereotype": "(→ Part 5)", "isEnum": false, "isExternal": false, "isAbstract": false, "attrs": [], "ops": [], "x": 60, "y": 420}, {"id": "Notification", "name": "Notification", "stereotype": null, "isEnum": false, "isExternal": false, "isAbstract": false, "attrs": ["+ channel : ReminderChannel", "+ type : NotificationType", "+ sendTime : DateTime", "+ deliveryStatus : DeliveryStatus"], "ops": [], "x": 300, "y": 540}, {"id": "SmsGateway", "name": "SmsGateway", "stereotype": "«external system»", "isEnum": false, "isExternal": true, "isAbstract": false, "attrs": [], "ops": [], "x": 240, "y": 720}, {"id": "EmailService", "name": "EmailService", "stereotype": "«external system»", "isEnum": false, "isExternal": true, "isAbstract": false, "attrs": [], "ops": [], "x": 430, "y": 720}, {"id": "MemberStatus", "name": "MemberStatus", "stereotype": "«enumeration»", "isEnum": true, "isExternal": false, "isAbstract": false, "attrs": ["Active", "Suspended"], "ops": [], "x": 60, "y": 500}, {"id": "ReminderChannel", "name": "ReminderChannel", "stereotype": "«enumeration»", "isEnum": true, "isExternal": false, "isAbstract": false, "attrs": ["SMS", "Email", "Phone"], "ops": [], "x": 60, "y": 600}, {"id": "LoanStatus", "name": "LoanStatus", "stereotype": "«enumeration»", "isEnum": true, "isExternal": false, "isAbstract": false, "attrs": ["Active", "Returned", "Overdue", "Lost"], "ops": [], "x": 960, "y": 30}, {"id": "ReservationStatus", "name": "ReservationStatus", "stereotype": "«enumeration»", "isEnum": true, "isExternal": false, "isAbstract": false, "attrs": ["Queued", "ReadyForPickup", "Collected", "Cancelled", "Expired"], "ops": [], "x": 1040, "y": 540}, {"id": "NotificationType", "name": "NotificationType", "stereotype": "«enumeration»", "isEnum": true, "isExternal": false, "isAbstract": false, "attrs": ["PreDueReminder", "OverdueReminder", "ReadyForPickup", "EventNotice"], "ops": [], "x": 620, "y": 690}, {"id": "DeliveryStatus", "name": "DeliveryStatus", "stereotype": "«enumeration»", "isEnum": true, "isExternal": false, "isAbstract": false, "attrs": ["Pending", "Sent", "Failed"], "ops": [], "x": 770, "y": 690}], "rels": [{"id": "r1", "type": "assoc", "from": "Member", "to": "MembershipTier", "fromMult": "0..*", "toMult": "1", "fromRole": null, "toRole": null, "label": null, "points": [[300, 262], [232, 262]]}, {"id": "r2", "type": "assoc", "from": "Member", "to": "Loan", "fromMult": "1", "toMult": "0..*", "fromRole": null, "toRole": null, "label": null, "points": [[550, 230], [720, 230]]}, {"id": "r3", "type": "assoc", "from": "Member", "to": "Reservation", "fromMult": "1", "toMult": "0..*", "fromRole": null, "toRole": null, "label": null, "points": [[510, 384], [510, 440], [720, 440]]}, {"id": "r4", "type": "assoc", "from": "Member", "to": "Notification", "fromMult": "1", "toMult": "0..*", "fromRole": null, "toRole": null, "label": null, "points": [[420, 384], [420, 540]]}, {"id": "r5", "type": "assoc", "from": "Member", "to": "Fine", "fromMult": "1", "toMult": "0..*", "fromRole": null, "toRole": null, "label": null, "points": [[520, 190], [520, 105], [560, 105]]}, {"id": "r6", "type": "assoc", "from": "Member", "to": "Payment", "fromMult": "1", "toMult": "0..*", "fromRole": null, "toRole": null, "label": null, "points": [[360, 190], [360, 130]]}, {"id": "r7", "type": "assoc", "from": "Registration", "to": "Member", "fromMult": "0..*", "toMult": "1", "fromRole": null, "toRole": null, "label": null, "points": [[180, 355], [300, 355]]}, {"id": "r8", "type": "assoc", "from": "AcquisitionSuggestion", "to": "Member", "fromMult": "0..*", "toMult": "0..1", "fromRole": null, "toRole": null, "label": "proposed by", "points": [[213, 445], [276.5, 445.0], [276.5, 445.0], [340, 445], [340, 384]]}, {"id": "r9", "type": "assoc", "from": "Loan", "to": "Copy", "fromMult": "0..*", "toMult": "1", "fromRole": null, "toRole": null, "label": null, "points": [[892, 250], [1030, 250], [1030, 300]]}, {"id": "r10", "type": "assoc", "from": "Loan", "to": "Branch", "fromMult": "0..*", "toMult": "1", "fromRole": null, "toRole": null, "label": "issued at", "points": [[892, 190], [1046.0, 190.0], [1200, 190]]}, {"id": "r11", "type": "assoc", "from": "Reservation", "to": "Title", "fromMult": "0..*", "toMult": "1", "fromRole": null, "toRole": null, "label": null, "points": [[760, 496], [760, 580]]}, {"id": "r12", "type": "assoc", "from": "Reservation", "to": "Branch", "fromMult": "0..*", "toMult": "1", "fromRole": null, "toRole": null, "label": "pickup at", "points": [[918, 470], [1089.0, 470.0], [1089.0, 470.0], [1260, 470], [1260, 215]]}, {"id": "r13", "type": "assoc", "from": "Reservation", "to": "Copy", "fromMult": "0..1", "toMult": "0..1", "fromRole": null, "toRole": null, "label": "holds", "points": [[918, 420], [999.0, 420.0], [999.0, 420.0], [1080, 420], [1080, 350]]}, {"id": "r14", "type": "assoc", "from": "Fine", "to": "Loan", "fromMult": "0..*", "toMult": "0..1", "fromRole": null, "toRole": null, "label": null, "points": [[680, 105], [806, 105], [806, 160]]}, {"id": "r29", "type": "assoc", "from": "Transfer", "to": "Reservation", "fromMult": "0..*", "toMult": "0..1", "fromRole": null, "toRole": null, "label": null, "points": [[900, 580], [900, 496]]}, {"id": "r21", "type": "dep", "from": "Notification", "to": "SmsGateway", "fromMult": null, "toMult": null, "fromRole": null, "toRole": null, "label": null, "points": [[330, 636], [330, 720]]}, {"id": "r22", "type": "dep", "from": "Notification", "to": "EmailService", "fromMult": null, "toMult": null, "fromRole": null, "toRole": null, "label": null, "points": [[480, 636], [480, 720]]}]}, {"id": "part-3", "label": "Part 3: Fines & Payments", "splitRationale": "Split by domain: 24 classes > 8 threshold. Part 1 is the overview of all classes and the relationships between the domains; Parts 2-6 show one domain each with full attributes. A class drawn as a stub '(→ Part N)' is detailed in Part N.", "packages": [], "classes": [{"id": "Member", "name": "Member", "stereotype": "(→ Part 2)", "isEnum": false, "isExternal": false, "isAbstract": false, "attrs": [], "ops": [], "x": 520, "y": 60}, {"id": "Fine", "name": "Fine", "stereotype": null, "isEnum": false, "isExternal": false, "isAbstract": false, "attrs": ["+ amount : Money", "+ type : FineType", "+ createdDate : Date", "+ status : FineStatus", "+ waiverReason : String"], "ops": [], "x": 200, "y": 200}, {"id": "Payment", "name": "Payment", "stereotype": null, "isEnum": false, "isExternal": false, "isAbstract": false, "attrs": ["+ amount : Money", "+ purpose : PaymentPurpose", "+ paymentDate : DateTime", "+ receiptNumber : String"], "ops": [], "x": 760, "y": 207}, {"id": "PaymentAllocation", "name": "PaymentAllocation", "stereotype": "«association class»", "isEnum": false, "isExternal": false, "isAbstract": false, "attrs": ["+ amount : Money"], "ops": [], "x": 493, "y": 330}, {"id": "Loan", "name": "Loan", "stereotype": "(→ Part 2)", "isEnum": false, "isExternal": false, "isAbstract": false, "attrs": [], "ops": [], "x": 40, "y": 230}, {"id": "StaffUser", "name": "StaffUser", "stereotype": "(→ Part 6)", "isEnum": false, "isExternal": false, "isAbstract": false, "attrs": [], "ops": [], "x": 60, "y": 620}, {"id": "DeskPayment", "name": "DeskPayment", "stereotype": null, "isEnum": false, "isExternal": false, "isAbstract": false, "attrs": ["+ method : DeskPaymentMethod"], "ops": [], "x": 640, "y": 440}, {"id": "OnlinePayment", "name": "OnlinePayment", "stereotype": null, "isEnum": false, "isExternal": false, "isAbstract": false, "attrs": ["+ gatewayReference : String"], "ops": [], "x": 880, "y": 440}, {"id": "PaymentGateway", "name": "PaymentGateway", "stereotype": "«external system»", "isEnum": false, "isExternal": true, "isAbstract": false, "attrs": [], "ops": [], "x": 913, "y": 580}, {"id": "FineType", "name": "FineType", "stereotype": "«enumeration»", "isEnum": true, "isExternal": false, "isAbstract": false, "attrs": ["Late", "Lost", "Damage"], "ops": [], "x": 40, "y": 330}, {"id": "FineStatus", "name": "FineStatus", "stereotype": "«enumeration»", "isEnum": true, "isExternal": false, "isAbstract": false, "attrs": ["Open", "PendingWaiverApproval", "Paid", "Waived"], "ops": [], "x": 40, "y": 440}, {"id": "PaymentPurpose", "name": "PaymentPurpose", "stereotype": "«enumeration»", "isEnum": true, "isExternal": false, "isAbstract": false, "attrs": ["Fine", "MembershipFee"], "ops": [], "x": 1010, "y": 207}, {"id": "DeskPaymentMethod", "name": "DeskPaymentMethod", "stereotype": "«enumeration»", "isEnum": true, "isExternal": false, "isAbstract": false, "attrs": ["Cash", "Card"], "ops": [], "x": 470, "y": 440}], "rels": [{"id": "r5", "type": "assoc", "from": "Member", "to": "Fine", "fromMult": "1", "toMult": "0..*", "fromRole": null, "toRole": null, "label": null, "points": [[520, 85], [283, 85], [283, 200]]}, {"id": "r6", "type": "assoc", "from": "Member", "to": "Payment", "fromMult": "1", "toMult": "0..*", "fromRole": null, "toRole": null, "label": null, "points": [[640, 85], [852, 85], [852, 207]]}, {"id": "r14", "type": "assoc", "from": "Fine", "to": "Loan", "fromMult": "0..*", "toMult": "0..1", "fromRole": null, "toRole": null, "label": null, "points": [[200, 255], [160, 255]]}, {"id": "r16", "type": "assoc", "from": "Fine", "to": "Payment", "fromMult": "0..*", "toMult": "0..*", "fromRole": null, "toRole": null, "label": null, "points": [[366, 255], [760, 255]]}, {"id": "r16c", "type": "assocClass", "from": "PaymentAllocation", "to": "PaymentAllocation", "fromMult": null, "toMult": null, "fromRole": null, "toRole": null, "label": null, "points": [[563, 255], [563, 330]], "assocId": "r16"}, {"id": "r15", "type": "assoc", "from": "Fine", "to": "StaffUser", "fromMult": "0..*", "toMult": "0..1", "fromRole": null, "toRole": null, "label": "waived by", "points": [[250, 310], [250, 635], [215.0, 635.0], [180, 635]]}, {"id": "r17", "type": "assoc", "from": "DeskPayment", "to": "StaffUser", "fromMult": "0..*", "toMult": "1", "fromRole": null, "toRole": null, "label": "collected by", "points": [[739, 494], [739, 655], [459.5, 655.0], [180, 655]]}, {"id": "r18", "type": "gen", "from": "DeskPayment", "to": "Payment", "fromMult": null, "toMult": null, "fromRole": null, "toRole": null, "label": null, "points": [[739, 440], [739, 380], [852, 380], [852, 303]]}, {"id": "r19", "type": "gen", "from": "OnlinePayment", "to": "Payment", "fromMult": null, "toMult": null, "fromRole": null, "toRole": null, "label": null, "points": [[976, 440], [976, 380], [852, 380], [852, 303]]}, {"id": "r20", "type": "dep", "from": "OnlinePayment", "to": "PaymentGateway", "fromMult": null, "toMult": null, "fromRole": null, "toRole": null, "label": null, "points": [[976, 494], [976, 580]]}]}, {"id": "part-4", "label": "Part 4: Catalog & Branches", "splitRationale": "Split by domain: 24 classes > 8 threshold. Part 1 is the overview of all classes and the relationships between the domains; Parts 2-6 show one domain each with full attributes. A class drawn as a stub '(→ Part N)' is detailed in Part N.", "packages": [], "classes": [{"id": "Title", "name": "Title", "stereotype": null, "isEnum": false, "isExternal": false, "isAbstract": false, "attrs": ["+ name : String", "+ author : String", "+ isbn : String", "+ subject : String", "+ publisher : String", "+ publicationYear : Integer", "+ summary : String", "+ status : TitleStatus"], "ops": [], "x": 520, "y": 80}, {"id": "ItemType", "name": "ItemType", "stereotype": null, "isEnum": false, "isExternal": false, "isAbstract": false, "attrs": ["+ name : String", "+ loanPeriodDays : Integer", "+ renewable : Boolean"], "ops": [], "x": 220, "y": 115}, {"id": "Copy", "name": "Copy", "stereotype": null, "isEnum": false, "isExternal": false, "isAbstract": false, "attrs": ["+ barcode : String", "+ shelfLocation : String", "+ condition : CopyCondition", "+ status : CopyStatus", "+ purchaseDate : Date"], "ops": [], "x": 520, "y": 330}, {"id": "PurchaseOrderLine", "name": "PurchaseOrderLine", "stereotype": "(→ Part 5)", "isEnum": false, "isExternal": false, "isAbstract": false, "attrs": [], "ops": [], "x": 880, "y": 230}, {"id": "Loan", "name": "Loan", "stereotype": "(→ Part 2)", "isEnum": false, "isExternal": false, "isAbstract": false, "attrs": [], "ops": [], "x": 880, "y": 390}, {"id": "Branch", "name": "Branch", "stereotype": null, "isEnum": false, "isExternal": false, "isAbstract": false, "attrs": ["+ name : String", "+ address : String", "+ openingHours : String"], "ops": [], "x": 533, "y": 560}, {"id": "Event", "name": "Event", "stereotype": "(→ Part 6)", "isEnum": false, "isExternal": false, "isAbstract": false, "attrs": [], "ops": [], "x": 880, "y": 620}, {"id": "Reservation", "name": "Reservation", "stereotype": "(→ Part 2)", "isEnum": false, "isExternal": false, "isAbstract": false, "attrs": [], "ops": [], "x": 230, "y": 300}, {"id": "Transfer", "name": "Transfer", "stereotype": null, "isEnum": false, "isExternal": false, "isAbstract": false, "attrs": ["+ requestDate : Date", "+ status : TransferStatus"], "ops": [], "x": 250, "y": 420}, {"id": "StaffUser", "name": "StaffUser", "stereotype": "(→ Part 6)", "isEnum": false, "isExternal": false, "isAbstract": false, "attrs": [], "ops": [], "x": 880, "y": 720}, {"id": "TitleStatus", "name": "TitleStatus", "stereotype": "«enumeration»", "isEnum": true, "isExternal": false, "isAbstract": false, "attrs": ["Active", "Withdrawn"], "ops": [], "x": 780, "y": 50}, {"id": "CopyStatus", "name": "CopyStatus", "stereotype": "«enumeration»", "isEnum": true, "isExternal": false, "isAbstract": false, "attrs": ["Available", "OnLoan", "Reserved", "InTransit", "Lost", "Damaged", "Removed"], "ops": [], "x": 1060, "y": 280}, {"id": "CopyCondition", "name": "CopyCondition", "stereotype": "«enumeration»", "isEnum": true, "isExternal": false, "isAbstract": false, "attrs": ["Good", "Worn", "Damaged"], "ops": [], "x": 1060, "y": 470}, {"id": "TransferStatus", "name": "TransferStatus", "stereotype": "«enumeration»", "isEnum": true, "isExternal": false, "isAbstract": false, "attrs": ["Requested", "Approved", "Rejected", "InTransit", "Arrived", "Cancelled"], "ops": [], "x": 40, "y": 700}], "rels": [{"id": "r23", "type": "assoc", "from": "Title", "to": "ItemType", "fromMult": "0..*", "toMult": "1", "fromRole": null, "toRole": null, "label": null, "points": [[520, 156], [405, 156]]}, {"id": "r24", "type": "comp", "from": "Title", "to": "Copy", "fromMult": "1", "toMult": "0..*", "fromRole": null, "toRole": null, "label": null, "points": [[616, 232], [616, 330]]}, {"id": "r25", "type": "assoc", "from": "Copy", "to": "Branch", "fromMult": "0..*", "toMult": "1", "fromRole": null, "toRole": null, "label": null, "points": [[616, 440], [616, 560]]}, {"id": "r34", "type": "assoc", "from": "PurchaseOrderLine", "to": "Title", "fromMult": "0..*", "toMult": "1", "fromRole": null, "toRole": null, "label": null, "points": [[943, 230], [943, 190], [712, 190]]}, {"id": "r31", "type": "assoc", "from": "Copy", "to": "PurchaseOrderLine", "fromMult": "0..*", "toMult": "0..1", "fromRole": null, "toRole": null, "label": "received via", "points": [[712, 350], [827.5, 350.0], [827.5, 350.0], [943, 350], [943, 280]]}, {"id": "r9", "type": "assoc", "from": "Loan", "to": "Copy", "fromMult": "0..*", "toMult": "1", "fromRole": null, "toRole": null, "label": null, "points": [[880, 415], [712, 415]]}, {"id": "r10", "type": "assoc", "from": "Loan", "to": "Branch", "fromMult": "0..*", "toMult": "1", "fromRole": null, "toRole": null, "label": "issued at", "points": [[940, 440], [940, 580], [819.5, 580.0], [699, 580]]}, {"id": "r41", "type": "assoc", "from": "Event", "to": "Branch", "fromMult": "0..*", "toMult": "1", "fromRole": null, "toRole": null, "label": null, "points": [[880, 625], [699, 625]]}, {"id": "r11", "type": "assoc", "from": "Reservation", "to": "Title", "fromMult": "0..*", "toMult": "1", "fromRole": null, "toRole": null, "label": null, "points": [[290, 300], [290, 215], [520, 215]]}, {"id": "r13", "type": "assoc", "from": "Reservation", "to": "Copy", "fromMult": "0..1", "toMult": "0..1", "fromRole": null, "toRole": null, "label": "holds", "points": [[350, 340], [435.0, 340.0], [520, 340]]}, {"id": "r12", "type": "assoc", "from": "Reservation", "to": "Branch", "fromMult": "0..*", "toMult": "1", "fromRole": null, "toRole": null, "label": "pickup at", "points": [[230, 325], [180, 325], [180, 620], [356.5, 620.0], [356.5, 620.0], [533, 620]]}, {"id": "r29", "type": "assoc", "from": "Transfer", "to": "Reservation", "fromMult": "0..*", "toMult": "0..1", "fromRole": null, "toRole": null, "label": null, "points": [[290, 420], [290, 350]]}, {"id": "r26", "type": "assoc", "from": "Transfer", "to": "Copy", "fromMult": "0..*", "toMult": "1", "fromRole": null, "toRole": null, "label": null, "points": [[429, 430], [520, 430]]}, {"id": "r27", "type": "assoc", "from": "Transfer", "to": "Branch", "fromMult": "0..*", "toMult": "1", "fromRole": null, "toRole": null, "label": "from", "points": [[340, 488], [340, 575], [436.5, 575.0], [533, 575]]}, {"id": "r28", "type": "assoc", "from": "Transfer", "to": "Branch", "fromMult": "0..*", "toMult": "1", "fromRole": null, "toRole": null, "label": "to", "points": [[400, 488], [400, 600], [466.5, 600.0], [533, 600]]}, {"id": "r30", "type": "assoc", "from": "Transfer", "to": "StaffUser", "fromMult": "0..*", "toMult": "0..1", "fromRole": null, "toRole": null, "label": "approved by", "points": [[270, 488], [270, 800], [650.0, 800.0], [650.0, 800.0], [1030, 800], [1030, 745], [1000, 745]]}, {"id": "r39", "type": "assoc", "from": "StaffUser", "to": "Branch", "fromMult": "0..*", "toMult": "1", "fromRole": null, "toRole": null, "label": "works at", "points": [[880, 730], [765.0, 730.0], [765.0, 730.0], [650, 730], [650, 642]]}, {"id": "r40", "type": "assoc", "from": "Branch", "to": "StaffUser", "fromMult": "0..1", "toMult": "1", "fromRole": null, "toRole": null, "label": "managed by", "points": [[580, 642], [580, 760], [730.0, 760.0], [880, 760]]}]}, {"id": "part-5", "label": "Part 5: Acquisition", "splitRationale": "Split by domain: 24 classes > 8 threshold. Part 1 is the overview of all classes and the relationships between the domains; Parts 2-6 show one domain each with full attributes. A class drawn as a stub '(→ Part N)' is detailed in Part N.", "packages": [], "classes": [{"id": "Supplier", "name": "Supplier", "stereotype": null, "isEnum": false, "isExternal": false, "isAbstract": false, "attrs": ["+ name : String", "+ contactPerson : String", "+ phone : String", "+ email : String", "+ apiUrl : String", "+ terms : String", "+ status : ActivityStatus"], "ops": [], "x": 60, "y": 120}, {"id": "PurchaseOrder", "name": "PurchaseOrder", "stereotype": null, "isEnum": false, "isExternal": false, "isAbstract": false, "attrs": ["+ orderDate : Date", "+ status : PurchaseOrderStatus", "+ /totalAmount : Money"], "ops": [], "x": 360, "y": 150}, {"id": "AcquisitionBudget", "name": "AcquisitionBudget", "stereotype": null, "isEnum": false, "isExternal": false, "isAbstract": false, "attrs": ["+ year : Integer", "+ amount : Money"], "ops": [], "x": 700, "y": 166}, {"id": "SupplierOrderingApi", "name": "SupplierOrderingApi", "stereotype": "«external system»", "isEnum": false, "isExternal": true, "isAbstract": false, "attrs": [], "ops": [], "x": 395, "y": 30}, {"id": "PurchaseOrderLine", "name": "PurchaseOrderLine", "stereotype": null, "isEnum": false, "isExternal": false, "isAbstract": false, "attrs": ["+ quantity : Integer", "+ unitPrice : Money"], "ops": [], "x": 392, "y": 330}, {"id": "Title", "name": "Title", "stereotype": "(→ Part 4)", "isEnum": false, "isExternal": false, "isAbstract": false, "attrs": [], "ops": [], "x": 700, "y": 339}, {"id": "Copy", "name": "Copy", "stereotype": "(→ Part 4)", "isEnum": false, "isExternal": false, "isAbstract": false, "attrs": [], "ops": [], "x": 405, "y": 490}, {"id": "AcquisitionSuggestion", "name": "AcquisitionSuggestion", "stereotype": null, "isEnum": false, "isExternal": false, "isAbstract": false, "attrs": ["+ suggestedTitle : String", "+ suggestedAuthor : String", "+ suggestedIsbn : String", "+ suggestionDate : Date", "+ status : SuggestionStatus"], "ops": [], "x": 380, "y": 600}, {"id": "Member", "name": "Member", "stereotype": "(→ Part 2)", "isEnum": false, "isExternal": false, "isAbstract": false, "attrs": [], "ops": [], "x": 80, "y": 630}, {"id": "StaffUser", "name": "StaffUser", "stereotype": "(→ Part 6)", "isEnum": false, "isExternal": false, "isAbstract": false, "attrs": [], "ops": [], "x": 780, "y": 625}, {"id": "ActivityStatus", "name": "ActivityStatus", "stereotype": "«enumeration»", "isEnum": true, "isExternal": false, "isAbstract": false, "attrs": ["Active", "Inactive"], "ops": [], "x": 60, "y": 320}, {"id": "PurchaseOrderStatus", "name": "PurchaseOrderStatus", "stereotype": "«enumeration»", "isEnum": true, "isExternal": false, "isAbstract": false, "attrs": ["Draft", "Sent", "Confirmed", "PartiallyReceived", "Completed", "Cancelled"], "ops": [], "x": 900, "y": 140}, {"id": "SuggestionStatus", "name": "SuggestionStatus", "stereotype": "«enumeration»", "isEnum": true, "isExternal": false, "isAbstract": false, "attrs": ["Pending", "Approved", "Rejected"], "ops": [], "x": 60, "y": 440}], "rels": [{"id": "r32", "type": "assoc", "from": "Supplier", "to": "PurchaseOrder", "fromMult": "1", "toMult": "0..*", "fromRole": null, "toRole": null, "label": null, "points": [[239, 190], [360, 190]]}, {"id": "r35", "type": "assoc", "from": "PurchaseOrder", "to": "AcquisitionBudget", "fromMult": "0..*", "toMult": "1", "fromRole": null, "toRole": null, "label": null, "points": [[571, 200], [700, 200]]}, {"id": "r36", "type": "dep", "from": "PurchaseOrder", "to": "SupplierOrderingApi", "fromMult": null, "toMult": null, "fromRole": null, "toRole": null, "label": null, "points": [[465, 150], [465, 80]]}, {"id": "r33", "type": "comp", "from": "PurchaseOrder", "to": "PurchaseOrderLine", "fromMult": "1", "toMult": "1..*", "fromRole": null, "toRole": null, "label": null, "points": [[465, 232], [465, 330]]}, {"id": "r34", "type": "assoc", "from": "PurchaseOrderLine", "to": "Title", "fromMult": "0..*", "toMult": "1", "fromRole": null, "toRole": null, "label": null, "points": [[538, 364], [700, 364]]}, {"id": "r31", "type": "assoc", "from": "Copy", "to": "PurchaseOrderLine", "fromMult": "0..*", "toMult": "0..1", "fromRole": null, "toRole": null, "label": null, "points": [[465, 490], [465, 398]]}, {"id": "r8", "type": "assoc", "from": "AcquisitionSuggestion", "to": "Member", "fromMult": "0..*", "toMult": "0..1", "fromRole": null, "toRole": null, "label": "proposed by", "points": [[380, 655], [290.0, 655.0], [200, 655]]}, {"id": "r37", "type": "assoc", "from": "AcquisitionSuggestion", "to": "StaffUser", "fromMult": "0..*", "toMult": "0..1", "fromRole": null, "toRole": null, "label": "proposed by", "points": [[572, 635], [676.0, 635.0], [780, 635]]}, {"id": "r38", "type": "assoc", "from": "AcquisitionSuggestion", "to": "StaffUser", "fromMult": "0..*", "toMult": "0..1", "fromRole": null, "toRole": null, "label": "decided by", "points": [[572, 665], [676.0, 665.0], [780, 665]]}]}, {"id": "part-6", "label": "Part 6: Staff, Events & Policy", "splitRationale": "Split by domain: 24 classes > 8 threshold. Part 1 is the overview of all classes and the relationships between the domains; Parts 2-6 show one domain each with full attributes. A class drawn as a stub '(→ Part N)' is detailed in Part N.", "packages": [], "classes": [{"id": "StaffUser", "name": "StaffUser", "stereotype": null, "isEnum": false, "isExternal": false, "isAbstract": false, "attrs": ["+ name : String", "+ username : String", "+ role : StaffRole", "+ status : ActivityStatus", "+ lastLogin : DateTime"], "ops": [], "x": 520, "y": 300}, {"id": "Branch", "name": "Branch", "stereotype": "(→ Part 4)", "isEnum": false, "isExternal": false, "isAbstract": false, "attrs": [], "ops": [], "x": 900, "y": 320}, {"id": "Event", "name": "Event", "stereotype": null, "isEnum": false, "isExternal": false, "isAbstract": false, "attrs": ["+ name : String", "+ dateTime : DateTime", "+ room : String", "+ capacity : Integer", "+ status : EventStatus"], "ops": [], "x": 900, "y": 520}, {"id": "Registration", "name": "Registration", "stereotype": null, "isEnum": false, "isExternal": false, "isAbstract": false, "attrs": ["+ registrationDate : DateTime", "+ status : RegistrationStatus", "+ attended : Boolean"], "ops": [], "x": 880, "y": 720}, {"id": "Member", "name": "Member", "stereotype": "(→ Part 2)", "isEnum": false, "isExternal": false, "isAbstract": false, "attrs": [], "ops": [], "x": 600, "y": 736}, {"id": "Fine", "name": "Fine", "stereotype": "(→ Part 3)", "isEnum": false, "isExternal": false, "isAbstract": false, "attrs": [], "ops": [], "x": 160, "y": 180}, {"id": "DeskPayment", "name": "DeskPayment", "stereotype": "(→ Part 3)", "isEnum": false, "isExternal": false, "isAbstract": false, "attrs": [], "ops": [], "x": 160, "y": 300}, {"id": "Transfer", "name": "Transfer", "stereotype": "(→ Part 4)", "isEnum": false, "isExternal": false, "isAbstract": false, "attrs": [], "ops": [], "x": 160, "y": 380}, {"id": "AcquisitionSuggestion", "name": "AcquisitionSuggestion", "stereotype": "(→ Part 5)", "isEnum": false, "isExternal": false, "isAbstract": false, "attrs": [], "ops": [], "x": 130, "y": 520}, {"id": "Policy", "name": "Policy", "stereotype": null, "isEnum": false, "isExternal": false, "isAbstract": false, "attrs": ["+ dailyFineRate : Money", "+ fineCap : Money", "+ blockingThreshold : Money", "+ maxRenewals : Integer", "+ waiverThreshold : Money"], "ops": [], "x": 200, "y": 660}, {"id": "StaffRole", "name": "StaffRole", "stereotype": "«enumeration»", "isEnum": true, "isExternal": false, "isAbstract": false, "attrs": ["DeskLibrarian", "AcquisitionLibrarian", "BranchManager", "NetworkManager"], "ops": [], "x": 720, "y": 110}, {"id": "ActivityStatus", "name": "ActivityStatus", "stereotype": "«enumeration»", "isEnum": true, "isExternal": false, "isAbstract": false, "attrs": ["Active", "Inactive"], "ops": [], "x": 900, "y": 140}, {"id": "EventStatus", "name": "EventStatus", "stereotype": "«enumeration»", "isEnum": true, "isExternal": false, "isAbstract": false, "attrs": ["Planned", "Cancelled", "Held"], "ops": [], "x": 1120, "y": 520}, {"id": "RegistrationStatus", "name": "RegistrationStatus", "stereotype": "«enumeration»", "isEnum": true, "isExternal": false, "isAbstract": false, "attrs": ["Registered", "Waitlisted", "Cancelled"], "ops": [], "x": 1140, "y": 720}], "rels": [{"id": "r39", "type": "assoc", "from": "StaffUser", "to": "Branch", "fromMult": "0..*", "toMult": "1", "fromRole": null, "toRole": null, "label": "works at", "points": [[699, 330], [799.5, 330.0], [900, 330]]}, {"id": "r40", "type": "assoc", "from": "Branch", "to": "StaffUser", "fromMult": "0..1", "toMult": "1", "fromRole": null, "toRole": null, "label": "managed by", "points": [[900, 360], [799.5, 360.0], [699, 360]]}, {"id": "r41", "type": "assoc", "from": "Event", "to": "Branch", "fromMult": "0..*", "toMult": "1", "fromRole": null, "toRole": null, "label": null, "points": [[960, 520], [960, 370]]}, {"id": "r42", "type": "assoc", "from": "Event", "to": "StaffUser", "fromMult": "0..*", "toMult": "1", "fromRole": null, "toRole": null, "label": "managed by", "points": [[900, 560], [770.0, 560.0], [770.0, 560.0], [640, 560], [640, 410]]}, {"id": "r43", "type": "comp", "from": "Event", "to": "Registration", "fromMult": "1", "toMult": "0..*", "fromRole": null, "toRole": null, "label": null, "points": [[980, 630], [980, 720]]}, {"id": "r7", "type": "assoc", "from": "Registration", "to": "Member", "fromMult": "0..*", "toMult": "1", "fromRole": null, "toRole": null, "label": null, "points": [[880, 761], [720, 761]]}, {"id": "r15", "type": "assoc", "from": "Fine", "to": "StaffUser", "fromMult": "0..*", "toMult": "0..1", "fromRole": null, "toRole": null, "label": "waived by", "points": [[280, 205], [420.0, 205.0], [420.0, 205.0], [560, 205], [560, 300]]}, {"id": "r17", "type": "assoc", "from": "DeskPayment", "to": "StaffUser", "fromMult": "0..*", "toMult": "1", "fromRole": null, "toRole": null, "label": "collected by", "points": [[280, 325], [400.0, 325.0], [520, 325]]}, {"id": "r30", "type": "assoc", "from": "Transfer", "to": "StaffUser", "fromMult": "0..*", "toMult": "0..1", "fromRole": null, "toRole": null, "label": "approved by", "points": [[280, 395], [400.0, 395.0], [520, 395]]}, {"id": "r37", "type": "assoc", "from": "AcquisitionSuggestion", "to": "StaffUser", "fromMult": "0..*", "toMult": "0..1", "fromRole": null, "toRole": null, "label": "proposed by", "points": [[283, 535], [421.5, 535.0], [421.5, 535.0], [560, 535], [560, 410]]}, {"id": "r38", "type": "assoc", "from": "AcquisitionSuggestion", "to": "StaffUser", "fromMult": "0..*", "toMult": "0..1", "fromRole": null, "toRole": null, "label": "decided by", "points": [[283, 555], [441.5, 555.0], [441.5, 555.0], [600, 555], [600, 410]]}]}];
+    let CLASSES = PARTS[0].classes;
+    let RELS = PARTS[0].rels;
+    let PACKAGES = PARTS[0].packages;
+
+    /* 2. ENGINE: section 9d, verbatim */
+// ── Constants ─────────────────────────────────────────────────────────────
+const HDR_H = 28, PAD = 6, LINE_H = 14, DIV_H = 1;
+const FM = 'font-family="IBM Plex Mono, monospace"';
+
+function escXml(s) {
+  return String(s)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+function boxH(cls) {
+  const hdrH = cls.stereotype ? 38 : HDR_H;
+  return hdrH + PAD + cls.attrs.length * LINE_H +
+    (cls.ops.length > 0 ? DIV_H + cls.ops.length * LINE_H : 0) + PAD;
+}
+
+function boxW(cls) {
+  // The stereotype counts: «external system» is wider than most class names.
+  const longest = [...cls.attrs, ...cls.ops, cls.name, cls.stereotype || '']
+    .reduce((m, s) => Math.max(m, s.length), 0);
+  return Math.max(120, Math.ceil(longest * 6.5) + 16);
+}
+
+function svgBox(cls) {
+  const w = boxW(cls), h = boxH(cls), { x, y } = cls;
+  const hdrH = cls.stereotype ? 38 : HDR_H;
+  // Three looks: domain class (blue), enumeration (gray dashed), «external system» (gray solid).
+  const border   = cls.isEnum ? '#94a3b8' : cls.isExternal ? '#64748b' : '#3b82f6';
+  const hdrFill  = cls.isEnum ? '#475569' : cls.isExternal ? '#64748b' : '#1e40af';
+  const bodyFill = cls.isEnum ? '#f8fafc' : cls.isExternal ? '#f1f5f9' : 'white';
+  const dash     = cls.isEnum ? 'stroke-dasharray="5 3"' : '';
+
+  let s = `<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="${bodyFill}" stroke="${border}" stroke-width="2" ${dash} rx="2"/>`;
+  s += `<rect x="${x}" y="${y}" width="${w}" height="${hdrH}" fill="${hdrFill}" rx="2"/>`;
+
+  if (cls.stereotype) {
+    s += `<text x="${x + w/2}" y="${y + 13}" text-anchor="middle" fill="white" font-size="9" ${FM}>${escXml(cls.stereotype)}</text>`;
+  }
+  const nameStyle = cls.isAbstract ? 'font-style:italic' : '';
+  const nameY = cls.stereotype ? y + hdrH - 8 : y + hdrH / 2 + 4;
+  s += `<text x="${x + w/2}" y="${nameY}" text-anchor="middle" fill="white" font-size="11" font-weight="700" ${FM} style="${nameStyle}">${escXml(cls.name)}</text>`;
+
+  const divY = y + hdrH;
+  s += `<line x1="${x}" y1="${divY}" x2="${x + w}" y2="${divY}" stroke="${border}" stroke-width="1"/>`;
+
+  let curY = divY + PAD + 10;
+  for (const a of cls.attrs) {
+    s += `<text x="${x + 6}" y="${curY}" text-anchor="start" fill="#1e293b" font-size="10.5" ${FM}>${escXml(a)}</text>`;
+    curY += LINE_H;
+  }
+  if (cls.ops.length > 0) {
+    const opDivY = divY + PAD + cls.attrs.length * LINE_H;
+    s += `<line x1="${x}" y1="${opDivY}" x2="${x + w}" y2="${opDivY}" stroke="${border}" stroke-width="1"/>`;
+    curY = opDivY + PAD + 10;
+    for (const o of cls.ops) {
+      s += `<text x="${x + 6}" y="${curY}" text-anchor="start" fill="#2563eb" font-size="10.5" font-style="italic" ${FM}>${escXml(o)}</text>`;
+      curY += LINE_H;
+    }
+  }
+  return s;
+}
+
+function svgRel(rel) {
+  const pts = rel.points.map(([px, py]) => `${px},${py}`).join(' ');
+  let mS = '', mE = '', dash = '';
+  if (rel.type === 'comp') mS = 'marker-start="url(#compFill)"';
+  if (rel.type === 'agg')  mS = 'marker-start="url(#aggHollow)"';
+  if (rel.type === 'gen')  mE = 'marker-end="url(#genHollow)"';
+  if (rel.type === 'dep')  { mE = 'marker-end="url(#arrOpen)"'; dash = 'stroke-dasharray="6 3"'; }
+  // 'assoc': no markers (plain line)
+
+  let s = `<polyline class="cd-edge" points="${pts}" fill="none" stroke="#334155" stroke-width="1.8" ${dash} ${mS} ${mE}/>`;
+  // Multiplicity labels: placed just OUTSIDE each box, offset along the line
+  // (away from the box) and beside it, so BOTH ends are always legible.
+  const multLabel = (end, adj, txt) => {
+    const dx = adj[0] - end[0], dy = adj[1] - end[1];
+    const L = Math.hypot(dx, dy) || 1, ux = dx / L, uy = dy / L;
+    const x = end[0] + ux * 16 - uy * 9, y = end[1] + uy * 16 + ux * 9 + 3;
+    return `<text x="${x}" y="${y}" text-anchor="middle" fill="#64748b" font-size="9.5" ${FM}>${escXml(txt)}</text>`;
+  };
+  if (rel.fromMult) s += multLabel(rel.points[0], rel.points[1], rel.fromMult);
+  if (rel.toMult) {
+    const n = rel.points.length;
+    s += multLabel(rel.points[n - 1], rel.points[n - 2], rel.toMult);
+  }
+  if (rel.label) {
+    const mid = rel.points[Math.floor(rel.points.length / 2)];
+    s += `<text x="${mid[0]}" y="${mid[1] - 6}" text-anchor="middle" fill="#64748b" font-size="9.5" ${FM}>${escXml(rel.label)}</text>`;
+  }
+  return s;
+}
+
+// ── Hover highlight ─────────────────────────────────────────────────────────
+// Point at any relationship line to trace it through crossings: it brightens,
+// thickens, and lifts to the front, restoring on mouse-out. A wide transparent
+// overlay makes the thin line easy to grab. Call wireHover(svg) after innerHTML.
+function wireHover(svg) {
+  svg.querySelectorAll('.cd-edge').forEach(function (line) {
+    const hit = line.cloneNode(false);
+    hit.removeAttribute('marker-start'); hit.removeAttribute('marker-end');
+    hit.removeAttribute('class');
+    hit.setAttribute('stroke', 'transparent');
+    hit.setAttribute('stroke-width', '16');
+    hit.setAttribute('fill', 'none');
+    hit.style.pointerEvents = 'stroke';
+    hit.style.cursor = 'pointer';
+    line.parentNode.insertBefore(hit, line.nextSibling); // transparent overlay on top
+    const s0 = line.getAttribute('stroke');
+    const w0 = line.getAttribute('stroke-width');
+    let slot = null;
+    hit.addEventListener('mouseenter', function () {
+      slot = document.createComment('e'); hit.parentNode.insertBefore(slot, hit);
+      const p = hit.parentNode; p.appendChild(line); p.appendChild(hit); // lift to front
+      line.setAttribute('stroke', '#e6007e');
+      line.setAttribute('stroke-width', String(Math.max(3.4, parseFloat(w0 || '1.8') + 1.6)));
+    });
+    hit.addEventListener('mouseleave', function () {
+      line.setAttribute('stroke', s0); if (w0) line.setAttribute('stroke-width', w0);
+      if (slot && slot.parentNode) {
+        slot.parentNode.insertBefore(line, slot);
+        slot.parentNode.insertBefore(hit, slot);
+        slot.remove();
+      }
+      slot = null;
+    });
+  });
+}
+
+function render() {
+  let maxX = 600, maxY = 400;
+  for (const cls of CLASSES) {
+    maxX = Math.max(maxX, cls.x + boxW(cls) + 60);
+    maxY = Math.max(maxY, cls.y + boxH(cls) + 80);
+  }
+
+  const defs = `<defs>
+    <pattern id="dotgrid" width="24" height="24" patternUnits="userSpaceOnUse">
+      <circle cx="12" cy="12" r="0.8" fill="#cbd5e1"/>
+    </pattern>
+    <marker id="genHollow" markerWidth="12" markerHeight="10" refX="10" refY="5" orient="auto">
+      <polygon points="0,0 10,5 0,10" fill="white" stroke="#334155" stroke-width="1.5"/>
+    </marker>
+    <marker id="arrOpen" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <polyline points="0,0 9,4 0,8" fill="none" stroke="#334155" stroke-width="1.5"/>
+    </marker>
+    <marker id="compFill" markerWidth="14" markerHeight="10" refX="1" refY="5" orient="auto">
+      <polygon points="0,5 7,0 14,5 7,10" fill="#1e40af" stroke="#1e40af"/>
+    </marker>
+    <marker id="aggHollow" markerWidth="14" markerHeight="10" refX="1" refY="5" orient="auto">
+      <polygon points="0,5 7,0 14,5 7,10" fill="white" stroke="#334155"/>
+    </marker>
+  </defs>`;
+
+  // totalWidth / totalHeight include margins and space for the legend.
+  // RIGHT_MARGIN ≥ 40px, BOTTOM_MARGIN ≥ 70px (legend needs ~50px).
+  // These are already baked into maxX / maxY from the loop above (60px / 80px).
+  const totalWidth  = maxX;
+  const totalHeight = maxY;   // legend drawn at totalHeight - 60, inside this height
+
+  const bg    = `<rect width="${totalWidth}" height="${totalHeight}" fill="url(#dotgrid)"/>`;
+  const rels  = RELS.map(svgRel).join('');
+  const boxes = CLASSES.map(svgBox).join('');
+  // Legend is placed at totalHeight - 60 so it always lands inside the viewBox.
+  // The dependency entry appears only when the diagram actually has one (§7).
+  const hasDep  = RELS.some(r => r.type === 'dep');
+  const depLeg  = hasDep ? '  ⇢ Dependency («external system»)' : '';
+  const legend = `<text x="16" y="${totalHeight - 60}" fill="#64748b" font-size="9" ${FM}>── Association  ◇── Aggregation  ◆── Composition  ──▷ Generalization${depLeg}  |  Multiplicity at both ends of every association</text>`;
+
+  const svg = document.getElementById('diagram-svg');
+  svg.setAttribute('width',   totalWidth);
+  svg.setAttribute('height',  totalHeight);
+  svg.setAttribute('viewBox', `0 0 ${totalWidth} ${totalHeight}`);
+  svg.innerHTML = defs + bg + rels + boxes + legend;
+  wireHover(svg);
+}
+
+    /* 2b. Engine additions for this diagram (the 9d engine has no drawing for these):
+       - 'assocClass' relationship: the dashed tether from an association's midpoint to its
+         association class (no arrowhead, no multiplicity), section 3.
+       - package frames (section 2, Packages) on the overview part, drawn behind the classes. */
+    const svgRelBase = svgRel;
+    svgRel = function (rel) {
+      if (rel.type !== 'assocClass') return svgRelBase(rel);
+      const pts = rel.points.map(([px, py]) => `${px},${py}`).join(' ');
+      return `<polyline class="cd-edge" points="${pts}" fill="none" stroke="#334155" stroke-width="1.5" stroke-dasharray="5 4"/>`;
+    };
+    const renderBase = render;
+    render = function () {
+      renderBase();
+      if (!PACKAGES || !PACKAGES.length) return;
+      const svg = document.getElementById('diagram-svg');
+      const frames = PACKAGES.map(p => {
+        const tw = p.name.length * 7 + 20;
+        const tx = p.tab && p.tab[1] === 'r' ? p.x + p.w - tw : p.x;
+        const ty = p.tab && p.tab[0] === 'b' ? p.y + p.h : p.y - 18;
+        return `<rect x="${p.x}" y="${p.y}" width="${p.w}" height="${p.h}" fill="#eef2ff" fill-opacity="0.55" stroke="#6366f1" stroke-width="1.2"/>` +
+          `<rect x="${tx}" y="${ty}" width="${tw}" height="18" fill="#e0e7ff" stroke="#6366f1" stroke-width="1.2"/>` +
+          `<text x="${tx + 8}" y="${ty + 13}" fill="#3730a3" font-size="10.5" font-weight="700" ${FM}>${escXml(p.name)}</text>`;
+      }).join('');
+      svg.querySelector('rect').insertAdjacentHTML('afterend', frames);
+    };
+
+    /* 2c. Tabs (section 9e): each tab re-renders the SVG with its part's data */
+    function showPart(i) {
+      CLASSES = PARTS[i].classes; RELS = PARTS[i].rels; PACKAGES = PARTS[i].packages;
+      document.getElementById('diagram-title').textContent = TITLE + ' | ' + PARTS[i].label;
+      document.getElementById('split-rationale').textContent = PARTS[i].splitRationale;
+      document.querySelectorAll('.tab-btn').forEach((b, j) => b.classList.toggle('active', i === j));
+      render();
+    }
+    function buildTabs() {
+      const bar = document.getElementById('tab-bar');
+      PARTS.forEach((p, i) => {
+        const b = document.createElement('button');
+        b.className = 'tab-btn'; b.textContent = p.label; b.onclick = () => showPart(i);
+        bar.appendChild(b);
+      });
+    }
+
+    /* 3. VP EXPORT (export-buttons.md) */
+    function xmlEscape(s) {
+      return String(s ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&apos;');
+    }
+
+    function downloadFile(filename, mimeType, content) {
+      const blob = new Blob([content], { type: mimeType });
+      const url  = URL.createObjectURL(blob);
+      const a    = Object.assign(document.createElement('a'),
+                     { href: url, download: filename });
+      document.body.appendChild(a);
+      a.click();
+      setTimeout(() => { URL.revokeObjectURL(url); a.remove(); }, 1000);
+    }
+
+    function xmiBody(elements, rels) {
+      const lines = [];
+      const seen = new Set();
+      for (const el of elements) {
+        if (el.kind !== 'class' || el.isStub || seen.has(el.id)) continue;
+        seen.add(el.id);
+        const isEnum = el.stereotype === 'enumeration';
+        const tag = isEnum ? 'uml:Enumeration' : 'uml:Class';
+        lines.push(`    <packagedElement xmi:type="${tag}" xmi:id="${el.id}" name="${xmlEscape(el.name)}"${el.isAbstract ? ' isAbstract="true"' : ''}>`);
+        if (isEnum) {
+          for (const a of el.attributes)
+            lines.push(`      <ownedLiteral xmi:id="${el.id}_${a.name}" name="${xmlEscape(a.name)}"/>`);
+        } else {
+          for (const a of el.attributes)
+            lines.push(`      <ownedAttribute xmi:id="${el.id}_${a.name.replace(/\W/g, '')}" name="${xmlEscape(a.name)}" visibility="${a.visibility === '+' ? 'public' : a.visibility === '-' ? 'private' : 'protected'}"/>`);
+          for (const op of el.operations)
+            lines.push(`      <ownedOperation xmi:id="${el.id}_${op.name}" name="${xmlEscape(op.name)}"/>`);
+        }
+        lines.push(`    </packagedElement>`);
+      }
+      const done = new Set();
+      for (const r of rels) {
+        if (done.has(r.id)) continue;
+        done.add(r.id);
+        if (r.kind === 'generalization')
+          lines.push(`    <packagedElement xmi:type="uml:Generalization" xmi:id="${r.id}" specific="${r.from}" general="${r.to}"/>`);
+        if (r.kind === 'association')
+          lines.push(`    <packagedElement xmi:type="uml:Association" xmi:id="${r.id}" memberEnd="${r.from}_end ${r.to}_end"/>`);
+        if (r.kind === 'dependency')
+          lines.push(`    <packagedElement xmi:type="uml:Dependency" xmi:id="${r.id}" client="${r.from}" supplier="${r.to}"/>`);
+        if (r.kind === 'associationClass')
+          lines.push(`    <packagedElement xmi:type="uml:AssociationClass" xmi:id="${r.id}" name="${xmlEscape(r.classId)}"/>`);
+      }
+      return lines.join('\n');
+    }
+
+    function exportXMI() {
+      const m = diagramModel;
+      const title = xmlEscape(m.title || 'diagram');
+      const allElements = m.parts.flatMap(p => p.elements);
+      const allRelationships = m.parts.flatMap(p => p.relationships);
+      const body = xmiBody(allElements, allRelationships);
+      const xmi = `<?xml version="1.0" encoding="UTF-8"?>
+<xmi:XMI xmi:version="2.1"
+  xmlns:xmi="http://www.omg.org/XMI"
+  xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML">
+  <uml:Model xmi:id="model_1" name="${title}">
+${body}
+  </uml:Model>
+</xmi:XMI>`;
+      downloadFile(title.replace(/\s+/g, '_') + '.xmi', 'application/xml', xmi);
+    }
+
+    /* 4. diagramModel (model-shape.md, kind: 'class') */
+    function buildModel() {
+      const parseMember = (s) => {
+        const m = s.match(/^([+\-#])?\s*([^:()]+?)\s*(\([^)]*\))?\s*(?::\s*(.+))?\s*$/);
+        return { visibility: m && m[1] ? m[1] : '+', name: m ? m[2].trim() : s, type: m && m[4] ? m[4].trim() : null };
+      };
+      const parts = PARTS.map(p => {
+        const elements = p.classes.map(c => {
+          const stereo = c.isEnum ? 'enumeration' : c.isExternal ? 'external system'
+            : (c.stereotype && c.stereotype.startsWith('«')) ? c.stereotype.replace(/[«»]/g, '').trim() : null;
+          return { kind: 'class', id: c.id.replace(/@.*$/, ''), name: c.name, isAbstract: !!c.isAbstract,
+            stereotype: stereo, isStub: !!(c.stereotype && c.stereotype.startsWith('(')),
+            attributes: c.attrs.map(a => { if (c.isEnum) return { visibility: '', name: a, type: null, defaultValue: null, constraint: null };
+              const q = parseMember(a); return { visibility: q.visibility, name: q.name, type: q.type, defaultValue: null, constraint: null }; }),
+            operations: c.ops.map(o => { const q = parseMember(o); return { visibility: q.visibility, name: q.name, params: [], returnType: q.type }; }),
+            x: c.x, y: c.y, w: boxW(c), h: boxH(c) };
+        });
+        const base = id => id.replace(/@.*$/, '');
+        const relationships = p.rels.map(r => {
+          if (r.type === 'gen') return { kind: 'generalization', id: r.id, from: base(r.from), to: base(r.to) };
+          if (r.type === 'dep') return { kind: 'dependency', id: r.id, from: base(r.from), to: base(r.to), stereotype: null };
+          if (r.type === 'assocClass') return { kind: 'associationClass', id: r.id, classId: base(r.to), assocId: r.assocId };
+          return { kind: 'association', id: r.id, from: base(r.from), to: base(r.to), multFrom: r.fromMult, multTo: r.toMult,
+            roleFrom: r.fromRole, roleTo: r.toRole, directed: false, aggregation: false, composition: r.type === 'comp' };
+        });
+        return { id: p.id, label: p.label, splitRationale: p.splitRationale, elements, relationships };
+      });
+      return { kind: 'class', title: TITLE, parts };
+    }
+    const diagramModel = buildModel();
+
+    document.addEventListener('DOMContentLoaded', () => {
+      buildTabs();
+      const m = location.hash.match(/part-(\d+)/);
+      showPart(m ? Math.min(+m[1] - 1, PARTS.length - 1) : 0);
+    });
+  </script>
+</body>
+</html>

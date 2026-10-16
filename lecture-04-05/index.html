@@ -16,7 +16,7 @@
       <div class="course">ניתוח ועיצוב מערכות מידע</div>
       <h1>תרשים תרחישי שימוש — Use Case</h1>
       <div class="lecture-no">הרצאה 4-5</div>
-      <div class="updated">עודכן: 30.08.2026</div>
+      <div class="updated">עודכן: 15.10.2026</div>
     </section>
     <section class="toc-slide has-acro-footer" data-slug="toc">
       <h1>סדר היום</h1>
@@ -1489,6 +1489,102 @@
         <p class="bottom-line">רמז: מי שמושפע, מי שרק מקבל פלט, ומה שאנחנו קוראים לו — אף אחד מהם אינו שחקן. רק מי ש<b>יוזם</b>.</p>
 
       </div>
+    </section>
+    <!-- B3.6: when an external system triggers us (added 2026-10-15, David, after the exam review).
+         Same initiator test as actors / actor-or-not, applied to the question students actually ask:
+         "the supplier sends us an email, is that an actor?" Two ways the same business event reaches us:
+           A. no API: the supplier emails an inbox. An email cannot start anything in our system, so
+              someone must go and look: a ⏰ «time» actor polls the inbox on a schedule (timing label
+              on the association, per the use-case doctrine).
+           B. we expose an API: the supplier's system calls us directly, so IT is the initiator and
+              appears as a «system» actor.
+         Plus the corollary from the review: sending an email is never a use case of its own; it is
+         a step inside one (we call the mail service, an API call, as on the actors slide). -->
+    <section data-slug="external-trigger">
+      <div class="sdlc-chip" title="שלב 3 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>ניתוח דרישות</div>
+      <style>
+        section[data-slug="external-trigger"] .card svg { width:100%; height:auto; max-height:150px; }
+        section[data-slug="external-trigger"] .how { font-size:17px; margin:0; }
+        section[data-slug="external-trigger"] .how li { margin:2px 0; }
+      </style>
+      <h1>מערכת חיצונית מפעילה אותנו: שתי דרכים</h1>
+      <div class="subtitle">הספק מאשר הזמנת חומרי גלם. מי השחקן? תלוי <b>איך</b> האישור מגיע אלינו.</div>
+      <div class="body">
+
+        <div class="cols" style="align-items:stretch;">
+
+          <div class="card fragment" style="display:flex; flex-direction:column; gap:6px;">
+            <div class="panel-title">📧 אין <span class="en">API</span>: הספק שולח מייל לתיבה</div>
+            <svg viewBox="0 0 420 170" role="img" aria-label="שחקן זמן מפעיל כל עשר דקות את התרחיש קליטת אישורי ספק">
+              <rect x="10" y="10" width="250" height="150" rx="10" fill="#fff" stroke="#94a3b8" stroke-width="2"/>
+              <text x="135" y="32" text-anchor="middle" font-size="14" fill="#475569">מערכת הקפיטריה</text>
+              <ellipse cx="135" cy="95" rx="105" ry="32" fill="#fff" stroke="var(--blue)" stroke-width="2"/>
+              <text x="135" y="101" text-anchor="middle" font-size="16" fill="var(--body)">קליטת אישורי ספק</text>
+              <line x1="330" y1="88" x2="240" y2="95" stroke="#1e293b" stroke-width="2"/>
+              <text x="287" y="80" text-anchor="middle" font-size="13" font-weight="700" fill="#92400E">כל 10 דקות</text>
+              <text x="352" y="40" text-anchor="middle" font-size="13" font-weight="700" fill="#92400E">«time»</text>
+              <g transform="translate(330,46)">
+                <circle cx="22" cy="9" r="7.5" fill="#F59E0B" stroke="#1e293b" stroke-width="2.2"/>
+                <line x1="22" y1="16.5" x2="22" y2="40" stroke="#1e293b" stroke-width="2.2" stroke-linecap="round"/>
+                <line x1="6" y1="25" x2="38" y2="25" stroke="#1e293b" stroke-width="2.2" stroke-linecap="round"/>
+                <line x1="22" y1="40" x2="9" y2="60" stroke="#1e293b" stroke-width="2.2" stroke-linecap="round"/>
+                <line x1="22" y1="40" x2="35" y2="60" stroke="#1e293b" stroke-width="2.2" stroke-linecap="round"/>
+              </g>
+              <text x="352" y="128" text-anchor="middle" font-size="15" fill="var(--body)">⏰ זמן</text>
+            </svg>
+            <ul class="bullets how">
+              <li>מייל שמגיע לתיבה <b>לא מפעיל</b> שום דבר במערכת. היא לא יודעת שהוא הגיע.</li>
+              <li>לכן מישהו צריך ללכת ולבדוק: <b>הזמן</b> מפעיל את המערכת כל 10 דקות, והיא קוראת את התיבה ופועלת.</li>
+              <li>היוזם הוא הזמן, ולא הספק. הספק אינו שחקן כאן.</li>
+            </ul>
+          </div>
+
+          <div class="card fragment" style="display:flex; flex-direction:column; gap:6px;">
+            <div class="panel-title">🔌 יש <span class="en">API</span>: מערכת הספק קוראת לנו</div>
+            <svg viewBox="0 0 420 170" role="img" aria-label="שחקן מערכת הספק מפעיל ישירות את התרחיש קליטת אישור ספק">
+              <rect x="10" y="10" width="250" height="150" rx="10" fill="#fff" stroke="#94a3b8" stroke-width="2"/>
+              <text x="135" y="32" text-anchor="middle" font-size="14" fill="#475569">מערכת הקפיטריה</text>
+              <ellipse cx="135" cy="95" rx="105" ry="32" fill="#fff" stroke="var(--blue)" stroke-width="2"/>
+              <text x="135" y="101" text-anchor="middle" font-size="16" fill="var(--body)">קליטת אישור ספק</text>
+              <line x1="330" y1="88" x2="240" y2="95" stroke="#1e293b" stroke-width="2"/>
+              <text x="352" y="40" text-anchor="middle" font-size="13" font-weight="700" fill="#92400E">«system»</text>
+              <g transform="translate(330,46)">
+                <circle cx="22" cy="9" r="7.5" fill="#F59E0B" stroke="#1e293b" stroke-width="2.2"/>
+                <line x1="22" y1="16.5" x2="22" y2="40" stroke="#1e293b" stroke-width="2.2" stroke-linecap="round"/>
+                <line x1="6" y1="25" x2="38" y2="25" stroke="#1e293b" stroke-width="2.2" stroke-linecap="round"/>
+                <line x1="22" y1="40" x2="9" y2="60" stroke="#1e293b" stroke-width="2.2" stroke-linecap="round"/>
+                <line x1="22" y1="40" x2="35" y2="60" stroke="#1e293b" stroke-width="2.2" stroke-linecap="round"/>
+              </g>
+              <text x="352" y="128" text-anchor="middle" font-size="15" fill="var(--body)">מערכת הספק</text>
+            </svg>
+            <ul class="bullets how">
+              <li>למערכת שלנו יש <span class="en">API</span>, ומערכת הספק קוראת לו <b>ברגע</b> האישור.</li>
+              <li>היא זו שמעירה אותנו, ולכן היא היוזמת: שחקן <span class="en">«system»</span>.</li>
+              <li>אותו אירוע עסקי, שחקן אחר. מה שקובע הוא <b>מי מפעיל</b> את המערכת.</li>
+            </ul>
+          </div>
+
+        </div>
+
+        <div class="cols fragment">
+          <div class="hero" style="margin:0;">
+            <h3>השאלה: מה מעיר את המערכת שלנו?</h3>
+            <p>קוראים לה ישירות ← השחקן הוא המערכת הקוראת. היא צריכה ללכת ולבדוק ← השחקן הוא ⏰ הזמן.</p>
+          </div>
+          <div class="callout bad" style="font-size:17px;">
+            <b>⛔ "שליחת מייל" אינה תרחיש.</b> זה צעד בתוך תרחיש: המערכת פונה לשירות הדואר, וזו קריאת
+            <span class="en">API</span>, בדיוק כמו שער התשלום.
+          </div>
+        </div>
+
+        <p class="bottom-line">מייל נכנס ← ⏰ זמן שבודק את התיבה · קריאה ל-<span class="en">API</span> שלנו ← שחקן <span class="en">«system»</span> · מייל יוצא ← צעד, לא תרחיש.</p>
+
+      </div>
+      <aside class="notes">
+        לשאול לפני החשיפה: "הספק שולח לנו מייל. הוא שחקן?" רוב הכיתה תגיד כן. התשובה תלויה בשאלה אם מישהו
+        יכול לקרוא למערכת שלנו. מייל לא קורא לאף אחד, ולכן צריך שעון שבודק. זה גם המקום להזכיר את תווית
+        התזמון על הקו של שחקן הזמן.
+      </aside>
     </section>
     <!-- B4 — Use Case definition (Jacobson) + characteristics + campus examples.
          Jacobson's formal definition as the hero, then the full set of characteristics

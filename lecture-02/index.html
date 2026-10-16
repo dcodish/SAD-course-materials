@@ -16,7 +16,7 @@
       <div class="course">ניתוח ועיצוב מערכות מידע</div>
       <h1>תיעוד תהליכים עסקיים — BPMN</h1>
       <div class="lecture-no">הרצאה 2</div>
-      <div class="updated">עודכן: 17.08.2026</div>
+      <div class="updated">עודכן: 15.10.2026</div>
     <div class="acro-footer"><span class="acro"><span class="en">BPMN</span> = <span class="en">Business Process Model and Notation</span> · מידול וסימון תהליכים עסקיים</span></div>
     </section>
     <section class="toc-slide has-acro-footer" data-slug="toc">
@@ -1637,6 +1637,131 @@
 
       </div>
     </section>
+    <!-- D: Loops and the stop condition (added 2026-10-15, David, after the exam-review session).
+         A loop in BPMN is an XOR branch whose flow goes BACK to an earlier task. The rule:
+         every loop needs a stop condition, otherwise the process can get stuck and never reach
+         an end event. That is a business problem (an order nobody closes), not a drawing nit.
+         The ✗ side is deliberately the "אזל" loop from the previous slide (gateways-example):
+         it loops "until a dish is available" and has no way out if nothing is. The ✓ side adds
+         a second XOR on the back path with an exit to a cancelled end event.
+         Same SVG conventions as gateways-example: only the X inside the diamond, outcomes on
+         the flows, SMIL tokens (no <script>). -->
+    <section data-slug="bpmn-loops" class="has-acro-footer">
+      <div class="sdlc-chip" title="שלב 2 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>חקר מצב קיים</div>
+      <h1>לולאות: וכל לולאה צריכה תנאי עצירה</h1>
+      <div class="subtitle">לולאה = שער <span class="en">XOR</span> שמחזיר את האסימון אחורה. בלי יציאה, התהליך יכול להיתקע לנצח.</div>
+      <div class="body">
+
+        <div class="cols" style="align-items:stretch;">
+
+          <div class="card fragment" style="display:flex; flex-direction:column; gap:8px;">
+            <div class="panel-title">✗ לולאה בלי יציאה: "חוזרים עד שיש מנה"</div>
+            <div class="center">
+              <svg width="274" height="184" viewBox="0 0 340 228" role="img"
+                   aria-label="לולאה בלי תנאי עצירה: כשהמנה אזלה האסימון חוזר לבחירת מנה, שוב ושוב, ולא מגיע לסיום">
+                <defs>
+                  <marker id="lp1-ar" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+                    <path d="M0,0 L7,3 L0,6 Z" fill="#78909c"/>
+                  </marker>
+                </defs>
+                <line x1="170" y1="42" x2="170" y2="62" stroke="#78909c" stroke-width="2" marker-end="url(#lp1-ar)"/>
+                <line x1="170" y1="132" x2="170" y2="156" stroke="#78909c" stroke-width="2" marker-end="url(#lp1-ar)"/>
+                <path d="M 202 100 L 292 100 L 292 24 L 246 24" fill="none" stroke="var(--red)" stroke-width="2.5" marker-end="url(#lp1-ar)"/>
+                <rect x="100" y="6" width="140" height="36" rx="8" fill="#fff" stroke="var(--blue)" stroke-width="2"/>
+                <text x="170" y="29" text-anchor="middle" font-size="16" fill="var(--body)">בחירת מנה</text>
+                <polygon points="170,68 202,100 170,132 138,100" fill="var(--hero-bg)" stroke="var(--orange)" stroke-width="2"/>
+                <path d="M160 90 L180 110 M180 90 L160 110" stroke="#e65100" stroke-width="3" stroke-linecap="round"/>
+                <rect x="100" y="160" width="140" height="36" rx="8" fill="#fff" stroke="var(--blue)" stroke-width="2"/>
+                <text x="170" y="183" text-anchor="middle" font-size="16" fill="var(--body)">המשך לתשלום</text>
+                <text x="154" y="149" text-anchor="end" font-size="15" font-weight="700" fill="var(--green)">במלאי</text>
+                <text x="238" y="90" text-anchor="middle" font-size="15" font-weight="700" fill="var(--red)">אזל</text>
+                <text x="300" y="62" text-anchor="start" font-size="20">♾️</text>
+                <circle r="8" fill="#c62828" stroke="#fff" stroke-width="2">
+                  <animateMotion dur="2.6s" repeatCount="indefinite" calcMode="linear"
+                                 path="M 170 24 L 170 100 L 202 100 L 292 100 L 292 24 L 170 24"/>
+                </circle>
+              </svg>
+            </div>
+            <div class="muted" style="font-size:17px;">אם כל המנות אזלו, האסימון מסתובב בלי סוף ואף פעם לא מגיע לאירוע סיום.
+              בעולם האמיתי זו <b>הזמנה תקועה</b> שאף אחד לא סוגר, וסטודנט שלא יודע מה קורה איתו.</div>
+          </div>
+
+          <div class="card fragment" style="display:flex; flex-direction:column; gap:8px;">
+            <div class="panel-title">✓ לולאה עם תנאי עצירה: "יש מנה חלופית?"</div>
+            <div class="center">
+              <svg width="274" height="184" viewBox="0 0 340 228" role="img"
+                   aria-label="לולאה עם תנאי עצירה: כשהמנה אזלה בודקים אם יש חלופה; יש חלופה חוזרים לבחירה, אין חלופה ההזמנה מבוטלת ומגיעה לאירוע סיום">
+                <defs>
+                  <marker id="lp2-ar" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+                    <path d="M0,0 L7,3 L0,6 Z" fill="#78909c"/>
+                  </marker>
+                </defs>
+                <line x1="120" y1="42" x2="120" y2="62" stroke="#78909c" stroke-width="2" marker-end="url(#lp2-ar)"/>
+                <line x1="120" y1="132" x2="120" y2="156" stroke="#78909c" stroke-width="2" marker-end="url(#lp2-ar)"/>
+                <line x1="152" y1="100" x2="222" y2="100" stroke="#78909c" stroke-width="2" marker-end="url(#lp2-ar)"/>
+                <path d="M 260 68 L 260 24 L 196 24" fill="none" stroke="#78909c" stroke-width="2" marker-end="url(#lp2-ar)"/>
+                <line x1="260" y1="132" x2="260" y2="152" stroke="#78909c" stroke-width="2" marker-end="url(#lp2-ar)"/>
+                <rect x="50" y="6" width="140" height="36" rx="8" fill="#fff" stroke="var(--blue)" stroke-width="2"/>
+                <text x="120" y="29" text-anchor="middle" font-size="16" fill="var(--body)">בחירת מנה</text>
+                <polygon points="120,68 152,100 120,132 88,100" fill="var(--hero-bg)" stroke="var(--orange)" stroke-width="2"/>
+                <path d="M110 90 L130 110 M130 90 L110 110" stroke="#e65100" stroke-width="3" stroke-linecap="round"/>
+                <polygon points="260,68 292,100 260,132 228,100" fill="var(--hero-bg)" stroke="var(--orange)" stroke-width="2"/>
+                <path d="M250 90 L270 110 M270 90 L250 110" stroke="#e65100" stroke-width="3" stroke-linecap="round"/>
+                <rect x="50" y="160" width="140" height="36" rx="8" fill="#fff" stroke="var(--blue)" stroke-width="2"/>
+                <text x="120" y="183" text-anchor="middle" font-size="16" fill="var(--body)">המשך לתשלום</text>
+                <circle cx="260" cy="172" r="16" fill="#fff" stroke="var(--red)" stroke-width="5"/>
+                <text x="260" y="214" text-anchor="middle" font-size="14" fill="var(--body)">הזמנה בוטלה</text>
+                <text x="104" y="149" text-anchor="end" font-size="15" font-weight="700" fill="var(--green)">במלאי</text>
+                <text x="187" y="90" text-anchor="middle" font-size="15" font-weight="700" fill="var(--red)">אזל</text>
+                <text x="268" y="52" text-anchor="end" font-size="15" font-weight="700" fill="var(--green)">יש חלופה</text>
+                <text x="270" y="148" text-anchor="end" font-size="15" font-weight="700" fill="var(--red)">אין</text>
+                <circle r="8" fill="#2e7d32" stroke="#fff" stroke-width="2" opacity="0">
+                  <animateMotion dur="8s" repeatCount="indefinite" calcMode="linear"
+                                 path="M 120 24 L 120 100 L 152 100 L 260 100 L 260 24 L 190 24"
+                                 keyPoints="0;1;1" keyTimes="0;0.42;1"/>
+                  <animate attributeName="opacity" dur="8s" repeatCount="indefinite"
+                           values="0;1;1;0;0" keyTimes="0;0.03;0.4;0.44;1"/>
+                </circle>
+                <circle r="8" fill="#2e7d32" stroke="#fff" stroke-width="2" opacity="0">
+                  <animateMotion dur="8s" repeatCount="indefinite" calcMode="linear"
+                                 path="M 120 24 L 120 100 L 152 100 L 260 100 L 260 172"
+                                 keyPoints="0;0;1;1" keyTimes="0;0.5;0.9;1"/>
+                  <animate attributeName="opacity" dur="8s" repeatCount="indefinite"
+                           values="0;0;1;1;0;0" keyTimes="0;0.5;0.53;0.9;0.94;1"/>
+                </circle>
+              </svg>
+            </div>
+            <div class="muted" style="font-size:17px;">שער שני על המסלול האחורי: <b>יש חלופה</b> ← חוזרים לבחור.
+              <b>אין</b> ← ההזמנה מבוטלת ומגיעה לאירוע סיום. מכל סיבוב יש דרך החוצה.</div>
+          </div>
+
+        </div>
+
+        <div class="cols fragment">
+          <div class="hero" style="margin:0;">
+            <h3>לכל חץ שחוזר אחורה, שאלו: מה גורם ללולאה להיגמר?</h3>
+            <p><span class="tag">מונה ניסיונות</span> עד 3 ניסיונות תשלום ·
+              <span class="tag">מגבלת זמן</span> אחרי 15 דקות מבטלים ·
+              <span class="tag">החלטה</span> הלקוח מוותר ·
+              <span class="tag">מצב</span> אין יותר מלאי</p>
+          </div>
+          <div class="callout warn" style="font-size:17px;">
+            <span class="label">⚠️ גם הבינה שוכחת</span>
+            לולאת "נסה שוב" בלי מגבלה היא טעות נפוצה גם בתרשימים ש-<span class="en">AI</span> מייצר. עקבו אחרי כל חץ אחורה
+            עד שאתם מוצאים את היציאה שלו.
+          </div>
+        </div>
+
+        <p class="bottom-line">לולאה = חץ אחורה משער <span class="en">XOR</span> · חייבת יציאה שמובילה לאירוע סיום · בלי תנאי עצירה, התהליך יכול להיתקע.</p>
+
+      </div>
+      <aside class="notes">
+        לחבר לשקף הקודם: הלולאה של "אזל" שם היא בדיוק הלולאה השמאלית כאן. שאלו את הכיתה מה קורה אם כל המנות אזלו,
+        לפני שחושפים את הצד הימני. לחבר גם לשקף הפסאודו-קוד (REPEAT ... UNTIL): ה-UNTIL הוא תנאי העצירה,
+        וכאן הוא חייב להיות מצויר.
+      </aside>
+    <div class="acro-footer"><span class="acro"><span class="en">AI</span> = <span class="en">Artificial Intelligence</span> · בינה מלאכותית</span></div>
+    </section>
     <!-- D — Gateways: WHEN to use which — the OR (inclusive) worked example (added 2026-07 per
          request; campus analog of the original deck's Amsterdam/Hamburg warehouse exercise).
          A combo order is routed to one-OR-MORE prep stations (hot dish / salad / drink) depending
@@ -2821,20 +2946,21 @@
         <p class="bottom-line">כל מסלול נסגר ב-<span class="en">end event</span> · אירועי סיום שונים לתוצאות שונות (הושלמה / בוטלה).</p>
       </div>
     </section>
-    <!-- E (mistakes) — over-detailing. ❌ every click a task (unreadable) vs ✓ a few meaningful
-         business steps. LTR flow. -->
+    <!-- E (mistakes): over-detailing. ❌ every click a task (unreadable) vs ✓ a few meaningful
+         business steps. LTR flow. The merge test (same person, same moment = one task) added
+         2026-10-15 after the exam review, where David stated it as a standing rule. -->
     <section data-slug="bpmn-mistake-over-detail">
       <div class="sdlc-chip" title="שלב 2 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>חקר מצב קיים</div>
       <style>
         section[data-slug="bpmn-mistake-over-detail"] .ex { display:flex; flex-direction:column; min-height:0; gap:8px; }
-        section[data-slug="bpmn-mistake-over-detail"] .ex svg { width:100%; height:auto; max-height:300px; }
+        section[data-slug="bpmn-mistake-over-detail"] .ex svg { width:100%; height:auto; max-height:240px; }
         section[data-slug="bpmn-mistake-over-detail"] .cap { font-size:16px; }
         section[data-slug="bpmn-mistake-over-detail"] .bad-t { color:var(--red); font-weight:700; }
         section[data-slug="bpmn-mistake-over-detail"] .good-t { color:var(--green); font-weight:700; }
         section[data-slug="bpmn-mistake-over-detail"] text { direction:rtl; }
       </style>
       <h1>טעות נפוצה: פירוט יתר</h1>
-      <div class="subtitle">כל קליק הופך למשימה — <b>אי אפשר לקרוא</b> את התהליך</div>
+      <div class="subtitle">כל קליק הופך למשימה, ו<b>אי אפשר לקרוא</b> את התהליך</div>
       <div class="body">
         <div class="cols" style="align-items:stretch; min-height:0;">
 
@@ -2860,7 +2986,7 @@
               </g>
               <text x="150" y="88" text-anchor="middle" font-size="12" fill="var(--red)" font-weight="700">💥 מתפוצץ בפרטי מימוש</text>
             </svg>
-            <div class="cap muted">עשרות צעדים זעירים ברמת המסך — לא רואים את התהליך העסקי.</div>
+            <div class="cap muted">עשרות צעדים זעירים ברמת המסך, ולא רואים את התהליך העסקי.</div>
           </div>
 
           <!-- RIGHT -->
@@ -2874,11 +3000,16 @@
               <line x1="94" y1="51" x2="110" y2="51" stroke="#78909c" stroke-width="1.6" marker-end="url(#od2-a)"/>
               <line x1="192" y1="51" x2="208" y2="51" stroke="#78909c" stroke-width="1.6" marker-end="url(#od2-a)"/>
             </svg>
-            <div class="cap muted">מדלים פעולות עסקיות — אם שלב הוא מסך בודד, כנראה הוא פרט מימוש.</div>
+            <div class="cap muted">מדלים פעולות עסקיות. אם שלב הוא מסך בודד, כנראה הוא פרט מימוש.</div>
           </div>
 
         </div>
-        <p class="bottom-line">רמת התהליך העסקי — לא קליקים · שלב = פעולה שלמה, לא לחיצה.</p>
+        <div class="hero fragment" style="margin:0;">
+          <h3>מבחן האיחוד: אותו אדם, באותו רגע ← משימה אחת</h3>
+          <p>"כתיבת מייל" ו"שליחת מייל" הן משימה אחת: <b>שליחת מייל ללקוח</b>. אם הפעולות מבוצעות על ידי
+            אנשים שונים, או שיש ביניהן המתנה או החלטה, הן נשארות שתי משימות.</p>
+        </div>
+        <p class="bottom-line">רמת התהליך העסקי, לא קליקים · שלב = פעולה שלמה, לא לחיצה · אותו אדם באותו רגע = משימה אחת.</p>
       </div>
     </section>
     <!-- E (worked example, from original deck s66-72) — building a BPMN step by step: bank account

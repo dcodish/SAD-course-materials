@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>תרשים מצבים: הזמנה (Reservation), הספרייה אשכול</title>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;700&family=Noto+Sans+Hebrew:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    body { margin: 0; background: #f1f5f9; font-family: 'Noto Sans Hebrew', 'Segoe UI', Arial, sans-serif; }
+    .page-title { direction: rtl; font-size: 15px; font-weight: 700; color: #1e293b; padding: 12px 16px 2px; }
+    .page-sub { direction: rtl; font-size: 13px; color: #475569; padding: 0 16px 8px; }
+    .diagram-part { padding: 0 8px 70px; }
+    .diagram-part svg { display: block; max-width: 100%; height: auto; direction: ltr; margin: 0 auto; }
+    .vp-export-btn {
+      position: fixed; bottom: 20px; right: 20px; z-index: 1000;
+      background: #1e40af; color: #fff; border: none; border-radius: 6px;
+      padding: 8px 16px; font-size: 13px; cursor: pointer;
+      font-family: 'IBM Plex Mono', monospace;
+    }
+    .vp-export-btn:hover { background: #1e3a8a; }
+  </style>
+</head>
+<body>
+  <div class="page-title">תרשים מצבים: הזמנה (Reservation), הספרייה אשכול</div>
+  <div class="page-sub">הספרייה אשכול · האובייקט: הזמנה (status : ReservationStatus) · 7 מצבים ושני מצבי-על · 10 מעברים · כל מעבר ממופה לחוק עסקי</div>
+
+  <div class="diagram-part" id="part-1">
+    <svg id="diagram-svg" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="תרשים מצבים: הזמנה (Reservation), הספרייה אשכול"></svg>
+  </div>
+
+  <button class="vp-export-btn" onclick="exportXMI()">Download .xmi (Visual Paradigm)</button>
+
+  <script>
+  /* ============================================================
+     1. DATA: states, pseudostates and transitions, hand-placed.
+     Every polyline is orthogonal (checked in validate()), endpoints sit
+     on box edges; composites are drawn first (behind their sub-states).
+     ============================================================ */
+  const DATA = {
+ "title": "תרשים מצבים: הזמנה (Reservation), הספרייה אשכול",
+ "partLabel": "מחזור החיים של הזמנה",
+ "w": 1060,
+ "h": 920,
+ "states": [
+  {
+   "id": "active",
+   "name": "פעילה",
+   "constant": "ACTIVE",
+   "lines": [
+    "entry / setStatus('ACTIVE')"
+   ],
+   "x": 40,
+   "y": 70,
+   "w": 940,
+   "h": 330,
+   "composite": true,
+   "headerRight": 955
+  },
+  {
+   "id": "closed",
+   "name": "סגורה",
+   "constant": "CLOSED",
+   "lines": [
+    "entry / setStatus('CLOSED')"
+   ],
+   "x": 40,
+   "y": 480,
+   "w": 940,
+   "h": 170,
+   "composite": true,
+   "headerRight": 495
+  },
+  {
+   "id": "queued",
+   "name": "בתור",
+   "constant": "QUEUED",
+   "lines": [
+    "entry / setStatus('QUEUED')"
+   ],
+   "x": 80,
+   "y": 140,
+   "w": 240,
+   "h": 56,
+   "parent": "active"
+  },
+  {
+   "id": "awaitingTransfer",
+   "name": "ממתינה להעברה",
+   "constant": "AWAITING_TRANSFER",
+   "lines": [
+    "entry / setStatus('AWAITING_TRANSFER')"
+   ],
+   "x": 700,
+   "y": 140,
+   "w": 250,
+   "h": 56,
+   "parent": "active"
+  },
+  {
+   "id": "readyForPickup",
+   "name": "מיועדת לאיסוף",
+   "constant": "READY_FOR_PICKUP",
+   "lines": [
+    "entry / startHold()"
+   ],
+   "x": 390,
+   "y": 290,
+   "w": 250,
+   "h": 56,
+   "parent": "active"
+  },
+  {
+   "id": "collected",
+   "name": "נאספה",
+   "constant": "COLLECTED",
+   "lines": [
+    "entry / closeAsCollected()"
+   ],
+   "x": 80,
+   "y": 560,
+   "w": 240,
+   "h": 56,
+   "parent": "closed"
+  },
+  {
+   "id": "cancelled",
+   "name": "בוטלה",
+   "constant": "CANCELLED",
+   "lines": [
+    "entry / closeAsCancelled()"
+   ],
+   "x": 390,
+   "y": 560,
+   "w": 250,
+   "h": 56,
+   "parent": "closed"
+  },
+  {
+   "id": "expired",
+   "name": "פגה",
+   "constant": "EXPIRED",
+   "lines": [
+    "entry / closeAsExpired()"
+   ],
+   "x": 700,
+   "y": 560,
+   "w": 250,
+   "h": 56,
+   "parent": "closed"
+  },
+  {
+   "id": "archived",
+   "name": "ארכיון",
+   "constant": "ARCHIVED",
+   "lines": [
+    "entry / setStatus('ARCHIVED')"
+   ],
+   "x": 400,
+   "y": 730,
+   "w": 220,
+   "h": 56,
+   "isArchive": true
+  }
+ ],
+ "pseudo": [
+  {
+   "id": "initial",
+   "kind": "initial",
+   "x": 200,
+   "y": 30
+  },
+  {
+   "id": "final",
+   "kind": "final",
+   "x": 510,
+   "y": 850
+  }
+ ],
+ "transitions": [
+  {
+   "id": "R0",
+   "from": "initial",
+   "to": "queued",
+   "event": "",
+   "guard": "",
+   "action": "",
+   "br": "",
+   "label": null,
+   "pts": [
+    [
+     200,
+     38
+    ],
+    [
+     200,
+     140
+    ]
+   ]
+  },
+  {
+   "id": "R1",
+   "from": "queued",
+   "to": "readyForPickup",
+   "event": "הוקצה עותק",
+   "guard": "BR-19: ראשונה בתור",
+   "action": "holdCopy(copy)",
+   "br": "BR-19 · BR-8",
+   "label": {
+    "x": 208,
+    "y": 232,
+    "align": "start"
+   },
+   "pts": [
+    [
+     200,
+     196
+    ],
+    [
+     200,
+     318
+    ],
+    [
+     390,
+     318
+    ]
+   ]
+  },
+  {
+   "id": "R2",
+   "from": "queued",
+   "to": "awaitingTransfer",
+   "event": "נדרשה העברה",
+   "guard": "",
+   "action": "awaitTransfer()",
+   "br": "BR-16",
+   "label": {
+    "x": 510,
+    "y": 148,
+    "align": "middle",
+    "rows": [
+     [
+      0,
+      1
+     ]
+    ]
+   },
+   "pts": [
+    [
+     320,
+     156
+    ],
+    [
+     700,
+     156
+    ]
+   ]
+  },
+  {
+   "id": "R3",
+   "from": "awaitingTransfer",
+   "to": "queued",
+   "event": "ההעברה נדחתה",
+   "guard": "",
+   "action": "returnToQueue()",
+   "br": "BR-16",
+   "label": {
+    "x": 510,
+    "y": 202,
+    "align": "middle",
+    "rows": [
+     [
+      0,
+      1
+     ]
+    ]
+   },
+   "pts": [
+    [
+     700,
+     182
+    ],
+    [
+     320,
+     182
+    ]
+   ]
+  },
+  {
+   "id": "R4",
+   "from": "awaitingTransfer",
+   "to": "readyForPickup",
+   "event": "העותק הגיע",
+   "guard": "",
+   "action": "holdCopy(copy)",
+   "br": "BR-8",
+   "label": {
+    "x": 833,
+    "y": 240,
+    "align": "start"
+   },
+   "pts": [
+    [
+     825,
+     196
+    ],
+    [
+     825,
+     318
+    ],
+    [
+     640,
+     318
+    ]
+   ]
+  },
+  {
+   "id": "R5",
+   "from": "readyForPickup",
+   "to": "collected",
+   "event": "מסירה לחבר",
+   "guard": "BR-20: בעל ההזמנה",
+   "action": "collect(member)",
+   "br": "BR-20 (· BR-4 · BR-5 · BR-11)",
+   "label": {
+    "x": 282,
+    "y": 505,
+    "align": "end"
+   },
+   "pts": [
+    [
+     430,
+     346
+    ],
+    [
+     430,
+     440
+    ],
+    [
+     290,
+     440
+    ],
+    [
+     290,
+     560
+    ]
+   ]
+  },
+  {
+   "id": "R6",
+   "from": "readyForPickup",
+   "to": "expired",
+   "event": "after(3 ימי עבודה)",
+   "guard": "",
+   "action": "",
+   "br": "BR-8",
+   "label": {
+    "x": 710,
+    "y": 432,
+    "align": "middle"
+   },
+   "pts": [
+    [
+     600,
+     346
+    ],
+    [
+     600,
+     440
+    ],
+    [
+     820,
+     440
+    ],
+    [
+     820,
+     560
+    ]
+   ]
+  },
+  {
+   "id": "R7",
+   "from": "active",
+   "to": "cancelled",
+   "event": "ביטול ע\"י החבר",
+   "guard": "",
+   "action": "cancel()",
+   "br": "BR-21",
+   "label": {
+    "x": 523,
+    "y": 458,
+    "align": "start"
+   },
+   "pts": [
+    [
+     515,
+     400
+    ],
+    [
+     515,
+     560
+    ]
+   ]
+  },
+  {
+   "id": "R8",
+   "from": "closed",
+   "to": "archived",
+   "event": "סגירת יום",
+   "guard": "",
+   "action": "archive()",
+   "br": "BR-25",
+   "label": {
+    "x": 518,
+    "y": 685,
+    "align": "start"
+   },
+   "pts": [
+    [
+     510,
+     650
+    ],
+    [
+     510,
+     730
+    ]
+   ]
+  },
+  {
+   "id": "R9",
+   "from": "archived",
+   "to": "final",
+   "event": "after(24 חודשים)",
+   "guard": "BR-26: אין רשומה שמורה המפנה אליה",
+   "action": "purge()",
+   "br": "BR-26",
+   "label": {
+    "x": 530,
+    "y": 800,
+    "align": "start"
+   },
+   "pts": [
+    [
+     510,
+     786
+    ],
+    [
+     510,
+     838
+    ]
+   ]
+  }
+ ]
+};
+
+  /* ============================================================
+     2. RENDERER (SKILL.md §4, §6, §7, §10)
+     ============================================================ */
+  const SVG_NS = 'http://www.w3.org/2000/svg';
+  const MONO = "'IBM Plex Mono', Consolas, monospace";
+  const NAME_H = 26, LINE_H = 15;
+  const COL = { ev: '#334155', g: '#0891b2', ac: '#15803d' };
+
+  function el(tag, attrs, parent) {
+    const n = document.createElementNS(SVG_NS, tag);
+    for (const k in attrs) if (attrs[k] !== null && attrs[k] !== undefined) n.setAttribute(k, attrs[k]);
+    if (parent) parent.appendChild(n);
+    return n;
+  }
+  function txt(parent, attrs, content) { const t = el('text', attrs, parent); t.textContent = content; return t; }
+  function bandPath(x, y, w, h, r) {
+    return `M${x},${y + h} L${x},${y + r} Q${x},${y} ${x + r},${y} L${x + w - r},${y} Q${x + w},${y} ${x + w},${y + r} L${x + w},${y + h} Z`;
+  }
+
+  const HEB = "'Noto Sans Hebrew', 'Segoe UI', Arial, sans-serif";
+  const HE = /[֐-׿]/;
+
+  function drawState(s, parent) {
+    const g = el('g', { class: 'sd-state', id: s.id }, parent);
+    if (s.composite) {
+      el('rect', { x: s.x, y: s.y, width: s.w, height: s.h, rx: 20, ry: 20, fill: '#f0f7ff',
+                   stroke: '#2563eb', 'stroke-width': 2, 'stroke-dasharray': '8 4' }, g);
+      // header anchored at its RIGHT edge (Hebrew reading order): name, then «composite» to its left
+      const hr = s.headerRight;
+      const name = txt(g, { x: hr, y: s.y + 25, direction: 'rtl', 'text-anchor': 'start', 'font-family': HEB,
+                            'font-size': 15, 'font-weight': 700, fill: '#1e293b' }, s.name);
+      const st = txt(g, { x: hr, y: s.y + 25, 'text-anchor': 'end', 'font-family': MONO, 'font-size': 10,
+                          fill: '#64748b', class: 'sd-comp-st' }, '«composite»');
+      st.__name = name;
+      s.lines.forEach((ln, i) =>
+        txt(g, { x: hr, y: s.y + 42 + i * LINE_H, 'text-anchor': 'end', 'font-family': MONO, 'font-size': 10, fill: '#334155' }, ln));
+      return g;
+    }
+    el('rect', { x: s.x, y: s.y, width: s.w, height: s.h, rx: 18, ry: 18, fill: '#ffffff', stroke: '#3b82f6', 'stroke-width': 2 }, g);
+    el('path', { d: bandPath(s.x + 1, s.y + 1, s.w - 2, NAME_H - 1, 17), fill: '#eef4ff' }, g);
+    el('line', { x1: s.x, y1: s.y + NAME_H, x2: s.x + s.w, y2: s.y + NAME_H, stroke: '#3b82f6', 'stroke-width': 1 }, g);
+    txt(g, { x: s.x + s.w / 2, y: s.y + 19, direction: 'rtl', 'text-anchor': 'middle', 'font-family': HEB,
+             'font-size': 14, 'font-weight': 700, fill: '#1e293b' }, s.name);
+    s.lines.forEach((ln, i) =>
+      txt(g, { x: s.x + 10, y: s.y + NAME_H + 17 + i * LINE_H, 'font-family': MONO, 'font-size': 10, fill: '#334155' }, ln));
+    return g;
+  }
+  function layoutComposites(svg) {
+    svg.querySelectorAll('.sd-comp-st').forEach(st => {
+      const w = st.__name.getComputedTextLength();
+      if (w) st.setAttribute('x', +st.__name.getAttribute('x') - w - 8);
+    });
+  }
+
+  function drawPseudostates(parent) {
+    for (const p of DATA.pseudo) {
+      if (p.kind === 'initial') el('circle', { cx: p.x, cy: p.y, r: 8, fill: '#1e293b', id: p.id }, parent);
+      else {
+        const g = el('g', { id: p.id }, parent);
+        el('circle', { cx: p.x, cy: p.y, r: 12, fill: 'none', stroke: '#1e293b', 'stroke-width': 2 }, g);
+        el('circle', { cx: p.x, cy: p.y, r: 7, fill: '#1e293b' }, g);
+      }
+    }
+  }
+
+  function pathD(t) { return t.d ? t.d : t.pts.map((p, i) => (i ? 'L' : 'M') + p[0] + ',' + p[1]).join(' '); }
+
+  function drawTransition(t, parent) {
+    const p = el('path', { d: pathD(t), fill: 'none', stroke: '#334155', 'stroke-width': 1.8,
+                           'marker-end': 'url(#arrow)', id: t.id }, parent);
+    const ttl = el('title', {}, p);
+    ttl.textContent = `${t.id}: ${[t.event, t.guard ? '[' + t.guard + ']' : '', t.action ? '/ ' + t.action : ''].filter(Boolean).join(' ')}  (${t.br || 'ללא BR: החץ ההתחלתי'})`;
+  }
+
+  // Labels: each part (event / [guard] / action) is its own <text>, measured and packed in
+  // reading order (RTL when the row starts with Hebrew), with a white rect behind each row.
+  function labelParts(t) {
+    const parts = [];
+    if (t.event) parts.push(['ev', t.event]);
+    if (t.guard) parts.push(['g', '[' + t.guard + ']']);
+    if (t.action) parts.push(['ac', '/ ' + t.action]);
+    return parts;
+  }
+  function drawLabel(t, parent) {
+    if (!t.label) return;
+    const parts = labelParts(t);
+    const rows = t.label.rows || parts.map((_, i) => [i]);
+    const g = el('g', { class: 'sd-label' }, parent);
+    rows.forEach((row, ri) => row.forEach(pi => {
+      const [kind, s] = parts[pi];
+      const heb = HE.test(s.charAt(0));
+      const mono = kind === 'ac' || !HE.test(s);
+      txt(g, { x: 0, y: t.label.y + ri * 16, 'text-anchor': 'start', direction: heb ? 'rtl' : 'ltr',
+               'font-family': mono ? MONO : HEB, 'font-size': mono ? 11 : 12.5, fill: COL[kind],
+               'data-row': ri, 'data-heb': heb ? 1 : 0 }, (heb ? '⁧' : '⁦') + s + '⁩');  // bidi isolate: each part keeps its own direction
+    }));
+    g.__label = t.label;
+  }
+  function layoutLabels(svg) {
+    layoutComposites(svg);
+    const bg = svg.querySelector('#sd-labelbg');
+    while (bg.firstChild) bg.removeChild(bg.firstChild);
+    svg.querySelectorAll('.sd-label').forEach(g => {
+      const Lb = g.__label;
+      const texts = Array.from(g.querySelectorAll('text'));
+      const nRows = Math.max(...texts.map(t => +t.getAttribute('data-row'))) + 1;
+      for (let ri = 0; ri < nRows; ri++) {
+        const segs = texts.filter(t => +t.getAttribute('data-row') === ri);
+        const widths = segs.map(t => t.getComputedTextLength());
+        if (!widths.every(w => w > 0)) return;
+        const total = widths.reduce((a, b) => a + b, 0) + 8 * (segs.length - 1);
+        const left = Lb.align === 'start' ? Lb.x : Lb.align === 'end' ? Lb.x - total : Lb.x - total / 2;
+        const rtl = segs[0].getAttribute('data-heb') === '1';
+        let cur = rtl ? left + total : left;
+        segs.forEach((t, i) => {
+          const w = widths[i];
+          if (i) cur += rtl ? -8 : 8;
+          const segLeft = rtl ? cur - w : cur;
+          t.setAttribute('x', t.getAttribute('data-heb') === '1' ? segLeft + w : segLeft);
+          cur = rtl ? cur - w : cur + w;
+        });
+        const y = +segs[0].getAttribute('y');
+        el('rect', { x: left - 3, y: y - 12, width: total + 6, height: 16, rx: 3, fill: '#ffffff', 'fill-opacity': 0.95 }, bg);
+      }
+    });
+  }
+
+  function drawLegend(parent) {
+    const y = DATA.h - 34;
+    const R = DATA.w - 24;
+    txt(parent, { x: R, y, direction: 'rtl', 'text-anchor': 'start', 'font-family': HEB, 'font-size': 12, fill: '#475569' },
+      '● מצב התחלתי · ◎ מצב סיום (הרשומה נמחקת) · ▢ מצב · ⬚ מצב-על (קו מקווקו)');
+    txt(parent, { x: R, y: y + 18, direction: 'rtl', 'text-anchor': 'start', 'font-family': HEB, 'font-size': 12, fill: '#475569' },
+      'מעבר: אירוע [תנאי] / פעולה · בתא המצב: פעולות entry / exit · כל מעבר ממופה לחוק עסקי (ראו טבלת העקיבות)');
+  }
+
+  function validate() {
+    for (const t of DATA.transitions) {
+      if (!t.pts) continue;
+      for (let i = 0; i < t.pts.length - 1; i++) {
+        const a = t.pts[i], b = t.pts[i + 1];
+        if (a[0] !== b[0] && a[1] !== b[1]) throw new Error('Diagonal segment found on ' + t.id + ' at ' + i);
+      }
+      for (const s of DATA.states) {
+        if (s.composite) continue;
+        for (const p of [t.pts[0], t.pts[t.pts.length - 1]])
+          if (p[0] > s.x && p[0] < s.x + s.w && p[1] > s.y && p[1] < s.y + s.h)
+            throw new Error('Arrow endpoint inside state ' + s.id + ' on ' + t.id);
+      }
+    }
+  }
+
+  function render() {
+    validate();
+    const svg = document.getElementById('diagram-svg');
+    svg.setAttribute('viewBox', `0 0 ${DATA.w} ${DATA.h}`);
+    svg.setAttribute('width', DATA.w); svg.setAttribute('height', DATA.h);
+    const defs = el('defs', {}, svg);
+    const pat = el('pattern', { id: 'dotgrid', width: 24, height: 24, patternUnits: 'userSpaceOnUse' }, defs);
+    el('circle', { cx: 12, cy: 12, r: 0.8, fill: '#cbd5e1' }, pat);
+    const mk = el('marker', { id: 'arrow', markerWidth: 10, markerHeight: 7, refX: 9, refY: 3.5, orient: 'auto' }, defs);
+    el('polygon', { points: '0 0, 10 3.5, 0 7', fill: '#334155' }, mk);
+    el('rect', { width: DATA.w, height: DATA.h, fill: '#f8fafc' }, svg);
+    el('rect', { width: DATA.w, height: DATA.h, fill: 'url(#dotgrid)' }, svg);
+    const gComp = el('g', { id: 'sd-composites' }, svg);
+    const gStates = el('g', { id: 'sd-states' }, svg);
+    const gEdges = el('g', { id: 'sd-edges' }, svg);
+    const gPseudo = el('g', { id: 'sd-pseudo' }, svg);
+    el('g', { id: 'sd-labelbg' }, svg);
+    const gLabels = el('g', { id: 'sd-labels' }, svg);
+    for (const s of DATA.states) if (s.composite) drawState(s, gComp);
+    for (const s of DATA.states) if (!s.composite) drawState(s, gStates);
+    drawPseudostates(gPseudo);
+    for (const t of DATA.transitions) drawTransition(t, gEdges);
+    for (const t of DATA.transitions) drawLabel(t, gLabels);
+    drawLegend(svg);
+    layoutLabels(svg);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => layoutLabels(svg));
+    window.addEventListener('load', () => layoutLabels(svg));
+  }
+
+  /* ============================================================
+     3. Transition hover-highlight (SKILL.md §7b, verbatim)
+     ============================================================ */
+  function wireEdgeHover() {
+    document.querySelectorAll('svg [marker-end]').forEach(function (line) {
+      if (line.dataset.hoverWired) return;
+      line.dataset.hoverWired = '1';
+      const hit = line.cloneNode(false);
+      hit.removeAttribute('marker-end'); hit.removeAttribute('marker-start');
+      hit.setAttribute('stroke', 'transparent');
+      hit.setAttribute('stroke-width', '16');
+      hit.setAttribute('fill', 'none');
+      hit.style.pointerEvents = 'stroke';
+      hit.style.cursor = 'pointer';
+      line.parentNode.insertBefore(hit, line.nextSibling); // transparent overlay on top
+      const s0 = line.getAttribute('stroke') || '#334155';
+      const w0 = line.getAttribute('stroke-width') || '1.8';
+      let slot = null;
+      hit.addEventListener('mouseenter', function () {
+        slot = document.createComment('e'); hit.parentNode.insertBefore(slot, hit);
+        const p = hit.parentNode; p.appendChild(line); p.appendChild(hit); // lift to front
+        line.setAttribute('stroke', '#e6007e');
+        line.setAttribute('stroke-width', String(Math.max(3.4, parseFloat(w0) + 1.6)));
+      });
+      hit.addEventListener('mouseleave', function () {
+        line.setAttribute('stroke', s0); line.setAttribute('stroke-width', w0);
+        if (slot && slot.parentNode) {
+          slot.parentNode.insertBefore(line, slot);
+          slot.parentNode.insertBefore(hit, slot);
+          slot.remove();
+        }
+        slot = null;
+      });
+    });
+  }
+
+  /* ============================================================
+     4. diagramModel (model-shape.md, kind: 'state')
+     ============================================================ */
+  function activities(s) {
+    const pick = k => s.lines.filter(l => l.startsWith(k + ' /')).map(l => l.slice(k.length + 3));
+    return { entry: pick('entry'), exit: pick('exit'), do: pick('do') };
+  }
+  function stateEl(s) {
+    return { kind: 'state', id: s.id, name: s.name, isComposite: !!s.composite, statusConstant: s.constant,
+             activities: activities(s), x: s.x, y: s.y, w: s.w, h: s.h,
+             subElements: DATA.states.filter(c => c.parent === s.id).map(stateEl) };
+  }
+  const diagramModel = {
+    kind: 'state',
+    title: DATA.title,
+    parts: [{
+      id: 'part-1', label: DATA.partLabel, splitRationale: '',
+      elements: [
+        ...DATA.pseudo.filter(p => p.kind === 'initial').map(p => ({ kind: 'pseudostate', id: p.id, subKind: 'initial', x: p.x, y: p.y })),
+        ...DATA.states.filter(s => !s.parent).map(stateEl),
+        ...DATA.pseudo.filter(p => p.kind === 'final').map(p => ({ kind: 'pseudostate', id: p.id, subKind: 'final', x: p.x, y: p.y }))
+      ],
+      relationships: DATA.transitions.map(t => ({ kind: 'transition', id: t.id, from: t.from, to: t.to,
+        event: t.event || '', guard: t.guard || '', action: t.action || '', isSelf: t.from === t.to }))
+    }]
+  };
+
+  /* ============================================================
+     5. Visual Paradigm export (export-buttons.md)
+     ============================================================ */
+  function xmlEscape(s) {
+    return String(s ?? '')
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&apos;');
+  }
+  function downloadFile(filename, mimeType, content) {
+    const blob = new Blob([content], { type: mimeType });
+    const url  = URL.createObjectURL(blob);
+    const a    = Object.assign(document.createElement('a'), { href: url, download: filename });
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(() => { URL.revokeObjectURL(url); a.remove(); }, 1000);
+  }
+  function xmiBody(elements, rels) {
+    const lines = [];
+    lines.push(`    <packagedElement xmi:type="uml:StateMachine" xmi:id="sm_1" name="${xmlEscape(diagramModel.title)}">`);
+    lines.push(`      <region xmi:type="uml:Region" xmi:id="region_1">`);
+    const walk = (els, indent) => {
+      for (const el of els) {
+        if (el.kind === 'pseudostate')
+          lines.push(`${indent}<subvertex xmi:type="uml:Pseudostate" xmi:id="${el.id}" kind="${el.subKind}"/>`);
+        if (el.kind === 'state' && el.isComposite) {
+          lines.push(`${indent}<subvertex xmi:type="uml:State" xmi:id="${el.id}" name="${xmlEscape(el.name)}">`);
+          lines.push(`${indent}  <region xmi:type="uml:Region" xmi:id="${el.id}_region">`);
+          walk(el.subElements, indent + '    ');
+          lines.push(`${indent}  </region>`);
+          lines.push(`${indent}</subvertex>`);
+        } else if (el.kind === 'state')
+          lines.push(`${indent}<subvertex xmi:type="uml:State" xmi:id="${el.id}" name="${xmlEscape(el.name)}"/>`);
+      }
+    };
+    walk(elements, '        ');
+    for (const r of rels) {
+      if (r.kind === 'transition')
+        lines.push(`        <transition xmi:type="uml:Transition" xmi:id="${r.id}" source="${r.from}" target="${r.to}"${r.event?` name="${xmlEscape(r.event)}"`:''}/>`);
+    }
+    lines.push(`      </region>`);
+    lines.push(`    </packagedElement>`);
+    return lines.join('\n');
+  }
+  function exportXMI() {
+    const m = diagramModel;
+    const title = xmlEscape(m.title || 'diagram');
+    const allElements = m.parts.flatMap(p => p.elements);
+    const allRelationships = m.parts.flatMap(p => p.relationships);
+    const body = xmiBody(allElements, allRelationships);
+    const xmi = `<?xml version="1.0" encoding="UTF-8"?>
+<xmi:XMI xmi:version="2.1"
+  xmlns:xmi="http://www.omg.org/XMI"
+  xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML">
+  <uml:Model xmi:id="model_1" name="${title}">
+${body}
+  </uml:Model>
+</xmi:XMI>`;
+    downloadFile(title.replace(/\s+/g, '_') + '.xmi', 'application/xml', xmi);
+  }
+  // NOTE: Visual Paradigm auto-layouts on XMI import; coordinates are not preserved.
+
+  document.addEventListener('DOMContentLoaded', render);
+  document.addEventListener('DOMContentLoaded', wireEdgeHover);
+  </script>
+</body>
+</html>
