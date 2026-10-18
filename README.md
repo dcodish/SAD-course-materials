@@ -10,7 +10,7 @@
 
 לחצו על הרצאה כדי לצפות במצגת האינטראקטיבית בדפדפן. לצד כל הרצאה יש גם קובץ PDF להדפסה — שימו לב שהחלקים האינטראקטיביים (תרשימים שנפתחים בלחיצה, חלוניות הסבר) קיימים **רק** בגרסת ה-HTML:
 
-- **הרצאה 1** — מבוא לניתוח ועיצוב מערכות מידע → [צפייה במצגת](https://dcodish.github.io/SAD-course-materials/lecture-01/) · [PDF להדפסה](Lectures%20PDF%20Format/lecture-01.pdf) · _עודכן 16.10.2026_
+- **הרצאה 1** — מבוא לניתוח ועיצוב מערכות מידע → [צפייה במצגת](https://dcodish.github.io/SAD-course-materials/lecture-01/) · [PDF להדפסה](Lectures%20PDF%20Format/lecture-01.pdf) · _עודכן 18.10.2026_
 - **הרצאה 2** — תיעוד תהליכים עסקיים — BPMN → [צפייה במצגת](https://dcodish.github.io/SAD-course-materials/lecture-02/) · [PDF להדפסה](Lectures%20PDF%20Format/lecture-02.pdf) · _עודכן 16.10.2026_
 - **הרצאה 3** — דרישות → [צפייה במצגת](https://dcodish.github.io/SAD-course-materials/lecture-03/) · [PDF להדפסה](Lectures%20PDF%20Format/lecture-03.pdf) · _עודכן 16.10.2026_
 - **הרצאה 4-5** — תרשים תרחישי שימוש — Use Case → [צפייה במצגת](https://dcodish.github.io/SAD-course-materials/lecture-04-05/) · [PDF להדפסה](Lectures%20PDF%20Format/lecture-04-05.pdf) · _עודכן 16.10.2026_
