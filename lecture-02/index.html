@@ -16,7 +16,7 @@
       <div class="course">ניתוח ועיצוב מערכות מידע</div>
       <h1>תיעוד תהליכים עסקיים — BPMN</h1>
       <div class="lecture-no">הרצאה 2</div>
-      <div class="updated">עודכן: 24.10.2026</div>
+      <div class="updated">עודכן: 31.10.2026</div>
     <div class="acro-footer"><span class="acro"><span class="en">BPMN</span> = <span class="en">Business Process Model and Notation</span> · מידול וסימון תהליכים עסקיים</span></div>
     </section>
     <section class="toc-slide has-acro-footer" data-slug="toc">
@@ -1814,6 +1814,155 @@
         <p class="bottom-line">שער <span class="en">OR</span> (מכליל) = אחד או יותר מהענפים לפי תנאי · ה-<span class="en">join</span> ממתין רק לענפים <b>שהופעלו</b>.</p>
 
       </div>
+    </section>
+    <!-- D: Closing a gateway, and why there are no implicit gateways (added 2026-10-31, David,
+         after the week-2 sad-mcp log: "when do you close an XOR?" was the heaviest student question,
+         and "implicit gateway" had no answer in any material although the 2024 מועד א exam asks it).
+         The ✗/✓ pair uses the case where an implicit merge really breaks the process: an AND split
+         whose two branches run straight into the next task, so packing happens twice. The table
+         pairs each split with its join; the rule restates the instructor's standing position
+         ("אל תשתמשו בה כי היא יוצרת בעיות לוגיות בתהליך"). Sits after the OR example, whose join
+         it generalizes. Same SVG conventions as bpmn-loops: markers inside diamonds, SMIL tokens. -->
+    <section data-slug="bpmn-closing-gateways">
+      <div class="sdlc-chip" title="שלב 2 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>חקר מצב קיים</div>
+      <style>
+        section[data-slug="bpmn-closing-gateways"] table { width:100%; border-collapse:collapse; font-size:15px; }
+        section[data-slug="bpmn-closing-gateways"] th,
+        section[data-slug="bpmn-closing-gateways"] td { padding:4px 8px; border-bottom:1px solid #cfd8dc; text-align:right; vertical-align:top; }
+        section[data-slug="bpmn-closing-gateways"] th { font-weight:700; }
+      </style>
+      <h1>סגירת שער: כל פיצול נסגר באיחוד מפורש</h1>
+      <div class="subtitle">מסלולים שהתפצלו בשער צריכים להתאחד בשער מאותו סוג, לפני שהתהליך ממשיך</div>
+      <div class="body">
+
+        <div class="cols" style="align-items:stretch;">
+
+          <div class="card fragment" style="display:flex; flex-direction:column; gap:8px;">
+            <div class="panel-title">✗ בלי שער איחוד: שני חצים נכנסים ישר למשימה</div>
+            <div class="center">
+              <svg width="270" height="135" viewBox="0 0 400 200" role="img"
+                   aria-label="פיצול AND להכנת המנה ולהכנת השתייה, ושני הענפים נכנסים ישר לאריזה בלי שער איחוד, ולכן האריזה מתבצעת פעמיים">
+                <defs>
+                  <marker id="cg1-ar" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+                    <path d="M0,0 L7,3 L0,6 Z" fill="#78909c"/>
+                  </marker>
+                </defs>
+                <line x1="0" y1="100" x2="14" y2="100" stroke="#78909c" stroke-width="2" marker-end="url(#cg1-ar)"/>
+                <path d="M 40 76 L 40 48 L 86 48" fill="none" stroke="#78909c" stroke-width="2" marker-end="url(#cg1-ar)"/>
+                <path d="M 40 124 L 40 152 L 86 152" fill="none" stroke="#78909c" stroke-width="2" marker-end="url(#cg1-ar)"/>
+                <path d="M 200 48 L 270 48 L 270 92 L 292 92" fill="none" stroke="var(--red)" stroke-width="2.5" marker-end="url(#cg1-ar)"/>
+                <path d="M 200 152 L 270 152 L 270 108 L 292 108" fill="none" stroke="var(--red)" stroke-width="2.5" marker-end="url(#cg1-ar)"/>
+                <polygon points="40,76 64,100 40,124 16,100" fill="var(--hero-bg)" stroke="var(--orange)" stroke-width="2"/>
+                <path d="M40 88 L40 112 M28 100 L52 100" stroke="#e65100" stroke-width="3" stroke-linecap="round"/>
+                <rect x="90" y="30" width="110" height="36" rx="8" fill="#fff" stroke="var(--blue)" stroke-width="2"/>
+                <text x="145" y="53" text-anchor="middle" font-size="15" fill="var(--body)">הכנת המנה</text>
+                <rect x="90" y="134" width="110" height="36" rx="8" fill="#fff" stroke="var(--blue)" stroke-width="2"/>
+                <text x="145" y="157" text-anchor="middle" font-size="15" fill="var(--body)">הכנת השתייה</text>
+                <rect x="296" y="82" width="100" height="36" rx="8" fill="#fff" stroke="var(--red)" stroke-width="2"/>
+                <text x="346" y="105" text-anchor="middle" font-size="15" fill="var(--body)">אריזה ומסירה</text>
+                <text x="346" y="140" text-anchor="middle" font-size="16" font-weight="700" fill="var(--red)">פעמיים!</text>
+                <circle r="8" fill="#c62828" stroke="#fff" stroke-width="2" opacity="0">
+                  <animateMotion dur="6s" repeatCount="indefinite" calcMode="linear"
+                                 path="M 0 100 L 40 100 L 40 48 L 200 48 L 270 48 L 270 92 L 300 92"
+                                 keyPoints="0;1;1" keyTimes="0;0.45;1"/>
+                  <animate attributeName="opacity" dur="6s" repeatCount="indefinite"
+                           values="0;1;1;0;0" keyTimes="0;0.03;0.5;0.55;1"/>
+                </circle>
+                <circle r="8" fill="#c62828" stroke="#fff" stroke-width="2" opacity="0">
+                  <animateMotion dur="6s" repeatCount="indefinite" calcMode="linear"
+                                 path="M 0 100 L 40 100 L 40 152 L 200 152 L 270 152 L 270 108 L 300 108"
+                                 keyPoints="0;1;1" keyTimes="0;0.75;1"/>
+                  <animate attributeName="opacity" dur="6s" repeatCount="indefinite"
+                           values="0;1;1;0;0" keyTimes="0;0.03;0.8;0.85;1"/>
+                </circle>
+              </svg>
+            </div>
+            <div class="muted" style="font-size:17px;">כל ענף מביא אסימון משלו. בלי איחוד, כל אסימון שמגיע מפעיל את האריזה מחדש:
+              ההזמנה <b>נארזת פעמיים</b>, והפעם הראשונה עוד לפני שהשתייה מוכנה.</div>
+          </div>
+
+          <div class="card fragment" style="display:flex; flex-direction:column; gap:8px;">
+            <div class="panel-title">✓ שער איחוד AND לפני האריזה</div>
+            <div class="center">
+              <svg width="270" height="135" viewBox="0 0 400 200" role="img"
+                   aria-label="פיצול AND להכנת המנה ולהכנת השתייה, שער איחוד AND ממתין לשני הענפים, ורק אז מתבצעת אריזה אחת">
+                <defs>
+                  <marker id="cg2-ar" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+                    <path d="M0,0 L7,3 L0,6 Z" fill="#78909c"/>
+                  </marker>
+                </defs>
+                <line x1="0" y1="100" x2="14" y2="100" stroke="#78909c" stroke-width="2" marker-end="url(#cg2-ar)"/>
+                <path d="M 40 76 L 40 48 L 86 48" fill="none" stroke="#78909c" stroke-width="2" marker-end="url(#cg2-ar)"/>
+                <path d="M 40 124 L 40 152 L 86 152" fill="none" stroke="#78909c" stroke-width="2" marker-end="url(#cg2-ar)"/>
+                <path d="M 200 48 L 250 48 L 250 72" fill="none" stroke="#78909c" stroke-width="2" marker-end="url(#cg2-ar)"/>
+                <path d="M 200 152 L 250 152 L 250 128" fill="none" stroke="#78909c" stroke-width="2" marker-end="url(#cg2-ar)"/>
+                <line x1="274" y1="100" x2="292" y2="100" stroke="#78909c" stroke-width="2" marker-end="url(#cg2-ar)"/>
+                <polygon points="40,76 64,100 40,124 16,100" fill="var(--hero-bg)" stroke="var(--orange)" stroke-width="2"/>
+                <path d="M40 88 L40 112 M28 100 L52 100" stroke="#e65100" stroke-width="3" stroke-linecap="round"/>
+                <polygon points="250,76 274,100 250,124 226,100" fill="var(--hero-bg)" stroke="var(--orange)" stroke-width="2"/>
+                <path d="M250 88 L250 112 M238 100 L262 100" stroke="#e65100" stroke-width="3" stroke-linecap="round"/>
+                <rect x="90" y="30" width="110" height="36" rx="8" fill="#fff" stroke="var(--blue)" stroke-width="2"/>
+                <text x="145" y="53" text-anchor="middle" font-size="15" fill="var(--body)">הכנת המנה</text>
+                <rect x="90" y="134" width="110" height="36" rx="8" fill="#fff" stroke="var(--blue)" stroke-width="2"/>
+                <text x="145" y="157" text-anchor="middle" font-size="15" fill="var(--body)">הכנת השתייה</text>
+                <rect x="296" y="82" width="100" height="36" rx="8" fill="#fff" stroke="var(--green)" stroke-width="2"/>
+                <text x="346" y="105" text-anchor="middle" font-size="15" fill="var(--body)">אריזה ומסירה</text>
+                <text x="346" y="140" text-anchor="middle" font-size="16" font-weight="700" fill="var(--green)">פעם אחת</text>
+                <circle r="8" fill="#2e7d32" stroke="#fff" stroke-width="2" opacity="0">
+                  <animateMotion dur="6s" repeatCount="indefinite" calcMode="linear"
+                                 path="M 0 100 L 40 100 L 40 48 L 200 48 L 250 48 L 250 78"
+                                 keyPoints="0;1;1" keyTimes="0;0.45;1"/>
+                  <animate attributeName="opacity" dur="6s" repeatCount="indefinite"
+                           values="0;1;1;0;0" keyTimes="0;0.03;0.75;0.77;1"/>
+                </circle>
+                <circle r="8" fill="#2e7d32" stroke="#fff" stroke-width="2" opacity="0">
+                  <animateMotion dur="6s" repeatCount="indefinite" calcMode="linear"
+                                 path="M 0 100 L 40 100 L 40 152 L 200 152 L 250 152 L 250 122"
+                                 keyPoints="0;1;1" keyTimes="0;0.75;1"/>
+                  <animate attributeName="opacity" dur="6s" repeatCount="indefinite"
+                           values="0;1;1;0;0" keyTimes="0;0.03;0.75;0.77;1"/>
+                </circle>
+                <circle r="8" fill="#2e7d32" stroke="#fff" stroke-width="2" opacity="0">
+                  <animateMotion dur="6s" repeatCount="indefinite" calcMode="linear"
+                                 path="M 250 100 L 300 100"
+                                 keyPoints="0;0;1;1" keyTimes="0;0.77;0.9;1"/>
+                  <animate attributeName="opacity" dur="6s" repeatCount="indefinite"
+                           values="0;0;1;1;0;0" keyTimes="0;0.76;0.78;0.9;0.94;1"/>
+                </circle>
+              </svg>
+            </div>
+            <div class="muted" style="font-size:17px;">שער האיחוד <b>ממתין לשני האסימונים</b>, ורק כשהמנה וגם השתייה מוכנות
+              יוצא ממנו אסימון אחד אל האריזה.</div>
+          </div>
+
+        </div>
+
+        <div class="cols fragment" style="align-items:start;">
+          <div class="card">
+            <table>
+              <tr><th>פיצול</th><th>נסגר ב-</th><th>מתי ממשיכים</th></tr>
+              <tr><td><span class="en">XOR</span> (בלעדי)</td><td>איחוד <span class="en">XOR</span></td><td>מיד כשמגיע הענף היחיד שנבחר</td></tr>
+              <tr><td><span class="en">AND</span> (מקבילי)</td><td>איחוד <span class="en">AND</span></td><td>רק אחרי שהגיעו <b>כל</b> הענפים</td></tr>
+              <tr><td><span class="en">OR</span> (מכליל)</td><td>איחוד <span class="en">OR</span></td><td>אחרי שהגיעו כל הענפים <b>שהופעלו</b> (השקף הקודם)</td></tr>
+            </table>
+            <div class="muted" style="font-size:16px; margin-top:8px;">סגירה בשער מסוג אחר שוברת את התהליך: פיצול <span class="en">XOR</span> שנסגר ב-<span class="en">AND</span>
+              ממתין לנצח לענף שלא נבחר, ופיצול <span class="en">AND</span> שנסגר ב-<span class="en">XOR</span> מריץ את ההמשך פעמיים.</div>
+          </div>
+          <div class="callout warn" style="font-size:17px;">
+            <span class="label">⚠️ שער מרומז (<span class="en">implicit gateway</span>)</span>
+            פיצול או איחוד בלי מעוין: כמה חצים שיוצאים ישר ממשימה, או נכנסים ישר אליה. התקן מתיר זאת, אבל בקורס
+            <b>לא משתמשים בשער מרומז</b>, כי הוא מסתיר את ההיגיון ויוצר טעויות כמו האריזה הכפולה. כל פיצול וכל איחוד מצוירים כמעוין מפורש.
+          </div>
+        </div>
+
+        <p class="bottom-line">כל פיצול נסגר באיחוד מאותו סוג · <span class="en">XOR</span> ← אחד, <span class="en">AND</span> ← כולם, <span class="en">OR</span> ← אלה שהופעלו · אין חצים שמתפצלים או מתאחדים בלי מעוין.</p>
+
+      </div>
+      <aside class="notes">
+        לשאול את הכיתה לפני החשיפה: כמה פעמים תיארז ההזמנה בצד השמאלי? להריץ את האסימונים בעיניים, אחד לכל ענף.
+        לחבר לשקף ה-OR: שם האיחוד כבר הופיע, וכאן הוא הופך לכלל. שאלה שחוזרת אצל סטודנטים: "מתי סוגרים XOR?"
+        התשובה: בנקודה שבה המסלולים מתאחדים לפני הצעד המשותף הבא, גם אם רק ענף אחד באמת רץ. ענף שמסתיים באירוע סיום משלו לא צריך איחוד.
+      </aside>
     </section>
     <!-- D — active exercise (from the original deck, s65): "what's wrong?" on the purchase-order
          process. The error = "Available"/"Not Available" drawn as ACTIVITY boxes, when they are
