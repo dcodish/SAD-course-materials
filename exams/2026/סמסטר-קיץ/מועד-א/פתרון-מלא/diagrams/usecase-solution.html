@@ -1,0 +1,3364 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>מטה 2026, Use Case Diagram (פתרון שאלה 6)</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Hebrew:wght@400;600&family=IBM+Plex+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+/* inlined uc-diagram-common.css */
+/* uc-diagram-common.css, SAD MCP shared styles for use case diagrams */
+
+/* ── Base layout ─────────────────────────────────────────────────────────── */
+body { margin: 0; padding: 20px 0; background: #f8fafc;
+  font-family: 'Noto Sans Hebrew', sans-serif; color: #1e293b; }
+h1.page-title { text-align: center; font-size: 18px; color: #1e40af;
+  margin: 0 0 10px; font-weight: 700; }
+.diagram-part { display: flex; justify-content: center; }
+
+/* ── Tab bar ─────────────────────────────────────────────────────────────── */
+.tab-bar { display: flex; justify-content: center; gap: 8px; margin: 12px 0 4px; }
+.tab { padding: 7px 20px; border: 1px solid #cbd5e1; background: #f8fafc;
+  color: #475569; font-size: 13px; font-weight: 600; cursor: pointer;
+  border-radius: 6px; font-family: 'Noto Sans Hebrew', sans-serif; }
+.tab.active { background: #1e40af; color: #fff; border-color: #1e40af; }
+.split-rationale { text-align: center; font-size: 11px; color: #64748b;
+  margin: 0 0 8px; font-style: italic; }
+
+/* ── Buttons ─────────────────────────────────────────────────────────────── */
+.fix-btn { padding: 8px 20px; border: 1px solid #3b82f6; background: #eff6ff;
+  color: #1e40af; font-size: 12px; font-weight: 600; cursor: pointer;
+  border-radius: 6px; font-family: 'Noto Sans Hebrew', sans-serif; }
+.fix-btn:hover { background: #dbeafe; }
+.vp-export-btn { position: fixed; bottom: 20px; right: 20px; z-index: 1000;
+  background: #1e40af; color: #fff; border: none; border-radius: 6px;
+  padding: 8px 16px; font-size: 13px; cursor: pointer;
+  font-family: 'IBM Plex Mono', monospace; }
+.vp-export-btn:hover { background: #1e3a8a; }
+
+/* ── Assumptions panel ───────────────────────────────────────────────────── */
+.assumptions-panel { display: flex; gap: 24px; max-width: 1000px;
+  margin: 20px auto; padding: 16px 20px; background: #fff;
+  border: 1px solid #cbd5e1; border-radius: 8px; direction: rtl; }
+.assumptions-col { flex: 1; min-width: 0; }
+.assumptions-col h3 { margin: 0 0 6px; font-size: 13px; font-weight: 600; color: #1e40af; }
+.assumptions-col ul { margin: 0; padding-right: 18px; }
+.assumptions-col li { color: #334155; font-size: 12px; line-height: 1.6; }
+
+/* ── User stories summary panel ──────────────────────────────────────────── */
+.user-stories-panel { max-width: 1000px; margin: 12px auto 20px; padding: 16px 20px;
+  background: #fff; border: 1px solid #cbd5e1; border-radius: 8px; direction: rtl; }
+.user-stories-panel h3 { margin: 0 0 8px; font-size: 13px; font-weight: 600; color: #1e40af; }
+.user-stories-panel ul { margin: 0; padding-right: 18px; }
+.user-stories-panel li { color: #334155; font-size: 12px; line-height: 1.7; }
+
+/* ── UC modal ────────────────────────────────────────────────────────────── */
+body.uc-modal-open { overflow: hidden; }
+.uc-modal[hidden] { display: none !important; }
+.uc-modal { position: fixed; inset: 0; z-index: 2000; display: flex;
+  align-items: flex-start; justify-content: center; padding: 40px 20px;
+  overflow-y: auto; direction: rtl; font-family: 'Noto Sans Hebrew', sans-serif; }
+.uc-modal-backdrop { position: absolute; inset: 0; background: rgba(15,23,42,0.55); }
+.uc-modal-body { position: relative; z-index: 1; width: 100%; max-width: 960px;
+  background: #fff; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,.25);
+  padding: 28px 32px 32px; color: #1e293b; }
+.uc-modal-close { position: absolute; top: 10px; left: 14px; background: none;
+  border: none; font-size: 24px; color: #64748b; cursor: pointer; }
+.uc-modal-body header { border-bottom: 1px solid #e2e8f0; padding-bottom: 12px;
+  margin-bottom: 18px; }
+.uc-modal-body .uc-id { display: inline-block; font-family: 'IBM Plex Mono',monospace;
+  font-size: 11px; color: #64748b; background: #f1f5f9; padding: 2px 8px;
+  border-radius: 4px; margin-bottom: 6px; }
+.uc-modal-body .uc-name { margin: 0 0 4px; font-size: 20px; color: #1e40af; font-weight: 700; }
+.uc-modal-body .uc-primary { font-size: 13px; color: #334155; }
+.uc-modal-body .uc-primary-label { color: #64748b; margin-left: 6px; }
+.uc-modal-body .uc-primary-link { color: #1e40af; cursor: pointer; font-weight: 600;
+  text-decoration: underline dotted; }
+.uc-description { margin-bottom: 20px; font-size: 14px; line-height: 1.7; color: #334155; }
+.uc-scenarios h3 { font-size: 14px; color: #1e40af; margin: 18px 0 6px;
+  border-right: 3px solid #3b82f6; padding-right: 10px; }
+
+/* ── Scenario rail (NOTATION §11c) ────────────────────────────────────────
+   A UC with more than one scenario (a CRUD "ניהול X" and its four operations)
+   shows a numbered rail with one flow at a time, the VP Flow-of-Events
+   presentation, matching the course's flow-of-events viewer. */
+.uc-sc-rail-title { font-size: 12px; color: #64748b; font-weight: 700; margin: 18px 0 8px; }
+.uc-sc-split { display: grid; grid-template-columns: 200px minmax(0, 1fr); gap: 14px;
+  align-items: start; }
+.uc-sc-rail { display: flex; flex-direction: column; gap: 6px; }
+.uc-sc-tab { appearance: none; text-align: start; border: 1px solid #cbd5e1;
+  background: #f8fafc; border-radius: 6px; padding: 7px 10px; cursor: pointer;
+  font-family: inherit; font-size: 13px; color: #334155; }
+.uc-sc-tab:hover { background: #eef2f7; }
+.uc-sc-tab[aria-selected="true"] { background: #e0f2fe; border-color: #0284c7;
+  color: #0c4a6e; font-weight: 600; }
+.uc-sc-tab .uc-sc-num { display: block; font-size: 10px; color: #64748b;
+  font-family: 'IBM Plex Mono', monospace; }
+.uc-sc-pane > h3 { margin-top: 0; }
+.uc-scenarios ol { margin: 0 0 14px; padding-right: 22px; }
+.uc-scenarios ol li { color: #1e293b; font-size: 13px; line-height: 1.9; }
+.step-actor { color: #1e40af; font-weight: 600; cursor: pointer; text-decoration: underline dotted; }
+.step-system { color: #475569; font-style: italic; }
+.step-include { color: #7c3aed; font-family: 'IBM Plex Mono', monospace; font-size: 11px; }
+.step-uc-ref { color: #7c3aed; cursor: pointer; text-decoration: underline; }
+
+/* ── Flow of events (§4.4a / NOTATION §11b) ──────────────────────────────
+   Step labels are printed by the JS, not by list-style, so the number a reader
+   sees always matches what an extension's "חזרה לשלב 2.1" points at. */
+.uc-scenarios ul.flow { list-style: none; margin: 0 0 14px; padding: 0; }
+.uc-scenarios ul.flow ul.flow { margin: 4px 0 6px; padding-right: 14px;
+  border-right: 2px solid #e2e8f0; }
+.flow-step { color: #1e293b; font-size: 13px; line-height: 1.9; }
+.step-label { display: inline-block; min-width: 34px; color: #64748b;
+  font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600; }
+
+/* loop / alt, control structures read as keywords, not as prose */
+.flow-loop > .ctrl-kw, .flow-alt > .ctrl-kw { font-weight: 700; font-size: 11px;
+  padding: 1px 7px; border-radius: 10px; letter-spacing: .02em; }
+.flow-loop > .ctrl-kw { color: #0369a1; background: #e0f2fe; }
+.flow-alt  > .ctrl-kw { color: #92400e; background: #fef3c7; }
+.ctrl-cond { color: #334155; font-style: italic; }
+.flow-loop > ul.flow { border-right-color: #7dd3fc; }
+.flow-alt  > ul.flow, .flow-branches { border-right-color: #fcd34d; }
+.flow-branches { list-style: none; margin: 4px 0 6px; padding-right: 14px;
+  border-right: 2px solid #fcd34d; }
+.flow-branch { font-size: 13px; line-height: 1.9; }
+.branch-label { color: #92400e; font-weight: 600; font-size: 12px;
+  background: #fffbeb; border: 1px solid #fde68a; border-radius: 4px; padding: 0 6px; }
+.flow-branch > ul.flow { border-right-color: #fde68a; }
+
+/* «extend» hook marker (§3.3), a step declaring an extension point */
+.ext-point-badge { font-size: 11.5px; color: #7c3aed; background: #f5f3ff;
+  border: 1px solid #ddd6fe; border-radius: 4px; padding: 1px 8px;
+  margin: 2px 0 2px 0; display: inline-block; line-height: 1.7; }
+.ext-point-cond { color: #6d28d9; font-size: 11px; }
+
+/* extensions, the not-happy path */
+.ext-holder { list-style: none; }
+.ext-list { list-style: none; margin: 2px 0 8px; padding-right: 34px; }
+.ext-inline, .ext-sub { list-style: none; color: #64748b; font-size: 12px;
+  padding-right: 24px; line-height: 1.7; }
+.ext-sub { padding-right: 0; border-right: 2px solid #fecaca; padding-right: 10px;
+  margin-bottom: 4px; }
+.ext-label { color: #b91c1c; min-width: 42px; }
+.ext-steps { list-style: none; margin: 2px 0; padding-right: 12px; }
+.ext-steps li { font-size: 12px; color: #64748b; line-height: 1.7; }
+.ext-steps .step-label { min-width: 48px; color: #94a3b8; }
+.ext-outcome { font-size: 11.5px; font-weight: 600; margin: 2px 0 2px 0;
+  padding-right: 12px; }
+.ext-resume { color: #0f766e; }
+.ext-terminate { color: #b91c1c; }
+.uc-prepostuser { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 18px;
+  margin: 18px 0 20px; }
+.uc-prepostuser > div { background: #f8fafc; border: 1px solid #e2e8f0;
+  border-radius: 8px; padding: 12px 14px; }
+.uc-prepostuser h4 { margin: 0 0 6px; font-size: 12px; color: #1e40af; font-weight: 600; }
+.uc-prepostuser ul { margin: 0; padding-right: 18px; font-size: 12px;
+  color: #334155; line-height: 1.7; }
+.uc-wireframe { border-top: 1px dashed #cbd5e1; padding-top: 16px; margin-top: 6px; }
+.uc-wireframe:empty, .uc-wireframe[hidden] { display: none; }
+
+/* ── Actor pulse ─────────────────────────────────────────────────────────── */
+.actor-pulse { animation: actor-pulse 0.6s ease-in-out 3; }
+@keyframes actor-pulse {
+  0%, 100% { filter: none; }
+  50%      { filter: drop-shadow(0 0 8px #3b82f6); }
+}
+
+/* ── Wireframe scoped theme (wf-*) ───────────────────────────────────────── */
+.wf-screen { background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px;
+  padding: 18px 20px; font-family: 'Noto Sans Hebrew', sans-serif;
+  color: #1e293b; direction: rtl; max-width: 760px; margin: 0 auto; }
+.wf-heading { margin: 0 0 14px; font-size: 15px; color: #1e40af; font-weight: 700;
+  border-bottom: 1px solid #e2e8f0; padding-bottom: 6px; }
+.wf-section { margin: 14px 0; }
+.wf-row { display: flex; gap: 10px; align-items: center; margin: 6px 0; }
+.wf-label { font-size: 12px; color: #475569; min-width: 120px; }
+.wf-input, .wf-textarea, .wf-select { flex: 1; background: #fff;
+  border: 1px solid #cbd5e1; border-radius: 4px; padding: 6px 8px;
+  font-size: 12px; color: #334155; }
+.wf-textarea { min-height: 60px; }
+.wf-table { width: 100%; border-collapse: collapse; margin: 10px 0; font-size: 12px; }
+.wf-table th, .wf-table td { border: 1px solid #cbd5e1; padding: 6px 8px; text-align: right; }
+.wf-table th { background: #e2e8f0; color: #1e40af; font-weight: 600; }
+.wf-actions { display: flex; gap: 8px; margin-top: 12px; justify-content: flex-start; }
+.wf-button { background: #fff; border: 1px solid #64748b; border-radius: 4px;
+  padding: 6px 14px; font-size: 12px; color: #334155; cursor: default; }
+.wf-primary { background: #1e40af; color: #fff; border-color: #1e40af; }
+.wf-image-box { border: 1px dashed #94a3b8; background: #f1f5f9; color: #64748b;
+  text-align: center; padding: 24px; border-radius: 4px; font-size: 12px; margin: 10px 0; }
+.wf-hint { font-size: 11px; color: #64748b; font-style: italic; margin: 6px 0; }
+.wf-badge { display: inline-block; background: #e0f2fe; color: #0369a1;
+  padding: 2px 8px; border-radius: 999px; font-size: 10px; font-weight: 600; }
+
+/* REQUIRED for tab switching: this sheet sets display:flex on .diagram-part,
+   which overrides the browser default [hidden]{display:none}. */
+[hidden] { display: none !important; }
+
+  </style>
+</head>
+<body>
+  <div class="solution-head">
+    <h1>פתרון שאלה 6, תרשים Use Case, מערכת לניהול פעילות השטח ביום הבחירות</h1>
+    <p>מודל פתרון להוראה, ניתוח ועיצוב מערכות מידע (364-1-1411), 2026 סמסטר קיץ מועד א'. לחיצה על Use Case פותחת את התיעוד המלא; לחיצה על שחקן מציגה תיאור. <b>ארבעה אזורי אחריות של אותה מערכת:</b> מוקד והסעות, משמרות וקלפיות, ניהול נתוני-אב, ותהליכים אוטומטיים וממשקים. <b>נקודות המפתח:</b> «include» ל"רישום שיחה" משתי השיחות (יוצאת ונכנסת), כי כל שיחה נרשמת תמיד; «extend» מ"פתיחת בקשת הסעה" אל שתי השיחות, בתנאי {התומך זקוק להסעה}, כי רק בחלק מהשיחות נפתחת בקשה; מערכת ועדת הבחירות היא שחקן «system» <b>יוזם</b>, ואין Use Case שבו המטה פונה אליה; ואין Use Cases לרכש כיבוד וציוד ולתשלום לספקים, שהם מחוץ להיקף שהוגדר בסיפור.</p>
+  </div>
+
+  <div class="tab-bar">
+    <button class="tab active" onclick="showDiagram(0)">מוקד והסעות</button>
+    <button class="tab" onclick="showDiagram(1)">משמרות וקלפיות</button>
+    <button class="tab" onclick="showDiagram(2)">ניהול נתוני-אב</button>
+    <button class="tab" onclick="showDiagram(3)">תהליכים אוטומטיים וממשקים</button>
+  </div>
+  <div class="split-rationale">פוצל לארבעה אזורי אחריות: 23 Use Cases &gt; סף 8. ניהול נתוני-האב מקבל תרשים משלו, והטריגרים שאין להם יוזם אנושי (ועדת הבחירות ושחקן הזמן) מקבלים תרשים משלהם.</div>
+  <div style="text-align:center;margin:8px 0;">
+    <button onclick="fixLayout(currentLayout())" class="fix-btn">Fix Layout</button>
+  </div>
+
+  <div class="diagram-part" id="diagram-0">
+    <svg id="diagram-svg-0" viewBox="0 0 1820 900" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <pattern id="dots0" width="24" height="24" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="0.8" fill="#cbd5e1"/></pattern>
+        <marker id="arrow-include0" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polyline points="0 0, 9 3.5, 0 7" fill="none" stroke="#7c3aed" stroke-width="1.2"/></marker>
+        <marker id="arrow-extend0" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polyline points="0 0, 9 3.5, 0 7" fill="none" stroke="#b45309" stroke-width="1.2"/></marker>
+      </defs>
+      <rect x="0" y="0" width="1820" height="900" fill="#f8fafc"/>
+      <rect x="0" y="0" width="1820" height="900" fill="url(#dots0)"/>
+
+      <rect class="system-boundary" x="380" y="70" width="1080" height="780" rx="12" fill="#ffffff" stroke="#3b82f6" stroke-width="2.5"/>
+      <rect x="380" y="70" width="1080" height="44" rx="12" fill="#1e40af"/>
+      <rect x="380" y="96" width="1080" height="18" fill="#1e40af"/>
+      <text x="920" y="99" text-anchor="middle" fill="#ffffff" font-size="14" font-weight="700" font-family="'Noto Sans Hebrew',sans-serif">מערכת פעילות השטח, מוקד והסעות</text>
+
+      <g id="assocLayer0">
+        <line class="assoc-line" data-conn-from="caller" data-conn-to="uc-out-call" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+        <line class="assoc-line" data-conn-from="caller" data-conn-to="uc-in-call" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+        <line class="assoc-line" data-conn-from="caller" data-conn-to="uc-cancel-ride" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+        <line class="assoc-line" data-conn-from="rideCoordinator" data-conn-to="uc-assign-driver" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+        <line class="assoc-line" data-conn-from="rideCoordinator" data-conn-to="uc-coord-handle" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+        <line class="assoc-line" data-conn-from="driver" data-conn-to="uc-driver-respond" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+        <line class="assoc-line" data-conn-from="driver" data-conn-to="uc-report-pickup" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+        <line class="assoc-line" data-conn-from="shiftManager" data-conn-to="uc-override-status" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+      </g>
+
+      <g id="includeLayer0">
+        <line class="include-line" data-conn-from="uc-out-call" data-conn-to="uc-record-call" x1="0" y1="0" x2="0" y2="0" stroke="#7c3aed" stroke-width="1.6" stroke-dasharray="6 4" marker-end="url(#arrow-include0)"/>
+        <text data-label-for="uc-out-call uc-record-call" x="0" y="0" text-anchor="middle" font-size="9.5" fill="#7c3aed" font-family="'IBM Plex Mono',monospace">«include»</text>
+        <line class="include-line" data-conn-from="uc-in-call" data-conn-to="uc-record-call" x1="0" y1="0" x2="0" y2="0" stroke="#7c3aed" stroke-width="1.6" stroke-dasharray="6 4" marker-end="url(#arrow-include0)"/>
+        <text data-label-for="uc-in-call uc-record-call" x="0" y="0" text-anchor="middle" font-size="9.5" fill="#7c3aed" font-family="'IBM Plex Mono',monospace">«include»</text>
+        <line class="include-line" data-conn-from="uc-open-ride" data-conn-to="uc-out-call" x1="0" y1="0" x2="0" y2="0" stroke="#b45309" stroke-width="1.6" stroke-dasharray="6 4" marker-end="url(#arrow-extend0)"/>
+        <text data-label-for="uc-open-ride uc-out-call" x="0" y="0" text-anchor="middle" font-size="9.5" fill="#b45309" font-family="'IBM Plex Mono',monospace">«extend»</text>
+        <line class="include-line" data-conn-from="uc-open-ride" data-conn-to="uc-in-call" x1="0" y1="0" x2="0" y2="0" stroke="#b45309" stroke-width="1.6" stroke-dasharray="6 4" marker-end="url(#arrow-extend0)"/>
+        <text data-label-for="uc-open-ride uc-in-call" x="0" y="0" text-anchor="middle" font-size="9.5" fill="#b45309" font-family="'IBM Plex Mono',monospace">«extend»</text>
+      </g>
+
+      <g id="ucLayer0">
+        <g class="uc-group" id="uc-group-uc-out-call" data-uc-id="uc-out-call" onclick="showDesc('uc-out-call','uc',event)" style="cursor:pointer"><ellipse cx="580" cy="180" rx="95" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/><text x="580" y="184" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">ביצוע שיחה יוצאת לתומך</text></g>
+        <g class="uc-group" id="uc-group-uc-cancel-ride" data-uc-id="uc-cancel-ride" onclick="showDesc('uc-cancel-ride','uc',event)" style="cursor:pointer"><ellipse cx="580" cy="330" rx="85" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/><text x="580" y="334" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">ביטול בקשת הסעה</text></g>
+        <g class="uc-group" id="uc-group-uc-in-call" data-uc-id="uc-in-call" onclick="showDesc('uc-in-call','uc',event)" style="cursor:pointer"><ellipse cx="580" cy="480" rx="95" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/><text x="580" y="484" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">טיפול בשיחה נכנסת</text></g>
+        <g class="uc-group" id="uc-group-uc-record-call" data-uc-id="uc-record-call" onclick="showDesc('uc-record-call','uc',event)" style="cursor:pointer"><ellipse cx="900" cy="255" rx="70" ry="28" fill="#ece3fb" stroke="#7c3aed" stroke-width="2"/><text x="900" y="259" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">רישום שיחה</text></g>
+        <g class="uc-group" id="uc-group-uc-open-ride" data-uc-id="uc-open-ride" onclick="showDesc('uc-open-ride','uc',event)" style="cursor:pointer"><ellipse cx="900" cy="420" rx="82" ry="28" fill="#ece3fb" stroke="#7c3aed" stroke-width="2"/><text x="900" y="424" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">פתיחת בקשת הסעה</text></g>
+        <g class="uc-group" id="uc-group-uc-assign-driver" data-uc-id="uc-assign-driver" onclick="showDesc('uc-assign-driver','uc',event)" style="cursor:pointer"><ellipse cx="1240" cy="180" rx="95" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/><text x="1240" y="184" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">שיבוץ נהג לבקשת הסעה</text></g>
+        <g class="uc-group" id="uc-group-uc-coord-handle" data-uc-id="uc-coord-handle" onclick="showDesc('uc-coord-handle','uc',event)" style="cursor:pointer"><ellipse cx="1240" cy="320" rx="110" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/><text x="1240" y="324" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">טיפול אישי בבקשה שהוסלמה</text></g>
+        <g class="uc-group" id="uc-group-uc-driver-respond" data-uc-id="uc-driver-respond" onclick="showDesc('uc-driver-respond','uc',event)" style="cursor:pointer"><ellipse cx="1240" cy="460" rx="100" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/><text x="1240" y="464" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">אישור או דחיית שיבוץ</text></g>
+        <g class="uc-group" id="uc-group-uc-report-pickup" data-uc-id="uc-report-pickup" onclick="showDesc('uc-report-pickup','uc',event)" style="cursor:pointer"><ellipse cx="1240" cy="600" rx="100" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/><text x="1240" y="604" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">דיווח תוצאת האיסוף</text></g>
+        <g class="uc-group" id="uc-group-uc-override-status" data-uc-id="uc-override-status" onclick="showDesc('uc-override-status','uc',event)" style="cursor:pointer"><ellipse cx="1240" cy="750" rx="110" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/><text x="1240" y="754" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">שינוי סטטוס של בקשת הסעה</text></g>
+      </g>
+
+      <g id="actorLayer0">
+        <g id="actor-group-caller" data-actor-id="caller" onclick="showDesc('caller','actor',event)" style="cursor:pointer" transform="translate(290,330)">
+          <circle cx="0" cy="-60" r="14" fill="#e0f0ff" stroke="#334155" stroke-width="2"/><line x1="0" y1="-46" x2="0" y2="-10" stroke="#334155" stroke-width="2"/><line x1="-18" y1="-36" x2="18" y2="-36" stroke="#334155" stroke-width="2"/><line x1="0" y1="-10" x2="-14" y2="14" stroke="#334155" stroke-width="2"/><line x1="0" y1="-10" x2="14" y2="14" stroke="#334155" stroke-width="2"/>
+          <text x="0" y="30" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b" font-family="'Noto Sans Hebrew',sans-serif">מוקדן</text>
+        </g>
+        <g id="actor-group-rideCoordinator" data-actor-id="rideCoordinator" onclick="showDesc('rideCoordinator','actor',event)" style="cursor:pointer" transform="translate(1640,250)">
+          <circle cx="0" cy="-60" r="14" fill="#e0f0ff" stroke="#334155" stroke-width="2"/><line x1="0" y1="-46" x2="0" y2="-10" stroke="#334155" stroke-width="2"/><line x1="-18" y1="-36" x2="18" y2="-36" stroke="#334155" stroke-width="2"/><line x1="0" y1="-10" x2="-14" y2="14" stroke="#334155" stroke-width="2"/><line x1="0" y1="-10" x2="14" y2="14" stroke="#334155" stroke-width="2"/>
+          <text x="0" y="30" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b" font-family="'Noto Sans Hebrew',sans-serif">רכז הסעות</text>
+        </g>
+        <g id="actor-group-driver" data-actor-id="driver" onclick="showDesc('driver','actor',event)" style="cursor:pointer" transform="translate(1640,530)">
+          <circle cx="0" cy="-60" r="14" fill="#e0f0ff" stroke="#334155" stroke-width="2"/><line x1="0" y1="-46" x2="0" y2="-10" stroke="#334155" stroke-width="2"/><line x1="-18" y1="-36" x2="18" y2="-36" stroke="#334155" stroke-width="2"/><line x1="0" y1="-10" x2="-14" y2="14" stroke="#334155" stroke-width="2"/><line x1="0" y1="-10" x2="14" y2="14" stroke="#334155" stroke-width="2"/>
+          <text x="0" y="30" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b" font-family="'Noto Sans Hebrew',sans-serif">נהג מתנדב</text>
+        </g>
+        <g id="actor-group-shiftManager" data-actor-id="shiftManager" onclick="showDesc('shiftManager','actor',event)" style="cursor:pointer" transform="translate(1640,760)">
+          <circle cx="0" cy="-60" r="14" fill="#e0f0ff" stroke="#334155" stroke-width="2"/><line x1="0" y1="-46" x2="0" y2="-10" stroke="#334155" stroke-width="2"/><line x1="-18" y1="-36" x2="18" y2="-36" stroke="#334155" stroke-width="2"/><line x1="0" y1="-10" x2="-14" y2="14" stroke="#334155" stroke-width="2"/><line x1="0" y1="-10" x2="14" y2="14" stroke="#334155" stroke-width="2"/>
+          <text x="0" y="30" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b" font-family="'Noto Sans Hebrew',sans-serif">מנהל משמרת</text>
+        </g>
+      </g>
+    </svg>
+  </div>
+
+  <div class="diagram-part" id="diagram-1" hidden>
+    <svg id="diagram-svg-1" viewBox="0 0 1500 660" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <pattern id="dots1" width="24" height="24" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="0.8" fill="#cbd5e1"/></pattern>
+      </defs>
+      <rect x="0" y="0" width="1500" height="660" fill="#f8fafc"/>
+      <rect x="0" y="0" width="1500" height="660" fill="url(#dots1)"/>
+
+      <rect class="system-boundary" x="380" y="70" width="820" height="540" rx="12" fill="#ffffff" stroke="#3b82f6" stroke-width="2.5"/>
+      <rect x="380" y="70" width="820" height="44" rx="12" fill="#1e40af"/>
+      <rect x="380" y="96" width="820" height="18" fill="#1e40af"/>
+      <text x="790" y="99" text-anchor="middle" fill="#ffffff" font-size="14" font-weight="700" font-family="'Noto Sans Hebrew',sans-serif">מערכת פעילות השטח, משמרות וקלפיות</text>
+
+      <g id="assocLayer1">
+        <line class="assoc-line" data-conn-from="shiftManager" data-conn-to="uc-build-shifts" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+        <line class="assoc-line" data-conn-from="shiftManager" data-conn-to="uc-record-attendance" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+        <line class="assoc-line" data-conn-from="shiftManager" data-conn-to="uc-status-board" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+        <line class="assoc-line" data-conn-from="shiftManager" data-conn-to="uc-mark-priority" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+        <line class="assoc-line" data-conn-from="observer" data-conn-to="uc-report-turnout" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+      </g>
+
+      <g id="ucLayer1">
+        <g class="uc-group" id="uc-group-uc-build-shifts" data-uc-id="uc-build-shifts" onclick="showDesc('uc-build-shifts','uc',event)" style="cursor:pointer"><ellipse cx="600" cy="180" rx="90" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/><text x="600" y="184" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">בניית לוח המשמרות</text></g>
+        <g class="uc-group" id="uc-group-uc-record-attendance" data-uc-id="uc-record-attendance" onclick="showDesc('uc-record-attendance','uc',event)" style="cursor:pointer"><ellipse cx="600" cy="330" rx="120" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/><text x="600" y="334" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">רישום התייצבות וסיום בפועל</text></g>
+        <g class="uc-group" id="uc-group-uc-status-board" data-uc-id="uc-status-board" onclick="showDesc('uc-status-board','uc',event)" style="cursor:pointer"><ellipse cx="600" cy="480" rx="90" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/><text x="600" y="484" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">צפייה בלוח המצב</text></g>
+        <g class="uc-group" id="uc-group-uc-mark-priority" data-uc-id="uc-mark-priority" onclick="showDesc('uc-mark-priority','uc',event)" style="cursor:pointer"><ellipse cx="990" cy="250" rx="95" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/><text x="990" y="254" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">סימון קלפי בעדיפות</text></g>
+        <g class="uc-group" id="uc-group-uc-report-turnout" data-uc-id="uc-report-turnout" onclick="showDesc('uc-report-turnout','uc',event)" style="cursor:pointer"><ellipse cx="990" cy="470" rx="115" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/><text x="990" y="474" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">דיווח מספר המצביעים בקלפי</text></g>
+      </g>
+
+      <g id="actorLayer1">
+        <g id="actor-group-shiftManager" data-actor-id="shiftManager" onclick="showDesc('shiftManager','actor',event)" style="cursor:pointer" transform="translate(290,330)">
+          <circle cx="0" cy="-60" r="14" fill="#e0f0ff" stroke="#334155" stroke-width="2"/><line x1="0" y1="-46" x2="0" y2="-10" stroke="#334155" stroke-width="2"/><line x1="-18" y1="-36" x2="18" y2="-36" stroke="#334155" stroke-width="2"/><line x1="0" y1="-10" x2="-14" y2="14" stroke="#334155" stroke-width="2"/><line x1="0" y1="-10" x2="14" y2="14" stroke="#334155" stroke-width="2"/>
+          <text x="0" y="30" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b" font-family="'Noto Sans Hebrew',sans-serif">מנהל משמרת</text>
+        </g>
+        <g id="actor-group-observer" data-actor-id="observer" onclick="showDesc('observer','actor',event)" style="cursor:pointer" transform="translate(1300,470)">
+          <circle cx="0" cy="-60" r="14" fill="#e0f0ff" stroke="#334155" stroke-width="2"/><line x1="0" y1="-46" x2="0" y2="-10" stroke="#334155" stroke-width="2"/><line x1="-18" y1="-36" x2="18" y2="-36" stroke="#334155" stroke-width="2"/><line x1="0" y1="-10" x2="-14" y2="14" stroke="#334155" stroke-width="2"/><line x1="0" y1="-10" x2="14" y2="14" stroke="#334155" stroke-width="2"/>
+          <text x="0" y="30" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b" font-family="'Noto Sans Hebrew',sans-serif">משקיף קלפי</text>
+        </g>
+      </g>
+    </svg>
+  </div>
+
+  <div class="diagram-part" id="diagram-2" hidden>
+    <svg id="diagram-svg-2" viewBox="0 0 1100 620" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <pattern id="dots2" width="24" height="24" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="0.8" fill="#cbd5e1"/></pattern>
+      </defs>
+      <rect x="0" y="0" width="1100" height="620" fill="#f8fafc"/>
+      <rect x="0" y="0" width="1100" height="620" fill="url(#dots2)"/>
+
+      <rect class="system-boundary" x="380" y="70" width="460" height="500" rx="12" fill="#ffffff" stroke="#3b82f6" stroke-width="2.5"/>
+      <rect x="380" y="70" width="460" height="44" rx="12" fill="#1e40af"/>
+      <rect x="380" y="96" width="460" height="18" fill="#1e40af"/>
+      <text x="610" y="99" text-anchor="middle" fill="#ffffff" font-size="14" font-weight="700" font-family="'Noto Sans Hebrew',sans-serif">מערכת פעילות השטח, ניהול נתוני-אב</text>
+
+      <g id="assocLayer2">
+        <line class="assoc-line" data-conn-from="shiftManager" data-conn-to="uc-manage-volunteers" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+        <line class="assoc-line" data-conn-from="shiftManager" data-conn-to="uc-manage-roles" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+        <line class="assoc-line" data-conn-from="shiftManager" data-conn-to="uc-manage-stations" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+      </g>
+
+      <g id="ucLayer2">
+        <g class="uc-group" id="uc-group-uc-manage-volunteers" data-uc-id="uc-manage-volunteers" onclick="showDesc('uc-manage-volunteers','uc',event)" style="cursor:pointer"><ellipse cx="610" cy="180" rx="90" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/><text x="610" y="184" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">ניהול מתנדבים</text></g>
+        <g class="uc-group" id="uc-group-uc-manage-roles" data-uc-id="uc-manage-roles" onclick="showDesc('uc-manage-roles','uc',event)" style="cursor:pointer"><ellipse cx="610" cy="320" rx="105" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/><text x="610" y="324" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">ניהול תפקידים והרשאות</text></g>
+        <g class="uc-group" id="uc-group-uc-manage-stations" data-uc-id="uc-manage-stations" onclick="showDesc('uc-manage-stations','uc',event)" style="cursor:pointer"><ellipse cx="610" cy="460" rx="110" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/><text x="610" y="464" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">ניהול קלפיות ויעדי הצבעה</text></g>
+      </g>
+
+      <g id="actorLayer2">
+        <g id="actor-group-shiftManager" data-actor-id="shiftManager" onclick="showDesc('shiftManager','actor',event)" style="cursor:pointer" transform="translate(290,320)">
+          <circle cx="0" cy="-60" r="14" fill="#e0f0ff" stroke="#334155" stroke-width="2"/><line x1="0" y1="-46" x2="0" y2="-10" stroke="#334155" stroke-width="2"/><line x1="-18" y1="-36" x2="18" y2="-36" stroke="#334155" stroke-width="2"/><line x1="0" y1="-10" x2="-14" y2="14" stroke="#334155" stroke-width="2"/><line x1="0" y1="-10" x2="14" y2="14" stroke="#334155" stroke-width="2"/>
+          <text x="0" y="30" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b" font-family="'Noto Sans Hebrew',sans-serif">מנהל משמרת</text>
+        </g>
+      </g>
+    </svg>
+  </div>
+
+  <div class="diagram-part" id="diagram-3" hidden>
+    <svg id="diagram-svg-3" viewBox="0 0 1200 740" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <pattern id="dots3" width="24" height="24" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="0.8" fill="#cbd5e1"/></pattern>
+      </defs>
+      <rect x="0" y="0" width="1200" height="740" fill="#f8fafc"/>
+      <rect x="0" y="0" width="1200" height="740" fill="url(#dots3)"/>
+
+      <rect class="system-boundary" x="380" y="70" width="560" height="620" rx="12" fill="#ffffff" stroke="#3b82f6" stroke-width="2.5"/>
+      <rect x="380" y="70" width="560" height="44" rx="12" fill="#1e40af"/>
+      <rect x="380" y="96" width="560" height="18" fill="#1e40af"/>
+      <text x="660" y="99" text-anchor="middle" fill="#ffffff" font-size="14" font-weight="700" font-family="'Noto Sans Hebrew',sans-serif">מערכת פעילות השטח, אוטומציה וממשקים</text>
+
+      <g id="assocLayer3">
+        <line class="assoc-line" data-conn-from="electionCommittee" data-conn-to="uc-import-register" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+        <line class="conn-hitbox" data-conn-id="a-committee-register" data-hitbox-from="electionCommittee" data-hitbox-to="uc-import-register" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('a-committee-register','assoc',event)"/>
+        <line class="assoc-line" data-conn-from="electionCommittee" data-conn-to="uc-import-updates" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+        <line class="conn-hitbox" data-conn-id="a-committee-updates" data-hitbox-from="electionCommittee" data-hitbox-to="uc-import-updates" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('a-committee-updates','assoc',event)"/>
+        <line class="assoc-line" data-conn-from="timeActor" data-conn-to="uc-confirm-timeout" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+        <line class="conn-hitbox" data-conn-id="a-time-timeout" data-hitbox-from="timeActor" data-hitbox-to="uc-confirm-timeout" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('a-time-timeout','assoc',event)"/>
+        <line class="assoc-line" data-conn-from="timeActor" data-conn-to="uc-close-day" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+        <line class="assoc-line" data-conn-from="timeActor" data-conn-to="uc-purge" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+      </g>
+
+      <g id="ucLayer3">
+        <g class="uc-group" id="uc-group-uc-import-register" data-uc-id="uc-import-register" onclick="showDesc('uc-import-register','uc',event)" style="cursor:pointer"><ellipse cx="560" cy="170" rx="100" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/><text x="560" y="174" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">קליטת פנקס הבוחרים</text></g>
+        <g class="uc-group" id="uc-group-uc-import-updates" data-uc-id="uc-import-updates" onclick="showDesc('uc-import-updates','uc',event)" style="cursor:pointer"><ellipse cx="560" cy="290" rx="110" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/><text x="560" y="294" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">קליטת עדכון הצבעה רשמי</text></g>
+        <g class="uc-group" id="uc-group-uc-confirm-timeout" data-uc-id="uc-confirm-timeout" onclick="showDesc('uc-confirm-timeout','uc',event)" style="cursor:pointer"><ellipse cx="740" cy="400" rx="120" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/><text x="740" y="404" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">טיפול בשיבוץ שלא אושר בזמן</text></g>
+        <g class="uc-group" id="uc-group-uc-close-day" data-uc-id="uc-close-day" onclick="showDesc('uc-close-day','uc',event)" style="cursor:pointer"><ellipse cx="720" cy="510" rx="130" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/><text x="720" y="514" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">העברת הבקשות לארכיון בסגירת הקלפיות</text></g>
+        <g class="uc-group" id="uc-group-uc-purge" data-uc-id="uc-purge" onclick="showDesc('uc-purge','uc',event)" style="cursor:pointer"><ellipse cx="720" cy="620" rx="130" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/><text x="720" y="624" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">מחיקת רשומות בתום תקופת השמירה</text></g>
+      </g>
+
+      <g id="actorLayer3">
+        <g id="actor-group-electionCommittee" data-actor-id="electionCommittee" onclick="showDesc('electionCommittee','actor',event)" style="cursor:pointer" transform="translate(280,230)">
+          <circle cx="0" cy="-60" r="14" fill="#fef3c7" stroke="#334155" stroke-width="2"/><line x1="0" y1="-46" x2="0" y2="-10" stroke="#334155" stroke-width="2"/><line x1="-18" y1="-36" x2="18" y2="-36" stroke="#334155" stroke-width="2"/><line x1="0" y1="-10" x2="-14" y2="14" stroke="#334155" stroke-width="2"/><line x1="0" y1="-10" x2="14" y2="14" stroke="#334155" stroke-width="2"/>
+          <text x="0" y="30" text-anchor="middle" font-size="9" font-style="italic" fill="#64748b" font-family="'IBM Plex Mono',monospace">«system»</text>
+          <text x="0" y="44" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b" font-family="'Noto Sans Hebrew',sans-serif">מערכת ועדת הבחירות</text>
+          <text x="0" y="58" text-anchor="middle" font-size="9.5" fill="#64748b" font-family="'Noto Sans Hebrew',sans-serif">(חיצונית, יוזמת)</text>
+        </g>
+        <g id="actor-group-timeActor" data-actor-id="timeActor" onclick="showDesc('timeActor','actor',event)" style="cursor:pointer" transform="translate(1040,510)">
+          <circle cx="0" cy="-60" r="14" fill="#fef3c7" stroke="#334155" stroke-width="2"/><line x1="0" y1="-46" x2="0" y2="-10" stroke="#334155" stroke-width="2"/><line x1="-18" y1="-36" x2="18" y2="-36" stroke="#334155" stroke-width="2"/><line x1="0" y1="-10" x2="-14" y2="14" stroke="#334155" stroke-width="2"/><line x1="0" y1="-10" x2="14" y2="14" stroke="#334155" stroke-width="2"/>
+          <text x="0" y="30" text-anchor="middle" font-size="9" font-style="italic" fill="#64748b" font-family="'IBM Plex Mono',monospace">«system»</text>
+          <text x="0" y="44" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b" font-family="'Noto Sans Hebrew',sans-serif">שחקן זמן</text>
+          <text x="0" y="58" text-anchor="middle" font-size="9.5" fill="#64748b" font-family="'Noto Sans Hebrew',sans-serif">(טריגר תזמון)</text>
+        </g>
+      </g>
+    </svg>
+  </div>
+
+  <div id="assumptions-panel" class="assumptions-panel" hidden>
+    <div class="assumptions-col" id="assumptions-col"><h3>הנחות</h3><ul id="assumptions-list"></ul></div>
+    <div class="assumptions-col" id="open-questions-col"><h3>שאלות פתוחות</h3><ul id="open-questions-list"></ul></div>
+  </div>
+
+  <div id="user-stories-panel" class="user-stories-panel" hidden>
+    <h3>סיפורי משתמש</h3>
+    <ul id="user-stories-list"></ul>
+  </div>
+
+  <div id="uc-modal" class="uc-modal" hidden role="dialog" aria-modal="true">
+    <div class="uc-modal-backdrop" onclick="closeUcModal()"></div>
+    <div class="uc-modal-body"></div>
+  </div>
+
+  <button class="vp-export-btn" onclick="exportXMI()">Download .xmi (Visual Paradigm)</button>
+
+  <script>
+  var actorDescriptions = {
+  "caller": {
+    "name": "מוקדן",
+    "desc": "מתנדב הרשום בתפקיד מוקדן. מבצע שיחות יוצאות לתומכים שטרם הצביעו ומקבל שיחות נכנסות. כשמתברר בשיחה שהתומך זקוק להסעה, הוא פותח עבורו בקשת הסעה, ורשאי לבטל בקשה כל עוד לא שובץ לה נהג."
+  },
+  "rideCoordinator": {
+    "name": "רכז הסעות",
+    "desc": "משבץ נהג מתנדב לכל בקשת הסעה הממתינה לשיבוץ, ומטפל אישית בבקשה שנדחתה או לא אושרה בשני סבבי שיבוץ."
+  },
+  "driver": {
+    "name": "נהג מתנדב",
+    "desc": "מאשר או דוחה שיבוץ שקיבל, יוצא לאיסוף ומדווח אם התומך הגיע לקלפי או לא נמצא בכתובת. מתנדב יכול להיות גם נהג וגם משקיף: זה אותו אדם הנושא שני תפקידים, ולכן הוא מופיע בשני קווי אסוציאציה ולא כשחקן נוסף."
+  },
+  "observer": {
+    "name": "משקיף קלפי",
+    "desc": "מדווח כל שעה כמה מצביעים נספרו בקלפי שלו."
+  },
+  "shiftManager": {
+    "name": "מנהל משמרת",
+    "desc": "בונה את לוח המשמרות, רושם התייצבות וסיום בפועל, עוקב אחר לוח המצב, מסמן קלפי בעדיפות, ורשאי לשנות כל סטטוס של בקשת הסעה בכל שלב. בהיעדר מנהל מערכת בסיפור, הוא גם מנהל את נתוני-האב."
+  },
+  "electionCommittee": {
+    "name": "מערכת ועדת הבחירות «system»",
+    "desc": "מערכת חיצונית. היא שולחת את פנקס הבוחרים עם פתיחת הקלפיות ומעבירה עדכוני הצבעה רשמיים בעיתוי שהיא קובעת. המטה אינו יכול לפנות אליה או לבקש ממנה מידע, ולכן היא שחקן יוזם בלבד."
+  },
+  "timeActor": {
+    "name": "שחקן זמן «system»",
+    "desc": "שעון המערכת. אינו משתמש אנושי. מפעיל את הטיפול בשיבוץ שלא אושר בזמן, את סגירת יום הפעילות בסגירת הקלפיות, ואת מחיקת הרשומות בתום תקופת השמירה."
+  }
+};
+
+  var assocDescriptions = {
+  "a-committee-register": {
+    "name": "מערכת ועדת הבחירות - קליטת פנקס הבוחרים",
+    "desc": "הוועדה היא השחקן <b>היוזם</b>: היא שולחת את הפנקס עם פתיחת הקלפיות. אין בתרשים Use Case שבו המטה מבקש ממנה מידע."
+  },
+  "a-committee-updates": {
+    "name": "מערכת ועדת הבחירות - קליטת עדכון הצבעה רשמי",
+    "desc": "הוועדה היא השחקן <b>היוזם</b> והיא שקובעת את העיתוי. לכן הקליטה אינה תלויה בשחקן זמן ואינה מופעלת בידי משתמש של המטה: הטריגר נתון כולו בידי הגורם החיצוני."
+  },
+  "a-time-timeout": {
+    "name": "שחקן זמן - טיפול בשיבוץ שלא אושר בזמן",
+    "desc": "כשחולף זמן האישור והנהג לא אישר, המערכת מחזירה את הבקשה להמתנה לשיבוץ, או מעבירה אותה לטיפול אישי של הרכז לאחר הסבב השני. טריגר אחד, תגובה אוטומטית אחת, ולכן Use Case אחד."
+  }
+};
+
+  var useCaseDocs = {
+  "uc-out-call": {
+    "id": "uc-out-call",
+    "name": "ביצוע שיחה יוצאת לתומך",
+    "primaryActor": "caller",
+    "secondaryActors": [],
+    "description": "המוקדן בוחר תומך שטרם הצביע ואינו מסומן כלא זמין, ומתקשר אליו. כל שיחה נרשמת (include), ואם מתברר שהתומך זקוק להסעה נפתחת עבורו בקשת הסעה (extend).",
+    "preconditions": [
+      "המוקדן מזוהה במערכת; קיים תומך שטרם הצביע ואינו מסומן כלא זמין."
+    ],
+    "postconditions": [
+      "השיחה נרשמה עם מועד, מבצע ותוצאה."
+    ],
+    "scenarios": [
+      {
+        "id": "sc-happy",
+        "name": "מסלול מרכזי",
+        "flow": [
+          {
+            "kind": "system",
+            "text": "מציג למוקדן את התומך הבא לשיחה מבין מי שטרם הצביעו ואינם מסומנים כלא זמינים"
+          },
+          {
+            "kind": "actor",
+            "actor": "caller",
+            "text": "מתקשר לתומך"
+          },
+          {
+            "kind": "include",
+            "uc": "uc-record-call",
+            "text": "רישום השיחה ותוצאתה"
+          }
+        ],
+        "extensions": [
+          {
+            "at": 3,
+            "text": "נקודת הרחבה \"בירור צורך בהסעה\": אם התומך זקוק להסעה, מופעל Use Case פתיחת בקשת הסעה."
+          }
+        ]
+      }
+    ],
+    "userStories": [
+      {
+        "role": "מוקדן",
+        "want": "לקבל את התומך הבא שטרם הצביע ואינו מסומן כלא זמין",
+        "so": "לא אתקשר פעמיים לאותו אדם ולא אבזבז שיחות על מי שכבר הצביע"
+      }
+    ]
+  },
+  "uc-in-call": {
+    "id": "uc-in-call",
+    "name": "טיפול בשיחה נכנסת",
+    "primaryActor": "caller",
+    "secondaryActors": [],
+    "description": "תומך מתקשר למוקד. המוקדן מאתר אותו במערכת ומטפל בפנייה. כל שיחה נרשמת (include), ואם מתברר שהתומך זקוק להסעה נפתחת עבורו בקשת הסעה (extend).",
+    "preconditions": [
+      "המוקדן מזוהה במערכת."
+    ],
+    "postconditions": [
+      "השיחה נרשמה עם מועד, מבצע ותוצאה."
+    ],
+    "scenarios": [
+      {
+        "id": "sc-happy",
+        "name": "מסלול מרכזי",
+        "flow": [
+          {
+            "kind": "actor",
+            "actor": "caller",
+            "text": "עונה לשיחה ומאתר את התומך לפי הטלפון או השם"
+          },
+          {
+            "kind": "system",
+            "text": "מציג את פרטי התומך, את הקלפי שלו ואת סטטוס ההצבעה"
+          },
+          {
+            "kind": "include",
+            "uc": "uc-record-call",
+            "text": "רישום השיחה ותוצאתה"
+          }
+        ],
+        "extensions": [
+          {
+            "at": 3,
+            "text": "נקודת הרחבה \"בירור צורך בהסעה\": אם התומך זקוק להסעה, מופעל Use Case פתיחת בקשת הסעה."
+          }
+        ]
+      }
+    ],
+    "userStories": []
+  },
+  "uc-record-call": {
+    "id": "uc-record-call",
+    "name": "רישום שיחה",
+    "primaryActor": "",
+    "secondaryActors": [],
+    "description": "התנהגות משותפת המתבצעת תמיד, בכל שיחה, יוצאת או נכנסת: רישום המועד, מי ביצע את השיחה ומה הייתה תוצאתה. כאן גם נאכף הכלל: לאחר שלוש שיחות ללא מענה מסומן התומך כלא זמין, ואין מתקשרים אליו שוב באותו יום.",
+    "preconditions": [
+      "מתקיימת שיחה עם תומך."
+    ],
+    "postconditions": [
+      "נשמרה רשומת שיחה; תומך שצבר שלוש שיחות ללא מענה סומן כלא זמין."
+    ],
+    "scenarios": [
+      {
+        "id": "sc-happy",
+        "name": "מסלול מרכזי",
+        "flow": [
+          {
+            "kind": "actor",
+            "actor": "caller",
+            "text": "בוחר את תוצאת השיחה"
+          },
+          {
+            "kind": "system",
+            "text": "שומר את מועד השיחה, את המוקדן שביצע אותה ואת התוצאה"
+          }
+        ],
+        "extensions": [
+          {
+            "at": 2,
+            "text": "אם זו השיחה השלישית ללא מענה לאותו תומך באותו יום, המערכת מסמנת אותו כלא זמין ומוציאה אותו מרשימת השיחות היוצאות."
+          }
+        ]
+      }
+    ],
+    "userStories": []
+  },
+  "uc-open-ride": {
+    "id": "uc-open-ride",
+    "name": "פתיחת בקשת הסעה",
+    "primaryActor": "",
+    "secondaryActors": [],
+    "description": "מרחיבה (extend) את שתי השיחות: מתבצעת רק כשמתברר בשיחה שהתומך זקוק להסעה. נפתחת בקשה הנושאת מספר בקשה, כתובת איסוף, מספר נוסעים ושעה מבוקשת, והיא ממתינה לשיבוץ.",
+    "preconditions": [
+      "מתקיימת שיחה עם תומך, והתברר שהוא זקוק להסעה."
+    ],
+    "postconditions": [
+      "נוצרה בקשת הסעה במצב \"ממתינה לשיבוץ\", המקושרת לשיחה שבה נפתחה."
+    ],
+    "scenarios": [
+      {
+        "id": "sc-happy",
+        "name": "מסלול מרכזי",
+        "flow": [
+          {
+            "kind": "actor",
+            "actor": "caller",
+            "text": "מזין כתובת איסוף, מספר נוסעים ושעה מבוקשת"
+          },
+          {
+            "kind": "system",
+            "text": "מנפיק מספר בקשה ושומר את הבקשה במצב \"ממתינה לשיבוץ\""
+          }
+        ],
+        "extensions": [
+          {
+            "at": 2,
+            "text": "אם הקלפי של התומך מסומנת בעדיפות, הבקשה מוצגת לרכז ההסעות בראש התור."
+          }
+        ]
+      }
+    ],
+    "userStories": [
+      {
+        "role": "מוקדן",
+        "want": "לפתוח בקשת הסעה מתוך השיחה עצמה",
+        "so": "הבקשה לא תלך לאיבוד בין הטלפון לגיליון"
+      }
+    ]
+  },
+  "uc-cancel-ride": {
+    "id": "uc-cancel-ride",
+    "name": "ביטול בקשת הסעה",
+    "primaryActor": "caller",
+    "secondaryActors": [],
+    "description": "המוקדן מבטל בקשת הסעה, למשל כשהתומך הודיע שאינו זקוק לה עוד. מותר רק כל עוד לא שובץ לבקשה נהג.",
+    "preconditions": [
+      "קיימת בקשת הסעה שטרם שובץ לה נהג."
+    ],
+    "postconditions": [
+      "הבקשה עברה למצב \"בוטלה\"."
+    ],
+    "scenarios": [
+      {
+        "id": "sc-happy",
+        "name": "מסלול מרכזי",
+        "flow": [
+          {
+            "kind": "actor",
+            "actor": "caller",
+            "text": "בוחר את הבקשה ומבקש לבטלה"
+          },
+          {
+            "kind": "system",
+            "text": "בודק שטרם שובץ לבקשה נהג"
+          },
+          {
+            "kind": "system",
+            "text": "מעביר את הבקשה למצב \"בוטלה\""
+          }
+        ],
+        "extensions": [
+          {
+            "at": 2,
+            "text": "אם כבר שובץ נהג, הביטול נחסם בפני המוקדן; רק מנהל המשמרת רשאי לשנות את הסטטוס בשלב זה."
+          }
+        ]
+      }
+    ],
+    "userStories": []
+  },
+  "uc-assign-driver": {
+    "id": "uc-assign-driver",
+    "name": "שיבוץ נהג לבקשת הסעה",
+    "primaryActor": "rideCoordinator",
+    "secondaryActors": [],
+    "description": "רכז ההסעות בוחר נהג מתנדב זמין ומשבץ אותו לבקשה הממתינה לשיבוץ. בקשות של קלפי המסומנת בעדיפות מוצגות ראשונות.",
+    "preconditions": [
+      "קיימת בקשה במצב \"ממתינה לשיבוץ\"."
+    ],
+    "postconditions": [
+      "לבקשה שובץ נהג, מונה הסבבים עלה באחד, והנהג קיבל הודעה ונדרש לאשר."
+    ],
+    "scenarios": [
+      {
+        "id": "sc-happy",
+        "name": "מסלול מרכזי",
+        "flow": [
+          {
+            "kind": "system",
+            "text": "מציג את הבקשות הממתינות, כשבקשות של קלפי בעדיפות ראשונות"
+          },
+          {
+            "kind": "actor",
+            "actor": "rideCoordinator",
+            "text": "בוחר בקשה ונהג מתנדב זמין"
+          },
+          {
+            "kind": "system",
+            "text": "רושם את השיבוץ ושולח לנהג בקשת אישור"
+          }
+        ],
+        "extensions": []
+      }
+    ],
+    "userStories": []
+  },
+  "uc-coord-handle": {
+    "id": "uc-coord-handle",
+    "name": "טיפול אישי בבקשה שהוסלמה",
+    "primaryActor": "rideCoordinator",
+    "secondaryActors": [],
+    "description": "בקשה ששני סבבי שיבוץ שלה נכשלו (נדחו או לא אושרו בזמן) עוברת לטיפולו האישי של הרכז, שמסדיר נהג ישירות.",
+    "preconditions": [
+      "הבקשה במצב \"בטיפול אישי של הרכז\"."
+    ],
+    "postconditions": [
+      "לבקשה נקבע נהג שאישר, והיא עברה למצב \"נהג בדרך לאיסוף\"."
+    ],
+    "scenarios": [
+      {
+        "id": "sc-happy",
+        "name": "מסלול מרכזי",
+        "flow": [
+          {
+            "kind": "actor",
+            "actor": "rideCoordinator",
+            "text": "מאתר נהג ומוודא איתו את ההסעה"
+          },
+          {
+            "kind": "system",
+            "text": "רושם את הנהג ומעביר את הבקשה למצב \"נהג בדרך לאיסוף\""
+          }
+        ],
+        "extensions": []
+      }
+    ],
+    "userStories": []
+  },
+  "uc-driver-respond": {
+    "id": "uc-driver-respond",
+    "name": "אישור או דחיית שיבוץ",
+    "primaryActor": "driver",
+    "secondaryActors": [],
+    "description": "הנהג המשובץ מאשר את השיבוץ ויוצא לאיסוף, או דוחה אותו. בדחייה הבקשה חוזרת להמתנה לשיבוץ, ולאחר הסבב השני עוברת לטיפול אישי של הרכז.",
+    "preconditions": [
+      "לנהג שובצה בקשה הממתינה לאישורו."
+    ],
+    "postconditions": [
+      "הבקשה במצב \"נהג בדרך לאיסוף\", או חזרה להמתנה לשיבוץ, או הוסלמה לרכז."
+    ],
+    "scenarios": [
+      {
+        "id": "sc-happy",
+        "name": "מסלול מרכזי",
+        "flow": [
+          {
+            "kind": "actor",
+            "actor": "driver",
+            "text": "מאשר את השיבוץ"
+          },
+          {
+            "kind": "system",
+            "text": "מעביר את הבקשה למצב \"נהג בדרך לאיסוף\""
+          }
+        ],
+        "extensions": [
+          {
+            "at": 1,
+            "text": "אם הנהג דוחה: בסבב הראשון הבקשה חוזרת להמתנה לשיבוץ; בסבב השני היא עוברת לטיפול אישי של הרכז."
+          }
+        ]
+      }
+    ],
+    "userStories": []
+  },
+  "uc-report-pickup": {
+    "id": "uc-report-pickup",
+    "name": "דיווח תוצאת האיסוף",
+    "primaryActor": "driver",
+    "secondaryActors": [],
+    "description": "הנהג מדווח שהתומך הגיע לקלפי, או שהתומך לא נמצא בכתובת ולכן הבקשה נסגרת ללא ביצוע.",
+    "preconditions": [
+      "הבקשה במצב \"נהג בדרך לאיסוף\"."
+    ],
+    "postconditions": [
+      "הבקשה במצב \"הושלמה\" או \"נסגרה ללא ביצוע\"."
+    ],
+    "scenarios": [
+      {
+        "id": "sc-happy",
+        "name": "מסלול מרכזי",
+        "flow": [
+          {
+            "kind": "actor",
+            "actor": "driver",
+            "text": "מדווח שהתומך הגיע לקלפי"
+          },
+          {
+            "kind": "system",
+            "text": "סוגר את הבקשה כ\"הושלמה\""
+          }
+        ],
+        "extensions": [
+          {
+            "at": 1,
+            "text": "אם התומך אינו נמצא בכתובת, הנהג מדווח על כך והבקשה נסגרת ללא ביצוע."
+          }
+        ]
+      }
+    ],
+    "userStories": []
+  },
+  "uc-override-status": {
+    "id": "uc-override-status",
+    "name": "שינוי סטטוס של בקשת הסעה",
+    "primaryActor": "shiftManager",
+    "secondaryActors": [],
+    "description": "מנהל המשמרת רשאי לשנות כל סטטוס של בקשת הסעה בכל שלב, לרבות ביטול בקשה שכבר שובץ לה נהג.",
+    "preconditions": [
+      "קיימת בקשת הסעה פעילה."
+    ],
+    "postconditions": [
+      "סטטוס הבקשה שונה ונרשם מי שינה אותו."
+    ],
+    "scenarios": [
+      {
+        "id": "sc-happy",
+        "name": "מסלול מרכזי",
+        "flow": [
+          {
+            "kind": "actor",
+            "actor": "shiftManager",
+            "text": "בוחר בקשה ואת הסטטוס החדש"
+          },
+          {
+            "kind": "system",
+            "text": "מעדכן את הסטטוס ורושם את השינוי"
+          }
+        ],
+        "extensions": []
+      }
+    ],
+    "userStories": []
+  },
+  "uc-build-shifts": {
+    "id": "uc-build-shifts",
+    "name": "בניית לוח המשמרות",
+    "primaryActor": "shiftManager",
+    "secondaryActors": [],
+    "description": "מנהל המשמרת מגדיר משמרות (תאריך, שעת התחלה וסיום, מקום הפעילות ומספר המתנדבים הדרוש) ומשבץ אליהן מתנדבים.",
+    "preconditions": [
+      "המתנדבים רשומים במערכת."
+    ],
+    "postconditions": [
+      "נשמרו המשמרות והשיבוצים."
+    ],
+    "scenarios": [
+      {
+        "id": "sc-happy",
+        "name": "מסלול מרכזי",
+        "flow": [
+          {
+            "kind": "actor",
+            "actor": "shiftManager",
+            "text": "מגדיר משמרת ואת מקום הפעילות שלה"
+          },
+          {
+            "kind": "actor",
+            "actor": "shiftManager",
+            "text": "משבץ מתנדבים למשמרת"
+          },
+          {
+            "kind": "system",
+            "text": "שומר את השיבוצים ומתריע על משמרת שמספר המשובצים בה קטן מהדרוש"
+          }
+        ],
+        "extensions": []
+      }
+    ],
+    "userStories": []
+  },
+  "uc-record-attendance": {
+    "id": "uc-record-attendance",
+    "name": "רישום התייצבות וסיום בפועל",
+    "primaryActor": "shiftManager",
+    "secondaryActors": [],
+    "description": "לכל שיבוץ נרשמות שעת ההתייצבות בפועל ושעת הסיום בפועל של המתנדב באותה משמרת. מכאן נגזר כמה מתנדבים נוכחים בכל מוקד.",
+    "preconditions": [
+      "המתנדב משובץ למשמרת."
+    ],
+    "postconditions": [
+      "השעות נשמרו על השיבוץ של אותו מתנדב לאותה משמרת."
+    ],
+    "scenarios": [
+      {
+        "id": "sc-happy",
+        "name": "מסלול מרכזי",
+        "flow": [
+          {
+            "kind": "actor",
+            "actor": "shiftManager",
+            "text": "מסמן שהמתנדב התייצב, ובהמשך שסיים"
+          },
+          {
+            "kind": "system",
+            "text": "שומר את השעות על השיבוץ"
+          }
+        ],
+        "extensions": []
+      }
+    ],
+    "userStories": []
+  },
+  "uc-status-board": {
+    "id": "uc-status-board",
+    "name": "צפייה בלוח המצב",
+    "primaryActor": "shiftManager",
+    "secondaryActors": [],
+    "description": "תמונת מצב אחת ומעודכנת: כמה מתנדבים נוכחים בכל מוקד, התרעה על משמרת שאינה מאוישת במלואה, ומול כל קלפי המספר האחרון שדווח לעומת היעד לאותה שעה.",
+    "preconditions": [
+      "מנהל המשמרת מזוהה במערכת."
+    ],
+    "postconditions": [
+      "לא משתנה דבר במערכת."
+    ],
+    "scenarios": [
+      {
+        "id": "sc-happy",
+        "name": "מסלול מרכזי",
+        "flow": [
+          {
+            "kind": "actor",
+            "actor": "shiftManager",
+            "text": "פותח את לוח המצב"
+          },
+          {
+            "kind": "system",
+            "text": "מציג נוכחות לפי מוקד, משמרות חסרות ואת מספר המצביעים האחרון בכל קלפי מול היעד"
+          }
+        ],
+        "extensions": []
+      }
+    ],
+    "userStories": []
+  },
+  "uc-mark-priority": {
+    "id": "uc-mark-priority",
+    "name": "סימון קלפי בעדיפות",
+    "primaryActor": "shiftManager",
+    "secondaryActors": [],
+    "description": "כאשר המספר שדווח בקלפי נמוך מהיעד לאותה שעה, מנהל המשמרת מסמן אותה בעדיפות, ובקשות ההסעה של תומכיה מטופלות ראשונות.",
+    "preconditions": [
+      "דווח מספר מצביעים לקלפי."
+    ],
+    "postconditions": [
+      "הקלפי מסומנת בעדיפות."
+    ],
+    "scenarios": [
+      {
+        "id": "sc-happy",
+        "name": "מסלול מרכזי",
+        "flow": [
+          {
+            "kind": "actor",
+            "actor": "shiftManager",
+            "text": "בוחר קלפי שנמצאת מתחת ליעד ומסמן אותה בעדיפות"
+          },
+          {
+            "kind": "system",
+            "text": "מקדם את בקשות ההסעה של הקלפי לראש התור של רכז ההסעות"
+          }
+        ],
+        "extensions": []
+      }
+    ],
+    "userStories": []
+  },
+  "uc-report-turnout": {
+    "id": "uc-report-turnout",
+    "name": "דיווח מספר המצביעים בקלפי",
+    "primaryActor": "observer",
+    "secondaryActors": [],
+    "description": "המשקיף מדווח כל שעה כמה מצביעים נספרו בקלפי שלו. בהתאם להגדרת הלקוח נשמר המספר האחרון בלבד, והוא דורס את הקודם (ראו 7.5).",
+    "preconditions": [
+      "המשקיף משובץ למשמרת בקלפי."
+    ],
+    "postconditions": [
+      "המספר האחרון ושעת הדיווח עודכנו על הקלפי."
+    ],
+    "scenarios": [
+      {
+        "id": "sc-happy",
+        "name": "מסלול מרכזי",
+        "flow": [
+          {
+            "kind": "actor",
+            "actor": "observer",
+            "text": "מזין את מספר המצביעים שנספרו"
+          },
+          {
+            "kind": "system",
+            "text": "מעדכן את המספר האחרון ואת שעת הדיווח של הקלפי"
+          }
+        ],
+        "extensions": []
+      }
+    ],
+    "userStories": []
+  },
+  "uc-manage-volunteers": {
+    "id": "uc-manage-volunteers",
+    "name": "ניהול מתנדבים",
+    "primaryActor": "shiftManager",
+    "secondaryActors": [],
+    "description": "רישום מתנדב (מספר מתנדב, שם, טלפון, אזור) ושיוך תפקיד אחד או יותר אליו.",
+    "preconditions": [],
+    "postconditions": [
+      "המתנדב רשום ותפקידיו משויכים."
+    ],
+    "scenarios": [],
+    "userStories": []
+  },
+  "uc-manage-roles": {
+    "id": "uc-manage-roles",
+    "name": "ניהול תפקידים והרשאות",
+    "primaryActor": "shiftManager",
+    "secondaryActors": [],
+    "description": "ניהול קטלוג התפקידים וההרשאות הנלוות לכל תפקיד.",
+    "preconditions": [],
+    "postconditions": [
+      "קטלוג התפקידים עודכן."
+    ],
+    "scenarios": [],
+    "userStories": []
+  },
+  "uc-manage-stations": {
+    "id": "uc-manage-stations",
+    "name": "ניהול קלפיות ויעדי הצבעה",
+    "primaryActor": "shiftManager",
+    "secondaryActors": [],
+    "description": "הגדרת הקלפיות שבאחריות המטה (מספר קלפי, כתובת) והיעד לכל שעה בכל קלפי.",
+    "preconditions": [],
+    "postconditions": [
+      "הקלפיות והיעדים נשמרו."
+    ],
+    "scenarios": [],
+    "userStories": []
+  },
+  "uc-import-register": {
+    "id": "uc-import-register",
+    "name": "קליטת פנקס הבוחרים",
+    "primaryActor": "electionCommittee",
+    "secondaryActors": [],
+    "description": "עם פתיחת הקלפיות שולחת מערכת ועדת הבחירות את פנקס הבוחרים של הקלפיות שבאחריות המטה. המערכת קולטת אותו ומשייכת את התומכים לקלפיות.",
+    "preconditions": [
+      "הקלפיות שבאחריות המטה מוגדרות במערכת."
+    ],
+    "postconditions": [
+      "התומכים משויכים לקלפיות עם המספר הסידורי בפנקס."
+    ],
+    "scenarios": [
+      {
+        "id": "sc-happy",
+        "name": "מסלול מרכזי",
+        "flow": [
+          {
+            "kind": "system",
+            "text": "מקבל את הפנקס ממערכת ועדת הבחירות"
+          },
+          {
+            "kind": "system",
+            "text": "מעדכן לכל תומך את הקלפי ואת המספר הסידורי בפנקס"
+          }
+        ],
+        "extensions": []
+      }
+    ],
+    "userStories": []
+  },
+  "uc-import-updates": {
+    "id": "uc-import-updates",
+    "name": "קליטת עדכון הצבעה רשמי",
+    "primaryActor": "electionCommittee",
+    "secondaryActors": [],
+    "description": "מערכת ועדת הבחירות מעבירה עדכוני הצבעה רשמיים בעיתוי שהיא קובעת. המערכת מעדכנת את סטטוס ההצבעה של התומכים ומוציאה מי שהצביע מרשימת השיחות היוצאות.",
+    "preconditions": [
+      "פנקס הבוחרים נקלט."
+    ],
+    "postconditions": [
+      "סטטוס ההצבעה של התומכים עודכן."
+    ],
+    "scenarios": [
+      {
+        "id": "sc-happy",
+        "name": "מסלול מרכזי",
+        "flow": [
+          {
+            "kind": "system",
+            "text": "מקבל עדכון מהוועדה"
+          },
+          {
+            "kind": "system",
+            "text": "מסמן את התומכים שהצביעו ומסיר אותם מרשימת השיחות"
+          }
+        ],
+        "extensions": []
+      }
+    ],
+    "userStories": []
+  },
+  "uc-confirm-timeout": {
+    "id": "uc-confirm-timeout",
+    "name": "טיפול בשיבוץ שלא אושר בזמן",
+    "primaryActor": "timeActor",
+    "secondaryActors": [],
+    "description": "כשחלף זמן האישור והנהג לא אישר, הבקשה חוזרת להמתנה לשיבוץ, או עוברת לטיפול אישי של הרכז אם זה הסבב השני.",
+    "preconditions": [
+      "לבקשה שובץ נהג וזמן האישור חלף."
+    ],
+    "postconditions": [
+      "הבקשה חזרה להמתנה לשיבוץ או הוסלמה לרכז."
+    ],
+    "scenarios": [],
+    "userStories": []
+  },
+  "uc-close-day": {
+    "id": "uc-close-day",
+    "name": "העברת הבקשות לארכיון בסגירת הקלפיות",
+    "primaryActor": "timeActor",
+    "secondaryActors": [],
+    "description": "בסגירת הקלפיות עוברות בקשות ההסעה שנסגרו (הושלמו, נסגרו ללא ביצוע או בוטלו) לארכיון, לקריאה בלבד, לצורכי דוחות והפקת לקחים.",
+    "preconditions": [
+      "הגיע מועד סגירת הקלפיות."
+    ],
+    "postconditions": [
+      "הבקשות הסגורות נמצאות בארכיון."
+    ],
+    "scenarios": [],
+    "userStories": []
+  },
+  "uc-purge": {
+    "id": "uc-purge",
+    "name": "מחיקת רשומות בתום תקופת השמירה",
+    "primaryActor": "timeActor",
+    "secondaryActors": [],
+    "description": "על פי נוהל המטה נשמרות רשומות הפעילות עד תום ששה חודשים מיום הבחירות, ולאחר מכן נמחקות מהמערכת.",
+    "preconditions": [
+      "חלפו ששה חודשים מיום הבחירות."
+    ],
+    "postconditions": [
+      "רשומות הפעילות נמחקו מהמערכת."
+    ],
+    "scenarios": [],
+    "userStories": []
+  }
+};
+
+  var diagramLayouts = [
+  {
+    "svgId": "diagram-svg-0",
+    "boundary": {
+      "x": 380,
+      "y": 70,
+      "width": 1080,
+      "height": 780
+    },
+    "actors": [
+      {
+        "id": "caller",
+        "label": "מוקדן",
+        "side": "left",
+        "x": 290,
+        "y": 330,
+        "ucIds": [
+          "uc-out-call",
+          "uc-in-call",
+          "uc-cancel-ride"
+        ]
+      },
+      {
+        "id": "rideCoordinator",
+        "label": "רכז הסעות",
+        "side": "right",
+        "x": 1640,
+        "y": 250,
+        "ucIds": [
+          "uc-assign-driver",
+          "uc-coord-handle"
+        ]
+      },
+      {
+        "id": "driver",
+        "label": "נהג מתנדב",
+        "side": "right",
+        "x": 1640,
+        "y": 530,
+        "ucIds": [
+          "uc-driver-respond",
+          "uc-report-pickup"
+        ]
+      },
+      {
+        "id": "shiftManager",
+        "label": "מנהל משמרת",
+        "side": "right",
+        "x": 1640,
+        "y": 760,
+        "ucIds": [
+          "uc-override-status"
+        ]
+      }
+    ],
+    "useCases": [
+      {
+        "id": "uc-out-call",
+        "cx": 580,
+        "cy": 180,
+        "rx": 95,
+        "ry": 28
+      },
+      {
+        "id": "uc-cancel-ride",
+        "cx": 580,
+        "cy": 330,
+        "rx": 85,
+        "ry": 28
+      },
+      {
+        "id": "uc-in-call",
+        "cx": 580,
+        "cy": 480,
+        "rx": 95,
+        "ry": 28
+      },
+      {
+        "id": "uc-record-call",
+        "cx": 900,
+        "cy": 255,
+        "rx": 70,
+        "ry": 28
+      },
+      {
+        "id": "uc-open-ride",
+        "cx": 900,
+        "cy": 420,
+        "rx": 82,
+        "ry": 28
+      },
+      {
+        "id": "uc-assign-driver",
+        "cx": 1240,
+        "cy": 180,
+        "rx": 95,
+        "ry": 28
+      },
+      {
+        "id": "uc-coord-handle",
+        "cx": 1240,
+        "cy": 320,
+        "rx": 110,
+        "ry": 28
+      },
+      {
+        "id": "uc-driver-respond",
+        "cx": 1240,
+        "cy": 460,
+        "rx": 100,
+        "ry": 28
+      },
+      {
+        "id": "uc-report-pickup",
+        "cx": 1240,
+        "cy": 600,
+        "rx": 100,
+        "ry": 28
+      },
+      {
+        "id": "uc-override-status",
+        "cx": 1240,
+        "cy": 750,
+        "rx": 110,
+        "ry": 28
+      }
+    ],
+    "connections": []
+  },
+  {
+    "svgId": "diagram-svg-1",
+    "boundary": {
+      "x": 380,
+      "y": 70,
+      "width": 820,
+      "height": 540
+    },
+    "actors": [
+      {
+        "id": "shiftManager",
+        "label": "מנהל משמרת",
+        "side": "left",
+        "x": 290,
+        "y": 330,
+        "ucIds": [
+          "uc-build-shifts",
+          "uc-record-attendance",
+          "uc-status-board",
+          "uc-mark-priority"
+        ]
+      },
+      {
+        "id": "observer",
+        "label": "משקיף קלפי",
+        "side": "right",
+        "x": 1300,
+        "y": 470,
+        "ucIds": [
+          "uc-report-turnout"
+        ]
+      }
+    ],
+    "useCases": [
+      {
+        "id": "uc-build-shifts",
+        "cx": 600,
+        "cy": 180,
+        "rx": 90,
+        "ry": 28
+      },
+      {
+        "id": "uc-record-attendance",
+        "cx": 600,
+        "cy": 330,
+        "rx": 120,
+        "ry": 28
+      },
+      {
+        "id": "uc-status-board",
+        "cx": 600,
+        "cy": 480,
+        "rx": 90,
+        "ry": 28
+      },
+      {
+        "id": "uc-mark-priority",
+        "cx": 990,
+        "cy": 250,
+        "rx": 95,
+        "ry": 28
+      },
+      {
+        "id": "uc-report-turnout",
+        "cx": 990,
+        "cy": 470,
+        "rx": 115,
+        "ry": 28
+      }
+    ],
+    "connections": []
+  },
+  {
+    "svgId": "diagram-svg-2",
+    "boundary": {
+      "x": 380,
+      "y": 70,
+      "width": 460,
+      "height": 500
+    },
+    "actors": [
+      {
+        "id": "shiftManager",
+        "label": "מנהל משמרת",
+        "side": "left",
+        "x": 290,
+        "y": 320,
+        "ucIds": [
+          "uc-manage-volunteers",
+          "uc-manage-roles",
+          "uc-manage-stations"
+        ]
+      }
+    ],
+    "useCases": [
+      {
+        "id": "uc-manage-volunteers",
+        "cx": 610,
+        "cy": 180,
+        "rx": 90,
+        "ry": 28
+      },
+      {
+        "id": "uc-manage-roles",
+        "cx": 610,
+        "cy": 320,
+        "rx": 105,
+        "ry": 28
+      },
+      {
+        "id": "uc-manage-stations",
+        "cx": 610,
+        "cy": 460,
+        "rx": 110,
+        "ry": 28
+      }
+    ],
+    "connections": []
+  },
+  {
+    "svgId": "diagram-svg-3",
+    "boundary": {
+      "x": 380,
+      "y": 70,
+      "width": 560,
+      "height": 620
+    },
+    "actors": [
+      {
+        "id": "electionCommittee",
+        "label": "מערכת ועדת הבחירות",
+        "side": "left",
+        "x": 280,
+        "y": 230,
+        "ucIds": [
+          "uc-import-register",
+          "uc-import-updates"
+        ]
+      },
+      {
+        "id": "timeActor",
+        "label": "שחקן זמן",
+        "side": "right",
+        "x": 1040,
+        "y": 510,
+        "ucIds": [
+          "uc-confirm-timeout",
+          "uc-close-day",
+          "uc-purge"
+        ]
+      }
+    ],
+    "useCases": [
+      {
+        "id": "uc-import-register",
+        "cx": 560,
+        "cy": 170,
+        "rx": 100,
+        "ry": 28
+      },
+      {
+        "id": "uc-import-updates",
+        "cx": 560,
+        "cy": 290,
+        "rx": 110,
+        "ry": 28
+      },
+      {
+        "id": "uc-confirm-timeout",
+        "cx": 740,
+        "cy": 400,
+        "rx": 120,
+        "ry": 28
+      },
+      {
+        "id": "uc-close-day",
+        "cx": 720,
+        "cy": 510,
+        "rx": 130,
+        "ry": 28
+      },
+      {
+        "id": "uc-purge",
+        "cx": 720,
+        "cy": 620,
+        "rx": 130,
+        "ry": 28
+      }
+    ],
+    "connections": [
+      {
+        "from": "timeActor",
+        "to": "uc-confirm-timeout",
+        "type": "association",
+        "timing": "בחלוף זמן האישור של הנהג"
+      },
+      {
+        "from": "timeActor",
+        "to": "uc-close-day",
+        "type": "association",
+        "timing": "בסגירת הקלפיות"
+      },
+      {
+        "from": "timeActor",
+        "to": "uc-purge",
+        "type": "association",
+        "timing": "בתום ששה חודשים מיום הבחירות"
+      }
+    ]
+  }
+];
+
+  var diagramModel = {
+  "kind": "use-case",
+  "title": "מטה 2026, Use Case",
+  "parts": [
+    {
+      "id": "part-a",
+      "label": "מוקד והסעות",
+      "splitRationale": "פוצל לפי אזורי אחריות: 23 Use Cases > 8.",
+      "elements": [
+        {
+          "kind": "actor",
+          "id": "caller",
+          "name": "מוקדן",
+          "actorType": "human",
+          "side": "left"
+        },
+        {
+          "kind": "actor",
+          "id": "rideCoordinator",
+          "name": "רכז הסעות",
+          "actorType": "human",
+          "side": "right"
+        },
+        {
+          "kind": "actor",
+          "id": "driver",
+          "name": "נהג מתנדב",
+          "actorType": "human",
+          "side": "right"
+        },
+        {
+          "kind": "actor",
+          "id": "shiftManager",
+          "name": "מנהל משמרת",
+          "actorType": "human",
+          "side": "right"
+        },
+        {
+          "kind": "useCase",
+          "id": "uc-out-call",
+          "name": "ביצוע שיחה יוצאת לתומך",
+          "description": "המוקדן בוחר תומך שטרם הצביע ואינו מסומן כלא זמין, ומתקשר אליו. כל שיחה נרשמת (include), ואם מתברר שהתומך זקוק להסעה נפתחת עבורו בקשת הסעה (extend).",
+          "primaryActor": "caller",
+          "secondaryActors": [],
+          "preconditions": [
+            "המוקדן מזוהה במערכת; קיים תומך שטרם הצביע ואינו מסומן כלא זמין."
+          ],
+          "postconditions": [
+            "השיחה נרשמה עם מועד, מבצע ותוצאה."
+          ],
+          "scenarios": [
+            {
+              "id": "sc-happy",
+              "name": "מסלול מרכזי",
+              "flow": [
+                {
+                  "kind": "system",
+                  "text": "מציג למוקדן את התומך הבא לשיחה מבין מי שטרם הצביעו ואינם מסומנים כלא זמינים"
+                },
+                {
+                  "kind": "actor",
+                  "actor": "caller",
+                  "text": "מתקשר לתומך"
+                },
+                {
+                  "kind": "include",
+                  "uc": "uc-record-call",
+                  "text": "רישום השיחה ותוצאתה"
+                }
+              ],
+              "extensions": [
+                {
+                  "at": 3,
+                  "text": "נקודת הרחבה \"בירור צורך בהסעה\": אם התומך זקוק להסעה, מופעל Use Case פתיחת בקשת הסעה."
+                }
+              ]
+            }
+          ],
+          "userStories": [
+            {
+              "role": "מוקדן",
+              "want": "לקבל את התומך הבא שטרם הצביע ואינו מסומן כלא זמין",
+              "so": "לא אתקשר פעמיים לאותו אדם ולא אבזבז שיחות על מי שכבר הצביע"
+            }
+          ],
+          "wireframe": ""
+        },
+        {
+          "kind": "useCase",
+          "id": "uc-cancel-ride",
+          "name": "ביטול בקשת הסעה",
+          "description": "המוקדן מבטל בקשת הסעה, למשל כשהתומך הודיע שאינו זקוק לה עוד. מותר רק כל עוד לא שובץ לבקשה נהג.",
+          "primaryActor": "caller",
+          "secondaryActors": [],
+          "preconditions": [
+            "קיימת בקשת הסעה שטרם שובץ לה נהג."
+          ],
+          "postconditions": [
+            "הבקשה עברה למצב \"בוטלה\"."
+          ],
+          "scenarios": [
+            {
+              "id": "sc-happy",
+              "name": "מסלול מרכזי",
+              "flow": [
+                {
+                  "kind": "actor",
+                  "actor": "caller",
+                  "text": "בוחר את הבקשה ומבקש לבטלה"
+                },
+                {
+                  "kind": "system",
+                  "text": "בודק שטרם שובץ לבקשה נהג"
+                },
+                {
+                  "kind": "system",
+                  "text": "מעביר את הבקשה למצב \"בוטלה\""
+                }
+              ],
+              "extensions": [
+                {
+                  "at": 2,
+                  "text": "אם כבר שובץ נהג, הביטול נחסם בפני המוקדן; רק מנהל המשמרת רשאי לשנות את הסטטוס בשלב זה."
+                }
+              ]
+            }
+          ],
+          "userStories": [],
+          "wireframe": ""
+        },
+        {
+          "kind": "useCase",
+          "id": "uc-in-call",
+          "name": "טיפול בשיחה נכנסת",
+          "description": "תומך מתקשר למוקד. המוקדן מאתר אותו במערכת ומטפל בפנייה. כל שיחה נרשמת (include), ואם מתברר שהתומך זקוק להסעה נפתחת עבורו בקשת הסעה (extend).",
+          "primaryActor": "caller",
+          "secondaryActors": [],
+          "preconditions": [
+            "המוקדן מזוהה במערכת."
+          ],
+          "postconditions": [
+            "השיחה נרשמה עם מועד, מבצע ותוצאה."
+          ],
+          "scenarios": [
+            {
+              "id": "sc-happy",
+              "name": "מסלול מרכזי",
+              "flow": [
+                {
+                  "kind": "actor",
+                  "actor": "caller",
+                  "text": "עונה לשיחה ומאתר את התומך לפי הטלפון או השם"
+                },
+                {
+                  "kind": "system",
+                  "text": "מציג את פרטי התומך, את הקלפי שלו ואת סטטוס ההצבעה"
+                },
+                {
+                  "kind": "include",
+                  "uc": "uc-record-call",
+                  "text": "רישום השיחה ותוצאתה"
+                }
+              ],
+              "extensions": [
+                {
+                  "at": 3,
+                  "text": "נקודת הרחבה \"בירור צורך בהסעה\": אם התומך זקוק להסעה, מופעל Use Case פתיחת בקשת הסעה."
+                }
+              ]
+            }
+          ],
+          "userStories": [],
+          "wireframe": ""
+        },
+        {
+          "kind": "useCase",
+          "id": "uc-record-call",
+          "name": "רישום שיחה",
+          "description": "התנהגות משותפת המתבצעת תמיד, בכל שיחה, יוצאת או נכנסת: רישום המועד, מי ביצע את השיחה ומה הייתה תוצאתה. כאן גם נאכף הכלל: לאחר שלוש שיחות ללא מענה מסומן התומך כלא זמין, ואין מתקשרים אליו שוב באותו יום.",
+          "primaryActor": "",
+          "secondaryActors": [],
+          "preconditions": [
+            "מתקיימת שיחה עם תומך."
+          ],
+          "postconditions": [
+            "נשמרה רשומת שיחה; תומך שצבר שלוש שיחות ללא מענה סומן כלא זמין."
+          ],
+          "scenarios": [
+            {
+              "id": "sc-happy",
+              "name": "מסלול מרכזי",
+              "flow": [
+                {
+                  "kind": "actor",
+                  "actor": "caller",
+                  "text": "בוחר את תוצאת השיחה"
+                },
+                {
+                  "kind": "system",
+                  "text": "שומר את מועד השיחה, את המוקדן שביצע אותה ואת התוצאה"
+                }
+              ],
+              "extensions": [
+                {
+                  "at": 2,
+                  "text": "אם זו השיחה השלישית ללא מענה לאותו תומך באותו יום, המערכת מסמנת אותו כלא זמין ומוציאה אותו מרשימת השיחות היוצאות."
+                }
+              ]
+            }
+          ],
+          "userStories": [],
+          "wireframe": ""
+        },
+        {
+          "kind": "useCase",
+          "id": "uc-open-ride",
+          "name": "פתיחת בקשת הסעה",
+          "description": "מרחיבה (extend) את שתי השיחות: מתבצעת רק כשמתברר בשיחה שהתומך זקוק להסעה. נפתחת בקשה הנושאת מספר בקשה, כתובת איסוף, מספר נוסעים ושעה מבוקשת, והיא ממתינה לשיבוץ.",
+          "primaryActor": "",
+          "secondaryActors": [],
+          "preconditions": [
+            "מתקיימת שיחה עם תומך, והתברר שהוא זקוק להסעה."
+          ],
+          "postconditions": [
+            "נוצרה בקשת הסעה במצב \"ממתינה לשיבוץ\", המקושרת לשיחה שבה נפתחה."
+          ],
+          "scenarios": [
+            {
+              "id": "sc-happy",
+              "name": "מסלול מרכזי",
+              "flow": [
+                {
+                  "kind": "actor",
+                  "actor": "caller",
+                  "text": "מזין כתובת איסוף, מספר נוסעים ושעה מבוקשת"
+                },
+                {
+                  "kind": "system",
+                  "text": "מנפיק מספר בקשה ושומר את הבקשה במצב \"ממתינה לשיבוץ\""
+                }
+              ],
+              "extensions": [
+                {
+                  "at": 2,
+                  "text": "אם הקלפי של התומך מסומנת בעדיפות, הבקשה מוצגת לרכז ההסעות בראש התור."
+                }
+              ]
+            }
+          ],
+          "userStories": [
+            {
+              "role": "מוקדן",
+              "want": "לפתוח בקשת הסעה מתוך השיחה עצמה",
+              "so": "הבקשה לא תלך לאיבוד בין הטלפון לגיליון"
+            }
+          ],
+          "wireframe": ""
+        },
+        {
+          "kind": "useCase",
+          "id": "uc-assign-driver",
+          "name": "שיבוץ נהג לבקשת הסעה",
+          "description": "רכז ההסעות בוחר נהג מתנדב זמין ומשבץ אותו לבקשה הממתינה לשיבוץ. בקשות של קלפי המסומנת בעדיפות מוצגות ראשונות.",
+          "primaryActor": "rideCoordinator",
+          "secondaryActors": [],
+          "preconditions": [
+            "קיימת בקשה במצב \"ממתינה לשיבוץ\"."
+          ],
+          "postconditions": [
+            "לבקשה שובץ נהג, מונה הסבבים עלה באחד, והנהג קיבל הודעה ונדרש לאשר."
+          ],
+          "scenarios": [
+            {
+              "id": "sc-happy",
+              "name": "מסלול מרכזי",
+              "flow": [
+                {
+                  "kind": "system",
+                  "text": "מציג את הבקשות הממתינות, כשבקשות של קלפי בעדיפות ראשונות"
+                },
+                {
+                  "kind": "actor",
+                  "actor": "rideCoordinator",
+                  "text": "בוחר בקשה ונהג מתנדב זמין"
+                },
+                {
+                  "kind": "system",
+                  "text": "רושם את השיבוץ ושולח לנהג בקשת אישור"
+                }
+              ],
+              "extensions": []
+            }
+          ],
+          "userStories": [],
+          "wireframe": ""
+        },
+        {
+          "kind": "useCase",
+          "id": "uc-coord-handle",
+          "name": "טיפול אישי בבקשה שהוסלמה",
+          "description": "בקשה ששני סבבי שיבוץ שלה נכשלו (נדחו או לא אושרו בזמן) עוברת לטיפולו האישי של הרכז, שמסדיר נהג ישירות.",
+          "primaryActor": "rideCoordinator",
+          "secondaryActors": [],
+          "preconditions": [
+            "הבקשה במצב \"בטיפול אישי של הרכז\"."
+          ],
+          "postconditions": [
+            "לבקשה נקבע נהג שאישר, והיא עברה למצב \"נהג בדרך לאיסוף\"."
+          ],
+          "scenarios": [
+            {
+              "id": "sc-happy",
+              "name": "מסלול מרכזי",
+              "flow": [
+                {
+                  "kind": "actor",
+                  "actor": "rideCoordinator",
+                  "text": "מאתר נהג ומוודא איתו את ההסעה"
+                },
+                {
+                  "kind": "system",
+                  "text": "רושם את הנהג ומעביר את הבקשה למצב \"נהג בדרך לאיסוף\""
+                }
+              ],
+              "extensions": []
+            }
+          ],
+          "userStories": [],
+          "wireframe": ""
+        },
+        {
+          "kind": "useCase",
+          "id": "uc-driver-respond",
+          "name": "אישור או דחיית שיבוץ",
+          "description": "הנהג המשובץ מאשר את השיבוץ ויוצא לאיסוף, או דוחה אותו. בדחייה הבקשה חוזרת להמתנה לשיבוץ, ולאחר הסבב השני עוברת לטיפול אישי של הרכז.",
+          "primaryActor": "driver",
+          "secondaryActors": [],
+          "preconditions": [
+            "לנהג שובצה בקשה הממתינה לאישורו."
+          ],
+          "postconditions": [
+            "הבקשה במצב \"נהג בדרך לאיסוף\", או חזרה להמתנה לשיבוץ, או הוסלמה לרכז."
+          ],
+          "scenarios": [
+            {
+              "id": "sc-happy",
+              "name": "מסלול מרכזי",
+              "flow": [
+                {
+                  "kind": "actor",
+                  "actor": "driver",
+                  "text": "מאשר את השיבוץ"
+                },
+                {
+                  "kind": "system",
+                  "text": "מעביר את הבקשה למצב \"נהג בדרך לאיסוף\""
+                }
+              ],
+              "extensions": [
+                {
+                  "at": 1,
+                  "text": "אם הנהג דוחה: בסבב הראשון הבקשה חוזרת להמתנה לשיבוץ; בסבב השני היא עוברת לטיפול אישי של הרכז."
+                }
+              ]
+            }
+          ],
+          "userStories": [],
+          "wireframe": ""
+        },
+        {
+          "kind": "useCase",
+          "id": "uc-report-pickup",
+          "name": "דיווח תוצאת האיסוף",
+          "description": "הנהג מדווח שהתומך הגיע לקלפי, או שהתומך לא נמצא בכתובת ולכן הבקשה נסגרת ללא ביצוע.",
+          "primaryActor": "driver",
+          "secondaryActors": [],
+          "preconditions": [
+            "הבקשה במצב \"נהג בדרך לאיסוף\"."
+          ],
+          "postconditions": [
+            "הבקשה במצב \"הושלמה\" או \"נסגרה ללא ביצוע\"."
+          ],
+          "scenarios": [
+            {
+              "id": "sc-happy",
+              "name": "מסלול מרכזי",
+              "flow": [
+                {
+                  "kind": "actor",
+                  "actor": "driver",
+                  "text": "מדווח שהתומך הגיע לקלפי"
+                },
+                {
+                  "kind": "system",
+                  "text": "סוגר את הבקשה כ\"הושלמה\""
+                }
+              ],
+              "extensions": [
+                {
+                  "at": 1,
+                  "text": "אם התומך אינו נמצא בכתובת, הנהג מדווח על כך והבקשה נסגרת ללא ביצוע."
+                }
+              ]
+            }
+          ],
+          "userStories": [],
+          "wireframe": ""
+        },
+        {
+          "kind": "useCase",
+          "id": "uc-override-status",
+          "name": "שינוי סטטוס של בקשת הסעה",
+          "description": "מנהל המשמרת רשאי לשנות כל סטטוס של בקשת הסעה בכל שלב, לרבות ביטול בקשה שכבר שובץ לה נהג.",
+          "primaryActor": "shiftManager",
+          "secondaryActors": [],
+          "preconditions": [
+            "קיימת בקשת הסעה פעילה."
+          ],
+          "postconditions": [
+            "סטטוס הבקשה שונה ונרשם מי שינה אותו."
+          ],
+          "scenarios": [
+            {
+              "id": "sc-happy",
+              "name": "מסלול מרכזי",
+              "flow": [
+                {
+                  "kind": "actor",
+                  "actor": "shiftManager",
+                  "text": "בוחר בקשה ואת הסטטוס החדש"
+                },
+                {
+                  "kind": "system",
+                  "text": "מעדכן את הסטטוס ורושם את השינוי"
+                }
+              ],
+              "extensions": []
+            }
+          ],
+          "userStories": [],
+          "wireframe": ""
+        }
+      ],
+      "relationships": [
+        {
+          "kind": "actorAssoc",
+          "id": "as-caller-uc-out-call",
+          "actorId": "caller",
+          "ucId": "uc-out-call",
+          "role": "initiator"
+        },
+        {
+          "kind": "actorAssoc",
+          "id": "as-caller-uc-in-call",
+          "actorId": "caller",
+          "ucId": "uc-in-call",
+          "role": "initiator"
+        },
+        {
+          "kind": "actorAssoc",
+          "id": "as-caller-uc-cancel-ride",
+          "actorId": "caller",
+          "ucId": "uc-cancel-ride",
+          "role": "initiator"
+        },
+        {
+          "kind": "actorAssoc",
+          "id": "as-rideCoordinator-uc-assign-driver",
+          "actorId": "rideCoordinator",
+          "ucId": "uc-assign-driver",
+          "role": "initiator"
+        },
+        {
+          "kind": "actorAssoc",
+          "id": "as-rideCoordinator-uc-coord-handle",
+          "actorId": "rideCoordinator",
+          "ucId": "uc-coord-handle",
+          "role": "initiator"
+        },
+        {
+          "kind": "actorAssoc",
+          "id": "as-driver-uc-driver-respond",
+          "actorId": "driver",
+          "ucId": "uc-driver-respond",
+          "role": "initiator"
+        },
+        {
+          "kind": "actorAssoc",
+          "id": "as-driver-uc-report-pickup",
+          "actorId": "driver",
+          "ucId": "uc-report-pickup",
+          "role": "initiator"
+        },
+        {
+          "kind": "actorAssoc",
+          "id": "as-shiftManager-uc-override-status",
+          "actorId": "shiftManager",
+          "ucId": "uc-override-status",
+          "role": "initiator"
+        },
+        {
+          "kind": "include",
+          "id": "inc-part-a-0",
+          "from": "uc-out-call",
+          "to": "uc-record-call"
+        },
+        {
+          "kind": "include",
+          "id": "inc-part-a-1",
+          "from": "uc-in-call",
+          "to": "uc-record-call"
+        },
+        {
+          "kind": "extend",
+          "id": "ext-part-a-0",
+          "from": "uc-open-ride",
+          "to": "uc-out-call",
+          "condition": "התומך זקוק להסעה",
+          "extensionPoint": "בירור צורך בהסעה"
+        },
+        {
+          "kind": "extend",
+          "id": "ext-part-a-1",
+          "from": "uc-open-ride",
+          "to": "uc-in-call",
+          "condition": "התומך זקוק להסעה",
+          "extensionPoint": "בירור צורך בהסעה"
+        }
+      ]
+    },
+    {
+      "id": "part-b",
+      "label": "משמרות וקלפיות",
+      "splitRationale": "פוצל לפי אזורי אחריות: ניהול המשמרות ולוח המצב.",
+      "elements": [
+        {
+          "kind": "actor",
+          "id": "shiftManager",
+          "name": "מנהל משמרת",
+          "actorType": "human",
+          "side": "left"
+        },
+        {
+          "kind": "actor",
+          "id": "observer",
+          "name": "משקיף קלפי",
+          "actorType": "human",
+          "side": "right"
+        },
+        {
+          "kind": "useCase",
+          "id": "uc-build-shifts",
+          "name": "בניית לוח המשמרות",
+          "description": "מנהל המשמרת מגדיר משמרות (תאריך, שעת התחלה וסיום, מקום הפעילות ומספר המתנדבים הדרוש) ומשבץ אליהן מתנדבים.",
+          "primaryActor": "shiftManager",
+          "secondaryActors": [],
+          "preconditions": [
+            "המתנדבים רשומים במערכת."
+          ],
+          "postconditions": [
+            "נשמרו המשמרות והשיבוצים."
+          ],
+          "scenarios": [
+            {
+              "id": "sc-happy",
+              "name": "מסלול מרכזי",
+              "flow": [
+                {
+                  "kind": "actor",
+                  "actor": "shiftManager",
+                  "text": "מגדיר משמרת ואת מקום הפעילות שלה"
+                },
+                {
+                  "kind": "actor",
+                  "actor": "shiftManager",
+                  "text": "משבץ מתנדבים למשמרת"
+                },
+                {
+                  "kind": "system",
+                  "text": "שומר את השיבוצים ומתריע על משמרת שמספר המשובצים בה קטן מהדרוש"
+                }
+              ],
+              "extensions": []
+            }
+          ],
+          "userStories": [],
+          "wireframe": ""
+        },
+        {
+          "kind": "useCase",
+          "id": "uc-record-attendance",
+          "name": "רישום התייצבות וסיום בפועל",
+          "description": "לכל שיבוץ נרשמות שעת ההתייצבות בפועל ושעת הסיום בפועל של המתנדב באותה משמרת. מכאן נגזר כמה מתנדבים נוכחים בכל מוקד.",
+          "primaryActor": "shiftManager",
+          "secondaryActors": [],
+          "preconditions": [
+            "המתנדב משובץ למשמרת."
+          ],
+          "postconditions": [
+            "השעות נשמרו על השיבוץ של אותו מתנדב לאותה משמרת."
+          ],
+          "scenarios": [
+            {
+              "id": "sc-happy",
+              "name": "מסלול מרכזי",
+              "flow": [
+                {
+                  "kind": "actor",
+                  "actor": "shiftManager",
+                  "text": "מסמן שהמתנדב התייצב, ובהמשך שסיים"
+                },
+                {
+                  "kind": "system",
+                  "text": "שומר את השעות על השיבוץ"
+                }
+              ],
+              "extensions": []
+            }
+          ],
+          "userStories": [],
+          "wireframe": ""
+        },
+        {
+          "kind": "useCase",
+          "id": "uc-status-board",
+          "name": "צפייה בלוח המצב",
+          "description": "תמונת מצב אחת ומעודכנת: כמה מתנדבים נוכחים בכל מוקד, התרעה על משמרת שאינה מאוישת במלואה, ומול כל קלפי המספר האחרון שדווח לעומת היעד לאותה שעה.",
+          "primaryActor": "shiftManager",
+          "secondaryActors": [],
+          "preconditions": [
+            "מנהל המשמרת מזוהה במערכת."
+          ],
+          "postconditions": [
+            "לא משתנה דבר במערכת."
+          ],
+          "scenarios": [
+            {
+              "id": "sc-happy",
+              "name": "מסלול מרכזי",
+              "flow": [
+                {
+                  "kind": "actor",
+                  "actor": "shiftManager",
+                  "text": "פותח את לוח המצב"
+                },
+                {
+                  "kind": "system",
+                  "text": "מציג נוכחות לפי מוקד, משמרות חסרות ואת מספר המצביעים האחרון בכל קלפי מול היעד"
+                }
+              ],
+              "extensions": []
+            }
+          ],
+          "userStories": [],
+          "wireframe": ""
+        },
+        {
+          "kind": "useCase",
+          "id": "uc-mark-priority",
+          "name": "סימון קלפי בעדיפות",
+          "description": "כאשר המספר שדווח בקלפי נמוך מהיעד לאותה שעה, מנהל המשמרת מסמן אותה בעדיפות, ובקשות ההסעה של תומכיה מטופלות ראשונות.",
+          "primaryActor": "shiftManager",
+          "secondaryActors": [],
+          "preconditions": [
+            "דווח מספר מצביעים לקלפי."
+          ],
+          "postconditions": [
+            "הקלפי מסומנת בעדיפות."
+          ],
+          "scenarios": [
+            {
+              "id": "sc-happy",
+              "name": "מסלול מרכזי",
+              "flow": [
+                {
+                  "kind": "actor",
+                  "actor": "shiftManager",
+                  "text": "בוחר קלפי שנמצאת מתחת ליעד ומסמן אותה בעדיפות"
+                },
+                {
+                  "kind": "system",
+                  "text": "מקדם את בקשות ההסעה של הקלפי לראש התור של רכז ההסעות"
+                }
+              ],
+              "extensions": []
+            }
+          ],
+          "userStories": [],
+          "wireframe": ""
+        },
+        {
+          "kind": "useCase",
+          "id": "uc-report-turnout",
+          "name": "דיווח מספר המצביעים בקלפי",
+          "description": "המשקיף מדווח כל שעה כמה מצביעים נספרו בקלפי שלו. בהתאם להגדרת הלקוח נשמר המספר האחרון בלבד, והוא דורס את הקודם (ראו 7.5).",
+          "primaryActor": "observer",
+          "secondaryActors": [],
+          "preconditions": [
+            "המשקיף משובץ למשמרת בקלפי."
+          ],
+          "postconditions": [
+            "המספר האחרון ושעת הדיווח עודכנו על הקלפי."
+          ],
+          "scenarios": [
+            {
+              "id": "sc-happy",
+              "name": "מסלול מרכזי",
+              "flow": [
+                {
+                  "kind": "actor",
+                  "actor": "observer",
+                  "text": "מזין את מספר המצביעים שנספרו"
+                },
+                {
+                  "kind": "system",
+                  "text": "מעדכן את המספר האחרון ואת שעת הדיווח של הקלפי"
+                }
+              ],
+              "extensions": []
+            }
+          ],
+          "userStories": [],
+          "wireframe": ""
+        }
+      ],
+      "relationships": [
+        {
+          "kind": "actorAssoc",
+          "id": "as-shiftManager-uc-build-shifts",
+          "actorId": "shiftManager",
+          "ucId": "uc-build-shifts",
+          "role": "initiator"
+        },
+        {
+          "kind": "actorAssoc",
+          "id": "as-shiftManager-uc-record-attendance",
+          "actorId": "shiftManager",
+          "ucId": "uc-record-attendance",
+          "role": "initiator"
+        },
+        {
+          "kind": "actorAssoc",
+          "id": "as-shiftManager-uc-status-board",
+          "actorId": "shiftManager",
+          "ucId": "uc-status-board",
+          "role": "initiator"
+        },
+        {
+          "kind": "actorAssoc",
+          "id": "as-shiftManager-uc-mark-priority",
+          "actorId": "shiftManager",
+          "ucId": "uc-mark-priority",
+          "role": "initiator"
+        },
+        {
+          "kind": "actorAssoc",
+          "id": "as-observer-uc-report-turnout",
+          "actorId": "observer",
+          "ucId": "uc-report-turnout",
+          "role": "initiator"
+        }
+      ]
+    },
+    {
+      "id": "part-c",
+      "label": "ניהול נתוני-אב",
+      "splitRationale": "ניהול נתוני-האב מקבל תרשים משלו ואינו מעורב בשחקנים שאינם אנושיים.",
+      "elements": [
+        {
+          "kind": "actor",
+          "id": "shiftManager",
+          "name": "מנהל משמרת",
+          "actorType": "human",
+          "side": "left"
+        },
+        {
+          "kind": "useCase",
+          "id": "uc-manage-volunteers",
+          "name": "ניהול מתנדבים",
+          "description": "רישום מתנדב (מספר מתנדב, שם, טלפון, אזור) ושיוך תפקיד אחד או יותר אליו.",
+          "primaryActor": "shiftManager",
+          "secondaryActors": [],
+          "preconditions": [],
+          "postconditions": [
+            "המתנדב רשום ותפקידיו משויכים."
+          ],
+          "scenarios": [],
+          "userStories": [],
+          "wireframe": ""
+        },
+        {
+          "kind": "useCase",
+          "id": "uc-manage-roles",
+          "name": "ניהול תפקידים והרשאות",
+          "description": "ניהול קטלוג התפקידים וההרשאות הנלוות לכל תפקיד.",
+          "primaryActor": "shiftManager",
+          "secondaryActors": [],
+          "preconditions": [],
+          "postconditions": [
+            "קטלוג התפקידים עודכן."
+          ],
+          "scenarios": [],
+          "userStories": [],
+          "wireframe": ""
+        },
+        {
+          "kind": "useCase",
+          "id": "uc-manage-stations",
+          "name": "ניהול קלפיות ויעדי הצבעה",
+          "description": "הגדרת הקלפיות שבאחריות המטה (מספר קלפי, כתובת) והיעד לכל שעה בכל קלפי.",
+          "primaryActor": "shiftManager",
+          "secondaryActors": [],
+          "preconditions": [],
+          "postconditions": [
+            "הקלפיות והיעדים נשמרו."
+          ],
+          "scenarios": [],
+          "userStories": [],
+          "wireframe": ""
+        }
+      ],
+      "relationships": [
+        {
+          "kind": "actorAssoc",
+          "id": "as-shiftManager-uc-manage-volunteers",
+          "actorId": "shiftManager",
+          "ucId": "uc-manage-volunteers",
+          "role": "initiator"
+        },
+        {
+          "kind": "actorAssoc",
+          "id": "as-shiftManager-uc-manage-roles",
+          "actorId": "shiftManager",
+          "ucId": "uc-manage-roles",
+          "role": "initiator"
+        },
+        {
+          "kind": "actorAssoc",
+          "id": "as-shiftManager-uc-manage-stations",
+          "actorId": "shiftManager",
+          "ucId": "uc-manage-stations",
+          "role": "initiator"
+        }
+      ]
+    },
+    {
+      "id": "part-d",
+      "label": "תהליכים אוטומטיים וממשקים",
+      "splitRationale": "הטריגרים שאין להם יוזם אנושי מרוכזים בתרשים נפרד: מערכת ועדת הבחירות ושחקן הזמן אינם משתמשים של המטה.",
+      "elements": [
+        {
+          "kind": "actor",
+          "id": "electionCommittee",
+          "name": "מערכת ועדת הבחירות",
+          "actorType": "system",
+          "side": "left"
+        },
+        {
+          "kind": "actor",
+          "id": "timeActor",
+          "name": "שחקן זמן",
+          "actorType": "system",
+          "side": "right"
+        },
+        {
+          "kind": "useCase",
+          "id": "uc-import-register",
+          "name": "קליטת פנקס הבוחרים",
+          "description": "עם פתיחת הקלפיות שולחת מערכת ועדת הבחירות את פנקס הבוחרים של הקלפיות שבאחריות המטה. המערכת קולטת אותו ומשייכת את התומכים לקלפיות.",
+          "primaryActor": "electionCommittee",
+          "secondaryActors": [],
+          "preconditions": [
+            "הקלפיות שבאחריות המטה מוגדרות במערכת."
+          ],
+          "postconditions": [
+            "התומכים משויכים לקלפיות עם המספר הסידורי בפנקס."
+          ],
+          "scenarios": [
+            {
+              "id": "sc-happy",
+              "name": "מסלול מרכזי",
+              "flow": [
+                {
+                  "kind": "system",
+                  "text": "מקבל את הפנקס ממערכת ועדת הבחירות"
+                },
+                {
+                  "kind": "system",
+                  "text": "מעדכן לכל תומך את הקלפי ואת המספר הסידורי בפנקס"
+                }
+              ],
+              "extensions": []
+            }
+          ],
+          "userStories": [],
+          "wireframe": ""
+        },
+        {
+          "kind": "useCase",
+          "id": "uc-import-updates",
+          "name": "קליטת עדכון הצבעה רשמי",
+          "description": "מערכת ועדת הבחירות מעבירה עדכוני הצבעה רשמיים בעיתוי שהיא קובעת. המערכת מעדכנת את סטטוס ההצבעה של התומכים ומוציאה מי שהצביע מרשימת השיחות היוצאות.",
+          "primaryActor": "electionCommittee",
+          "secondaryActors": [],
+          "preconditions": [
+            "פנקס הבוחרים נקלט."
+          ],
+          "postconditions": [
+            "סטטוס ההצבעה של התומכים עודכן."
+          ],
+          "scenarios": [
+            {
+              "id": "sc-happy",
+              "name": "מסלול מרכזי",
+              "flow": [
+                {
+                  "kind": "system",
+                  "text": "מקבל עדכון מהוועדה"
+                },
+                {
+                  "kind": "system",
+                  "text": "מסמן את התומכים שהצביעו ומסיר אותם מרשימת השיחות"
+                }
+              ],
+              "extensions": []
+            }
+          ],
+          "userStories": [],
+          "wireframe": ""
+        },
+        {
+          "kind": "useCase",
+          "id": "uc-confirm-timeout",
+          "name": "טיפול בשיבוץ שלא אושר בזמן",
+          "description": "כשחלף זמן האישור והנהג לא אישר, הבקשה חוזרת להמתנה לשיבוץ, או עוברת לטיפול אישי של הרכז אם זה הסבב השני.",
+          "primaryActor": "timeActor",
+          "secondaryActors": [],
+          "preconditions": [
+            "לבקשה שובץ נהג וזמן האישור חלף."
+          ],
+          "postconditions": [
+            "הבקשה חזרה להמתנה לשיבוץ או הוסלמה לרכז."
+          ],
+          "scenarios": [],
+          "userStories": [],
+          "wireframe": ""
+        },
+        {
+          "kind": "useCase",
+          "id": "uc-close-day",
+          "name": "העברת הבקשות לארכיון בסגירת הקלפיות",
+          "description": "בסגירת הקלפיות עוברות בקשות ההסעה שנסגרו (הושלמו, נסגרו ללא ביצוע או בוטלו) לארכיון, לקריאה בלבד, לצורכי דוחות והפקת לקחים.",
+          "primaryActor": "timeActor",
+          "secondaryActors": [],
+          "preconditions": [
+            "הגיע מועד סגירת הקלפיות."
+          ],
+          "postconditions": [
+            "הבקשות הסגורות נמצאות בארכיון."
+          ],
+          "scenarios": [],
+          "userStories": [],
+          "wireframe": ""
+        },
+        {
+          "kind": "useCase",
+          "id": "uc-purge",
+          "name": "מחיקת רשומות בתום תקופת השמירה",
+          "description": "על פי נוהל המטה נשמרות רשומות הפעילות עד תום ששה חודשים מיום הבחירות, ולאחר מכן נמחקות מהמערכת.",
+          "primaryActor": "timeActor",
+          "secondaryActors": [],
+          "preconditions": [
+            "חלפו ששה חודשים מיום הבחירות."
+          ],
+          "postconditions": [
+            "רשומות הפעילות נמחקו מהמערכת."
+          ],
+          "scenarios": [],
+          "userStories": [],
+          "wireframe": ""
+        }
+      ],
+      "relationships": [
+        {
+          "kind": "actorAssoc",
+          "id": "as-electionCommittee-uc-import-register",
+          "actorId": "electionCommittee",
+          "ucId": "uc-import-register",
+          "role": "initiator"
+        },
+        {
+          "kind": "actorAssoc",
+          "id": "as-electionCommittee-uc-import-updates",
+          "actorId": "electionCommittee",
+          "ucId": "uc-import-updates",
+          "role": "initiator"
+        },
+        {
+          "kind": "actorAssoc",
+          "id": "as-timeActor-uc-confirm-timeout",
+          "actorId": "timeActor",
+          "ucId": "uc-confirm-timeout",
+          "role": "initiator"
+        },
+        {
+          "kind": "actorAssoc",
+          "id": "as-timeActor-uc-close-day",
+          "actorId": "timeActor",
+          "ucId": "uc-close-day",
+          "role": "initiator"
+        },
+        {
+          "kind": "actorAssoc",
+          "id": "as-timeActor-uc-purge",
+          "actorId": "timeActor",
+          "ucId": "uc-purge",
+          "role": "initiator"
+        }
+      ]
+    }
+  ],
+  "assumptions": [
+    "ההזדהות במערכת היא תנאי מוקדם לכל מקרה שימוש ואינה מקרה שימוש בפני עצמה.",
+    "לתומכים אין גישה ישירה למערכת: המוקדן פועל בשמם, בשיחה יוצאת או נכנסת. מי שצייר את התומך כשחקן ונימק זאת נתן תשובה תקינה לא פחות.",
+    "\"רישום שיחה\" מתבצע תמיד, בכל שיחה, יוצאת או נכנסת, ולכן הוא יעד «include» משני בסיסים. \"פתיחת בקשת הסעה\" מתבצעת רק בחלק מהשיחות, ולכן היא «extend» בתנאי {התומך זקוק להסעה}. Use Case עצמאי לפתיחת הבקשה, שהמוקדן מפעיל ישירות, מזכה אם נומק ונאמר מחירו: הקשר לשיחה אינו נראה בתרשים.",
+    "מערכת ועדת הבחירות היא שחקן יוזם בלבד. אין Use Case שבו המטה שולף ממנה נתונים, והקליטה אינה תלויה בשחקן זמן, כי הוועדה היא שקובעת את העיתוי.",
+    "מתנדב הנושא כמה תפקידים (נהג שהוא גם משקיף) הוא משתמש יחיד, ולכן הוא מופיע בשני קווי אסוציאציה ולא כשחקן נוסף.",
+    "הסיפור מונה חמישה סוגי משתמשים ואינו מזכיר מנהל מערכת, ולכן ניהול נתוני-האב הוקצה למנהל המשמרת. מי שהוסיף שחקן מנהל מערכת נתן תשובה תקינה לא פחות.",
+    "הרשאתו של מנהל המשמרת לשנות כל סטטוס בכל שלב מיוצגת ב-Use Case \"שינוי סטטוס של בקשת הסעה\", ואילו הביטול בידי המוקדן, המוגבל לשלב שלפני שיבוץ נהג, הוא Use Case נפרד. ההגבלה עצמה נבחנת בתרשים המצבים (8.3).",
+    "רכש כיבוד וציוד למתנדבים ותשלום לספקים אינם מיוצגים: הסיפור קובע במפורש שהמערכת אינה מנהלת תשלומים, וייעודה ניהול פעילות השטח ביום הבחירות. הבקשה מוחזרת למנהל המטה במפורש כדרישה מחוץ להיקף (מודול או שלב נפרד) ואינה מושתקת. מי שצייר Use Cases כאלה ונימק שזוהי הרחבת היקף הטעונה אישור הלקוח מקבל אף הוא ניקוד מלא (6.4).",
+    "המערכת אינה עוסקת בתוצאות ההצבעה עצמן, ולכן אין Use Case לתחזית או לדיווח תוצאות."
+  ],
+  "openQuestions": [
+    "מי רושם את שעת ההתייצבות והסיום בפועל: מנהל המשמרת, או המתנדב עצמו בכניסה וביציאה? כאן נבחר מנהל המשמרת; רישום עצמי בידי המתנדב סביר לא פחות.",
+    "מהו זמן האישור שניתן לנהג לפני שהשיבוץ פוקע? הסיפור אינו נוקב בו, והוא ייקבע מול מנהל המטה."
+  ]
+};
+  </script>
+  <script>
+/* inlined uc-diagram-common.js */
+/* uc-diagram-common.js, SAD MCP shared runtime for use case diagrams
+   Depends on globals defined in the inline <script> of each diagram:
+   diagramLayouts, actorDescriptions, assocDescriptions, useCaseDocs, diagramModel
+
+   This file is deployed by hand to themathbible.com (see CLAUDE.md → Static Assets).
+   Keep UC_RUNTIME_VERSION in sync with package.json on every deploy, it prints to the
+   browser console so you can confirm which runtime is actually live vs. the repo.
+*/
+const UC_RUNTIME_VERSION = '2.9.6';
+if (typeof console !== 'undefined') console.info('[sad-mcp] uc-diagram runtime v' + UC_RUNTIME_VERSION);
+
+// ── fixLayout constants ───────────────────────────────────────────────────
+const HEADER_H  = 44;
+const UC_PAD    = 30;
+const UC_GAP    = 14;
+const ACTOR_PAD = 80;
+
+// ── fixLayout ─────────────────────────────────────────────────────────────
+function fixLayout(layout) {
+  const svg = document.getElementById(layout.svgId);
+  if (!svg) return;
+  const b = layout.boundary;
+
+  // Step 1, Group UCs by the side of their owning actor.
+  const ucSide = {};
+  layout.actors.forEach(a =>
+    a.ucIds.forEach(uid => {
+      ucSide[uid] = ucSide[uid] && ucSide[uid] !== a.side ? 'center' : a.side;
+    })
+  );
+  const cols = { left: [], right: [], center: [] };
+  layout.useCases.forEach(uc => cols[ucSide[uc.id] || 'center'].push(uc));
+
+  // Step 2, Sort each column by actor order (top-to-bottom on that side).
+  function sortCol(ucs, side) {
+    const ordered = layout.actors.filter(a => a.side === side).sort((a, bb) => a.y - bb.y);
+    ucs.sort((a, bb) => {
+      const ai = ordered.findIndex(act => act.ucIds.includes(a.id));
+      const bi = ordered.findIndex(act => act.ucIds.includes(bb.id));
+      return (ai < 0 ? 999 : ai) - (bi < 0 ? 999 : bi);
+    });
+  }
+  sortCol(cols.left,  'left');
+  sortCol(cols.right, 'right');
+
+  // Step 3, Adaptive column X positions. Widen boundary if needed.
+  const COL_GAP = 30;
+  const maxRx = ucs => (ucs.length ? Math.max(...ucs.map(u => u.rx)) : 0);
+  const lRx = maxRx(cols.left), cRx = maxRx(cols.center), rRx = maxRx(cols.right);
+  const gaps = (cRx ? 2 * COL_GAP : (lRx && rRx ? 2 * COL_GAP : 0));
+  const needed = 2 * UC_PAD + 2 * lRx + 2 * cRx + 2 * rRx + gaps;
+  if (b.width < needed) b.width = needed;
+
+  const leftX   = b.x + UC_PAD + lRx;
+  const rightX  = b.x + b.width - UC_PAD - rRx;
+  const centerX = (leftX + rightX) / 2;
+
+  function place(ucs, colX, colName) {
+    ucs.forEach((uc, i) => {
+      uc.cy = b.y + HEADER_H + UC_PAD + uc.ry + i * (uc.ry * 2 + UC_GAP);
+      uc.cx = colX;
+      uc.col = colName;
+    });
+  }
+  place(cols.left,   leftX,   'left');
+  place(cols.right,  rightX,  'right');
+  place(cols.center, centerX, 'center');
+
+  // Step 4, Clamp and resolve overlaps. Idempotent fixed-point loop.
+  const minX = b.x + UC_PAD;
+  const maxX = b.x + b.width - UC_PAD;
+  const minY = b.y + HEADER_H + UC_PAD;
+  let changed = true, iter = 0;
+  while (changed && iter++ < 40) {
+    changed = false;
+    for (const uc of layout.useCases) {
+      const nx = Math.max(minX + uc.rx, Math.min(maxX - uc.rx, uc.cx));
+      if (nx !== uc.cx) { uc.cx = nx; changed = true; }
+      const ny = Math.max(minY + uc.ry, uc.cy);
+      if (ny !== uc.cy) { uc.cy = ny; changed = true; }
+    }
+    for (const col of Object.values(cols)) {
+      col.sort((a, bb) => a.cy - bb.cy);
+      for (let i = 1; i < col.length; i++) {
+        const prev = col[i - 1], cur = col[i];
+        const nd = prev.cy + prev.ry + UC_GAP + cur.ry;
+        if (cur.cy < nd) { cur.cy = nd; changed = true; }
+      }
+    }
+  }
+
+  // Step 5, Expand boundary height to fit all UCs.
+  const maxBottom = Math.max(...layout.useCases.map(uc => uc.cy + uc.ry));
+  b.height = Math.max(b.height, maxBottom - b.y + UC_PAD);
+
+  // Step 6, Re-center actors on their UC group; push bottom actors below boundary.
+  layout.actors.forEach(actor => {
+    const myUCs = layout.useCases.filter(u => actor.ucIds.includes(u.id));
+    if (actor.side === 'left' || actor.side === 'right') {
+      if (myUCs.length) actor.y = myUCs.reduce((s, u) => s + u.cy, 0) / myUCs.length;
+      actor.x = actor.side === 'left' ? b.x - ACTOR_PAD : b.x + b.width + ACTOR_PAD;
+    } else if (actor.side === 'bottom') {
+      actor.y = b.y + b.height + ACTOR_PAD;
+    }
+  });
+
+  // Step 6b, Enforce a minimum vertical gap between actors on the same side.
+  // Step 6 centers each actor on its UCs' mean cy, which can place two single-UC
+  // actors barely one row apart (~UC_GAP) so their stick figures + labels overlap.
+  // Push later actors down to keep centers at least ACTOR_MIN_GAP apart (CR #6).
+  const ACTOR_MIN_GAP = 150;
+  ['left', 'right'].forEach(side => {
+    const col = layout.actors.filter(a => a.side === side).sort((a, bb) => a.y - bb.y);
+    for (let i = 1; i < col.length; i++) {
+      const need = col[i - 1].y + ACTOR_MIN_GAP;
+      if (col[i].y < need) col[i].y = need;
+    }
+  });
+
+  // Step 7, Write UC positions to the SVG (absolute attributes).
+  layout.useCases.forEach(uc => {
+    const g = svg.querySelector('[id="uc-group-' + uc.id + '"]');
+    if (!g) return;
+    const el = g.querySelector('ellipse');
+    if (!el) return;
+    const dx = uc.cx - parseFloat(el.getAttribute('cx'));
+    const dy = uc.cy - parseFloat(el.getAttribute('cy'));
+    el.setAttribute('cx', uc.cx);
+    el.setAttribute('cy', uc.cy);
+    g.querySelectorAll('text').forEach(t => {
+      t.setAttribute('x', parseFloat(t.getAttribute('x') || 0) + dx);
+      t.setAttribute('y', parseFloat(t.getAttribute('y') || 0) + dy);
+    });
+    g.removeAttribute('transform');
+  });
+  layout.actors.forEach(actor => {
+    // Scope to THIS svg: a shared actor id (e.g. 'head') repeats across tabs, so
+    // document.getElementById returns the first tab's figure and moves the wrong
+    // one, leaving this tab's figure detached from its (correctly placed) line.
+    const g = svg.querySelector('[id="actor-group-' + actor.id + '"]');
+    if (g) g.setAttribute('transform', `translate(${actor.x},${actor.y})`);
+  });
+
+  // Step 8, Recalculate every connection line endpoint.
+  svg.querySelectorAll('[data-conn-from][data-conn-to]').forEach(line => {
+    const fId = line.getAttribute('data-conn-from');
+    const tId = line.getAttribute('data-conn-to');
+    const fUC = layout.useCases.find(u => u.id === fId);
+    const fAc = layout.actors.find(a => a.id === fId);
+    const tUC = layout.useCases.find(u => u.id === tId);
+    const tAc = layout.actors.find(a => a.id === tId);
+    const from = fAc ? { x: fAc.x, y: fAc.y } : fUC ? { x: fUC.cx, y: fUC.cy } : null;
+    const to   = tAc ? { x: tAc.x, y: tAc.y } : tUC ? { x: tUC.cx, y: tUC.cy } : null;
+    if (!from || !to) return;
+    let x1 = from.x, y1 = from.y, x2 = to.x, y2 = to.y;
+    if (fUC) { const a = Math.atan2(to.y - fUC.cy, to.x - fUC.cx);     x1 = fUC.cx + fUC.rx * Math.cos(a); y1 = fUC.cy + fUC.ry * Math.sin(a); }
+    if (tUC) { const a = Math.atan2(from.y - tUC.cy, from.x - tUC.cx); x2 = tUC.cx + tUC.rx * Math.cos(a); y2 = tUC.cy + tUC.ry * Math.sin(a); }
+    line.setAttribute('x1', x1); line.setAttribute('y1', y1);
+    line.setAttribute('x2', x2); line.setAttribute('y2', y2);
+
+    const hitbox = svg.querySelector(
+      `.conn-hitbox[data-hitbox-from="${fId}"][data-hitbox-to="${tId}"]`);
+    if (hitbox) {
+      hitbox.setAttribute('x1', x1); hitbox.setAttribute('y1', y1);
+      hitbox.setAttribute('x2', x2); hitbox.setAttribute('y2', y2);
+    }
+
+    // Reposition «include»/«extend» text label associated with this line.
+    const lbl = svg.querySelector(`[data-label-for="${fId} ${tId}"]`);
+    if (lbl) {
+      lbl.setAttribute('x', (x1 + x2) / 2);
+      lbl.setAttribute('y', (y1 + y2) / 2 - 8);
+    }
+  });
+
+  // Step 9, Resize boundary rect and SVG viewBox (both width and height).
+  const br = svg.querySelector('.system-boundary, rect[rx="12"]');
+  if (br) { br.setAttribute('width', b.width); br.setAttribute('height', b.height); }
+  const vb = svg.getAttribute('viewBox');
+  if (vb) {
+    const p = vb.split(/\s+/);
+    p[3] = Math.max(parseFloat(p[3]), b.y + b.height + 120);
+    const ACTOR_LABEL_MARGIN = 120;
+    const maxActorX = layout.actors.length
+      ? Math.max(...layout.actors.map(a => a.x))
+      : b.x + b.width;
+    p[2] = Math.max(parseFloat(p[2]), maxActorX + ACTOR_LABEL_MARGIN);
+    svg.setAttribute('viewBox', p.join(' '));
+  }
+
+  // Step 10, Timing labels + «extend» condition/point notes.
+  renderTimingLabels(layout);
+  renderExtendNotes(layout);
+}
+
+// ── renderTimingLabels ────────────────────────────────────────────────────
+function renderTimingLabels(layout) {
+  const svg = document.getElementById(layout.svgId);
+  if (!svg) return;
+  svg.querySelectorAll('.timing-label').forEach(el => el.remove());
+  const NS = 'http://www.w3.org/2000/svg';
+  (layout.connections || []).forEach(conn => {
+    if (!conn.timing) return;
+    const line = svg.querySelector(
+      `[data-conn-from="${conn.from}"][data-conn-to="${conn.to}"]`);
+    if (!line) return;
+    const x1 = +line.getAttribute('x1'), y1 = +line.getAttribute('y1');
+    const x2 = +line.getAttribute('x2'), y2 = +line.getAttribute('y2');
+    const mx = (x1 + x2) / 2, my = (y1 + y2) / 2;
+    const w = 10 + conn.timing.length * 7, h = 16;
+    const g = document.createElementNS(NS, 'g');
+    g.setAttribute('class', 'timing-label');
+    const rect = document.createElementNS(NS, 'rect');
+    rect.setAttribute('x', mx - w / 2); rect.setAttribute('y', my - h / 2);
+    rect.setAttribute('width', w);      rect.setAttribute('height', h);
+    rect.setAttribute('fill', 'white'); rect.setAttribute('stroke', '#334155');
+    rect.setAttribute('stroke-width', '0.8'); rect.setAttribute('rx', '3');
+    const text = document.createElementNS(NS, 'text');
+    text.setAttribute('x', mx); text.setAttribute('y', my + 4);
+    text.setAttribute('font-size', '10'); text.setAttribute('text-anchor', 'middle');
+    text.setAttribute('fill', '#334155');
+    text.setAttribute('font-family', "'Noto Sans Hebrew', sans-serif");
+    text.setAttribute('direction', 'rtl');
+    text.textContent = conn.timing;
+    g.appendChild(rect); g.appendChild(text);
+    svg.appendChild(g);
+  });
+}
+
+// ── renderExtendNotes ─────────────────────────────────────────────────────
+// UML puts the {condition} and the extension point on every Extend, a bare
+// «extend» label cannot answer "when does this fire?". Data comes from
+// diagramModel.relationships (kind: 'extend'); rendered like timing labels:
+// re-created on every fixLayout pass at the arrow midpoint, below the line
+// (the static «extend» label sits above it).
+function renderExtendNotes(layout) {
+  const svg = document.getElementById(layout.svgId);
+  if (!svg || typeof diagramModel === 'undefined') return;
+  svg.querySelectorAll('.extend-note').forEach(el => el.remove());
+  const NS = 'http://www.w3.org/2000/svg';
+  const rels = (diagramModel.parts || []).flatMap(p => p.relationships || []);
+  rels.filter(r => r.kind === 'extend' && (r.condition || r.extensionPoint)).forEach(r => {
+    const line = svg.querySelector(`[data-conn-from="${r.from}"][data-conn-to="${r.to}"]`);
+    if (!line) return;  // this tab does not draw the arrow
+    const x1 = +line.getAttribute('x1'), y1 = +line.getAttribute('y1');
+    const x2 = +line.getAttribute('x2'), y2 = +line.getAttribute('y2');
+    const mx = (x1 + x2) / 2, my = (y1 + y2) / 2;
+    const rows = [];
+    if (r.condition)      rows.push('{' + r.condition + '}');
+    if (r.extensionPoint) rows.push('📍 ' + r.extensionPoint);
+    const LINE_H = 13;
+    const w = 14 + Math.max(...rows.map(t => t.length)) * 6;
+    const h = rows.length * LINE_H + 7;
+    const g = document.createElementNS(NS, 'g');
+    g.setAttribute('class', 'extend-note');
+    const rect = document.createElementNS(NS, 'rect');
+    rect.setAttribute('x', mx - w / 2); rect.setAttribute('y', my + 5);
+    rect.setAttribute('width', w);      rect.setAttribute('height', h);
+    rect.setAttribute('fill', 'white'); rect.setAttribute('stroke', '#7c3aed');
+    rect.setAttribute('stroke-width', '0.8'); rect.setAttribute('rx', '3');
+    g.appendChild(rect);
+    rows.forEach((t, i) => {
+      const text = document.createElementNS(NS, 'text');
+      text.setAttribute('x', mx); text.setAttribute('y', my + 5 + LINE_H * (i + 1));
+      text.setAttribute('font-size', '9.5'); text.setAttribute('text-anchor', 'middle');
+      text.setAttribute('fill', '#7c3aed');
+      text.setAttribute('font-family', "'Noto Sans Hebrew', sans-serif");
+      text.setAttribute('direction', 'rtl');
+      text.textContent = t;
+      g.appendChild(text);
+    });
+    svg.appendChild(g);
+  });
+}
+
+// ── Tabs ──────────────────────────────────────────────────────────────────
+let activeTab = 0;
+function currentLayout() { return diagramLayouts[activeTab]; }
+function showDiagram(index) {
+  activeTab = index;
+  document.querySelectorAll('.diagram-part').forEach((p, i) => p.hidden = i !== index);
+  document.querySelectorAll('.tab').forEach((t, i) => t.classList.toggle('active', i === index));
+  fixLayout(diagramLayouts[index]);
+}
+
+// ── Small popup (actors & associations) ───────────────────────────────────
+function showDesc(id, type, event) {
+  if (type === 'uc') { openUcModal(id); event.stopPropagation(); return; }
+  showPopup(id, type, event);
+}
+
+function showPopup(id, type, event) {
+  hideDesc();
+  const data = type === 'actor' ? actorDescriptions[id]
+             : type === 'assoc' ? assocDescriptions[id]
+             : null;
+  if (!data) return;
+  const panel = document.createElement('div');
+  panel.id = 'desc-panel';
+  panel.innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+      <strong style="font-size:12px;color:#1e40af;direction:rtl;">${data.name}</strong>
+      <span onclick="hideDesc()" style="cursor:pointer;color:#94a3b8;font-size:18px;line-height:1;margin-right:6px;">×</span>
+    </div>
+    <div style="font-size:11px;color:#334155;line-height:1.6;direction:rtl;">${data.desc}</div>`;
+  Object.assign(panel.style, {
+    position:'fixed', background:'#fff', border:'1.5px solid #2980b9',
+    borderRadius:'8px', padding:'12px 16px', maxWidth:'300px',
+    boxShadow:'0 4px 14px rgba(0,0,0,.15)', zIndex:'1000',
+    left: event.clientX + 'px', top: event.clientY + 'px'
+  });
+  document.body.appendChild(panel);
+  const r = panel.getBoundingClientRect();
+  if (r.right  > window.innerWidth)  panel.style.left = (window.innerWidth  - r.width  - 10) + 'px';
+  if (r.bottom > window.innerHeight) panel.style.top  = (event.clientY - r.height - 10) + 'px';
+  event.stopPropagation();
+}
+
+function hideDesc() { document.getElementById('desc-panel')?.remove(); }
+
+document.addEventListener('click', e => {
+  if (!e.target.closest('[data-uc-id]') &&
+      !e.target.closest('[data-actor-id]') &&
+      !e.target.closest('[data-conn-id]')) hideDesc();
+});
+
+// ── UC modal ──────────────────────────────────────────────────────────────
+function wireframeSafe(html) {
+  const forbidden = [/<script\b/i, /\son\w+\s*=/i, /<iframe\b/i,
+    /src\s*=\s*["']https?:/i, /href\s*=\s*["']https?:/i, /@import\b/i, /<style\b/i];
+  return !forbidden.some(rx => rx.test(html));
+}
+
+// Flow of events (§4.4a / NOTATION §11b). The flow is a tree: actor/system/
+// include are leaves, `loop` and `alt` nest one level deeper. Step labels are
+// computed here rather than left to <ol> numbering, because extensions and
+// `resume` outcomes reference them by name, CSS counters would let the rendered
+// number drift away from "חזרה לשלב 2.1" and nobody would notice.
+function ucEsc(s) {
+  return String(s == null ? '' : s)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function ucOutcomeHtml(outcome) {
+  if (!outcome) return '';
+  if (outcome.kind === 'resume')
+    return `<div class="ext-outcome ext-resume">↩ חזרה לשלב ${ucEsc(outcome.at)}</div>`;
+  if (outcome.kind === 'terminate')
+    return `<div class="ext-outcome ext-terminate">⛔ המקרה מסתיים ללא הצלחה${
+      outcome.text ? ', ' + ucEsc(outcome.text) : ''}</div>`;
+  return '';
+}
+
+function ucExtensionHtml(ext, label, letter) {
+  // Legacy extensions (text-only, pre-2.6) carry the whole sentence in `text`
+  // and already read as prose, don't prefix them with "אם".
+  const structured = Array.isArray(ext.steps) || !!ext.outcome;
+  const head = structured
+    ? `אם ${ucEsc(ext.text)}:`
+    : ucEsc(ext.text);
+  const subSteps = (ext.steps || []).length
+    ? `<ul class="ext-steps">${(ext.steps || []).map((s, k) =>
+        `<li><span class="step-label">${label}${letter}${k + 1}</span>${ucEsc(s)}</li>`).join('')}</ul>`
+    : '';
+  return `<li class="ext-sub"><span class="step-label ext-label">${label}${letter}</span>${head}` +
+         `${subSteps}${ucOutcomeHtml(ext.outcome)}</li>`;
+}
+
+function ucStepBodyHtml(step, ctx) {
+  if (step.kind === 'actor')
+    return `<strong class="step-actor" data-actor-id="${ucEsc(step.actor)}">${ucEsc(ctx.actorName(step.actor))}</strong>: ${ucEsc(step.text)}`;
+  if (step.kind === 'system')
+    return `<em class="step-system">המערכת</em>: ${ucEsc(step.text)}`;
+  if (step.kind === 'include')
+    return `<span class="step-include">«include» </span><a class="step-uc-ref" data-uc-ref="${ucEsc(step.uc)}">${ucEsc(ctx.ucName(step.uc))}</a>${step.text ? ', ' + ucEsc(step.text) : ''}`;
+  if (step.kind === 'extension')  // legacy inline extension pseudo-step
+    return ucEsc(step.text);
+  return ucEsc(step.text);
+}
+
+// «extend» hook marker (§3.3). A step carrying `extensionPoint` is the named
+// location where an extension may fire, mark it in the base's modal, naming the
+// extension(s) that hook here and their {condition}, so the reader can answer
+// "at what point does it fire?" from the base's own flow.
+function ucPointBadgeHtml(step, ctx) {
+  const pt = step && step.extensionPoint;
+  if (!pt) return '';
+  const rels = (diagramModel.parts || []).flatMap(p => p.relationships || []);
+  const hooks = rels
+    .filter(r => r.kind === 'extend' && r.to === ctx.ucId && r.extensionPoint === pt)
+    .map(r =>
+      `<a class="step-uc-ref" data-uc-ref="${ucEsc(r.from)}">${ucEsc(ctx.ucName(r.from))}</a>` +
+      (r.condition ? ` <span class="ext-point-cond">{${ucEsc(r.condition)}}</span>` : ''));
+  return `<div class="ext-point-badge">📍 נקודת הרחבה ״${ucEsc(pt)}״` +
+         (hooks.length ? `, «extend» ${hooks.join(' · ')}` : '') + `</div>`;
+}
+
+function ucFlowHtml(flow, prefix, extByAt, ctx) {
+  let html = '<ul class="flow">';
+  (flow || []).forEach((step, i) => {
+    const label = `${prefix}${i + 1}`;
+    const badge = ucPointBadgeHtml(step, ctx);
+
+    if (step.kind === 'loop') {
+      html += `<li class="flow-step flow-loop"><span class="step-label">${label}</span>` +
+              `<span class="ctrl-kw">חזור</span> <span class="ctrl-cond">${ucEsc(step.condition)}</span>:` +
+              badge + ucFlowHtml(step.steps, `${label}.`, extByAt, ctx) + '</li>';
+    } else if (step.kind === 'alt') {
+      let branches = '<ul class="flow-branches">';
+      (step.branches || []).forEach((b, bi) => {
+        const bLabel = `${label}.${bi + 1}`;
+        branches += `<li class="flow-branch"><span class="step-label">${bLabel}</span>` +
+                    `<span class="branch-label">${ucEsc(b.label)}</span>` +
+                    ucFlowHtml(b.steps, `${bLabel}.`, extByAt, ctx) + '</li>';
+      });
+      branches += '</ul>';
+      html += `<li class="flow-step flow-alt"><span class="step-label">${label}</span>` +
+              `<span class="ctrl-kw">לפי</span> <span class="ctrl-cond">${ucEsc(step.condition)}</span>:` +
+              badge + branches + '</li>';
+    } else if (step.kind === 'extension') {
+      html += `<li class="ext-inline">${step.at ? ucEsc(step.at) + 'a. ' : ''}${ucEsc(step.text)}</li>`;
+    } else {
+      html += `<li class="flow-step"><span class="step-label">${label}</span>${ucStepBodyHtml(step, ctx)}${badge}</li>`;
+    }
+
+    const exts = extByAt.get(label) || [];
+    if (exts.length)
+      html += '<li class="ext-holder"><ul class="ext-list">' +
+              exts.map((e, j) => ucExtensionHtml(e, label, String.fromCharCode(97 + j))).join('') +
+              '</ul></li>';
+  });
+  return html + '</ul>';
+}
+
+// Modal header "who" line. Course doctrine: שחקן = מי שיוזם, an actor is whoever
+// initiates. Two UC kinds legitimately have ZERO actor associations, each with its
+// own wording because their invocation mechanism differs:
+//   «include» target (CR #4) , nobody initiates it, it is CALLED by its bases.
+//   «extend» extension (§3.3), nothing calls it EITHER: it fires on its own when
+//     the base reaches the named extension point and the condition holds. Naming
+//     the base + point here is what answers "at what point does it run?".
+// An extension WITH an actor shows the actor line AND its base/point line.
+function ucWhoHtml(id, doc, actorName, esc) {
+  const rels = (diagramModel.parts || []).flatMap(p => p.relationships || []);
+  const els  = (diagramModel.parts || []).flatMap(p => p.elements || []);
+  const nameOf = eid => { const el = els.find(e => e.id === eid); return esc(el ? el.name : eid); };
+  const extendsOf = rels.filter(r => r.kind === 'extend' && r.from === id)
+    .map(r => nameOf(r.to) + (r.extensionPoint ? ', בנקודת ״' + esc(r.extensionPoint) + '״' : ''));
+  const extendLine = extendsOf.length
+    ? `<div class="uc-primary uc-called">
+        <span class="uc-primary-label">הרחבה של:</span>
+        <b class="uc-callers">${extendsOf.join(' · ')}</b>
+      </div>`
+    : '';
+
+  const hasActor = rels.some(r => r.kind === 'actorAssoc' && r.ucId === id);
+  if (hasActor) {
+    return `<div class="uc-primary">
+        <span class="uc-primary-label">שחקן:</span>
+        <a class="uc-primary-link" data-actor-pulse="${esc(doc.primaryActor)}">${esc(actorName(doc.primaryActor))}</a>
+      </div>` + extendLine;
+  }
+  if (extendsOf.length) {
+    return `<div class="uc-primary uc-called">
+        <span class="uc-primary-label">אין שחקן, הרחבה של:</span>
+        <b class="uc-callers">${extendsOf.join(' · ')}</b>
+      </div>`;
+  }
+  const callers = rels.filter(r => r.kind === 'include' && r.to === id).map(r => nameOf(r.from));
+  return `<div class="uc-primary uc-called">
+      <span class="uc-primary-label">אין שחקן, נקראת מתוך:</span>
+      <b class="uc-callers">${callers.join(' · ')}</b>
+    </div>`;
+}
+
+function openUcModal(id) {
+  const doc = useCaseDocs[id];
+  if (!doc) return;
+  const actorName = aid => (actorDescriptions[aid]?.name) || aid;
+  const ucName    = uid => (useCaseDocs[uid]?.name) || uid;
+  const ctx = { actorName, ucName, ucId: id };
+  const esc = ucEsc;
+
+  const sces = doc.scenarios || [];
+  const scFlowHtml = sce => {
+    // `at` is a dot-numbered label; legacy models used a plain step number.
+    const extByAt = new Map();
+    (sce.extensions || []).forEach(e => {
+      const at = String(e.at == null ? '' : e.at);
+      if (!extByAt.has(at)) extByAt.set(at, []);
+      extByAt.get(at).push(e);
+    });
+    return ucFlowHtml(sce.flow, '', extByAt, ctx);
+  };
+  // NOTATION §11c: a multi-scenario UC (a CRUD "ניהול X" carries one scenario per
+  // operation) must READ as separate scenarios, numbered rail, one flow shown at a
+  // time, same presentation as VP's Flow-of-Events tab. Stacked bare headings made
+  // four scenarios look like sub-sections of a single flow.
+  let scenariosHtml = '';
+  if (sces.length > 1) {
+    const tabs = sces.map((sce, i) =>
+      `<button type="button" class="uc-sc-tab" data-sc-ix="${i}" aria-selected="${i === 0}">` +
+      `<span class="uc-sc-num">תרחיש ${i + 1}</span>${esc(sce.name || sce.id)}</button>`).join('');
+    const panes = sces.map((sce, i) =>
+      `<div class="uc-sc-pane" data-sc-ix="${i}"${i ? ' style="display:none"' : ''}>` +
+      `<h3>${esc(sce.name || sce.id)}</h3>${scFlowHtml(sce)}</div>`).join('');
+    scenariosHtml =
+      `<div class="uc-sc-rail-title">תרחישים (${sces.length})</div>` +
+      `<div class="uc-sc-split"><div class="uc-sc-rail">${tabs}</div><div class="uc-sc-panes">${panes}</div></div>`;
+  } else {
+    sces.forEach(sce => {
+      scenariosHtml += `<h3>${esc(sce.name || sce.id)}</h3>` + scFlowHtml(sce);
+    });
+  }
+
+  const listItems = items => (items || []).map(s => `<li>${esc(s)}</li>`).join('');
+  const usItems   = (doc.userStories || []).map(us =>
+    `<li>${esc('בתור ' + us.role + ', אני רוצה ' + us.want + ', כדי ש' + us.so)}</li>`).join('');
+
+  const wfHtml = (doc.wireframe && wireframeSafe(doc.wireframe))
+    ? `<section class="uc-wireframe">${doc.wireframe}</section>` : '';
+  if (doc.wireframe && !wireframeSafe(doc.wireframe))
+    console.warn(`Wireframe for ${id} failed safety check.`);
+
+  // Single innerHTML write, avoids silent failures in sandboxed iframe environments.
+  const body = document.querySelector('#uc-modal .uc-modal-body');
+  body.innerHTML = `
+    <button class="uc-modal-close" onclick="closeUcModal()" aria-label="Close">×</button>
+    <header>
+      <span class="uc-id">${esc(doc.id)}</span>
+      <h2 class="uc-name">${esc(doc.name)}</h2>
+      ${ucWhoHtml(id, doc, actorName, esc)}
+    </header>
+    <section class="uc-description">${esc(doc.description || '')}</section>
+    <section class="uc-scenarios">${scenariosHtml}</section>
+    <section class="uc-prepostuser">
+      <div class="uc-pre"><h4>תנאים מוקדמים</h4><ul>${listItems(doc.preconditions)}</ul></div>
+      <div class="uc-post"><h4>תנאים סופיים</h4><ul>${listItems(doc.postconditions)}</ul></div>
+      <div class="uc-stories"><h4>סיפורי משתמש</h4><ul>${usItems}</ul></div>
+    </section>
+    ${wfHtml}`;
+
+  // An actorless «include» target renders no .uc-primary-link, guard before wiring.
+  const primaryLink = body.querySelector('.uc-primary-link');
+  if (primaryLink) primaryLink.onclick = () => { closeUcModal(); pulseActor(doc.primaryActor); };
+  body.querySelectorAll('.step-actor').forEach(el => {
+    el.onclick = () => { closeUcModal(); pulseActor(el.dataset.actorId); };
+  });
+  body.querySelectorAll('.step-uc-ref').forEach(el => {
+    el.onclick = () => openUcModal(el.dataset.ucRef);
+  });
+  body.querySelectorAll('.uc-sc-tab').forEach(tab => {
+    tab.onclick = () => {
+      body.querySelectorAll('.uc-sc-tab').forEach(t =>
+        t.setAttribute('aria-selected', String(t === tab)));
+      body.querySelectorAll('.uc-sc-pane').forEach(p => {
+        p.style.display = p.dataset.scIx === tab.dataset.scIx ? '' : 'none';
+      });
+    };
+  });
+
+  const modal = document.getElementById('uc-modal');
+  modal.hidden = false;
+  document.body.classList.add('uc-modal-open');
+}
+
+function closeUcModal() {
+  const modal = document.getElementById('uc-modal');
+  if (modal) modal.hidden = true;
+  document.body.classList.remove('uc-modal-open');
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeUcModal(); });
+
+function pulseActor(actorId) {
+  const g = document.getElementById('actor-group-' + actorId);
+  if (!g) return;
+  g.classList.add('actor-pulse');
+  setTimeout(() => g.classList.remove('actor-pulse'), 2000);
+}
+
+// ── Assumptions panel ─────────────────────────────────────────────────────
+function renderAssumptions() {
+  const a = (diagramModel && diagramModel.assumptions)   || [];
+  const q = (diagramModel && diagramModel.openQuestions) || [];
+  const panel = document.getElementById('assumptions-panel');
+  if (!panel) return;
+  if (!a.length && !q.length) { panel.hidden = true; return; }
+  panel.hidden = false;
+  const fillList = (listEl, items) => {
+    listEl.innerHTML = '';
+    items.forEach(s => { const li = document.createElement('li'); li.textContent = s; listEl.appendChild(li); });
+  };
+  fillList(document.getElementById('assumptions-list'),    a);
+  fillList(document.getElementById('open-questions-list'), q);
+  document.getElementById('assumptions-col').hidden    = !a.length;
+  document.getElementById('open-questions-col').hidden = !q.length;
+}
+
+// ── XMI export ────────────────────────────────────────────────────────────
+function xmlEscape(s) {
+  return String(s == null ? '' : s)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;').replace(/'/g,'&apos;');
+}
+
+function downloadFile(filename, mimeType, content) {
+  const blob = new Blob([content], { type: mimeType });
+  const url  = URL.createObjectURL(blob);
+  const a = Object.assign(document.createElement('a'), { href: url, download: filename });
+  document.body.appendChild(a); a.click();
+  setTimeout(() => { URL.revokeObjectURL(url); a.remove(); }, 1000);
+}
+
+function xmiBody(elements, rels) {
+  const lines = [];
+  function flowText(uc) {
+    const actorName = id => (elements.find(e => e.kind === 'actor'   && e.id === id) || {}).name || id;
+    const ucName    = id => (elements.find(e => e.kind === 'useCase' && e.id === id) || {}).name || id;
+    const out = [];
+
+    // VP stores Flow of Events as an OpaqueBehavior text body, so the loop/alt
+    // structure round-trips as indented prose rather than as UML activity nodes.
+    const emit = (flow, prefix, indent, extByAt) => {
+      (flow || []).forEach((step, i) => {
+        const label = prefix + (i + 1);
+        const pad = '  '.repeat(indent);
+        // §3.3, a step that declares an extension point is the named hook; the
+        // exported flow must show it or the correspondence lives only on-screen.
+        const pt = step.extensionPoint ? ', 📍 נקודת הרחבה: ' + step.extensionPoint : '';
+        if (step.kind === 'loop') {
+          out.push(pad + label + '. חזור ' + (step.condition || '') + ':' + pt);
+          emit(step.steps, label + '.', indent + 1, extByAt);
+        } else if (step.kind === 'alt') {
+          out.push(pad + label + '. לפי ' + (step.condition || '') + ':' + pt);
+          (step.branches || []).forEach((b, bi) => {
+            const bLabel = label + '.' + (bi + 1);
+            out.push('  '.repeat(indent + 1) + bLabel + ' [' + (b.label || '') + ']');
+            emit(b.steps, bLabel + '.', indent + 2, extByAt);
+          });
+        } else if (step.kind === 'actor')     out.push(pad + label + '. ' + actorName(step.actor) + ': ' + step.text + pt);
+        else if (step.kind === 'system')      out.push(pad + label + '. System: ' + step.text + pt);
+        else if (step.kind === 'include')     out.push(pad + label + '. «include» ' + ucName(step.uc) + (step.text ? ', ' + step.text : '') + pt);
+        else if (step.kind === 'extension')   out.push(pad + label + 'a. ' + step.text);
+
+        (extByAt.get(label) || []).forEach((e, j) => {
+          const letter = String.fromCharCode(97 + j);
+          const structured = Array.isArray(e.steps) || !!e.outcome;
+          out.push(pad + '  ' + label + letter + '. ' + (structured ? 'אם ' + e.text + ':' : e.text));
+          (e.steps || []).forEach((s, k) => {
+            out.push(pad + '    ' + label + letter + (k + 1) + '. ' + s);
+          });
+          if (e.outcome && e.outcome.kind === 'resume')
+            out.push(pad + '    ↩ חזרה לשלב ' + e.outcome.at);
+          else if (e.outcome && e.outcome.kind === 'terminate')
+            out.push(pad + '    ⛔ המקרה מסתיים ללא הצלחה' + (e.outcome.text ? ', ' + e.outcome.text : ''));
+        });
+      });
+    };
+
+    (uc.scenarios || []).forEach(sc => {
+      out.push((sc.name || sc.id) + ':');
+      const extByAt = new Map();
+      (sc.extensions || []).forEach(e => {
+        const at = String(e.at == null ? '' : e.at);
+        if (!extByAt.has(at)) extByAt.set(at, []);
+        extByAt.get(at).push(e);
+      });
+      emit(sc.flow, '', 1, extByAt);
+    });
+    return out.join('\n');
+  }
+
+  for (const el of elements) {
+    if (el.kind === 'useCase') {
+      const hasDocs = (el.preconditions  && el.preconditions.length)
+                   || (el.postconditions && el.postconditions.length)
+                   || (el.scenarios      && el.scenarios.length);
+      if (!hasDocs) {
+        lines.push('    <packagedElement xmi:type="uml:UseCase" xmi:id="' + el.id + '" name="' + xmlEscape(el.name) + '"/>');
+      } else {
+        lines.push('    <packagedElement xmi:type="uml:UseCase" xmi:id="' + el.id + '" name="' + xmlEscape(el.name) + '">');
+        (el.preconditions || []).forEach((p, i) => {
+          lines.push('      <precondition xmi:type="uml:Constraint" xmi:id="' + el.id + '-pre-' + (i+1) + '" name="pre-' + (i+1) + '">');
+          lines.push('        <specification xmi:type="uml:OpaqueExpression" xmi:id="' + el.id + '-pre-' + (i+1) + '-s"><body>' + xmlEscape(p) + '</body></specification>');
+          lines.push('      </precondition>');
+        });
+        (el.postconditions || []).forEach((p, i) => {
+          lines.push('      <postcondition xmi:type="uml:Constraint" xmi:id="' + el.id + '-post-' + (i+1) + '" name="post-' + (i+1) + '">');
+          lines.push('        <specification xmi:type="uml:OpaqueExpression" xmi:id="' + el.id + '-post-' + (i+1) + '-s"><body>' + xmlEscape(p) + '</body></specification>');
+          lines.push('      </postcondition>');
+        });
+        if (el.scenarios && el.scenarios.length) {
+          lines.push('      <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="' + el.id + '-flow" name="Flow of Events">');
+          lines.push('        <body>' + xmlEscape(flowText(el)) + '</body>');
+          lines.push('      </ownedBehavior>');
+        }
+        lines.push('    </packagedElement>');
+      }
+    }
+    if (el.kind === 'actor')
+      lines.push('    <packagedElement xmi:type="uml:Actor" xmi:id="' + el.id + '" name="' + xmlEscape(el.name) + '"/>');
+  }
+  for (const r of rels) {
+    if (r.kind === 'actorAssoc') {
+      lines.push('    <packagedElement xmi:type="uml:Association" xmi:id="' + r.id + '">');
+      lines.push('      <ownedEnd xmi:type="uml:Property" xmi:id="' + r.id + '-e1" association="' + r.id + '" type="' + r.actorId + '"/>');
+      lines.push('      <ownedEnd xmi:type="uml:Property" xmi:id="' + r.id + '-e2" association="' + r.id + '" type="' + r.ucId   + '"/>');
+      lines.push('    </packagedElement>');
+    }
+    if (r.kind === 'include')
+      lines.push('    <packagedElement xmi:type="uml:Include" xmi:id="' + r.id + '" includingCase="' + r.from + '" addition="' + r.to + '"/>');
+    if (r.kind === 'extend')
+      lines.push('    <packagedElement xmi:type="uml:Extend"  xmi:id="' + r.id + '" extendedCase="'  + r.to   + '" extension="' + r.from + '"/>');
+    if (r.kind === 'generalization')
+      lines.push('    <packagedElement xmi:type="uml:Generalization" xmi:id="' + r.id + '" specific="' + r.from + '" general="' + r.to + '"/>');
+  }
+  return lines.join('\n');
+}
+
+function exportXMI() {
+  const m     = diagramModel;
+  const title = xmlEscape(m.title || 'diagram');
+  const body  = xmiBody(m.parts.flatMap(p => p.elements), m.parts.flatMap(p => p.relationships));
+  const xmi   =
+    '<?xml version="1.0" encoding="UTF-8"?>\n' +
+    '<xmi:XMI xmi:version="2.1"\n' +
+    '  xmlns:xmi="http://www.omg.org/XMI"\n' +
+    '  xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML">\n' +
+    '  <uml:Model xmi:id="model_1" name="' + title + '">\n' +
+    body + '\n' +
+    '  </uml:Model>\n' +
+    '</xmi:XMI>';
+  downloadFile(title.replace(/\s+/g, '_') + '.xmi', 'application/xml', xmi);
+}
+
+// ── User stories summary panel ────────────────────────────────────────────
+function renderUserStoriesSummary() {
+  const panel = document.getElementById('user-stories-panel');
+  if (!panel) return;
+  const seen = new Set();
+  const stories = [];
+  Object.values(useCaseDocs).forEach(doc => {
+    (doc.userStories || []).forEach(us => {
+      const key = us.role + '|' + us.want + '|' + us.so;
+      if (!seen.has(key)) { seen.add(key); stories.push(us); }
+    });
+  });
+  if (!stories.length) { panel.hidden = true; return; }
+  panel.hidden = false;
+  const list = document.getElementById('user-stories-list');
+  if (!list) return;
+  list.innerHTML = '';
+  stories.forEach(us => {
+    const li = document.createElement('li');
+    li.textContent = 'בתור ' + us.role + ', אני רוצה ' + us.want + ', כדי ש' + us.so;
+    list.appendChild(li);
+  });
+}
+
+// ── Hover highlight ────────────────────────────────────────────────────────
+// Point at any association / «include» / «extend» line to trace it through
+// crossings: it brightens to magenta, thickens, and lifts to the front,
+// restoring on mouse-out. Reuses the existing wide .conn-hitbox targets (kept in
+// sync by fixLayout), so no extra geometry and it works on every tab.
+function wireUcHover() {
+  document.querySelectorAll('.conn-hitbox').forEach(hit => {
+    if (hit.dataset.hoverWired) return;
+    hit.dataset.hoverWired = '1';
+    hit.style.cursor = 'pointer';
+    const svg = hit.ownerSVGElement;
+    const fId = hit.getAttribute('data-hitbox-from');
+    const tId = hit.getAttribute('data-hitbox-to');
+    const line = svg && svg.querySelector(
+      `[data-conn-from="${fId}"][data-conn-to="${tId}"]`);
+    if (!line) return;
+    let slot = null;
+    hit.addEventListener('mouseenter', () => {
+      const s0 = line.getAttribute('stroke') || '#334155';
+      const w0 = line.getAttribute('stroke-width') || '1.5';
+      line.dataset.s0 = s0; line.dataset.w0 = w0;
+      slot = document.createComment('e'); line.parentNode.insertBefore(slot, line);
+      line.parentNode.appendChild(line); // lift to front
+      line.setAttribute('stroke', '#e6007e');
+      line.setAttribute('stroke-width', String(Math.max(3.2, parseFloat(w0) + 1.6)));
+    });
+    hit.addEventListener('mouseleave', () => {
+      line.setAttribute('stroke', line.dataset.s0 || '#334155');
+      line.setAttribute('stroke-width', line.dataset.w0 || '1.5');
+      if (slot && slot.parentNode) { slot.parentNode.insertBefore(line, slot); slot.remove(); }
+      slot = null;
+    });
+  });
+}
+
+// ── Init ──────────────────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  diagramLayouts.forEach(l => fixLayout(l));
+  renderAssumptions();
+  renderUserStoriesSummary();
+});
+// Wired independently so a hiccup in the layout/summary init above never skips
+// it (hover doesn't depend on layout, it only attaches listeners).
+document.addEventListener('DOMContentLoaded', wireUcHover);
+
+</script>
+</body>
+</html>

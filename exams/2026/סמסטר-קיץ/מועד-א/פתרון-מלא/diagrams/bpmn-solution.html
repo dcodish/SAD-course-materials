@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>פתרון שאלה 1, קליטת מתנדב חדש למטה לקראת יום הבחירות, BPMN 1.0</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Hebrew:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; padding: 0; background: #eef2f6;
+      font-family: 'Noto Sans Hebrew', -apple-system, BlinkMacSystemFont, sans-serif;
+      direction: rtl; }
+    .header-bar { padding: 14px 20px; background: linear-gradient(135deg, #37474f, #546e7a);
+      color: #fff; display: flex; align-items: baseline; gap: 16px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
+    .header-bar h1 { margin: 0; font-size: 18px; font-weight: 600; }
+    .header-bar .en { font-size: 13px; opacity: 0.8; font-weight: 400; }
+    .header-bar .badge { margin-inline-start: auto; background: rgba(255,255,255,0.15);
+      padding: 3px 10px; border-radius: 10px; font-size: 11px; letter-spacing: 0.5px; }
+    .stats-bar { padding: 8px 20px; background: #ffffff; font-size: 12px; color: #546e7a;
+      border-bottom: 1px solid #cfd8dc; }
+    .stats-bar span { margin-inline-end: 16px; }
+    .svg-wrapper { overflow: auto; background: #f8fafc; padding: 20px; min-height: calc(100vh - 120px); }
+    svg { display: block; background: #f8fafc; }
+    .bpmn-element { cursor: pointer; }
+    /* Flow hover: a wide invisible hit-area makes thin lines easy to grab; the
+       line then brightens + thickens (and is lifted to the front by JS) so it
+       can be tracked unbroken through crossings. Dash patterns are preserved. */
+    .bpmn-flow { cursor: pointer; }
+    .bpmn-flow-hit { stroke: transparent; fill: none; stroke-width: 16; pointer-events: stroke; }
+    .bpmn-flow-line { transition: stroke 0.05s, stroke-width 0.05s; }
+    .bpmn-flow.bpmn-hl .bpmn-flow-line { stroke: #e6007e !important; stroke-width: 3.4 !important; }
+    .bpmn-tooltip { display: none; position: fixed; background: #1a1a2e; color: #fff;
+      padding: 9px 13px; border-radius: 6px; font-size: 12px; max-width: 280px;
+      z-index: 500; direction: rtl; pointer-events: none; line-height: 1.5;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+    .bpmn-tooltip strong { color: #ffd54f; }
+    .vp-export-btn { position: fixed; bottom: 20px; left: 20px; z-index: 1000;
+      background: #1e40af; color: #fff; border: none; border-radius: 6px;
+      padding: 9px 16px; font-size: 13px; cursor: pointer;
+      font-family: 'Noto Sans Hebrew', sans-serif; box-shadow: 0 2px 6px rgba(0,0,0,0.15); }
+    .vp-export-btn:hover { background: #1e3a8a; }
+    .assumptions-btn { position: fixed; top: 12px; left: 12px; z-index: 1000;
+      background: #37474f; color: #fff; border: none; border-radius: 6px;
+      padding: 7px 13px; font-size: 12px; cursor: pointer;
+      font-family: 'Noto Sans Hebrew', sans-serif; }
+    .assumptions-panel { position: fixed; top: 54px; left: 12px; z-index: 1000;
+      background: #ffffff; border: 1px solid #b0bec5; border-radius: 8px; padding: 14px;
+      max-width: 340px; max-height: 70vh; overflow-y: auto; direction: rtl;
+      font-family: 'Noto Sans Hebrew', sans-serif; font-size: 13px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.18); display: none; }
+    .assumptions-panel h4 { margin: 0 0 10px; color: #37474f; }
+    .assumptions-panel ul { margin: 4px 0 10px; padding-inline-start: 18px; }
+  </style>
+</head>
+<body>
+  <div class="header-bar">
+    <h1>פתרון שאלה 1, קליטת מתנדב חדש למטה לקראת יום הבחירות</h1>
+    <span class="en">Onboarding a new volunteer ahead of election day</span>
+    <span class="badge">BPMN 1.0</span>
+  </div>
+  <div class="stats-bar">
+    <span>3 מאגרים</span>
+    <span>2 נתיבים</span>
+    <span>10 משימות</span>
+    <span>8 שערים</span>
+    <span>6 אירועים</span>
+    <span>1 פריטי נתונים</span>
+    <span>34 זרימות</span>
+  </div>
+  <div class="svg-wrapper">
+    <svg width="3368.6" height="876"
+         viewBox="0 0 3368.6 876"
+         xmlns="http://www.w3.org/2000/svg">
+      
+    <defs>
+      <pattern id="dot-grid" x="0" y="0" width="24" height="24" patternUnits="userSpaceOnUse">
+        <circle cx="1" cy="1" r="0.8" fill="#cbd5e1"/>
+      </pattern>
+      <!-- markerUnits=userSpaceOnUse: arrowheads keep ONE size regardless of each
+           flow's stroke-width (default strokeWidth units made seq arrows ~45%
+           bigger than data-association arrows) -->
+      <marker id="arrow-seq" viewBox="0 0 10 10" refX="10" refY="5"
+              markerWidth="12" markerHeight="12" markerUnits="userSpaceOnUse" orient="auto-start-reverse">
+        <path d="M 0 0 L 10 5 L 0 10 Z" fill="#455a64"/>
+      </marker>
+      <marker id="msg-start" viewBox="-10 -10 20 20" refX="0" refY="0"
+              markerWidth="12" markerHeight="12" markerUnits="userSpaceOnUse" orient="auto">
+        <circle cx="0" cy="0" r="4" fill="#ffffff" stroke="#37474f" stroke-width="1.2"/>
+      </marker>
+      <marker id="msg-end" viewBox="0 0 10 10" refX="9" refY="5"
+              markerWidth="12" markerHeight="12" markerUnits="userSpaceOnUse" orient="auto-start-reverse">
+        <path d="M 0 0 L 10 5 L 0 10 Z" fill="#37474f"/>
+      </marker>
+      <marker id="arrow-data" viewBox="0 0 10 10" refX="9" refY="5"
+              markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto-start-reverse">
+        <path d="M 0 0 L 10 5 L 0 10 Z" fill="#7986cb"/>
+      </marker>
+    </defs>
+      <rect x="0" y="0" width="3368.6" height="876" fill="#f8fafc"/>
+    <rect x="0" y="0" width="3368.6" height="876" fill="url(#dot-grid)"/>
+      
+    <!-- pool: candidate -->
+    <g class="bpmn-pool" data-pool="candidate">
+      <rect x="20" y="72" width="3308.6" height="96"
+            fill="#faf7f2" stroke="#8d6e63" stroke-width="1.5"/>
+      <rect x="20" y="72" width="30" height="96"
+            fill="#6d4c41" stroke="#8d6e63" stroke-width="1.5"/>
+      <text x="35" y="120" text-anchor="middle"
+            dominant-baseline="middle"
+            transform="rotate(-90, 35, 120)"
+            fill="#ffffff" font-size="12" font-weight="600"
+            direction="rtl">המועמד</text>
+      <line x1="50" y1="72" x2="50" y2="168"
+            stroke="#8d6e63" stroke-width="1"/>
+    </g>
+
+    <!-- pool: hq -->
+    <g class="bpmn-pool" data-pool="hq">
+      <rect x="20" y="184" width="3308.6" height="544"
+            fill="#ffffff" stroke="#455a64" stroke-width="1.5"/>
+      <rect x="20" y="184" width="30" height="544"
+            fill="#37474f" stroke="#455a64" stroke-width="1.5"/>
+      <text x="35" y="456" text-anchor="middle"
+            dominant-baseline="middle"
+            transform="rotate(-90, 35, 456)"
+            fill="#ffffff" font-size="12" font-weight="600"
+            direction="rtl">מטה 2026</text>
+      <line x1="50" y1="184" x2="50" y2="728"
+            stroke="#455a64" stroke-width="1"/>
+    </g>
+
+    <!-- pool: security -->
+    <g class="bpmn-pool" data-pool="security">
+      <rect x="20" y="744" width="3308.6" height="96"
+            fill="#faf7f2" stroke="#8d6e63" stroke-width="1.5"/>
+      <rect x="20" y="744" width="30" height="96"
+            fill="#6d4c41" stroke="#8d6e63" stroke-width="1.5"/>
+      <text x="35" y="792" text-anchor="middle"
+            dominant-baseline="middle"
+            transform="rotate(-90, 35, 792)"
+            fill="#ffffff" font-size="12" font-weight="600"
+            direction="rtl">חברת האבטחה</text>
+      <line x1="50" y1="744" x2="50" y2="840"
+            stroke="#8d6e63" stroke-width="1"/>
+    </g>
+      
+    <g class="bpmn-lane" data-lane="sys">
+      <rect x="74" y="184" width="3254.6" height="272"
+            fill="#fafafa" fill-opacity="0.6" stroke="none"/>
+      <rect x="50" y="184" width="24" height="272"
+            fill="#546e7a" stroke="#455a64" stroke-width="1"/>
+      <text x="62" y="320" text-anchor="middle"
+            dominant-baseline="middle"
+            transform="rotate(-90, 62, 320)"
+            fill="#ffffff" font-size="11" font-weight="500"
+            direction="rtl">מערכת המטה</text>
+      
+    </g>
+
+    <g class="bpmn-lane" data-lane="coord">
+      <rect x="74" y="456" width="3254.6" height="272"
+            fill="#fafafa" fill-opacity="0.6" stroke="none"/>
+      <rect x="50" y="456" width="24" height="272"
+            fill="#546e7a" stroke="#455a64" stroke-width="1"/>
+      <text x="62" y="592" text-anchor="middle"
+            dominant-baseline="middle"
+            transform="rotate(-90, 62, 592)"
+            fill="#ffffff" font-size="11" font-weight="500"
+            direction="rtl">רכז ההתנדבות</text>
+      <line x1="50" y1="456" x2="3328.6" y2="456"
+              stroke="#90a4ae" stroke-width="1" stroke-dasharray="4 3"/>
+    </g>
+      
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf1">
+      <path class="bpmn-flow-hit" d="M 162.0 292.0 L 286.0 292.0" fill="none"/>
+      <path class="bpmn-flow-line" d="M 162.0 292.0 L 286.0 292.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf2">
+      <path class="bpmn-flow-hit" d="M 426.0 292.0 L 544.0 292.0" fill="none"/>
+      <path class="bpmn-flow-line" d="M 426.0 292.0 L 544.0 292.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf3">
+      <path class="bpmn-flow-hit" d="M 592.0 292.0 L 710.0 292.0" fill="none"/>
+      <path class="bpmn-flow-line" d="M 592.0 292.0 L 710.0 292.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    <g class="bpmn-flow-label">
+      <rect x="619.6" y="268.75" width="62.8" height="14"
+            rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"/>
+      <text x="651" y="275.75" text-anchor="middle" dominant-baseline="middle"
+            font-size="11" fill="#263238" direction="rtl">כן, רשום</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf4">
+      <path class="bpmn-flow-hit" d="M 850.0 292.0 L 974.0 292.0" fill="none"/>
+      <path class="bpmn-flow-line" d="M 850.0 292.0 L 974.0 292.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf5">
+      <path class="bpmn-flow-hit" d="M 568.0 316.0 L 568.0 514.0 L 780.0 514.0 L 780.0 540.0" fill="none"/>
+      <path class="bpmn-flow-line" d="M 568.0 316.0 L 568.0 514.0 L 780.0 514.0 L 780.0 540.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    <g class="bpmn-flow-label">
+      <rect x="535" y="364.4" width="24" height="14"
+            rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"/>
+      <text x="547" y="371.4" text-anchor="middle" dominant-baseline="middle"
+            font-size="11" fill="#263238" direction="rtl">לא</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf6">
+      <path class="bpmn-flow-hit" d="M 804.0 564.0 L 922.0 564.0" fill="none"/>
+      <path class="bpmn-flow-line" d="M 804.0 564.0 L 922.0 564.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf7">
+      <path class="bpmn-flow-hit" d="M 1062.0 564.0 L 1180.0 564.0" fill="none"/>
+      <path class="bpmn-flow-line" d="M 1062.0 564.0 L 1180.0 564.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf8">
+      <path class="bpmn-flow-hit" d="M 1204.0 588.0 L 1204.0 616.0 L 1350.6 616.0" fill="none"/>
+      <path class="bpmn-flow-line" d="M 1204.0 588.0 L 1204.0 616.0 L 1350.6 616.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    <g class="bpmn-flow-label">
+      <rect x="1206.68" y="619.25" width="82.6" height="14"
+            rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"/>
+      <text x="1247.98" y="626.25" text-anchor="middle" dominant-baseline="middle"
+            font-size="11" fill="#263238" direction="rtl">חסרים פרטים</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf9">
+      <path class="bpmn-flow-hit" d="M 1490.6 616.0 L 1614.6 616.0" fill="none"/>
+      <path class="bpmn-flow-line" d="M 1490.6 616.0 L 1614.6 616.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf10">
+      <path class="bpmn-flow-hit" d="M 1650.6 616.0 L 1666.6 616.0 L 1666.6 568.0 L 1244.0 568.0 L 1244.0 609.0 L 780.0 609.0 L 780.0 588.0" fill="none"/>
+      <path class="bpmn-flow-line" d="M 1650.6 616.0 L 1666.6 616.0 L 1666.6 568.0 L 1244.0 568.0 L 1244.0 609.0 L 780.0 609.0 L 780.0 588.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf11">
+      <path class="bpmn-flow-hit" d="M 1228.0 564.0 L 1244.0 564.0 L 1244.0 552.0 L 1370.6 552.0 L 1370.6 512.0 L 1396.6 512.0" fill="none"/>
+      <path class="bpmn-flow-line" d="M 1228.0 564.0 L 1244.0 564.0 L 1244.0 552.0 L 1370.6 552.0 L 1370.6 512.0 L 1396.6 512.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    <g class="bpmn-flow-label">
+      <rect x="1292.8149999999998" y="529" width="69.4" height="14"
+            rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"/>
+      <text x="1327.5149999999999" y="536" text-anchor="middle" dominant-baseline="middle"
+            font-size="11" fill="#263238" direction="rtl">הטופס מלא</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf12">
+      <path class="bpmn-flow-hit" d="M 1444.6 512.0 L 1562.6 512.0" fill="none"/>
+      <path class="bpmn-flow-line" d="M 1444.6 512.0 L 1562.6 512.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf13">
+      <path class="bpmn-flow-hit" d="M 1420.6 488.0 L 1420.6 350.0 L 1625.6 350.0 L 1625.6 324.0" fill="none"/>
+      <path class="bpmn-flow-line" d="M 1420.6 488.0 L 1420.6 350.0 L 1625.6 350.0 L 1625.6 324.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf14">
+      <path class="bpmn-flow-hit" d="M 1702.6 292.0 L 1826.6 292.0" fill="none"/>
+      <path class="bpmn-flow-line" d="M 1702.6 292.0 L 1826.6 292.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf15">
+      <path class="bpmn-flow-hit" d="M 1702.6 512.0 L 2006.6 512.0 L 2006.6 564.0 L 2032.6 564.0" fill="none"/>
+      <path class="bpmn-flow-line" d="M 1702.6 512.0 L 2006.6 512.0 L 2006.6 564.0 L 2032.6 564.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf16">
+      <path class="bpmn-flow-hit" d="M 1851.6 308.6 L 1851.6 496.0 L 2056.6 496.0 L 2056.6 540.0" fill="none"/>
+      <path class="bpmn-flow-line" d="M 1851.6 308.6 L 1851.6 496.0 L 2056.6 496.0 L 2056.6 540.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf17">
+      <path class="bpmn-flow-hit" d="M 2080.6 564.0 L 2244.6 564.0" fill="none"/>
+      <path class="bpmn-flow-line" d="M 2080.6 564.0 L 2244.6 564.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf18">
+      <path class="bpmn-flow-hit" d="M 2268.6 588.0 L 2268.6 609.0 L 2745.6 609.0" fill="none"/>
+      <path class="bpmn-flow-line" d="M 2268.6 588.0 L 2268.6 609.0 L 2745.6 609.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    <g class="bpmn-flow-label">
+      <rect x="2204.545" y="587.5" width="56.199999999999996" height="14"
+            rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"/>
+      <text x="2232.645" y="594.5" text-anchor="middle" dominant-baseline="middle"
+            font-size="11" fill="#263238" direction="rtl">לא אושר</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf19">
+      <path class="bpmn-flow-hit" d="M 2292.6 564.0 L 2456.6 564.0" fill="none"/>
+      <path class="bpmn-flow-line" d="M 2292.6 564.0 L 2456.6 564.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    <g class="bpmn-flow-label">
+      <rect x="2323.6" y="540.75" width="36.4" height="14"
+            rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"/>
+      <text x="2341.7999999999997" y="547.75" text-anchor="middle" dominant-baseline="middle"
+            font-size="11" fill="#263238" direction="rtl">אושר</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf20">
+      <path class="bpmn-flow-hit" d="M 2480.6 588.0 L 2480.6 623.0 L 2745.6 623.0" fill="none"/>
+      <path class="bpmn-flow-line" d="M 2480.6 588.0 L 2480.6 623.0 L 2745.6 623.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    <g class="bpmn-flow-label">
+      <rect x="2485.7999999999997" y="626.25" width="148.6" height="14"
+            rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"/>
+      <text x="2560.1" y="633.25" text-anchor="middle" dominant-baseline="middle"
+            font-size="11" fill="#263238" direction="rtl">אינו זמין ואינו מתאים</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf21">
+      <path class="bpmn-flow-hit" d="M 2504.6 564.0 L 2666.6 564.0 L 2666.6 512.0 L 2692.6 512.0" fill="none"/>
+      <path class="bpmn-flow-line" d="M 2504.6 564.0 L 2666.6 564.0 L 2666.6 512.0 L 2692.6 512.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    <g class="bpmn-flow-label">
+      <rect x="2511.8999999999996" y="540.75" width="82.6" height="14"
+            rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"/>
+      <text x="2553.2" y="547.75" text-anchor="middle" dominant-baseline="middle"
+            font-size="11" fill="#263238" direction="rtl">זמין ומתאים</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf22">
+      <path class="bpmn-flow-hit" d="M 2762.6 592.0 L 2762.6 558.0 L 2974.6 558.0 L 2974.6 376.0" fill="none"/>
+      <path class="bpmn-flow-line" d="M 2762.6 592.0 L 2762.6 558.0 L 2974.6 558.0 L 2974.6 376.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf23">
+      <path class="bpmn-flow-hit" d="M 3044.6 344.0 L 3168.6 344.0" fill="none"/>
+      <path class="bpmn-flow-line" d="M 3044.6 344.0 L 3168.6 344.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf24">
+      <path class="bpmn-flow-hit" d="M 2762.6 480.0 L 2762.6 350.0 L 2769.6 350.0 L 2769.6 324.0" fill="none"/>
+      <path class="bpmn-flow-line" d="M 2762.6 480.0 L 2762.6 350.0 L 2769.6 350.0 L 2769.6 324.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf25">
+      <path class="bpmn-flow-hit" d="M 2832.6 292.0 L 2878.6 292.0 L 2878.6 240.0 L 2904.6 240.0" fill="none"/>
+      <path class="bpmn-flow-line" d="M 2832.6 292.0 L 2878.6 292.0 L 2878.6 240.0 L 2904.6 240.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf26">
+      <path class="bpmn-flow-hit" d="M 3044.6 240.0 L 3168.6 240.0" fill="none"/>
+      <path class="bpmn-flow-line" d="M 3044.6 240.0 L 3168.6 240.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    </g>
+      
+    <g class="bpmn-flow bpmn-message" data-flow="mf1">
+      <path class="bpmn-flow-hit" d="M 144.0 168.0 L 144.0 274.0" fill="none"/>
+      <path class="bpmn-flow-line" d="M 144.0 168.0 L 144.0 274.0" fill="none" stroke="#37474f" stroke-width="1.3"
+            stroke-dasharray="10 5"
+            marker-start="url(#msg-start)" marker-end="url(#msg-end)"/>
+      
+    <g class="bpmn-flow-label">
+      <rect x="4.429999999999993" y="210" width="128.8" height="14"
+            rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"/>
+      <text x="68.83" y="217" text-anchor="middle" dominant-baseline="middle"
+            font-size="11" fill="#263238" direction="rtl">טופס מועמדות מקוון</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-message" data-flow="mf2">
+      <path class="bpmn-flow-hit" d="M 780.0 260.0 L 780.0 168.0" fill="none"/>
+      <path class="bpmn-flow-line" d="M 780.0 260.0 L 780.0 168.0" fill="none" stroke="#37474f" stroke-width="1.3"
+            stroke-dasharray="10 5"
+            marker-start="url(#msg-start)" marker-end="url(#msg-end)"/>
+      
+    <g class="bpmn-flow-label">
+      <rect x="633.565" y="203" width="135.39999999999998" height="14"
+            rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"/>
+      <text x="701.265" y="210" text-anchor="middle" dominant-baseline="middle"
+            font-size="11" fill="#263238" direction="rtl">הודעה: רשום זה מכבר</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-message" data-flow="mf3">
+      <path class="bpmn-flow-hit" d="M 1420.6 584.0 L 1420.6 552.0 L 1460.6 552.0 L 1460.6 194.0 L 1420.6 194.0 L 1420.6 168.0" fill="none"/>
+      <path class="bpmn-flow-line" d="M 1420.6 584.0 L 1420.6 552.0 L 1460.6 552.0 L 1460.6 194.0 L 1420.6 194.0 L 1420.6 168.0" fill="none" stroke="#37474f" stroke-width="1.3"
+            stroke-dasharray="10 5"
+            marker-start="url(#msg-start)" marker-end="url(#msg-end)"/>
+      
+    <g class="bpmn-flow-label">
+      <rect x="1327.895" y="290.4" width="122.19999999999999" height="14"
+            rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"/>
+      <text x="1388.995" y="297.4" text-anchor="middle" dominant-baseline="middle"
+            font-size="11" fill="#263238" direction="rtl">בקשה להשלמת פרטים</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-message" data-flow="mf4">
+      <path class="bpmn-flow-hit" d="M 1632.6 168.0 L 1632.6 246.0 L 1718.6 246.0 L 1718.6 560.0 L 1632.6 560.0 L 1632.6 598.0" fill="none"/>
+      <path class="bpmn-flow-line" d="M 1632.6 168.0 L 1632.6 246.0 L 1718.6 246.0 L 1718.6 560.0 L 1632.6 560.0 L 1632.6 598.0" fill="none" stroke="#37474f" stroke-width="1.3"
+            stroke-dasharray="10 5"
+            marker-start="url(#msg-start)" marker-end="url(#msg-end)"/>
+      
+    <g class="bpmn-flow-label">
+      <rect x="1486.165" y="196" width="135.39999999999998" height="14"
+            rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"/>
+      <text x="1553.865" y="203" text-anchor="middle" dominant-baseline="middle"
+            font-size="11" fill="#263238" direction="rtl">טופס מועמדות מעודכן</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-message" data-flow="mf5">
+      <path class="bpmn-flow-hit" d="M 1639.6 324.0 L 1639.6 466.0 L 1728.6 466.0 L 1728.6 718.0 L 1632.6 718.0 L 1632.6 744.0" fill="none"/>
+      <path class="bpmn-flow-line" d="M 1639.6 324.0 L 1639.6 466.0 L 1728.6 466.0 L 1728.6 718.0 L 1632.6 718.0 L 1632.6 744.0" fill="none" stroke="#37474f" stroke-width="1.3"
+            stroke-dasharray="10 5"
+            marker-start="url(#msg-start)" marker-end="url(#msg-end)"/>
+      
+    <g class="bpmn-flow-label">
+      <rect x="1479.3" y="720" width="142" height="14"
+            rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"/>
+      <text x="1550.3" y="727" text-anchor="middle" dominant-baseline="middle"
+            font-size="11" fill="#263238" direction="rtl">בקשה להנפקת תג כניסה</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-message" data-flow="mf6">
+      <path class="bpmn-flow-hit" d="M 1844.6 744.0 L 1844.6 336.0 L 1837.6 336.0 L 1837.6 308.6" fill="none"/>
+      <path class="bpmn-flow-line" d="M 1844.6 744.0 L 1844.6 336.0 L 1837.6 336.0 L 1837.6 308.6" fill="none" stroke="#37474f" stroke-width="1.3"
+            stroke-dasharray="10 5"
+            marker-start="url(#msg-start)" marker-end="url(#msg-end)"/>
+      
+    <g class="bpmn-flow-label">
+      <rect x="1871.225" y="447.4" width="175" height="14"
+            rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"/>
+      <text x="1958.725" y="454.4" text-anchor="middle" dominant-baseline="middle"
+            font-size="11" fill="#263238" direction="rtl">אישור או סירוב להנפקת התג</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-message" data-flow="mf7">
+      <path class="bpmn-flow-hit" d="M 2974.6 312.0 L 2974.6 286.0 L 2888.6 286.0 L 2888.6 194.0 L 2950.6 194.0 L 2950.6 168.0" fill="none"/>
+      <path class="bpmn-flow-line" d="M 2974.6 312.0 L 2974.6 286.0 L 2888.6 286.0 L 2888.6 194.0 L 2950.6 194.0 L 2950.6 168.0" fill="none" stroke="#37474f" stroke-width="1.3"
+            stroke-dasharray="10 5"
+            marker-start="url(#msg-start)" marker-end="url(#msg-end)"/>
+      
+    <g class="bpmn-flow-label">
+      <rect x="2983.515" y="288" width="82.6" height="14"
+            rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"/>
+      <text x="3024.815" y="295" text-anchor="middle" dominant-baseline="middle"
+            font-size="11" fill="#263238" direction="rtl">הודעת דחייה</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-message" data-flow="mf8">
+      <path class="bpmn-flow-hit" d="M 2974.6 208.0 L 2974.6 194.0 L 2998.6 194.0 L 2998.6 168.0" fill="none"/>
+      <path class="bpmn-flow-line" d="M 2974.6 208.0 L 2974.6 194.0 L 2998.6 194.0 L 2998.6 168.0" fill="none" stroke="#37474f" stroke-width="1.3"
+            stroke-dasharray="10 5"
+            marker-start="url(#msg-start)" marker-end="url(#msg-end)"/>
+      
+    <g class="bpmn-flow-label">
+      <rect x="3007.78" y="170" width="89.19999999999999" height="14"
+            rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"/>
+      <text x="3052.38" y="177" text-anchor="middle" dominant-baseline="middle"
+            font-size="11" fill="#263238" direction="rtl">זימון לחניכה</text>
+    </g>
+    </g>
+      
+    <g class="bpmn-flow bpmn-data-assoc" data-flow="da1" data-dir="read">
+      <path class="bpmn-flow-hit" d="M 1552.3 406.0 L 1552.3 362.0 L 356.0 362.0 L 356.0 324.0" fill="none"/>
+      <path class="bpmn-flow-line" d="M 1552.3 406.0 L 1552.3 362.0 L 356.0 362.0 L 356.0 324.0" fill="none" stroke="#7986cb" stroke-width="1.1"
+            stroke-dasharray="4 3" marker-end="url(#arrow-data)"/>
+    </g>
+
+    <g class="bpmn-flow bpmn-data-assoc" data-flow="da2" data-dir="write">
+      <path class="bpmn-flow-hit" d="M 2755.6 324.0 L 2755.6 380.0 L 1566.3 380.0 L 1566.3 406.0" fill="none"/>
+      <path class="bpmn-flow-line" d="M 2755.6 324.0 L 2755.6 380.0 L 1566.3 380.0 L 1566.3 406.0" fill="none" stroke="#7986cb" stroke-width="1.1"
+            stroke-dasharray="4 3" marker-end="url(#arrow-data)"/>
+    </g>
+      
+    <g class="bpmn-element bpmn-event" id="s_start" data-kind="event" data-event="start">
+      <circle cx="144" cy="292" r="18" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2"/>
+      <text text-anchor="middle" font-size="11" fill="#37474f" direction="rtl"
+             font-weight="500"><tspan x="144" y="324">התקבל טופס מועמדות</tspan><tspan x="144" y="336">מקוון</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-task" id="s_fetch" data-kind="task">
+      <rect x="286" y="260" width="140" height="64"
+            rx="8" ry="8" fill="#ffffff" stroke="#546e7a" stroke-width="1.5"/>
+      <text text-anchor="middle" dominant-baseline="middle"
+            font-size="11.5" font-weight="500"
+            fill="#1a1a2e" direction="rtl"><tspan x="356" y="278">שליפת רשומות</tspan><tspan x="356" y="292">המתנדבים ובדיקה</tspan><tspan x="356" y="306">אם המועמד רשום</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-gateway" id="g_reg" data-kind="gateway" data-gw="XOR">
+      <text text-anchor="middle" font-size="11" fill="#37474f" direction="rtl"
+             font-weight="500"><tspan x="568" y="245">האם המועמד כבר רשום</tspan><tspan x="568" y="258">במאגר?</tspan></text>
+      <rect x="551" y="275" width="34" height="34"
+            fill="#fff8e1" stroke="#f9a825" stroke-width="2"
+            transform="rotate(45, 568, 292)"/>
+      
+      <line x1="560" y1="284" x2="576" y2="300"
+            stroke="#e65100" stroke-width="3" stroke-linecap="round"/>
+      <line x1="576" y1="284" x2="560" y2="300"
+            stroke="#e65100" stroke-width="3" stroke-linecap="round"/>
+    </g>
+
+    <g class="bpmn-element bpmn-task" id="s_notify_reg" data-kind="task">
+      <rect x="710" y="260" width="140" height="64"
+            rx="8" ry="8" fill="#ffffff" stroke="#546e7a" stroke-width="1.5"/>
+      <text text-anchor="middle" dominant-baseline="middle"
+            font-size="11.5" font-weight="500"
+            fill="#1a1a2e" direction="rtl"><tspan x="780" y="278">שליחת הודעה</tspan><tspan x="780" y="292">למועמד שהוא רשום</tspan><tspan x="780" y="306">זה מכבר</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-event" id="s_end_reg" data-kind="event" data-event="end">
+      <circle cx="992" cy="292" r="18" fill="#ffebee" stroke="#c62828" stroke-width="3.5"/>
+      <text text-anchor="middle" font-size="11" fill="#37474f" direction="rtl"
+             font-weight="500"><tspan x="992" y="324">המועמד רשום זה</tspan><tspan x="992" y="336">מכבר</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-task" id="s_badge_req" data-kind="task">
+      <rect x="1562.6" y="260" width="140" height="64"
+            rx="8" ry="8" fill="#ffffff" stroke="#546e7a" stroke-width="1.5"/>
+      <text text-anchor="middle" dominant-baseline="middle"
+            font-size="11.5" font-weight="500"
+            fill="#1a1a2e" direction="rtl"><tspan x="1632.6" y="285">שליחת בקשה</tspan><tspan x="1632.6" y="299">להנפקת תג כניסה</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-event" id="s_wait_badge" data-kind="event" data-event="intermediate">
+      
+      <circle cx="1844.6" cy="292" r="18" fill="#ffffff" stroke="#1565c0" stroke-width="2"/>
+      <circle cx="1844.6" cy="292" r="13.5" fill="none" stroke="#1565c0" stroke-width="1.2"/>
+      <text text-anchor="middle" font-size="11" fill="#37474f" direction="rtl"
+             font-weight="500"><tspan x="1844.6" y="324">התקבלה תשובת חברת</tspan><tspan x="1844.6" y="336">האבטחה</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-task" id="s_register" data-kind="task">
+      <rect x="2692.6" y="260" width="140" height="64"
+            rx="8" ry="8" fill="#ffffff" stroke="#546e7a" stroke-width="1.5"/>
+      <text text-anchor="middle" dominant-baseline="middle"
+            font-size="11.5" font-weight="500"
+            fill="#1a1a2e" direction="rtl"><tspan x="2762.6" y="278">רישום המועמד</tspan><tspan x="2762.6" y="292">במאגר כמתנדב</tspan><tspan x="2762.6" y="306">פעיל</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-task" id="s_invite" data-kind="task">
+      <rect x="2904.6" y="208" width="140" height="64"
+            rx="8" ry="8" fill="#ffffff" stroke="#546e7a" stroke-width="1.5"/>
+      <text text-anchor="middle" dominant-baseline="middle"
+            font-size="11.5" font-weight="500"
+            fill="#1a1a2e" direction="rtl"><tspan x="2974.6" y="226">שליחת זימון</tspan><tspan x="2974.6" y="240">לחניכה על נהלי</tspan><tspan x="2974.6" y="254">העבודה</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-task" id="s_reject" data-kind="task">
+      <rect x="2904.6" y="312" width="140" height="64"
+            rx="8" ry="8" fill="#ffffff" stroke="#546e7a" stroke-width="1.5"/>
+      <text text-anchor="middle" dominant-baseline="middle"
+            font-size="11.5" font-weight="500"
+            fill="#1a1a2e" direction="rtl"><tspan x="2974.6" y="337">שליחת הודעת</tspan><tspan x="2974.6" y="351">דחייה למועמד</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-event" id="s_end_ok" data-kind="event" data-event="end">
+      <circle cx="3186.6" cy="240" r="18" fill="#ffebee" stroke="#c62828" stroke-width="3.5"/>
+      <text text-anchor="middle" font-size="11" fill="#37474f" direction="rtl"
+             font-weight="500"><tspan x="3186.6" y="272">המועמד נרשם כמתנדב</tspan><tspan x="3186.6" y="284">וזומן לחניכה</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-event" id="s_end_rej" data-kind="event" data-event="end">
+      <circle cx="3186.6" cy="344" r="18" fill="#ffebee" stroke="#c62828" stroke-width="3.5"/>
+      <text text-anchor="middle" font-size="11" fill="#37474f" direction="rtl"
+             font-weight="500"><tspan x="3186.6" y="376">המועמדות נדחתה</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-gateway" id="c_loop_merge" data-kind="gateway" data-gw="XOR">
+      
+      <rect x="763" y="547" width="34" height="34"
+            fill="#fff8e1" stroke="#f9a825" stroke-width="2"
+            transform="rotate(45, 780, 564)"/>
+      
+      <line x1="772" y1="556" x2="788" y2="572"
+            stroke="#e65100" stroke-width="3" stroke-linecap="round"/>
+      <line x1="788" y1="556" x2="772" y2="572"
+            stroke="#e65100" stroke-width="3" stroke-linecap="round"/>
+    </g>
+
+    <g class="bpmn-element bpmn-task" id="c_check" data-kind="task">
+      <rect x="922" y="532" width="140" height="64"
+            rx="8" ry="8" fill="#ffffff" stroke="#546e7a" stroke-width="1.5"/>
+      <text text-anchor="middle" dominant-baseline="middle"
+            font-size="11.5" font-weight="500"
+            fill="#1a1a2e" direction="rtl"><tspan x="992" y="557">בדיקת שלמות טופס</tspan><tspan x="992" y="571">המועמדות</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-gateway" id="g_complete" data-kind="gateway" data-gw="XOR">
+      <text text-anchor="middle" font-size="11" fill="#37474f" direction="rtl"
+             font-weight="500"><tspan x="1204" y="530">האם הטופס מלא?</tspan></text>
+      <rect x="1187" y="547" width="34" height="34"
+            fill="#fff8e1" stroke="#f9a825" stroke-width="2"
+            transform="rotate(45, 1204, 564)"/>
+      
+      <line x1="1196" y1="556" x2="1212" y2="572"
+            stroke="#e65100" stroke-width="3" stroke-linecap="round"/>
+      <line x1="1212" y1="556" x2="1196" y2="572"
+            stroke="#e65100" stroke-width="3" stroke-linecap="round"/>
+    </g>
+
+    <g class="bpmn-element bpmn-gateway" id="g_and_split" data-kind="gateway" data-gw="AND">
+      
+      <rect x="1403.6" y="495" width="34" height="34"
+            fill="#e8f5e9" stroke="#2e7d32" stroke-width="2"
+            transform="rotate(45, 1420.6, 512)"/>
+      
+      <line x1="1420.6" y1="503" x2="1420.6" y2="521"
+            stroke="#1b5e20" stroke-width="3" stroke-linecap="round"/>
+      <line x1="1411.6" y1="512" x2="1429.6" y2="512"
+            stroke="#1b5e20" stroke-width="3" stroke-linecap="round"/>
+    </g>
+
+    <g class="bpmn-element bpmn-task" id="c_request" data-kind="task">
+      <rect x="1350.6" y="584" width="140" height="64"
+            rx="8" ry="8" fill="#ffffff" stroke="#546e7a" stroke-width="1.5"/>
+      <text text-anchor="middle" dominant-baseline="middle"
+            font-size="11.5" font-weight="500"
+            fill="#1a1a2e" direction="rtl"><tspan x="1420.6" y="602">בקשה מהמועמד</tspan><tspan x="1420.6" y="616">להשלמת הפרטים</tspan><tspan x="1420.6" y="630">החסרים</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-task" id="c_interview" data-kind="task">
+      <rect x="1562.6" y="480" width="140" height="64"
+            rx="8" ry="8" fill="#ffffff" stroke="#546e7a" stroke-width="1.5"/>
+      <text text-anchor="middle" dominant-baseline="middle"
+            font-size="11.5" font-weight="500"
+            fill="#1a1a2e" direction="rtl"><tspan x="1632.6" y="498">ראיון טלפוני עם</tspan><tspan x="1632.6" y="512">המועמד ותיעוד</tspan><tspan x="1632.6" y="526">תוצאתו</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-event" id="c_wait_form" data-kind="event" data-event="intermediate">
+      
+      <circle cx="1632.6" cy="616" r="18" fill="#ffffff" stroke="#1565c0" stroke-width="2"/>
+      <circle cx="1632.6" cy="616" r="13.5" fill="none" stroke="#1565c0" stroke-width="1.2"/>
+      <text text-anchor="middle" font-size="11" fill="#37474f" direction="rtl"
+             font-weight="500"><tspan x="1632.6" y="648">התקבל טופס מעודכן</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-gateway" id="g_and_join" data-kind="gateway" data-gw="AND">
+      
+      <rect x="2039.6" y="547" width="34" height="34"
+            fill="#e8f5e9" stroke="#2e7d32" stroke-width="2"
+            transform="rotate(45, 2056.6, 564)"/>
+      
+      <line x1="2056.6" y1="555" x2="2056.6" y2="573"
+            stroke="#1b5e20" stroke-width="3" stroke-linecap="round"/>
+      <line x1="2047.6" y1="564" x2="2065.6" y2="564"
+            stroke="#1b5e20" stroke-width="3" stroke-linecap="round"/>
+    </g>
+
+    <g class="bpmn-element bpmn-gateway" id="g_badge" data-kind="gateway" data-gw="XOR">
+      <text text-anchor="middle" font-size="11" fill="#37474f" direction="rtl"
+             font-weight="500"><tspan x="2268.6" y="530">האם התג אושר?</tspan></text>
+      <rect x="2251.6" y="547" width="34" height="34"
+            fill="#fff8e1" stroke="#f9a825" stroke-width="2"
+            transform="rotate(45, 2268.6, 564)"/>
+      
+      <line x1="2260.6" y1="556" x2="2276.6" y2="572"
+            stroke="#e65100" stroke-width="3" stroke-linecap="round"/>
+      <line x1="2276.6" y1="556" x2="2260.6" y2="572"
+            stroke="#e65100" stroke-width="3" stroke-linecap="round"/>
+    </g>
+
+    <g class="bpmn-element bpmn-gateway" id="g_fit" data-kind="gateway" data-gw="XOR">
+      <text text-anchor="middle" font-size="11" fill="#37474f" direction="rtl"
+             font-weight="500"><tspan x="2480.6" y="517">האם המועמד זמין</tspan><tspan x="2480.6" y="530">ומתאים?</tspan></text>
+      <rect x="2463.6" y="547" width="34" height="34"
+            fill="#fff8e1" stroke="#f9a825" stroke-width="2"
+            transform="rotate(45, 2480.6, 564)"/>
+      
+      <line x1="2472.6" y1="556" x2="2488.6" y2="572"
+            stroke="#e65100" stroke-width="3" stroke-linecap="round"/>
+      <line x1="2488.6" y1="556" x2="2472.6" y2="572"
+            stroke="#e65100" stroke-width="3" stroke-linecap="round"/>
+    </g>
+
+    <g class="bpmn-element bpmn-task" id="c_role" data-kind="task">
+      <rect x="2692.6" y="480" width="140" height="64"
+            rx="8" ry="8" fill="#ffffff" stroke="#546e7a" stroke-width="1.5"/>
+      <text text-anchor="middle" dominant-baseline="middle"
+            font-size="11.5" font-weight="500"
+            fill="#1a1a2e" direction="rtl"><tspan x="2762.6" y="505">קביעת התפקיד</tspan><tspan x="2762.6" y="519">שימלא המועמד</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-gateway" id="s_reject_merge" data-kind="gateway" data-gw="XOR">
+      
+      <rect x="2745.6" y="599" width="34" height="34"
+            fill="#fff8e1" stroke="#f9a825" stroke-width="2"
+            transform="rotate(45, 2762.6, 616)"/>
+      
+      <line x1="2754.6" y1="608" x2="2770.6" y2="624"
+            stroke="#e65100" stroke-width="3" stroke-linecap="round"/>
+      <line x1="2770.6" y1="608" x2="2754.6" y2="624"
+            stroke="#e65100" stroke-width="3" stroke-linecap="round"/>
+    </g>
+
+    <g class="bpmn-element bpmn-data-store" id="ds_volunteers" data-kind="dataStore">
+      <path d="M 1531.3 412 L 1531.3 444
+               A 28 6 0 0 0 1587.3 444
+               L 1587.3 412
+               A 28 6 0 0 0 1531.3 412 Z"
+            fill="#ffffff" stroke="#2e7d32" stroke-width="1.4"/>
+      <path d="M 1531.3 412
+               A 28 6 0 0 0 1587.3 412"
+            fill="none" stroke="#2e7d32" stroke-width="1.4"/>
+      <text x="1559.3" y="464" text-anchor="middle"
+            font-size="11" fill="#263238"
+            direction="rtl">מאגר המתנדבים</text>
+    </g>
+    </svg>
+  </div>
+  <div id="bpmn-tooltip" class="bpmn-tooltip"></div>
+  
+    <button class="assumptions-btn" onclick="toggleAssumptions()">ℹ️ הנחות ושאלות</button>
+    <div id="assumptions-panel" class="assumptions-panel">
+      <h4>הנחות ושאלות פתוחות</h4>
+      <strong>הנחות:</strong><ul><li>המועמד וחברת האבטחה אינם חלק מן המטה, ולכן כל אחד מהם הוא Pool נפרד ולא Lane. שניהם מצוירים כ-Pool ריק (black-box): המטה אינו מנהל את התהליך הפנימי שלהם, ומוחלפות עמם הודעות בלבד.</li><li>התהליך נפתח ב-Start Event בתוך ה-Pool של המטה, שאליו מגיע Message Flow מן ה-Pool של המועמד. כיוון החץ, מבחוץ פנימה, הוא שמראה שהיוזמה חיצונית. Start Event מסוג הודעה (מעטפה) בלי Pool נפרד למועמד הוא וריאנט מזכה.</li><li>רכז ההתנדבות ומערכת המטה הם שני מבצעים באותו משתתף עסקי, ולכן הם שני Lanes בתוך Pool אחד, והמעבר ביניהם הוא Sequence Flow רגיל.</li><li>הראיון הטלפוני ובקשת התג אינם תלויים זה בזה ושניהם מתבצעים תמיד, ולכן הם יוצאים משער AND (פיצול) ונפגשים בשער AND (סנכרון). ההכרעה על קבלה או דחייה מתקבלת רק אחרי הסנכרון, כששתי התוצאות בידי המטה.</li><li>לולאת ההשלמה חוזרת אל שער XOR של מיזוג הממוקם מיד לפני בדיקת שלמות הטופס, ולא אל אירוע ההתחלה: בדיקת הרישום הקיים במאגר כבר בוצעה ותוצאתה אינה משתנה.</li><li>ההמתנה לטופס המעודכן ולתשובת חברת האבטחה הן פרקי זמן שבהם איש אינו פועל, ולכן הן אירועי ביניים ולא משימות.</li><li>שני ענפי הדחייה (התג לא אושר, המועמד אינו מתאים) מתאחדים בשער XOR של מיזוג לפני פעילות אחת של שליחת הודעת הדחייה.</li></ul>
+      <strong>שאלות פתוחות:</strong><ul><li>התיאור אינו קובע גבול למספר סבבי ההשלמה של הטופס. בפועל המטה היה עשוי לקבוע מועד אחרון שאחריו המועמדות נסגרת; סטודנט שהוסיף ענף כזה (למשל אירוע טיימר) נתן תשובה סבירה לא פחות, אך הדבר אינו נדרש.</li></ul>
+    </div>
+  <button class="vp-export-btn" onclick="exportBPMN()">Download .bpmn (Visual Paradigm)</button>
+  <script>
+  (function() {
+    const TOOLTIPS = {"s_start":"<strong>אירוע התחלה</strong><div>התקבל טופס מועמדות מקוון</div>","s_fetch":"<strong>שליפת רשומות המתנדבים ובדיקה אם המועמד רשום</strong><div>מאגר: מטה 2026 · נתיב: מערכת המטה</div><div>קורא: מאגר המתנדבים</div>","g_reg":"<strong>XOR (בלעדי), פיצול</strong><div>האם המועמד כבר רשום במאגר?</div><div>שאלה: האם המועמד כבר רשום במאגר המתנדבים?</div><div>ענפים:</div><ul style=\"margin:4px 0 0;padding-right:18px\"><li>כן, רשום ← שליחת הודעה למועמד שהוא רשום זה מכבר</li><li>לא ← c_loop_merge</li></ul>","s_notify_reg":"<strong>שליחת הודעה למועמד שהוא רשום זה מכבר</strong><div>מאגר: מטה 2026 · נתיב: מערכת המטה</div>","s_end_reg":"<strong>אירוע סיום</strong><div>המועמד רשום זה מכבר</div>","c_loop_merge":"<strong>XOR (בלעדי), איחוד</strong>","c_check":"<strong>בדיקת שלמות טופס המועמדות</strong><div>מאגר: מטה 2026 · נתיב: רכז ההתנדבות</div>","g_complete":"<strong>XOR (בלעדי), פיצול</strong><div>האם הטופס מלא?</div><div>שאלה: האם טופס המועמדות מלא?</div><div>ענפים:</div><ul style=\"margin:4px 0 0;padding-right:18px\"><li>חסרים פרטים ← בקשה מהמועמד להשלמת הפרטים החסרים</li><li>הטופס מלא ← g_and_split</li></ul>","c_request":"<strong>בקשה מהמועמד להשלמת הפרטים החסרים</strong><div>מאגר: מטה 2026 · נתיב: רכז ההתנדבות</div>","c_wait_form":"<strong>אירוע ביניים</strong><div>התקבל טופס מעודכן</div>","g_and_split":"<strong>AND (מקבילי), פיצול</strong><div>ענפים:</div><ul style=\"margin:4px 0 0;padding-right:18px\"><li>(ללא תנאי) ← ראיון טלפוני עם המועמד ותיעוד תוצאתו</li><li>(ללא תנאי) ← שליחת בקשה להנפקת תג כניסה</li></ul>","c_interview":"<strong>ראיון טלפוני עם המועמד ותיעוד תוצאתו</strong><div>מאגר: מטה 2026 · נתיב: רכז ההתנדבות</div>","s_badge_req":"<strong>שליחת בקשה להנפקת תג כניסה</strong><div>מאגר: מטה 2026 · נתיב: מערכת המטה</div>","s_wait_badge":"<strong>אירוע ביניים</strong><div>התקבלה תשובת חברת האבטחה</div>","g_and_join":"<strong>AND (מקבילי), איחוד</strong>","g_badge":"<strong>XOR (בלעדי), פיצול</strong><div>האם התג אושר?</div><div>שאלה: האם חברת האבטחה אישרה את הנפקת התג?</div><div>ענפים:</div><ul style=\"margin:4px 0 0;padding-right:18px\"><li>לא אושר ← s_reject_merge</li><li>אושר ← האם המועמד זמין ומתאים?</li></ul>","g_fit":"<strong>XOR (בלעדי), פיצול</strong><div>האם המועמד זמין ומתאים?</div><div>שאלה: האם הראיון העלה שהמועמד זמין ומתאים לתפקיד?</div><div>ענפים:</div><ul style=\"margin:4px 0 0;padding-right:18px\"><li>אינו זמין ואינו מתאים ← s_reject_merge</li><li>זמין ומתאים ← קביעת התפקיד שימלא המועמד</li></ul>","c_role":"<strong>קביעת התפקיד שימלא המועמד</strong><div>מאגר: מטה 2026 · נתיב: רכז ההתנדבות</div>","s_register":"<strong>רישום המועמד במאגר כמתנדב פעיל</strong><div>מאגר: מטה 2026 · נתיב: מערכת המטה</div><div>כותב: מאגר המתנדבים</div>","s_invite":"<strong>שליחת זימון לחניכה על נהלי העבודה</strong><div>מאגר: מטה 2026 · נתיב: מערכת המטה</div>","s_end_ok":"<strong>אירוע סיום</strong><div>המועמד נרשם כמתנדב וזומן לחניכה</div>","s_reject_merge":"<strong>XOR (בלעדי), איחוד</strong>","s_reject":"<strong>שליחת הודעת דחייה למועמד</strong><div>מאגר: מטה 2026 · נתיב: מערכת המטה</div>","s_end_rej":"<strong>אירוע סיום</strong><div>המועמדות נדחתה</div>","ds_volunteers":"<strong>מאגר נתונים: מאגר המתנדבים</strong><div>נקרא ע״י: שליפת רשומות המתנדבים ובדיקה אם המועמד רשום</div><div>נכתב ע״י: רישום המועמד במאגר כמתנדב פעיל</div>"};
+    const tip = document.getElementById('bpmn-tooltip');
+    document.querySelectorAll('.bpmn-element').forEach(function(g) {
+      g.addEventListener('mouseenter', function() {
+        const id = g.getAttribute('id');
+        const content = TOOLTIPS[id];
+        if (!content) return;
+        tip.innerHTML = content;
+        tip.style.display = 'block';
+      });
+      g.addEventListener('mousemove', function(e) {
+        tip.style.top = (e.clientY + 14) + 'px';
+        tip.style.left = (e.clientX + 14) + 'px';
+      });
+      g.addEventListener('mouseleave', function() { tip.style.display = 'none'; });
+    });
+
+    // Flow highlight: brighten and draw an unbroken copy on top of crossings.
+    // The hovered element itself is NEVER moved in the DOM, moving the node
+    // under the pointer can swallow the browser's mouseleave and leave the
+    // highlight stuck. A pointer-transparent clone gives the same z-lift safely.
+    document.querySelectorAll('.bpmn-flow').forEach(function(g) {
+      let ghost = null;
+      g.addEventListener('mouseenter', function() {
+        g.classList.add('bpmn-hl');
+        ghost = g.cloneNode(true);
+        ghost.removeAttribute('id');
+        ghost.style.pointerEvents = 'none';
+        g.ownerSVGElement.appendChild(ghost);  // unbroken copy on top
+      });
+      g.addEventListener('mouseleave', function() {
+        g.classList.remove('bpmn-hl');
+        if (ghost) { ghost.remove(); ghost = null; }
+      });
+    });
+  })();
+
+  
+  function toggleAssumptions() {
+    const p = document.getElementById('assumptions-panel');
+    p.style.display = p.style.display === 'block' ? 'none' : 'block';
+  }
+
+  // Precomputed BPMN 2.0 XML, server generated from the layout
+  const BPMN_XML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<bpmn:definitions xmlns:bpmn=\"http://www.omg.org/spec/BPMN/20100524/MODEL\"\n  xmlns:bpmndi=\"http://www.omg.org/spec/BPMN/20100524/DI\"\n  xmlns:dc=\"http://www.omg.org/spec/DD/20100524/DC\"\n  xmlns:di=\"http://www.omg.org/spec/DD/20100524/DI\"\n  xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n  id=\"Definitions_1\" targetNamespace=\"http://bpmn.io/schema/bpmn\">\n  <bpmn:process id=\"process_1\" name=\"המועמד\" isExecutable=\"false\">\n\n      <bpmn:dataStoreReference id=\"ds_volunteers\" name=\"מאגר המתנדבים\"/>\n  </bpmn:process>\n  <bpmn:process id=\"process_2\" name=\"מטה 2026\" isExecutable=\"false\">\n      <bpmn:laneSet id=\"process_2_laneset\">\n        <bpmn:lane id=\"sys\" name=\"מערכת המטה\">\n          <bpmn:flowNodeRef>s_start</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>s_fetch</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>g_reg</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>s_notify_reg</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>s_end_reg</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>s_badge_req</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>s_wait_badge</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>s_register</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>s_invite</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>s_end_ok</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>s_reject</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>s_end_rej</bpmn:flowNodeRef>\n        </bpmn:lane>\n        <bpmn:lane id=\"coord\" name=\"רכז ההתנדבות\">\n          <bpmn:flowNodeRef>c_loop_merge</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>c_check</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>g_complete</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>c_request</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>c_wait_form</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>g_and_split</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>c_interview</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>g_and_join</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>g_badge</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>g_fit</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>c_role</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>s_reject_merge</bpmn:flowNodeRef>\n        </bpmn:lane>\n      </bpmn:laneSet>\n      <bpmn:startEvent id=\"s_start\" name=\"התקבל טופס מועמדות מקוון\"/>\n      <bpmn:task id=\"s_fetch\" name=\"שליפת רשומות המתנדבים ובדיקה אם המועמד רשום\"/>\n      <bpmn:exclusiveGateway id=\"g_reg\" name=\"האם המועמד כבר רשום במאגר?\"/>\n      <bpmn:task id=\"s_notify_reg\" name=\"שליחת הודעה למועמד שהוא רשום זה מכבר\"/>\n      <bpmn:endEvent id=\"s_end_reg\" name=\"המועמד רשום זה מכבר\"/>\n      <bpmn:exclusiveGateway id=\"c_loop_merge\" name=\"\"/>\n      <bpmn:task id=\"c_check\" name=\"בדיקת שלמות טופס המועמדות\"/>\n      <bpmn:exclusiveGateway id=\"g_complete\" name=\"האם הטופס מלא?\"/>\n      <bpmn:task id=\"c_request\" name=\"בקשה מהמועמד להשלמת הפרטים החסרים\"/>\n      <bpmn:intermediateCatchEvent id=\"c_wait_form\" name=\"התקבל טופס מעודכן\"/>\n      <bpmn:parallelGateway id=\"g_and_split\" name=\"\"/>\n      <bpmn:task id=\"c_interview\" name=\"ראיון טלפוני עם המועמד ותיעוד תוצאתו\"/>\n      <bpmn:task id=\"s_badge_req\" name=\"שליחת בקשה להנפקת תג כניסה\"/>\n      <bpmn:intermediateCatchEvent id=\"s_wait_badge\" name=\"התקבלה תשובת חברת האבטחה\"/>\n      <bpmn:parallelGateway id=\"g_and_join\" name=\"\"/>\n      <bpmn:exclusiveGateway id=\"g_badge\" name=\"האם התג אושר?\"/>\n      <bpmn:exclusiveGateway id=\"g_fit\" name=\"האם המועמד זמין ומתאים?\"/>\n      <bpmn:task id=\"c_role\" name=\"קביעת התפקיד שימלא המועמד\"/>\n      <bpmn:task id=\"s_register\" name=\"רישום המועמד במאגר כמתנדב פעיל\"/>\n      <bpmn:task id=\"s_invite\" name=\"שליחת זימון לחניכה על נהלי העבודה\"/>\n      <bpmn:endEvent id=\"s_end_ok\" name=\"המועמד נרשם כמתנדב וזומן לחניכה\"/>\n      <bpmn:exclusiveGateway id=\"s_reject_merge\" name=\"\"/>\n      <bpmn:task id=\"s_reject\" name=\"שליחת הודעת דחייה למועמד\"/>\n      <bpmn:endEvent id=\"s_end_rej\" name=\"המועמדות נדחתה\"/>\n      <bpmn:dataStoreReference id=\"ds_volunteers\" name=\"מאגר המתנדבים\"/>\n      <bpmn:sequenceFlow id=\"sf1\" sourceRef=\"s_start\" targetRef=\"s_fetch\"/>\n      <bpmn:sequenceFlow id=\"sf2\" sourceRef=\"s_fetch\" targetRef=\"g_reg\"/>\n      <bpmn:sequenceFlow id=\"sf3\" sourceRef=\"g_reg\" targetRef=\"s_notify_reg\" name=\"כן, רשום\"/>\n      <bpmn:sequenceFlow id=\"sf4\" sourceRef=\"s_notify_reg\" targetRef=\"s_end_reg\"/>\n      <bpmn:sequenceFlow id=\"sf5\" sourceRef=\"g_reg\" targetRef=\"c_loop_merge\" name=\"לא\"/>\n      <bpmn:sequenceFlow id=\"sf6\" sourceRef=\"c_loop_merge\" targetRef=\"c_check\"/>\n      <bpmn:sequenceFlow id=\"sf7\" sourceRef=\"c_check\" targetRef=\"g_complete\"/>\n      <bpmn:sequenceFlow id=\"sf8\" sourceRef=\"g_complete\" targetRef=\"c_request\" name=\"חסרים פרטים\"/>\n      <bpmn:sequenceFlow id=\"sf9\" sourceRef=\"c_request\" targetRef=\"c_wait_form\"/>\n      <bpmn:sequenceFlow id=\"sf10\" sourceRef=\"c_wait_form\" targetRef=\"c_loop_merge\"/>\n      <bpmn:sequenceFlow id=\"sf11\" sourceRef=\"g_complete\" targetRef=\"g_and_split\" name=\"הטופס מלא\"/>\n      <bpmn:sequenceFlow id=\"sf12\" sourceRef=\"g_and_split\" targetRef=\"c_interview\"/>\n      <bpmn:sequenceFlow id=\"sf13\" sourceRef=\"g_and_split\" targetRef=\"s_badge_req\"/>\n      <bpmn:sequenceFlow id=\"sf14\" sourceRef=\"s_badge_req\" targetRef=\"s_wait_badge\"/>\n      <bpmn:sequenceFlow id=\"sf15\" sourceRef=\"c_interview\" targetRef=\"g_and_join\"/>\n      <bpmn:sequenceFlow id=\"sf16\" sourceRef=\"s_wait_badge\" targetRef=\"g_and_join\"/>\n      <bpmn:sequenceFlow id=\"sf17\" sourceRef=\"g_and_join\" targetRef=\"g_badge\"/>\n      <bpmn:sequenceFlow id=\"sf18\" sourceRef=\"g_badge\" targetRef=\"s_reject_merge\" name=\"לא אושר\"/>\n      <bpmn:sequenceFlow id=\"sf19\" sourceRef=\"g_badge\" targetRef=\"g_fit\" name=\"אושר\"/>\n      <bpmn:sequenceFlow id=\"sf20\" sourceRef=\"g_fit\" targetRef=\"s_reject_merge\" name=\"אינו זמין ואינו מתאים\"/>\n      <bpmn:sequenceFlow id=\"sf21\" sourceRef=\"g_fit\" targetRef=\"c_role\" name=\"זמין ומתאים\"/>\n      <bpmn:sequenceFlow id=\"sf22\" sourceRef=\"s_reject_merge\" targetRef=\"s_reject\"/>\n      <bpmn:sequenceFlow id=\"sf23\" sourceRef=\"s_reject\" targetRef=\"s_end_rej\"/>\n      <bpmn:sequenceFlow id=\"sf24\" sourceRef=\"c_role\" targetRef=\"s_register\"/>\n      <bpmn:sequenceFlow id=\"sf25\" sourceRef=\"s_register\" targetRef=\"s_invite\"/>\n      <bpmn:sequenceFlow id=\"sf26\" sourceRef=\"s_invite\" targetRef=\"s_end_ok\"/>\n  </bpmn:process>\n  <bpmn:process id=\"process_3\" name=\"חברת האבטחה\" isExecutable=\"false\">\n\n      <bpmn:dataStoreReference id=\"ds_volunteers\" name=\"מאגר המתנדבים\"/>\n  </bpmn:process>\n  <bpmn:collaboration id=\"collab_1\">\n    <bpmn:participant id=\"candidate\" name=\"המועמד\" processRef=\"process_1\"/>\n    <bpmn:participant id=\"hq\" name=\"מטה 2026\" processRef=\"process_2\"/>\n    <bpmn:participant id=\"security\" name=\"חברת האבטחה\" processRef=\"process_3\"/>\n    <bpmn:messageFlow id=\"mf1\" sourceRef=\"candidate\" targetRef=\"s_start\" name=\"טופס מועמדות מקוון\"/>\n    <bpmn:messageFlow id=\"mf2\" sourceRef=\"s_notify_reg\" targetRef=\"candidate\" name=\"הודעה: רשום זה מכבר\"/>\n    <bpmn:messageFlow id=\"mf3\" sourceRef=\"c_request\" targetRef=\"candidate\" name=\"בקשה להשלמת פרטים\"/>\n    <bpmn:messageFlow id=\"mf4\" sourceRef=\"candidate\" targetRef=\"c_wait_form\" name=\"טופס מועמדות מעודכן\"/>\n    <bpmn:messageFlow id=\"mf5\" sourceRef=\"s_badge_req\" targetRef=\"security\" name=\"בקשה להנפקת תג כניסה\"/>\n    <bpmn:messageFlow id=\"mf6\" sourceRef=\"security\" targetRef=\"s_wait_badge\" name=\"אישור או סירוב להנפקת התג\"/>\n    <bpmn:messageFlow id=\"mf7\" sourceRef=\"s_reject\" targetRef=\"candidate\" name=\"הודעת דחייה\"/>\n    <bpmn:messageFlow id=\"mf8\" sourceRef=\"s_invite\" targetRef=\"candidate\" name=\"זימון לחניכה\"/>\n  </bpmn:collaboration>\n  <bpmndi:BPMNDiagram id=\"BPMNDiagram_1\">\n    <bpmndi:BPMNPlane id=\"BPMNPlane_1\" bpmnElement=\"collab_1\">\n      <bpmndi:BPMNShape id=\"candidate_di\" bpmnElement=\"candidate\" isHorizontal=\"true\">\n        <dc:Bounds x=\"20\" y=\"72\" width=\"3309\" height=\"96\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"hq_di\" bpmnElement=\"hq\" isHorizontal=\"true\">\n        <dc:Bounds x=\"20\" y=\"184\" width=\"3309\" height=\"544\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"sys_di\" bpmnElement=\"sys\" isHorizontal=\"true\">\n        <dc:Bounds x=\"50\" y=\"184\" width=\"3279\" height=\"272\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"coord_di\" bpmnElement=\"coord\" isHorizontal=\"true\">\n        <dc:Bounds x=\"50\" y=\"456\" width=\"3279\" height=\"272\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"security_di\" bpmnElement=\"security\" isHorizontal=\"true\">\n        <dc:Bounds x=\"20\" y=\"744\" width=\"3309\" height=\"96\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"s_start_di\" bpmnElement=\"s_start\">\n        <dc:Bounds x=\"126\" y=\"274\" width=\"36\" height=\"36\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"s_fetch_di\" bpmnElement=\"s_fetch\">\n        <dc:Bounds x=\"286\" y=\"260\" width=\"140\" height=\"64\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"g_reg_di\" bpmnElement=\"g_reg\">\n        <dc:Bounds x=\"544\" y=\"268\" width=\"48\" height=\"48\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"s_notify_reg_di\" bpmnElement=\"s_notify_reg\">\n        <dc:Bounds x=\"710\" y=\"260\" width=\"140\" height=\"64\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"s_end_reg_di\" bpmnElement=\"s_end_reg\">\n        <dc:Bounds x=\"974\" y=\"274\" width=\"36\" height=\"36\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"s_badge_req_di\" bpmnElement=\"s_badge_req\">\n        <dc:Bounds x=\"1563\" y=\"260\" width=\"140\" height=\"64\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"s_wait_badge_di\" bpmnElement=\"s_wait_badge\">\n        <dc:Bounds x=\"1827\" y=\"274\" width=\"36\" height=\"36\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"s_register_di\" bpmnElement=\"s_register\">\n        <dc:Bounds x=\"2693\" y=\"260\" width=\"140\" height=\"64\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"s_invite_di\" bpmnElement=\"s_invite\">\n        <dc:Bounds x=\"2905\" y=\"208\" width=\"140\" height=\"64\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"s_reject_di\" bpmnElement=\"s_reject\">\n        <dc:Bounds x=\"2905\" y=\"312\" width=\"140\" height=\"64\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"s_end_ok_di\" bpmnElement=\"s_end_ok\">\n        <dc:Bounds x=\"3169\" y=\"222\" width=\"36\" height=\"36\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"s_end_rej_di\" bpmnElement=\"s_end_rej\">\n        <dc:Bounds x=\"3169\" y=\"326\" width=\"36\" height=\"36\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"c_loop_merge_di\" bpmnElement=\"c_loop_merge\">\n        <dc:Bounds x=\"756\" y=\"540\" width=\"48\" height=\"48\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"c_check_di\" bpmnElement=\"c_check\">\n        <dc:Bounds x=\"922\" y=\"532\" width=\"140\" height=\"64\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"g_complete_di\" bpmnElement=\"g_complete\">\n        <dc:Bounds x=\"1180\" y=\"540\" width=\"48\" height=\"48\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"g_and_split_di\" bpmnElement=\"g_and_split\">\n        <dc:Bounds x=\"1397\" y=\"488\" width=\"48\" height=\"48\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"c_request_di\" bpmnElement=\"c_request\">\n        <dc:Bounds x=\"1351\" y=\"584\" width=\"140\" height=\"64\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"c_interview_di\" bpmnElement=\"c_interview\">\n        <dc:Bounds x=\"1563\" y=\"480\" width=\"140\" height=\"64\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"c_wait_form_di\" bpmnElement=\"c_wait_form\">\n        <dc:Bounds x=\"1615\" y=\"598\" width=\"36\" height=\"36\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"g_and_join_di\" bpmnElement=\"g_and_join\">\n        <dc:Bounds x=\"2033\" y=\"540\" width=\"48\" height=\"48\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"g_badge_di\" bpmnElement=\"g_badge\">\n        <dc:Bounds x=\"2245\" y=\"540\" width=\"48\" height=\"48\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"g_fit_di\" bpmnElement=\"g_fit\">\n        <dc:Bounds x=\"2457\" y=\"540\" width=\"48\" height=\"48\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"c_role_di\" bpmnElement=\"c_role\">\n        <dc:Bounds x=\"2693\" y=\"480\" width=\"140\" height=\"64\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"s_reject_merge_di\" bpmnElement=\"s_reject_merge\">\n        <dc:Bounds x=\"2739\" y=\"592\" width=\"48\" height=\"48\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"ds_volunteers_di\" bpmnElement=\"ds_volunteers\">\n        <dc:Bounds x=\"1531\" y=\"406\" width=\"56\" height=\"44\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNEdge id=\"sf1_di\" bpmnElement=\"sf1\">\n        <di:waypoint x=\"162\" y=\"292\"/>\n        <di:waypoint x=\"286\" y=\"292\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf2_di\" bpmnElement=\"sf2\">\n        <di:waypoint x=\"426\" y=\"292\"/>\n        <di:waypoint x=\"544\" y=\"292\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf3_di\" bpmnElement=\"sf3\">\n        <di:waypoint x=\"592\" y=\"292\"/>\n        <di:waypoint x=\"710\" y=\"292\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf4_di\" bpmnElement=\"sf4\">\n        <di:waypoint x=\"850\" y=\"292\"/>\n        <di:waypoint x=\"974\" y=\"292\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf5_di\" bpmnElement=\"sf5\">\n        <di:waypoint x=\"568\" y=\"316\"/>\n        <di:waypoint x=\"568\" y=\"514\"/>\n        <di:waypoint x=\"780\" y=\"514\"/>\n        <di:waypoint x=\"780\" y=\"540\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf6_di\" bpmnElement=\"sf6\">\n        <di:waypoint x=\"804\" y=\"564\"/>\n        <di:waypoint x=\"922\" y=\"564\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf7_di\" bpmnElement=\"sf7\">\n        <di:waypoint x=\"1062\" y=\"564\"/>\n        <di:waypoint x=\"1180\" y=\"564\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf8_di\" bpmnElement=\"sf8\">\n        <di:waypoint x=\"1204\" y=\"588\"/>\n        <di:waypoint x=\"1204\" y=\"616\"/>\n        <di:waypoint x=\"1351\" y=\"616\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf9_di\" bpmnElement=\"sf9\">\n        <di:waypoint x=\"1491\" y=\"616\"/>\n        <di:waypoint x=\"1615\" y=\"616\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf10_di\" bpmnElement=\"sf10\">\n        <di:waypoint x=\"1651\" y=\"616\"/>\n        <di:waypoint x=\"1667\" y=\"616\"/>\n        <di:waypoint x=\"1667\" y=\"568\"/>\n        <di:waypoint x=\"1244\" y=\"568\"/>\n        <di:waypoint x=\"1244\" y=\"609\"/>\n        <di:waypoint x=\"780\" y=\"609\"/>\n        <di:waypoint x=\"780\" y=\"588\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf11_di\" bpmnElement=\"sf11\">\n        <di:waypoint x=\"1228\" y=\"564\"/>\n        <di:waypoint x=\"1244\" y=\"564\"/>\n        <di:waypoint x=\"1244\" y=\"552\"/>\n        <di:waypoint x=\"1371\" y=\"552\"/>\n        <di:waypoint x=\"1371\" y=\"512\"/>\n        <di:waypoint x=\"1397\" y=\"512\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf12_di\" bpmnElement=\"sf12\">\n        <di:waypoint x=\"1445\" y=\"512\"/>\n        <di:waypoint x=\"1563\" y=\"512\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf13_di\" bpmnElement=\"sf13\">\n        <di:waypoint x=\"1421\" y=\"488\"/>\n        <di:waypoint x=\"1421\" y=\"350\"/>\n        <di:waypoint x=\"1626\" y=\"350\"/>\n        <di:waypoint x=\"1626\" y=\"324\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf14_di\" bpmnElement=\"sf14\">\n        <di:waypoint x=\"1703\" y=\"292\"/>\n        <di:waypoint x=\"1827\" y=\"292\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf15_di\" bpmnElement=\"sf15\">\n        <di:waypoint x=\"1703\" y=\"512\"/>\n        <di:waypoint x=\"2007\" y=\"512\"/>\n        <di:waypoint x=\"2007\" y=\"564\"/>\n        <di:waypoint x=\"2033\" y=\"564\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf16_di\" bpmnElement=\"sf16\">\n        <di:waypoint x=\"1852\" y=\"309\"/>\n        <di:waypoint x=\"1852\" y=\"496\"/>\n        <di:waypoint x=\"2057\" y=\"496\"/>\n        <di:waypoint x=\"2057\" y=\"540\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf17_di\" bpmnElement=\"sf17\">\n        <di:waypoint x=\"2081\" y=\"564\"/>\n        <di:waypoint x=\"2245\" y=\"564\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf18_di\" bpmnElement=\"sf18\">\n        <di:waypoint x=\"2269\" y=\"588\"/>\n        <di:waypoint x=\"2269\" y=\"609\"/>\n        <di:waypoint x=\"2746\" y=\"609\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf19_di\" bpmnElement=\"sf19\">\n        <di:waypoint x=\"2293\" y=\"564\"/>\n        <di:waypoint x=\"2457\" y=\"564\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf20_di\" bpmnElement=\"sf20\">\n        <di:waypoint x=\"2481\" y=\"588\"/>\n        <di:waypoint x=\"2481\" y=\"623\"/>\n        <di:waypoint x=\"2746\" y=\"623\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf21_di\" bpmnElement=\"sf21\">\n        <di:waypoint x=\"2505\" y=\"564\"/>\n        <di:waypoint x=\"2667\" y=\"564\"/>\n        <di:waypoint x=\"2667\" y=\"512\"/>\n        <di:waypoint x=\"2693\" y=\"512\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf22_di\" bpmnElement=\"sf22\">\n        <di:waypoint x=\"2763\" y=\"592\"/>\n        <di:waypoint x=\"2763\" y=\"558\"/>\n        <di:waypoint x=\"2975\" y=\"558\"/>\n        <di:waypoint x=\"2975\" y=\"376\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf23_di\" bpmnElement=\"sf23\">\n        <di:waypoint x=\"3045\" y=\"344\"/>\n        <di:waypoint x=\"3169\" y=\"344\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf24_di\" bpmnElement=\"sf24\">\n        <di:waypoint x=\"2763\" y=\"480\"/>\n        <di:waypoint x=\"2763\" y=\"350\"/>\n        <di:waypoint x=\"2770\" y=\"350\"/>\n        <di:waypoint x=\"2770\" y=\"324\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf25_di\" bpmnElement=\"sf25\">\n        <di:waypoint x=\"2833\" y=\"292\"/>\n        <di:waypoint x=\"2879\" y=\"292\"/>\n        <di:waypoint x=\"2879\" y=\"240\"/>\n        <di:waypoint x=\"2905\" y=\"240\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf26_di\" bpmnElement=\"sf26\">\n        <di:waypoint x=\"3045\" y=\"240\"/>\n        <di:waypoint x=\"3169\" y=\"240\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"mf1_di\" bpmnElement=\"mf1\">\n        <di:waypoint x=\"144\" y=\"168\"/>\n        <di:waypoint x=\"144\" y=\"274\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"mf2_di\" bpmnElement=\"mf2\">\n        <di:waypoint x=\"780\" y=\"260\"/>\n        <di:waypoint x=\"780\" y=\"168\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"mf3_di\" bpmnElement=\"mf3\">\n        <di:waypoint x=\"1421\" y=\"584\"/>\n        <di:waypoint x=\"1421\" y=\"552\"/>\n        <di:waypoint x=\"1461\" y=\"552\"/>\n        <di:waypoint x=\"1461\" y=\"194\"/>\n        <di:waypoint x=\"1421\" y=\"194\"/>\n        <di:waypoint x=\"1421\" y=\"168\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"mf4_di\" bpmnElement=\"mf4\">\n        <di:waypoint x=\"1633\" y=\"168\"/>\n        <di:waypoint x=\"1633\" y=\"246\"/>\n        <di:waypoint x=\"1719\" y=\"246\"/>\n        <di:waypoint x=\"1719\" y=\"560\"/>\n        <di:waypoint x=\"1633\" y=\"560\"/>\n        <di:waypoint x=\"1633\" y=\"598\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"mf5_di\" bpmnElement=\"mf5\">\n        <di:waypoint x=\"1640\" y=\"324\"/>\n        <di:waypoint x=\"1640\" y=\"466\"/>\n        <di:waypoint x=\"1729\" y=\"466\"/>\n        <di:waypoint x=\"1729\" y=\"718\"/>\n        <di:waypoint x=\"1633\" y=\"718\"/>\n        <di:waypoint x=\"1633\" y=\"744\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"mf6_di\" bpmnElement=\"mf6\">\n        <di:waypoint x=\"1845\" y=\"744\"/>\n        <di:waypoint x=\"1845\" y=\"336\"/>\n        <di:waypoint x=\"1838\" y=\"336\"/>\n        <di:waypoint x=\"1838\" y=\"309\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"mf7_di\" bpmnElement=\"mf7\">\n        <di:waypoint x=\"2975\" y=\"312\"/>\n        <di:waypoint x=\"2975\" y=\"286\"/>\n        <di:waypoint x=\"2889\" y=\"286\"/>\n        <di:waypoint x=\"2889\" y=\"194\"/>\n        <di:waypoint x=\"2951\" y=\"194\"/>\n        <di:waypoint x=\"2951\" y=\"168\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"mf8_di\" bpmnElement=\"mf8\">\n        <di:waypoint x=\"2975\" y=\"208\"/>\n        <di:waypoint x=\"2975\" y=\"194\"/>\n        <di:waypoint x=\"2999\" y=\"194\"/>\n        <di:waypoint x=\"2999\" y=\"168\"/>\n      </bpmndi:BPMNEdge>\n    </bpmndi:BPMNPlane>\n  </bpmndi:BPMNDiagram>\n</bpmn:definitions>";
+  const BPMN_FILENAME = "Onboarding_a_new_volunteer_ahead_of_election_day.bpmn";
+  function exportBPMN() {
+    const blob = new Blob([BPMN_XML], { type: 'application/xml' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = BPMN_FILENAME;
+    document.body.appendChild(a); a.click();
+    setTimeout(function() { URL.revokeObjectURL(url); a.remove(); }, 1000);
+  }
+  </script>
+</body>
+</html>

@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>מטה 2026, State Diagram, בקשת הסעה (פתרון שאלה 8)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600;700&family=Noto+Sans+Hebrew:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;background:#eef2f6;font-family:'Noto Sans Hebrew',sans-serif;color:#1e293b;}
+  .header-bar{padding:14px 20px 6px 20px;}
+  .header-bar h1{font-size:18px;margin:0 0 3px 0;}
+  .header-bar p{font-size:12.5px;color:#475569;margin:0;line-height:1.7;}
+  .diagram-wrap{overflow:auto;padding:14px 20px 30px 20px;direction:ltr;}
+  .diagram-wrap svg{display:block;background:#f8fafc;border-radius:10px;box-shadow:0 1px 3px rgba(0,0,0,.08);min-width:1360px;}
+</style>
+</head>
+<body>
+
+  <div class="header-bar">
+    <h1>פתרון שאלה 8, תרשים מצבים של אובייקט בקשת הסעה (RideRequest)</h1>
+    <p>מחזור החיים של אובייקט <b>בקשת הסעה</b>. <b>שלוש נקודות ההכרעה שהשאלה בוחנת:</b> (א) <b>הסבבים וההסלמה</b>: מעבר אחד חוזר מ"ממתינה לאישור הנהג" אל "ממתינה לשיבוץ" בתנאי <code>[מספר הסבבים &lt; 2]</code>, ומעבר נפרד אל "בטיפול אישי של הרכז" בתנאי המשלים <code>[מספר הסבבים ≥ 2]</code>; המונה <code>assignmentRound</code> עולה בכל שיבוץ. אין מצב נפרד לכל סבב. (ב) <b>הגבלת הביטול</b>: מעבר הביטול של המוקדן יוצא מגבול מצב-העל הפנימי "בקשה טרם שובץ לה נהג" בלבד, ואילו מעבר הביטול של מנהל המשמרת יוצא מגבול מצב-העל החיצוני "בקשה פעילה", כלומר מכל שלב. (ג) <b>קץ מחזור החיים</b>: סיום ההסעה אינו סוף החיים של הבקשה. מצבי התוצאה עוברים בסגירת הקלפיות ל<b>ארכיון</b>, והרשומה נשמרת לדוחות ולהפקת לקחים. <b>מצב הסיום (◎) פירושו שהרשומה נמחקה מהמערכת</b>, ומגיעים אליו רק בתום ששה חודשים מיום הבחירות. <code>closureReason</code> נשמר בכניסה לכל מצב תוצאה, כי הכניסה לארכיון דורסת את <code>status</code>.</p>
+  </div>
+
+  <div class="diagram-wrap">
+  <svg id="diagram" viewBox="0 0 1360 1000" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <marker id="arrow-slate" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="#334155"/></marker>
+      <marker id="arrow-blue" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="#334155"/></marker>
+      <marker id="arrow-green" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="#15803d"/></marker>
+      <marker id="arrow-orange" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="#c2410c"/></marker>
+      <marker id="arrow-red" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="#b91c1c"/></marker>
+      <marker id="arrow-purple" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="#7c3aed"/></marker>
+      <marker id="arrow-teal" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="#0891b2"/></marker>
+      <filter id="shadow" x="-5%" y="-5%" width="110%" height="110%"><feDropShadow dx="0" dy="1" stdDeviation="2" flood-opacity="0.12"/></filter>
+      <pattern id="dotgrid" width="24" height="24" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r="0.8" fill="#cbd5e1"/></pattern>
+    </defs>
+
+    <rect x="0" y="0" width="1360" height="1000" fill="#f8fafc"/>
+    <rect x="0" y="0" width="1360" height="1000" fill="url(#dotgrid)"/>
+
+    <g id="composite-active">
+      <rect x="40" y="50" width="780" height="620" rx="20" ry="20" fill="#f0f7ff" stroke="#475569" stroke-width="2" stroke-dasharray="8 4"/>
+      <text x="59" y="76" font-size="10.5" font-style="italic" fill="#7c3aed" font-family="IBM Plex Mono">«composite»</text>
+      <text x="59" y="100" font-size="15" font-weight="800" fill="#1e293b" font-family="Noto Sans Hebrew, sans-serif">בקשה פעילה</text>
+      <line x1="50" y1="110" x2="810" y2="110" stroke="#475569" stroke-width="1"/>
+      <line x1="50" y1="121" x2="810" y2="121" stroke="#94a3b8" stroke-width="1" stroke-dasharray="6 3"/>
+    </g>
+    <g id="composite-preAssign">
+      <rect x="60" y="150" width="320" height="400" rx="20" ry="20" fill="#f0f7ff" stroke="#3b82f6" stroke-width="2" stroke-dasharray="8 4"/>
+      <text x="79" y="176" font-size="10.5" font-style="italic" fill="#7c3aed" font-family="IBM Plex Mono">«composite»</text>
+      <text x="79" y="200" font-size="15" font-weight="800" fill="#1e293b" font-family="Noto Sans Hebrew, sans-serif">בקשה טרם שובץ לה נהג</text>
+      <line x1="70" y1="210" x2="370" y2="210" stroke="#3b82f6" stroke-width="1"/>
+      <line x1="70" y1="221" x2="370" y2="221" stroke="#94a3b8" stroke-width="1" stroke-dasharray="6 3"/>
+    </g>
+
+    <path d="M 330 28 L 330 50" fill="none" stroke="#334155" stroke-width="1.9" marker-end="url(#arrow-slate)"/>
+    <g font-family="IBM Plex Mono">
+      <rect x="391.4" y="9.0" width="157.3" height="13.5" fill="white" opacity="0.94" rx="3"/>
+      <text x="470" y="19" text-anchor="middle" font-size="9.5" fill="#334155">פתיחת בקשת הסעה מתוך שיחה</text>
+      <rect x="446.3" y="23.0" width="47.3" height="13.5" fill="white" opacity="0.94" rx="3"/>
+      <text x="470" y="33" text-anchor="middle" font-size="8.6" fill="#7c3aed">[מוקדן]</text>
+    </g>
+    <path d="M 100 140 L 100 150" fill="none" stroke="#334155" stroke-width="1.9" marker-end="url(#arrow-slate)"/>
+    <path d="M 75 236 L 75 271 L 90 271" fill="none" stroke="#334155" stroke-width="1.9" marker-end="url(#arrow-slate)"/>
+    <path d="M 350 258 L 480 258" fill="none" stroke="#0891b2" stroke-width="1.9" marker-end="url(#arrow-teal)"/>
+    <g font-family="IBM Plex Mono">
+      <rect x="365.8" y="209.0" width="98.3" height="13.5" fill="white" opacity="0.94" rx="3"/>
+      <text x="415" y="219" text-anchor="middle" font-size="9.5" fill="#0891b2">שיבוץ נהג מתנדב</text>
+      <rect x="358.2" y="223.0" width="113.7" height="13.5" fill="white" opacity="0.94" rx="3"/>
+      <text x="415" y="233" text-anchor="middle" font-size="8.8" fill="#15803d" style="direction:ltr;unicode-bidi:isolate">/ assignmentRound++</text>
+      <rect x="380.7" y="237.0" width="68.7" height="13.5" fill="white" opacity="0.94" rx="3"/>
+      <text x="415" y="247" text-anchor="middle" font-size="8.6" fill="#7c3aed">[רכז הסעות]</text>
+    </g>
+    <path d="M 480 292 L 350 292" fill="none" stroke="#c2410c" stroke-width="1.9" marker-end="url(#arrow-orange)"/>
+    <g font-family="IBM Plex Mono">
+      <rect x="312.8" y="309.0" width="204.4" height="13.5" fill="white" opacity="0.94" rx="3"/>
+      <text x="415" y="319" text-anchor="middle" font-size="9.5" fill="#c2410c">דחיית השיבוץ או after(זמן האישור)</text>
+      <rect x="363.6" y="323.0" width="102.8" height="13.5" fill="white" opacity="0.94" rx="3"/>
+      <text x="415" y="333" text-anchor="middle" font-size="8.8" fill="#0891b2">[מספר הסבבים &lt; 2]</text>
+      <rect x="356.7" y="337.0" width="116.6" height="13.5" fill="white" opacity="0.94" rx="3"/>
+      <text x="415" y="347" text-anchor="middle" font-size="8.6" fill="#7c3aed">[נהג מתנדב / המערכת]</text>
+      <rect x="326.7" y="351.0" width="176.7" height="13.5" fill="white" opacity="0.94" rx="3"/>
+      <text x="415" y="361" text-anchor="middle" font-size="8.4" fill="#64748b">מעבר חוזר, ניתן לעבור בו בכל סבב</text>
+    </g>
+    <path d="M 640 318 L 640 469 L 350 469" fill="none" stroke="#b91c1c" stroke-width="1.9" marker-end="url(#arrow-red)"/>
+    <g font-family="IBM Plex Mono">
+      <rect x="377.8" y="406.0" width="204.4" height="13.5" fill="white" opacity="0.94" rx="3"/>
+      <text x="480" y="416" text-anchor="middle" font-size="9.5" fill="#b91c1c">דחיית השיבוץ או after(זמן האישור)</text>
+      <rect x="428.6" y="420.0" width="102.8" height="13.5" fill="white" opacity="0.94" rx="3"/>
+      <text x="480" y="430" text-anchor="middle" font-size="8.8" fill="#0891b2">[מספר הסבבים ≥ 2]</text>
+      <rect x="421.7" y="434.0" width="116.6" height="13.5" fill="white" opacity="0.94" rx="3"/>
+      <text x="480" y="444" text-anchor="middle" font-size="8.6" fill="#7c3aed">[נהג מתנדב / המערכת]</text>
+    </g>
+    <path d="M 730 318 L 730 560" fill="none" stroke="#15803d" stroke-width="1.9" marker-end="url(#arrow-green)"/>
+    <g font-family="IBM Plex Mono">
+      <rect x="689.7" y="503.0" width="80.7" height="13.5" fill="white" opacity="0.94" rx="3"/>
+      <text x="730" y="513" text-anchor="middle" font-size="9.5" fill="#15803d">אישור השיבוץ</text>
+      <rect x="695.7" y="517.0" width="68.7" height="13.5" fill="white" opacity="0.94" rx="3"/>
+      <text x="730" y="527" text-anchor="middle" font-size="8.6" fill="#7c3aed">[נהג מתנדב]</text>
+    </g>
+    <path d="M 220 508 L 220 599 L 480 599" fill="none" stroke="#15803d" stroke-width="1.9" marker-end="url(#arrow-green)"/>
+    <g font-family="IBM Plex Mono">
+      <rect x="249.6" y="593.0" width="180.8" height="13.5" fill="white" opacity="0.94" rx="3"/>
+      <text x="340" y="603" text-anchor="middle" font-size="9.5" fill="#15803d">קביעת נהג ואישורו בטיפול אישי</text>
+      <rect x="305.7" y="607.0" width="68.7" height="13.5" fill="white" opacity="0.94" rx="3"/>
+      <text x="340" y="617" text-anchor="middle" font-size="8.6" fill="#7c3aed">[רכז הסעות]</text>
+    </g>
+    <path d="M 380 200 L 920 200" fill="none" stroke="#b91c1c" stroke-width="1.9" marker-end="url(#arrow-red)"/>
+    <g font-family="IBM Plex Mono">
+      <rect x="612.6" y="176.0" width="74.8" height="13.5" fill="white" opacity="0.94" rx="3"/>
+      <text x="650" y="186" text-anchor="middle" font-size="9.5" fill="#b91c1c">ביטול הבקשה</text>
+      <rect x="606.8" y="190.0" width="86.4" height="13.5" fill="white" opacity="0.94" rx="3"/>
+      <text x="650" y="200" text-anchor="middle" font-size="8.8" fill="#0891b2">[טרם שובץ נהג]</text>
+      <rect x="626.3" y="204.0" width="47.3" height="13.5" fill="white" opacity="0.94" rx="3"/>
+      <text x="650" y="214" text-anchor="middle" font-size="8.6" fill="#7c3aed">[מוקדן]</text>
+    </g>
+    <path d="M 700 50 L 700 30 L 1050 30 L 1050 180" fill="none" stroke="#b91c1c" stroke-width="1.9" marker-end="url(#arrow-red)"/>
+    <g font-family="IBM Plex Mono">
+      <rect x="837.6" y="6.0" width="74.8" height="13.5" fill="white" opacity="0.94" rx="3"/>
+      <text x="875" y="16" text-anchor="middle" font-size="9.5" fill="#b91c1c">ביטול הבקשה</text>
+      <rect x="815.4" y="20.0" width="119.1" height="13.5" fill="white" opacity="0.94" rx="3"/>
+      <text x="875" y="30" text-anchor="middle" font-size="8.8" fill="#0891b2">[בכל שלב, ללא הגבלה]</text>
+      <rect x="838.0" y="34.0" width="74.0" height="13.5" fill="white" opacity="0.94" rx="3"/>
+      <text x="875" y="44" text-anchor="middle" font-size="8.6" fill="#7c3aed">[מנהל משמרת]</text>
+    </g>
+    <path d="M 770 615 L 920 615" fill="none" stroke="#7c3aed" stroke-width="1.9" marker-end="url(#arrow-purple)"/>
+    <g font-family="IBM Plex Mono">
+      <rect x="787.3" y="623.0" width="145.5" height="13.5" fill="white" opacity="0.94" rx="3"/>
+      <text x="860" y="633" text-anchor="middle" font-size="9.5" fill="#7c3aed">דיווח שהתומך הגיע לקלפי</text>
+      <rect x="825.7" y="637.0" width="68.7" height="13.5" fill="white" opacity="0.94" rx="3"/>
+      <text x="860" y="647" text-anchor="middle" font-size="8.6" fill="#7c3aed">[נהג מתנדב]</text>
+    </g>
+    <path d="M 770 575 L 850 575 L 850 451 L 920 451" fill="none" stroke="#c2410c" stroke-width="1.9" marker-end="url(#arrow-orange)"/>
+    <g font-family="IBM Plex Mono">
+      <rect x="774.3" y="493.0" width="151.4" height="13.5" fill="white" opacity="0.94" rx="3"/>
+      <text x="850" y="503" text-anchor="middle" font-size="9.5" fill="#c2410c">דיווח שהתומך אינו בכתובת</text>
+      <rect x="815.7" y="507.0" width="68.7" height="13.5" fill="white" opacity="0.94" rx="3"/>
+      <text x="850" y="517" text-anchor="middle" font-size="8.6" fill="#7c3aed">[נהג מתנדב]</text>
+    </g>
+    <path d="M 1050 642 L 1050 730" fill="none" stroke="#334155" stroke-width="1.9" marker-end="url(#arrow-slate)"/>
+    <g font-family="IBM Plex Mono">
+      <rect x="994.9" y="676.0" width="110.1" height="13.5" fill="white" opacity="0.94" rx="3"/>
+      <text x="1050" y="686" text-anchor="middle" font-size="9.5" fill="#334155">at(סגירת הקלפיות)</text>
+    </g>
+    <path d="M 1180 451 L 1220 451 L 1220 745 L 1200 745" fill="none" stroke="#334155" stroke-width="1.9" marker-end="url(#arrow-slate)"/>
+    <g font-family="IBM Plex Mono">
+      <rect x="1164.9" y="510.0" width="110.1" height="13.5" fill="white" opacity="0.94" rx="3"/>
+      <text x="1220" y="520" text-anchor="middle" font-size="9.5" fill="#334155">at(סגירת הקלפיות)</text>
+    </g>
+    <path d="M 1180 211 L 1280 211 L 1280 770 L 1200 770" fill="none" stroke="#334155" stroke-width="1.9" marker-end="url(#arrow-slate)"/>
+    <g font-family="IBM Plex Mono">
+      <rect x="1224.9" y="320.0" width="110.1" height="13.5" fill="white" opacity="0.94" rx="3"/>
+      <text x="1280" y="330" text-anchor="middle" font-size="9.5" fill="#334155">at(סגירת הקלפיות)</text>
+    </g>
+    <path d="M 1060 792 L 1060 868" fill="none" stroke="#334155" stroke-width="1.9" marker-end="url(#arrow-slate)"/>
+    <g font-family="IBM Plex Mono">
+      <rect x="972.5" y="813.0" width="174.9" height="13.5" fill="white" opacity="0.94" rx="3"/>
+      <text x="1060" y="823" text-anchor="middle" font-size="9.5" fill="#334155">after(6 חודשים מיום הבחירות)</text>
+      <rect x="1030.4" y="827.0" width="59.1" height="13.5" fill="white" opacity="0.94" rx="3"/>
+      <text x="1060" y="837" text-anchor="middle" font-size="8.8" fill="#15803d" style="direction:ltr;unicode-bidi:isolate">/ purge()</text>
+    </g>
+
+    <g id="state-waiting" filter="url(#shadow)">
+      <rect x="90" y="240" width="260" height="62" rx="18" ry="18" fill="#ffffff" stroke="#3b82f6" stroke-width="2"/>
+      <rect x="90" y="240" width="260" height="27" rx="18" ry="18" fill="#eef4ff"/>
+      <rect x="90" y="255" width="260" height="12" fill="#eef4ff"/>
+      <text x="220" y="259" text-anchor="middle" font-size="13" font-weight="700" fill="#1e293b" font-family="Noto Sans Hebrew, sans-serif">בקשה ממתינה לשיבוץ</text>
+      <line x1="90" y1="267" x2="350" y2="267" stroke="#3b82f6" stroke-width="1"/>
+      <text x="100" y="286" font-size="8.4" font-style="italic" fill="#1e293b" font-family="IBM Plex Mono" style="direction:ltr;unicode-bidi:isolate">entry / setStatus('WaitingAssignment')</text>
+    </g>
+    <g id="state-coordinator" filter="url(#shadow)">
+      <rect x="90" y="430" width="260" height="78" rx="18" ry="18" fill="#fff7ed" stroke="#c2410c" stroke-width="2"/>
+      <rect x="90" y="430" width="260" height="27" rx="18" ry="18" fill="#ffedd5"/>
+      <rect x="90" y="445" width="260" height="12" fill="#ffedd5"/>
+      <text x="220" y="449" text-anchor="middle" font-size="13" font-weight="700" fill="#7c2d12" font-family="Noto Sans Hebrew, sans-serif">בקשה בטיפול אישי של הרכז</text>
+      <line x1="90" y1="457" x2="350" y2="457" stroke="#c2410c" stroke-width="1"/>
+      <text x="100" y="476" font-size="8.4" font-style="italic" fill="#7c2d12" font-family="IBM Plex Mono" style="direction:ltr;unicode-bidi:isolate">entry / setStatus('CoordinatorHandling')</text>
+      <text x="100" y="492" font-size="9.3" font-style="italic" fill="#7c2d12" font-family="IBM Plex Mono" style="direction:ltr;unicode-bidi:isolate">do / arrangeDriverManually()</text>
+    </g>
+    <g id="state-awaitingConfirm" filter="url(#shadow)">
+      <rect x="480" y="240" width="290" height="78" rx="18" ry="18" fill="#ecfeff" stroke="#0891b2" stroke-width="2"/>
+      <rect x="480" y="240" width="290" height="27" rx="18" ry="18" fill="#cffafe"/>
+      <rect x="480" y="255" width="290" height="12" fill="#cffafe"/>
+      <text x="625" y="259" text-anchor="middle" font-size="13" font-weight="700" fill="#164e63" font-family="Noto Sans Hebrew, sans-serif">בקשה ממתינה לאישור הנהג</text>
+      <line x1="480" y1="267" x2="770" y2="267" stroke="#0891b2" stroke-width="1"/>
+      <text x="490" y="286" font-size="8.4" font-style="italic" fill="#164e63" font-family="IBM Plex Mono" style="direction:ltr;unicode-bidi:isolate">entry / setStatus('AwaitingDriverConfirmation')</text>
+      <text x="490" y="302" font-size="9.3" font-style="italic" fill="#164e63" font-family="IBM Plex Mono" style="direction:ltr;unicode-bidi:isolate">do / waitForDriverResponse()</text>
+    </g>
+    <g id="state-enRoute" filter="url(#shadow)">
+      <rect x="480" y="560" width="290" height="78" rx="18" ry="18" fill="#ecfeff" stroke="#0891b2" stroke-width="2"/>
+      <rect x="480" y="560" width="290" height="27" rx="18" ry="18" fill="#cffafe"/>
+      <rect x="480" y="575" width="290" height="12" fill="#cffafe"/>
+      <text x="625" y="579" text-anchor="middle" font-size="13" font-weight="700" fill="#164e63" font-family="Noto Sans Hebrew, sans-serif">בקשה בביצוע, נהג בדרך לאיסוף</text>
+      <line x1="480" y1="587" x2="770" y2="587" stroke="#0891b2" stroke-width="1"/>
+      <text x="490" y="606" font-size="9.3" font-style="italic" fill="#164e63" font-family="IBM Plex Mono" style="direction:ltr;unicode-bidi:isolate">entry / setStatus('DriverEnRoute')</text>
+      <text x="490" y="622" font-size="9.3" font-style="italic" fill="#164e63" font-family="IBM Plex Mono" style="direction:ltr;unicode-bidi:isolate">do / trackPickup()</text>
+    </g>
+    <g id="state-cancelled" filter="url(#shadow)">
+      <rect x="920" y="180" width="260" height="62" rx="18" ry="18" fill="#fef2f2" stroke="#b91c1c" stroke-width="2"/>
+      <rect x="920" y="180" width="260" height="27" rx="18" ry="18" fill="#fee2e2"/>
+      <rect x="920" y="195" width="260" height="12" fill="#fee2e2"/>
+      <text x="1050" y="199" text-anchor="middle" font-size="13" font-weight="700" fill="#7f1d1d" font-family="Noto Sans Hebrew, sans-serif">בקשה בוטלה</text>
+      <line x1="920" y1="207" x2="1180" y2="207" stroke="#b91c1c" stroke-width="1"/>
+      <text x="930" y="226" font-size="9.3" font-style="italic" fill="#7f1d1d" font-family="IBM Plex Mono" style="direction:ltr;unicode-bidi:isolate">entry / closeAsCancelled()</text>
+    </g>
+    <g id="state-closedNotFound" filter="url(#shadow)">
+      <rect x="920" y="420" width="260" height="62" rx="18" ry="18" fill="#fff7ed" stroke="#c2410c" stroke-width="2"/>
+      <rect x="920" y="420" width="260" height="27" rx="18" ry="18" fill="#ffedd5"/>
+      <rect x="920" y="435" width="260" height="12" fill="#ffedd5"/>
+      <text x="1050" y="439" text-anchor="middle" font-size="13" font-weight="700" fill="#7c2d12" font-family="Noto Sans Hebrew, sans-serif">בקשה נסגרה ללא ביצוע</text>
+      <line x1="920" y1="447" x2="1180" y2="447" stroke="#c2410c" stroke-width="1"/>
+      <text x="930" y="466" font-size="9.3" font-style="italic" fill="#7c2d12" font-family="IBM Plex Mono" style="direction:ltr;unicode-bidi:isolate">entry / closeAsNotFound()</text>
+    </g>
+    <g id="state-completed" filter="url(#shadow)">
+      <rect x="920" y="580" width="260" height="62" rx="18" ry="18" fill="#faf5ff" stroke="#7c3aed" stroke-width="2"/>
+      <rect x="920" y="580" width="260" height="27" rx="18" ry="18" fill="#f3e8ff"/>
+      <rect x="920" y="595" width="260" height="12" fill="#f3e8ff"/>
+      <text x="1050" y="599" text-anchor="middle" font-size="13" font-weight="700" fill="#4c1d95" font-family="Noto Sans Hebrew, sans-serif">בקשה הושלמה</text>
+      <line x1="920" y1="607" x2="1180" y2="607" stroke="#7c3aed" stroke-width="1"/>
+      <text x="930" y="626" font-size="9.3" font-style="italic" fill="#4c1d95" font-family="IBM Plex Mono" style="direction:ltr;unicode-bidi:isolate">entry / closeAsCompleted()</text>
+    </g>
+    <g id="state-archive" filter="url(#shadow)">
+      <rect x="920" y="730" width="280" height="62" rx="18" ry="18" fill="#ffffff" stroke="#475569" stroke-width="2"/>
+      <rect x="920" y="730" width="280" height="27" rx="18" ry="18" fill="#f1f5f9"/>
+      <rect x="920" y="745" width="280" height="12" fill="#f1f5f9"/>
+      <text x="1060" y="749" text-anchor="middle" font-size="13" font-weight="700" fill="#1e293b" font-family="Noto Sans Hebrew, sans-serif">בקשה בארכיון הפעילות</text>
+      <line x1="920" y1="757" x2="1200" y2="757" stroke="#475569" stroke-width="1"/>
+      <text x="930" y="776" font-size="9.3" font-style="italic" fill="#1e293b" font-family="IBM Plex Mono" style="direction:ltr;unicode-bidi:isolate">entry / setStatus('Archived')</text>
+    </g>
+
+    <circle id="pseudo-i1" cx="330" cy="20" r="8" fill="#1e293b"/>
+    <circle id="pseudo-i2" cx="100" cy="132" r="8" fill="#1e293b"/>
+    <circle id="pseudo-i3" cx="75" cy="228" r="8" fill="#1e293b"/>
+    <g id="pseudo-fin"><circle cx="1060" cy="880" r="12" fill="none" stroke="#1e293b" stroke-width="2"/><circle cx="1060" cy="880" r="7" fill="#1e293b"/></g>
+
+      <text x="20" y="940" font-size="10" fill="#64748b" font-family="Noto Sans Hebrew, sans-serif">כל חץ נושא: אירוע [תנאי] / פעולה, ובסוגריים מרובעים סגולים, בעל התפקיד הרשאי להפעילו. מעבר היוצא מגבול מצב-על חל על כל המצבים שבתוכו.</text>
+      <text x="20" y="955" font-size="10" fill="#64748b" font-family="Noto Sans Hebrew, sans-serif">מנהל המשמרת רשאי לשנות כל סטטוס בכל שלב: הוא רשאי להפעיל כל אחד מן המעברים שבתרשים. הביטול בכל שלב מוצג במפורש כמעבר מגבול &quot;בקשה פעילה&quot;.</text>
+      <text x="20" y="970" font-size="10" fill="#64748b" font-family="Noto Sans Hebrew, sans-serif">ארכיון אינו מצב סיום. מצב הסיום (◎) פירושו שרשומת הבקשה נמחקה מהמערכת בתום תקופת השמירה.</text>
+      <text x="20" y="985" font-size="10" fill="#64748b" font-family="Noto Sans Hebrew, sans-serif">לכל מצב פעולת כניסה אחת. מצב תוצאה מקבל שיטת עטיפה אחת (closeAs…), שבגופה setStatus ו-setClosureReason (closeAsCancelled ⇐ setStatus('Cancelled')).</text>
+  </svg>
+  </div>
+
+</body>
+</html>

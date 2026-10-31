@@ -1,0 +1,1848 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>פתרון מלא, 2026 סמסטר קיץ מועד א': מטה 2026</title>
+<style>
+:root{
+  --ink:#1a2332; --muted:#5b6b7f; --line:#dfe5ec; --bg:#f7f9fb; --card:#fff;
+  --accent:#1d4ed8; --accent-soft:#eff4ff;
+  --ans:#065f46; --ans-bg:#ecfdf5; --ans-line:#6ee7b7;
+  --warn:#8a3d12; --warn-bg:#fff5ed; --warn-line:#f7b98a;
+}
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--bg); color:var(--ink); direction:rtl;
+  font-family:"Segoe UI","Noto Sans Hebrew",Arial,sans-serif;
+  font-size:16px; line-height:1.75;
+}
+.wrap{max-width:1180px; margin:0 auto; padding:32px 20px 80px}
+header.page{
+  background:linear-gradient(135deg,#1e3a8a,#1d4ed8); color:#fff;
+  border-radius:14px; padding:28px 30px; margin-bottom:28px;
+}
+header.page h1{margin:0 0 6px; font-size:1.75rem; letter-spacing:-.01em}
+header.page p{margin:0; opacity:.92; font-size:.95rem}
+.meta{margin-top:16px; display:flex; flex-wrap:wrap; gap:8px}
+.chip{background:rgba(255,255,255,.16); border:1px solid rgba(255,255,255,.28);
+  padding:4px 12px; border-radius:999px; font-size:.82rem}
+
+section.q{background:var(--card); border:1px solid var(--line); border-radius:12px;
+  padding:24px 26px; margin-bottom:22px; scroll-margin-top:16px}
+section.q > h2{
+  margin:0 0 4px; font-size:1.28rem; color:var(--accent);
+  border-bottom:2px solid var(--accent-soft); padding-bottom:10px;
+}
+.pts{float:left; font-size:.85rem; font-weight:600; color:var(--muted);
+  background:var(--bg); border:1px solid var(--line); border-radius:999px; padding:2px 11px}
+
+.qtext{color:var(--muted); font-size:.95rem; margin:14px 0}
+.box{background:var(--bg); border:1px solid var(--line); border-right:4px solid var(--accent);
+  border-radius:8px; padding:14px 18px; margin:14px 0; font-size:.93rem; color:#374a5e}
+.box p{margin:.5em 0}
+.box.goldrule{background:var(--accent-soft); border-color:#c7d7fe; border-right-color:#1e3a8a;
+  font-size:.94rem; margin:0 0 26px}
+
+h3.sub{margin:26px 0 8px; font-size:1.02rem; color:var(--ink);
+  background:var(--accent-soft); border-radius:6px; padding:8px 12px}
+h4{margin:16px 0 4px; font-size:.96rem; color:var(--ink)}
+
+.answer{background:var(--ans-bg); border:1px solid var(--ans-line); border-radius:8px;
+  padding:14px 18px; margin:10px 0}
+.answer::before{content:"תשובה"; display:block; font-weight:700; font-size:.78rem;
+  letter-spacing:.06em; color:var(--ans); margin-bottom:6px}
+.answer p:last-child, .answer ul:last-child, .answer ol:last-child{margin-bottom:0}
+.answer p:first-of-type{margin-top:0}
+
+.mistake{background:var(--warn-bg); border:1px solid var(--warn-line); border-radius:8px;
+  padding:12px 18px; margin:10px 0; font-size:.92rem; color:#5c2c0d}
+.mistake::before{content:"טעות נפוצה"; display:block; font-weight:700; font-size:.78rem;
+  letter-spacing:.06em; color:var(--warn); margin-bottom:5px}
+.mistake p:first-of-type{margin-top:0} .mistake p:last-child{margin-bottom:0}
+.alt{font-size:.9rem; color:var(--muted); margin:8px 0 0; padding-right:2px}
+.alt b{color:var(--ink)}
+.alt p{margin:.35em 0}
+
+/* direction:ltr on the FIGURE too, an RTL scroll container starts pinned to the
+   right, which hides the left edge of any diagram wider than the page. */
+figure.diagram{margin:18px 0 6px; border:1px solid var(--line); border-radius:10px;
+  background:#fff; padding:12px; overflow-x:auto; direction:ltr}
+/* Never shrink a diagram below legibility: scroll sideways instead. */
+/* direction:ltr is REQUIRED, the page is RTL, and inheriting that into the SVG
+   flips how text-anchor:start resolves, throwing every label out of its box. */
+figure.diagram svg{display:block; width:100%; height:auto; min-width:1040px; direction:ltr}
+figure.diagram.wide svg{min-width:1500px}
+.scrollhint{font-size:.78rem; color:var(--muted); margin:0 0 6px; display:none}
+figure.diagram.wide + .scrollhint{display:block}
+figcaption{margin-top:8px; font-size:.85rem; color:var(--muted); text-align:center; direction:rtl}
+.difflink{margin:8px 0 0; font-size:.88rem}
+.difflink a{display:inline-flex; align-items:center; gap:6px; text-decoration:none;
+  color:var(--accent); background:var(--accent-soft); border:1px solid #c7d7fe;
+  border-radius:999px; padding:5px 14px; font-weight:600}
+.difflink a:hover{background:#dbe6ff}
+.difflink small{color:var(--muted); font-weight:400; margin-inline-start:8px}
+
+ul,ol{margin:.4em 0; padding-right:1.2em}
+li{margin:.3em 0}
+code{background:#eef2f7; border:1px solid var(--line); border-radius:4px;
+  padding:1px 5px; font-family:"Consolas","IBM Plex Mono",monospace;
+  font-size:.88em; direction:ltr; display:inline-block}
+.en{direction:ltr; unicode-bidi:embed; display:inline-block}
+
+.tablewrap{overflow-x:auto; margin:12px 0}
+table{border-collapse:collapse; width:100%; font-size:.9rem; background:#fff}
+th,td{border:1px solid var(--line); padding:7px 10px; text-align:right; vertical-align:top}
+th{background:var(--accent-soft); font-weight:700; color:var(--ink)}
+.answer table{background:#fff}
+
+footer{color:var(--muted); font-size:.85rem; text-align:center; margin-top:34px}
+
+@media print{
+  body{background:#fff}
+  section.q{break-inside:avoid; border:none; padding:0; margin-bottom:26px}
+  header.page{background:#1e3a8a !important; -webkit-print-color-adjust:exact; print-color-adjust:exact}
+  figure.diagram{overflow:visible}
+  figure.diagram svg, figure.diagram.wide svg{min-width:0}
+  .scrollhint{display:none !important}
+}
+@media (max-width:640px){ .wrap{padding:16px 10px 50px} section.q{padding:16px 14px} }
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="page">
+  <h1>פתרון מלא, 2026 סמסטר קיץ מועד א': מטה 2026</h1>
+  <p>ניתוח ועיצוב מערכות מידע (364-1-1411), 16.10.2026</p>
+  <div class="meta">
+    <span class="chip">100 נקודות</span>
+    <span class="chip">8 שאלות</span>
+    <span class="chip">4 תרשימים</span>
+    <span class="chip">ד״ר דוד קודיש | מר איציק גורביץ</span>
+  </div>
+</header>
+<div class="box goldrule">
+<p><b>מה יש כאן.</b> תשובות מודל מלאות לשמונה השאלות (100 נק׳), ולצדן טעויות נפוצות וחלופות מקובלות. ארבעת התרשימים הפתורים (BPMN, Use Case, מחלקות, מצבים) מצורפים כקבצים אינטראקטיביים נפרדים ומוטמעים בעמוד. בסיטינג זה אין שאלה 9.</p>
+</div>
+<section class="q" id="q1">
+<h2><span class="pts">15 נק׳</span>שאלה 1: תרשים BPMN: קליטת מתנדב חדש למטה</h2>
+
+<p class="qtext">לפניכם תיאור המפרט את תהליך העבודה. תארו תהליך עסקי זה באמצעות תרשים BPMN. בתשובה לשאלה זו יש להסתמך רק על חלק זה ללא קשר לסיפור המסגרת.</p>
+<div class="box">
+<p><b>תהליך: קליטת מתנדב חדש למטה לקראת יום הבחירות.</b> התהליך העסקי המתואר כאן הוא קליטתו של מתנדב חדש במטה, המתבצעת על ידי רכז ההתנדבות ומערכת המטה מול המועמד ומול חברת האבטחה המנפיקה את תגי הכניסה לבניין המטה. הוא מתחיל כאשר מועמד שולח למטה טופס מועמדות מקוון, ומסתיים כאשר המועמד נרשם כמתנדב וזומן לחניכה, או לחלופין כאשר מועמדותו נדחית או כאשר מתברר שהוא רשום זה מכבר.</p>
+<p>עם קבלת הטופס שולפת מערכת המטה את רשומות המתנדבים ממאגר המתנדבים ובודקת אם המועמד כבר רשום בו. אם כן, המערכת מודיעה לו על כך והתהליך מסתיים. אחרת בודק רכז ההתנדבות אם הטופס מלא; אם חסרים בו פרטים, הוא מבקש מהמועמד להשלימם, המועמד שולח טופס מעודכן והרכז בודק אותו שוב, וכך עד שהטופס מלא.</p>
+<p>משהתקבל טופס מלא מתבצעות שתי פעולות במקביל, שאינן תלויות זו בזו: רכז ההתנדבות מקיים עם המועמד ראיון טלפוני לבירור זמינותו וניסיונו ומתעד את תוצאתו, ובאותו זמן שולחת המערכת לחברת האבטחה בקשה להנפקת תג כניסה וממתינה לתשובתה. התהליך ממשיך רק לאחר ששתי הפעולות הסתיימו.</p>
+<p>אם חברת האבטחה לא אישרה את הנפקת התג, או אם הראיון העלה שהמועמד אינו זמין ואינו מתאים לתפקיד, שולחת המערכת למועמד הודעת דחייה והתהליך מסתיים. אחרת קובע הרכז את התפקיד שימלא המועמד, המערכת רושמת אותו במאגר המתנדבים כמתנדב פעיל ושולחת לו זימון לחניכה על נהלי העבודה, ובכך מסתיים התהליך.</p>
+</div>
+<h3 class="sub">1.1 (6 נק׳): התרשים</h3>
+<p class="qtext">הכינו תרשים BPMN המתאר את התהליך שלעיל. התרשים עצמו נבדק בצורה כללית, לבחינת השימוש הנכון בסימונים ובהבנת מהות התרשים.</p>
+<figure class="diagram wide"><svg width="3368.6" height="876" viewBox="0 0 3368.6 876" xmlns="http://www.w3.org/2000/svg">
+      
+    <defs>
+      <pattern id="bpmn0-dot-grid" x="0" y="0" width="24" height="24" patternUnits="userSpaceOnUse">
+        <circle cx="1" cy="1" r="0.8" fill="#cbd5e1"></circle>
+      </pattern>
+      <!-- markerUnits=userSpaceOnUse: arrowheads keep ONE size regardless of each
+           flow's stroke-width (default strokeWidth units made seq arrows ~45%
+           bigger than data-association arrows) -->
+      <marker id="bpmn0-arrow-seq" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="12" markerHeight="12" markerUnits="userSpaceOnUse" orient="auto-start-reverse">
+        <path d="M 0 0 L 10 5 L 0 10 Z" fill="#455a64"></path>
+      </marker>
+      <marker id="bpmn0-msg-start" viewBox="-10 -10 20 20" refX="0" refY="0" markerWidth="12" markerHeight="12" markerUnits="userSpaceOnUse" orient="auto">
+        <circle cx="0" cy="0" r="4" fill="#ffffff" stroke="#37474f" stroke-width="1.2"></circle>
+      </marker>
+      <marker id="bpmn0-msg-end" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="12" markerHeight="12" markerUnits="userSpaceOnUse" orient="auto-start-reverse">
+        <path d="M 0 0 L 10 5 L 0 10 Z" fill="#37474f"></path>
+      </marker>
+      <marker id="bpmn0-arrow-data" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto-start-reverse">
+        <path d="M 0 0 L 10 5 L 0 10 Z" fill="#7986cb"></path>
+      </marker>
+    </defs>
+      <rect x="0" y="0" width="3368.6" height="876" fill="#f8fafc"></rect>
+    <rect x="0" y="0" width="3368.6" height="876" fill="url(#bpmn0-dot-grid)"></rect>
+      
+    <!-- pool: candidate -->
+    <g class="bpmn-pool" data-pool="candidate">
+      <rect x="20" y="72" width="3308.6" height="96" fill="#faf7f2" stroke="#8d6e63" stroke-width="1.5"></rect>
+      <rect x="20" y="72" width="30" height="96" fill="#6d4c41" stroke="#8d6e63" stroke-width="1.5"></rect>
+      <text x="35" y="120" text-anchor="middle" dominant-baseline="middle" transform="rotate(-90, 35, 120)" fill="#ffffff" font-size="12" font-weight="600" direction="rtl">המועמד</text>
+      <line x1="50" y1="72" x2="50" y2="168" stroke="#8d6e63" stroke-width="1"></line>
+    </g>
+
+    <!-- pool: hq -->
+    <g class="bpmn-pool" data-pool="hq">
+      <rect x="20" y="184" width="3308.6" height="544" fill="#ffffff" stroke="#455a64" stroke-width="1.5"></rect>
+      <rect x="20" y="184" width="30" height="544" fill="#37474f" stroke="#455a64" stroke-width="1.5"></rect>
+      <text x="35" y="456" text-anchor="middle" dominant-baseline="middle" transform="rotate(-90, 35, 456)" fill="#ffffff" font-size="12" font-weight="600" direction="rtl">מטה 2026</text>
+      <line x1="50" y1="184" x2="50" y2="728" stroke="#455a64" stroke-width="1"></line>
+    </g>
+
+    <!-- pool: security -->
+    <g class="bpmn-pool" data-pool="security">
+      <rect x="20" y="744" width="3308.6" height="96" fill="#faf7f2" stroke="#8d6e63" stroke-width="1.5"></rect>
+      <rect x="20" y="744" width="30" height="96" fill="#6d4c41" stroke="#8d6e63" stroke-width="1.5"></rect>
+      <text x="35" y="792" text-anchor="middle" dominant-baseline="middle" transform="rotate(-90, 35, 792)" fill="#ffffff" font-size="12" font-weight="600" direction="rtl">חברת האבטחה</text>
+      <line x1="50" y1="744" x2="50" y2="840" stroke="#8d6e63" stroke-width="1"></line>
+    </g>
+      
+    <g class="bpmn-lane" data-lane="sys">
+      <rect x="74" y="184" width="3254.6" height="272" fill="#fafafa" fill-opacity="0.6" stroke="none"></rect>
+      <rect x="50" y="184" width="24" height="272" fill="#546e7a" stroke="#455a64" stroke-width="1"></rect>
+      <text x="62" y="320" text-anchor="middle" dominant-baseline="middle" transform="rotate(-90, 62, 320)" fill="#ffffff" font-size="11" font-weight="500" direction="rtl">מערכת המטה</text>
+      
+    </g>
+
+    <g class="bpmn-lane" data-lane="coord">
+      <rect x="74" y="456" width="3254.6" height="272" fill="#fafafa" fill-opacity="0.6" stroke="none"></rect>
+      <rect x="50" y="456" width="24" height="272" fill="#546e7a" stroke="#455a64" stroke-width="1"></rect>
+      <text x="62" y="592" text-anchor="middle" dominant-baseline="middle" transform="rotate(-90, 62, 592)" fill="#ffffff" font-size="11" font-weight="500" direction="rtl">רכז ההתנדבות</text>
+      <line x1="50" y1="456" x2="3328.6" y2="456" stroke="#90a4ae" stroke-width="1" stroke-dasharray="4 3"></line>
+    </g>
+      
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf1">
+      <path class="bpmn-flow-hit" d="M 162.0 292.0 L 286.0 292.0" fill="none"></path>
+      <path class="bpmn-flow-line" d="M 162.0 292.0 L 286.0 292.0" fill="none" stroke="#455a64" stroke-width="1.6" marker-end="url(#bpmn0-arrow-seq)"></path>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf2">
+      <path class="bpmn-flow-hit" d="M 426.0 292.0 L 544.0 292.0" fill="none"></path>
+      <path class="bpmn-flow-line" d="M 426.0 292.0 L 544.0 292.0" fill="none" stroke="#455a64" stroke-width="1.6" marker-end="url(#bpmn0-arrow-seq)"></path>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf3">
+      <path class="bpmn-flow-hit" d="M 592.0 292.0 L 710.0 292.0" fill="none"></path>
+      <path class="bpmn-flow-line" d="M 592.0 292.0 L 710.0 292.0" fill="none" stroke="#455a64" stroke-width="1.6" marker-end="url(#bpmn0-arrow-seq)"></path>
+      
+      
+    <g class="bpmn-flow-label">
+      <rect x="619.6" y="268.75" width="62.8" height="14" rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"></rect>
+      <text x="651" y="275.75" text-anchor="middle" dominant-baseline="middle" font-size="11" fill="#263238" direction="rtl">כן, רשום</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf4">
+      <path class="bpmn-flow-hit" d="M 850.0 292.0 L 974.0 292.0" fill="none"></path>
+      <path class="bpmn-flow-line" d="M 850.0 292.0 L 974.0 292.0" fill="none" stroke="#455a64" stroke-width="1.6" marker-end="url(#bpmn0-arrow-seq)"></path>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf5">
+      <path class="bpmn-flow-hit" d="M 568.0 316.0 L 568.0 514.0 L 780.0 514.0 L 780.0 540.0" fill="none"></path>
+      <path class="bpmn-flow-line" d="M 568.0 316.0 L 568.0 514.0 L 780.0 514.0 L 780.0 540.0" fill="none" stroke="#455a64" stroke-width="1.6" marker-end="url(#bpmn0-arrow-seq)"></path>
+      
+      
+    <g class="bpmn-flow-label">
+      <rect x="535" y="364.4" width="24" height="14" rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"></rect>
+      <text x="547" y="371.4" text-anchor="middle" dominant-baseline="middle" font-size="11" fill="#263238" direction="rtl">לא</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf6">
+      <path class="bpmn-flow-hit" d="M 804.0 564.0 L 922.0 564.0" fill="none"></path>
+      <path class="bpmn-flow-line" d="M 804.0 564.0 L 922.0 564.0" fill="none" stroke="#455a64" stroke-width="1.6" marker-end="url(#bpmn0-arrow-seq)"></path>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf7">
+      <path class="bpmn-flow-hit" d="M 1062.0 564.0 L 1180.0 564.0" fill="none"></path>
+      <path class="bpmn-flow-line" d="M 1062.0 564.0 L 1180.0 564.0" fill="none" stroke="#455a64" stroke-width="1.6" marker-end="url(#bpmn0-arrow-seq)"></path>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf8">
+      <path class="bpmn-flow-hit" d="M 1204.0 588.0 L 1204.0 616.0 L 1350.6 616.0" fill="none"></path>
+      <path class="bpmn-flow-line" d="M 1204.0 588.0 L 1204.0 616.0 L 1350.6 616.0" fill="none" stroke="#455a64" stroke-width="1.6" marker-end="url(#bpmn0-arrow-seq)"></path>
+      
+      
+    <g class="bpmn-flow-label">
+      <rect x="1206.68" y="619.25" width="82.6" height="14" rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"></rect>
+      <text x="1247.98" y="626.25" text-anchor="middle" dominant-baseline="middle" font-size="11" fill="#263238" direction="rtl">חסרים פרטים</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf9">
+      <path class="bpmn-flow-hit" d="M 1490.6 616.0 L 1614.6 616.0" fill="none"></path>
+      <path class="bpmn-flow-line" d="M 1490.6 616.0 L 1614.6 616.0" fill="none" stroke="#455a64" stroke-width="1.6" marker-end="url(#bpmn0-arrow-seq)"></path>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf10">
+      <path class="bpmn-flow-hit" d="M 1650.6 616.0 L 1666.6 616.0 L 1666.6 568.0 L 1244.0 568.0 L 1244.0 609.0 L 780.0 609.0 L 780.0 588.0" fill="none"></path>
+      <path class="bpmn-flow-line" d="M 1650.6 616.0 L 1666.6 616.0 L 1666.6 568.0 L 1244.0 568.0 L 1244.0 609.0 L 780.0 609.0 L 780.0 588.0" fill="none" stroke="#455a64" stroke-width="1.6" marker-end="url(#bpmn0-arrow-seq)"></path>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf11">
+      <path class="bpmn-flow-hit" d="M 1228.0 564.0 L 1244.0 564.0 L 1244.0 552.0 L 1370.6 552.0 L 1370.6 512.0 L 1396.6 512.0" fill="none"></path>
+      <path class="bpmn-flow-line" d="M 1228.0 564.0 L 1244.0 564.0 L 1244.0 552.0 L 1370.6 552.0 L 1370.6 512.0 L 1396.6 512.0" fill="none" stroke="#455a64" stroke-width="1.6" marker-end="url(#bpmn0-arrow-seq)"></path>
+      
+      
+    <g class="bpmn-flow-label">
+      <rect x="1292.8149999999998" y="529" width="69.4" height="14" rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"></rect>
+      <text x="1327.5149999999999" y="536" text-anchor="middle" dominant-baseline="middle" font-size="11" fill="#263238" direction="rtl">הטופס מלא</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf12">
+      <path class="bpmn-flow-hit" d="M 1444.6 512.0 L 1562.6 512.0" fill="none"></path>
+      <path class="bpmn-flow-line" d="M 1444.6 512.0 L 1562.6 512.0" fill="none" stroke="#455a64" stroke-width="1.6" marker-end="url(#bpmn0-arrow-seq)"></path>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf13">
+      <path class="bpmn-flow-hit" d="M 1420.6 488.0 L 1420.6 350.0 L 1625.6 350.0 L 1625.6 324.0" fill="none"></path>
+      <path class="bpmn-flow-line" d="M 1420.6 488.0 L 1420.6 350.0 L 1625.6 350.0 L 1625.6 324.0" fill="none" stroke="#455a64" stroke-width="1.6" marker-end="url(#bpmn0-arrow-seq)"></path>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf14">
+      <path class="bpmn-flow-hit" d="M 1702.6 292.0 L 1826.6 292.0" fill="none"></path>
+      <path class="bpmn-flow-line" d="M 1702.6 292.0 L 1826.6 292.0" fill="none" stroke="#455a64" stroke-width="1.6" marker-end="url(#bpmn0-arrow-seq)"></path>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf15">
+      <path class="bpmn-flow-hit" d="M 1702.6 512.0 L 2006.6 512.0 L 2006.6 564.0 L 2032.6 564.0" fill="none"></path>
+      <path class="bpmn-flow-line" d="M 1702.6 512.0 L 2006.6 512.0 L 2006.6 564.0 L 2032.6 564.0" fill="none" stroke="#455a64" stroke-width="1.6" marker-end="url(#bpmn0-arrow-seq)"></path>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf16">
+      <path class="bpmn-flow-hit" d="M 1851.6 308.6 L 1851.6 496.0 L 2056.6 496.0 L 2056.6 540.0" fill="none"></path>
+      <path class="bpmn-flow-line" d="M 1851.6 308.6 L 1851.6 496.0 L 2056.6 496.0 L 2056.6 540.0" fill="none" stroke="#455a64" stroke-width="1.6" marker-end="url(#bpmn0-arrow-seq)"></path>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf17">
+      <path class="bpmn-flow-hit" d="M 2080.6 564.0 L 2244.6 564.0" fill="none"></path>
+      <path class="bpmn-flow-line" d="M 2080.6 564.0 L 2244.6 564.0" fill="none" stroke="#455a64" stroke-width="1.6" marker-end="url(#bpmn0-arrow-seq)"></path>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf18">
+      <path class="bpmn-flow-hit" d="M 2268.6 588.0 L 2268.6 609.0 L 2745.6 609.0" fill="none"></path>
+      <path class="bpmn-flow-line" d="M 2268.6 588.0 L 2268.6 609.0 L 2745.6 609.0" fill="none" stroke="#455a64" stroke-width="1.6" marker-end="url(#bpmn0-arrow-seq)"></path>
+      
+      
+    <g class="bpmn-flow-label">
+      <rect x="2204.545" y="587.5" width="56.199999999999996" height="14" rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"></rect>
+      <text x="2232.645" y="594.5" text-anchor="middle" dominant-baseline="middle" font-size="11" fill="#263238" direction="rtl">לא אושר</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf19">
+      <path class="bpmn-flow-hit" d="M 2292.6 564.0 L 2456.6 564.0" fill="none"></path>
+      <path class="bpmn-flow-line" d="M 2292.6 564.0 L 2456.6 564.0" fill="none" stroke="#455a64" stroke-width="1.6" marker-end="url(#bpmn0-arrow-seq)"></path>
+      
+      
+    <g class="bpmn-flow-label">
+      <rect x="2323.6" y="540.75" width="36.4" height="14" rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"></rect>
+      <text x="2341.7999999999997" y="547.75" text-anchor="middle" dominant-baseline="middle" font-size="11" fill="#263238" direction="rtl">אושר</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf20">
+      <path class="bpmn-flow-hit" d="M 2480.6 588.0 L 2480.6 623.0 L 2745.6 623.0" fill="none"></path>
+      <path class="bpmn-flow-line" d="M 2480.6 588.0 L 2480.6 623.0 L 2745.6 623.0" fill="none" stroke="#455a64" stroke-width="1.6" marker-end="url(#bpmn0-arrow-seq)"></path>
+      
+      
+    <g class="bpmn-flow-label">
+      <rect x="2485.7999999999997" y="626.25" width="148.6" height="14" rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"></rect>
+      <text x="2560.1" y="633.25" text-anchor="middle" dominant-baseline="middle" font-size="11" fill="#263238" direction="rtl">אינו זמין ואינו מתאים</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf21">
+      <path class="bpmn-flow-hit" d="M 2504.6 564.0 L 2666.6 564.0 L 2666.6 512.0 L 2692.6 512.0" fill="none"></path>
+      <path class="bpmn-flow-line" d="M 2504.6 564.0 L 2666.6 564.0 L 2666.6 512.0 L 2692.6 512.0" fill="none" stroke="#455a64" stroke-width="1.6" marker-end="url(#bpmn0-arrow-seq)"></path>
+      
+      
+    <g class="bpmn-flow-label">
+      <rect x="2511.8999999999996" y="540.75" width="82.6" height="14" rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"></rect>
+      <text x="2553.2" y="547.75" text-anchor="middle" dominant-baseline="middle" font-size="11" fill="#263238" direction="rtl">זמין ומתאים</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf22">
+      <path class="bpmn-flow-hit" d="M 2762.6 592.0 L 2762.6 558.0 L 2974.6 558.0 L 2974.6 376.0" fill="none"></path>
+      <path class="bpmn-flow-line" d="M 2762.6 592.0 L 2762.6 558.0 L 2974.6 558.0 L 2974.6 376.0" fill="none" stroke="#455a64" stroke-width="1.6" marker-end="url(#bpmn0-arrow-seq)"></path>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf23">
+      <path class="bpmn-flow-hit" d="M 3044.6 344.0 L 3168.6 344.0" fill="none"></path>
+      <path class="bpmn-flow-line" d="M 3044.6 344.0 L 3168.6 344.0" fill="none" stroke="#455a64" stroke-width="1.6" marker-end="url(#bpmn0-arrow-seq)"></path>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf24">
+      <path class="bpmn-flow-hit" d="M 2762.6 480.0 L 2762.6 350.0 L 2769.6 350.0 L 2769.6 324.0" fill="none"></path>
+      <path class="bpmn-flow-line" d="M 2762.6 480.0 L 2762.6 350.0 L 2769.6 350.0 L 2769.6 324.0" fill="none" stroke="#455a64" stroke-width="1.6" marker-end="url(#bpmn0-arrow-seq)"></path>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf25">
+      <path class="bpmn-flow-hit" d="M 2832.6 292.0 L 2878.6 292.0 L 2878.6 240.0 L 2904.6 240.0" fill="none"></path>
+      <path class="bpmn-flow-line" d="M 2832.6 292.0 L 2878.6 292.0 L 2878.6 240.0 L 2904.6 240.0" fill="none" stroke="#455a64" stroke-width="1.6" marker-end="url(#bpmn0-arrow-seq)"></path>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf26">
+      <path class="bpmn-flow-hit" d="M 3044.6 240.0 L 3168.6 240.0" fill="none"></path>
+      <path class="bpmn-flow-line" d="M 3044.6 240.0 L 3168.6 240.0" fill="none" stroke="#455a64" stroke-width="1.6" marker-end="url(#bpmn0-arrow-seq)"></path>
+      
+      
+    </g>
+      
+    <g class="bpmn-flow bpmn-message" data-flow="mf1">
+      <path class="bpmn-flow-hit" d="M 144.0 168.0 L 144.0 274.0" fill="none"></path>
+      <path class="bpmn-flow-line" d="M 144.0 168.0 L 144.0 274.0" fill="none" stroke="#37474f" stroke-width="1.3" stroke-dasharray="10 5" marker-start="url(#bpmn0-msg-start)" marker-end="url(#bpmn0-msg-end)"></path>
+      
+    <g class="bpmn-flow-label">
+      <rect x="4.429999999999993" y="210" width="128.8" height="14" rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"></rect>
+      <text x="68.83" y="217" text-anchor="middle" dominant-baseline="middle" font-size="11" fill="#263238" direction="rtl">טופס מועמדות מקוון</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-message" data-flow="mf2">
+      <path class="bpmn-flow-hit" d="M 780.0 260.0 L 780.0 168.0" fill="none"></path>
+      <path class="bpmn-flow-line" d="M 780.0 260.0 L 780.0 168.0" fill="none" stroke="#37474f" stroke-width="1.3" stroke-dasharray="10 5" marker-start="url(#bpmn0-msg-start)" marker-end="url(#bpmn0-msg-end)"></path>
+      
+    <g class="bpmn-flow-label">
+      <rect x="633.565" y="203" width="135.39999999999998" height="14" rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"></rect>
+      <text x="701.265" y="210" text-anchor="middle" dominant-baseline="middle" font-size="11" fill="#263238" direction="rtl">הודעה: רשום זה מכבר</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-message" data-flow="mf3">
+      <path class="bpmn-flow-hit" d="M 1420.6 584.0 L 1420.6 552.0 L 1460.6 552.0 L 1460.6 194.0 L 1420.6 194.0 L 1420.6 168.0" fill="none"></path>
+      <path class="bpmn-flow-line" d="M 1420.6 584.0 L 1420.6 552.0 L 1460.6 552.0 L 1460.6 194.0 L 1420.6 194.0 L 1420.6 168.0" fill="none" stroke="#37474f" stroke-width="1.3" stroke-dasharray="10 5" marker-start="url(#bpmn0-msg-start)" marker-end="url(#bpmn0-msg-end)"></path>
+      
+    <g class="bpmn-flow-label">
+      <rect x="1327.895" y="290.4" width="122.19999999999999" height="14" rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"></rect>
+      <text x="1388.995" y="297.4" text-anchor="middle" dominant-baseline="middle" font-size="11" fill="#263238" direction="rtl">בקשה להשלמת פרטים</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-message" data-flow="mf4">
+      <path class="bpmn-flow-hit" d="M 1632.6 168.0 L 1632.6 246.0 L 1718.6 246.0 L 1718.6 560.0 L 1632.6 560.0 L 1632.6 598.0" fill="none"></path>
+      <path class="bpmn-flow-line" d="M 1632.6 168.0 L 1632.6 246.0 L 1718.6 246.0 L 1718.6 560.0 L 1632.6 560.0 L 1632.6 598.0" fill="none" stroke="#37474f" stroke-width="1.3" stroke-dasharray="10 5" marker-start="url(#bpmn0-msg-start)" marker-end="url(#bpmn0-msg-end)"></path>
+      
+    <g class="bpmn-flow-label">
+      <rect x="1486.165" y="196" width="135.39999999999998" height="14" rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"></rect>
+      <text x="1553.865" y="203" text-anchor="middle" dominant-baseline="middle" font-size="11" fill="#263238" direction="rtl">טופס מועמדות מעודכן</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-message" data-flow="mf5">
+      <path class="bpmn-flow-hit" d="M 1639.6 324.0 L 1639.6 466.0 L 1728.6 466.0 L 1728.6 718.0 L 1632.6 718.0 L 1632.6 744.0" fill="none"></path>
+      <path class="bpmn-flow-line" d="M 1639.6 324.0 L 1639.6 466.0 L 1728.6 466.0 L 1728.6 718.0 L 1632.6 718.0 L 1632.6 744.0" fill="none" stroke="#37474f" stroke-width="1.3" stroke-dasharray="10 5" marker-start="url(#bpmn0-msg-start)" marker-end="url(#bpmn0-msg-end)"></path>
+      
+    <g class="bpmn-flow-label">
+      <rect x="1479.3" y="720" width="142" height="14" rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"></rect>
+      <text x="1550.3" y="727" text-anchor="middle" dominant-baseline="middle" font-size="11" fill="#263238" direction="rtl">בקשה להנפקת תג כניסה</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-message" data-flow="mf6">
+      <path class="bpmn-flow-hit" d="M 1844.6 744.0 L 1844.6 336.0 L 1837.6 336.0 L 1837.6 308.6" fill="none"></path>
+      <path class="bpmn-flow-line" d="M 1844.6 744.0 L 1844.6 336.0 L 1837.6 336.0 L 1837.6 308.6" fill="none" stroke="#37474f" stroke-width="1.3" stroke-dasharray="10 5" marker-start="url(#bpmn0-msg-start)" marker-end="url(#bpmn0-msg-end)"></path>
+      
+    <g class="bpmn-flow-label">
+      <rect x="1871.225" y="447.4" width="175" height="14" rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"></rect>
+      <text x="1958.725" y="454.4" text-anchor="middle" dominant-baseline="middle" font-size="11" fill="#263238" direction="rtl">אישור או סירוב להנפקת התג</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-message" data-flow="mf7">
+      <path class="bpmn-flow-hit" d="M 2974.6 312.0 L 2974.6 286.0 L 2888.6 286.0 L 2888.6 194.0 L 2950.6 194.0 L 2950.6 168.0" fill="none"></path>
+      <path class="bpmn-flow-line" d="M 2974.6 312.0 L 2974.6 286.0 L 2888.6 286.0 L 2888.6 194.0 L 2950.6 194.0 L 2950.6 168.0" fill="none" stroke="#37474f" stroke-width="1.3" stroke-dasharray="10 5" marker-start="url(#bpmn0-msg-start)" marker-end="url(#bpmn0-msg-end)"></path>
+      
+    <g class="bpmn-flow-label">
+      <rect x="2983.515" y="288" width="82.6" height="14" rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"></rect>
+      <text x="3024.815" y="295" text-anchor="middle" dominant-baseline="middle" font-size="11" fill="#263238" direction="rtl">הודעת דחייה</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-message" data-flow="mf8">
+      <path class="bpmn-flow-hit" d="M 2974.6 208.0 L 2974.6 194.0 L 2998.6 194.0 L 2998.6 168.0" fill="none"></path>
+      <path class="bpmn-flow-line" d="M 2974.6 208.0 L 2974.6 194.0 L 2998.6 194.0 L 2998.6 168.0" fill="none" stroke="#37474f" stroke-width="1.3" stroke-dasharray="10 5" marker-start="url(#bpmn0-msg-start)" marker-end="url(#bpmn0-msg-end)"></path>
+      
+    <g class="bpmn-flow-label">
+      <rect x="3007.78" y="170" width="89.19999999999999" height="14" rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"></rect>
+      <text x="3052.38" y="177" text-anchor="middle" dominant-baseline="middle" font-size="11" fill="#263238" direction="rtl">זימון לחניכה</text>
+    </g>
+    </g>
+      
+    <g class="bpmn-flow bpmn-data-assoc" data-flow="da1" data-dir="read">
+      <path class="bpmn-flow-hit" d="M 1552.3 406.0 L 1552.3 362.0 L 356.0 362.0 L 356.0 324.0" fill="none"></path>
+      <path class="bpmn-flow-line" d="M 1552.3 406.0 L 1552.3 362.0 L 356.0 362.0 L 356.0 324.0" fill="none" stroke="#7986cb" stroke-width="1.1" stroke-dasharray="4 3" marker-end="url(#bpmn0-arrow-data)"></path>
+    </g>
+
+    <g class="bpmn-flow bpmn-data-assoc" data-flow="da2" data-dir="write">
+      <path class="bpmn-flow-hit" d="M 2755.6 324.0 L 2755.6 380.0 L 1566.3 380.0 L 1566.3 406.0" fill="none"></path>
+      <path class="bpmn-flow-line" d="M 2755.6 324.0 L 2755.6 380.0 L 1566.3 380.0 L 1566.3 406.0" fill="none" stroke="#7986cb" stroke-width="1.1" stroke-dasharray="4 3" marker-end="url(#bpmn0-arrow-data)"></path>
+    </g>
+      
+    <g class="bpmn-element bpmn-event" id="bpmn0-s_start" data-kind="event" data-event="start">
+      <circle cx="144" cy="292" r="18" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2"></circle>
+      <text text-anchor="middle" font-size="11" fill="#37474f" direction="rtl" font-weight="500"><tspan x="144" y="324">התקבל טופס מועמדות</tspan><tspan x="144" y="336">מקוון</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-task" id="bpmn0-s_fetch" data-kind="task">
+      <rect x="286" y="260" width="140" height="64" rx="8" ry="8" fill="#ffffff" stroke="#546e7a" stroke-width="1.5"></rect>
+      <text text-anchor="middle" dominant-baseline="middle" font-size="11.5" font-weight="500" fill="#1a1a2e" direction="rtl"><tspan x="356" y="278">שליפת רשומות</tspan><tspan x="356" y="292">המתנדבים ובדיקה</tspan><tspan x="356" y="306">אם המועמד רשום</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-gateway" id="bpmn0-g_reg" data-kind="gateway" data-gw="XOR">
+      <text text-anchor="middle" font-size="11" fill="#37474f" direction="rtl" font-weight="500"><tspan x="568" y="245">האם המועמד כבר רשום</tspan><tspan x="568" y="258">במאגר?</tspan></text>
+      <rect x="551" y="275" width="34" height="34" fill="#fff8e1" stroke="#f9a825" stroke-width="2" transform="rotate(45, 568, 292)"></rect>
+      
+      <line x1="560" y1="284" x2="576" y2="300" stroke="#e65100" stroke-width="3" stroke-linecap="round"></line>
+      <line x1="576" y1="284" x2="560" y2="300" stroke="#e65100" stroke-width="3" stroke-linecap="round"></line>
+    </g>
+
+    <g class="bpmn-element bpmn-task" id="bpmn0-s_notify_reg" data-kind="task">
+      <rect x="710" y="260" width="140" height="64" rx="8" ry="8" fill="#ffffff" stroke="#546e7a" stroke-width="1.5"></rect>
+      <text text-anchor="middle" dominant-baseline="middle" font-size="11.5" font-weight="500" fill="#1a1a2e" direction="rtl"><tspan x="780" y="278">שליחת הודעה</tspan><tspan x="780" y="292">למועמד שהוא רשום</tspan><tspan x="780" y="306">זה מכבר</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-event" id="bpmn0-s_end_reg" data-kind="event" data-event="end">
+      <circle cx="992" cy="292" r="18" fill="#ffebee" stroke="#c62828" stroke-width="3.5"></circle>
+      <text text-anchor="middle" font-size="11" fill="#37474f" direction="rtl" font-weight="500"><tspan x="992" y="324">המועמד רשום זה</tspan><tspan x="992" y="336">מכבר</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-task" id="bpmn0-s_badge_req" data-kind="task">
+      <rect x="1562.6" y="260" width="140" height="64" rx="8" ry="8" fill="#ffffff" stroke="#546e7a" stroke-width="1.5"></rect>
+      <text text-anchor="middle" dominant-baseline="middle" font-size="11.5" font-weight="500" fill="#1a1a2e" direction="rtl"><tspan x="1632.6" y="285">שליחת בקשה</tspan><tspan x="1632.6" y="299">להנפקת תג כניסה</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-event" id="bpmn0-s_wait_badge" data-kind="event" data-event="intermediate">
+      
+      <circle cx="1844.6" cy="292" r="18" fill="#ffffff" stroke="#1565c0" stroke-width="2"></circle>
+      <circle cx="1844.6" cy="292" r="13.5" fill="none" stroke="#1565c0" stroke-width="1.2"></circle>
+      <text text-anchor="middle" font-size="11" fill="#37474f" direction="rtl" font-weight="500"><tspan x="1844.6" y="324">התקבלה תשובת חברת</tspan><tspan x="1844.6" y="336">האבטחה</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-task" id="bpmn0-s_register" data-kind="task">
+      <rect x="2692.6" y="260" width="140" height="64" rx="8" ry="8" fill="#ffffff" stroke="#546e7a" stroke-width="1.5"></rect>
+      <text text-anchor="middle" dominant-baseline="middle" font-size="11.5" font-weight="500" fill="#1a1a2e" direction="rtl"><tspan x="2762.6" y="278">רישום המועמד</tspan><tspan x="2762.6" y="292">במאגר כמתנדב</tspan><tspan x="2762.6" y="306">פעיל</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-task" id="bpmn0-s_invite" data-kind="task">
+      <rect x="2904.6" y="208" width="140" height="64" rx="8" ry="8" fill="#ffffff" stroke="#546e7a" stroke-width="1.5"></rect>
+      <text text-anchor="middle" dominant-baseline="middle" font-size="11.5" font-weight="500" fill="#1a1a2e" direction="rtl"><tspan x="2974.6" y="226">שליחת זימון</tspan><tspan x="2974.6" y="240">לחניכה על נהלי</tspan><tspan x="2974.6" y="254">העבודה</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-task" id="bpmn0-s_reject" data-kind="task">
+      <rect x="2904.6" y="312" width="140" height="64" rx="8" ry="8" fill="#ffffff" stroke="#546e7a" stroke-width="1.5"></rect>
+      <text text-anchor="middle" dominant-baseline="middle" font-size="11.5" font-weight="500" fill="#1a1a2e" direction="rtl"><tspan x="2974.6" y="337">שליחת הודעת</tspan><tspan x="2974.6" y="351">דחייה למועמד</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-event" id="bpmn0-s_end_ok" data-kind="event" data-event="end">
+      <circle cx="3186.6" cy="240" r="18" fill="#ffebee" stroke="#c62828" stroke-width="3.5"></circle>
+      <text text-anchor="middle" font-size="11" fill="#37474f" direction="rtl" font-weight="500"><tspan x="3186.6" y="272">המועמד נרשם כמתנדב</tspan><tspan x="3186.6" y="284">וזומן לחניכה</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-event" id="bpmn0-s_end_rej" data-kind="event" data-event="end">
+      <circle cx="3186.6" cy="344" r="18" fill="#ffebee" stroke="#c62828" stroke-width="3.5"></circle>
+      <text text-anchor="middle" font-size="11" fill="#37474f" direction="rtl" font-weight="500"><tspan x="3186.6" y="376">המועמדות נדחתה</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-gateway" id="bpmn0-c_loop_merge" data-kind="gateway" data-gw="XOR">
+      
+      <rect x="763" y="547" width="34" height="34" fill="#fff8e1" stroke="#f9a825" stroke-width="2" transform="rotate(45, 780, 564)"></rect>
+      
+      <line x1="772" y1="556" x2="788" y2="572" stroke="#e65100" stroke-width="3" stroke-linecap="round"></line>
+      <line x1="788" y1="556" x2="772" y2="572" stroke="#e65100" stroke-width="3" stroke-linecap="round"></line>
+    </g>
+
+    <g class="bpmn-element bpmn-task" id="bpmn0-c_check" data-kind="task">
+      <rect x="922" y="532" width="140" height="64" rx="8" ry="8" fill="#ffffff" stroke="#546e7a" stroke-width="1.5"></rect>
+      <text text-anchor="middle" dominant-baseline="middle" font-size="11.5" font-weight="500" fill="#1a1a2e" direction="rtl"><tspan x="992" y="557">בדיקת שלמות טופס</tspan><tspan x="992" y="571">המועמדות</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-gateway" id="bpmn0-g_complete" data-kind="gateway" data-gw="XOR">
+      <text text-anchor="middle" font-size="11" fill="#37474f" direction="rtl" font-weight="500"><tspan x="1204" y="530">האם הטופס מלא?</tspan></text>
+      <rect x="1187" y="547" width="34" height="34" fill="#fff8e1" stroke="#f9a825" stroke-width="2" transform="rotate(45, 1204, 564)"></rect>
+      
+      <line x1="1196" y1="556" x2="1212" y2="572" stroke="#e65100" stroke-width="3" stroke-linecap="round"></line>
+      <line x1="1212" y1="556" x2="1196" y2="572" stroke="#e65100" stroke-width="3" stroke-linecap="round"></line>
+    </g>
+
+    <g class="bpmn-element bpmn-gateway" id="bpmn0-g_and_split" data-kind="gateway" data-gw="AND">
+      
+      <rect x="1403.6" y="495" width="34" height="34" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2" transform="rotate(45, 1420.6, 512)"></rect>
+      
+      <line x1="1420.6" y1="503" x2="1420.6" y2="521" stroke="#1b5e20" stroke-width="3" stroke-linecap="round"></line>
+      <line x1="1411.6" y1="512" x2="1429.6" y2="512" stroke="#1b5e20" stroke-width="3" stroke-linecap="round"></line>
+    </g>
+
+    <g class="bpmn-element bpmn-task" id="bpmn0-c_request" data-kind="task">
+      <rect x="1350.6" y="584" width="140" height="64" rx="8" ry="8" fill="#ffffff" stroke="#546e7a" stroke-width="1.5"></rect>
+      <text text-anchor="middle" dominant-baseline="middle" font-size="11.5" font-weight="500" fill="#1a1a2e" direction="rtl"><tspan x="1420.6" y="602">בקשה מהמועמד</tspan><tspan x="1420.6" y="616">להשלמת הפרטים</tspan><tspan x="1420.6" y="630">החסרים</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-task" id="bpmn0-c_interview" data-kind="task">
+      <rect x="1562.6" y="480" width="140" height="64" rx="8" ry="8" fill="#ffffff" stroke="#546e7a" stroke-width="1.5"></rect>
+      <text text-anchor="middle" dominant-baseline="middle" font-size="11.5" font-weight="500" fill="#1a1a2e" direction="rtl"><tspan x="1632.6" y="498">ראיון טלפוני עם</tspan><tspan x="1632.6" y="512">המועמד ותיעוד</tspan><tspan x="1632.6" y="526">תוצאתו</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-event" id="bpmn0-c_wait_form" data-kind="event" data-event="intermediate">
+      
+      <circle cx="1632.6" cy="616" r="18" fill="#ffffff" stroke="#1565c0" stroke-width="2"></circle>
+      <circle cx="1632.6" cy="616" r="13.5" fill="none" stroke="#1565c0" stroke-width="1.2"></circle>
+      <text text-anchor="middle" font-size="11" fill="#37474f" direction="rtl" font-weight="500"><tspan x="1632.6" y="648">התקבל טופס מעודכן</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-gateway" id="bpmn0-g_and_join" data-kind="gateway" data-gw="AND">
+      
+      <rect x="2039.6" y="547" width="34" height="34" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2" transform="rotate(45, 2056.6, 564)"></rect>
+      
+      <line x1="2056.6" y1="555" x2="2056.6" y2="573" stroke="#1b5e20" stroke-width="3" stroke-linecap="round"></line>
+      <line x1="2047.6" y1="564" x2="2065.6" y2="564" stroke="#1b5e20" stroke-width="3" stroke-linecap="round"></line>
+    </g>
+
+    <g class="bpmn-element bpmn-gateway" id="bpmn0-g_badge" data-kind="gateway" data-gw="XOR">
+      <text text-anchor="middle" font-size="11" fill="#37474f" direction="rtl" font-weight="500"><tspan x="2268.6" y="530">האם התג אושר?</tspan></text>
+      <rect x="2251.6" y="547" width="34" height="34" fill="#fff8e1" stroke="#f9a825" stroke-width="2" transform="rotate(45, 2268.6, 564)"></rect>
+      
+      <line x1="2260.6" y1="556" x2="2276.6" y2="572" stroke="#e65100" stroke-width="3" stroke-linecap="round"></line>
+      <line x1="2276.6" y1="556" x2="2260.6" y2="572" stroke="#e65100" stroke-width="3" stroke-linecap="round"></line>
+    </g>
+
+    <g class="bpmn-element bpmn-gateway" id="bpmn0-g_fit" data-kind="gateway" data-gw="XOR">
+      <text text-anchor="middle" font-size="11" fill="#37474f" direction="rtl" font-weight="500"><tspan x="2480.6" y="517">האם המועמד זמין</tspan><tspan x="2480.6" y="530">ומתאים?</tspan></text>
+      <rect x="2463.6" y="547" width="34" height="34" fill="#fff8e1" stroke="#f9a825" stroke-width="2" transform="rotate(45, 2480.6, 564)"></rect>
+      
+      <line x1="2472.6" y1="556" x2="2488.6" y2="572" stroke="#e65100" stroke-width="3" stroke-linecap="round"></line>
+      <line x1="2488.6" y1="556" x2="2472.6" y2="572" stroke="#e65100" stroke-width="3" stroke-linecap="round"></line>
+    </g>
+
+    <g class="bpmn-element bpmn-task" id="bpmn0-c_role" data-kind="task">
+      <rect x="2692.6" y="480" width="140" height="64" rx="8" ry="8" fill="#ffffff" stroke="#546e7a" stroke-width="1.5"></rect>
+      <text text-anchor="middle" dominant-baseline="middle" font-size="11.5" font-weight="500" fill="#1a1a2e" direction="rtl"><tspan x="2762.6" y="505">קביעת התפקיד</tspan><tspan x="2762.6" y="519">שימלא המועמד</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-gateway" id="bpmn0-s_reject_merge" data-kind="gateway" data-gw="XOR">
+      
+      <rect x="2745.6" y="599" width="34" height="34" fill="#fff8e1" stroke="#f9a825" stroke-width="2" transform="rotate(45, 2762.6, 616)"></rect>
+      
+      <line x1="2754.6" y1="608" x2="2770.6" y2="624" stroke="#e65100" stroke-width="3" stroke-linecap="round"></line>
+      <line x1="2770.6" y1="608" x2="2754.6" y2="624" stroke="#e65100" stroke-width="3" stroke-linecap="round"></line>
+    </g>
+
+    <g class="bpmn-element bpmn-data-store" id="bpmn0-ds_volunteers" data-kind="dataStore">
+      <path d="M 1531.3 412 L 1531.3 444
+               A 28 6 0 0 0 1587.3 444
+               L 1587.3 412
+               A 28 6 0 0 0 1531.3 412 Z" fill="#ffffff" stroke="#2e7d32" stroke-width="1.4"></path>
+      <path d="M 1531.3 412
+               A 28 6 0 0 0 1587.3 412" fill="none" stroke="#2e7d32" stroke-width="1.4"></path>
+      <text x="1559.3" y="464" text-anchor="middle" font-size="11" fill="#263238" direction="rtl">מאגר המתנדבים</text>
+    </g>
+    </svg>
+<figcaption>פתרון לדוגמה: שלושה Pools. המטה עם שני Lanes (מערכת המטה, רכז ההתנדבות), והמועמד וחברת האבטחה כ-Pools ריקים (black-box) המחליפים עם המטה הודעות בלבד. שימו לב לזוג שערי ה-AND (פיצול וסנכרון) סביב הראיון ובקשת התג, ללולאת ההשלמה החוזרת לשער מיזוג שלפני בדיקת השלמות, ולשלושה אירועי סיום מובחנים.</figcaption>
+</figure>
+<p class="scrollhint">↔ התרשים רחב מן העמוד, ניתן לגלול אותו לצדדים.</p>
+<p class="difflink"><a href="diagrams/bpmn-solution.html" target="_blank" rel="noopener">↗ פתחו את תרשים ה-BPMN המלא</a><small>עמוד נפרד, ניתן להגדלה ולהדפסה</small></p>
+<div class="answer">
+<h4>תשובה קצרה</h4>
+<p><b>שלושה Pools:</b></p>
+<ul>
+<li><b>Pool A: מטה 2026</b> (הארגון המנהל את התהליך), שני <b>Lanes</b>: <b>מערכת המטה</b> (פעולות ממוחשבות) ו<b>רכז ההתנדבות</b> (פעולות שאדם מבצע).</li>
+<li><b>Pool B: המועמד</b>, Pool ריק (black-box): שולח ומקבל הודעות בלבד.</li>
+<li><b>Pool C: חברת האבטחה</b>, Pool ריק (black-box): מקבלת בקשה להנפקת תג ומחזירה החלטה.</li>
+</ul>
+<p><b>מאגר נתונים אחד:</b> <b>מאגר המתנדבים</b>, בסמל <b>Data Store</b>, מחובר ב-<b>Association</b> בקריאה (בדיקה אם המועמד רשום) ובכתיבה (רישומו כמתנדב פעיל).</p>
+<h4>המפרט המלא של התרשים</h4>
+<p><b>Lane "מערכת המטה":</b></p>
+<ol>
+<li><b>Start Event</b>: "התקבל טופס מועמדות מקוון", שאליו מגיע <b>Message Flow</b> מן ה-Pool של המועמד.</li>
+<li>פעילות: <b>שליפת רשומות המתנדבים ובדיקה אם המועמד רשום</b>, Association של <b>קריאה</b> מן המאגר.</li>
+<li><b>G1 (XOR split): "האם המועמד כבר רשום במאגר?"</b> <b>כן</b> → פעילות <b>שליחת הודעה למועמד שהוא רשום זה מכבר</b> (Message Flow החוצה) → <b>End Event 1</b>: "המועמד רשום זה מכבר". <b>לא</b> → ל-Lane של הרכז.</li>
+<li>פעילות: <b>שליחת בקשה להנפקת תג כניסה</b> (Message Flow החוצה לחברת האבטחה) → <b>אירוע ביניים: "התקבלה תשובת חברת האבטחה"</b> (Message Flow פנימה). זהו ענף ב' של הפיצול המקבילי.</li>
+<li>פעילות: <b>רישום המועמד במאגר כמתנדב פעיל</b>, Association של <b>כתיבה</b> אל המאגר.</li>
+<li>פעילות: <b>שליחת זימון לחניכה על נהלי העבודה</b> (Message Flow החוצה) → <b>End Event 3</b>: "המועמד נרשם כמתנדב וזומן לחניכה".</li>
+<li>פעילות: <b>שליחת הודעת דחייה למועמד</b> (Message Flow החוצה) → <b>End Event 2</b>: "המועמדות נדחתה".</li>
+</ol>
+<p><b>Lane "רכז ההתנדבות":</b></p>
+<ol>
+<li><b>XOR merge</b> (נקודת החזרה של הלולאה) → פעילות <b>בדיקת שלמות טופס המועמדות</b>.</li>
+<li><b>G2 (XOR split): "האם הטופס מלא?"</b><ul>
+<li><b>חסרים פרטים</b> → פעילות <b>בקשה מהמועמד להשלמת הפרטים החסרים</b> (Message Flow החוצה) → <b>אירוע ביניים: "התקבל טופס מעודכן"</b> (Message Flow פנימה) → <b>חזרה ל-XOR merge</b> = הלולאה.</li>
+<li><b>הטופס מלא</b> → <b>G3 (AND split)</b>.</li>
+</ul>
+</li>
+<li><b>G3 (AND split)</b>: ענף א' → פעילות <b>ראיון טלפוני עם המועמד ותיעוד תוצאתו</b>; ענף ב' → בקשת התג ב-Lane של המערכת. אין תנאים על היציאות.</li>
+<li><b>AND join</b>: שני הענפים נכנסים אליו, וממנו ממשיך התהליך רק כששניהם הגיעו.</li>
+<li><b>G4 (XOR split): "האם התג אושר?"</b> <b>לא אושר</b> → XOR merge של הדחייה; <b>אושר</b> → G5.</li>
+<li><b>G5 (XOR split): "האם המועמד זמין ומתאים?"</b> <b>אינו זמין ואינו מתאים</b> → XOR merge של הדחייה → שליחת הודעת דחייה (Lane המערכת); <b>זמין ומתאים</b> → פעילות <b>קביעת התפקיד שימלא המועמד</b> → רישום במאגר (Lane המערכת).</li>
+</ol>
+<p><b>Message Flows, שמונה בסך הכול:</b></p>
+<div class="tablewrap"><table>
+<thead><tr><th>כיוון</th><th>תוכן ההודעה</th></tr></thead>
+<tbody>
+<tr><td>מהמועמד אל המטה</td><td>טופס מועמדות מקוון (פותח את התהליך)</td></tr>
+<tr><td>מהמטה אל המועמד</td><td>הודעה: רשום זה מכבר</td></tr>
+<tr><td>מהמטה אל המועמד</td><td>בקשה להשלמת פרטים</td></tr>
+<tr><td>מהמועמד אל המטה</td><td>טופס מועמדות מעודכן</td></tr>
+<tr><td>מהמטה אל חברת האבטחה</td><td>בקשה להנפקת תג כניסה</td></tr>
+<tr><td>מחברת האבטחה אל המטה</td><td>אישור או סירוב להנפקת התג</td></tr>
+<tr><td>מהמטה אל המועמד</td><td>הודעת דחייה</td></tr>
+<tr><td>מהמטה אל המועמד</td><td>זימון לחניכה</td></tr>
+</tbody></table></div>
+</div>
+<div class="mistake">
+<p><b>מה מוריד נקודות:</b> המועמד או חברת האבטחה כ-Lane בתוך ה-Pool של המטה · Sequence Flow החוצה ל-Pool אחר · לולאה החוזרת ישירות אל פעילות בלי שער מיזוג (שני חצים נכנסים לאותה פעילות) · משימה בשם "המתנה" במקום אירוע ביניים · שערים ללא תוויות על הענפים · היעדר Data Store.</p>
+</div>
+<div class="alt">
+<p><b>וריאנטים מקובלים במלואם:</b> Pool מלא למועמד, ובו פעילות מילוי הטופס וההשלמה · Start Event מסוג הודעה בלי Pool נפרד למועמד · Pool אחד למטה בלי Lanes, כשברור מי מבצע כל פעילות · שער XOR אחד אחרי הסנכרון ("האם התג אושר והמועמד מתאים?") במקום שניים · איחוד End 2 ו-End 3 לאירוע סיום יחיד (הורדה קלה בשער בלבד; אינו נבחן בנימוקים).</p>
+</div>
+<h3 class="sub">1.2 (3 נק׳): פתיחת התהליך ומי יוזם אותו</h3>
+<p class="qtext">התהליך אינו נפתח ביוזמת המטה: הוא נפתח כאשר מועמד, שאינו חלק מן המטה, שולח אליו טופס מועמדות מקוון. כיצד ייצגתם בתרשים שלכם את פתיחת התהליך, ומה בתרשים שלכם מראה שהיוזמה הגיעה מגורם שמחוץ למטה?</p>
+<div class="answer">
+<p><b>תשובת מודל:</b></p>
+<ol>
+<li>התהליך נפתח ב-<b>Start Event</b> בתוך ה-Pool של המטה, עם מלל המתאר את ההדק: "התקבל טופס מועמדות מקוון".</li>
+<li><b>המועמד מיוצג כמשתתף נפרד, Pool משלו</b> (כאן Pool ריק), והגעת הטופס מצוירת כ-<b>Message Flow</b> (חץ מקווקו) מן ה-Pool של המועמד אל אירוע ההתחלה.</li>
+<li><b>הנימוק:</b> Sequence Flow אינו חוצה גבול Pool, ולכן כל מעבר בין המועמד למטה חייב להיות Message Flow; <b>כיוון החץ, מבחוץ פנימה אל המטה</b>, הוא שמראה בתרשים שהיוזמה חיצונית ושהמטה רק מגיב לה.</li>
+</ol>
+</div>
+<div class="alt">
+<p><b>חלופות המזכות במלוא הניקוד:</b> (א) <b>Start Event מסוג הודעה</b> (סמל מעטפה) בלי Pool נפרד למועמד, ובלבד שהנימוק אומר במפורש שהמועמד אינו חלק מן המטה ושהאירוע מופעל בהודעה נכנסת מבחוץ; (ב) <b>Pool מלא למועמד</b> ובו פעילות "מילוי ושליחת טופס מועמדות" ואירוע התחלה משלו, ו-Message Flow אל המטה.</p>
+</div>
+<div class="mistake">
+<p><b>הסתירה:</b> (א) המועמד צויר כ-<b>Lane בתוך ה-Pool של המטה</b>: התרשים טוען שהמועמד הוא חלק מן הארגון, בניגוד לתיאור. (ב) נמתח <b>Sequence Flow</b> מן המועמד אל המטה: הנימוק סותר את התרשים. (ג) אין אירוע התחלה כלל, והתהליך נפתח בפעילות "קבלת טופס".</p>
+</div>
+<div class="alt">
+<p><b>אין לדרוש</b> את המונחים "black-box" או "Message Start Event" באנגלית; הקורס מלמד BPMN 1.0, ונבדקים הסימון והנימוק.</p>
+</div>
+<h3 class="sub">1.3 (3 נק׳): הראיון ובקשת התג, מקביליות וסנכרון</h3>
+<p class="qtext">לאחר שהתקבל טופס מלא מתבצעות שתי פעולות: הראיון הטלפוני מצד אחד ובקשת תג הכניסה. כיצד ייצגתם בתרשים שלכם את סדר העבודה בין הפעולות האלה, וכיצד מראה התרשים שלכם שהתהליך ממשיך רק לאחר ששתיהן הסתיימו?</p>
+<div class="answer">
+<p><b>תשובת מודל:</b></p>
+<ol>
+<li><b>פיצול מקבילי (AND split)</b> מיד אחרי ענף "הטופס מלא": <b>שני</b> המסלולים יוצאים ומתבצעים תמיד. בענף אחד הראיון הטלפוני (Lane הרכז), ובשני שליחת בקשת התג לחברת האבטחה (Message Flow החוצה) והמתנה לתשובתה (אירוע ביניים ו-Message Flow פנימה). אין על היציאות תנאי בחירה.</li>
+<li><b>נקודת סנכרון (AND join)</b> שאליה נכנסים שני המסלולים, וממנה ממשיך התהליך אל ההכרעה על התג ועל התאמת המועמד. ההמשך מתחיל רק כששני הענפים הגיעו אליה.</li>
+<li><b>הנימוק, בהנגדה ל-XOR:</b> ב-XOR נבחר מסלול <b>אחד</b> לפי תנאי, וכאן <b>שתי</b> הפעולות מתבצעות תמיד ואינן תלויות זו בזו, ולכן אין סיבה להמתין לאחת לפני שמתחילים את השנייה. הסנכרון הוא שמבטיח שההכרעה על קבלה או דחייה תתקבל רק כששתי התוצאות בידי המטה.</li>
+</ol>
+</div>
+<div class="alt">
+<p><b>מסלול ב', חלופה מנומקת המזכה במלוא הניקוד:</b> סטודנט שצייר <b>חוט אחד</b>: שליחת בקשת התג לחברת האבטחה → ביצוע הראיון הטלפוני בזמן ההמתנה → <b>אירוע ביניים של המתנה לתשובת חברת האבטחה</b> → המשך. התשובה מתקבלת <b>רק אם</b> הנימוק אומר את שני הדברים: (1) הבקשה נשלחה <b>לפני</b> הראיון, ולכן חברת האבטחה עובדת במקביל ואין המתנה מיותרת; (2) <b>אירוע ההמתנה</b> הוא שמבטיח שהתהליך ימשיך רק אחרי ששתי הפעולות הסתיימו.</p>
+</div>
+<div class="mistake">
+<p><b>תשובות חלקיות:</b> שני ענפים מקבילים <b>ללא</b> נקודת סנכרון (שני החצים נכנסים ישירות לפעילות הבאה), עם נימוק המצהיר "הפעילות מתחילה רק כששני החצים הגיעו" ומכיר בכך שהסימון אינו מפורש · ציור <b>טורי</b> (ראיון ואז בקשת תג, או להפך) עם נימוק מן הקופסה שהסדר אינו נדרש, וציון המחיר: עיכוב מיותר של הפעולה השנייה · זיהוי מילולי נכון של אי-התלות בלי כל ביטוי בתרשים.</p>
+</div>
+<div class="mistake">
+<p><b>הסתירה:</b> (א) <b>XOR gateway</b> בנקודת הפיצול: התרשים אומר שמתבצעת רק אחת משתי הפעולות, בניגוד מפורש לקופסה. (ב) פיצול מקבילי שאחריו שני המסלולים <b>מסתיימים בנפרד</b> וההמשך תלוי רק באחד מהם. (ג) בקשת התג צוירה כפעילות פנימית בלי כל קשר לחברת האבטחה (אין Message Flow ואין המתנה), והסנכרון מאבד את משמעותו.</p>
+</div>
+<div class="alt">
+<p><b>אין לדרוש</b> את המילים "AND gateway" באנגלית; נבדקים הסימון והנימוק.</p>
+</div>
+<h3 class="sub">1.4 (3 נק׳): ההגשה החוזרת ונקודת החזרה שלה</h3>
+<p class="qtext">אם חסרים פרטים בטופס המועמדות, הרכז מבקש מהמועמד להשלימם, המועמד שולח טופס מעודכן והבדיקה נעשית שוב, וכך עד שהטופס מלא. כיצד ייצגתם בתרשים שלכם את ההגשה החוזרת, ולאיזו נקודה בתהליך חוזרת הזרימה לאחר שהתקבל הטופס המעודכן? נמקו מדוע דווקא לשם.</p>
+<div class="answer">
+<p><b>תשובת מודל:</b></p>
+<ol>
+<li><b>XOR gateway</b> אחרי פעילות בדיקת שלמות הטופס, עם <b>שתי יציאות מתויגות</b>: "חסרים פרטים" ו"הטופס מלא".</li>
+<li>ענף "חסרים פרטים" מוביל לפעילות <b>בקשה מהמועמד להשלמת הפרטים</b>, היוצאת כ-<b>Message Flow החוצה</b> אל המועמד; הטופס המעודכן חוזר ב-<b>Message Flow פנימה</b> אל אירוע ביניים, ומשם <b>Sequence Flow חוזר אל שער מיזוג הממוקם מיד לפני פעילות בדיקת שלמות הטופס</b>. זו לולאה סגורה, שיכולה לחזור על עצמה יותר מפעם אחת.</li>
+<li><b>הנימוק לנקודת החזרה:</b> הכלל שנבדק שוב הוא <b>שלמות הטופס</b> בלבד. אין טעם לחזור לאירוע ההתחלה ולהריץ מחדש את בדיקת הרישום הקיים במאגר, שכבר בוצעה ותוצאתה אינה משתנה בגלל השלמת פרטים.</li>
+</ol>
+</div>
+<div class="alt">
+<p><b>חלופה המזכה במלוא הניקוד:</b> סטודנט שהחזיר את הזרימה <b>לאירוע ההתחלה / לתחילת התהליך</b>, אם נימק זאת מן הקופסה ("הטופס המעודכן הוא הגשה חדשה הנכנסת מבחוץ") <b>וציין את המחיר</b>: הרצה חוזרת ומיותרת של בדיקת הרישום במאגר.</p>
+</div>
+<div class="alt">
+<p><b>מזכה גם:</b> סימון לולאה על פעילות הבדיקה במקום חץ חוזר מפורש, ובלבד שתנאי החזרה מופיע ושהסטודנט מסביר מתי הלולאה נפסקת · חזרה ישירה אל פעילות הבדיקה בלי שער מיזוג, אף ששני חצים הנכנסים לאותה פעילות הם שגיאת סימון בתרשים עצמו (1.1).</p>
+</div>
+<div class="mistake">
+<p><b>הסתירה:</b> (א) אין כל חץ חוזר: בקשת ההשלמה מתבצעת פעם אחת והתהליך ממשיך; אין לולאה להצביע עליה. (ב) החץ החוזר נמתח כ-<b>Sequence Flow אל תוך ה-Pool של המועמד</b> ובחזרה: זרימת רצף אינה חוצה Pools. (ג) היציאות אינן מתויגות בתנאים.</p>
+</div>
+</section>
+<section class="q" id="q2">
+<h2><span class="pts">12 נק׳</span>שאלה 2: חקר מצב קיים (AS-IS) של תהליך שאי אפשר לצפות בו</h2>
+
+<p class="qtext">בפגישות עם מנהל המטה התבקשתם לבצע חקר מצב קיים (AS-IS) של אופן פעילות המטה היום, לפני שממשיכים לאפיון המערכת. לחקר הזה יש מאפיין חריג: תהליך העבודה שאתם נדרשים לתעד מתרחש יום אחד בלבד, אחת לכמה שנים. הוא אינו מתקיים כרגע, לא יתקיים שוב לפני שהמערכת תיבנה, ואין לו "יום רגיל" שאפשר להיכנס אליו ולראות אותו פועל. מי שמבצע אותו בפועל הם מתנדבים מתחלפים ולא עובדי הארגון, והעקבות היחידות שנשארו ממנו הן גיליונות האקסל, קבוצות הווטסאפ ויומני השיחות שתוארו בסיפור.</p>
+<h3 class="sub">2.1 (4 נק׳): מה מאבדים כשאין תצפית</h3>
+<p class="qtext">אחת משיטות איסוף המידע המקובלות בחקר מצב קיים היא תצפית (observation), והיא אינה זמינה לכם כאן. א. ציינו שני דברים שתצפית תורמת לחקר מצב קיים ושראיון עם בעל תפקיד אינו מספק. ב. הדגימו כל אחד מהשניים על פעילות המטה כפי שתוארה בסיפור: איזה ממצא קונקרטי אתם עלולים לפספס בגללו?</p>
+<div class="answer">
+<p><b>תרומה 1: הפער בין מה שאומרים לבין מה שעושים.</b> בראיון בעל התפקיד מתאר את הנוהל כפי שהוא <b>אמור</b> לעבוד; בתצפית רואים איך הוא עובד בפועל. אנשים אינם משקרים, הם פשוט אינם מודעים לחלק ממה שהם עושים.</p>
+<p>*הדגמה במטה:* רכז ההסעות יאמר בראיון שהוא בוחר נהג "לפי אזור וזמינות", ובפועל ייתכן שהוא מתקשר לשלושה נהגים שהוא מכיר אישית. הכלל האמיתי לבחירת נהג, שהמערכת תצטרך לתמוך בו, אינו מתועד בשום מקום.</p>
+<p><b>תרומה 2: עקיפות ופתרונות מאולתרים (workarounds).</b> גיליון צדדי, פתק על המסך, סדר עבודה לא רשמי. בעיני מי שעושה אותם הם "לא חלק מהתהליך", ולכן איש לא יזכיר אותם בראיון, והם בדיוק הצרכים שלא נענו.</p>
+<p>*הדגמה במטה:* הגיליונות וקבוצות הווטסאפ הצדדיים שכל רכז מנהל לעצמו כדי לדעת איזה נהג כבר יצא. בלי תצפית לא נדע שהם קיימים, ולא נבין <b>היכן בדיוק</b> נופל המידע כך ש"מתנדבים מגיעים פעמיים לאותה משימה".</p>
+<p><b>תרומות נוספות שהיו מתקבלות:</b> עומס, קצב ותזמון אמיתיים (מה קורה במוקד בשעת השיא, כמה שיחות ננטשות, כמה זמן עובר מפתיחת בקשה ועד יציאת הנהג) · ידע סמוי שאיש אינו יודע לנסח · הקשר פיזי וסביבתי (מה נאמר בקול ולא נרשם בשום מקום).</p>
+</div>
+<div class="alt">
+<p><b>מזכה גם:</b> כל תרומה אמיתית של תצפית (פער אמירה/עשייה · workarounds · עומס וקצב אמיתיים · ידע סמוי · הקשר פיזי), ובלבד שלכל אחת הדגמה <b>קונקרטית מן המטה</b>, למשל: אופן בחירת הנהג בפועל · מנגנון הכשל של "מגיעים פעמיים" · שעת השיא במוקד · הגיליונות המקבילים · הזמן האמיתי מבקשה ועד יציאה.</p>
+</div>
+<div class="mistake">
+<p><b>תשובה חלקית:</b> שתי תרומות נכונות אך סעיף ב' גנרי ("נראה איך עובדים") בלי ממצא קונקרטי מהמטה.</p>
+</div>
+<div class="mistake">
+<p><b>לא מזכה:</b> "תצפית נותנת תמונה מלאה יותר" בלי לומר מה בדיוק נראה בה ולא בראיון.</p>
+</div>
+<div class="alt">
+<p><b>אין להוריד</b> על שימוש בביטוי "לראות בשטח" במקום במונח "תצפית".</p>
+</div>
+<h3 class="sub">2.2 (4 נק׳): קריאת העקבות כמקור מצב קיים</h3>
+<p class="qtext">בהיעדר תהליך פעיל, העקבות שהותירה הפעילות הקודמת הן מקור המידע המרכזי שלכם: גיליונות האקסל, קבוצות הווטסאפ ויומני השיחות. א. בחרו שניים מהשלושה. לכל אחד ציינו ממצא ספציפי על המצב הקיים שאפשר להפיק ממנו, ודבר אחד שהוא אינו יכול ללמד אתכם. ב. מה מלמד אתכם עצם קיומם של הכלים הללו על הצרכים שהמערכת החדשה תידרש לענות עליהם?</p>
+<div class="answer">
+<p><b>א. שני מקורות:</b></p>
+<div class="tablewrap"><table>
+<thead><tr><th>מקור</th><th>ממצא שאפשר להפיק</th><th>מה הוא <b>אינו</b> יכול ללמד</th></tr></thead>
+<tbody>
+<tr><td><b>גיליונות האקסל</b></td><td>אילו שדות המטה באמת רשם ואילו נשארו ריקים כל היום (שדה שתמיד ריק הוא דרישה מתה; עמודה שנוספה בצד היא דרישה חסרה); אילו ישויות קיימות בפועל; סדרי גודל: כמה בקשות הסעה, כמה מתנדבים, כמה קלפיות.</td><td>מה קרה <b>בין</b> השורות: מדוע בקשה נשארה פתוחה, מי החליט ומתי, ומה נעשה מחוץ לגיליון ולכן לא תועד כלל.</td></tr>
+<tr><td><b>יומני השיחות</b></td><td>נפחים וזמנים אמיתיים: שעות השיא במוקד, אורך שיחה ממוצע, כמה ניסיונות חוזרים נעשו לאותו מספר.</td><td>מה נאמר בשיחה ומה הייתה <b>תוצאתה</b>, למשל אם נפתחה בעקבותיה בקשת הסעה. היומן מודד תעבורה, לא תוכן.</td></tr>
+</tbody></table></div>
+<p>(קבוצות הווטסאפ היו מזכות באותה מידה: מהן אפשר ללמוד מה דרש תיאום בזמן אמת ואילו החלטות נסגרו בהודעה ולא נרשמו בשום מקום אחר; הן אינן נותנות תמונה שלמה, שכן השיח קטוע, לא כל הקבוצות נשמרו, ואין לדעת מה סוכם בטלפון במקביל.)</p>
+<p><b>ב. עצם קיומם:</b> גיליון, קבוצת ווטסאפ ויומן טלפוני הם <b>מערכת צללים</b> שהמטה בנה לעצמו, ולכן הם <b>מפת הצרכים הכנה ביותר שיש</b>: כל כלי מאולתר מצביע על צורך אמיתי שלא נענה. הגיליון מעיד על צורך ברישום ובמעקב משותף, קבוצת הווטסאפ על צורך בתיאום מיידי ובעדכון סטטוס לכולם בו-זמנית, ויומן השיחות על צורך בהיסטוריית התקשרות לכל תומך.</p>
+</div>
+<div class="alt">
+<p><b>חלופה המזכה במלואה בסעיף ב':</b> הכיוון ההפוך המנומק: עצם קיומם מעיד גם על <b>גבול ההיקף</b> (מה שהמטה ניהל בכלים פשוטים ייתכן שאינו מצדיק פיתוח), ובלבד שנאמר שגם זו מסקנה שצריך לאמת מול הלקוח.</p>
+</div>
+<div class="mistake">
+<p><b>תשובה חלקית:</b> שני ממצאים נכונים בלי אף מגבלה, או שתי מגבלות בלי ממצא.</p>
+</div>
+<div class="mistake">
+<p><b>לא מזכה:</b> "נסתכל על האקסל ונראה מה יש שם" בלי ממצא מסוים.</p>
+</div>
+<div class="alt">
+<p><b>הערה:</b> אפשר לנסח את הממצא גם כדרישה ("המערכת תאפשר…"). כאן נבחן הממצא, ולא איכות הניסוח.</p>
+</div>
+<h3 class="sub">2.3 (4 נק׳): שחזור מהזיכרון ואימות התיעוד</h3>
+<p class="qtext">התמונה שתקבלו על יום הבחירות הקודם נשענת במידה רבה על שחזור מהזיכרון: אירוע אחד, עמוס, שהתרחש לפני זמן רב, שמתארים אותו בעיקר מנהל המטה ובעלי התפקידים הקבועים. א. ציינו שתי סיבות, הנובעות מהמצב המתואר, שבגללן התמונה הזו עלולה שלא לשקף את מה שקרה בפועל. ב. ציינו שתי דרכים לבדוק שהתיעוד שהפקתם נאמן למציאות, לפני שממשיכים לאפיון על בסיסו.</p>
+<div class="answer">
+<p><b>א. שתי סיבות:</b></p>
+<ol>
+<li><b>הטיית זיכרון:</b> אירוע חד-פעמי ועמוס נזכר בסלקטיביות. זוכרים את התקלות הגדולות ואת החריגים, ושוכחים את הרצף השגרתי, שהוא בדיוק מה שהמערכת צריכה לתמוך בו.</li>
+<li><b>מקור לא נכון:</b> מי שמתאר הוא <b>מנהל המטה ובעלי התפקידים הקבועים</b>, והם מתארים את הנוהל כפי שהגדירו אותו, לא כפי שמאות מתנדבים ביצעו אותו בשטח. מי שביצע בפועל אינו בחדר, ורבים מהם גם לא יהיו אותם אנשים בפעם הבאה.</li>
+</ol>
+<p><b>ב. שתי דרכי בדיקה:</b></p>
+<ol>
+<li><b>הצלבה מול העקבות:</b> להעמיד את התהליך שתיעדנו מול מה שמופיע בפועל בגיליונות, בקבוצות וביומני השיחות. אם התיאור אומר שכל בקשה עוברת אישור נהג, ובגיליון אין לכך זכר, אחד מהשניים שגוי, וזה ממצא שיש לברר.</li>
+<li><b>החזרת התיעוד לאישור והצלבה בין בעלי תפקיד:</b> להציג את התהליך המתועד (למשל כתרשים) למוקדן ותיק, לרכז ולנהג, כל אחד בנפרד, ולבקש שיצביעו על מה שחסר או לא מדויק. נקודות אי-ההתאמה ביניהם הן ממצא, לא הפרעה, ופער שלא הוכרע נרשם כשאלה פתוחה ללקוח ולא מושלם בהנחה של המנתח.</li>
+</ol>
+</div>
+<div class="alt">
+<p><b>סעיף א', מזכים גם:</b> המבצעים התחלפו ואין "בעל תהליך" יחיד לתקף מולו · תיאור מנקודת מבט אחת, שנראה שלם אך חסר · ייפוי בדיעבד מול גורם חיצוני.</p>
+<p><b>סעיף ב', מזכים גם:</b> טריאנגולציה (אותה שאלה לבעלי תפקיד שונים) · החזרת סיכום כתוב למרואיין בסמוך לפגישה · הצגת התהליך לקבוצת בעלי תפקיד · סימון פערים כשאלות פתוחות להכרעת הלקוח · <b>חריג מזכה:</b> צפייה בפעילות חיה <b>אחרת</b> וניתנת לצפייה (מרכז שיגור, מוקד פעיל, פעילות מטה מצומצמת קיימת) כדי לאמת מולה את התיעוד.</p>
+</div>
+<div class="mistake">
+<p><b>לא מזכה:</b> "נגייס נציג משתמשים קבוע", "נקים קבוצת מתנדבי ליבה למשוב", "נקיים תרגולת של המערכת החדשה" הם אמצעים לקבלת <b>משוב על מה שנבנה</b>, והם שייכים ל-3.3. הם אינם נחשבים לאחת משתי דרכי הבדיקה של התיעוד.</p>
+</div>
+<div class="mistake">
+<p><b>תשובה חלקית:</b> שתי סיבות טובות, וסעיף ב' שמונה <b>שיטות איסוף נוספות</b> ("עוד ראיונות", "שאלון") בלי לומר כיצד הן <b>בודקות</b> את מה שכבר תועד.</p>
+</div>
+<div class="mistake">
+<p><b>לא מזכה:</b> "נוודא שהמידע נכון" בלי מנגנון.</p>
+</div>
+</section>
+<section class="q" id="q3">
+<h2><span class="pts">10 נק׳</span>שאלה 3: תכנון מסירה מול תאריך נעול</h2>
+
+<p class="qtext">מועד יום הבחירות נקבע מראש ואינו ניתן לשינוי, והמערכת נדרשת לעבוד במלוא העומס ביום אחד בלבד, מהבוקר ועד סגירת הקלפיות. לפני אותו יום אין למטה פעילות שטח בהיקף דומה.</p>
+<h3 class="sub">3.1 (4 נק׳): התכולה, לוח הזמנים והמשאבים</h3>
+<p class="qtext">בתכנון פרויקט תוכנה נהוג להתייחס לשלושה גורמים הנמצאים בחליפין (trade-off) זה עם זה: התכולה, לוח הזמנים והמשאבים (אנשים ותקציב). א. איזה מהשלושה נעול בפרויקט הזה, ומה ההשלכה הישירה של כך על שני האחרים? ב. ציינו שני הבדלים קונקרטיים באופן תכנון העבודה לעומת פרויקט שבו מועד ההשקה גמיש.</p>
+<div class="answer">
+<p><b>א.</b> <b>לוח הזמנים נעול:</b> יום הבחירות נקבע מראש, ואי-אפשר להזיז אותו ואי-אפשר לדחות את ההשקה. <b>ההשלכה:</b> כל הגמישות חייבת לבוא מ<b>התכולה</b> ו/או מ<b>המשאבים</b>: או שמצמצמים את מה שנכנס לגרסה שתעלה ליום הבחירות, או שמגדילים את הצוות והתקציב. בפועל התכולה היא הגורם הגמיש יותר, שכן הוספת אנשים מאוחר בפרויקט אינה מקצרת אותו באופן לינארי.</p>
+<p><b>ב. שני הבדלים בתכנון:</b></p>
+<ol>
+<li><b>מתכננים לאחור מהתאריך</b>, כולל <b>חוצץ זמן (buffer)</b> לפני היום, ולא קדימה מתחילת העבודה: כל אבן דרך (הקפאת גרסה, בדיקת עומסים, הדרכת מתנדבים) נגזרת מיום הבחירות, והסיום המתוכנן מוקדם ממנו.</li>
+<li><b>תיעדוף מחייב מראש:</b> קובעים מה חובה לגרסה שתעלה ליום הבחירות (למשל בקשות הסעה ושיחות) ומה נדחה, ומנהלים את התכולה לפי חשיבות. שינוי דרישה מאוחר נבחן לא רק לפי ערכו אלא לפי מה הוא דוחק החוצה.</li>
+</ol>
+</div>
+<div class="alt">
+<p><b>הבדלי תכנון נוספים המזכים:</b> מועד הקפאה (freeze) שאחריו רק תיקונים · בקרה בתדירות גבוהה (איטרציות קצרות, נקודות בדיקה שבועיות) כדי לגלות פיגור בזמן שעוד אפשר לצמצם תכולה · החלטות נסגרות מוקדם יותר.</p>
+</div>
+<div class="mistake">
+<p><b>תשובה חלקית:</b> זיהוי נכון והשלכה, אך סעיף ב' כללי ("לעבוד מהר יותר", "להיות מסודרים") בלי החלטת תכנון קונקרטית.</p>
+</div>
+<div class="alt">
+<p><b>מזכה במלואו גם:</b> סטודנט הטוען שגם התכולה נעולה חלקית (בלי ניהול בקשות הסעה אין מערכת), ובלבד שהוא מזהה את הזמן כנעול המוחלט ומסיק שהגמישות נותרת בתכולת הפרט ובמשאבים.</p>
+</div>
+<h3 class="sub">3.2 (3 נק׳): סיכון ההשקה החד-פעמית</h3>
+<p class="qtext">הצוות שוקל להשלים את כל הפיתוח ולהעלות את המערכת כולה לאוויר ימים ספורים לפני יום הבחירות. ציינו שני סיכונים קונקרטיים שגישה זו יוצרת דווקא במערכת הזו, והציעו דרך פעולה אחת המפחיתה אותם.</p>
+<div class="answer">
+<p><b>שני סיכונים:</b></p>
+<ol>
+<li><b>העומס האמיתי מעולם לא נבדק, ואין הזדמנות שנייה:</b> מאות מתנדבים ומוקדנים יעבדו בה בו-זמנית, לראשונה, ביום העבודה היחיד. מערכת שעבדה בבדיקות של כמה משתמשים עלולה לקרוס דווקא בשעת השיא, ותקלה שתתגלה ביום הבחירות אינה ניתנת לתיקון "בגרסה הבאה".</li>
+<li><b>אין הרצה מקבילה ורשת ביטחון:</b> אי-אפשר להפעיל את המערכת החדשה לצד האקסל והווטסאפ ביום עומס אחד, ובנוסף הממשק לקליטת פנקס הבוחרים ועדכוני ההצבעה ממערכת ועדת הבחירות, שאין למטה שליטה עליו, ייבדק בפעם הראשונה בדקה התשעים.</li>
+</ol>
+<p><b>דרך פעולה מפחיתה:</b> <b>הרצת ניסיון (dry-run) בתרגולת מטה מבוקרת</b> כמה שבועות לפני יום הבחירות, עם מתנדבים אמיתיים ובעומס מדומה, ולאחריה הקפאת גרסה ותיקונים בלבד. כך מתגלות בעיות העומס והשימוש כשעוד יש זמן לתקן, והמתנדבים פוגשים את המערכת לפני יום הלחץ.</p>
+</div>
+<div class="alt">
+<p><b>מזכים גם:</b> כל סיכון הנשען על <b>מאפייני המערכת</b> (יום פעילות אחד, מאות משתמשים, אין הרצה מקבילה, ממשק חיצוני שאין עליו שליטה, משתמשים שפוגשים את המערכת לראשונה בשיא הלחץ, גילוי מאוחר של אי-הבנה בדרישות) · כל דרך פעולה של <b>שחרור והטמעה</b>: העלאה מדורגת של ליבה מוקדם · pilot או dry-run · בדיקת עומסים מתוכננת · הקפאת גרסה מוקדמת · נוהל נפילה לאחור (fallback) ידני מוגדר מראש · הדרכת המתנדבים לפני היום.</p>
+</div>
+<div class="mistake">
+<p><b>תשובה חלקית:</b> שני סיכונים גנריים ("יכולים להיות באגים", "זה מסוכן") שאינם נשענים על יום הפעילות היחיד או על היקף המשתמשים.</p>
+</div>
+<h3 class="sub">3.3 (3 נק׳): לולאת המשוב כשהמשתמשים אינם זמינים</h3>
+<p class="qtext">בשיטת פיתוח איטרטיבית נדרש משוב חוזר מהמשתמשים. כאן רוב המשתמשים (מוקדנים, רכזי הסעות, נהגים ומשקיפים) הם מתנדבים שאינם זמינים לאורך הפיתוח, וחלקם אף אינם ידועים בשמם עד סמוך ליום הבחירות. הסבירו מדוע זו בעיה מהותית עבור שיטת פיתוח איטרטיבית, והציעו שתי דרכי פעולה מעשיות להתמודד איתה.</p>
+<div class="answer">
+<p><b>מה נשבר:</b> שיטה איטרטיבית מניחה שבסוף כל איטרציה יש <b>משתמש אמיתי</b> שבוחן תוצר עובד ומתקן את הכיוון; המשוב הוא המנוע שלה. בלי משתמשים זמינים, האיטרציות נבנות על <b>הנחות של הצוות</b>, הפער מול הצורך האמיתי אינו מתגלה ומצטבר, והיתרון המרכזי של השיטה, גילוי מוקדם וזול של טעות, נעלם. בפועל הפרויקט הופך לפיתוח רציף בתחפושת איטרטיבית, ורגע האמת נדחה ליום הבחירות עצמו.</p>
+<p><b>שתי דרכי פעולה:</b></p>
+<ol>
+<li><b>נציג משתמשים קבוע מטעם המטה:</b> מנהל משמרת או רכז הסעות ותיק, בעל ניסיון מיום הבחירות הקודם, המחויב לזמינות שבועית ומשמש דובר המשתמשים בסוף כל איטרציה.</li>
+<li><b>קבוצת מתנדבי ליבה קטנה ומפגשי משוב מרוכזים:</b> מתנדבים ותיקים שחוזרים מבחירות קודמות מגויסים מראש למפגשים קצרים בזמן שנוח להם (ערב, סוף שבוע, מפגש הכשרה קיים), והחלקים התלויים בהם מתוזמנים לשלב שבו הם כבר מגויסים.</li>
+</ol>
+</div>
+<div class="alt">
+<p><b>מה נדרש בהסבר:</b> לומר <b>מה נשבר</b>, לא רק ש"חסר משוב": האיטרציות נשענות על הנחות, והגילוי המוקדם נעלם.</p>
+<p><b>דרכי פעולה נוספות המזכות:</b> תרגולת או סימולציה של יום בחירות שבה המשוב נאסף מרוכז · הישענות על נתוני יום הבחירות הקודם ועל בעלי התפקידים הקבועים כמקור משלים · איטרציות קצרות בחלקים שבהם יש נגישות למשתמש, ודחיית החלקים התלויים במשוב.</p>
+</div>
+<div class="mistake">
+<p><b>תשובה חלקית:</b> "אפשר לראיין אותם" או "נשלח שאלון" בלי ההסבר מה נשבר בשיטה.</p>
+</div>
+<div class="alt">
+<p><b>הערה:</b> "הרצת ניסיון" מתאימה כאן <b>רק</b> אם היא מוצגת כמנגנון לאיסוף משוב שיזין איטרציה נוספת, ולא רק כאמצעי להפחתת סיכון ההשקה (זו התשובה ל-3.2).</p>
+<p><b>מזכה במלואו גם:</b> סטודנט המסיק שיש לשלב שיטות (לקבע חלק מהדרישות מראש ולעבוד איטרטיבית רק בחלק הנותר), ובלבד שהסביר תחילה מה נשבר בלולאת המשוב.</p>
+</div>
+</section>
+<section class="q" id="q4">
+<h2><span class="pts">8 נק׳</span>שאלה 4: מקום התרשימים בפיתוח איטרטיבי ובעידן ה-AI</h2>
+
+<p class="qtext">צוות הפיתוח של המטה טוען כך: "אנחנו עובדים בשיטה איטרטיבית, והקוד ממילא נכתב היום במידה רבה בעזרת כלי AI. תרשים ה-use case, תרשים המחלקות ותרשים המצבים שהכנתם הם שריד של שיטת המפל. אפשר לוותר עליהם ולהתחיל לכתוב קוד כבר עכשיו."</p>
+<h3 class="sub">4.1 (5 נק׳): שלושה נימוקים מעוגנים בסיפור</h3>
+<p class="qtext">הביאו שלושה נימוקים ענייניים בעד הכנת התרשימים דווקא במערכת המתוארת בסיפור. כל נימוק חייב להיות מעוגן בפרט קונקרטי מסיפור המעשה, ולהסביר מה בדיוק התרשים תורם שם.</p>
+<div class="answer">
+<ol>
+<li><b>מחזור החיים של בקשת ההסעה</b> (שיבוץ, דחייה או פקיעת זמן, חזרה להמתנה, הסלמה לרכז אחרי שני סבבים, סגירה ללא ביצוע, ביטול בידי מוקדן רק לפני שיבוץ, ושינוי בכל שלב בידי מנהל המשמרת): אילו מעברים חוקיים ומי רשאי לבצע כל אחד היא <b>החלטה עסקית</b>. תרשים המצבים מכריע אותה פעם אחת ובמקום אחד; בלעדיו ייכתבו כללים סותרים במסך של המוקדן ובמסך של הרכז.</li>
+<li><b>מתנדב אחד בכמה תפקידים, וההרשאות נגזרות מהתפקידים</b> (נהג שהוא גם משקיף): תרשים המחלקות מכריע שתפקיד הוא <b>שיוך</b> ולא סוג של אדם. הכרעה הפוכה, שתתקבל בשקט תוך כדי כתיבת קוד (טבלה נפרדת לכל תפקיד), תכפיל רשומות של אותו אדם ותשבור את ההרשאות, והיא יקרה מאוד לתיקון אחרי שהנתונים כבר נאספו.</li>
+<li><b>גבולות המערכת מול הלקוח ומול גורם חיצוני:</b> מנהל המטה ביקש גם רכש ותשלום לספקים, בעוד שהסיפור קובע שהמערכת אינה מנהלת תשלומים; ומערכת ועדת הבחירות יוזמת את העדכונים ואין לפנות אליה. תרשים ה-use case הוא <b>מסמך ההסכמה</b> מול מנהל המטה, שאינו קורא קוד: בו מוכרעים ההיקף ומי יוזם מה, לפני שכותבים ממשק. וכלי AI מייצר בדיוק את מה שנאמר לו: בלי מודל מוסכם, הקוד יהיה קוהרנטי אך שגוי, וקשה יותר לזהות זאת בקוד מאשר בתרשים.</li>
+</ol>
+</div>
+<div class="alt">
+<p><b>מה נדרש מכל נימוק:</b> (א) <b>פרט מהסיפור</b> בשמו; (ב) <b>מה התרשים מכריע או מונע שם</b>, לא "עוזר להבין". שלושת הנימוקים צריכים להיות שונים זה מזה.</p>
+<p><b>מזכים גם (רשימה פתוחה):</b> חמישה סוגי משתמשים ומבנה ההרשאות · יום הפעילות היחיד, שבו טעות בקוד אינה ניתנת לתיקון, והמודל הוא המקום הזול לגלות אותה · מאות מתנדבים ומידע רגיש (פנקס בוחרים, טלפונים וכתובות של תומכים), שמבנה הנתונים והגישה אליו אינם דבר שמאלתרים.</p>
+<p><b>מזכה במלואו גם, הסכמה חלקית מנומקת:</b> סטודנט המקבל את טענת הצוות לגבי חלק מהתרשימים אך מבסס שלושה נימוקים לשאר. אין לדרוש הסכמה גורפת.</p>
+</div>
+<div class="mistake">
+<p><b>תשובה חלקית:</b> שלושה נימוקים נכונים אך <b>גנריים</b> ("תיעוד", "תקשורת בצוות", "קל לתחזק") בלי אף פרט מהסיפור.</p>
+</div>
+<div class="mistake">
+<p><b>לא מזכה:</b> ציטוט פרט מהסיפור בלי לומר מה התרשים תורם שם, או להפך.</p>
+</div>
+<h3 class="sub">4.2 (3 נק׳): מה כן משתנה בשיטה איטרטיבית</h3>
+<p class="qtext">ציינו שני דברים שכן משתנים באופן שבו מכינים ומתחזקים את התרשימים הללו בשיטת פיתוח איטרטיבית, לעומת שיטת המפל.</p>
+<div class="answer">
+<ol>
+<li><b>לא מכינים הכול מראש, אלא בפרוסות ולפי תיעדוף:</b> התרשימים נבנים בעומק הנדרש לאיטרציה הקרובה (למשל תחילה מחזור החיים של בקשת ההסעה, שנכנס לגרסה הראשונה), ולא כמודל שלם וסופי לפני תחילת הפיתוח.</li>
+<li><b>התרשים הוא מסמך חי שמתעדכן גם לאחור:</b> בסוף כל איטרציה מעדכנים אותו לפי מה שהתברר במימוש ומאמתים אותו שוב מול הלקוח, כך שהוא נשאר מקור אמת; בשיטת המפל הוא מאושר פעם אחת ו"ננעל".</li>
+</ol>
+</div>
+<div class="alt">
+<p><b>מזכים גם:</b> רמת פירוט נמוכה יותר ("מספיק כדי להכריע ולתקשר") · אימות חוזר מול הלקוח בסוף כל איטרציה במקום חתימה אחת על מסמך אפיון.</p>
+</div>
+<div class="alt">
+<p><b>שימו לב:</b> "מעדכנים אותו" ו"הוא מסמך חי" הם <b>אותו שינוי</b>, ושני ניסוחים של אותה נקודה נחשבים לשינוי אחד בלבד.</p>
+</div>
+<div class="mistake">
+<p><b>תשובה חלקית:</b> "עובדים יותר מהר" / "פחות ניירת" בלי אמירה על <b>אופן ההכנה או התחזוקה</b> של התרשים.</p>
+</div>
+<div class="mistake">
+<p><b>לא מזכה:</b> "שום דבר לא משתנה, תמיד מכינים את כל התרשימים לפני הקוד".</p>
+</div>
+</section>
+<section class="q" id="q5">
+<h2><span class="pts">8 נק׳</span>שאלה 5: ביקורת דרישות</h2>
+
+<p class="qtext">לפניכם ארבעה פריטים שכתב צוות האפיון של המערכת המתוארת בסיפור המעשה: שתי דרישות פונקציונליות, user story אחד ודרישה לא-פונקציונלית אחת. כל אחד מהפריטים נראה תקין במבט ראשון, אך בכל אחד מהם נפל ליקוי. לכל דרישה ציינו מהו הדבר המהותי ביותר שאינו מושלם בה, והסבירו במשפט קצר מדוע זו בעיה ומה צריך לעשות כדי שזו תהיה דרישה טובה יותר.</p>
+<div class="alt">
+<p><b>מה נדרש בכל פריט:</b> <b>זיהוי</b> הליקוי בניסוח מדויק דיו (לאו דווקא בשם המקצועי), ו<b>הסבר ותיקון</b>: מדוע זו בעיה (ההשלכה המעשית) ומה צריך לעשות (כיוון תיקון קצר מספיק; תיקון נכון שמובלעת בו ההשלכה מספיק גם בלי אמירתה המפורשת).</p>
+<p><b>מזכה גם:</b> <b>כל פגם אמיתי אחר</b> שמזוהה ומנומק מול הסיפור, גם אם אינו הליקוי שהוכנס לפריט במכוון.</p>
+</div>
+<div class="mistake">
+<p><b>לא מזכה:</b> אמירה כללית חסרת תוכן ("הניסוח לא ברור", "צריך לשפר", "חסר פירוט") בלי להצביע על מה בדיוק ומה ההשלכה. <b>אין להוריד</b> על עברית יומיומית במקום מונחי הקורס.</p>
+</div>
+<h3 class="sub">5.1 (2 נק׳): שיבוץ נהג ודוח סיכום</h3>
+<p class="qtext">"המערכת תאפשר לרכז ההסעות לשבץ נהג מתנדב לבקשת הסעה הממתינה לשיבוץ, וכן להפיק בתום יום הבחירות דוח המרכז את כל ההסעות שבוצעו באזור."</p>
+<div class="answer">
+<p><b>הליקוי:</b> <b>שתי דרישות נפרדות אוגדו לדרישה אחת</b> (שיבוץ נהג לבקשה, והפקת דוח סיכום בתום היום), השונות בטריגר, בתזמון ובפונקציונליות.</p>
+<p><b>מדוע זו בעיה ומה לעשות:</b> אי-אפשר לבדוק אותה כיחידה אחת (ייתכן שאחת מומשה והשנייה לא), אי-אפשר לתעדף או לתמחר כל אחת בנפרד, ואי-אפשר לעקוב אחריהן במטריצת עקיבות. <b>התיקון:</b> לפצל לשתי דרישות, כל אחת עם התנהגות אחת.</p>
+</div>
+<div class="alt">
+<p><b>פגמים נוספים המזכים במלואם:</b> "באזור" אינו מוגדר (אזור של הרכז? של ההסעה?) · לא נאמר מה קורה כאשר הבקשה אינה ממתינה לשיבוץ.</p>
+</div>
+<div class="mistake">
+<p><b>תשובה חלקית:</b> "יש כאן שתי דרישות" בלי ההשלכה, או תיאור ההשלכה בלי לומר מה מחולל אותה.</p>
+</div>
+<h3 class="sub">5.2 (2 נק׳): רשימת התומכים למוקדן</h3>
+<p class="qtext">"המערכת תציג למוקדן את התומכים שטרם הצביעו ברשימה נפתחת הממוינת לפי המספר הסידורי בפנקס, הנשלפת מטבלת התומכים בכל פתיחה של מסך השיחות."</p>
+<div class="answer">
+<p><b>הליקוי:</b> <b>הדרישה מכתיבה מימוש ("איך") במקום צורך ("מה"):</b> רכיב ממשק ("רשימה נפתחת"), מבנה נתונים ("טבלת התומכים"), מנגנון שליפה ("בכל פתיחה של מסך") וסדר מיון.</p>
+<p><b>מדוע זו בעיה ומה לעשות:</b> היא כובלת את המעצב לפתרון מסוים, שעלול להיות לא יעיל ולא שמיש (רשימה נפתחת של אלפי תומכים), ומסתירה את הצורך האמיתי שמולו אמורים לבדוק את המערכת. <b>התיקון:</b> לנסח את הצורך העסקי, למשל "המערכת תציג למוקדן את התומך הבא לשיחה מבין מי שטרם הצביעו ואינם מסומנים כלא זמינים", ולהשאיר את אופן התצוגה לשלב העיצוב.</p>
+</div>
+<div class="alt">
+<p><b>פגמים נוספים המזכים במלואם:</b> מיון לפי מספר סידורי אינו סדר עבודה הגיוני למוקדן ואינו נגזר מהסיפור · לא נאמר לאילו תומכים הכוונה (אזור? קלפי? מי שטרם סומן כלא זמין?).</p>
+</div>
+<div class="mistake">
+<p><b>תשובה חלקית:</b> "יותר מדי פירוט טכני" בלי להצביע על רכיב מימוש קונקרטי ובלי ההשלכה.</p>
+</div>
+<h3 class="sub">5.3 (2 נק׳): תחזית תוצאות ההצבעה</h3>
+<p class="qtext">"כמנהל משמרת, אני רוצה לראות תחזית של תוצאות ההצבעה בקלפיות שבאחריותי, כדי שאוכל להחליט לאן להסיט מתנדבים בהמשך היום."</p>
+<div class="answer">
+<p><b>הליקוי:</b> <b>חריגה מהיקף המערכת.</b> הסיפור קובע במפורש ש"המערכת אינה עוסקת בתוצאות ההצבעה עצמן". המערכת אכן עוקבת אחר <b>מספר המצביעים</b> שנספרו בקלפי (התייצבות), אך ספירת התייצבות אינה תוצאות ההצבעה ואינה חיזוי שלהן.</p>
+<p><b>מדוע זו בעיה ומה לעשות:</b> דרישה מחוץ להיקף גוררת הרחבת פרויקט (מודל חיזוי, נתונים שאין למטה, לוח זמנים ועלות), ולכן יש להחזירה ללקוח להכרעה מפורשת ולא לממשה בשקט. אם הצורך האמיתי הוא הסטת מתנדבים, אפשר לנסח אותו מחדש בתוך ההיקף: להציג למנהל המשמרת את הקלפיות שבהן מספר המצביעים נמוך מהיעד לאותה שעה.</p>
+</div>
+<div class="alt">
+<p><b>פגמים נוספים המזכים במלואם (כשהם מנומקים):</b> "תחזית" אינה מוגדרת (על מה היא מבוססת, באיזו רמת דיוק ולאיזה טווח), ולכן אין דרך לבדוק אותה · אין קריטריון קבלה.</p>
+</div>
+<div class="mistake">
+<p><b>תשובה חלקית:</b> "זה לא קשור למערכת" בלי להיתלות באמירת ההיקף שבסיפור, או הצבעה נכונה על פגם בלי הסבר ההשלכה.</p>
+</div>
+<div class="alt">
+<p><b>הערה:</b> תבנית ה-user story כאן <b>תקינה</b>, ולכן הטענה שהתבנית עצמה שגויה אינה מזהה את הליקוי. לעומת זאת, הטענה שמעקב ההתייצבות כן בהיקף ורק החיזוי חורג ממנו היא בדיוק ההבחנה הנדרשת.</p>
+</div>
+<h3 class="sub">5.4 (2 נק׳): יציבות ועומס</h3>
+<p class="qtext">"המערכת תהיה יציבה ותתמוך בעומס הצפוי ביום הבחירות, כך שכל המוקדנים יוכלו לעבוד בה ברציפות."</p>
+<div class="answer">
+<p><b>הליקוי:</b> <b>הדרישה אינה מדידה:</b> "יציבה", "העומס הצפוי" ו"ברציפות" אינם מוגדרים. כמה משתמשים במקביל? איזה זמן תגובה? איזו רמת זמינות ובאילו שעות?</p>
+<p><b>מדוע זו בעיה ומה לעשות:</b> אי-אפשר לבדוק אם הדרישה מולאה, אי-אפשר לקבוע מתי המערכת נכשלה, והיא אינה ניתנת לאכיפה מול הספק. <b>התיקון:</b> להוסיף סף כמותי ותנאי בדיקה, למשל: "המערכת תתמוך ב-300 מוקדנים העובדים במקביל, בזמן תגובה של עד 3 שניות לכל פעולה, בזמינות 99.5% בין 07:00 ל-22:00 ביום הבחירות."</p>
+</div>
+<div class="mistake">
+<p><b>תשובה חלקית:</b> "צריך להוסיף מספרים" בלי לומר איזה היבט אינו מדיד.</p>
+</div>
+<div class="alt">
+<p><b>הערה:</b> סיווג הפריט כלא-פונקציונלי <b>נכון</b> (ביצועים וזמינות), ולכן הטענה שזו דרישה פונקציונלית אינה מזהה את הליקוי.</p>
+</div>
+</section>
+<section class="q" id="q6">
+<h2><span class="pts">15 נק׳</span>שאלה 6: תרשים Use Case</h2>
+
+<p class="qtext">הכינו תרשים Use Case עבור המערכת מתוך המתואר בסיפור המעשה. שימו לב שאין להתייחס למופיע בשאלה 1.</p>
+<h3 class="sub">6.1 (6 נק׳): התרשים</h3>
+<p class="qtext">הכינו תרשים Use Case עבור המערכת מתוך המתואר בסיפור המעשה. שימו לב שאין להתייחס למופיע בשאלה 1. יש להשתמש ב-include אחד לפחות. התרשים עצמו נבדק בצורה כללית, לבחינת השימוש הנכון בסימונים ובהבנת מהות התרשים.</p>
+<figure class="diagram wide"><svg id="usecase0-diagram-svg-0" viewBox="0 0 1820 970" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <pattern id="usecase0-dots0" width="24" height="24" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="0.8" fill="#cbd5e1"></circle></pattern>
+        <marker id="usecase0-arrow-include0" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polyline points="0 0, 9 3.5, 0 7" fill="none" stroke="#7c3aed" stroke-width="1.2"></polyline></marker>
+        <marker id="usecase0-arrow-extend0" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polyline points="0 0, 9 3.5, 0 7" fill="none" stroke="#b45309" stroke-width="1.2"></polyline></marker>
+      </defs>
+      <rect x="0" y="0" width="1820" height="900" fill="#f8fafc"></rect>
+      <rect x="0" y="0" width="1820" height="900" fill="url(#usecase0-dots0)"></rect>
+
+      <rect class="system-boundary" x="380" y="70" width="1080" height="780" rx="12" fill="#ffffff" stroke="#3b82f6" stroke-width="2.5"></rect>
+      <rect x="380" y="70" width="1080" height="44" rx="12" fill="#1e40af"></rect>
+      <rect x="380" y="96" width="1080" height="18" fill="#1e40af"></rect>
+      <text x="920" y="99" text-anchor="middle" fill="#ffffff" font-size="14" font-weight="700" font-family="'Noto Sans Hebrew',sans-serif">מערכת פעילות השטח, מוקד והסעות</text>
+
+      <g id="usecase0-assocLayer0">
+        <line class="assoc-line" data-conn-from="caller" data-conn-to="uc-out-call" x1="300" y1="242" x2="415.09676367354047" y2="181.04802789216228" stroke="#334155" stroke-width="1.8"></line>
+        <line class="assoc-line" data-conn-from="caller" data-conn-to="uc-in-call" x1="300" y1="242" x2="415.09676367354047" y2="302.9519721078377" stroke="#334155" stroke-width="1.8"></line>
+        <line class="assoc-line" data-conn-from="caller" data-conn-to="uc-cancel-ride" x1="300" y1="242" x2="420" y2="242" stroke="#334155" stroke-width="1.8"></line>
+        <line class="assoc-line" data-conn-from="rideCoordinator" data-conn-to="uc-assign-driver" x1="1540" y1="207" x2="1413.8201291018358" y2="176.3992213645837" stroke="#334155" stroke-width="1.8"></line>
+        <line class="assoc-line" data-conn-from="rideCoordinator" data-conn-to="uc-coord-handle" x1="1540" y1="207" x2="1428.6338336968624" y2="237.6007786354163" stroke="#334155" stroke-width="1.8"></line>
+        <line class="assoc-line" data-conn-from="driver" data-conn-to="uc-driver-respond" x1="1540" y1="357" x2="1417.9714932282566" y2="317.6110946121638" stroke="#334155" stroke-width="1.8"></line>
+        <line class="assoc-line" data-conn-from="driver" data-conn-to="uc-report-pickup" x1="1540" y1="357" x2="1419.3605254789718" y2="378.83852873475996" stroke="#334155" stroke-width="1.8"></line>
+        <line class="assoc-line" data-conn-from="shiftManager" data-conn-to="uc-override-status" x1="1540" y1="507" x2="1426.7156750159866" y2="458.79099750101733" stroke="#334155" stroke-width="1.8"></line>
+      </g>
+
+      <g id="usecase0-includeLayer0">
+        <line class="include-line" data-conn-from="uc-out-call" data-conn-to="uc-record-call" x1="600" y1="172" x2="842.5" y2="172" stroke="#7c3aed" stroke-width="1.6" stroke-dasharray="6 4" marker-end="url(#usecase0-arrow-include0)"></line>
+        <text data-label-for="uc-out-call uc-record-call" x="721.25" y="164" text-anchor="middle" font-size="9.5" fill="#7c3aed" font-family="'IBM Plex Mono',monospace">«include»</text>
+        <line class="include-line" data-conn-from="uc-in-call" data-conn-to="uc-record-call" x1="594.845520979779" y1="302.90230694889937" x2="846.2980371727944" y2="181.09769305110066" stroke="#7c3aed" stroke-width="1.6" stroke-dasharray="6 4" marker-end="url(#usecase0-arrow-include0)"></line>
+        <text data-label-for="uc-in-call uc-record-call" x="720.5717790762867" y="234" text-anchor="middle" font-size="9.5" fill="#7c3aed" font-family="'IBM Plex Mono',monospace">«include»</text>
+        <line class="include-line" data-conn-from="uc-open-ride" data-conn-to="uc-out-call" x1="831.6836980045083" y1="237.2596153849719" x2="598.6286425557527" y2="176.7403846150281" stroke="#b45309" stroke-width="1.6" stroke-dasharray="6 4" marker-end="url(#usecase0-arrow-extend0)"></line>
+        <text data-label-for="uc-open-ride uc-out-call" x="715.1561702801305" y="199" text-anchor="middle" font-size="9.5" fill="#b45309" font-family="'IBM Plex Mono',monospace">«extend»</text>
+        <line class="include-line" data-conn-from="uc-open-ride" data-conn-to="uc-in-call" x1="831.6836980045083" y1="246.7403846150281" x2="598.6286425557527" y2="307.2596153849719" stroke="#b45309" stroke-width="1.6" stroke-dasharray="6 4" marker-end="url(#usecase0-arrow-extend0)"></line>
+        <text data-label-for="uc-open-ride uc-in-call" x="715.1561702801305" y="269" text-anchor="middle" font-size="9.5" fill="#b45309" font-family="'IBM Plex Mono',monospace">«extend»</text>
+      </g>
+
+      <g id="usecase0-ucLayer0">
+        <g class="uc-group" id="usecase0-uc-group-uc-out-call" data-uc-id="uc-out-call"><ellipse cx="505" cy="172" rx="95" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"></ellipse><text x="505" y="176" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">ביצוע שיחה יוצאת לתומך</text></g>
+        <g class="uc-group" id="usecase0-uc-group-uc-cancel-ride" data-uc-id="uc-cancel-ride"><ellipse cx="505" cy="242" rx="85" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"></ellipse><text x="505" y="246" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">ביטול בקשת הסעה</text></g>
+        <g class="uc-group" id="usecase0-uc-group-uc-in-call" data-uc-id="uc-in-call"><ellipse cx="505" cy="312" rx="95" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"></ellipse><text x="505" y="316" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">טיפול בשיחה נכנסת</text></g>
+        <g class="uc-group" id="usecase0-uc-group-uc-record-call" data-uc-id="uc-record-call"><ellipse cx="912.5" cy="172" rx="70" ry="28" fill="#ece3fb" stroke="#7c3aed" stroke-width="2"></ellipse><text x="912.5" y="176" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">רישום שיחה</text></g>
+        <g class="uc-group" id="usecase0-uc-group-uc-open-ride" data-uc-id="uc-open-ride"><ellipse cx="912.5" cy="242" rx="82" ry="28" fill="#ece3fb" stroke="#7c3aed" stroke-width="2"></ellipse><text x="912.5" y="246" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">פתיחת בקשת הסעה</text></g>
+        <g class="uc-group" id="usecase0-uc-group-uc-assign-driver" data-uc-id="uc-assign-driver"><ellipse cx="1320" cy="172" rx="95" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"></ellipse><text x="1320" y="176" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">שיבוץ נהג לבקשת הסעה</text></g>
+        <g class="uc-group" id="usecase0-uc-group-uc-coord-handle" data-uc-id="uc-coord-handle"><ellipse cx="1320" cy="242" rx="110" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"></ellipse><text x="1320" y="246" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">טיפול אישי בבקשה שהוסלמה</text></g>
+        <g class="uc-group" id="usecase0-uc-group-uc-driver-respond" data-uc-id="uc-driver-respond"><ellipse cx="1320" cy="312" rx="100" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"></ellipse><text x="1320" y="316" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">אישור או דחיית שיבוץ</text></g>
+        <g class="uc-group" id="usecase0-uc-group-uc-report-pickup" data-uc-id="uc-report-pickup"><ellipse cx="1320" cy="382" rx="100" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"></ellipse><text x="1320" y="386" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">דיווח תוצאת האיסוף</text></g>
+        <g class="uc-group" id="usecase0-uc-group-uc-override-status" data-uc-id="uc-override-status"><ellipse cx="1320" cy="452" rx="110" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"></ellipse><text x="1320" y="456" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">שינוי סטטוס של בקשת הסעה</text></g>
+      </g>
+
+      <g id="usecase0-actorLayer0">
+        <g id="usecase0-actor-group-caller" data-actor-id="caller" transform="translate(300,242)">
+          <circle cx="0" cy="-60" r="14" fill="#e0f0ff" stroke="#334155" stroke-width="2"></circle><line x1="0" y1="-46" x2="0" y2="-10" stroke="#334155" stroke-width="2"></line><line x1="-18" y1="-36" x2="18" y2="-36" stroke="#334155" stroke-width="2"></line><line x1="0" y1="-10" x2="-14" y2="14" stroke="#334155" stroke-width="2"></line><line x1="0" y1="-10" x2="14" y2="14" stroke="#334155" stroke-width="2"></line>
+          <text x="0" y="30" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b" font-family="'Noto Sans Hebrew',sans-serif">מוקדן</text>
+        </g>
+        <g id="usecase0-actor-group-rideCoordinator" data-actor-id="rideCoordinator" transform="translate(1540,207)">
+          <circle cx="0" cy="-60" r="14" fill="#e0f0ff" stroke="#334155" stroke-width="2"></circle><line x1="0" y1="-46" x2="0" y2="-10" stroke="#334155" stroke-width="2"></line><line x1="-18" y1="-36" x2="18" y2="-36" stroke="#334155" stroke-width="2"></line><line x1="0" y1="-10" x2="-14" y2="14" stroke="#334155" stroke-width="2"></line><line x1="0" y1="-10" x2="14" y2="14" stroke="#334155" stroke-width="2"></line>
+          <text x="0" y="30" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b" font-family="'Noto Sans Hebrew',sans-serif">רכז הסעות</text>
+        </g>
+        <g id="usecase0-actor-group-driver" data-actor-id="driver" transform="translate(1540,357)">
+          <circle cx="0" cy="-60" r="14" fill="#e0f0ff" stroke="#334155" stroke-width="2"></circle><line x1="0" y1="-46" x2="0" y2="-10" stroke="#334155" stroke-width="2"></line><line x1="-18" y1="-36" x2="18" y2="-36" stroke="#334155" stroke-width="2"></line><line x1="0" y1="-10" x2="-14" y2="14" stroke="#334155" stroke-width="2"></line><line x1="0" y1="-10" x2="14" y2="14" stroke="#334155" stroke-width="2"></line>
+          <text x="0" y="30" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b" font-family="'Noto Sans Hebrew',sans-serif">נהג מתנדב</text>
+        </g>
+        <g id="usecase0-actor-group-shiftManager" data-actor-id="shiftManager" transform="translate(1540,507)">
+          <circle cx="0" cy="-60" r="14" fill="#e0f0ff" stroke="#334155" stroke-width="2"></circle><line x1="0" y1="-46" x2="0" y2="-10" stroke="#334155" stroke-width="2"></line><line x1="-18" y1="-36" x2="18" y2="-36" stroke="#334155" stroke-width="2"></line><line x1="0" y1="-10" x2="-14" y2="14" stroke="#334155" stroke-width="2"></line><line x1="0" y1="-10" x2="14" y2="14" stroke="#334155" stroke-width="2"></line>
+          <text x="0" y="30" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b" font-family="'Noto Sans Hebrew',sans-serif">מנהל משמרת</text>
+        </g>
+      </g>
+    <g class="extend-note"><rect x="651.1561702801305" y="212" width="128" height="33" fill="white" stroke="#7c3aed" stroke-width="0.8" rx="3"></rect><text x="715.1561702801305" y="225" font-size="9.5" text-anchor="middle" fill="#7c3aed" font-family="'Noto Sans Hebrew', sans-serif" direction="rtl">{התומך זקוק להסעה}</text><text x="715.1561702801305" y="238" font-size="9.5" text-anchor="middle" fill="#7c3aed" font-family="'Noto Sans Hebrew', sans-serif" direction="rtl">📍 בירור צורך בהסעה</text></g><g class="extend-note"><rect x="651.1561702801305" y="282" width="128" height="33" fill="white" stroke="#7c3aed" stroke-width="0.8" rx="3"></rect><text x="715.1561702801305" y="295" font-size="9.5" text-anchor="middle" fill="#7c3aed" font-family="'Noto Sans Hebrew', sans-serif" direction="rtl">{התומך זקוק להסעה}</text><text x="715.1561702801305" y="308" font-size="9.5" text-anchor="middle" fill="#7c3aed" font-family="'Noto Sans Hebrew', sans-serif" direction="rtl">📍 בירור צורך בהסעה</text></g></svg>
+<figcaption>חלק 1 מתוך 4: מוקד והסעות. «include» ל"רישום שיחה" משתי השיחות, ו-«extend» מ"פתיחת בקשת הסעה" אל שתי השיחות בתנאי {התומך זקוק להסעה}.</figcaption>
+</figure>
+<p class="scrollhint">↔ התרשים רחב מן העמוד, ניתן לגלול אותו לצדדים.</p>
+<figure class="diagram wide"><svg id="usecase1-diagram-svg-1" viewBox="0 0 1500 730" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <pattern id="usecase1-dots1" width="24" height="24" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="0.8" fill="#cbd5e1"></circle></pattern>
+      </defs>
+      <rect x="0" y="0" width="1500" height="660" fill="#f8fafc"></rect>
+      <rect x="0" y="0" width="1500" height="660" fill="url(#usecase1-dots1)"></rect>
+
+      <rect class="system-boundary" x="380" y="70" width="820" height="540" rx="12" fill="#ffffff" stroke="#3b82f6" stroke-width="2.5"></rect>
+      <rect x="380" y="70" width="820" height="44" rx="12" fill="#1e40af"></rect>
+      <rect x="380" y="96" width="820" height="18" fill="#1e40af"></rect>
+      <text x="790" y="99" text-anchor="middle" fill="#ffffff" font-size="14" font-weight="700" font-family="'Noto Sans Hebrew',sans-serif">מערכת פעילות השטח, משמרות וקלפיות</text>
+
+      <g id="usecase1-assocLayer1">
+        <line class="assoc-line" data-conn-from="shiftManager" data-conn-to="uc-build-shifts" x1="300" y1="277" x2="448.12807965232696" y2="183.62818578851008" stroke="#334155" stroke-width="1.8"></line>
+        <line class="assoc-line" data-conn-from="shiftManager" data-conn-to="uc-record-attendance" x1="300" y1="277" x2="411.36573951924663" y2="246.21237591562095" stroke="#334155" stroke-width="1.8"></line>
+        <line class="assoc-line" data-conn-from="shiftManager" data-conn-to="uc-status-board" x1="300" y1="277" x2="441.02430463943494" y2="307.78762408437905" stroke="#334155" stroke-width="1.8"></line>
+        <line class="assoc-line" data-conn-from="shiftManager" data-conn-to="uc-mark-priority" x1="300" y1="277" x2="443.57963963301177" y2="370.3718142114899" stroke="#334155" stroke-width="1.8"></line>
+        <line class="assoc-line" data-conn-from="observer" data-conn-to="uc-report-turnout" x1="1280" y1="172" x2="1170" y2="172" stroke="#334155" stroke-width="1.8"></line>
+      </g>
+
+      <g id="usecase1-ucLayer1">
+        <g class="uc-group" id="usecase1-uc-group-uc-build-shifts" data-uc-id="uc-build-shifts"><ellipse cx="530" cy="172" rx="90" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"></ellipse><text x="530" y="176" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">בניית לוח המשמרות</text></g>
+        <g class="uc-group" id="usecase1-uc-group-uc-record-attendance" data-uc-id="uc-record-attendance"><ellipse cx="530" cy="242" rx="120" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"></ellipse><text x="530" y="246" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">רישום התייצבות וסיום בפועל</text></g>
+        <g class="uc-group" id="usecase1-uc-group-uc-status-board" data-uc-id="uc-status-board"><ellipse cx="530" cy="312" rx="90" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"></ellipse><text x="530" y="316" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">צפייה בלוח המצב</text></g>
+        <g class="uc-group" id="usecase1-uc-group-uc-mark-priority" data-uc-id="uc-mark-priority"><ellipse cx="530" cy="382" rx="95" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"></ellipse><text x="530" y="386" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">סימון קלפי בעדיפות</text></g>
+        <g class="uc-group" id="usecase1-uc-group-uc-report-turnout" data-uc-id="uc-report-turnout"><ellipse cx="1055" cy="172" rx="115" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"></ellipse><text x="1055" y="176" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">דיווח מספר המצביעים בקלפי</text></g>
+      </g>
+
+      <g id="usecase1-actorLayer1">
+        <g id="usecase1-actor-group-shiftManager" data-actor-id="shiftManager" transform="translate(300,277)">
+          <circle cx="0" cy="-60" r="14" fill="#e0f0ff" stroke="#334155" stroke-width="2"></circle><line x1="0" y1="-46" x2="0" y2="-10" stroke="#334155" stroke-width="2"></line><line x1="-18" y1="-36" x2="18" y2="-36" stroke="#334155" stroke-width="2"></line><line x1="0" y1="-10" x2="-14" y2="14" stroke="#334155" stroke-width="2"></line><line x1="0" y1="-10" x2="14" y2="14" stroke="#334155" stroke-width="2"></line>
+          <text x="0" y="30" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b" font-family="'Noto Sans Hebrew',sans-serif">מנהל משמרת</text>
+        </g>
+        <g id="usecase1-actor-group-observer" data-actor-id="observer" transform="translate(1280,172)">
+          <circle cx="0" cy="-60" r="14" fill="#e0f0ff" stroke="#334155" stroke-width="2"></circle><line x1="0" y1="-46" x2="0" y2="-10" stroke="#334155" stroke-width="2"></line><line x1="-18" y1="-36" x2="18" y2="-36" stroke="#334155" stroke-width="2"></line><line x1="0" y1="-10" x2="-14" y2="14" stroke="#334155" stroke-width="2"></line><line x1="0" y1="-10" x2="14" y2="14" stroke="#334155" stroke-width="2"></line>
+          <text x="0" y="30" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b" font-family="'Noto Sans Hebrew',sans-serif">משקיף קלפי</text>
+        </g>
+      </g>
+    </svg>
+<figcaption>חלק 2 מתוך 4: משמרות וקלפיות. מנהל המשמרת ומשקיף הקלפי.</figcaption>
+</figure>
+<p class="scrollhint">↔ התרשים רחב מן העמוד, ניתן לגלול אותו לצדדים.</p>
+<figure class="diagram"><svg id="usecase2-diagram-svg-2" viewBox="0 0 1100 690" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <pattern id="usecase2-dots2" width="24" height="24" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="0.8" fill="#cbd5e1"></circle></pattern>
+      </defs>
+      <rect x="0" y="0" width="1100" height="620" fill="#f8fafc"></rect>
+      <rect x="0" y="0" width="1100" height="620" fill="url(#usecase2-dots2)"></rect>
+
+      <rect class="system-boundary" x="380" y="70" width="460" height="500" rx="12" fill="#ffffff" stroke="#3b82f6" stroke-width="2.5"></rect>
+      <rect x="380" y="70" width="460" height="44" rx="12" fill="#1e40af"></rect>
+      <rect x="380" y="96" width="460" height="18" fill="#1e40af"></rect>
+      <text x="610" y="99" text-anchor="middle" fill="#ffffff" font-size="14" font-weight="700" font-family="'Noto Sans Hebrew',sans-serif">מערכת פעילות השטח, ניהול נתוני-אב</text>
+
+      <g id="usecase2-assocLayer2">
+        <line class="assoc-line" data-conn-from="shiftManager" data-conn-to="uc-manage-volunteers" x1="300" y1="242" x2="434.23667979880645" y2="180.4897024037545" stroke="#334155" stroke-width="1.8"></line>
+        <line class="assoc-line" data-conn-from="shiftManager" data-conn-to="uc-manage-roles" x1="300" y1="242" x2="415" y2="242" stroke="#334155" stroke-width="1.8"></line>
+        <line class="assoc-line" data-conn-from="shiftManager" data-conn-to="uc-manage-stations" x1="300" y1="242" x2="415.1781641985412" y2="303.5102975962455" stroke="#334155" stroke-width="1.8"></line>
+      </g>
+
+      <g id="usecase2-ucLayer2">
+        <g class="uc-group" id="usecase2-uc-group-uc-manage-volunteers" data-uc-id="uc-manage-volunteers"><ellipse cx="520" cy="172" rx="90" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"></ellipse><text x="520" y="176" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">ניהול מתנדבים</text></g>
+        <g class="uc-group" id="usecase2-uc-group-uc-manage-roles" data-uc-id="uc-manage-roles"><ellipse cx="520" cy="242" rx="105" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"></ellipse><text x="520" y="246" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">ניהול תפקידים והרשאות</text></g>
+        <g class="uc-group" id="usecase2-uc-group-uc-manage-stations" data-uc-id="uc-manage-stations"><ellipse cx="520" cy="312" rx="110" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"></ellipse><text x="520" y="316" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">ניהול קלפיות ויעדי הצבעה</text></g>
+      </g>
+
+      <g id="usecase2-actorLayer2">
+        <g id="usecase2-actor-group-shiftManager" data-actor-id="shiftManager" transform="translate(300,242)">
+          <circle cx="0" cy="-60" r="14" fill="#e0f0ff" stroke="#334155" stroke-width="2"></circle><line x1="0" y1="-46" x2="0" y2="-10" stroke="#334155" stroke-width="2"></line><line x1="-18" y1="-36" x2="18" y2="-36" stroke="#334155" stroke-width="2"></line><line x1="0" y1="-10" x2="-14" y2="14" stroke="#334155" stroke-width="2"></line><line x1="0" y1="-10" x2="14" y2="14" stroke="#334155" stroke-width="2"></line>
+          <text x="0" y="30" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b" font-family="'Noto Sans Hebrew',sans-serif">מנהל משמרת</text>
+        </g>
+      </g>
+    </svg>
+<figcaption>חלק 3 מתוך 4: ניהול נתוני-אב. Use Case ניהול ייעודי לכל ישות: מתנדבים, תפקידים והרשאות, קלפיות ויעדי הצבעה.</figcaption>
+</figure>
+<p class="scrollhint">↔ התרשים רחב מן העמוד, ניתן לגלול אותו לצדדים.</p>
+<figure class="diagram"><svg id="usecase3-diagram-svg-3" viewBox="0 0 1200 810" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <pattern id="usecase3-dots3" width="24" height="24" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="0.8" fill="#cbd5e1"></circle></pattern>
+      </defs>
+      <rect x="0" y="0" width="1200" height="740" fill="#f8fafc"></rect>
+      <rect x="0" y="0" width="1200" height="740" fill="url(#usecase3-dots3)"></rect>
+
+      <rect class="system-boundary" x="380" y="70" width="600" height="620" rx="12" fill="#ffffff" stroke="#3b82f6" stroke-width="2.5"></rect>
+      <rect x="380" y="70" width="560" height="44" rx="12" fill="#1e40af"></rect>
+      <rect x="380" y="96" width="560" height="18" fill="#1e40af"></rect>
+      <text x="660" y="99" text-anchor="middle" fill="#ffffff" font-size="14" font-weight="700" font-family="'Noto Sans Hebrew',sans-serif">מערכת פעילות השטח, אוטומציה וממשקים</text>
+
+      <g id="usecase3-assocLayer3">
+        <line class="assoc-line" data-conn-from="electionCommittee" data-conn-to="uc-import-register" x1="300" y1="207" x2="421.24196936648866" y2="176.3992213645837" stroke="#334155" stroke-width="1.8"></line>
+        <line class="conn-hitbox" data-conn-id="a-committee-register" data-hitbox-from="electionCommittee" data-hitbox-to="uc-import-register" x1="300" y1="207" x2="421.24196936648866" y2="176.3992213645837" stroke="transparent" stroke-width="14" data-hover-wired="1"></line>
+        <line class="assoc-line" data-conn-from="electionCommittee" data-conn-to="uc-import-updates" x1="300" y1="207" x2="411.3661663031375" y2="237.6007786354163" stroke="#334155" stroke-width="1.8"></line>
+        <line class="conn-hitbox" data-conn-id="a-committee-updates" data-hitbox-from="electionCommittee" data-hitbox-to="uc-import-updates" x1="300" y1="207" x2="411.3661663031375" y2="237.6007786354163" stroke="transparent" stroke-width="14" data-hover-wired="1"></line>
+        <line class="assoc-line" data-conn-from="timeActor" data-conn-to="uc-confirm-timeout" x1="1060" y1="242" x2="935.2" y2="179.84" stroke="#334155" stroke-width="1.8"></line>
+        <line class="conn-hitbox" data-conn-id="a-time-timeout" data-hitbox-from="timeActor" data-hitbox-to="uc-confirm-timeout" x1="1060" y1="242" x2="935.2" y2="179.84" stroke="transparent" stroke-width="14" data-hover-wired="1"></line>
+        <line class="assoc-line" data-conn-from="timeActor" data-conn-to="uc-close-day" x1="1060" y1="242" x2="950" y2="242" stroke="#334155" stroke-width="1.8"></line>
+        <line class="assoc-line" data-conn-from="timeActor" data-conn-to="uc-purge" x1="1060" y1="242" x2="944.8" y2="304.16" stroke="#334155" stroke-width="1.8"></line>
+      </g>
+
+      <g id="usecase3-ucLayer3">
+        <g class="uc-group" id="usecase3-uc-group-uc-import-register" data-uc-id="uc-import-register"><ellipse cx="520" cy="172" rx="100" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"></ellipse><text x="520" y="176" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">קליטת פנקס הבוחרים</text></g>
+        <g class="uc-group" id="usecase3-uc-group-uc-import-updates" data-uc-id="uc-import-updates"><ellipse cx="520" cy="242" rx="110" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"></ellipse><text x="520" y="246" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">קליטת עדכון הצבעה רשמי</text></g>
+        <g class="uc-group" id="usecase3-uc-group-uc-confirm-timeout" data-uc-id="uc-confirm-timeout"><ellipse cx="820" cy="172" rx="120" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"></ellipse><text x="820" y="176" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">טיפול בשיבוץ שלא אושר בזמן</text></g>
+        <g class="uc-group" id="usecase3-uc-group-uc-close-day" data-uc-id="uc-close-day"><ellipse cx="820" cy="242" rx="130" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"></ellipse><text x="820" y="246" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">העברת הבקשות לארכיון בסגירת הקלפיות</text></g>
+        <g class="uc-group" id="usecase3-uc-group-uc-purge" data-uc-id="uc-purge"><ellipse cx="820" cy="312" rx="130" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"></ellipse><text x="820" y="316" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">מחיקת רשומות בתום תקופת השמירה</text></g>
+      </g>
+
+      <g id="usecase3-actorLayer3">
+        <g id="usecase3-actor-group-electionCommittee" data-actor-id="electionCommittee" transform="translate(300,207)">
+          <circle cx="0" cy="-60" r="14" fill="#fef3c7" stroke="#334155" stroke-width="2"></circle><line x1="0" y1="-46" x2="0" y2="-10" stroke="#334155" stroke-width="2"></line><line x1="-18" y1="-36" x2="18" y2="-36" stroke="#334155" stroke-width="2"></line><line x1="0" y1="-10" x2="-14" y2="14" stroke="#334155" stroke-width="2"></line><line x1="0" y1="-10" x2="14" y2="14" stroke="#334155" stroke-width="2"></line>
+          <text x="0" y="30" text-anchor="middle" font-size="9" font-style="italic" fill="#64748b" font-family="'IBM Plex Mono',monospace">«system»</text>
+          <text x="0" y="44" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b" font-family="'Noto Sans Hebrew',sans-serif">מערכת ועדת הבחירות</text>
+          <text x="0" y="58" text-anchor="middle" font-size="9.5" fill="#64748b" font-family="'Noto Sans Hebrew',sans-serif">(חיצונית, יוזמת)</text>
+        </g>
+        <g id="usecase3-actor-group-timeActor" data-actor-id="timeActor" transform="translate(1060,242)">
+          <circle cx="0" cy="-60" r="14" fill="#fef3c7" stroke="#334155" stroke-width="2"></circle><line x1="0" y1="-46" x2="0" y2="-10" stroke="#334155" stroke-width="2"></line><line x1="-18" y1="-36" x2="18" y2="-36" stroke="#334155" stroke-width="2"></line><line x1="0" y1="-10" x2="-14" y2="14" stroke="#334155" stroke-width="2"></line><line x1="0" y1="-10" x2="14" y2="14" stroke="#334155" stroke-width="2"></line>
+          <text x="0" y="30" text-anchor="middle" font-size="9" font-style="italic" fill="#64748b" font-family="'IBM Plex Mono',monospace">«system»</text>
+          <text x="0" y="44" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b" font-family="'Noto Sans Hebrew',sans-serif">שחקן זמן</text>
+          <text x="0" y="58" text-anchor="middle" font-size="9.5" fill="#64748b" font-family="'Noto Sans Hebrew',sans-serif">(טריגר תזמון)</text>
+        </g>
+      </g>
+    <g class="timing-label"><rect x="908.6" y="202.92000000000002" width="178" height="16" fill="white" stroke="#334155" stroke-width="0.8" rx="3"></rect><text x="997.6" y="214.92000000000002" font-size="10" text-anchor="middle" fill="#334155" font-family="'Noto Sans Hebrew', sans-serif" direction="rtl">בחלוף זמן האישור של הנהג</text></g><g class="timing-label"><rect x="951" y="234" width="108" height="16" fill="white" stroke="#334155" stroke-width="0.8" rx="3"></rect><text x="1005" y="246" font-size="10" text-anchor="middle" fill="#334155" font-family="'Noto Sans Hebrew', sans-serif" direction="rtl">בסגירת הקלפיות</text></g><g class="timing-label"><rect x="899.4" y="265.08000000000004" width="206" height="16" fill="white" stroke="#334155" stroke-width="0.8" rx="3"></rect><text x="1002.4" y="277.08000000000004" font-size="10" text-anchor="middle" fill="#334155" font-family="'Noto Sans Hebrew', sans-serif" direction="rtl">בתום ששה חודשים מיום הבחירות</text></g></svg>
+<figcaption>חלק 4 מתוך 4: תהליכים אוטומטיים וממשקים. מערכת ועדת הבחירות כשחקן «system» יוזם, ושחקן הזמן עם תווית תזמון על כל קשר. התרשים פוצל לפי תחומי אחריות לשם קריאוּת; פתרון בעמוד אחד תקין באותה מידה.</figcaption>
+</figure>
+<p class="scrollhint">↔ התרשים רחב מן העמוד, ניתן לגלול אותו לצדדים.</p>
+<p class="difflink"><a href="diagrams/usecase-solution.html" target="_blank" rel="noopener">↗ פתחו את תרשים ה-Use Case המלא</a><small>לחיצה על Use Case פותחת תיעוד מלא: תנאים, תרחיש ומסלולים חלופיים</small></p>
+<div class="answer">
+<p>התרשים מחולק לארבעה אזורי אחריות של אותה מערכת (23 מקרי שימוש):</p>
+<p><b>לשונית א': מוקד והסעות (10 מקרי שימוש):</b></p>
+<div class="tablewrap"><table>
+<thead><tr><th>שחקן</th><th>מקרי השימוש</th></tr></thead>
+<tbody>
+<tr><td><b>מוקדן</b></td><td>ביצוע שיחה יוצאת לתומך · טיפול בשיחה נכנסת · ביטול בקשת הסעה</td></tr>
+<tr><td><b>רכז הסעות</b></td><td>שיבוץ נהג לבקשת הסעה · טיפול אישי בבקשה שהוסלמה</td></tr>
+<tr><td><b>נהג מתנדב</b></td><td>אישור או דחיית שיבוץ · דיווח תוצאת האיסוף</td></tr>
+<tr><td><b>מנהל משמרת</b></td><td>שינוי סטטוס של בקשת הסעה</td></tr>
+<tr><td><b>(ללא שחקן)</b></td><td><b>רישום שיחה</b>: יעד «include» · <b>פתיחת בקשת הסעה</b>: מרחיבה ב-«extend»</td></tr>
+</tbody></table></div>
+<ul>
+<li>שני קשרי <b>«include»</b>: <b>ביצוע שיחה יוצאת לתומך</b> → <b>רישום שיחה</b>, ו<b>טיפול בשיחה נכנסת</b> → <b>רישום שיחה</b>. בתוך "רישום שיחה" נאכף גם הכלל של שלוש שיחות ללא מענה.</li>
+<li>שני קשרי <b>«extend»</b>: <b>פתיחת בקשת הסעה</b> → <b>ביצוע שיחה יוצאת לתומך</b>, ו<b>פתיחת בקשת הסעה</b> → <b>טיפול בשיחה נכנסת</b>, בתנאי {התומך זקוק להסעה}, בנקודת ההרחבה "בירור צורך בהסעה".</li>
+</ul>
+<p><b>לשונית ב': משמרות וקלפיות (5):</b> מנהל משמרת: בניית לוח המשמרות · רישום התייצבות וסיום בפועל · צפייה בלוח המצב · סימון קלפי בעדיפות. משקיף קלפי: דיווח מספר המצביעים בקלפי.</p>
+<p><b>לשונית ג': ניהול נתוני-אב (3):</b> מנהל משמרת: ניהול מתנדבים · ניהול תפקידים והרשאות · ניהול קלפיות ויעדי הצבעה.</p>
+<p><b>לשונית ד': תהליכים אוטומטיים וממשקים (5):</b></p>
+<ul>
+<li><b>מערכת ועדת הבחירות</b> «system», שחקן <b>יוזם</b> → <b>קליטת פנקס הבוחרים</b> ו<b>קליטת עדכון הצבעה רשמי</b>.</li>
+<li><b>שחקן זמן</b> «system» → <b>טיפול בשיבוץ שלא אושר בזמן</b> ("בחלוף זמן האישור של הנהג") · <b>העברת הבקשות לארכיון בסגירת הקלפיות</b> ("בסגירת הקלפיות") · <b>מחיקת רשומות בתום תקופת השמירה</b> ("בתום ששה חודשים מיום הבחירות").</li>
+</ul>
+<p><b>הנחות גישה:</b> לתומכים אין גישה ישירה למערכת; המוקדן פועל בשמם. סטודנט שצייר את התומך כשחקן ונימק זאת נתן תשובה תקינה לא פחות. הסיפור מונה חמישה סוגי משתמשים ואינו מזכיר מנהל מערכת, ולכן ניהול נתוני-האב הוקצה למנהל המשמרת; הוספת שחקן "מנהל מערכת" תקינה באותה מידה.</p>
+</div>
+<div class="alt">
+<p><b>הערה על דרישת ה-include:</b> ה-include הטבעי בסיפור הוא <b>"רישום שיחה"</b>: הוא נעשה לכל שיחה, יוצאת או נכנסת, ולכן מוכל <b>תמיד</b> בשני בסיסים. <b>includes נוספים מזכים:</b> "עדכון סטטוס הצבעה של תומך" (מקליטת עדכון רשמי ומטיפול בשיחה) · "בחירת נהג זמין" (מהשיבוץ הרגיל ומהטיפול הידני של הרכז), ובלבד שיעד ה-include מחובר לשני בסיסים לפחות.</p>
+</div>
+<div class="mistake">
+<p><b>מה מוריד נקודות:</b> מקרי שימוש שהם מסכים או שדות · קשר בין שני שחקנים · חץ «include» בכיוון הפוך · שחקן בתוך גבול המערכת · "ניהול נתונים" כללי בלי ציון הישות.</p>
+</div>
+<div class="alt">
+<p><b>אין להוריד:</b> על מספר לשוניות או על תרשים אחד גדול · על היעדר Use Cases לרכש ולתשלום (ראו 6.4), וגם לא על נוכחותם, אם התרשים קוהרנטי · על ייצוג הרשאתו הגורפת של מנהל המשמרת ככלל הרשאות ולא כ-Use Case נוסף.</p>
+</div>
+<h3 class="sub">6.2 (3 נק׳): עדכוני ההצבעה ממערכת ועדת הבחירות</h3>
+<p class="qtext">עדכוני ההצבעה הרשמיים מגיעים למערכת ממערכת ועדת הבחירות, והיא זו שקובעת מתי להעבירם; למטה אין אפשרות לפנות אליה או לבקש ממנה מידע. כיצד ייצגתם בתרשים שלכם את העדכונים הללו, ומה בייצוג שבחרתם מבטא את כיוון היוזמה?</p>
+<div class="answer">
+<p><b>תשובת מודל:</b></p>
+<ol>
+<li><b>מערכת ועדת הבחירות מצוירת כשחקן</b> שאינו אנושי («system»), <b>מחוץ לגבול המערכת</b>: לא כתהליך פנימי, לא כמחלקה ולא כ-Use Case.</li>
+<li>היא מחוברת ל-Use Case של קליטה, <b>"קליטת עדכון הצבעה רשמי"</b> (וכן "קליטת פנקס הבוחרים"), והיא בצד <b>היוזם</b> של הקשר: היא השחקן הראשי של ה-Use Case, והוא מופעל רק כשהיא שולחת.</li>
+<li><b>הנימוק:</b> <b>אין בתרשים Use Case שבו המערכת שלנו פונה לוועדה</b>, ואין שחקן פנימי ולא שחקן זמן המפעיל את הקליטה. הטריגר נתון כולו בידי הגורם החיצוני, כפי שנאמר בסיפור.</li>
+</ol>
+</div>
+<div class="alt">
+<p><b>חלופה מזכה במלואה:</b> השחקן בשם אחר (מערכת חיצונית / ממשק ועדת הבחירות). <b>אין לדרוש את הסטריאוטיפ «system» כתנאי לניקוד</b>: הוא מוסכמת שרטוט, לא ידע נבחן. מזכה גם Use Case אחד משותף לפנקס ולעדכונים, או פיצול לשניים כמו כאן, שכן הם נבדלים בתוכן ובעיתוי.</p>
+</div>
+<div class="mistake">
+<p><b>הסתירה:</b> הוועדה כשחקן אנושי או כמשתמש של המטה · Use Case בשם "שליפת נתונים מוועדת הבחירות" המופעל בידי מנהל משמרת או מוקדן: הופך את המטה ליוזם, בסתירה מפורשת לסיפור · קליטת העדכונים כפעולה פנימית בלי שחקן כלל ובלי הסבר מי מחולל אותה.</p>
+</div>
+<div class="mistake">
+<p><b>טעות נפוצה:</b> תליית הקליטה בשחקן זמן ("כל שעה"): הסיפור אומר שהעיתוי נקבע בידי הוועדה ולא לפי לוח זמנים של המטה.</p>
+</div>
+<h3 class="sub">6.3 (3 נק׳): פתיחת בקשת ההסעה ביחס לשיחות</h3>
+<p class="qtext">מוקדן מבצע שיחות יוצאות לתומכים וגם מקבל שיחות נכנסות. בחלק מהשיחות, ורק בחלקן, מתברר שהתומך זקוק להסעה, ואז נפתחת עבורו בקשת הסעה. כיצד ייצגתם בתרשים שלכם את פתיחת בקשת ההסעה ביחס לשיחות, ומדוע בייצוג זה ולא באחר?</p>
+<div class="answer">
+<p><b>תשובת מודל:</b></p>
+<ol>
+<li><b>"פתיחת בקשת הסעה" היא Use Case נפרד אחד</b>, ואינה משוכפלת לשיחה יוצאת ולשיחה נכנסת.</li>
+<li>הקשר אליה הוא <b>«extend»</b>, והחץ מכוון <b>מ"פתיחת בקשת הסעה" (המרחיב) אל כל אחת משתי השיחות (הבסיס)</b>, עם התנאי {התומך זקוק להסעה} בנקודת ההרחבה "בירור צורך בהסעה".</li>
+<li><b>הנימוק:</b> ההתנהגות מתרחשת <b>רק בחלק מהשיחות</b>, ולכן השיחה היא תהליך שלם ותקין גם בלעדיה. «include» היה קובע שכל שיחה פותחת בקשת הסעה, בסתירה לנתון; ורישום השיחה, שמתבצע תמיד, הוא אכן «include», וזה ההבדל בין השניים.</li>
+</ol>
+</div>
+<div class="alt">
+<p><b>חלופה מזכה במלואה:</b> Use Case עצמאי "פתיחת בקשת הסעה" שהמוקדן מפעיל ישירות, <b>בתנאי</b> שהסטודנט מנמק שפתיחת הבקשה היא מטרה עסקית בפני עצמה של המוקדן, <b>ומציין את המחיר</b>: הקשר בין השיחה לבקשה אינו נראה בתרשים ומתועד רק בתיאור ה-Use Case.</p>
+</div>
+<div class="mistake">
+<p><b>הסתירה:</b> «include» מהשיחות אל פתיחת הבקשה: לפי התרשים כל שיחה כוללת פתיחת בקשת הסעה · שני Use Cases נפרדים ("פתיחת בקשה משיחה יוצאת" / "משיחה נכנסת"): שכפול מיותר של אותה התנהגות · חץ «extend» בכיוון ההפוך (מן השיחה אל פתיחת הבקשה).</p>
+</div>
+<div class="alt">
+<p><b>אין להוריד</b> על כך שהתנאי נכתב כהערה ליד הקשר במקום כ-extension point פורמלי.</p>
+</div>
+<h3 class="sub">6.4 (3 נק׳): רכש כיבוד וציוד ותשלום לספקים</h3>
+<p class="qtext">מנהל המטה ביקש שהמערכת תנהל גם את רכש הכיבוד והציוד למתנדבים ואת התשלום לספקים. האם קיימים בתרשים שלכם Use Cases לכך? נמקו את ההכרעה במשפט אחד וציינו את מחירה.</p>
+<div class="answer">
+<p><b>ההכרעה בפתרון הבית: לא, אין Use Cases כאלה בתרשים (מסלול א').</b></p>
+<p><b>תשובת מודל:</b></p>
+<ol>
+<li><b>הכרעה מפורשת ("לא") התואמת את התרשים:</b> אין בתרשים Use Case לרכש, לספקים או לתשלום.</li>
+<li><b>נימוק הנשען על הסיפור:</b> ייעוד המערכת הוא ניהול פעילות השטח ביום הבחירות, והסיפור קובע במפורש ש"המערכת אינה מנהלת תשלומים"; רכש ותשלום לספקים הם תחום נפרד שאף אחד מתהליכי השטח אינו נזקק לו.</li>
+<li><b>המחיר:</b> הבקשה הועלתה בידי הלקוח עצמו, ולכן אין "להשתיק" אותה: יש להחזירה אליו במפורש כדרישה <b>מחוץ להיקף</b>, שתטופל כמודול או כשלב נפרד. עד אז ימשיך המטה לנהל את הרכש בכלים הקיימים, מחוץ לתמונת המצב האחת.</li>
+</ol>
+</div>
+<div class="alt">
+<p><b>מסלול ב', המזכה במלוא הניקוד: קיימים Use Cases כאלה.</b> הכרעה מפורשת ("כן") התואמת את התרשים · נימוק: הבקשה הועלתה במפורש בידי מנהל המטה, והצטיידות המתנדבים היא חלק מהלוגיסטיקה של יום הבחירות · מחיר: זו <b>הרחבת היקף</b> מעבר למה שהוגדר בסיפור, הטעונה אישור מפורש של הלקוח ומשפיעה על לוח הזמנים והעלות; במיוחד יש להיזהר מרכיב התשלום, שהוצא מההיקף בפירוש.</p>
+</div>
+<div class="mistake">
+<p><b>תשובה חלקית:</b> Use Cases כאלה בתרשים בלי כל התייחסות לחריגה, או "לא" בלי נימוק ובלי מחיר.</p>
+</div>
+</section>
+<section class="q" id="q7">
+<h2><span class="pts">20 נק׳</span>שאלה 7: תרשים מחלקות</h2>
+
+<p class="qtext">הכינו תרשים מחלקות מקיף עבור המערכת המתוארת בסיפור המעשה (שוב, אין להתייחס למופיע בשאלה 1).</p>
+<h3 class="sub">7.1 (8 נק׳): התרשים</h3>
+<p class="qtext">הכינו תרשים מחלקות מקיף עבור המערכת המתוארת בסיפור המעשה (שוב, אין להתייחס למופיע בשאלה 1). על התרשים לכלול שימוש נכון ב-enumerator, מאפיינים מהותיים וכן קרדינליות הקשרים. יש לציין את המאפיינים כפי שתוארו בשאלה, אך אין צורך לציין סוגי משתנים או הגדרות private/public. שיטות רלוונטיות יש להציג. עבור תרשים לא מסודר וקשרים מיותרים/לא יעילים יורדו נקודות.</p>
+<figure class="diagram"><svg id="class0-diagram-svg" xmlns="http://www.w3.org/2000/svg" width="1426" height="967" viewBox="0 0 1426 967"><defs>
+    <pattern id="class0-dotgrid" width="24" height="24" patternUnits="userSpaceOnUse">
+      <circle cx="12" cy="12" r="0.8" fill="#cbd5e1"></circle>
+    </pattern>
+    <marker id="class0-genHollow" markerWidth="12" markerHeight="10" refX="10" refY="5" orient="auto">
+      <polygon points="0,0 10,5 0,10" fill="white" stroke="#334155" stroke-width="1.5"></polygon>
+    </marker>
+    <marker id="class0-arrOpen" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <polyline points="0,0 9,4 0,8" fill="none" stroke="#334155" stroke-width="1.5"></polyline>
+    </marker>
+    <marker id="class0-compFill" markerWidth="14" markerHeight="10" refX="1" refY="5" orient="auto">
+      <polygon points="0,5 7,0 14,5 7,10" fill="#1e40af" stroke="#1e40af"></polygon>
+    </marker>
+    <marker id="class0-aggHollow" markerWidth="14" markerHeight="10" refX="1" refY="5" orient="auto">
+      <polygon points="0,5 7,0 14,5 7,10" fill="white" stroke="#334155"></polygon>
+    </marker>
+  </defs><rect width="1426" height="967" fill="url(#class0-dotgrid)"></rect><polyline points="119.5,200 119.5,108" fill="none" stroke="#334155" stroke-width="1.8"></polyline><text x="129.5" y="185" text-anchor="middle" fill="#64748b" font-size="9.5" font-family="IBM Plex Mono, monospace" style="direction:ltr;unicode-bidi:isolate">0..*</text><text x="109.5" y="129" text-anchor="middle" fill="#64748b" font-size="9.5" font-family="IBM Plex Mono, monospace" style="direction:ltr;unicode-bidi:isolate">1..*</text><text x="119.5" y="102" text-anchor="middle" fill="#64748b" font-size="9.5" font-family="IBM Plex Mono, monospace">נושא תפקיד</text><polyline points="225,255.5 560,255.5" fill="none" stroke="#334155" stroke-width="1.8"></polyline><text x="243" y="268.5" text-anchor="middle" fill="#64748b" font-size="9.5" font-family="IBM Plex Mono, monospace" style="direction:ltr;unicode-bidi:isolate">0..*</text><text x="542" y="248.5" text-anchor="middle" fill="#64748b" font-size="9.5" font-family="IBM Plex Mono, monospace" style="direction:ltr;unicode-bidi:isolate">0..*</text><text x="560" y="249.5" text-anchor="middle" fill="#64748b" font-size="9.5" font-family="IBM Plex Mono, monospace">משובץ ל</text><polyline points="771,269.5 900,269.5" fill="none" stroke="#334155" stroke-width="1.8"></polyline><text x="789" y="282.5" text-anchor="middle" fill="#64748b" font-size="9.5" font-family="IBM Plex Mono, monospace" style="direction:ltr;unicode-bidi:isolate">0..*</text><text x="882" y="262.5" text-anchor="middle" fill="#64748b" font-size="9.5" font-family="IBM Plex Mono, monospace" style="direction:ltr;unicode-bidi:isolate">0..1</text><text x="900" y="263.5" text-anchor="middle" fill="#64748b" font-size="9.5" font-family="IBM Plex Mono, monospace">מתקיימת בקלפי</text><polyline points="1105,269 1200,269" fill="none" stroke="#334155" stroke-width="1.8" marker-start="url(#class0-compFill)"></polyline><text x="1123" y="282" text-anchor="middle" fill="#64748b" font-size="9.5" font-family="IBM Plex Mono, monospace" style="direction:ltr;unicode-bidi:isolate">1</text><text x="1182" y="262" text-anchor="middle" fill="#64748b" font-size="9.5" font-family="IBM Plex Mono, monospace" style="direction:ltr;unicode-bidi:isolate">0..*</text><text x="1200" y="263" text-anchor="middle" fill="#64748b" font-size="9.5" font-family="IBM Plex Mono, monospace">יעד לשעה</text><polyline points="1002.5,440 1002.5,339" fill="none" stroke="#334155" stroke-width="1.8"></polyline><text x="1012.5" y="425" text-anchor="middle" fill="#64748b" font-size="9.5" font-family="IBM Plex Mono, monospace" style="direction:ltr;unicode-bidi:isolate">0..*</text><text x="992.5" y="360" text-anchor="middle" fill="#64748b" font-size="9.5" font-family="IBM Plex Mono, monospace" style="direction:ltr;unicode-bidi:isolate">1</text><text x="1002.5" y="333" text-anchor="middle" fill="#64748b" font-size="9.5" font-family="IBM Plex Mono, monospace">משויך לקלפי</text><polyline points="752,511 900,511" fill="none" stroke="#334155" stroke-width="1.8"></polyline><text x="770" y="524" text-anchor="middle" fill="#64748b" font-size="9.5" font-family="IBM Plex Mono, monospace" style="direction:ltr;unicode-bidi:isolate">0..*</text><text x="882" y="504" text-anchor="middle" fill="#64748b" font-size="9.5" font-family="IBM Plex Mono, monospace" style="direction:ltr;unicode-bidi:isolate">1</text><text x="900" y="505" text-anchor="middle" fill="#64748b" font-size="9.5" font-family="IBM Plex Mono, monospace">עם תומך</text><polyline points="560,500 180,500 180,311" fill="none" stroke="#334155" stroke-width="1.8"></polyline><text x="542" y="493" text-anchor="middle" fill="#64748b" font-size="9.5" font-family="IBM Plex Mono, monospace" style="direction:ltr;unicode-bidi:isolate">0..*</text><text x="170" y="332" text-anchor="middle" fill="#64748b" font-size="9.5" font-family="IBM Plex Mono, monospace" style="direction:ltr;unicode-bidi:isolate">1</text><text x="180" y="494" text-anchor="middle" fill="#64748b" font-size="9.5" font-family="IBM Plex Mono, monospace">בוצעה בידי</text><polyline points="656,552 656,650" fill="none" stroke="#334155" stroke-width="1.8"></polyline><text x="646" y="573" text-anchor="middle" fill="#64748b" font-size="9.5" font-family="IBM Plex Mono, monospace" style="direction:ltr;unicode-bidi:isolate">1</text><text x="666" y="635" text-anchor="middle" fill="#64748b" font-size="9.5" font-family="IBM Plex Mono, monospace" style="direction:ltr;unicode-bidi:isolate">0..1</text><text x="656" y="644" text-anchor="middle" fill="#64748b" font-size="9.5" font-family="IBM Plex Mono, monospace">פתחה בקשה</text><polyline points="530,720 90,720 90,311" fill="none" stroke="#334155" stroke-width="1.8"></polyline><text x="512" y="713" text-anchor="middle" fill="#64748b" font-size="9.5" font-family="IBM Plex Mono, monospace" style="direction:ltr;unicode-bidi:isolate">0..*</text><text x="80" y="332" text-anchor="middle" fill="#64748b" font-size="9.5" font-family="IBM Plex Mono, monospace" style="direction:ltr;unicode-bidi:isolate">0..1</text><text x="90" y="714" text-anchor="middle" fill="#64748b" font-size="9.5" font-family="IBM Plex Mono, monospace">נהג משובץ</text><rect x="40" y="40" width="159" height="68" fill="white" stroke="#3b82f6" stroke-width="2" rx="2"></rect><rect x="40" y="40" width="159" height="28" fill="#1e40af" rx="2"></rect><text x="119.5" y="58" text-anchor="middle" fill="white" font-size="11" font-weight="700" font-family="IBM Plex Mono, monospace" style="">Role</text><line x1="40" y1="68" x2="199" y2="68" stroke="#3b82f6" stroke-width="1"></line><text x="46" y="84" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ roleName : String</text><text x="46" y="98" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ permissions : String</text><rect x="40" y="200" width="185" height="111" fill="white" stroke="#3b82f6" stroke-width="2" rx="2"></rect><rect x="40" y="200" width="185" height="28" fill="#1e40af" rx="2"></rect><text x="132.5" y="218" text-anchor="middle" fill="white" font-size="11" font-weight="700" font-family="IBM Plex Mono, monospace" style="">Volunteer</text><line x1="40" y1="228" x2="225" y2="228" stroke="#3b82f6" stroke-width="1"></line><text x="46" y="244" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ volunteerNumber : String</text><text x="46" y="258" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ fullName : String</text><text x="46" y="272" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ phone : String</text><text x="46" y="286" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ region : String</text><line x1="40" y1="290" x2="225" y2="290" stroke="#3b82f6" stroke-width="1"></line><text x="46" y="306" text-anchor="start" fill="#2563eb" font-size="10.5" font-style="italic" font-family="IBM Plex Mono, monospace">+ getPermissions()</text><rect x="300" y="40" width="172" height="97" fill="white" stroke="#3b82f6" stroke-width="2" rx="2"></rect><rect x="300" y="40" width="172" height="28" fill="#1e40af" rx="2"></rect><text x="386" y="58" text-anchor="middle" fill="white" font-size="11" font-weight="700" font-family="IBM Plex Mono, monospace" style="">ShiftAssignment</text><line x1="300" y1="68" x2="472" y2="68" stroke="#3b82f6" stroke-width="1"></line><text x="306" y="84" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ actualStartTime : Time</text><text x="306" y="98" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ actualEndTime : Time</text><line x1="300" y1="102" x2="472" y2="102" stroke="#3b82f6" stroke-width="1"></line><text x="306" y="118" text-anchor="start" fill="#2563eb" font-size="10.5" font-style="italic" font-family="IBM Plex Mono, monospace">+ checkIn()</text><text x="306" y="132" text-anchor="start" fill="#2563eb" font-size="10.5" font-style="italic" font-family="IBM Plex Mono, monospace">+ checkOut()</text><rect x="560" y="200" width="211" height="139" fill="white" stroke="#3b82f6" stroke-width="2" rx="2"></rect><rect x="560" y="200" width="211" height="28" fill="#1e40af" rx="2"></rect><text x="665.5" y="218" text-anchor="middle" fill="white" font-size="11" font-weight="700" font-family="IBM Plex Mono, monospace" style="">Shift</text><line x1="560" y1="228" x2="771" y2="228" stroke="#3b82f6" stroke-width="1"></line><text x="566" y="244" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ shiftDate : Date</text><text x="566" y="258" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ startTime : Time</text><text x="566" y="272" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ endTime : Time</text><text x="566" y="286" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ locationType : LocationType</text><text x="566" y="300" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ requiredVolunteers : Integer</text><line x1="560" y1="304" x2="771" y2="304" stroke="#3b82f6" stroke-width="1"></line><text x="566" y="320" text-anchor="start" fill="#2563eb" font-size="10.5" font-style="italic" font-family="IBM Plex Mono, monospace">+ presentCount()</text><text x="566" y="334" text-anchor="start" fill="#2563eb" font-size="10.5" font-style="italic" font-family="IBM Plex Mono, monospace">+ isUnderstaffed()</text><rect x="900" y="200" width="205" height="139" fill="white" stroke="#3b82f6" stroke-width="2" rx="2"></rect><rect x="900" y="200" width="205" height="28" fill="#1e40af" rx="2"></rect><text x="1002.5" y="218" text-anchor="middle" fill="white" font-size="11" font-weight="700" font-family="IBM Plex Mono, monospace" style="">PollingStation</text><line x1="900" y1="228" x2="1105" y2="228" stroke="#3b82f6" stroke-width="1"></line><text x="906" y="244" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ stationNumber : String</text><text x="906" y="258" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ address : String</text><text x="906" y="272" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ lastReportedCount : Integer</text><text x="906" y="286" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ lastReportTime : Time</text><text x="906" y="300" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ isPriority : Boolean</text><line x1="900" y1="304" x2="1105" y2="304" stroke="#3b82f6" stroke-width="1"></line><text x="906" y="320" text-anchor="start" fill="#2563eb" font-size="10.5" font-style="italic" font-family="IBM Plex Mono, monospace">+ updateTurnout()</text><text x="906" y="334" text-anchor="start" fill="#2563eb" font-size="10.5" font-style="italic" font-family="IBM Plex Mono, monospace">+ markPriority()</text><rect x="1200" y="235" width="166" height="68" fill="white" stroke="#3b82f6" stroke-width="2" rx="2"></rect><rect x="1200" y="235" width="166" height="28" fill="#1e40af" rx="2"></rect><text x="1283" y="253" text-anchor="middle" fill="white" font-size="11" font-weight="700" font-family="IBM Plex Mono, monospace" style="">HourlyTarget</text><line x1="1200" y1="263" x2="1366" y2="263" stroke="#3b82f6" stroke-width="1"></line><text x="1206" y="279" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ hour : Time</text><text x="1206" y="293" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ targetCount : Integer</text><rect x="900" y="440" width="218" height="153" fill="white" stroke="#3b82f6" stroke-width="2" rx="2"></rect><rect x="900" y="440" width="218" height="28" fill="#1e40af" rx="2"></rect><text x="1009" y="458" text-anchor="middle" fill="white" font-size="11" font-weight="700" font-family="IBM Plex Mono, monospace" style="">Supporter</text><line x1="900" y1="468" x2="1118" y2="468" stroke="#3b82f6" stroke-width="1"></line><text x="906" y="484" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ fullName : String</text><text x="906" y="498" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ phone : String</text><text x="906" y="512" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ address : String</text><text x="906" y="526" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ registerSerialNumber : String</text><text x="906" y="540" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ votingStatus : VotingStatus</text><text x="906" y="554" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ isUnavailable : Boolean</text><line x1="900" y1="558" x2="1118" y2="558" stroke="#3b82f6" stroke-width="1"></line><text x="906" y="574" text-anchor="start" fill="#2563eb" font-size="10.5" font-style="italic" font-family="IBM Plex Mono, monospace">+ markVoted()</text><text x="906" y="588" text-anchor="start" fill="#2563eb" font-size="10.5" font-style="italic" font-family="IBM Plex Mono, monospace">+ markUnavailable()</text><rect x="560" y="470" width="192" height="82" fill="white" stroke="#3b82f6" stroke-width="2" rx="2"></rect><rect x="560" y="470" width="192" height="28" fill="#1e40af" rx="2"></rect><text x="656" y="488" text-anchor="middle" fill="white" font-size="11" font-weight="700" font-family="IBM Plex Mono, monospace" style="">Call</text><line x1="560" y1="498" x2="752" y2="498" stroke="#3b82f6" stroke-width="1"></line><text x="566" y="514" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ callTime : DateTime</text><text x="566" y="528" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ direction : CallDirection</text><text x="566" y="542" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ outcome : CallOutcome</text><rect x="530" y="650" width="244" height="237" fill="white" stroke="#3b82f6" stroke-width="2" rx="2"></rect><rect x="530" y="650" width="244" height="28" fill="#1e40af" rx="2"></rect><text x="652" y="668" text-anchor="middle" fill="white" font-size="11" font-weight="700" font-family="IBM Plex Mono, monospace" style="">RideRequest</text><line x1="530" y1="678" x2="774" y2="678" stroke="#3b82f6" stroke-width="1"></line><text x="536" y="694" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ requestNumber : String</text><text x="536" y="708" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ pickupAddress : String</text><text x="536" y="722" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ passengerCount : Integer</text><text x="536" y="736" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ requestedTime : Time</text><text x="536" y="750" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ assignmentRound : Integer</text><text x="536" y="764" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ status : RideRequestStatus</text><text x="536" y="778" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">+ closureReason : RideRequestStatus</text><line x1="530" y1="782" x2="774" y2="782" stroke="#3b82f6" stroke-width="1"></line><text x="536" y="798" text-anchor="start" fill="#2563eb" font-size="10.5" font-style="italic" font-family="IBM Plex Mono, monospace">+ assignDriver()</text><text x="536" y="812" text-anchor="start" fill="#2563eb" font-size="10.5" font-style="italic" font-family="IBM Plex Mono, monospace">+ confirmAssignment()</text><text x="536" y="826" text-anchor="start" fill="#2563eb" font-size="10.5" font-style="italic" font-family="IBM Plex Mono, monospace">+ declineAssignment()</text><text x="536" y="840" text-anchor="start" fill="#2563eb" font-size="10.5" font-style="italic" font-family="IBM Plex Mono, monospace">+ reportArrival()</text><text x="536" y="854" text-anchor="start" fill="#2563eb" font-size="10.5" font-style="italic" font-family="IBM Plex Mono, monospace">+ closeNotFound()</text><text x="536" y="868" text-anchor="start" fill="#2563eb" font-size="10.5" font-style="italic" font-family="IBM Plex Mono, monospace">+ cancel()</text><text x="536" y="882" text-anchor="start" fill="#2563eb" font-size="10.5" font-style="italic" font-family="IBM Plex Mono, monospace">+ overrideStatus()</text><rect x="860" y="660" width="185" height="162" fill="#f8fafc" stroke="#94a3b8" stroke-width="2" stroke-dasharray="5 3" rx="2"></rect><rect x="860" y="660" width="185" height="38" fill="#475569" rx="2"></rect><text x="952.5" y="673" text-anchor="middle" fill="white" font-size="9" font-family="IBM Plex Mono, monospace">«enumeration»</text><text x="952.5" y="690" text-anchor="middle" fill="white" font-size="11" font-weight="700" font-family="IBM Plex Mono, monospace" style="">RideRequestStatus</text><line x1="860" y1="698" x2="1045" y2="698" stroke="#94a3b8" stroke-width="1"></line><text x="866" y="714" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">WaitingAssignment</text><text x="866" y="728" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">AwaitingDriverConfirmation</text><text x="866" y="742" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">CoordinatorHandling</text><text x="866" y="756" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">DriverEnRoute</text><text x="866" y="770" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">Completed</text><text x="866" y="784" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">ClosedNotFound</text><text x="866" y="798" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">Cancelled</text><text x="866" y="812" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">Archived</text><rect x="1200" y="440" width="120" height="78" fill="#f8fafc" stroke="#94a3b8" stroke-width="2" stroke-dasharray="5 3" rx="2"></rect><rect x="1200" y="440" width="120" height="38" fill="#475569" rx="2"></rect><text x="1260" y="453" text-anchor="middle" fill="white" font-size="9" font-family="IBM Plex Mono, monospace">«enumeration»</text><text x="1260" y="470" text-anchor="middle" fill="white" font-size="11" font-weight="700" font-family="IBM Plex Mono, monospace" style="">VotingStatus</text><line x1="1200" y1="478" x2="1320" y2="478" stroke="#94a3b8" stroke-width="1"></line><text x="1206" y="494" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">NotVoted</text><text x="1206" y="508" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">Voted</text><rect x="1200" y="545" width="120" height="78" fill="#f8fafc" stroke="#94a3b8" stroke-width="2" stroke-dasharray="5 3" rx="2"></rect><rect x="1200" y="545" width="120" height="38" fill="#475569" rx="2"></rect><text x="1260" y="558" text-anchor="middle" fill="white" font-size="9" font-family="IBM Plex Mono, monospace">«enumeration»</text><text x="1260" y="575" text-anchor="middle" fill="white" font-size="11" font-weight="700" font-family="IBM Plex Mono, monospace" style="">CallDirection</text><line x1="1200" y1="583" x2="1320" y2="583" stroke="#94a3b8" stroke-width="1"></line><text x="1206" y="599" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">Outgoing</text><text x="1206" y="613" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">Incoming</text><rect x="1200" y="650" width="120" height="106" fill="#f8fafc" stroke="#94a3b8" stroke-width="2" stroke-dasharray="5 3" rx="2"></rect><rect x="1200" y="650" width="120" height="38" fill="#475569" rx="2"></rect><text x="1260" y="663" text-anchor="middle" fill="white" font-size="9" font-family="IBM Plex Mono, monospace">«enumeration»</text><text x="1260" y="680" text-anchor="middle" fill="white" font-size="11" font-weight="700" font-family="IBM Plex Mono, monospace" style="">CallOutcome</text><line x1="1200" y1="688" x2="1320" y2="688" stroke="#94a3b8" stroke-width="1"></line><text x="1206" y="704" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">Answered</text><text x="1206" y="718" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">NoAnswer</text><text x="1206" y="732" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">RideNeeded</text><text x="1206" y="746" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">WrongNumber</text><rect x="1200" y="785" width="120" height="92" fill="#f8fafc" stroke="#94a3b8" stroke-width="2" stroke-dasharray="5 3" rx="2"></rect><rect x="1200" y="785" width="120" height="38" fill="#475569" rx="2"></rect><text x="1260" y="798" text-anchor="middle" fill="white" font-size="9" font-family="IBM Plex Mono, monospace">«enumeration»</text><text x="1260" y="815" text-anchor="middle" fill="white" font-size="11" font-weight="700" font-family="IBM Plex Mono, monospace" style="">LocationType</text><line x1="1200" y1="823" x2="1320" y2="823" stroke="#94a3b8" stroke-width="1"></line><text x="1206" y="839" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">CallCenter</text><text x="1206" y="853" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">TransportCenter</text><text x="1206" y="867" text-anchor="start" fill="#1e293b" font-size="10.5" font-family="IBM Plex Mono, monospace">PollingSite</text><text x="16" y="927" fill="#64748b" font-size="9" font-family="IBM Plex Mono, monospace">── Association  ◇── Aggregation  ◆── Composition  ──▷ Generalization  |  קרדינליות בשני קצות הקשר  |  --- association-class tether</text><line x1="392.5" y1="255.5" x2="387.9" y2="137.0" stroke="#334155" stroke-width="1.3" stroke-dasharray="4 3" fill="none"></line></svg>
+<figcaption>פתרון לדוגמה: 9 מחלקות וחמישה אנומרטורים. **ShiftAssignment** היא מחלקת קשר על הקשר רבים-לרבים שבין המתנדב למשמרת ונושאת את שעות ההתייצבות והסיום בפועל; **Role** היא מחלקת קטלוג ברבים-לרבים עם המתנדב (לא ירושה). המספר האחרון שדווח בקלפי נשמר כמאפיין על **PollingStation**. אין בתרשים מפתחות ראשיים או זרים; המספרים העסקיים שהסיפור נוקב בהם כן מופיעים.</figcaption>
+</figure>
+<p class="scrollhint">↔ התרשים רחב מן העמוד, ניתן לגלול אותו לצדדים.</p>
+<p class="difflink"><a href="diagrams/class-solution.html" target="_blank" rel="noopener">↗ פתחו את תרשים המחלקות המלא</a><small>עמוד נפרד, ניתן להגדלה ולהדפסה</small></p>
+<div class="answer">
+<p><b>המחלקות (9) ומאפייניהן המהותיים:</b></p>
+<div class="tablewrap"><table>
+<thead><tr><th>מחלקה</th><th>מאפיינים</th><th>שיטות</th></tr></thead>
+<tbody>
+<tr><td><b>Volunteer</b></td><td>volunteerNumber · fullName · phone · region</td><td>getPermissions()</td></tr>
+<tr><td><b>Role</b> (קטלוג)</td><td>roleName · permissions</td><td></td></tr>
+<tr><td><b>Shift</b></td><td>shiftDate · startTime · endTime · locationType · requiredVolunteers</td><td>presentCount() · isUnderstaffed()</td></tr>
+<tr><td><b>ShiftAssignment</b> (מחלקת קשר)</td><td>actualStartTime · actualEndTime</td><td>checkIn() · checkOut()</td></tr>
+<tr><td><b>PollingStation</b></td><td>stationNumber · address · lastReportedCount · lastReportTime · isPriority</td><td>updateTurnout() · markPriority()</td></tr>
+<tr><td><b>HourlyTarget</b></td><td>hour · targetCount</td><td></td></tr>
+<tr><td><b>Supporter</b></td><td>fullName · phone · address · registerSerialNumber · votingStatus · isUnavailable</td><td>markVoted() · markUnavailable()</td></tr>
+<tr><td><b>Call</b></td><td>callTime · direction · outcome</td><td></td></tr>
+<tr><td><b>RideRequest</b></td><td>requestNumber · pickupAddress · passengerCount · requestedTime · assignmentRound · status · closureReason</td><td>assignDriver() · confirmAssignment() · declineAssignment() · reportArrival() · closeNotFound() · cancel() · overrideStatus()</td></tr>
+</tbody></table></div>
+<p><b>האנומרטורים (5), מצוירים בנפרד ואינם מחוברים בקו קשר לאף מחלקה:</b></p>
+<ul>
+<li><code>«enumeration» RideRequestStatus</code>: WaitingAssignment, AwaitingDriverConfirmation, CoordinatorHandling, DriverEnRoute, Completed, ClosedNotFound, Cancelled, Archived (זהים למצבי תרשים המצבים בשאלה 8)</li>
+<li><code>«enumeration» VotingStatus</code>: NotVoted, Voted</li>
+<li><code>«enumeration» CallDirection</code>: Outgoing, Incoming</li>
+<li><code>«enumeration» CallOutcome</code>: Answered, NoAnswer, RideNeeded, WrongNumber</li>
+<li><code>«enumeration» LocationType</code>: CallCenter, TransportCenter, PollingSite</li>
+</ul>
+<p><b>הקשרים והקרדינליות:</b></p>
+<div class="tablewrap"><table>
+<thead><tr><th>קשר</th><th>קרדינליות</th><th>הסבר</th></tr></thead>
+<tbody>
+<tr><td>Volunteer ↔ Role</td><td><code>0..*</code> בצד Volunteer, <code>1..*</code> בצד Role</td><td>לכל מתנדב תפקיד אחד לפחות, ותפקיד משותף למתנדבים רבים. ראו 7.3.</td></tr>
+<tr><td>Volunteer ↔ Shift, עם <b>ShiftAssignment</b></td><td><code>0..*</code> מול <code>0..*</code></td><td>מתנדב משובץ לכמה משמרות, ובמשמרת כמה מתנדבים. ראו 7.2.</td></tr>
+<tr><td>Shift ↔ PollingStation</td><td><code>0..*</code> בצד Shift, <code>0..1</code> בצד PollingStation</td><td>משמרת במקום מסוג "קלפי" קשורה לקלפי אחת; משמרת במוקד הטלפוני או במרכז ההסעות אינה קשורה לקלפי.</td></tr>
+<tr><td>PollingStation ◆ HourlyTarget</td><td><code>1</code> מול <code>0..*</code>, composition</td><td>היעד לשעה אינו קיים בלי הקלפי שלו.</td></tr>
+<tr><td>Supporter ↔ PollingStation</td><td><code>0..*</code> בצד Supporter, <code>1</code> בצד PollingStation</td><td>כל תומך משויך לקלפי אחת.</td></tr>
+<tr><td>Call ↔ Supporter</td><td><code>0..*</code> בצד Call, <code>1</code> בצד Supporter</td><td>כל שיחה, יוצאת או נכנסת, היא עם תומך אחד; מכאן נספרות שלוש השיחות ללא מענה.</td></tr>
+<tr><td>Call ↔ Volunteer ("בוצעה בידי")</td><td><code>0..*</code> בצד Call, <code>1</code> בצד Volunteer</td><td>"מי ביצע אותה": המוקדן.</td></tr>
+<tr><td>Call ↔ RideRequest ("פתחה בקשה")</td><td><code>1</code> בצד Call, <code>0..1</code> בצד RideRequest</td><td>רק בחלק מהשיחות נפתחת בקשה; כל בקשה נפתחת מתוך שיחה אחת. התומך והקלפי של הבקשה נגזרים דרך השיחה, ולכן אין קשר ישיר כפול בין הבקשה לתומך.</td></tr>
+<tr><td>RideRequest ↔ Volunteer ("נהג משובץ")</td><td><code>0..*</code> בצד RideRequest, <code>0..1</code> בצד Volunteer</td><td>לפני השיבוץ אין נהג, ומכאן <code>0..1</code>.</td></tr>
+</tbody></table></div>
+</div>
+<div class="mistake">
+<p><b>מוריד נקודות:</b> מפתח ראשי מומצא או מפתח זר כמאפיין (<code>volunteerId</code> על ShiftAssignment, <code>supporterId</code> על Call): <b>קו הקשר הוא ההפניה</b> · סימון ריבוי בסגנון ERD במקום סימון ה-UML הנלמד (<code>1</code>, <code>*</code>, <code>0..1</code>, <code>1..*</code>) · קשר היוצא מ-enumerator · קשר ישיר בין שתי מחלקות שכבר מחוברות דרך שלישית בלי ערך מוסף.</p>
+</div>
+<div class="alt">
+<p><b>אין להוריד:</b> על היעדר מחלקות לרכש ולתשלום, וגם לא על נוכחותן אם התרשים קוהרנטי (הפריט נבחן ב-6.4 בלבד) · על היעדר מחלקה למערכת ועדת הבחירות, וגם לא על מחלקה לעדכון שהתקבל, אם התרשים קוהרנטי · על מאפיין "המספר האחרון" או על מחלקת דיווחים: שתי ההכרעות תקפות (7.5) · על מחלקת <code>User</code> נפרדת (גישה בלבד) המקושרת <code>1</code> מול <code>1</code> ל-<code>Volunteer</code>, כל עוד התפקידים אינם ממודלים בירושה ממנה · על שמות מחלקות בעברית.</p>
+<p><b>המספרים העסקיים שהסיפור נוקב בהם</b> (מספר מתנדב, מספר בקשה, מספר קלפי, מספר סידורי בפנקס) מצופים כמאפיינים רגילים. היעדר מספר עסקי אינו הורדה; מפתח מומצא הוא הורדה.</p>
+</div>
+<h3 class="sub">7.2 (3 נק׳): היכן נשמרות שעות ההתייצבות והסיום בפועל</h3>
+<p class="qtext">מתנדב משובץ לכמה משמרות, ובכל שיבוץ נרשמות שעת ההתייצבות בפועל ושעת הסיום בפועל שלו באותה משמרת (מתנדבים שונים באותה משמרת אינם מגיעים ואינם מסיימים באותה שעה). היכן בתרשים שלכם נשמרות שתי השעות הללו, ומדוע דווקא שם?</p>
+<div class="answer">
+<p><b>תשובת מודל:</b></p>
+<ol>
+<li>שתי השעות יושבות על <b>מחלקת קשר (Association Class) <code>ShiftAssignment</code></b>, התלויה על הקשר שבין <code>Volunteer</code> ל-<code>Shift</code>, ובה <code>actualStartTime</code> ו-<code>actualEndTime</code>.</li>
+<li><b>הקרדינליות:</b> הקשר בין מתנדב למשמרת הוא <b>רבים-לרבים</b> (<code>0..*</code> מול <code>0..*</code>): מתנדב משובץ לכמה משמרות, ובכל משמרת כמה מתנדבים.</li>
+<li><b>ומדוע דווקא שם:</b> השעות <b>אינן תכונה של המשמרת</b>, כי הן משתנות ממתנדב למתנדב באותה משמרת; והן <b>אינן תכונה של המתנדב</b>, כי הן משתנות ממשמרת למשמרת. זהו נתון של ה<b>צמד</b> (מתנדב × משמרת), ולכן מקומו על הקישור עצמו.</li>
+</ol>
+</div>
+<div class="alt">
+<p><b>חלופה מזכה במלואה:</b> <b>מחלקה מתווכת</b> מפורשת (<code>ShiftAssignment</code> המחוברת בשני קשרי <code>1</code> מול <code>*</code>) במקום מחלקת קשר, עקבי עם סולם ההוראה: קשר רגיל ← מחלקת קשר ← מחלקה מתווכת ← קשר טרנרי (שממנו יש להימנע).</p>
+</div>
+<div class="mistake">
+<p><b>הסתירה:</b> השעות כתכונות של <code>Shift</code>: כל המתנדבים באותה משמרת נדחסים לשעה אחת · כתכונות של <code>Volunteer</code>: לא ניתן לדעת לאיזו משמרת השעות שייכות, ורק שיבוץ אחד יישמר · קשר רבים-לרבים בלי נושא נתונים: אין היכן לשמור אותן.</p>
+</div>
+<div class="alt">
+<p><b>אין לדרוש</b> מפתחות (<code>volunteerId</code> / <code>shiftId</code>): הקשר עצמו הוא ההפניה, ומפתח זר בתרשים הוא טעות (ראו 7.1).</p>
+</div>
+<h3 class="sub">7.3 (3 נק׳): התפקידים של המתנדב וההרשאות</h3>
+<p class="qtext">מתנדב יכול להיות רשום באותו יום ביותר מתפקיד אחד, למשל נהג שהוא גם משקיף קלפי, וההרשאות שלו במערכת נקבעות לפי התפקידים הרשומים לו. כיצד ייצגתם בתרשים שלכם את התפקידים השונים של המתנדב, וכיצד הייצוג שלכם מאפשר הרשאות בהתאם לתפקידים של המתנדב?</p>
+<div class="answer">
+<p><b>תשובת מודל:</b></p>
+<ol>
+<li><b>הייצוג:</b> התפקידים ממודלים כ<b>מחלקת קטלוג <code>Role</code></b> (שם התפקיד וההרשאות הנלוות לו), הקשורה ל-<code>Volunteer</code> בקשר <b>רבים-לרבים</b> (<code>0..*</code> בצד המתנדב, <code>1..*</code> בצד התפקיד): מתנדב נושא תפקיד אחד או יותר, ותפקיד משותף למתנדבים רבים.</li>
+<li><b>איך זה מאפשר הרשאות לפי תפקיד:</b> ההרשאות <b>תלויות ב-<code>Role</code></b>, לא במתנדב עצמו. ההרשאות של מתנדב הן <b>איחוד ההרשאות של מופעי <code>Role</code> המקושרים אליו</b> (<code>getPermissions()</code>). נהג שהוא גם משקיף מקבל את הרשאות שניהם דרך <b>שני מופעי קישור</b>, והוא נשאר <b>ישות אחת</b> במערכת, עם מספר מתנדב אחד ובלי כפילות רשומות.</li>
+<li><b>הנימוק:</b> תפקיד אינו מגדיר טיפוס שונה של אדם, אלא מה מותר לו לעשות. הוא עשוי להצטבר ולהשתנות במהלך היום, ולכן הוא <b>שיוך</b> שאפשר להוסיף ולהסיר, ולא מבנה קבוע כמו ירושה.</li>
+</ol>
+</div>
+<div class="alt">
+<p><b>חלופה מזכה במלואה:</b> תכונה <b>רב-ערכית</b> מטיפוס enumerator (<code>roles : RoleType[*]</code>) על <code>Volunteer</code>, <b>רק</b> אם הסטודנט מנמק שאין צורך לנהל קטלוג תפקידים במערכת <b>ומציין את המחיר</b>: לא ניתן להוסיף תפקיד חדש בזמן ריצה (שינוי בקוד), ולא ניתן לתלות בתפקיד נתונים משלו (הרשאות, הכשרה נדרשת).</p>
+</div>
+<div class="alt">
+<p><b>חלופה מזכה במלואה:</b> מחלקת <code>User</code> נפרדת (גישה בלבד: שם משתמש, הרשאות) המקושרת <code>1</code> מול <code>1</code> ל-<code>Volunteer</code>, כשהתפקידים תלויים באחת מהן, ובלבד שאינם ממודלים בירושה.</p>
+</div>
+<div class="mistake">
+<p><b>הסתירה:</b> ירושה: <code>Driver</code> / <code>Observer</code> / <code>Caller</code> כתת-מחלקות של <code>Volunteer</code> (או של <code>User</code>): לפי התרשים מתנדב הוא מופע של סוג אחד, ולכן נהג שהוא גם משקיף יחייב שתי רשומות נפרדות לאותו אדם (שני מספרי מתנדב, פיצול היסטוריית השיבוצים), בסתירה ישירה לנתון · תכונה חד-ערכית <code>role : String</code>: לא ניתן להחזיק שני תפקידים.</p>
+</div>
+<h3 class="sub">7.4 (3 נק׳): מספר מתנדב ומספר בקשה, והמפתחות הראשיים</h3>
+<p class="qtext">לכל בקשת הסעה מונפק מספר בקשה, ולכל מתנדב מספר מתנדב. כשהמערכת תמומש בפועל מעל בסיס נתונים רלציוני, כל מחלקה בתרשים שלכם תיוצג בטבלה ומספר המתנדב ומספר הבקשה יהיו מפתחות ראשיים בבסיס הנתונים. האם נדרש מאפיין כזה גם בתרשים המחלקות כדי להבחין בין שני מופעים של אותה מחלקה? נמקו.</p>
+<div class="answer">
+<p><b>תשובת מודל:</b></p>
+<ol>
+<li><b>ההכרעה: לא.</b> מחלקה אינה זקוקה למאפיין מזהה כדי להבחין בין מופעים, ובתרשים מחלקות <b>אין מושג של מפתח</b>. <code>volunteerNumber</code> ו-<code>requestNumber</code> מופיעים בתרשים שלנו כ<b>מאפיינים עסקיים רגילים</b>, משום שהמטה מנפיק אותם ואנשים נוקבים בהם בפועל (מוקדן שמברר מה קורה עם בקשה מספר X), ולא כדי לזהות את המופע.</li>
+<li><b>זהות האובייקט:</b> לכל מופע יש <b>זהות משל עצמו</b>, בלי תלות בערכי המאפיינים שלו. שתי בקשות הסעה שכל ערכיהן זהים (אותה כתובת, אותה שעה, אותו מספר נוסעים) הן עדיין שני אובייקטים נפרדים.</li>
+<li><b>ההנגדה לטבלה:</b> בטבלה, לעומת זאת, שורה היא אוסף ערכים בלבד, ואי-אפשר להבחין בין שתי שורות אלא לפי ערכי המפתח. לכן המעבר לייצוג רלציוני <b>מחייב</b> מפתח שהמודל אינו זקוק לו, וזה כל תפקידו של המספר שם.</li>
+</ol>
+</div>
+<div class="alt">
+<p><b>הערה:</b> תפקיד המפתח בטבלה <b>נתון בגוף השאלה</b>; הנבחן הוא צד המודל. <b>זו שאלת מידול, לא שאלת עיצוב בסיסי נתונים:</b> נרמול, SQL, join, אינדוקס או שרטוט סכימה אינם נדרשים כאן.</p>
+</div>
+<div class="mistake">
+<p><b>תשובה חלקית:</b> הכרעה נכונה שנומקה רק בהנגדה לטבלה, בלי זהות האובייקט.</p>
+</div>
+<div class="alt">
+<p><b>חלופה מזכה במלואה:</b> סטודנט המעיר שבמימוש היה מעדיף <b>מפתח שהמערכת מייצרת</b> על פני המספר העסקי (המספר העסקי עלול להשתנות, להינתן מחדש או לא להיות ידוע ברגע הקליטה): זו הערה לגיטימית, והיא אינה פוגעת בתשובה. מזכה גם הדגמת אותה הבחנה על מחלקה אחרת בתרשים (הקלפי ומספר הקלפי, או התומך והמספר הסידורי בפנקס).</p>
+</div>
+<div class="mistake">
+<p><b>הסתירה:</b> "כן, בלי המאפיין הזה אי אפשר להבחין בין שני מופעים": סותר את זהות האובייקט · "המספר הוא המפתח גם בתרשים וגם בטבלה, אין הבדל": מבטל את ההבחנה הנבחנת · תשובה שכל כולה מנגנוני בסיס נתונים בלי אף אמירה על ההבדל בין המודל לטבלה.</p>
+</div>
+<h3 class="sub">7.5 (3 נק׳): דיווחי השעה מהקלפי</h3>
+<p class="qtext">משקיף הקלפי מדווח כל שעה כמה מצביעים נספרו בקלפי שלו, ומנהל המטה אמר שאין צורך לשמור את כל דיווחי השעה, ודי בכך שיישמר המספר האחרון לכל קלפי. האם קיימים בתרשים שלכם מחלקה או מאפיין עבור הדיווחים? נמקו את ההכרעה, וציינו מדוע בחרתם כך.</p>
+<div class="answer">
+<p><b>ההכרעה בפתרון הבית: מאפיין, לא מחלקה (מסלול א', נאמנות לדרישת הלקוח).</b> על <code>PollingStation</code> יושבים <code>lastReportedCount</code> ו-<code>lastReportTime</code>, ואין מחלקת דיווח נפרדת.</p>
+<p><b>תשובת מודל:</b></p>
+<ol>
+<li><b>הכרעה מפורשת התואמת את התרשים:</b> אין מחלקת דיווח; המספר האחרון שדווח ושעת הדיווח הם <b>מאפיינים של <code>PollingStation</code></b>, והדיווח החדש דורס את הקודם (<code>updateTurnout()</code>).</li>
+<li><b>הנימוק:</b> כך הגדיר הלקוח במפורש, וההחלטה העסקית שהמערכת צריכה לתמוך בה, סימון קלפי בעדיפות, מתקבלת מול המספר העדכני בלבד (לעומת היעד לאותה שעה). אין להמציא ישויות שהלקוח לא ביקש.</li>
+<li><b>מדוע בחרתם כך, מול החלופה:</b> זו בחירה מודעת לטובת פשטות ונאמנות להגדרת הלקוח, ושילמנו עליה בוויתור על ההיסטוריה: אי-אפשר לראות את מגמת השעות, לדעת מי דיווח ומתי, או לבדוק בדיעבד מתי קלפי פיגרה אחרי היעד לצורך הפקת לקחים.</li>
+</ol>
+<p><b>החלופה, המזכה במלואה (מסלול ב', הכרעת המנתח):</b> מחלקה נפרדת <b><code>StationReport</code></b> (שעת דיווח, מספר מצביעים) בקשר <code>1</code> מול <code>*</code> עם <code>PollingStation</code>, וקשר למשקיף שדיווח. הנימוק: זו דרישה בעייתית, הלקוח מתאר את המצב הקיים (מספר שנמחק ונדרס) ולא את הצורך, ושמירת כל הדיווחים היא תנאי למעקב, לבקרה ולהפקת לקחים, שהם ממטרות הפרויקט המוצהרות. והמודעות: זו חריגה מדרישה מפורשת של הלקוח, שיש להציגה ולאשרה מולו, ותוספת נפח ומורכבות לעומת שדה יחיד.</p>
+</div>
+<div class="alt">
+<p><b>שני מסלולים לניקוד מלא, ואין מסלול "נכון יחיד".</b> השאלה מבקשת נימוק ו"מדוע בחרתם כך", ולא מחיר דווקא: ציון המחיר הוא דרך אחת לענות על כך, ומזכה גם התייחסות מפורשת לחלופה שנדחתה.</p>
+</div>
+<div class="mistake">
+<p><b>סתירה פנימית:</b> תרשים שאינו תואם את ההכרעה שנכתבה.</p>
+</div>
+</section>
+<section class="q" id="q8">
+<h2><span class="pts">12 נק׳</span>שאלה 8: תרשים מצבים של בקשת ההסעה</h2>
+
+<p class="qtext">הכינו state diagram עבור המצבים השונים שאובייקט בקשת ההסעה (RideRequest) יכול להיות בהם, ממועד פתיחת הבקשה ועד לסיום מחזור החיים שלה.</p>
+<h3 class="sub">8.1 (6 נק׳): התרשים</h3>
+<p class="qtext">הכינו state diagram עבור המצבים השונים שאובייקט בקשת ההסעה (RideRequest) יכול להיות בהם, ממועד פתיחת הבקשה ועד לסיום מחזור החיים שלה. במידת הצורך, ניתן להשתמש בידע ובהיגיון לגבי מצבים אפשריים במערכת כזו. התרשים עצמו נבדק בצורה כללית, לבחינת השימוש הנכון בסימונים ובהבנת מהות התרשים.</p>
+<figure class="diagram"><svg id="state0-diagram" viewBox="0 0 1360 1000" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <marker id="state0-arrow-slate" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="#334155"></polygon></marker>
+      <marker id="state0-arrow-blue" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="#334155"></polygon></marker>
+      <marker id="state0-arrow-green" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="#15803d"></polygon></marker>
+      <marker id="state0-arrow-orange" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="#c2410c"></polygon></marker>
+      <marker id="state0-arrow-red" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="#b91c1c"></polygon></marker>
+      <marker id="state0-arrow-purple" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="#7c3aed"></polygon></marker>
+      <marker id="state0-arrow-teal" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="#0891b2"></polygon></marker>
+      <filter id="state0-shadow" x="-5%" y="-5%" width="110%" height="110%"><fedropshadow dx="0" dy="1" stdDeviation="2" flood-opacity="0.12"></fedropshadow></filter>
+      <pattern id="state0-dotgrid" width="24" height="24" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r="0.8" fill="#cbd5e1"></circle></pattern>
+    </defs>
+
+    <rect x="0" y="0" width="1360" height="1000" fill="#f8fafc"></rect>
+    <rect x="0" y="0" width="1360" height="1000" fill="url(#state0-dotgrid)"></rect>
+
+    <g id="state0-composite-active">
+      <rect x="40" y="50" width="780" height="620" rx="20" ry="20" fill="#f0f7ff" stroke="#475569" stroke-width="2" stroke-dasharray="8 4"></rect>
+      <text x="59" y="76" font-size="10.5" font-style="italic" fill="#7c3aed" font-family="IBM Plex Mono">«composite»</text>
+      <text x="59" y="100" font-size="15" font-weight="800" fill="#1e293b" font-family="Noto Sans Hebrew, sans-serif">בקשה פעילה</text>
+      <line x1="50" y1="110" x2="810" y2="110" stroke="#475569" stroke-width="1"></line>
+      <line x1="50" y1="121" x2="810" y2="121" stroke="#94a3b8" stroke-width="1" stroke-dasharray="6 3"></line>
+    </g>
+    <g id="state0-composite-preAssign">
+      <rect x="60" y="150" width="320" height="400" rx="20" ry="20" fill="#f0f7ff" stroke="#3b82f6" stroke-width="2" stroke-dasharray="8 4"></rect>
+      <text x="79" y="176" font-size="10.5" font-style="italic" fill="#7c3aed" font-family="IBM Plex Mono">«composite»</text>
+      <text x="79" y="200" font-size="15" font-weight="800" fill="#1e293b" font-family="Noto Sans Hebrew, sans-serif">בקשה טרם שובץ לה נהג</text>
+      <line x1="70" y1="210" x2="370" y2="210" stroke="#3b82f6" stroke-width="1"></line>
+      <line x1="70" y1="221" x2="370" y2="221" stroke="#94a3b8" stroke-width="1" stroke-dasharray="6 3"></line>
+    </g>
+
+    <path d="M 330 28 L 330 50" fill="none" stroke="#334155" stroke-width="1.9" marker-end="url(#state0-arrow-slate)"></path>
+    <g font-family="IBM Plex Mono">
+      <rect x="391.4" y="9.0" width="157.3" height="13.5" fill="white" opacity="0.94" rx="3"></rect>
+      <text x="470" y="19" text-anchor="middle" font-size="9.5" fill="#334155">פתיחת בקשת הסעה מתוך שיחה</text>
+      <rect x="446.3" y="23.0" width="47.3" height="13.5" fill="white" opacity="0.94" rx="3"></rect>
+      <text x="470" y="33" text-anchor="middle" font-size="8.6" fill="#7c3aed">[מוקדן]</text>
+    </g>
+    <path d="M 100 140 L 100 150" fill="none" stroke="#334155" stroke-width="1.9" marker-end="url(#state0-arrow-slate)"></path>
+    <path d="M 75 236 L 75 271 L 90 271" fill="none" stroke="#334155" stroke-width="1.9" marker-end="url(#state0-arrow-slate)"></path>
+    <path d="M 350 258 L 480 258" fill="none" stroke="#0891b2" stroke-width="1.9" marker-end="url(#state0-arrow-teal)"></path>
+    <g font-family="IBM Plex Mono">
+      <rect x="365.8" y="209.0" width="98.3" height="13.5" fill="white" opacity="0.94" rx="3"></rect>
+      <text x="415" y="219" text-anchor="middle" font-size="9.5" fill="#0891b2">שיבוץ נהג מתנדב</text>
+      <rect x="358.2" y="223.0" width="113.7" height="13.5" fill="white" opacity="0.94" rx="3"></rect>
+      <text x="415" y="233" text-anchor="middle" font-size="8.8" fill="#15803d" style="direction:ltr;unicode-bidi:isolate">/ assignmentRound++</text>
+      <rect x="380.7" y="237.0" width="68.7" height="13.5" fill="white" opacity="0.94" rx="3"></rect>
+      <text x="415" y="247" text-anchor="middle" font-size="8.6" fill="#7c3aed">[רכז הסעות]</text>
+    </g>
+    <path d="M 480 292 L 350 292" fill="none" stroke="#c2410c" stroke-width="1.9" marker-end="url(#state0-arrow-orange)"></path>
+    <g font-family="IBM Plex Mono">
+      <rect x="312.8" y="309.0" width="204.4" height="13.5" fill="white" opacity="0.94" rx="3"></rect>
+      <text x="415" y="319" text-anchor="middle" font-size="9.5" fill="#c2410c">דחיית השיבוץ או after(זמן האישור)</text>
+      <rect x="363.6" y="323.0" width="102.8" height="13.5" fill="white" opacity="0.94" rx="3"></rect>
+      <text x="415" y="333" text-anchor="middle" font-size="8.8" fill="#0891b2">[מספר הסבבים &lt; 2]</text>
+      <rect x="356.7" y="337.0" width="116.6" height="13.5" fill="white" opacity="0.94" rx="3"></rect>
+      <text x="415" y="347" text-anchor="middle" font-size="8.6" fill="#7c3aed">[נהג מתנדב / המערכת]</text>
+      <rect x="326.7" y="351.0" width="176.7" height="13.5" fill="white" opacity="0.94" rx="3"></rect>
+      <text x="415" y="361" text-anchor="middle" font-size="8.4" fill="#64748b">מעבר חוזר, ניתן לעבור בו בכל סבב</text>
+    </g>
+    <path d="M 640 318 L 640 469 L 350 469" fill="none" stroke="#b91c1c" stroke-width="1.9" marker-end="url(#state0-arrow-red)"></path>
+    <g font-family="IBM Plex Mono">
+      <rect x="377.8" y="406.0" width="204.4" height="13.5" fill="white" opacity="0.94" rx="3"></rect>
+      <text x="480" y="416" text-anchor="middle" font-size="9.5" fill="#b91c1c">דחיית השיבוץ או after(זמן האישור)</text>
+      <rect x="428.6" y="420.0" width="102.8" height="13.5" fill="white" opacity="0.94" rx="3"></rect>
+      <text x="480" y="430" text-anchor="middle" font-size="8.8" fill="#0891b2">[מספר הסבבים ≥ 2]</text>
+      <rect x="421.7" y="434.0" width="116.6" height="13.5" fill="white" opacity="0.94" rx="3"></rect>
+      <text x="480" y="444" text-anchor="middle" font-size="8.6" fill="#7c3aed">[נהג מתנדב / המערכת]</text>
+    </g>
+    <path d="M 730 318 L 730 560" fill="none" stroke="#15803d" stroke-width="1.9" marker-end="url(#state0-arrow-green)"></path>
+    <g font-family="IBM Plex Mono">
+      <rect x="689.7" y="503.0" width="80.7" height="13.5" fill="white" opacity="0.94" rx="3"></rect>
+      <text x="730" y="513" text-anchor="middle" font-size="9.5" fill="#15803d">אישור השיבוץ</text>
+      <rect x="695.7" y="517.0" width="68.7" height="13.5" fill="white" opacity="0.94" rx="3"></rect>
+      <text x="730" y="527" text-anchor="middle" font-size="8.6" fill="#7c3aed">[נהג מתנדב]</text>
+    </g>
+    <path d="M 220 508 L 220 599 L 480 599" fill="none" stroke="#15803d" stroke-width="1.9" marker-end="url(#state0-arrow-green)"></path>
+    <g font-family="IBM Plex Mono">
+      <rect x="249.6" y="593.0" width="180.8" height="13.5" fill="white" opacity="0.94" rx="3"></rect>
+      <text x="340" y="603" text-anchor="middle" font-size="9.5" fill="#15803d">קביעת נהג ואישורו בטיפול אישי</text>
+      <rect x="305.7" y="607.0" width="68.7" height="13.5" fill="white" opacity="0.94" rx="3"></rect>
+      <text x="340" y="617" text-anchor="middle" font-size="8.6" fill="#7c3aed">[רכז הסעות]</text>
+    </g>
+    <path d="M 380 200 L 920 200" fill="none" stroke="#b91c1c" stroke-width="1.9" marker-end="url(#state0-arrow-red)"></path>
+    <g font-family="IBM Plex Mono">
+      <rect x="612.6" y="176.0" width="74.8" height="13.5" fill="white" opacity="0.94" rx="3"></rect>
+      <text x="650" y="186" text-anchor="middle" font-size="9.5" fill="#b91c1c">ביטול הבקשה</text>
+      <rect x="606.8" y="190.0" width="86.4" height="13.5" fill="white" opacity="0.94" rx="3"></rect>
+      <text x="650" y="200" text-anchor="middle" font-size="8.8" fill="#0891b2">[טרם שובץ נהג]</text>
+      <rect x="626.3" y="204.0" width="47.3" height="13.5" fill="white" opacity="0.94" rx="3"></rect>
+      <text x="650" y="214" text-anchor="middle" font-size="8.6" fill="#7c3aed">[מוקדן]</text>
+    </g>
+    <path d="M 700 50 L 700 30 L 1050 30 L 1050 180" fill="none" stroke="#b91c1c" stroke-width="1.9" marker-end="url(#state0-arrow-red)"></path>
+    <g font-family="IBM Plex Mono">
+      <rect x="837.6" y="6.0" width="74.8" height="13.5" fill="white" opacity="0.94" rx="3"></rect>
+      <text x="875" y="16" text-anchor="middle" font-size="9.5" fill="#b91c1c">ביטול הבקשה</text>
+      <rect x="815.4" y="20.0" width="119.1" height="13.5" fill="white" opacity="0.94" rx="3"></rect>
+      <text x="875" y="30" text-anchor="middle" font-size="8.8" fill="#0891b2">[בכל שלב, ללא הגבלה]</text>
+      <rect x="838.0" y="34.0" width="74.0" height="13.5" fill="white" opacity="0.94" rx="3"></rect>
+      <text x="875" y="44" text-anchor="middle" font-size="8.6" fill="#7c3aed">[מנהל משמרת]</text>
+    </g>
+    <path d="M 770 615 L 920 615" fill="none" stroke="#7c3aed" stroke-width="1.9" marker-end="url(#state0-arrow-purple)"></path>
+    <g font-family="IBM Plex Mono">
+      <rect x="787.3" y="623.0" width="145.5" height="13.5" fill="white" opacity="0.94" rx="3"></rect>
+      <text x="860" y="633" text-anchor="middle" font-size="9.5" fill="#7c3aed">דיווח שהתומך הגיע לקלפי</text>
+      <rect x="825.7" y="637.0" width="68.7" height="13.5" fill="white" opacity="0.94" rx="3"></rect>
+      <text x="860" y="647" text-anchor="middle" font-size="8.6" fill="#7c3aed">[נהג מתנדב]</text>
+    </g>
+    <path d="M 770 575 L 850 575 L 850 451 L 920 451" fill="none" stroke="#c2410c" stroke-width="1.9" marker-end="url(#state0-arrow-orange)"></path>
+    <g font-family="IBM Plex Mono">
+      <rect x="774.3" y="493.0" width="151.4" height="13.5" fill="white" opacity="0.94" rx="3"></rect>
+      <text x="850" y="503" text-anchor="middle" font-size="9.5" fill="#c2410c">דיווח שהתומך אינו בכתובת</text>
+      <rect x="815.7" y="507.0" width="68.7" height="13.5" fill="white" opacity="0.94" rx="3"></rect>
+      <text x="850" y="517" text-anchor="middle" font-size="8.6" fill="#7c3aed">[נהג מתנדב]</text>
+    </g>
+    <path d="M 1050 642 L 1050 730" fill="none" stroke="#334155" stroke-width="1.9" marker-end="url(#state0-arrow-slate)"></path>
+    <g font-family="IBM Plex Mono">
+      <rect x="994.9" y="676.0" width="110.1" height="13.5" fill="white" opacity="0.94" rx="3"></rect>
+      <text x="1050" y="686" text-anchor="middle" font-size="9.5" fill="#334155">at(סגירת הקלפיות)</text>
+    </g>
+    <path d="M 1180 451 L 1220 451 L 1220 745 L 1200 745" fill="none" stroke="#334155" stroke-width="1.9" marker-end="url(#state0-arrow-slate)"></path>
+    <g font-family="IBM Plex Mono">
+      <rect x="1164.9" y="510.0" width="110.1" height="13.5" fill="white" opacity="0.94" rx="3"></rect>
+      <text x="1220" y="520" text-anchor="middle" font-size="9.5" fill="#334155">at(סגירת הקלפיות)</text>
+    </g>
+    <path d="M 1180 211 L 1280 211 L 1280 770 L 1200 770" fill="none" stroke="#334155" stroke-width="1.9" marker-end="url(#state0-arrow-slate)"></path>
+    <g font-family="IBM Plex Mono">
+      <rect x="1224.9" y="320.0" width="110.1" height="13.5" fill="white" opacity="0.94" rx="3"></rect>
+      <text x="1280" y="330" text-anchor="middle" font-size="9.5" fill="#334155">at(סגירת הקלפיות)</text>
+    </g>
+    <path d="M 1060 792 L 1060 868" fill="none" stroke="#334155" stroke-width="1.9" marker-end="url(#state0-arrow-slate)"></path>
+    <g font-family="IBM Plex Mono">
+      <rect x="972.5" y="813.0" width="174.9" height="13.5" fill="white" opacity="0.94" rx="3"></rect>
+      <text x="1060" y="823" text-anchor="middle" font-size="9.5" fill="#334155">after(6 חודשים מיום הבחירות)</text>
+      <rect x="1030.4" y="827.0" width="59.1" height="13.5" fill="white" opacity="0.94" rx="3"></rect>
+      <text x="1060" y="837" text-anchor="middle" font-size="8.8" fill="#15803d" style="direction:ltr;unicode-bidi:isolate">/ purge()</text>
+    </g>
+
+    <g id="state0-state-waiting" filter="url(#state0-shadow)">
+      <rect x="90" y="240" width="260" height="62" rx="18" ry="18" fill="#ffffff" stroke="#3b82f6" stroke-width="2"></rect>
+      <rect x="90" y="240" width="260" height="27" rx="18" ry="18" fill="#eef4ff"></rect>
+      <rect x="90" y="255" width="260" height="12" fill="#eef4ff"></rect>
+      <text x="220" y="259" text-anchor="middle" font-size="13" font-weight="700" fill="#1e293b" font-family="Noto Sans Hebrew, sans-serif">בקשה ממתינה לשיבוץ</text>
+      <line x1="90" y1="267" x2="350" y2="267" stroke="#3b82f6" stroke-width="1"></line>
+      <text x="100" y="286" font-size="8.4" font-style="italic" fill="#1e293b" font-family="IBM Plex Mono" style="direction:ltr;unicode-bidi:isolate">entry / setStatus('WaitingAssignment')</text>
+    </g>
+    <g id="state0-state-coordinator" filter="url(#state0-shadow)">
+      <rect x="90" y="430" width="260" height="78" rx="18" ry="18" fill="#fff7ed" stroke="#c2410c" stroke-width="2"></rect>
+      <rect x="90" y="430" width="260" height="27" rx="18" ry="18" fill="#ffedd5"></rect>
+      <rect x="90" y="445" width="260" height="12" fill="#ffedd5"></rect>
+      <text x="220" y="449" text-anchor="middle" font-size="13" font-weight="700" fill="#7c2d12" font-family="Noto Sans Hebrew, sans-serif">בקשה בטיפול אישי של הרכז</text>
+      <line x1="90" y1="457" x2="350" y2="457" stroke="#c2410c" stroke-width="1"></line>
+      <text x="100" y="476" font-size="8.4" font-style="italic" fill="#7c2d12" font-family="IBM Plex Mono" style="direction:ltr;unicode-bidi:isolate">entry / setStatus('CoordinatorHandling')</text>
+      <text x="100" y="492" font-size="9.3" font-style="italic" fill="#7c2d12" font-family="IBM Plex Mono" style="direction:ltr;unicode-bidi:isolate">do / arrangeDriverManually()</text>
+    </g>
+    <g id="state0-state-awaitingConfirm" filter="url(#state0-shadow)">
+      <rect x="480" y="240" width="290" height="78" rx="18" ry="18" fill="#ecfeff" stroke="#0891b2" stroke-width="2"></rect>
+      <rect x="480" y="240" width="290" height="27" rx="18" ry="18" fill="#cffafe"></rect>
+      <rect x="480" y="255" width="290" height="12" fill="#cffafe"></rect>
+      <text x="625" y="259" text-anchor="middle" font-size="13" font-weight="700" fill="#164e63" font-family="Noto Sans Hebrew, sans-serif">בקשה ממתינה לאישור הנהג</text>
+      <line x1="480" y1="267" x2="770" y2="267" stroke="#0891b2" stroke-width="1"></line>
+      <text x="490" y="286" font-size="8.4" font-style="italic" fill="#164e63" font-family="IBM Plex Mono" style="direction:ltr;unicode-bidi:isolate">entry / setStatus('AwaitingDriverConfirmation')</text>
+      <text x="490" y="302" font-size="9.3" font-style="italic" fill="#164e63" font-family="IBM Plex Mono" style="direction:ltr;unicode-bidi:isolate">do / waitForDriverResponse()</text>
+    </g>
+    <g id="state0-state-enRoute" filter="url(#state0-shadow)">
+      <rect x="480" y="560" width="290" height="78" rx="18" ry="18" fill="#ecfeff" stroke="#0891b2" stroke-width="2"></rect>
+      <rect x="480" y="560" width="290" height="27" rx="18" ry="18" fill="#cffafe"></rect>
+      <rect x="480" y="575" width="290" height="12" fill="#cffafe"></rect>
+      <text x="625" y="579" text-anchor="middle" font-size="13" font-weight="700" fill="#164e63" font-family="Noto Sans Hebrew, sans-serif">בקשה בביצוע, נהג בדרך לאיסוף</text>
+      <line x1="480" y1="587" x2="770" y2="587" stroke="#0891b2" stroke-width="1"></line>
+      <text x="490" y="606" font-size="9.3" font-style="italic" fill="#164e63" font-family="IBM Plex Mono" style="direction:ltr;unicode-bidi:isolate">entry / setStatus('DriverEnRoute')</text>
+      <text x="490" y="622" font-size="9.3" font-style="italic" fill="#164e63" font-family="IBM Plex Mono" style="direction:ltr;unicode-bidi:isolate">do / trackPickup()</text>
+    </g>
+    <g id="state0-state-cancelled" filter="url(#state0-shadow)">
+      <rect x="920" y="180" width="260" height="62" rx="18" ry="18" fill="#fef2f2" stroke="#b91c1c" stroke-width="2"></rect>
+      <rect x="920" y="180" width="260" height="27" rx="18" ry="18" fill="#fee2e2"></rect>
+      <rect x="920" y="195" width="260" height="12" fill="#fee2e2"></rect>
+      <text x="1050" y="199" text-anchor="middle" font-size="13" font-weight="700" fill="#7f1d1d" font-family="Noto Sans Hebrew, sans-serif">בקשה בוטלה</text>
+      <line x1="920" y1="207" x2="1180" y2="207" stroke="#b91c1c" stroke-width="1"></line>
+      <text x="930" y="226" font-size="9.3" font-style="italic" fill="#7f1d1d" font-family="IBM Plex Mono" style="direction:ltr;unicode-bidi:isolate">entry / closeAsCancelled()</text>
+    </g>
+    <g id="state0-state-closedNotFound" filter="url(#state0-shadow)">
+      <rect x="920" y="420" width="260" height="62" rx="18" ry="18" fill="#fff7ed" stroke="#c2410c" stroke-width="2"></rect>
+      <rect x="920" y="420" width="260" height="27" rx="18" ry="18" fill="#ffedd5"></rect>
+      <rect x="920" y="435" width="260" height="12" fill="#ffedd5"></rect>
+      <text x="1050" y="439" text-anchor="middle" font-size="13" font-weight="700" fill="#7c2d12" font-family="Noto Sans Hebrew, sans-serif">בקשה נסגרה ללא ביצוע</text>
+      <line x1="920" y1="447" x2="1180" y2="447" stroke="#c2410c" stroke-width="1"></line>
+      <text x="930" y="466" font-size="9.3" font-style="italic" fill="#7c2d12" font-family="IBM Plex Mono" style="direction:ltr;unicode-bidi:isolate">entry / closeAsNotFound()</text>
+    </g>
+    <g id="state0-state-completed" filter="url(#state0-shadow)">
+      <rect x="920" y="580" width="260" height="62" rx="18" ry="18" fill="#faf5ff" stroke="#7c3aed" stroke-width="2"></rect>
+      <rect x="920" y="580" width="260" height="27" rx="18" ry="18" fill="#f3e8ff"></rect>
+      <rect x="920" y="595" width="260" height="12" fill="#f3e8ff"></rect>
+      <text x="1050" y="599" text-anchor="middle" font-size="13" font-weight="700" fill="#4c1d95" font-family="Noto Sans Hebrew, sans-serif">בקשה הושלמה</text>
+      <line x1="920" y1="607" x2="1180" y2="607" stroke="#7c3aed" stroke-width="1"></line>
+      <text x="930" y="626" font-size="9.3" font-style="italic" fill="#4c1d95" font-family="IBM Plex Mono" style="direction:ltr;unicode-bidi:isolate">entry / closeAsCompleted()</text>
+    </g>
+    <g id="state0-state-archive" filter="url(#state0-shadow)">
+      <rect x="920" y="730" width="280" height="62" rx="18" ry="18" fill="#ffffff" stroke="#475569" stroke-width="2"></rect>
+      <rect x="920" y="730" width="280" height="27" rx="18" ry="18" fill="#f1f5f9"></rect>
+      <rect x="920" y="745" width="280" height="12" fill="#f1f5f9"></rect>
+      <text x="1060" y="749" text-anchor="middle" font-size="13" font-weight="700" fill="#1e293b" font-family="Noto Sans Hebrew, sans-serif">בקשה בארכיון הפעילות</text>
+      <line x1="920" y1="757" x2="1200" y2="757" stroke="#475569" stroke-width="1"></line>
+      <text x="930" y="776" font-size="9.3" font-style="italic" fill="#1e293b" font-family="IBM Plex Mono" style="direction:ltr;unicode-bidi:isolate">entry / setStatus('Archived')</text>
+    </g>
+
+    <circle id="state0-pseudo-i1" cx="330" cy="20" r="8" fill="#1e293b"></circle>
+    <circle id="state0-pseudo-i2" cx="100" cy="132" r="8" fill="#1e293b"></circle>
+    <circle id="state0-pseudo-i3" cx="75" cy="228" r="8" fill="#1e293b"></circle>
+    <g id="state0-pseudo-fin"><circle cx="1060" cy="880" r="12" fill="none" stroke="#1e293b" stroke-width="2"></circle><circle cx="1060" cy="880" r="7" fill="#1e293b"></circle></g>
+
+      <text x="20" y="940" font-size="10" fill="#64748b" font-family="Noto Sans Hebrew, sans-serif">כל חץ נושא: אירוע [תנאי] / פעולה, ובסוגריים מרובעים סגולים, בעל התפקיד הרשאי להפעילו. מעבר היוצא מגבול מצב-על חל על כל המצבים שבתוכו.</text>
+      <text x="20" y="955" font-size="10" fill="#64748b" font-family="Noto Sans Hebrew, sans-serif">מנהל המשמרת רשאי לשנות כל סטטוס בכל שלב: הוא רשאי להפעיל כל אחד מן המעברים שבתרשים. הביטול בכל שלב מוצג במפורש כמעבר מגבול "בקשה פעילה".</text>
+      <text x="20" y="970" font-size="10" fill="#64748b" font-family="Noto Sans Hebrew, sans-serif">ארכיון אינו מצב סיום. מצב הסיום (◎) פירושו שרשומת הבקשה נמחקה מהמערכת בתום תקופת השמירה.</text>
+      <text x="20" y="985" font-size="10" fill="#64748b" font-family="Noto Sans Hebrew, sans-serif">לכל מצב פעולת כניסה אחת. מצב תוצאה מקבל שיטת עטיפה אחת (closeAs…), שבגופה setStatus ו-setClosureReason (closeAsCancelled ⇐ setStatus('Cancelled')).</text>
+  </svg>
+<figcaption>פתרון לדוגמה: שני מצבי-על מקוננים. מגבול הפנימי, "בקשה טרם שובץ לה נהג", יוצא ביטול המוקדן; מגבול החיצוני, "בקשה פעילה", יוצא ביטול מנהל המשמרת. שימו לב למעבר החוזר להמתנה לשיבוץ ולהסלמה אל הרכז בתנאי כמותי, ולזנב ארכיון ← מצב סיום בתום ששה חודשים מיום הבחירות.</figcaption>
+</figure>
+<p class="scrollhint">↔ התרשים רחב מן העמוד, ניתן לגלול אותו לצדדים.</p>
+<p class="difflink"><a href="diagrams/state-solution.html" target="_blank" rel="noopener">↗ פתחו את תרשים המצבים המלא</a><small>עמוד נפרד, ניתן להגדלה ולהדפסה</small></p>
+<div class="answer">
+<p><b>המצבים (8) ושני מצבי-על:</b></p>
+<div class="tablewrap"><table>
+<thead><tr><th>מצב</th><th>נכנסים אליו</th><th>יוצאים ממנו</th></tr></thead>
+<tbody>
+<tr><td><b>מצב-על: בקשה פעילה</b> (מכיל את כל המצבים הפעילים)</td><td>פתיחת בקשת הסעה מתוך שיחה [מוקדן]</td><td><code>ביטול הבקשה [בכל שלב, ללא הגבלה] [מנהל משמרת]</code> → בוטלה</td></tr>
+<tr><td><b>מצב-על: בקשה טרם שובץ לה נהג</b> (מכיל את "ממתינה לשיבוץ" ואת "בטיפול אישי של הרכז")</td><td></td><td><code>ביטול הבקשה [טרם שובץ נהג] [מוקדן]</code> → בוטלה</td></tr>
+<tr><td><b>בקשה ממתינה לשיבוץ</b> (<code>WaitingAssignment</code>)</td><td>פתיחת הבקשה · חזרה מסבב שנכשל</td><td><code>שיבוץ נהג מתנדב / assignmentRound++ [רכז הסעות]</code></td></tr>
+<tr><td><b>בקשה ממתינה לאישור הנהג</b> (<code>AwaitingDriverConfirmation</code>)</td><td>שיבוץ נהג</td><td><code>אישור השיבוץ [נהג מתנדב]</code> · <code>דחיית השיבוץ או after(זמן האישור) [מספר הסבבים &lt; 2]</code> → חזרה להמתנה · אותו אירוע <code>[מספר הסבבים ≥ 2]</code> → טיפול אישי של הרכז</td></tr>
+<tr><td><b>בקשה בטיפול אישי של הרכז</b> (<code>CoordinatorHandling</code>)</td><td>הסלמה אחרי הסבב השני</td><td><code>קביעת נהג ואישורו בטיפול אישי [רכז הסעות]</code></td></tr>
+<tr><td><b>בקשה בביצוע, נהג בדרך לאיסוף</b> (<code>DriverEnRoute</code>)</td><td>אישור השיבוץ · טיפול אישי של הרכז</td><td><code>דיווח שהתומך הגיע לקלפי [נהג מתנדב]</code> · <code>דיווח שהתומך אינו בכתובת [נהג מתנדב]</code></td></tr>
+<tr><td><b>בקשה הושלמה</b> (<code>Completed</code>, entry / closeAsCompleted())</td><td>התומך הגיע לקלפי</td><td><code>at(סגירת הקלפיות)</code> → ארכיון</td></tr>
+<tr><td><b>בקשה נסגרה ללא ביצוע</b> (<code>ClosedNotFound</code>, entry / closeAsNotFound())</td><td>התומך אינו בכתובת</td><td><code>at(סגירת הקלפיות)</code> → ארכיון</td></tr>
+<tr><td><b>בקשה בוטלה</b> (<code>Cancelled</code>, entry / closeAsCancelled())</td><td>ביטול בידי מוקדן (לפני שיבוץ) · ביטול בידי מנהל משמרת (בכל שלב)</td><td><code>at(סגירת הקלפיות)</code> → ארכיון</td></tr>
+<tr><td><b>בקשה בארכיון הפעילות</b> (<code>Archived</code>)</td><td>סגירת הקלפיות, מכל אחד ממצבי התוצאה</td><td><code>after(6 חודשים מיום הבחירות) / purge()</code> → <b>◎</b></td></tr>
+</tbody></table></div>
+<p><b>מצב סיום אחד (◎)</b>, ומגיעים אליו רק מן הארכיון ורק בתום תקופת השמירה. כל מצב תוצאה נכנס בשיטת עטיפה אחת (<code>closeAs…</code>), שבגופה <code>setStatus</code> ו-<code>setClosureReason</code>, כי הכניסה לארכיון דורסת את <code>status</code>.</p>
+</div>
+<div class="mistake">
+<p><b>מוריד נקודות:</b> סטטוס ההצבעה של התומך או מצב הקלפי שהוצגו כמצבי הבקשה · מעברים ללא אירוע · היעדר מצב סיום · יותר מפעולת כניסה אחת במצב.</p>
+</div>
+<div class="alt">
+<p><b>וריאנטים מקובלים במלואם:</b> מצב תוצאה אחד משותף ("נסגרה") עם <code>closureReason</code> מבחין, במקום "נסגרה ללא ביצוע" ו"בוטלה" נפרדים, ובלבד שההבחנה עקבית עם המעברים · בלי מצבי-על, כשההגבלה על הביטול מבוטאת בתנאי על המעבר · בלי מצב ארכיון, במעבר ישיר ממצב התוצאה אל ◎ המתויג בתקופת השמירה · מצב נוסף "המתנה לאישור" שאינו מפוצל מ"שובצה".</p>
+</div>
+<h3 class="sub">8.2 (2 נק׳): הסבבים החוזרים וההסלמה לרכז</h3>
+<p class="qtext">נהג שקיבל שיבוץ עשוי לדחות אותו או לא לאשר בזמן, ואז הבקשה חוזרת להמתנה לשיבוץ; לאחר שני סבבים כאלה היא עוברת לטיפולו האישי של רכז ההסעות. כיצד ייצגתם בתרשים שלכם את החזרה החוזרת ואת מה שקורה לאחר שני הסבבים?</p>
+<div class="answer">
+<p><b>תשובת מודל:</b></p>
+<ol>
+<li><b>המעגל:</b> מ"בקשה ממתינה לאישור הנהג" יוצא <b>מעבר אחד חוזר</b> אל "בקשה ממתינה לשיבוץ", באירוע <code>דחיית השיבוץ או after(זמן האישור)</code>. זהו מעבר יחיד שעוברים בו שוב ושוב, ולא שרשרת מצבים חדשה לכל סבב; מונה הסבבים <code>assignmentRound</code> עולה בכל שיבוץ (<code>/ assignmentRound++</code>).</li>
+<li><b>התנאי הכמותי:</b> ההסלמה היא <b>מעבר נפרד מאותו מצב ובאותו אירוע</b>, המתויג בתנאי <code>[מספר הסבבים ≥ 2]</code>, אל מצב ייעודי "בקשה בטיפול אישי של הרכז", ואילו המעבר החוזר מתויג בתנאי המשלים <code>[מספר הסבבים &lt; 2]</code>. כך התרשים מבחין בין הסבב הראשון, שחוזר להמתנה, לבין השני, שמוסלם.</li>
+</ol>
+</div>
+<div class="alt">
+<p><b>חלופה מזכה במלואה:</b> ספירת הסבבים כפעולה על מעבר הדחייה (<code>מונה סירובים++</code>) והתנאי במילים ("לאחר סירוב שני") · ייצוג ההסלמה כחזרה למצב ההמתנה עם סימון עדיפות לרכז, ובלבד שההבחנה בין שני המקרים מפורשת בתרשים.</p>
+</div>
+<div class="mistake">
+<p><b>הסתירה:</b> מעבר חוזר יחיד בלי כל תנאי: לפי התרשים הבקשה תסתובב בלולאה לנצח ולא תגיע לרכז לעולם · שני מצבי המתנה נפרדים ("המתנה 1", "המתנה 2"): תרשים זרימה מחופש למצבים · מעבר ישיר ל"בטיפול הרכז" כבר בסירוב הראשון, בסתירה לנתון.</p>
+</div>
+<div class="alt">
+<p><b>אין לדרוש</b> את המונח guard; תיאור התנאי במילים מזכה במלואו.</p>
+</div>
+<h3 class="sub">8.3 (2 נק׳): הגבלת הביטול בידי מוקדן מול מנהל המשמרת</h3>
+<p class="qtext">מוקדן רשאי לבטל בקשה כל עוד לא שובץ לה נהג, ואילו מנהל המשמרת רשאי לשנות כל סטטוס בכל שלב. כיצד ייצגתם בתרשים שלכם את ההגבלה החלה על ביטול בידי מוקדן, ובמה היא נבדלת מהאפשרות הנתונה למנהל המשמרת?</p>
+<div class="answer">
+<p><b>תשובת מודל:</b></p>
+<ol>
+<li>מעבר הביטול של המוקדן יוצא <b>רק מהמצבים שלפני שיבוץ נהג</b>: בתרשים הוא יוצא מגבול <b>מצב-העל "בקשה טרם שובץ לה נהג"</b>, המקבץ את "ממתינה לשיבוץ" ואת "בטיפול אישי של הרכז", ומתויג <code>ביטול הבקשה [טרם שובץ נהג] [מוקדן]</code>. מרגע ששובץ נהג הבקשה כבר מחוץ למצב-העל, ואין למוקדן מעבר לבצע.</li>
+<li><b>ההבדל ממנהל המשמרת מיוצג בתרשים עצמו:</b> למנהל המשמרת יש מעבר ביטול <b>נוסף, היוצא מגבול מצב-העל החיצוני "בקשה פעילה"</b>, כלומר גם מ"ממתינה לאישור הנהג" ומ"בדרך לאיסוף", המתויג <code>ביטול הבקשה [בכל שלב, ללא הגבלה] [מנהל משמרת]</code>. ההגבלה על מצב המקור חלה על המוקדן ואינה חלה עליו; הרשאתו הכללית לשנות כל סטטוס היא כלל הרשאה שמאפשר לו להפעיל כל מעבר בתרשים.</li>
+</ol>
+</div>
+<div class="alt">
+<p><b>חלופה מזכה במלואה:</b> מעבר יחיד המתויג באופן חד-משמעי <code>ביטול [מוקדן: לפני שיבוץ / מנהל משמרת: בכל שלב]</code>, ובלבד שהתיוג קריא · מעבר ביטול של המוקדן היוצא מ"ממתינה לשיבוץ" בלבד ומתויג בתנאי, ומעבר נוסף של מנהל המשמרת ממצב מאוחר, בלי מצבי-על.</p>
+</div>
+<div class="mistake">
+<p><b>הסתירה:</b> מעבר ביטול יחיד מכל מצב, בלי תנאי ובלי שם מבצע: לפי התרשים מוקדן רשאי לבטל בקשה שכבר בביצוע, בסתירה לנתון · היעדר מעבר ביטול כלל.</p>
+</div>
+<h3 class="sub">8.4 (2 נק׳): חיי הבקשה לאחר סיום ההסעה וקץ מחזור החיים</h3>
+<p class="qtext">גם לאחר סיום ההסעה נדרשת רשומת הבקשה להפקת לקחים ולדוחות של המטה, ונוהל המטה קובע ששומרים את רשומות הפעילות עד תום ששה חודשים מיום הבחירות. כיצד ייצגתם את שלב חייה של הבקשה שלאחר סיום ההסעה, ומה מסמן בתרשים שלכם את קץ מחזור החיים שלה?</p>
+<div class="answer">
+<p><b>תשובת מודל:</b></p>
+<ol>
+<li><b>הבקשה אינה נעלמת עם סיום ההסעה.</b> היא נכנסת למצב תוצאה ("הושלמה", "נסגרה ללא ביצוע" או "בוטלה"), ובסגירת הקלפיות (<code>at(סגירת הקלפיות)</code>) עוברת אל מצב <b>"בקשה בארכיון הפעילות"</b>: הרשומה נשמרת לקריאה בלבד, לדוחות ולהפקת לקחים. <code>closureReason</code> נשמר בכניסה למצב התוצאה, כי הכניסה לארכיון דורסת את <code>status</code>.</li>
+<li>קץ מחזור החיים מסומן ב<b>מצב הסיום (◎)</b>, שאליו מגיעים רק מן הארכיון <b>בתום תקופת השמירה</b>: <code>after(6 חודשים מיום הבחירות) / purge()</code>. מצב הסיום פירושו שרשומת הבקשה <b>נמחקה מהמערכת</b>, ולא ש"ההסעה הסתיימה"; "הושלמה" היא תוצאה, לא סוף חיים.</li>
+</ol>
+</div>
+<div class="alt">
+<p><b>חלופה מזכה במלואה:</b> מעבר ישיר ממצב התוצאה אל מצב הסיום, מתויג בתקופת השמירה הקונקרטית, בלי מצב ארכיון נפרד.</p>
+</div>
+<div class="mistake">
+<p><b>הסתירה:</b> אין מצב סיום כלל: מחזור חיים שאינו נגמר · מעבר ל-◎ <b>מיד</b> עם סיום ההסעה: סותר את הצורך בשמירה שנאמר בשאלה · מצב סיום המתויג "סוף התהליך" בלי שהרשומה מוסרת מהמערכת.</p>
+</div>
+<div class="alt">
+<p><b>הערה:</b> סטטוס ההצבעה של התומך ומצב הקלפי אינם מצבים של בקשת ההסעה (ראו 8.1).</p>
+</div>
+</section>
+<section class="q" id="s9">
+<h2>הערות עקביות בין השאלות (למרצה ולבודק)</h2>
+
+<div class="box">
+<p><b>הערה 1: עובדה אחת נבחנת בשאלה אחת.</b> להלן העובדות המשותפות והשאלה שבה הן מוכרעות.</p>
+<div class="tablewrap"><table>
+<thead><tr><th>עובדה בסיפור</th><th>נבחנת ב</th><th>הרעיון הנבחן</th></tr></thead>
+<tbody>
+<tr><td>"המערכת אינה עוסקת בתוצאות ההצבעה עצמן"</td><td>5.3</td><td>זיהוי חריגה מהיקף בפריט כתוב</td></tr>
+<tr><td>כל שיחה נרשמת, יוצאת או נכנסת</td><td>6.1 (שער)</td><td>«include» בעל שני בסיסים</td></tr>
+<tr><td>עדכוני הצבעה מוועדת הבחירות, בעיתוי שלה</td><td>6.2</td><td>שחקן חיצוני יוזם</td></tr>
+<tr><td>רק בחלק מהשיחות נפתחת בקשת הסעה</td><td>6.3</td><td>«extend» להתנהגות מותנית</td></tr>
+<tr><td>רכש כיבוד וציוד ותשלום לספקים</td><td>6.4</td><td>תיחום היקף</td></tr>
+<tr><td>שעות התייצבות וסיום בפועל בכל שיבוץ</td><td>7.2</td><td>מחלקת קשר הנושאת נתוני קישור</td></tr>
+<tr><td>מתנדב בעל שני תפקידים והרשאות לפי תפקיד</td><td>7.3</td><td>תפקיד כשיוך, לא כירושה</td></tr>
+<tr><td>מספר בקשה / מספר מתנדב</td><td>7.4</td><td>זהות אובייקט מול מפתח ראשי בטבלה</td></tr>
+<tr><td>דיווחי השעה: "די במספר האחרון"</td><td>7.5</td><td>דרישה בעייתית + הכרעה מודעת לחלופה</td></tr>
+<tr><td>דחיית שיבוץ ושני סבבים</td><td>8.2</td><td>מעגל + תנאי כמותי</td></tr>
+<tr><td>ביטול בידי מוקדן מול מנהל משמרת</td><td>8.3</td><td>מעבר מוגבל במצב ובשחקן</td></tr>
+<tr><td>שמירת הרשומה ששה חודשים</td><td>8.4</td><td>מצב סיום = הרשומה נמחקת</td></tr>
+</tbody></table></div>
+</div>
+<div class="box">
+<p><b>הערה 2: שתי הבקשות של הלקוח, ומדוע הפתרון כאן נאמן לו בשתיהן.</b> ב-6.4 הפתרון מקבל את גבול ההיקף שהסיפור קובע ("המערכת אינה מנהלת תשלומים") ומחזיר את בקשת הרכש ללקוח כדרישה מחוץ להיקף; ב-7.5 הפתרון נאמן להגדרת הלקוח ושומר את המספר האחרון בלבד, וכך גם תרשים ה-Use Case ("דיווח מספר המצביעים בקלפי" מעדכן את המספר האחרון) ותרשים המחלקות (מאפיינים על <code>PollingStation</code>, בלי <code>StationReport</code>). <b>בשתי השאלות גם ההכרעה ההפוכה, מנומקת, מזכה בניקוד מלא</b>, ואין לצפות מהסטודנט לאותה הכרעה שבפתרון כאן. בהעדפת מסלול ב' ב-7.5 אין סתירה ל-6.4: גבולות ההיקף הם של הלקוח, ואיכות התיעוד בתוך ההיקף היא שיקול של המנתח.</p>
+</div>
+<div class="box">
+<p><b>הערה 3: הרשאתו הגורפת של מנהל המשמרת.</b> בתרשים ה-Use Case היא מיוצגת ב-Use Case "שינוי סטטוס של בקשת הסעה", ובתרשים המצבים כמעבר ביטול היוצא מגבול מצב-העל "בקשה פעילה" ולצידו כלל הרשאה בכיתוב. שני הייצוגים משלימים ואינם סותרים.</p>
+</div>
+<div class="box">
+<p><b>הערה 4: מספרים עסקיים ומפתחות.</b> מספר מתנדב, מספר בקשה, מספר קלפי ומספר סידורי בפנקס מופיעים בתרשים המחלקות כמאפיינים עסקיים רגילים, ואין בו אף מפתח ראשי או זר. זו גם ההכרעה של 7.4, והיא עקבית עם גזע השאלה, שמייחס את תפקיד המפתח לטבלאות בלבד.</p>
+</div>
+</section>
+<section class="q" id="s10">
+<h2>נספח: פירוט הניקוד (100 נק׳)</h2>
+
+<div class="tablewrap"><table>
+<thead><tr><th>שאלה</th><th>תת-שאלה</th><th>נק׳</th><th>מה נדרש</th></tr></thead>
+<tbody>
+<tr><td><b>1</b></td><td>1.1 שער BPMN</td><td>6</td><td>3 Pools (שניים ריקים), 2 Lanes, זוג AND, שערי XOR מתויגים, לולאה עם שער מיזוג, אירועי המתנה, Data Store ב-Association, 3 אירועי סיום</td></tr>
+<tr><td></td><td>1.2 אירוע התחלה ומי יוזם</td><td>3</td><td>Start Event (1) + המועמד כ-Pool נפרד ו-Message Flow נכנס (1) + נימוק כיוון החץ ו-Sequence מול Message (1)</td></tr>
+<tr><td></td><td>1.3 מקביליות וסנכרון</td><td>3</td><td>AND split (1) + AND join (1) + נימוק בהנגדה ל-XOR (1)</td></tr>
+<tr><td></td><td>1.4 לולאה ונקודת החזרה</td><td>3</td><td>XOR מתויג (1) + לולאה סגורה דרך Message Flows (1) + נימוק החזרה לבדיקת השלמות (1)</td></tr>
+<tr><td><b>2</b></td><td>2.1 מה מאבדים בלי תצפית</td><td>4</td><td>2 × (תרומה 1 + הדגמה מעוגנת 1)</td></tr>
+<tr><td></td><td>2.2 קריאת העקבות</td><td>4</td><td>2 × (ממצא 1 + מגבלה 0.5) + פרשנות עצם הקיום (1)</td></tr>
+<tr><td></td><td>2.3 שחזור מהזיכרון ואימות</td><td>4</td><td>2 סיבות (2) + 2 דרכי בדיקה (2)</td></tr>
+<tr><td><b>3</b></td><td>3.1 תכולה/זמן/משאבים</td><td>4</td><td>זמן נעול (1) + השלכה (1) + 2 הבדלי תכנון (2)</td></tr>
+<tr><td></td><td>3.2 סיכון ההשקה</td><td>3</td><td>2 סיכונים מעוגנים (2) + דרך פעולה (1)</td></tr>
+<tr><td></td><td>3.3 לולאת המשוב</td><td>3</td><td>מה נשבר (1) + 2 דרכי פעולה (2)</td></tr>
+<tr><td><b>4</b></td><td>4.1 שלושה נימוקים מעוגנים</td><td>5</td><td>3 × 1.5 + 0.5 על אי-חפיפה</td></tr>
+<tr><td></td><td>4.2 מה משתנה</td><td>3</td><td>2 × 1.5</td></tr>
+<tr><td><b>5</b></td><td>5.1–5.4 ביקורת דרישות</td><td>8</td><td>4 × (זיהוי 1 + הסבר ותיקון 1)</td></tr>
+<tr><td><b>6</b></td><td>6.1 שער Use Case</td><td>6</td><td>תרשים תקין עם «include» אחד לפחות</td></tr>
+<tr><td></td><td>6.2 שחקן חיצוני יוזם</td><td>3</td><td>הוועדה כשחקן (1) + מחוברת ל-UC קליטה בצד היוזם (1) + אין UC שבו המטה פונה אליה (1)</td></tr>
+<tr><td></td><td>6.3 «extend»</td><td>3</td><td>UC אחד (1) + «extend» בכיוון הנכון עם תנאי (1) + נימוק "רק בחלק" מול include (1)</td></tr>
+<tr><td></td><td>6.4 רכש ותשלום</td><td>3</td><td>הכרעה (1) + נימוק (1) + מחיר (1), <b>שני מסלולים</b></td></tr>
+<tr><td><b>7</b></td><td>7.1 שער מחלקות</td><td>8</td><td>enumerator, מאפיינים, קרדינליות בשני הקצוות, ללא מפתחות</td></tr>
+<tr><td></td><td>7.2 שעות בפועל</td><td>3</td><td>מחלקת קשר (1) + רבים-לרבים (1) + נימוק נתון-הצמד (1)</td></tr>
+<tr><td></td><td>7.3 תפקידים והרשאות</td><td>3</td><td>Role ברבים-לרבים (1) + הרשאות מהתפקידים המקושרים, ישות אחת (1) + שיוך ולא ירושה (1)</td></tr>
+<tr><td></td><td>7.4 זהות מול מפתח</td><td>3</td><td>לא (1) + זהות האובייקט (1) + ההנגדה לטבלה (1)</td></tr>
+<tr><td></td><td>7.5 דיווחי השעה</td><td>3</td><td>הכרעה (1) + נימוק (1) + מודעות לחלופה או למחיר (1), <b>שני מסלולים</b></td></tr>
+<tr><td><b>8</b></td><td>8.1 שער מצבים</td><td>6</td><td>מצבים ולא שלבים, אירועים על המעברים, מעגל, ארכיון ומצב סיום</td></tr>
+<tr><td></td><td>8.2 סבבים והסלמה</td><td>2</td><td>מעגל (1) + תנאי כמותי מפריד (1)</td></tr>
+<tr><td></td><td>8.3 הגבלת הביטול</td><td>2</td><td>מעבר ממצבי טרום-שיבוץ עם מבצע/תנאי (1) + מעבר נוסף למנהל המשמרת ממצבים מאוחרים (1)</td></tr>
+<tr><td></td><td>8.4 קץ מחזור החיים</td><td>2</td><td>הרשומה נשמרת (1) + מצב סיום בתום ששה חודשים (1)</td></tr>
+<tr><td></td><td><b>סה"כ</b></td><td><b>100</b></td><td>15 + 12 + 10 + 8 + 8 + 15 + 20 + 12</td></tr>
+</tbody></table></div>
+</section>
+
+<footer>
+  פתרון לדוגמה | מנקדים את המשפט מול התרשים שהסטודנט צייר, נימוק קוהרנטי של עיצוב שונה-אך-סביר מזכה בניקוד מלא.
+</footer>
+</div>
+</body>
+</html>
