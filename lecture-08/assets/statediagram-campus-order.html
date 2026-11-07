@@ -130,8 +130,7 @@
     { id: 'pending', name: 'ממתינה', constant: 'PENDING',
       lines: ["entry / queueForKitchen()"],
       x: 190, y: 235, w: 230,
-      desc: "שולם, והמטבח קיבל התראה. שתי פעולות בכניסה, ולכן פעולה אחת שעוטפת אותן:
-      <span class='en'>queueForKitchen() = setStatus('PENDING'); notifyKitchen()</span>. זה המצב היחיד שבו הסטודנט עדיין יכול לבטל בעצמו (<span class='en g'>[BR-4]</span>) או לעדכן את שעת האיסוף (לולאה-עצמית: הנתון משתנה, המצב לא — וה-<span class='en'>entry</span> רץ שוב). יציאות: <b>תחילת הכנה</b> ← בהכנה · <b>ביטול ע״י הסטודנט</b> ← בוטלה · ביטול ע״י הצוות (מהגבול)." },
+      desc: "שולם, והמטבח קיבל התראה. שתי פעולות בכניסה, ולכן פעולה אחת שעוטפת אותן: <span class='en'>queueForKitchen() = setStatus('PENDING'); notifyKitchen()</span>. זה המצב היחיד שבו הסטודנט עדיין יכול לבטל בעצמו (<span class='en g'>[BR-4]</span>) או לעדכן את שעת האיסוף (לולאה-עצמית: הנתון משתנה, המצב לא — וה-<span class='en'>entry</span> רץ שוב). יציאות: <b>תחילת הכנה</b> ← בהכנה · <b>ביטול ע״י הסטודנט</b> ← בוטלה · ביטול ע״י הצוות (מהגבול)." },
     { id: 'prep', name: 'בהכנה', constant: 'IN_PREPARATION',
       lines: ["entry / setStatus('IN_PREPARATION')", "do / prepareItems()"],
       x: 500, y: 235, w: 240,
@@ -143,8 +142,7 @@
     { id: 'cancelled', name: 'בוטלה', constant: 'CANCELLED',
       lines: ["entry / closeAsCancelled()"],
       x: 185, y: 460, w: 250,
-      desc: "<b>תוצאה עסקית = מצב</b>, לא ◎. ההזמנה שולמה, ולכן ביטול הוא <b>עובדה</b> (יש זיכוי, יש דוח ביטולים) — היא הולכת לארכיון ולא נמחקת. בכניסה רצה פעולה אחת, <span class='en'>closeAsCancelled() = setStatus('CANCELLED'); setClosureReason('CANCELLED'); refund()</span>;
-      ה-<span class='en'>setClosureReason</span> שומר את <i>הסיבה</i> בתכונה נפרדת, כי הארכיון ידרוס את <span class='en'>status</span>. שני חצים נכנסים: מממתינה (הסטודנט) ומגבול פעילה (הצוות)." },
+      desc: "<b>תוצאה עסקית = מצב</b>, לא ◎. ההזמנה שולמה, ולכן ביטול הוא <b>עובדה</b> (יש זיכוי, יש דוח ביטולים) — היא הולכת לארכיון ולא נמחקת. בכניסה רצה פעולה אחת, <span class='en'>closeAsCancelled() = setStatus('CANCELLED'); setClosureReason('CANCELLED'); refund()</span>; ה-<span class='en'>setClosureReason</span> שומר את <i>הסיבה</i> בתכונה נפרדת, כי הארכיון ידרוס את <span class='en'>status</span>. שני חצים נכנסים: מממתינה (הסטודנט) ומגבול פעילה (הצוות)." },
     { id: 'collected', name: 'נאספה', constant: 'COLLECTED',
       lines: ["entry / closeAsCollected()"],
       x: 575, y: 460, w: 250,
@@ -152,8 +150,7 @@
     { id: 'notcollected', name: 'לא נאספה', constant: 'NOT_COLLECTED',
       lines: ["entry / closeAsNotCollected()"],
       x: 875, y: 460, w: 250,
-      desc: "נכנסים לכאן ב<b>אירוע זמן</b>: <span class='en'>after(60 דקות מזמן האיסוף)</span>. שתי העטיפות נראות זהות בתרשים, וההבדל בגוף:
-      <span class='en'>closeAsNotCollected() = setStatus('NOT_COLLECTED'); setClosureReason('NOT_COLLECTED')</span> — <b>בלי</b> <span class='en ac'>refund()</span>, לעומת בוטלה. זהו <span class='rule'>BR-3</span>: הזמנה ששולמה ולא נאספה — <b>החיוב נשאר, ללא זיכוי</b>. החוק היה פתוח מאז הרצאה 3; בניית התרשים הכריחה את הקמפוס להכריע, וההכרעה נראית כאן כ<b>פעולה שחסרה</b>. הפתק ליד המצב רק מסביר למה." },
+      desc: "נכנסים לכאן ב<b>אירוע זמן</b>: <span class='en'>after(60 דקות מזמן האיסוף)</span>. שתי העטיפות נראות זהות בתרשים, וההבדל בגוף: <span class='en'>closeAsNotCollected() = setStatus('NOT_COLLECTED'); setClosureReason('NOT_COLLECTED')</span> — <b>בלי</b> <span class='en ac'>refund()</span>, לעומת בוטלה. זהו <span class='rule'>BR-3</span>: הזמנה ששולמה ולא נאספה — <b>החיוב נשאר, ללא זיכוי</b>. החוק היה פתוח מאז הרצאה 3; בניית התרשים הכריחה את הקמפוס להכריע, וההכרעה נראית כאן כ<b>פעולה שחסרה</b>. הפתק ליד המצב רק מסביר למה." },
     { id: 'archived', name: 'ארכיון', constant: 'ARCHIVED',
       lines: ["entry / setStatus('ARCHIVED')"],
       x: 600, y: 610, w: 200,

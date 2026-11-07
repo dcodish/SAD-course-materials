@@ -363,32 +363,60 @@ function downloadFile(filename, mimeType, content) {
 }
 
 function xmiBody(elements, rels) {
+  // Visual Paradigm needs each association's ends spelled out, and a generalization nested
+  // in its subclass; it deletes anything else on import (tested with VP 18.0, 2026-11-07).
+  // A split diagram repeats classes across tabs (an overview with names only, detail tabs
+  // with attributes): keep each class once, in its fullest copy, and each line once.
+  const byId = new Map();
+  for (const el of elements) {
+    const prev = byId.get(el.id);
+    if (!prev || (el.attributes || []).length > (prev.attributes || []).length) byId.set(el.id, el);
+  }
+  elements = [...byId.values()];
+  const seen = new Set();
+  rels = rels.filter(r => { const k = r.from + '|' + r.to; if (seen.has(k)) return false; seen.add(k); return true; });
+  const srcRels =(typeof PARTS !== 'undefined' && Array.isArray(PARTS)) ? PARTS.flatMap(p => p.rels || [])
+                : (typeof RELS !== 'undefined' && Array.isArray(RELS)) ? RELS : [];
+  const srcType = r => { const s = srcRels.find(x => x.from === r.from && x.to === r.to); return s ? s.type : null; };
+  const isGen = r => r.kind === 'generalization' || srcType(r) === 'gen';
+  const isDep = r => r.kind === 'dependency' || srcType(r) === 'dep';
+  const ids = new Set(elements.map(e => e.id));
+  const lower = m => { const v = String(m || '1').split('..')[0]; return v === '*' ? '0' : v; };
+  const upper = m => { const v = String(m || '1').split('..').pop(); return v === '*' ? '*' : v; };
+  const vis = v => v === '-' ? 'private' : v === '#' ? 'protected' : 'public';
   const lines = [];
   for (const el of elements) {
-    if (el.kind === 'class') {
-      const isEnum = el.stereotype === 'enumeration';
-      const tag = isEnum ? 'uml:Enumeration' : 'uml:Class';
-      lines.push(`    <packagedElement xmi:type="${tag}" xmi:id="${el.id}" name="${xmlEscape(el.name)}"${el.isAbstract ? ' isAbstract="true"' : ''}>`);
-      if (isEnum) {
-        for (const a of el.attributes)
-          lines.push(`      <ownedLiteral xmi:id="${el.id}_${a.name}" name="${xmlEscape(a.name)}"/>`);
-      } else {
-        for (const a of el.attributes)
-          lines.push(`      <ownedAttribute xmi:id="${el.id}_${a.name}" name="${xmlEscape(a.name)}" visibility="${a.visibility === '+' ? 'public' : a.visibility === '-' ? 'private' : 'protected'}"/>`);
-        for (const op of el.operations)
-          lines.push(`      <ownedOperation xmi:id="${el.id}_${op.name}" name="${xmlEscape(op.name)}"/>`);
-      }
-      lines.push(`    </packagedElement>`);
+    const isEnum = el.stereotype === 'enumeration';
+    lines.push(`    <packagedElement xmi:type="${isEnum ? 'uml:Enumeration' : 'uml:Class'}" xmi:id="${el.id}" name="${xmlEscape(el.name)}"${el.isAbstract ? ' isAbstract="true"' : ''}>`);
+    if (isEnum) {
+      el.attributes.forEach((a, i) => lines.push(`      <ownedLiteral xmi:id="${el.id}_lit${i}" name="${xmlEscape(a.name)}"/>`));
+    } else {
+      for (const r of rels)
+        if (isGen(r) && r.from === el.id && ids.has(r.to))
+          lines.push(`      <generalization xmi:type="uml:Generalization" xmi:id="${el.id}_gen_${r.to}" general="${r.to}"/>`);
+      el.attributes.forEach((a, i) => lines.push(`      <ownedAttribute xmi:id="${el.id}_att${i}" name="${xmlEscape(a.name)}" visibility="${vis(a.visibility)}"/>`));
+      (el.operations || []).forEach((op, i) => lines.push(`      <ownedOperation xmi:id="${el.id}_op${i}" name="${xmlEscape(op.name)}" visibility="${vis(op.visibility)}"/>`));
     }
+    lines.push(`    </packagedElement>`);
   }
-  for (const r of rels) {
-    if (r.kind === 'generalization')
-      lines.push(`    <packagedElement xmi:type="uml:Generalization" xmi:id="${r.id}" specific="${r.from}" general="${r.to}"/>`);
-    if (r.kind === 'association')
-      lines.push(`    <packagedElement xmi:type="uml:Association" xmi:id="${r.id}" memberEnd="${r.from}_end ${r.to}_end"/>`);
-    if (r.kind === 'dependency')
-      lines.push(`    <packagedElement xmi:type="uml:Dependency" xmi:id="${r.id}" client="${r.from}" supplier="${r.to}"/>`);
-  }
+  rels.forEach((r, i) => {
+    if (isGen(r) || !ids.has(r.from) || !ids.has(r.to)) return;
+    const id = `rel${i}`;
+    if (isDep(r)) {
+      lines.push(`    <packagedElement xmi:type="uml:Dependency" xmi:id="${id}" client="${r.from}" supplier="${r.to}"/>`);
+      return;
+    }
+    if (r.kind !== 'association') return;
+    const agg = r.composition ? ' aggregation="composite"' : r.aggregation ? ' aggregation="shared"' : '';
+    const end = (n, type, mult, extra) => [
+      `      <ownedEnd xmi:type="uml:Property" xmi:id="${id}_e${n}" association="${id}" type="${type}"${extra}>`,
+      `        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="${id}_e${n}_l" value="${lower(mult)}"/>`,
+      `        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="${id}_e${n}_u" value="${upper(mult)}"/>`,
+      `      </ownedEnd>`];
+    lines.push(`    <packagedElement xmi:type="uml:Association" xmi:id="${id}" memberEnd="${id}_e1 ${id}_e2">`,
+      ...end(1, r.from, r.multFrom, agg), ...end(2, r.to, r.multTo, ''),
+      `    </packagedElement>`);
+  });
   return lines.join('\n');
 }
 
