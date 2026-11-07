@@ -2,23 +2,32 @@
 <html lang="he">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>פתרון שאלה 7, תרשים מחלקות | שולחן פנוי</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,700;1,400&family=Rubik:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
   * { box-sizing: border-box; }
   body { margin: 0; padding: 24px; background: #eef2f7; font-family: 'Rubik', sans-serif; color: #1e293b; }
-  .page { max-width: 1360px; margin: 0 auto; }
-  header.top { background: #1e40af; color: #fff; border-radius: 10px 10px 0 0; padding: 18px 26px; direction: rtl; text-align: right; }
+  .page { max-width: 1560px; margin: 0 auto; }
+  header.top {
+    background: #1e40af; color: #fff; border-radius: 10px 10px 0 0;
+    padding: 18px 26px; direction: rtl; text-align: right;
+  }
   header.top h1 { margin: 0 0 4px 0; font-size: 20px; font-weight: 700; }
-  header.top p { margin: 0; font-size: 13px; color: #dbeafe; }
-  .diagram-wrap { background: #fff; border: 1px solid #cbd5e1; border-top: none; padding: 10px; overflow-x: auto; direction: ltr; }
+  header.top p { margin: 0; font-size: 13px; color: #dbeafe; line-height: 1.7; }
+  .diagram-wrap {
+    background: #fff; border: 1px solid #cbd5e1; border-top: none;
+    border-radius: 0 0 10px 10px; padding: 10px; overflow-x: auto; direction: ltr;
+  }
   svg { display: block; }
+  .has-notes .diagram-wrap { border-radius: 0; }
   .notes { background: #fef9c3; border: 1px solid #eab308; border-top: none; border-radius: 0 0 10px 10px; padding: 16px 22px; direction: rtl; text-align: right; }
   .notes h2 { margin: 0 0 10px 0; font-size: 14px; font-weight: 700; color: #78350f; }
   .notes .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 24px; }
   .notes p { margin: 0; font-size: 12px; line-height: 1.5; color: #78350f; }
   .notes code { font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; }
+  @media (max-width: 760px) { .notes .grid { grid-template-columns: 1fr; } }
   .vp-export-btn {
     position: fixed; bottom: 20px; right: 20px; z-index: 1000;
     background: #1e40af; color: #fff; border: none; border-radius: 6px;
@@ -29,9 +38,9 @@
 </style>
 </head>
 <body>
-<div class="page">
+<div class="page has-notes">
   <header class="top">
-    <h1>פתרון לדוגמה, שאלה 7: תרשים מחלקות, "שולחן פנוי"</h1>
+    <h1>פתרון לדוגמה, שאלה 7: תרשים מחלקות, &quot;שולחן פנוי&quot;</h1>
     <p>ניתוח ועיצוב מערכות מידע (364-1-1411), מבחן לדוגמה, סמסטר ב' 2026, מועד מיוחד, תרשים מודל-פתרון להוראה</p>
   </header>
   <div class="diagram-wrap">
@@ -40,10 +49,13 @@
   <div class="notes">
     <h2>הערות עיצוב, שאלה 7</h2>
     <div class="grid">
-      <p><b>7.2, רבים-לרבים בלי מחלקת קשר:</b> <code>MenuPackage</code> —"offered at"— <code>Branch</code> הוא קשר <b>רבים-לרבים רגיל</b>. אין נתון על הזיווג חבילה-סניף (המחיר והתיאור אחידים ושייכים לחבילה עצמה), ולכן <b>לא</b> נדרשת מחלקת קשר. (לעומת זאת <code>Reservation</code> כן מחלקת קשר, כי יש לה נתונים משל הזיווג לקוח-שולחן.)</p>
-      <p><b>7.3, קרדינליות, הגבול התחתון:</b> <code>Branch</code> ◆—1—0..*— <code>Table</code>. הגבול התחתון בצד השולחן הוא <b>0</b> ולא 1, כי סניף חדש עשוי להתקיים עוד לפני שהוגדרו בו שולחנות. (הקשר נותר קומפוזיציה, שולחן אינו קיים ללא סניף.)</p>
-      <p><b>7.4, מחלקה מול enumerator:</b> <code>MenuPackage</code> היא <b>מחלקה</b> (נושאת <code>price</code>, <code>description</code>), אף שבוחרים אותה מרשימה קבועה, נתונים חייבים "לגור" איפשהו. לעומתה <code>SeatingArea</code> ו-<code>ReservationStatus</code> הם <b>enumerator</b>, קבוצות ערכים סגורות בלי תכונות.</p>
-      <p><b>7.5, <code>Reservation.cancellationReason</code> נשמר במכוון:</b> בקשת מנהל התפעול לסמן רק "בוטלה/לא בוטלה" נדחתה, היא סותרת בתוך הסיפור את דוח הביטולים החודשי של מנהל הסניף (המפרט את <b>הסיבות</b> לביטול). ויתור על התכונה = אי-אפשר להפיק את הדוח, ואין audit trail.</p>
+      <p><b>הזמנת שולחן היא מחלקה בפני עצמה:</b> <code>Customer</code> 1─0..* <code>Reservation</code> 0..*─0..1 <code>Table</code>. בקשה שאין עבורה שולחן פנוי נכנסת לרשימת המתנה, ועשויה לפקוע בלי שהוקצה לה שולחן. ההזמנה קיימת אפוא גם בלי שולחן, ומחלקת קשר, שמופע שלה הוא קישור בין שני קצוות קיימים, אינה אפשרית כאן. השולחן מוקצה רק באישור, ולכן הצד שלו הוא 0..1.</p>
+      <p><b>ההזמנה שייכת ללקוח:</b> הלקוח צופה בכל עת בהזמנותיו ובסטטוס שלהן, והדוח החודשי סופר את ההזמנות שבוטלו. אותו לקוח מזמין שוב ושוב, לעיתים את אותו שולחן, ולכן גם בלי רשימת ההמתנה הצמד לקוח-שולחן לא היה מזהה הזמנה אחת.</p>
+      <p><b>הזמנת אירוע היא מחלקה מתווכת:</b> <code>Customer</code> 1─0..* <code>EventBooking</code> 0..*─1 <code>Hall</code>. האולם נבחר כבר בהזמנה, אבל אותו לקוח עשוי להזמין את אותו אולם לאירוע נוסף, ולכן הצמד לקוח-אולם אינו מזהה הזמנה אחת. החבילה שנבחרה מחוברת להזמנה ישירות (<code>MenuPackage</code> 1─0..*).</p>
+      <p><b>7.2, רבים-לרבים בלי מחלקה נוספת:</b> <code>MenuPackage</code> ─"offered at"─ <code>Branch</code> הוא קשר <b>רבים-לרבים רגיל</b>. אין נתון על הזיווג חבילה-סניף (המחיר והתיאור אחידים ושייכים לחבילה עצמה), ולכן לא נדרשת מחלקת קשר. לעומת זאת, להזמנות יש נתונים משלהן (מועד, סועדים, סטטוס), ולכן הן מחלקות.</p>
+      <p><b>7.3, קרדינליות, הגבול התחתון:</b> <code>Branch</code> ◆─1─0..*─ <code>Table</code>. הגבול התחתון בצד השולחן הוא <b>0</b> ולא 1, כי סניף חדש עשוי להתקיים עוד לפני שהוגדרו בו שולחנות. (הקשר נותר קומפוזיציה: שולחן אינו קיים בלי סניף.)</p>
+      <p><b>7.4, מחלקה מול enumerator:</b> <code>MenuPackage</code> היא <b>מחלקה</b> (נושאת <code>price</code>, <code>description</code>), אף שבוחרים אותה מרשימה קבועה: נתונים חייבים "לגור" איפשהו. לעומתה <code>SeatingArea</code> ו-<code>ReservationStatus</code> הם <b>enumerator</b>, קבוצות ערכים סגורות בלי תכונות.</p>
+      <p><b>7.5, <code>Reservation.cancellationReason</code> נשמר במכוון:</b> בקשת מנהל התפעול לסמן רק "בוטלה" או "לא בוטלה" נדחתה. היא סותרת בתוך הסיפור את דוח הביטולים החודשי של מנהל הסניף, המפרט את <b>הסיבות</b> לביטול. בלי התכונה אי אפשר להפיק את הדוח, ואין תיעוד.</p>
     </div>
   </div>
 </div>
@@ -51,124 +63,494 @@
 <button class="vp-export-btn" onclick="exportXMI()">Download .xmi (Visual Paradigm)</button>
 
 <script>
-/* ============================================================
-   1. DATA, CLASSES (§9b)
-   ============================================================ */
+/* ── 1. DATA (routed offline by render_class.mjs) ────────────────────────── */
+
 const CLASSES = [
-  // ── Domain classes ──
-  { id: 'Branch', name: 'Branch', stereotype: null, isEnum: false, isAbstract: false,
-    attrs: ['+ name : String', '+ address : String', '+ city : String', '+ phone : String'],
-    ops: [], x: 60, y: 60 },
-
-  { id: 'Table', name: 'Table', stereotype: null, isEnum: false, isAbstract: false,
-    attrs: ['+ tableNumber : String', '+ seats : Integer', '+ area : SeatingArea'],
-    ops: [], x: 60, y: 430 },
-
-  { id: 'Customer', name: 'Customer', stereotype: null, isEnum: false, isAbstract: false,
-    attrs: ['+ name : String', '+ phone : String', '+ email : String'],
-    ops: [], x: 420, y: 430 },
-
-  { id: 'Hall', name: 'Hall', stereotype: null, isEnum: false, isAbstract: false,
-    attrs: ['+ name : String', '+ maxCapacity : Integer'],
-    ops: [], x: 760, y: 438 },
-
-  { id: 'Reservation', name: 'Reservation', stereotype: '«association class»', isEnum: false, isAbstract: false,
-    attrs: ['+ date : Date', '+ timeSlot : String', '+ partySize : Integer',
-            '+ specialNote : String', '+ status : ReservationStatus', '+ closureReason : ReservationStatus',
-            '+ cancellationReason : String'],
-    ops: ['+ confirm() : void', '+ seat() : void', '+ complete() : void', '+ cancel() : void'],
-    x: 217, y: 600 },
-
-  { id: 'EventBooking', name: 'EventBooking', stereotype: '«association class»', isEnum: false, isAbstract: false,
-    attrs: ['+ eventDate : Date', '+ headcount : Integer', '+ deposit : Number',
-            '+ depositPaid : Boolean', '+ status : EventBookingStatus'],
-    ops: ['+ confirm() : void', '+ complete() : void', '+ cancel() : void'],
-    x: 547, y: 600 },
-
-  { id: 'MenuPackage', name: 'MenuPackage', stereotype: null, isEnum: false, isAbstract: false,
-    attrs: ['+ name : String', '+ price : Number', '+ description : String'],
-    ops: [], x: 810, y: 610 },
-
-  { id: 'Staff', name: 'Staff', stereotype: null, isEnum: false, isAbstract: false,
-    attrs: ['+ name : String', '+ phone : String', '+ role : StaffRole'],
-    ops: [], x: 210, y: 900 },
-
-  // ── Enumerations (unconnected boxes, attribute-type link only) ──
-  { id: 'ReservationStatus', name: 'ReservationStatus', stereotype: '«enumeration»', isEnum: true, isAbstract: false,
-    attrs: ['Requested', 'Waitlisted', 'Confirmed', 'Seated', 'Completed', 'Cancelled', 'NoShow', 'Expired', 'Archived'],
-    ops: [], x: 1060, y: 60 },
-
-  { id: 'EventBookingStatus', name: 'EventBookingStatus', stereotype: '«enumeration»', isEnum: true, isAbstract: false,
-    attrs: ['Requested', 'Confirmed', 'Completed', 'Cancelled'],
-    ops: [], x: 1060, y: 300 },
-
-  { id: 'SeatingArea', name: 'SeatingArea', stereotype: '«enumeration»', isEnum: true, isAbstract: false,
-    attrs: ['Indoor', 'Outdoor', 'Bar', 'PrivateRoom'],
-    ops: [], x: 1060, y: 470 },
-
-  { id: 'StaffRole', name: 'StaffRole', stereotype: '«enumeration»', isEnum: true, isAbstract: false,
-    attrs: ['Host', 'BranchManager', 'EventCoordinator', 'SystemAdmin'],
-    ops: [], x: 1060, y: 640 }
+  {
+    "id": "Branch",
+    "name": "Branch",
+    "stereotype": null,
+    "isEnum": false,
+    "isAbstract": false,
+    "attrs": [
+      "+ name : String",
+      "+ address : String",
+      "+ city : String",
+      "+ phone : String"
+    ],
+    "ops": [],
+    "x": 60,
+    "y": 60
+  },
+  {
+    "id": "Table",
+    "name": "Table",
+    "stereotype": null,
+    "isEnum": false,
+    "isAbstract": false,
+    "attrs": [
+      "+ tableNumber : String",
+      "+ seats : Integer",
+      "+ area : SeatingArea"
+    ],
+    "ops": [],
+    "x": 60,
+    "y": 430
+  },
+  {
+    "id": "Customer",
+    "name": "Customer",
+    "stereotype": null,
+    "isEnum": false,
+    "isAbstract": false,
+    "attrs": [
+      "+ name : String",
+      "+ phone : String",
+      "+ email : String"
+    ],
+    "ops": [],
+    "x": 420,
+    "y": 430
+  },
+  {
+    "id": "Hall",
+    "name": "Hall",
+    "stereotype": null,
+    "isEnum": false,
+    "isAbstract": false,
+    "attrs": [
+      "+ name : String",
+      "+ maxCapacity : Integer"
+    ],
+    "ops": [],
+    "x": 760,
+    "y": 438
+  },
+  {
+    "id": "Reservation",
+    "name": "Reservation",
+    "stereotype": null,
+    "isEnum": false,
+    "isAbstract": false,
+    "attrs": [
+      "+ date : Date",
+      "+ timeSlot : String",
+      "+ partySize : Integer",
+      "+ specialNote : String",
+      "+ status : ReservationStatus",
+      "+ closureReason : ReservationStatus",
+      "+ cancellationReason : String"
+    ],
+    "ops": [
+      "+ confirm() : void",
+      "+ seat() : void",
+      "+ complete() : void",
+      "+ cancel() : void"
+    ],
+    "x": 217,
+    "y": 600
+  },
+  {
+    "id": "EventBooking",
+    "name": "EventBooking",
+    "stereotype": null,
+    "isEnum": false,
+    "isAbstract": false,
+    "attrs": [
+      "+ eventDate : Date",
+      "+ headcount : Integer",
+      "+ deposit : Number",
+      "+ depositPaid : Boolean",
+      "+ status : EventBookingStatus"
+    ],
+    "ops": [
+      "+ confirm() : void",
+      "+ complete() : void",
+      "+ cancel() : void"
+    ],
+    "x": 547,
+    "y": 600
+  },
+  {
+    "id": "MenuPackage",
+    "name": "MenuPackage",
+    "stereotype": null,
+    "isEnum": false,
+    "isAbstract": false,
+    "attrs": [
+      "+ name : String",
+      "+ price : Number",
+      "+ description : String"
+    ],
+    "ops": [],
+    "x": 810,
+    "y": 610
+  },
+  {
+    "id": "Staff",
+    "name": "Staff",
+    "stereotype": null,
+    "isEnum": false,
+    "isAbstract": false,
+    "attrs": [
+      "+ name : String",
+      "+ phone : String",
+      "+ role : StaffRole"
+    ],
+    "ops": [],
+    "x": 210,
+    "y": 900
+  },
+  {
+    "id": "ReservationStatus",
+    "name": "ReservationStatus",
+    "stereotype": "«enumeration»",
+    "isEnum": true,
+    "isAbstract": false,
+    "attrs": [
+      "Requested",
+      "Waitlisted",
+      "Confirmed",
+      "Seated",
+      "Completed",
+      "Cancelled",
+      "NoShow",
+      "Expired",
+      "Archived"
+    ],
+    "ops": [],
+    "x": 1060,
+    "y": 60
+  },
+  {
+    "id": "EventBookingStatus",
+    "name": "EventBookingStatus",
+    "stereotype": "«enumeration»",
+    "isEnum": true,
+    "isAbstract": false,
+    "attrs": [
+      "Requested",
+      "Confirmed",
+      "Completed",
+      "Cancelled"
+    ],
+    "ops": [],
+    "x": 1060,
+    "y": 300
+  },
+  {
+    "id": "SeatingArea",
+    "name": "SeatingArea",
+    "stereotype": "«enumeration»",
+    "isEnum": true,
+    "isAbstract": false,
+    "attrs": [
+      "Indoor",
+      "Outdoor",
+      "Bar",
+      "PrivateRoom"
+    ],
+    "ops": [],
+    "x": 1060,
+    "y": 470
+  },
+  {
+    "id": "StaffRole",
+    "name": "StaffRole",
+    "stereotype": "«enumeration»",
+    "isEnum": true,
+    "isAbstract": false,
+    "attrs": [
+      "Host",
+      "BranchManager",
+      "EventCoordinator",
+      "SystemAdmin"
+    ],
+    "ops": [],
+    "x": 1060,
+    "y": 640
+  }
 ];
 
-/* ============================================================
-   2. DATA, RELS (§9c)
-   ============================================================ */
 const RELS = [
-  // Composition: Branch (whole ◆), Table.  Lower bound 0: a new branch may have no tables yet (7.3).
-  { type: 'comp', from: 'Branch', to: 'Table',
-    fromMult: '1', toMult: '0..*', fromRole: null, toRole: null, label: null,
-    points: [[115, 156], [115, 430]] },
-
-  // Composition: Branch (whole ◆), Hall (top L-route)
-  { type: 'comp', from: 'Branch', to: 'Hall',
-    fromMult: '1', toMult: '0..*', fromRole: null, toRole: null, label: null,
-    points: [[193, 90], [843, 90], [843, 438]] },
-
-  // Association base of Reservation (association class): Customer, Table
-  { id: 'r_cust_table', type: 'assoc', from: 'Customer', to: 'Table',
-    fromMult: '0..*', toMult: '0..*', fromRole: null, toRole: null, label: 'reserves',
-    points: [[420, 475], [319, 475], [219, 475]] },
-
-  // Association base of EventBooking (association class): Customer, Hall
-  { id: 'r_cust_hall', type: 'assoc', from: 'Customer', to: 'Hall',
-    fromMult: '0..*', toMult: '0..*', fromRole: null, toRole: null, label: 'books event',
-    points: [[540, 475], [650, 475], [760, 475]] },
-
-  // Association-class tethers (dashed line to base-association midpoint; base line remains)
-  { type: 'assocClass', from: 'Reservation', baseId: 'r_cust_table' },
-  { type: 'assocClass', from: 'EventBooking', baseId: 'r_cust_hall' },
-
-  // Association: Staff, Branch (assigned to), left-margin L-route
-  { type: 'assoc', from: 'Staff', to: 'Branch',
-    fromMult: '0..*', toMult: '1', fromRole: 'assigned to', toRole: null, label: null,
-    points: [[210, 940], [20, 940], [20, 110], [60, 110]] },
-
-  // Association: Reservation, Staff (handled by)
-  { type: 'assoc', from: 'Reservation', to: 'Staff',
-    fromMult: '0..*', toMult: '0..1', fromRole: null, toRole: 'handled by', label: 'handled by',
-    points: [[319, 791], [319, 850], [276, 850], [276, 900]] },
-
-  // Association: EventBooking, Staff (coordinated by)
-  { type: 'assoc', from: 'EventBooking', to: 'Staff',
-    fromMult: '0..*', toMult: '0..1', fromRole: null, toRole: 'coordinated by', label: 'coordinated by',
-    points: [[649, 763], [649, 860], [343, 860], [343, 940]] },
-
-  // Association: MenuPackage, EventBooking
-  { type: 'assoc', from: 'MenuPackage', to: 'EventBooking',
-    fromMult: '1', toMult: '0..*', fromRole: null, toRole: null, label: null,
-    points: [[810, 650], [752, 650]] },
-
-  // Association: MenuPackage, Branch (offered at), plain many-to-many, NO association class (7.2).
-  // Top-margin route (y=40, above all boxes) from MenuPackage right edge to Branch top.
-  { type: 'assoc', from: 'MenuPackage', to: 'Branch',
-    fromMult: '0..*', toMult: '1..*', fromRole: null, toRole: null, label: 'offered at',
-    points: [[950, 610], [950, 40], [126, 40], [126, 60]] }
+  {
+    "type": "comp",
+    "from": "Branch",
+    "to": "Table",
+    "fromMult": "1",
+    "toMult": "0..*",
+    "fromRole": null,
+    "toRole": null,
+    "label": null,
+    "points": [
+      [
+        115,
+        156
+      ],
+      [
+        115,
+        430
+      ]
+    ]
+  },
+  {
+    "type": "comp",
+    "from": "Branch",
+    "to": "Hall",
+    "fromMult": "1",
+    "toMult": "0..*",
+    "fromRole": null,
+    "toRole": null,
+    "label": null,
+    "points": [
+      [
+        193,
+        90
+      ],
+      [
+        843,
+        90
+      ],
+      [
+        843,
+        438
+      ]
+    ]
+  },
+  {
+    "type": "assoc",
+    "from": "Staff",
+    "to": "Branch",
+    "fromMult": "0..*",
+    "toMult": "1",
+    "fromRole": "assigned to",
+    "toRole": null,
+    "label": null,
+    "points": [
+      [
+        210,
+        940
+      ],
+      [
+        20,
+        940
+      ],
+      [
+        20,
+        110
+      ],
+      [
+        60,
+        110
+      ]
+    ]
+  },
+  {
+    "type": "assoc",
+    "from": "Reservation",
+    "to": "Staff",
+    "fromMult": "0..*",
+    "toMult": "0..1",
+    "fromRole": null,
+    "toRole": "handled by",
+    "label": "handled by",
+    "points": [
+      [
+        319,
+        791
+      ],
+      [
+        319,
+        850
+      ],
+      [
+        276,
+        850
+      ],
+      [
+        276,
+        900
+      ]
+    ]
+  },
+  {
+    "type": "assoc",
+    "from": "EventBooking",
+    "to": "Staff",
+    "fromMult": "0..*",
+    "toMult": "0..1",
+    "fromRole": null,
+    "toRole": "coordinated by",
+    "label": "coordinated by",
+    "points": [
+      [
+        649,
+        763
+      ],
+      [
+        649,
+        860
+      ],
+      [
+        343,
+        860
+      ],
+      [
+        343,
+        940
+      ]
+    ]
+  },
+  {
+    "type": "assoc",
+    "from": "MenuPackage",
+    "to": "EventBooking",
+    "fromMult": "1",
+    "toMult": "0..*",
+    "fromRole": null,
+    "toRole": null,
+    "label": null,
+    "points": [
+      [
+        810,
+        650
+      ],
+      [
+        752,
+        650
+      ]
+    ]
+  },
+  {
+    "type": "assoc",
+    "from": "MenuPackage",
+    "to": "Branch",
+    "fromMult": "0..*",
+    "toMult": "1..*",
+    "fromRole": null,
+    "toRole": null,
+    "label": "offered at",
+    "points": [
+      [
+        950,
+        610
+      ],
+      [
+        950,
+        40
+      ],
+      [
+        126,
+        40
+      ],
+      [
+        126,
+        60
+      ]
+    ]
+  },
+  {
+    "fromRole": null,
+    "toRole": null,
+    "type": "assoc",
+    "from": "Customer",
+    "to": "Reservation",
+    "fromMult": "1",
+    "toMult": "0..*",
+    "label": "makes",
+    "points": [
+      [
+        440.5,
+        512
+      ],
+      [
+        440.5,
+        600
+      ]
+    ]
+  },
+  {
+    "fromRole": null,
+    "toRole": null,
+    "type": "assoc",
+    "from": "Reservation",
+    "to": "Table",
+    "fromMult": "0..*",
+    "toMult": "0..1",
+    "label": "assigned",
+    "points": [
+      [
+        217,
+        697.5
+      ],
+      [
+        139.5,
+        697.5
+      ],
+      [
+        139.5,
+        512
+      ]
+    ]
+  },
+  {
+    "fromRole": null,
+    "toRole": null,
+    "type": "assoc",
+    "from": "Customer",
+    "to": "EventBooking",
+    "fromMult": "1",
+    "toMult": "0..*",
+    "label": "books",
+    "points": [
+      [
+        540,
+        471
+      ],
+      [
+        649.5,
+        471
+      ],
+      [
+        649.5,
+        600
+      ]
+    ]
+  },
+  {
+    "fromRole": null,
+    "toRole": null,
+    "type": "assoc",
+    "from": "EventBooking",
+    "to": "Hall",
+    "fromMult": "0..*",
+    "toMult": "1",
+    "label": "in",
+    "points": [
+      [
+        730,
+        600
+      ],
+      [
+        730,
+        560
+      ],
+      [
+        800,
+        560
+      ],
+      [
+        800,
+        506
+      ]
+    ]
+  }
 ];
 
-/* ============================================================
-   3. ENGINE (§9d, verbatim, plus minimal assocClass support)
-   ============================================================ */
+const ASSOC_CLASSES = [];
+
+/* ── 2. ENGINE (SAD MCP uml-class-diagram §9d) ───────────────────────────── */
+
 const HDR_H = 28, PAD = 6, LINE_H = 14, DIV_H = 1;
 const FM = 'font-family="IBM Plex Mono, monospace"';
 
@@ -228,47 +610,20 @@ function svgBox(cls) {
   return s;
 }
 
-// Minimal helper for the association-class tether: nearest box-edge point
-// along the ray from the box center toward an external target (rect-boundary-intersect).
-function nearestEdge(cls, target) {
-  const w = boxW(cls), h = boxH(cls);
-  const cx = cls.x + w / 2, cy = cls.y + h / 2;
-  const dx = target[0] - cx, dy = target[1] - cy;
-  if (dx === 0 && dy === 0) return [cx, cy];
-  const sx = (w / 2) / Math.abs(dx || 1e-9);
-  const sy = (h / 2) / Math.abs(dy || 1e-9);
-  const t = Math.min(sx, sy);
-  return [cx + dx * t, cy + dy * t];
-}
-
 function svgRel(rel) {
-  // Association-class tether: dashed line from the AC box edge to the MIDPOINT
-  // of the base association polyline. No arrowhead, no multiplicity labels.
-  if (rel.type === 'assocClass') {
-    const base = RELS.find(r => r.id === rel.baseId);
-    const bp = base.points;
-    const mid = bp[Math.floor(bp.length / 2)];
-    const cls = CLASSES.find(c => c.id === rel.from);
-    const e = nearestEdge(cls, mid);
-    return `<polyline points="${e[0]},${e[1]} ${mid[0]},${mid[1]}" fill="none" stroke="#334155" stroke-width="1.4" stroke-dasharray="4 3"/>`;
-  }
-
   const pts = rel.points.map(([px, py]) => `${px},${py}`).join(' ');
   let mS = '', mE = '', dash = '';
   if (rel.type === 'comp') mS = 'marker-start="url(#compFill)"';
   if (rel.type === 'agg')  mS = 'marker-start="url(#aggHollow)"';
   if (rel.type === 'gen')  mE = 'marker-end="url(#genHollow)"';
   if (rel.type === 'dep')  { mE = 'marker-end="url(#arrOpen)"'; dash = 'stroke-dasharray="6 3"'; }
-  // 'assoc': no markers, plain line
 
   let s = `<polyline points="${pts}" fill="none" stroke="#334155" stroke-width="1.8" ${dash} ${mS} ${mE}/>`;
-  // Multiplicity labels, placed just OUTSIDE each box, offset along the line
-  // (away from the box) and beside it, so BOTH ends are always legible.
   const multLabel = (end, adj, txt) => {
     const dx = adj[0] - end[0], dy = adj[1] - end[1];
     const L = Math.hypot(dx, dy) || 1, ux = dx / L, uy = dy / L;
-    const x = end[0] + ux * 16 - uy * 9, y = end[1] + uy * 16 + ux * 9 + 3;
-    return `<text x="${x}" y="${y}" text-anchor="middle" fill="#64748b" font-size="9.5" ${FM}>${escXml(txt)}</text>`;
+    const x = end[0] + ux * 18 - uy * 10, y = end[1] + uy * 18 + ux * 10 + 3;
+    return `<text x="${x}" y="${y}" text-anchor="middle" fill="#64748b" font-size="9.5" ${FM} style="direction:ltr;unicode-bidi:isolate">${escXml(txt)}</text>`;
   };
   if (rel.fromMult) s += multLabel(rel.points[0], rel.points[1], rel.fromMult);
   if (rel.toMult) {
@@ -307,106 +662,118 @@ function render() {
     </marker>
   </defs>`;
 
-  const totalWidth  = maxX;
-  const totalHeight = maxY;
-
-  const bg    = `<rect width="${totalWidth}" height="${totalHeight}" fill="url(#dotgrid)"/>`;
-
-  // Enumeration zone: dashed divider + caption (course rule, right-hand zone).
-  const zoneX = 1030;
-  const zone = `<line x1="${zoneX}" y1="30" x2="${zoneX}" y2="${totalHeight - 90}" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="6 4"/>`
-    + `<text x="${zoneX + 6}" y="24" text-anchor="start" fill="#94a3b8" font-size="10" ${FM}>enumerations (type link only)</text>`;
-
+  const bg    = `<rect width="${maxX}" height="${maxY}" fill="url(#dotgrid)"/>`;
   const rels  = RELS.map(svgRel).join('');
   const boxes = CLASSES.map(svgBox).join('');
-
-  // cancellationReason, deliberate-retention highlight + annotation (שאלה 7.5).
-  const res = CLASSES.find(c => c.id === 'Reservation');
-  const rw = boxW(res);
-  const attrIdx = res.attrs.findIndex(a => a.indexOf('cancellationReason') !== -1);
-  const rowY = res.y + 38 + PAD + 10 + attrIdx * LINE_H;   // baseline of that attr row (matches engine)
-  const hi = `<rect x="${res.x + 3}" y="${rowY - 10}" width="${rw - 6}" height="14" fill="#fde68a" opacity="0.5"/>`
-    + `<text x="${res.x + 6}" y="${rowY}" text-anchor="start" fill="#1e293b" font-size="10.5" ${FM}>${escXml(res.attrs[attrIdx])}</text>`
-    + `<text x="${res.x + rw + 8}" y="${rowY - 3}" fill="#b45309" font-size="9" ${FM}>&#8592; retained (7.5)</text>`;
-
-  const legend = `<text x="16" y="${totalHeight - 60}" fill="#64748b" font-size="9" ${FM}>&#9472;&#9472; association  &#9670;&#9472; composition (&#9670; = whole)  &#183; &#183; &#183; association-class tether  |  multiplicity at both ends  |  italic = operations</text>`;
+  const legend = `<text x="16" y="${maxY - 40}" fill="#64748b" font-size="9" ${FM}>── Association  ◇── Aggregation  ◆── Composition  ──▷ Generalization  |  קרדינליות בשני קצות הקשר  |  --- association-class tether</text>`;
 
   const svg = document.getElementById('diagram-svg');
-  svg.setAttribute('width',   totalWidth);
-  svg.setAttribute('height',  totalHeight);
-  svg.setAttribute('viewBox', `0 0 ${totalWidth} ${totalHeight}`);
-  svg.innerHTML = defs + bg + zone + rels + boxes + hi + legend;
+  svg.setAttribute('width',   maxX);
+  svg.setAttribute('height',  maxY);
+  svg.setAttribute('viewBox', `0 0 ${maxX} ${maxY}`);
+  svg.innerHTML = defs + bg + rels + boxes + legend;
 }
 
-/* ============================================================
-   4. diagramModel (§8 / model-shape.md, kind:'class')
-   ============================================================ */
-function parseAttr(s) {
-  const m = s.match(/^\s*([+\-#])\s*([^:]+?)\s*:\s*(.+?)\s*$/);
-  if (m) return { visibility: m[1], name: m[2], type: m[3], defaultValue: null, constraint: null };
-  return { visibility: null, name: s.trim(), type: null, defaultValue: null, constraint: null };
-}
-function parseOp(s) {
-  const m = s.match(/^\s*([+\-#])\s*([A-Za-z0-9_]+)\s*\(([^)]*)\)\s*(?::\s*(.+))?\s*$/);
-  if (m) return { visibility: m[1], name: m[2], params: [], returnType: m[4] || null };
-  return { visibility: '+', name: s.trim(), params: [], returnType: null };
+/* association-class tethers: dashed line from the association midpoint to the
+   nearest edge of the association class, so the box can sit on any side of the
+   line without the tether cutting through it */
+function addTethers() {
+  const svg = document.getElementById('diagram-svg');
+  const out = ASSOC_CLASSES.map(({ classId, assocId }) => {
+    const base = RELS.find(r => r.id === assocId);
+    const cls  = CLASSES.find(c => c.id === classId);
+    if (!base || !cls) return '';
+    // midpoint ALONG the polyline — the chord midpoint of an L-shaped route
+    // floats in empty space, leaving the tether disconnected from the line
+    const p = base.points;
+    let total = 0;
+    const seg = [];
+    for (let i = 0; i < p.length - 1; i++) {
+      const L = Math.hypot(p[i + 1][0] - p[i][0], p[i + 1][1] - p[i][1]);
+      seg.push(L); total += L;
+    }
+    let half = total / 2, mx = p[0][0], my = p[0][1];
+    for (let i = 0; i < seg.length; i++) {
+      if (half <= seg[i]) {
+        const t = seg[i] ? half / seg[i] : 0;
+        mx = p[i][0] + (p[i + 1][0] - p[i][0]) * t;
+        my = p[i][1] + (p[i + 1][1] - p[i][1]) * t;
+        break;
+      }
+      half -= seg[i];
+    }
+
+    const w = boxW(cls), h = boxH(cls);
+    const cx = cls.x + w / 2, cy = cls.y + h / 2;
+    // clip the midpoint→centre segment at the box boundary
+    const dx = mx - cx, dy = my - cy;
+    let tx = cx, ty = cy;
+    if (dx !== 0 || dy !== 0) {
+      const sx = dx === 0 ? Infinity : (w / 2) / Math.abs(dx);
+      const sy = dy === 0 ? Infinity : (h / 2) / Math.abs(dy);
+      const s = Math.min(sx, sy);
+      tx = cx + dx * s;
+      ty = cy + dy * s;
+    }
+    return `<line x1="${mx}" y1="${my}" x2="${tx.toFixed(1)}" y2="${ty.toFixed(1)}" stroke="#334155" stroke-width="1.3" stroke-dasharray="4 3" fill="none"/>`;
+  }).join('');
+  if (out) svg.insertAdjacentHTML('beforeend', out);
 }
 
-const diagramModel = {
-  kind: 'class',
-  title: 'מודל מחלקות, "שולחן פנוי"',
-  parts: [{
-    id: 'part-1',
-    label: 'Domain Model',
-    splitRationale: '',
-    elements: CLASSES.map(c => ({
-      kind: 'class',
-      id: c.id,
-      name: c.name,
-      isAbstract: !!c.isAbstract,
-      stereotype: c.isEnum ? 'enumeration'
-                : (c.stereotype ? c.stereotype.replace(/[«»]/g, '').trim() : null),
-      attributes: c.attrs.map(parseAttr),
-      operations: c.ops.map(parseOp),
-      x: c.x, y: c.y, w: boxW(c), h: boxH(c)
-    })),
-    relationships: [
-      { kind: 'association', id: 'r_branch_table', from: 'Branch', to: 'Table',
-        multFrom: '1', multTo: '0..*', roleFrom: null, roleTo: null,
-        directed: false, aggregation: false, composition: true },
-      { kind: 'association', id: 'r_branch_hall', from: 'Branch', to: 'Hall',
-        multFrom: '1', multTo: '0..*', roleFrom: null, roleTo: null,
-        directed: false, aggregation: false, composition: true },
-      { kind: 'association', id: 'r_cust_table', from: 'Customer', to: 'Table',
-        multFrom: '0..*', multTo: '0..*', roleFrom: null, roleTo: 'reserves',
-        directed: false, aggregation: false, composition: false },
-      { kind: 'association', id: 'r_cust_hall', from: 'Customer', to: 'Hall',
-        multFrom: '0..*', multTo: '0..*', roleFrom: null, roleTo: 'books event',
-        directed: false, aggregation: false, composition: false },
-      { kind: 'associationClass', id: 'ac_reservation', classId: 'Reservation', assocId: 'r_cust_table' },
-      { kind: 'associationClass', id: 'ac_eventbooking', classId: 'EventBooking', assocId: 'r_cust_hall' },
-      { kind: 'association', id: 'r_staff_branch', from: 'Staff', to: 'Branch',
-        multFrom: '0..*', multTo: '1', roleFrom: 'assigned to', roleTo: null,
-        directed: false, aggregation: false, composition: false },
-      { kind: 'association', id: 'r_res_staff', from: 'Reservation', to: 'Staff',
-        multFrom: '0..*', multTo: '0..1', roleFrom: null, roleTo: 'handled by',
-        directed: false, aggregation: false, composition: false },
-      { kind: 'association', id: 'r_event_staff', from: 'EventBooking', to: 'Staff',
-        multFrom: '0..*', multTo: '0..1', roleFrom: null, roleTo: 'coordinated by',
-        directed: false, aggregation: false, composition: false },
-      { kind: 'association', id: 'r_menu_event', from: 'MenuPackage', to: 'EventBooking',
-        multFrom: '1', multTo: '0..*', roleFrom: null, roleTo: null,
-        directed: false, aggregation: false, composition: false },
-      { kind: 'association', id: 'r_menu_branch', from: 'MenuPackage', to: 'Branch',
-        multFrom: '0..*', multTo: '1..*', roleFrom: null, roleTo: 'offered at',
-        directed: false, aggregation: false, composition: false }
-    ]
-  }]
-};
+/* ── 3. diagramModel (model-shape.md, kind:'class') ──────────────────────── */
 
-/* ============================================================
-   5. VP EXPORT (export-buttons.md, XMI 2.1, class xmiBody)
-   ============================================================ */
+function buildModel() {
+  const parseMember = (s) => {
+    const m = s.match(/^([+\-#])?\s*([^:()]+?)\s*(\([^)]*\))?\s*(?::\s*(.+))?\s*$/);
+    return {
+      visibility: m && m[1] ? m[1] : '+',
+      name: m ? m[2].trim() : s,
+      type: m && m[4] ? m[4].trim() : null,
+      isOp: !!(m && m[3])
+    };
+  };
+  const elements = CLASSES.map(c => {
+    if (c.isEnum) {
+      return { kind: 'class', id: c.id, name: c.name, isAbstract: false,
+        stereotype: 'enumeration',
+        attributes: c.attrs.map(v => ({ visibility: '', name: v, type: null, defaultValue: null, constraint: null })),
+        operations: [], x: c.x, y: c.y, w: boxW(c), h: boxH(c) };
+    }
+    return { kind: 'class', id: c.id, name: c.name, isAbstract: !!c.isAbstract,
+      stereotype: c.stereotype ? c.stereotype.replace(/[«»]/g, '').trim() : null,
+      attributes: c.attrs.map(a => { const p = parseMember(a);
+        return { visibility: p.visibility, name: p.name, type: p.type, defaultValue: null, constraint: null }; }),
+      operations: c.ops.map(o => { const p = parseMember(o);
+        return { visibility: p.visibility, name: p.name, params: [], returnType: p.type }; }),
+      x: c.x, y: c.y, w: boxW(c), h: boxH(c) };
+  });
+
+  const relationships = [];
+  RELS.forEach((r, i) => {
+    if (r.type === 'gen') {
+      relationships.push({ kind: 'generalization', id: r.id || ('gen_' + i), from: r.from, to: r.to });
+      return;
+    }
+    relationships.push({ kind: 'association', id: r.id || ('assoc_' + i),
+      from: r.from, to: r.to, multFrom: r.fromMult, multTo: r.toMult,
+      roleFrom: r.fromRole || null, roleTo: r.toRole || null, directed: false,
+      aggregation: r.type === 'agg', composition: r.type === 'comp' });
+  });
+  ASSOC_CLASSES.forEach(ac => {
+    relationships.push({ kind: 'associationClass', id: 'ac_' + ac.classId, classId: ac.classId, assocId: ac.assocId });
+  });
+
+  return {
+    kind: 'class',
+    title: "Free Table Class Diagram",
+    parts: [ { id: 'part-1', label: "Free Table Class Diagram", splitRationale: '', elements, relationships } ]
+  };
+}
+
+const diagramModel = buildModel();
+
+/* ── 4. VP export ────────────────────────────────────────────────────────── */
+
 function xmlEscape(s) {
   return String(s ?? '')
     .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
@@ -431,12 +798,12 @@ function xmiBody(elements, rels) {
       lines.push(`    <packagedElement xmi:type="${tag}" xmi:id="${el.id}" name="${xmlEscape(el.name)}"${el.isAbstract ? ' isAbstract="true"' : ''}>`);
       if (isEnum) {
         for (const a of el.attributes)
-          lines.push(`      <ownedLiteral xmi:id="${el.id}_${xmlEscape(a.name)}" name="${xmlEscape(a.name)}"/>`);
+          lines.push(`      <ownedLiteral xmi:id="${el.id}_${a.name}" name="${xmlEscape(a.name)}"/>`);
       } else {
         for (const a of el.attributes)
-          lines.push(`      <ownedAttribute xmi:id="${el.id}_${xmlEscape(a.name)}" name="${xmlEscape(a.name)}" visibility="${a.visibility === '+' ? 'public' : a.visibility === '-' ? 'private' : 'protected'}"/>`);
+          lines.push(`      <ownedAttribute xmi:id="${el.id}_${a.name}" name="${xmlEscape(a.name)}" visibility="${a.visibility === '+' ? 'public' : a.visibility === '-' ? 'private' : 'protected'}"/>`);
         for (const op of el.operations)
-          lines.push(`      <ownedOperation xmi:id="${el.id}_${xmlEscape(op.name)}" name="${xmlEscape(op.name)}"/>`);
+          lines.push(`      <ownedOperation xmi:id="${el.id}_${op.name}" name="${xmlEscape(op.name)}"/>`);
       }
       lines.push(`    </packagedElement>`);
     }
@@ -470,9 +837,8 @@ ${body}
 
   downloadFile(title.replace(/\s+/g, '_') + '.xmi', 'application/xml', xmi);
 }
-// NOTE: Visual Paradigm auto-layouts on XMI import, coordinates are not preserved.
 
-document.addEventListener('DOMContentLoaded', render);
+document.addEventListener('DOMContentLoaded', () => { render(); addTethers(); });
 </script>
 </body>
 </html>

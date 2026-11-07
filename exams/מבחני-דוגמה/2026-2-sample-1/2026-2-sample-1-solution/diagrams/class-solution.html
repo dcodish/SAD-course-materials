@@ -2,24 +2,32 @@
 <html lang="he">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>פתרון שאלה 7, תרשים מחלקות, קמפוס בית</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,700;1,400&family=Rubik:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
   * { box-sizing: border-box; }
   body { margin: 0; padding: 24px; background: #eef2f7; font-family: 'Rubik', sans-serif; color: #1e293b; }
-  .page { max-width: 1360px; margin: 0 auto; }
+  .page { max-width: 1560px; margin: 0 auto; }
   header.top {
     background: #1e40af; color: #fff; border-radius: 10px 10px 0 0;
     padding: 18px 26px; direction: rtl; text-align: right;
   }
   header.top h1 { margin: 0 0 4px 0; font-size: 20px; font-weight: 700; }
-  header.top p { margin: 0; font-size: 13px; color: #dbeafe; }
+  header.top p { margin: 0; font-size: 13px; color: #dbeafe; line-height: 1.7; }
   .diagram-wrap {
     background: #fff; border: 1px solid #cbd5e1; border-top: none;
     border-radius: 0 0 10px 10px; padding: 10px; overflow-x: auto; direction: ltr;
   }
   svg { display: block; }
+  .has-notes .diagram-wrap { border-radius: 0; }
+  .notes { background: #fef9c3; border: 1px solid #eab308; border-top: none; border-radius: 0 0 10px 10px; padding: 16px 22px; direction: rtl; text-align: right; }
+  .notes h2 { margin: 0 0 10px 0; font-size: 14px; font-weight: 700; color: #78350f; }
+  .notes .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 24px; }
+  .notes p { margin: 0; font-size: 12px; line-height: 1.5; color: #78350f; }
+  .notes code { font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; }
+  @media (max-width: 760px) { .notes .grid { grid-template-columns: 1fr; } }
   .vp-export-btn {
     position: fixed; bottom: 20px; right: 20px; z-index: 1000;
     background: #1e40af; color: #fff; border: none; border-radius: 6px;
@@ -30,7 +38,7 @@
 </style>
 </head>
 <body>
-<div class="page">
+<div class="page has-notes">
   <header class="top">
     <h1>פתרון שאלה 7, תרשים מחלקות, קמפוס בית</h1>
     <p>ניתוח ועיצוב מערכות מידע (364-1-1411), מבחן לדוגמה, סמסטר ב' 2026, תרשים מודל-פתרון להוראה</p>
@@ -38,122 +46,596 @@
   <div class="diagram-wrap">
     <svg id="diagram-svg" xmlns="http://www.w3.org/2000/svg"></svg>
   </div>
+  <div class="notes">
+    <h2>הערות עיצוב, שאלה 7</h2>
+    <div class="grid">
+      <p><b>7.2, חוזה השכירות הוא מחלקה מתווכת:</b> <code>Student</code> 1─0..* <code>RentalAgreement</code> 0..*─1 <code>Room</code>. חוזה שהסתיים נשמר לצורכי דיווח, ודייר רשאי לחתום על חוזה חדש, גם על אותו חדר בשנה נוספת. לאותו צמד סטודנט-חדר יכולים אפוא להיות כמה חוזים, והצמד אינו מזהה חוזה אחד. החוזה הוא דבר בפני עצמו: יש לו סטטוס, מחזור חיים (שאלה 8) וחיובים משלו.</p>
+      <p><b>ההכרעה תלויה במטרת המערכת:</b> אילו המערכת הייתה צריכה לדעת רק מי גר בכל חדר עכשיו, ולא הייתה שומרת חוזים קודמים, מחלקת קשר על הקשר סטודנט-חדר הייתה מספיקה. השאלה המכריעה (הרצאה 6-7, שקף 35): האם הצמד מזהה את המופע? כאן לא.</p>
+      <p><b>הזמנת מתקן, אותו היגיון:</b> דייר מזמין את אותו מתקן שוב ושוב, בכל פעם לתאריך ולשעה אחרים. לכן <code>Booking</code> היא מחלקה מתווכת בין <code>Student</code> ל-<code>SharedFacility</code>, ולא מחלקת קשר.</p>
+      <p><b>חיובים שייכים לחוזה:</b> <code>RentalAgreement</code> 1─0..* <code>Payment</code>. חיוב נוצר לכל חוזה פעיל, ולכן הוא קשור לחוזה ולא לסטודנט. הגבול התחתון הוא 0, כי לחוזה בטיוטה או לחוזה שבוטל לפני תחילתו אין חיובים.</p>
+      <p><b>קריאת תחזוקה, מקום התקלה:</b> הדייר פותח קריאה עבור חדרו או עבור שטח משותף בבניין. לכן הקריאה קשורה תמיד ל-<code>Building</code> (0..* מול 1), ול-<code>Room</code> רק כשהיא עבור חדר (0..* מול 0..1). בקריאה על שטח משותף אין חדר, והתיאור מפרט את המקום. הקשר ל-<code>Student</code> נשאר: הוא מי שפתח את הקריאה ומי שמאשר שהתקלה תוקנה.</p>
+      <p><b>7.3, קומפוזיציה:</b> <code>Building</code> ◆ <code>Apartment</code> ◆ <code>Room</code>, בכל קשר 1 מול 1..*. דירה וחדר אינם קיימים בלי הבניין, ולכן בניין שיוצא מניהול החברה גורר איתו את דירותיו וחדריו.</p>
+      <p><b>7.4, enumerator כטיפוס של תכונה:</b> <code>UrgencyLevel</code> ו-<code>FacilityType</code> הם קבוצות ערכים סגורות בלי תכונות משלהן, ולכן הם הטיפוס של <code>urgency</code> ושל <code>type</code>, ולא מחלקה בקצה של קו.</p>
+      <p><b>7.5, <code>paidDate</code> נשמר במכוון:</b> הבקשה לסמן רק "שולם" או "לא שולם" סותרת את כלל הפיגור (עשרה ימים) ואת דוח הדיירים בפיגור, שאי אפשר לחשב בלי תאריך התשלום.</p>
+    </div>
+  </div>
 </div>
 
 <button class="vp-export-btn" onclick="exportXMI()">Download .xmi (Visual Paradigm)</button>
 
 <script>
-/* ── 1. DATA ─────────────────────────────────────────────────────────────── */
+/* ── 1. DATA (routed offline by render_class.mjs) ────────────────────────── */
 
 const CLASSES = [
-  { id: 'Building', name: 'Building', stereotype: null, isEnum: false, isAbstract: false,
-    attrs: ['+ address : String', '+ city : String', '+ floors : Integer'], ops: [],
-    x: 40, y: 60 },
-
-  { id: 'Apartment', name: 'Apartment', stereotype: null, isEnum: false, isAbstract: false,
-    attrs: ['+ apartmentNumber : String', '+ floor : Integer'], ops: [],
-    x: 40, y: 260 },
-
-  { id: 'Room', name: 'Room', stereotype: null, isEnum: false, isAbstract: false,
-    attrs: ['+ roomNumber : String', '+ size : Number', '+ isAvailable : Boolean'], ops: [],
-    x: 40, y: 440 },
-
-  { id: 'Student', name: 'Student', stereotype: null, isEnum: false, isAbstract: false,
-    attrs: ['+ name : String', '+ contactInfo : String', '+ institution : String'], ops: [],
-    x: 400, y: 440 },
-
-  { id: 'SharedFacility', name: 'SharedFacility', stereotype: null, isEnum: false, isAbstract: false,
-    attrs: ['+ name : String', '+ type : FacilityType'], ops: [],
-    x: 740, y: 445 },
-
-  { id: 'RentalAgreement', name: 'RentalAgreement', stereotype: '«association class»', isEnum: false, isAbstract: false,
-    attrs: ['+ startDate : Date', '+ endDate : Date', '+ monthlyRent : Number',
-            '+ deposit : Number', '+ status : AgreementStatus',
-            '+ closureReason : AgreementStatus'],
-    ops: ['+ approve()', '+ returnForCorrection()', '+ cancel()', '+ activate()'],
-    x: 210, y: 610 },
-
-  { id: 'Booking', name: 'Booking', stereotype: '«association class»', isEnum: false, isAbstract: false,
-    attrs: ['+ date : Date', '+ timeSlot : String', '+ status : BookingStatus'], ops: [],
-    x: 563, y: 610 },
-
-  { id: 'Payment', name: 'Payment', stereotype: null, isEnum: false, isAbstract: false,
-    attrs: ['+ amount : Number', '+ dueDate : Date', '+ paidDate : Date', '+ status : PaymentStatus'], ops: [],
-    x: 210, y: 880 },
-
-  { id: 'MaintenanceRequest', name: 'MaintenanceRequest', stereotype: null, isEnum: false, isAbstract: false,
-    attrs: ['+ description : String', '+ urgency : UrgencyLevel', '+ cost : Number', '+ status : RequestStatus'],
-    ops: ['+ assignContractor()', '+ reportDone(cost)', '+ confirmFixed()'],
-    x: 430, y: 870 },
-
-  { id: 'Contractor', name: 'Contractor', stereotype: null, isEnum: false, isAbstract: false,
-    attrs: ['+ name : String', '+ trade : ContractorTrade', '+ phone : String'], ops: [],
-    x: 430, y: 1090 },
-
-  /* ── enumerations (unconnected boxes, right column) ── */
-  { id: 'AgreementStatus', name: 'AgreementStatus', stereotype: '«enumeration»', isEnum: true, isAbstract: false,
-    attrs: ['Draft', 'AwaitingSignature', 'AwaitingApproval', 'ReturnedForCorrection',
-            'Active', 'InArrears', 'Ended', 'Cancelled', 'Archived'], ops: [],
-    x: 1060, y: 60 },
-
-  { id: 'PaymentStatus', name: 'PaymentStatus', stereotype: '«enumeration»', isEnum: true, isAbstract: false,
-    attrs: ['Pending', 'Paid', 'Rejected'], ops: [],
-    x: 1060, y: 250 },
-
-  { id: 'UrgencyLevel', name: 'UrgencyLevel', stereotype: '«enumeration»', isEnum: true, isAbstract: false,
-    attrs: ['Normal', 'Urgent', 'Emergency'], ops: [],
-    x: 1060, y: 375 },
-
-  { id: 'FacilityType', name: 'FacilityType', stereotype: '«enumeration»', isEnum: true, isAbstract: false,
-    attrs: ['Laundry', 'StudyRoom', 'Gym'], ops: [],
-    x: 1060, y: 500 },
-
-  { id: 'ContractorTrade', name: 'ContractorTrade', stereotype: '«enumeration»', isEnum: true, isAbstract: false,
-    attrs: ['Plumbing', 'Electricity', 'HVAC'], ops: [],
-    x: 1060, y: 625 },
-  { id: 'BookingStatus', name: 'BookingStatus', stereotype: '«enumeration»', isEnum: true, isAbstract: false,
-    attrs: ['Requested', 'Confirmed', 'Cancelled'], ops: [],
-    x: 1060, y: 750 },
-  { id: 'RequestStatus', name: 'RequestStatus', stereotype: '«enumeration»', isEnum: true, isAbstract: false,
-    attrs: ['Open', 'Assigned', 'Closed'], ops: [],
-    x: 1060, y: 875 }
+  {
+    "id": "Building",
+    "name": "Building",
+    "stereotype": null,
+    "isEnum": false,
+    "isAbstract": false,
+    "attrs": [
+      "+ address : String",
+      "+ city : String",
+      "+ floors : Integer"
+    ],
+    "ops": [],
+    "x": 40,
+    "y": 60
+  },
+  {
+    "id": "Apartment",
+    "name": "Apartment",
+    "stereotype": null,
+    "isEnum": false,
+    "isAbstract": false,
+    "attrs": [
+      "+ apartmentNumber : String",
+      "+ floor : Integer"
+    ],
+    "ops": [],
+    "x": 40,
+    "y": 260
+  },
+  {
+    "id": "Room",
+    "name": "Room",
+    "stereotype": null,
+    "isEnum": false,
+    "isAbstract": false,
+    "attrs": [
+      "+ roomNumber : String",
+      "+ size : Number",
+      "+ isAvailable : Boolean"
+    ],
+    "ops": [],
+    "x": 40,
+    "y": 440
+  },
+  {
+    "id": "Student",
+    "name": "Student",
+    "stereotype": null,
+    "isEnum": false,
+    "isAbstract": false,
+    "attrs": [
+      "+ name : String",
+      "+ contactInfo : String",
+      "+ institution : String"
+    ],
+    "ops": [],
+    "x": 400,
+    "y": 440
+  },
+  {
+    "id": "SharedFacility",
+    "name": "SharedFacility",
+    "stereotype": null,
+    "isEnum": false,
+    "isAbstract": false,
+    "attrs": [
+      "+ name : String",
+      "+ type : FacilityType"
+    ],
+    "ops": [],
+    "x": 740,
+    "y": 445
+  },
+  {
+    "id": "RentalAgreement",
+    "name": "RentalAgreement",
+    "stereotype": null,
+    "isEnum": false,
+    "isAbstract": false,
+    "attrs": [
+      "+ startDate : Date",
+      "+ endDate : Date",
+      "+ monthlyRent : Number",
+      "+ deposit : Number",
+      "+ status : AgreementStatus",
+      "+ closureReason : AgreementStatus"
+    ],
+    "ops": [
+      "+ approve()",
+      "+ returnForCorrection()",
+      "+ cancel()",
+      "+ activate()"
+    ],
+    "x": 210,
+    "y": 610
+  },
+  {
+    "id": "Booking",
+    "name": "Booking",
+    "stereotype": null,
+    "isEnum": false,
+    "isAbstract": false,
+    "attrs": [
+      "+ date : Date",
+      "+ timeSlot : String",
+      "+ status : BookingStatus"
+    ],
+    "ops": [],
+    "x": 563,
+    "y": 610
+  },
+  {
+    "id": "Payment",
+    "name": "Payment",
+    "stereotype": null,
+    "isEnum": false,
+    "isAbstract": false,
+    "attrs": [
+      "+ amount : Number",
+      "+ dueDate : Date",
+      "+ paidDate : Date",
+      "+ status : PaymentStatus"
+    ],
+    "ops": [],
+    "x": 210,
+    "y": 880
+  },
+  {
+    "id": "MaintenanceRequest",
+    "name": "MaintenanceRequest",
+    "stereotype": null,
+    "isEnum": false,
+    "isAbstract": false,
+    "attrs": [
+      "+ description : String",
+      "+ urgency : UrgencyLevel",
+      "+ cost : Number",
+      "+ status : RequestStatus"
+    ],
+    "ops": [
+      "+ assignContractor()",
+      "+ reportDone(cost)",
+      "+ confirmFixed()"
+    ],
+    "x": 430,
+    "y": 870
+  },
+  {
+    "id": "Contractor",
+    "name": "Contractor",
+    "stereotype": null,
+    "isEnum": false,
+    "isAbstract": false,
+    "attrs": [
+      "+ name : String",
+      "+ trade : ContractorTrade",
+      "+ phone : String"
+    ],
+    "ops": [],
+    "x": 430,
+    "y": 1090
+  },
+  {
+    "id": "AgreementStatus",
+    "name": "AgreementStatus",
+    "stereotype": "«enumeration»",
+    "isEnum": true,
+    "isAbstract": false,
+    "attrs": [
+      "Draft",
+      "AwaitingSignature",
+      "AwaitingApproval",
+      "ReturnedForCorrection",
+      "Active",
+      "InArrears",
+      "Ended",
+      "Cancelled",
+      "Archived"
+    ],
+    "ops": [],
+    "x": 1060,
+    "y": 60
+  },
+  {
+    "id": "PaymentStatus",
+    "name": "PaymentStatus",
+    "stereotype": "«enumeration»",
+    "isEnum": true,
+    "isAbstract": false,
+    "attrs": [
+      "Pending",
+      "Paid",
+      "Rejected"
+    ],
+    "ops": [],
+    "x": 1060,
+    "y": 250
+  },
+  {
+    "id": "UrgencyLevel",
+    "name": "UrgencyLevel",
+    "stereotype": "«enumeration»",
+    "isEnum": true,
+    "isAbstract": false,
+    "attrs": [
+      "Normal",
+      "Urgent",
+      "Emergency"
+    ],
+    "ops": [],
+    "x": 1060,
+    "y": 375
+  },
+  {
+    "id": "FacilityType",
+    "name": "FacilityType",
+    "stereotype": "«enumeration»",
+    "isEnum": true,
+    "isAbstract": false,
+    "attrs": [
+      "Laundry",
+      "StudyRoom",
+      "Gym"
+    ],
+    "ops": [],
+    "x": 1060,
+    "y": 500
+  },
+  {
+    "id": "ContractorTrade",
+    "name": "ContractorTrade",
+    "stereotype": "«enumeration»",
+    "isEnum": true,
+    "isAbstract": false,
+    "attrs": [
+      "Plumbing",
+      "Electricity",
+      "HVAC"
+    ],
+    "ops": [],
+    "x": 1060,
+    "y": 625
+  },
+  {
+    "id": "BookingStatus",
+    "name": "BookingStatus",
+    "stereotype": "«enumeration»",
+    "isEnum": true,
+    "isAbstract": false,
+    "attrs": [
+      "Requested",
+      "Confirmed",
+      "Cancelled"
+    ],
+    "ops": [],
+    "x": 1060,
+    "y": 750
+  },
+  {
+    "id": "RequestStatus",
+    "name": "RequestStatus",
+    "stereotype": "«enumeration»",
+    "isEnum": true,
+    "isAbstract": false,
+    "attrs": [
+      "Open",
+      "Assigned",
+      "Closed"
+    ],
+    "ops": [],
+    "x": 1060,
+    "y": 875
+  }
 ];
 
 const RELS = [
-  { type: 'comp', from: 'Building', to: 'Apartment', fromMult: '1', toMult: '1..*',
-    fromRole: null, toRole: null, label: null,
-    points: [[100, 142], [100, 260]] },
-
-  { type: 'comp', from: 'Apartment', to: 'Room', fromMult: '1', toMult: '1..*',
-    fromRole: null, toRole: null, label: null,
-    points: [[100, 328], [100, 440]] },
-
-  { id: 'ac_base_RA', type: 'assoc', from: 'Room', to: 'Student', fromMult: '0..*', toMult: '0..*',
-    fromRole: null, toRole: null, label: 'rents',
-    points: [[206, 481], [303, 481], [400, 481]] },
-
-  { id: 'ac_base_Booking', type: 'assoc', from: 'Student', to: 'SharedFacility', fromMult: '0..*', toMult: '0..*',
-    fromRole: null, toRole: null, label: 'books',
-    points: [[559, 480], [649.5, 480], [740, 480]] },
-
-  { type: 'assoc', from: 'Building', to: 'SharedFacility', fromMult: '1', toMult: '0..*',
-    fromRole: null, toRole: null, label: 'offers',
-    points: [[106.5, 60], [106.5, 30], [816.5, 30], [816.5, 445]] },
-
-  { type: 'assoc', from: 'RentalAgreement', to: 'Payment', fromMult: '1', toMult: '1..*',
-    fromRole: null, toRole: null, label: 'generates',
-    points: [[302.5, 787], [302.5, 833], [296, 833], [296, 880]] },
-
-  { type: 'assoc', from: 'Student', to: 'MaintenanceRequest', fromMult: '1', toMult: '0..*',
-    fromRole: null, toRole: null, label: 'opens',
-    points: [[479.5, 522], [479.5, 845], [516, 845], [516, 870]] },
-
-  { type: 'assoc', from: 'MaintenanceRequest', to: 'Contractor', fromMult: '0..*', toMult: '0..1',
-    fromRole: null, toRole: null, label: null,
-    points: [[516, 1009], [516, 1090]] }
+  {
+    "type": "comp",
+    "from": "Building",
+    "to": "Apartment",
+    "fromMult": "1",
+    "toMult": "1..*",
+    "fromRole": null,
+    "toRole": null,
+    "label": null,
+    "points": [
+      [
+        100,
+        142
+      ],
+      [
+        100,
+        260
+      ]
+    ]
+  },
+  {
+    "type": "comp",
+    "from": "Apartment",
+    "to": "Room",
+    "fromMult": "1",
+    "toMult": "1..*",
+    "fromRole": null,
+    "toRole": null,
+    "label": null,
+    "points": [
+      [
+        100,
+        328
+      ],
+      [
+        100,
+        440
+      ]
+    ]
+  },
+  {
+    "type": "assoc",
+    "from": "Building",
+    "to": "SharedFacility",
+    "fromMult": "1",
+    "toMult": "0..*",
+    "fromRole": null,
+    "toRole": null,
+    "label": "offers",
+    "points": [
+      [
+        106.5,
+        60
+      ],
+      [
+        106.5,
+        30
+      ],
+      [
+        816.5,
+        30
+      ],
+      [
+        816.5,
+        445
+      ]
+    ]
+  },
+  {
+    "type": "assoc",
+    "from": "RentalAgreement",
+    "to": "Payment",
+    "fromMult": "1",
+    "toMult": "0..*",
+    "fromRole": null,
+    "toRole": null,
+    "label": "generates",
+    "points": [
+      [
+        302.5,
+        787
+      ],
+      [
+        302.5,
+        833
+      ],
+      [
+        296,
+        833
+      ],
+      [
+        296,
+        880
+      ]
+    ]
+  },
+  {
+    "type": "assoc",
+    "from": "Student",
+    "to": "MaintenanceRequest",
+    "fromMult": "1",
+    "toMult": "0..*",
+    "fromRole": null,
+    "toRole": null,
+    "label": "opens",
+    "points": [
+      [
+        479.5,
+        522
+      ],
+      [
+        479.5,
+        845
+      ],
+      [
+        516,
+        845
+      ],
+      [
+        516,
+        870
+      ]
+    ]
+  },
+  {
+    "type": "assoc",
+    "from": "MaintenanceRequest",
+    "to": "Contractor",
+    "fromMult": "0..*",
+    "toMult": "0..1",
+    "fromRole": null,
+    "toRole": null,
+    "label": null,
+    "points": [
+      [
+        516,
+        1009
+      ],
+      [
+        516,
+        1090
+      ]
+    ]
+  },
+  {
+    "fromRole": null,
+    "toRole": null,
+    "type": "assoc",
+    "from": "Student",
+    "to": "RentalAgreement",
+    "fromMult": "1",
+    "toMult": "0..*",
+    "label": "signs",
+    "points": [
+      [
+        420.5,
+        522
+      ],
+      [
+        420.5,
+        610
+      ]
+    ]
+  },
+  {
+    "fromRole": null,
+    "toRole": null,
+    "type": "assoc",
+    "from": "RentalAgreement",
+    "to": "Room",
+    "fromMult": "0..*",
+    "toMult": "1",
+    "label": "for",
+    "points": [
+      [
+        210,
+        700.5
+      ],
+      [
+        123,
+        700.5
+      ],
+      [
+        123,
+        522
+      ]
+    ]
+  },
+  {
+    "fromRole": null,
+    "toRole": null,
+    "type": "assoc",
+    "from": "Student",
+    "to": "Booking",
+    "fromMult": "1",
+    "toMult": "0..*",
+    "label": "makes",
+    "points": [
+      [
+        559,
+        481
+      ],
+      [
+        649,
+        481
+      ],
+      [
+        649,
+        610
+      ]
+    ]
+  },
+  {
+    "fromRole": null,
+    "toRole": null,
+    "type": "assoc",
+    "from": "Booking",
+    "to": "SharedFacility",
+    "fromMult": "0..*",
+    "toMult": "1",
+    "label": "of",
+    "points": [
+      [
+        735,
+        651
+      ],
+      [
+        816.5,
+        651
+      ],
+      [
+        816.5,
+        513
+      ]
+    ]
+  },
+  {
+    "type": "assoc",
+    "from": "MaintenanceRequest",
+    "to": "Building",
+    "fromMult": "0..*",
+    "toMult": "1",
+    "label": "located in",
+    "fromRole": null,
+    "toRole": null,
+    "points": [
+      [
+        430,
+        1000
+      ],
+      [
+        20,
+        1000
+      ],
+      [
+        20,
+        120
+      ],
+      [
+        40,
+        120
+      ]
+    ]
+  },
+  {
+    "type": "assoc",
+    "from": "MaintenanceRequest",
+    "to": "Room",
+    "fromMult": "0..*",
+    "toMult": "0..1",
+    "label": "for room",
+    "fromRole": null,
+    "toRole": null,
+    "points": [
+      [
+        430,
+        975
+      ],
+      [
+        60,
+        975
+      ],
+      [
+        60,
+        522
+      ]
+    ]
+  }
 ];
 
-/* ── 2. ENGINE (§9d, verbatim) ───────────────────────────────────────────── */
+const ASSOC_CLASSES = [];
+
+/* ── 2. ENGINE (SAD MCP uml-class-diagram §9d) ───────────────────────────── */
 
 const HDR_H = 28, PAD = 6, LINE_H = 14, DIV_H = 1;
 const FM = 'font-family="IBM Plex Mono, monospace"';
@@ -221,14 +703,13 @@ function svgRel(rel) {
   if (rel.type === 'agg')  mS = 'marker-start="url(#aggHollow)"';
   if (rel.type === 'gen')  mE = 'marker-end="url(#genHollow)"';
   if (rel.type === 'dep')  { mE = 'marker-end="url(#arrOpen)"'; dash = 'stroke-dasharray="6 3"'; }
-  // 'assoc': no markers, plain line
 
   let s = `<polyline points="${pts}" fill="none" stroke="#334155" stroke-width="1.8" ${dash} ${mS} ${mE}/>`;
   const multLabel = (end, adj, txt) => {
     const dx = adj[0] - end[0], dy = adj[1] - end[1];
     const L = Math.hypot(dx, dy) || 1, ux = dx / L, uy = dy / L;
-    const x = end[0] + ux * 16 - uy * 9, y = end[1] + uy * 16 + ux * 9 + 3;
-    return `<text x="${x}" y="${y}" text-anchor="middle" fill="#64748b" font-size="9.5" ${FM}>${escXml(txt)}</text>`;
+    const x = end[0] + ux * 18 - uy * 10, y = end[1] + uy * 18 + ux * 10 + 3;
+    return `<text x="${x}" y="${y}" text-anchor="middle" fill="#64748b" font-size="9.5" ${FM} style="direction:ltr;unicode-bidi:isolate">${escXml(txt)}</text>`;
   };
   if (rel.fromMult) s += multLabel(rel.points[0], rel.points[1], rel.fromMult);
   if (rel.toMult) {
@@ -267,35 +748,62 @@ function render() {
     </marker>
   </defs>`;
 
-  const totalWidth  = maxX;
-  const totalHeight = maxY;
-
-  const bg    = `<rect width="${totalWidth}" height="${totalHeight}" fill="url(#dotgrid)"/>`;
+  const bg    = `<rect width="${maxX}" height="${maxY}" fill="url(#dotgrid)"/>`;
   const rels  = RELS.map(svgRel).join('');
   const boxes = CLASSES.map(svgBox).join('');
-  const legend = `<text x="16" y="${totalHeight - 60}" fill="#64748b" font-size="9" ${FM}>── Association  ◇── Aggregation  ◆── Composition  ──▷ Generalization  |  קרדינליות בשני קצות הקשר  |  --- association-class tether</text>`;
+  const legend = `<text x="16" y="${maxY - 40}" fill="#64748b" font-size="9" ${FM}>── Association  ◇── Aggregation  ◆── Composition  ──▷ Generalization  |  קרדינליות בשני קצות הקשר  |  --- association-class tether</text>`;
 
   const svg = document.getElementById('diagram-svg');
-  svg.setAttribute('width',   totalWidth);
-  svg.setAttribute('height',  totalHeight);
-  svg.setAttribute('viewBox', `0 0 ${totalWidth} ${totalHeight}`);
+  svg.setAttribute('width',   maxX);
+  svg.setAttribute('height',  maxY);
+  svg.setAttribute('viewBox', `0 0 ${maxX} ${maxY}`);
   svg.innerHTML = defs + bg + rels + boxes + legend;
 }
 
-/* ── Association-class tethers (course rule: dashed line from association
-      midpoint to the association-class box; the association line remains) ── */
+/* association-class tethers: dashed line from the association midpoint to the
+   nearest edge of the association class, so the box can sit on any side of the
+   line without the tether cutting through it */
 function addTethers() {
   const svg = document.getElementById('diagram-svg');
-  const tether = (baseId, clsId) => {
-    const base = RELS.find(r => r.id === baseId);
-    const cls  = CLASSES.find(c => c.id === clsId);
-    const p = base.points, a = p[0], b = p[p.length - 1];
-    const mx = (a[0] + b[0]) / 2, my = (a[1] + b[1]) / 2;
-    const tx = cls.x + boxW(cls) / 2, ty = cls.y;
-    return `<line x1="${mx}" y1="${my}" x2="${tx}" y2="${ty}" stroke="#334155" stroke-width="1.3" stroke-dasharray="4 3" fill="none"/>`;
-  };
-  svg.insertAdjacentHTML('beforeend',
-    tether('ac_base_RA', 'RentalAgreement') + tether('ac_base_Booking', 'Booking'));
+  const out = ASSOC_CLASSES.map(({ classId, assocId }) => {
+    const base = RELS.find(r => r.id === assocId);
+    const cls  = CLASSES.find(c => c.id === classId);
+    if (!base || !cls) return '';
+    // midpoint ALONG the polyline — the chord midpoint of an L-shaped route
+    // floats in empty space, leaving the tether disconnected from the line
+    const p = base.points;
+    let total = 0;
+    const seg = [];
+    for (let i = 0; i < p.length - 1; i++) {
+      const L = Math.hypot(p[i + 1][0] - p[i][0], p[i + 1][1] - p[i][1]);
+      seg.push(L); total += L;
+    }
+    let half = total / 2, mx = p[0][0], my = p[0][1];
+    for (let i = 0; i < seg.length; i++) {
+      if (half <= seg[i]) {
+        const t = seg[i] ? half / seg[i] : 0;
+        mx = p[i][0] + (p[i + 1][0] - p[i][0]) * t;
+        my = p[i][1] + (p[i + 1][1] - p[i][1]) * t;
+        break;
+      }
+      half -= seg[i];
+    }
+
+    const w = boxW(cls), h = boxH(cls);
+    const cx = cls.x + w / 2, cy = cls.y + h / 2;
+    // clip the midpoint→centre segment at the box boundary
+    const dx = mx - cx, dy = my - cy;
+    let tx = cx, ty = cy;
+    if (dx !== 0 || dy !== 0) {
+      const sx = dx === 0 ? Infinity : (w / 2) / Math.abs(dx);
+      const sy = dy === 0 ? Infinity : (h / 2) / Math.abs(dy);
+      const s = Math.min(sx, sy);
+      tx = cx + dx * s;
+      ty = cy + dy * s;
+    }
+    return `<line x1="${mx}" y1="${my}" x2="${tx.toFixed(1)}" y2="${ty.toFixed(1)}" stroke="#334155" stroke-width="1.3" stroke-dasharray="4 3" fill="none"/>`;
+  }).join('');
+  if (out) svg.insertAdjacentHTML('beforeend', out);
 }
 
 /* ── 3. diagramModel (model-shape.md, kind:'class') ──────────────────────── */
@@ -317,7 +825,7 @@ function buildModel() {
         attributes: c.attrs.map(v => ({ visibility: '', name: v, type: null, defaultValue: null, constraint: null })),
         operations: [], x: c.x, y: c.y, w: boxW(c), h: boxH(c) };
     }
-    return { kind: 'class', id: c.id, name: c.name, isAbstract: c.isAbstract,
+    return { kind: 'class', id: c.id, name: c.name, isAbstract: !!c.isAbstract,
       stereotype: c.stereotype ? c.stereotype.replace(/[«»]/g, '').trim() : null,
       attributes: c.attrs.map(a => { const p = parseMember(a);
         return { visibility: p.visibility, name: p.name, type: p.type, defaultValue: null, constraint: null }; }),
@@ -328,24 +836,29 @@ function buildModel() {
 
   const relationships = [];
   RELS.forEach((r, i) => {
+    if (r.type === 'gen') {
+      relationships.push({ kind: 'generalization', id: r.id || ('gen_' + i), from: r.from, to: r.to });
+      return;
+    }
     relationships.push({ kind: 'association', id: r.id || ('assoc_' + i),
       from: r.from, to: r.to, multFrom: r.fromMult, multTo: r.toMult,
-      roleFrom: r.fromRole, roleTo: r.toRole, directed: false,
+      roleFrom: r.fromRole || null, roleTo: r.toRole || null, directed: false,
       aggregation: r.type === 'agg', composition: r.type === 'comp' });
   });
-  relationships.push({ kind: 'associationClass', id: 'ac_RentalAgreement', classId: 'RentalAgreement', assocId: 'ac_base_RA' });
-  relationships.push({ kind: 'associationClass', id: 'ac_Booking', classId: 'Booking', assocId: 'ac_base_Booking' });
+  ASSOC_CLASSES.forEach(ac => {
+    relationships.push({ kind: 'associationClass', id: 'ac_' + ac.classId, classId: ac.classId, assocId: ac.assocId });
+  });
 
   return {
     kind: 'class',
-    title: 'קמפוס בית, Class Diagram',
-    parts: [ { id: 'part-1', label: 'Campus Housing', splitRationale: '', elements, relationships } ]
+    title: "Campus Home Class Diagram",
+    parts: [ { id: 'part-1', label: "Campus Home Class Diagram", splitRationale: '', elements, relationships } ]
   };
 }
 
 const diagramModel = buildModel();
 
-/* ── 4. VP export (export-buttons.md) ────────────────────────────────────── */
+/* ── 4. VP export ────────────────────────────────────────────────────────── */
 
 function xmlEscape(s) {
   return String(s ?? '')
@@ -411,7 +924,6 @@ ${body}
   downloadFile(title.replace(/\s+/g, '_') + '.xmi', 'application/xml', xmi);
 }
 
-/* ── boot ── */
 document.addEventListener('DOMContentLoaded', () => { render(); addTethers(); });
 </script>
 </body>
