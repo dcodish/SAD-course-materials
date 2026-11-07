@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>מערכת הזמנת אוכל בקמפוס — תרשים בסיסי (Use Case)</title>
+<title>מערכת הזמנת אוכל בקמפוס: תרשים בסיסי (Use Case)</title>
 <style>
 /* Fully self-contained: no external font fetch. Map the skill font families to
    system stacks so the file renders identically offline / inside a slide iframe. */
@@ -214,7 +214,7 @@ body.embed svg { max-width: none !important; width: 100% !important; height: 100
 </style>
 </head>
 <body>
-<h1 class="page-title">מערכת הזמנת אוכל — תרשים בסיסי (Use Case)</h1>
+<h1 class="page-title">מערכת הזמנת אוכל: תרשים בסיסי (Use Case)</h1>
 
 <div style="text-align:center;margin:8px 0;">
   <button onclick="fixLayout(currentLayout())" class="fix-btn">Fix Layout</button>
@@ -240,7 +240,7 @@ body.embed svg { max-width: none !important; width: 100% !important; height: 100
         font-size="14" font-weight="700" fill="#ffffff"
         font-family="'Noto Sans Hebrew',sans-serif" direction="rtl">מערכת הזמנת אוכל בקמפוס</text>
 
-  <!-- Association lines (solid) + hitboxes — 5 associations only -->
+  <!-- Association lines (solid) + hitboxes, 5 associations only -->
   <line data-conn-from="student" data-conn-to="uc-browse-menu" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
   <line class="conn-hitbox" data-conn-id="as-student-browse" data-hitbox-from="student" data-hitbox-to="uc-browse-menu" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('as-student-browse','assoc',event)"/>
   <line data-conn-from="student" data-conn-to="uc-order-pay" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
@@ -327,7 +327,7 @@ body.embed svg { max-width: none !important; width: 100% !important; height: 100
 <button class="vp-export-btn" onclick="exportXMI()">Download .xmi (Visual Paradigm)</button>
 
 <script>
-/* Diagram data — SIMPLE overview model:
+/* Diagram data: SIMPLE overview model:
    system boundary + 3 actors + 5 use cases + 5 association lines.
    No «include», no «extend», no generalization (Section C teaches those).
    The documentation BEHIND each UC uses the full v2.6 flow grammar:
@@ -448,15 +448,15 @@ var diagramLayouts    = [
 var actorDescriptions = {
   "student": {
     "name": "סטודנט",
-    "desc": "סטודנט בקמפוס המזמין אוכל מהקפיטריות דרך האפליקציה — מעיין, מזמין, משלם, עוקב ואוסף."
+    "desc": "סטודנט בקמפוס המזמין אוכל מהקפיטריות דרך האפליקציה: מעיין, מזמין, משלם, עוקב ואוסף."
   },
   "counter-staff": {
     "name": "עובד דלפק",
-    "desc": "עובד דלפק האיסוף — מאמת שההזמנה שולמה ושייכת לסטודנט שמולו, ומוסר אותה."
+    "desc": "עובד דלפק האיסוף: מאמת שההזמנה שולמה ושייכת לסטודנט שמולו, ומוסר אותה."
   },
   "cafe-manager": {
     "name": "מנהל קפיטריה",
-    "desc": "מנהל הקפיטריה — אחראי לתפריט, למחירים ולמלאי המוצגים לסטודנטים."
+    "desc": "מנהל הקפיטריה: אחראי לתפריט, למחירים ולמלאי המוצגים לסטודנטים."
   }
 };
 var assocDescriptions = {
@@ -486,7 +486,7 @@ var useCaseDocs       = {
     "id": "uc-browse-menu",
     "name": "עיון בתפריט",
     "primaryActor": "student",
-    "description": "הסטודנט מעיין בתפריט הקפיטריה — פריטים, מחירים וזמינות — ומסנן לפי העדפה תזונתית.",
+    "description": "הסטודנט מעיין בתפריט הקפיטריה (פריטים, מחירים וזמינות) ומסנן לפי העדפה תזונתית.",
     "preconditions": [
       "הסטודנט מזוהה באפליקציה באמצעות חשבון אוניברסיטאי פעיל."
     ],
@@ -531,7 +531,7 @@ var useCaseDocs       = {
                   {
                     "kind": "actor",
                     "actor": "student",
-                    "text": "בוחר מסנן — צמחוני, טבעוני או ללא גלוטן"
+                    "text": "בוחר מסנן: צמחוני, טבעוני או ללא גלוטן"
                   },
                   {
                     "kind": "system",
@@ -548,7 +548,7 @@ var useCaseDocs       = {
           },
           {
             "kind": "system",
-            "text": "מציגה את פרטי הפריט — רכיבים, מחיר וזמן הכנה משוער"
+            "text": "מציגה את פרטי הפריט: רכיבים, מחיר וזמן הכנה משוער"
           }
         ],
         "extensions": [
@@ -589,7 +589,7 @@ var useCaseDocs       = {
         "so": "אמצא מהר מה מתאים לי בלי לחפש"
       }
     ],
-    "wireframe": "<div class=\"wf-screen\"><div class=\"wf-heading\">תפריט הקפיטריה — קפיטריית הנדסה</div><div class=\"wf-row\"><label class=\"wf-label\">סינון תזונתי</label><select class=\"wf-select\" disabled><option>צמחוני</option></select></div><table class=\"wf-table\"><thead><tr><th>פריט</th><th>מחיר</th><th>זמינות</th></tr></thead><tbody><tr><td>סלט יווני</td><td>28 ₪</td><td><span class=\"wf-badge\">זמין</span></td></tr><tr><td>כריך טונה</td><td>22 ₪</td><td><span class=\"wf-badge\">אזל</span></td></tr></tbody></table><p class=\"wf-hint\">לחיצה על פריט מציגה רכיבים וזמן הכנה משוער.</p></div>"
+    "wireframe": "<div class=\"wf-screen\"><div class=\"wf-heading\">תפריט הקפיטריה: קפיטריית הנדסה</div><div class=\"wf-row\"><label class=\"wf-label\">סינון תזונתי</label><select class=\"wf-select\" disabled><option>צמחוני</option></select></div><table class=\"wf-table\"><thead><tr><th>פריט</th><th>מחיר</th><th>זמינות</th></tr></thead><tbody><tr><td>סלט יווני</td><td>28 ₪</td><td><span class=\"wf-badge\">זמין</span></td></tr><tr><td>כריך טונה</td><td>22 ₪</td><td><span class=\"wf-badge\">אזל</span></td></tr></tbody></table><p class=\"wf-hint\">לחיצה על פריט מציגה רכיבים וזמן הכנה משוער.</p></div>"
   },
   "uc-order-pay": {
     "id": "uc-order-pay",
@@ -728,13 +728,13 @@ var useCaseDocs       = {
         "so": "לא אצטרך להקליד פרטי אשראי בכל הזמנה"
       }
     ],
-    "wireframe": "<div class=\"wf-screen\"><div class=\"wf-heading\">העגלה שלי — הזמנה ותשלום</div><table class=\"wf-table\"><thead><tr><th>פריט</th><th>כמות</th><th>מחיר</th></tr></thead><tbody><tr><td>סלט יווני</td><td>1</td><td>28 ₪</td></tr><tr><td>מיץ תפוזים</td><td>2</td><td>16 ₪</td></tr></tbody></table><div class=\"wf-row\"><span class=\"wf-label\">סה״כ לתשלום:</span><span>44 ₪</span></div><div class=\"wf-row\"><label class=\"wf-label\">אמצעי תשלום</label><select class=\"wf-select\" disabled><option>כרטיס סטודנט</option></select></div><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">לתשלום</button><button class=\"wf-button\">חזרה לתפריט</button></div><p class=\"wf-hint\">לאחר אישור התשלום יוצגו מספר הזמנה וקוד איסוף.</p></div>"
+    "wireframe": "<div class=\"wf-screen\"><div class=\"wf-heading\">העגלה שלי: הזמנה ותשלום</div><table class=\"wf-table\"><thead><tr><th>פריט</th><th>כמות</th><th>מחיר</th></tr></thead><tbody><tr><td>סלט יווני</td><td>1</td><td>28 ₪</td></tr><tr><td>מיץ תפוזים</td><td>2</td><td>16 ₪</td></tr></tbody></table><div class=\"wf-row\"><span class=\"wf-label\">סה״כ לתשלום:</span><span>44 ₪</span></div><div class=\"wf-row\"><label class=\"wf-label\">אמצעי תשלום</label><select class=\"wf-select\" disabled><option>כרטיס סטודנט</option></select></div><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">לתשלום</button><button class=\"wf-button\">חזרה לתפריט</button></div><p class=\"wf-hint\">לאחר אישור התשלום יוצגו מספר הזמנה וקוד איסוף.</p></div>"
   },
   "uc-track-order": {
     "id": "uc-track-order",
     "name": "מעקב אחר הזמנה",
     "primaryActor": "student",
-    "description": "הסטודנט עוקב אחר סטטוס ההזמנה הפעילה שלו — מרגע הקליטה ועד שהיא מוכנה לאיסוף.",
+    "description": "הסטודנט עוקב אחר סטטוס ההזמנה הפעילה שלו, מרגע הקליטה ועד שהיא מוכנה לאיסוף.",
     "preconditions": [
       "לסטודנט קיימת הזמנה פעילה ששולמה."
     ],
@@ -762,7 +762,7 @@ var useCaseDocs       = {
           },
           {
             "kind": "system",
-            "text": "מציגה את פרטי ההזמנה — פריטים, קפיטריה, קוד איסוף וזמן משוער לסיום ההכנה"
+            "text": "מציגה את פרטי ההזמנה: פריטים, קפיטריה, קוד איסוף וזמן משוער לסיום ההכנה"
           },
           {
             "kind": "system",
@@ -782,7 +782,7 @@ var useCaseDocs       = {
             ],
             "outcome": {
               "kind": "terminate",
-              "text": "אין הזמנה למעקב — הסטודנט הופנה לתפריט."
+              "text": "אין הזמנה למעקב. הסטודנט הופנה לתפריט."
             }
           },
           {
@@ -819,7 +819,6 @@ var useCaseDocs       = {
     "primaryActor": "counter-staff",
     "description": "עובד הדלפק מאמת באמצעות קוד האיסוף שההזמנה שולמה ושייכת לסטודנט שמולו, ומוסר אותה.",
     "preconditions": [
-      "ההזמנה מסומנת \"מוכנה לאיסוף\".",
       "עובד הדלפק מחובר לעמדת הדלפק."
     ],
     "postconditions": [
@@ -838,7 +837,7 @@ var useCaseDocs       = {
           },
           {
             "kind": "system",
-            "text": "מאתרת את ההזמנה לפי הקוד ומציגה את פרטיה — פריטים, סטטוס תשלום וסטטוס הכנה"
+            "text": "מאתרת את ההזמנה לפי הקוד ומציגה את פרטיה: פריטים, סטטוס תשלום וסטטוס הכנה"
           },
           {
             "kind": "actor",
@@ -905,7 +904,7 @@ var useCaseDocs       = {
         "so": "לא אתבלבל בין הזמנות בשעות העומס"
       }
     ],
-    "wireframe": "<div class=\"wf-screen\"><div class=\"wf-heading\">אימות איסוף — עמדת דלפק</div><div class=\"wf-row\"><label class=\"wf-label\">קוד איסוף</label><input class=\"wf-input\" disabled placeholder=\"K-58\"></div><div class=\"wf-section\"><div class=\"wf-row\"><span class=\"wf-label\">הזמנה:</span><span>#4127 — סטודנט</span></div><div class=\"wf-row\"><span class=\"wf-label\">תשלום:</span><span class=\"wf-badge\">שולמה</span></div><div class=\"wf-row\"><span class=\"wf-label\">סטטוס:</span><span class=\"wf-badge\">מוכנה לאיסוף</span></div></div><table class=\"wf-table\"><thead><tr><th>פריט</th><th>כמות</th></tr></thead><tbody><tr><td>סלט יווני</td><td>1</td></tr><tr><td>מיץ תפוזים</td><td>2</td></tr></tbody></table><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">סמן כנאספה</button><button class=\"wf-button\">דווח על בעיה</button></div></div>"
+    "wireframe": "<div class=\"wf-screen\"><div class=\"wf-heading\">אימות איסוף: עמדת דלפק</div><div class=\"wf-row\"><label class=\"wf-label\">קוד איסוף</label><input class=\"wf-input\" disabled placeholder=\"K-58\"></div><div class=\"wf-section\"><div class=\"wf-row\"><span class=\"wf-label\">הזמנה:</span><span>#4127 · סטודנט</span></div><div class=\"wf-row\"><span class=\"wf-label\">תשלום:</span><span class=\"wf-badge\">שולמה</span></div><div class=\"wf-row\"><span class=\"wf-label\">סטטוס:</span><span class=\"wf-badge\">מוכנה לאיסוף</span></div></div><table class=\"wf-table\"><thead><tr><th>פריט</th><th>כמות</th></tr></thead><tbody><tr><td>סלט יווני</td><td>1</td></tr><tr><td>מיץ תפוזים</td><td>2</td></tr></tbody></table><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">סמן כנאספה</button><button class=\"wf-button\">דווח על בעיה</button></div></div>"
   },
   "uc-manage-menu": {
     "id": "uc-manage-menu",
@@ -978,12 +977,12 @@ var useCaseDocs       = {
           },
           {
             "kind": "system",
-            "text": "מציגה טבלת פריטים — שם, קטגוריה, מחיר, כמות במלאי וסטטוס זמינות"
+            "text": "מציגה טבלת פריטים: שם, קטגוריה, מחיר, כמות במלאי וסטטוס זמינות"
           },
           {
             "kind": "actor",
             "actor": "cafe-manager",
-            "text": "ממיין או מסנן את הטבלה — לפי קטגוריה או לפי פריטים שאזלו"
+            "text": "ממיין או מסנן את הטבלה, לפי קטגוריה או לפי פריטים שאזלו"
           },
           {
             "kind": "system",
@@ -999,7 +998,7 @@ var useCaseDocs       = {
             ],
             "outcome": {
               "kind": "terminate",
-              "text": "אין תפריט לצפייה — נדרשת הוספת פריטים."
+              "text": "אין תפריט לצפייה. נדרשת הוספת פריטים."
             }
           }
         ]
@@ -1024,7 +1023,7 @@ var useCaseDocs       = {
           },
           {
             "kind": "system",
-            "text": "שומרת את השינוי ומעדכנת את התצוגה לסטודנטים — פריט שסומן \"אזל\" מוצג \"לא זמין\" ואינו ניתן להזמנה"
+            "text": "שומרת את השינוי ומעדכנת את התצוגה לסטודנטים: פריט שסומן \"אזל\" מוצג \"לא זמין\" ואינו ניתן להזמנה"
           }
         ],
         "extensions": [
@@ -1077,7 +1076,7 @@ var useCaseDocs       = {
             ],
             "outcome": {
               "kind": "terminate",
-              "text": "הפריט לא הוסר — סומן \"אזל\" במקום."
+              "text": "הפריט לא הוסר: הוא סומן \"אזל\" במקום."
             }
           }
         ]
@@ -1095,20 +1094,20 @@ var useCaseDocs       = {
         "so": "סטודנטים לא יזמינו מנות שאינן קיימות"
       }
     ],
-    "wireframe": "<div class=\"wf-screen\"><div class=\"wf-heading\">ניהול תפריט ומלאי — קפיטריית הנדסה</div><table class=\"wf-table\"><thead><tr><th>פריט</th><th>קטגוריה</th><th>מחיר</th><th>מלאי</th><th>זמינות</th></tr></thead><tbody><tr><td>סלט יווני</td><td>עיקריות</td><td>28 ₪</td><td>12</td><td><span class=\"wf-badge\">זמין</span></td></tr><tr><td>כריך טונה</td><td>עיקריות</td><td>22 ₪</td><td>0</td><td><span class=\"wf-badge\">אזל</span></td></tr></tbody></table><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">הוסף פריט</button><button class=\"wf-button\">שמור שינויים</button><button class=\"wf-button\">הסר פריט</button></div><p class=\"wf-hint\">פריט שסומן \"אזל\" מוצג לסטודנטים \"לא זמין\" — הוא אינו נמחק מהתפריט.</p></div>"
+    "wireframe": "<div class=\"wf-screen\"><div class=\"wf-heading\">ניהול תפריט ומלאי: קפיטריית הנדסה</div><table class=\"wf-table\"><thead><tr><th>פריט</th><th>קטגוריה</th><th>מחיר</th><th>מלאי</th><th>זמינות</th></tr></thead><tbody><tr><td>סלט יווני</td><td>עיקריות</td><td>28 ₪</td><td>12</td><td><span class=\"wf-badge\">זמין</span></td></tr><tr><td>כריך טונה</td><td>עיקריות</td><td>22 ₪</td><td>0</td><td><span class=\"wf-badge\">אזל</span></td></tr></tbody></table><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">הוסף פריט</button><button class=\"wf-button\">שמור שינויים</button><button class=\"wf-button\">הסר פריט</button></div><p class=\"wf-hint\">פריט שסומן \"אזל\" מוצג לסטודנטים \"לא זמין\". הוא אינו נמחק מהתפריט.</p></div>"
   }
 };
 var diagramModel      = {
   "kind": "use-case",
-  "title": "מערכת הזמנת אוכל בקמפוס — תרשים בסיסי",
+  "title": "מערכת הזמנת אוכל בקמפוס: תרשים בסיסי",
   "assumptions": [
     "כל סטודנט מזוהה במערכת באמצעות חשבון אוניברסיטאי אישי.",
-    "התרשים מציג רק את יחסי הבסיס: גבול מערכת, שחקנים, תרחישים וקווי שיוך — ללא «include»/«extend» וללא הורשה (נלמדים בהמשך ההרצאה).",
+    "התרשים מציג רק את יחסי הבסיס: גבול מערכת, שחקנים, תרחישים וקווי שיוך, ללא «include»/«extend» וללא הורשה (נלמדים בהמשך ההרצאה).",
     "אמצעי התשלום (חשבון סטודנט / כרטיס אשראי) מנוהלים מול מערכות חיצוניות שאינן מוצגות בתרשים הבסיסי."
   ],
   "openQuestions": [
-    "מה המדיניות כשסטודנט אינו אוסף הזמנה ששולמה (no-show) — זיכוי, חיוב או חסימה?",
-    "בתרשים המלא נדרש גם עובד מטבח (תור הכנה, סימון \"מוכנה\") — כאן הוא הושמט לשם הפשטות."
+    "מה המדיניות כשסטודנט אינו אוסף הזמנה ששולמה (no-show): זיכוי, חיוב או חסימה?",
+    "בתרשים המלא נדרש גם עובד מטבח (תור הכנה, סימון \"מוכנה\"), וכאן הוא הושמט לשם הפשטות."
   ],
   "parts": [
     {
@@ -1141,7 +1140,7 @@ var diagramModel      = {
           "kind": "useCase",
           "name": "עיון בתפריט",
           "primaryActor": "student",
-          "description": "הסטודנט מעיין בתפריט הקפיטריה — פריטים, מחירים וזמינות — ומסנן לפי העדפה תזונתית.",
+          "description": "הסטודנט מעיין בתפריט הקפיטריה (פריטים, מחירים וזמינות) ומסנן לפי העדפה תזונתית.",
           "preconditions": [
             "הסטודנט מזוהה באפליקציה באמצעות חשבון אוניברסיטאי פעיל."
           ],
@@ -1186,7 +1185,7 @@ var diagramModel      = {
                         {
                           "kind": "actor",
                           "actor": "student",
-                          "text": "בוחר מסנן — צמחוני, טבעוני או ללא גלוטן"
+                          "text": "בוחר מסנן: צמחוני, טבעוני או ללא גלוטן"
                         },
                         {
                           "kind": "system",
@@ -1203,7 +1202,7 @@ var diagramModel      = {
                 },
                 {
                   "kind": "system",
-                  "text": "מציגה את פרטי הפריט — רכיבים, מחיר וזמן הכנה משוער"
+                  "text": "מציגה את פרטי הפריט: רכיבים, מחיר וזמן הכנה משוער"
                 }
               ],
               "extensions": [
@@ -1244,7 +1243,7 @@ var diagramModel      = {
               "so": "אמצא מהר מה מתאים לי בלי לחפש"
             }
           ],
-          "wireframe": "<div class=\"wf-screen\"><div class=\"wf-heading\">תפריט הקפיטריה — קפיטריית הנדסה</div><div class=\"wf-row\"><label class=\"wf-label\">סינון תזונתי</label><select class=\"wf-select\" disabled><option>צמחוני</option></select></div><table class=\"wf-table\"><thead><tr><th>פריט</th><th>מחיר</th><th>זמינות</th></tr></thead><tbody><tr><td>סלט יווני</td><td>28 ₪</td><td><span class=\"wf-badge\">זמין</span></td></tr><tr><td>כריך טונה</td><td>22 ₪</td><td><span class=\"wf-badge\">אזל</span></td></tr></tbody></table><p class=\"wf-hint\">לחיצה על פריט מציגה רכיבים וזמן הכנה משוער.</p></div>",
+          "wireframe": "<div class=\"wf-screen\"><div class=\"wf-heading\">תפריט הקפיטריה: קפיטריית הנדסה</div><div class=\"wf-row\"><label class=\"wf-label\">סינון תזונתי</label><select class=\"wf-select\" disabled><option>צמחוני</option></select></div><table class=\"wf-table\"><thead><tr><th>פריט</th><th>מחיר</th><th>זמינות</th></tr></thead><tbody><tr><td>סלט יווני</td><td>28 ₪</td><td><span class=\"wf-badge\">זמין</span></td></tr><tr><td>כריך טונה</td><td>22 ₪</td><td><span class=\"wf-badge\">אזל</span></td></tr></tbody></table><p class=\"wf-hint\">לחיצה על פריט מציגה רכיבים וזמן הכנה משוער.</p></div>",
           "id": "uc-browse-menu"
         },
         {
@@ -1384,14 +1383,14 @@ var diagramModel      = {
               "so": "לא אצטרך להקליד פרטי אשראי בכל הזמנה"
             }
           ],
-          "wireframe": "<div class=\"wf-screen\"><div class=\"wf-heading\">העגלה שלי — הזמנה ותשלום</div><table class=\"wf-table\"><thead><tr><th>פריט</th><th>כמות</th><th>מחיר</th></tr></thead><tbody><tr><td>סלט יווני</td><td>1</td><td>28 ₪</td></tr><tr><td>מיץ תפוזים</td><td>2</td><td>16 ₪</td></tr></tbody></table><div class=\"wf-row\"><span class=\"wf-label\">סה״כ לתשלום:</span><span>44 ₪</span></div><div class=\"wf-row\"><label class=\"wf-label\">אמצעי תשלום</label><select class=\"wf-select\" disabled><option>כרטיס סטודנט</option></select></div><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">לתשלום</button><button class=\"wf-button\">חזרה לתפריט</button></div><p class=\"wf-hint\">לאחר אישור התשלום יוצגו מספר הזמנה וקוד איסוף.</p></div>",
+          "wireframe": "<div class=\"wf-screen\"><div class=\"wf-heading\">העגלה שלי: הזמנה ותשלום</div><table class=\"wf-table\"><thead><tr><th>פריט</th><th>כמות</th><th>מחיר</th></tr></thead><tbody><tr><td>סלט יווני</td><td>1</td><td>28 ₪</td></tr><tr><td>מיץ תפוזים</td><td>2</td><td>16 ₪</td></tr></tbody></table><div class=\"wf-row\"><span class=\"wf-label\">סה״כ לתשלום:</span><span>44 ₪</span></div><div class=\"wf-row\"><label class=\"wf-label\">אמצעי תשלום</label><select class=\"wf-select\" disabled><option>כרטיס סטודנט</option></select></div><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">לתשלום</button><button class=\"wf-button\">חזרה לתפריט</button></div><p class=\"wf-hint\">לאחר אישור התשלום יוצגו מספר הזמנה וקוד איסוף.</p></div>",
           "id": "uc-order-pay"
         },
         {
           "kind": "useCase",
           "name": "מעקב אחר הזמנה",
           "primaryActor": "student",
-          "description": "הסטודנט עוקב אחר סטטוס ההזמנה הפעילה שלו — מרגע הקליטה ועד שהיא מוכנה לאיסוף.",
+          "description": "הסטודנט עוקב אחר סטטוס ההזמנה הפעילה שלו, מרגע הקליטה ועד שהיא מוכנה לאיסוף.",
           "preconditions": [
             "לסטודנט קיימת הזמנה פעילה ששולמה."
           ],
@@ -1419,7 +1418,7 @@ var diagramModel      = {
                 },
                 {
                   "kind": "system",
-                  "text": "מציגה את פרטי ההזמנה — פריטים, קפיטריה, קוד איסוף וזמן משוער לסיום ההכנה"
+                  "text": "מציגה את פרטי ההזמנה: פריטים, קפיטריה, קוד איסוף וזמן משוער לסיום ההכנה"
                 },
                 {
                   "kind": "system",
@@ -1439,7 +1438,7 @@ var diagramModel      = {
                   ],
                   "outcome": {
                     "kind": "terminate",
-                    "text": "אין הזמנה למעקב — הסטודנט הופנה לתפריט."
+                    "text": "אין הזמנה למעקב. הסטודנט הופנה לתפריט."
                   }
                 },
                 {
@@ -1477,7 +1476,6 @@ var diagramModel      = {
           "primaryActor": "counter-staff",
           "description": "עובד הדלפק מאמת באמצעות קוד האיסוף שההזמנה שולמה ושייכת לסטודנט שמולו, ומוסר אותה.",
           "preconditions": [
-            "ההזמנה מסומנת \"מוכנה לאיסוף\".",
             "עובד הדלפק מחובר לעמדת הדלפק."
           ],
           "postconditions": [
@@ -1496,7 +1494,7 @@ var diagramModel      = {
                 },
                 {
                   "kind": "system",
-                  "text": "מאתרת את ההזמנה לפי הקוד ומציגה את פרטיה — פריטים, סטטוס תשלום וסטטוס הכנה"
+                  "text": "מאתרת את ההזמנה לפי הקוד ומציגה את פרטיה: פריטים, סטטוס תשלום וסטטוס הכנה"
                 },
                 {
                   "kind": "actor",
@@ -1563,7 +1561,7 @@ var diagramModel      = {
               "so": "לא אתבלבל בין הזמנות בשעות העומס"
             }
           ],
-          "wireframe": "<div class=\"wf-screen\"><div class=\"wf-heading\">אימות איסוף — עמדת דלפק</div><div class=\"wf-row\"><label class=\"wf-label\">קוד איסוף</label><input class=\"wf-input\" disabled placeholder=\"K-58\"></div><div class=\"wf-section\"><div class=\"wf-row\"><span class=\"wf-label\">הזמנה:</span><span>#4127 — סטודנט</span></div><div class=\"wf-row\"><span class=\"wf-label\">תשלום:</span><span class=\"wf-badge\">שולמה</span></div><div class=\"wf-row\"><span class=\"wf-label\">סטטוס:</span><span class=\"wf-badge\">מוכנה לאיסוף</span></div></div><table class=\"wf-table\"><thead><tr><th>פריט</th><th>כמות</th></tr></thead><tbody><tr><td>סלט יווני</td><td>1</td></tr><tr><td>מיץ תפוזים</td><td>2</td></tr></tbody></table><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">סמן כנאספה</button><button class=\"wf-button\">דווח על בעיה</button></div></div>",
+          "wireframe": "<div class=\"wf-screen\"><div class=\"wf-heading\">אימות איסוף: עמדת דלפק</div><div class=\"wf-row\"><label class=\"wf-label\">קוד איסוף</label><input class=\"wf-input\" disabled placeholder=\"K-58\"></div><div class=\"wf-section\"><div class=\"wf-row\"><span class=\"wf-label\">הזמנה:</span><span>#4127 · סטודנט</span></div><div class=\"wf-row\"><span class=\"wf-label\">תשלום:</span><span class=\"wf-badge\">שולמה</span></div><div class=\"wf-row\"><span class=\"wf-label\">סטטוס:</span><span class=\"wf-badge\">מוכנה לאיסוף</span></div></div><table class=\"wf-table\"><thead><tr><th>פריט</th><th>כמות</th></tr></thead><tbody><tr><td>סלט יווני</td><td>1</td></tr><tr><td>מיץ תפוזים</td><td>2</td></tr></tbody></table><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">סמן כנאספה</button><button class=\"wf-button\">דווח על בעיה</button></div></div>",
           "id": "uc-pickup-verify"
         },
         {
@@ -1637,12 +1635,12 @@ var diagramModel      = {
                 },
                 {
                   "kind": "system",
-                  "text": "מציגה טבלת פריטים — שם, קטגוריה, מחיר, כמות במלאי וסטטוס זמינות"
+                  "text": "מציגה טבלת פריטים: שם, קטגוריה, מחיר, כמות במלאי וסטטוס זמינות"
                 },
                 {
                   "kind": "actor",
                   "actor": "cafe-manager",
-                  "text": "ממיין או מסנן את הטבלה — לפי קטגוריה או לפי פריטים שאזלו"
+                  "text": "ממיין או מסנן את הטבלה, לפי קטגוריה או לפי פריטים שאזלו"
                 },
                 {
                   "kind": "system",
@@ -1658,7 +1656,7 @@ var diagramModel      = {
                   ],
                   "outcome": {
                     "kind": "terminate",
-                    "text": "אין תפריט לצפייה — נדרשת הוספת פריטים."
+                    "text": "אין תפריט לצפייה. נדרשת הוספת פריטים."
                   }
                 }
               ]
@@ -1683,7 +1681,7 @@ var diagramModel      = {
                 },
                 {
                   "kind": "system",
-                  "text": "שומרת את השינוי ומעדכנת את התצוגה לסטודנטים — פריט שסומן \"אזל\" מוצג \"לא זמין\" ואינו ניתן להזמנה"
+                  "text": "שומרת את השינוי ומעדכנת את התצוגה לסטודנטים: פריט שסומן \"אזל\" מוצג \"לא זמין\" ואינו ניתן להזמנה"
                 }
               ],
               "extensions": [
@@ -1736,7 +1734,7 @@ var diagramModel      = {
                   ],
                   "outcome": {
                     "kind": "terminate",
-                    "text": "הפריט לא הוסר — סומן \"אזל\" במקום."
+                    "text": "הפריט לא הוסר: הוא סומן \"אזל\" במקום."
                   }
                 }
               ]
@@ -1754,7 +1752,7 @@ var diagramModel      = {
               "so": "סטודנטים לא יזמינו מנות שאינן קיימות"
             }
           ],
-          "wireframe": "<div class=\"wf-screen\"><div class=\"wf-heading\">ניהול תפריט ומלאי — קפיטריית הנדסה</div><table class=\"wf-table\"><thead><tr><th>פריט</th><th>קטגוריה</th><th>מחיר</th><th>מלאי</th><th>זמינות</th></tr></thead><tbody><tr><td>סלט יווני</td><td>עיקריות</td><td>28 ₪</td><td>12</td><td><span class=\"wf-badge\">זמין</span></td></tr><tr><td>כריך טונה</td><td>עיקריות</td><td>22 ₪</td><td>0</td><td><span class=\"wf-badge\">אזל</span></td></tr></tbody></table><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">הוסף פריט</button><button class=\"wf-button\">שמור שינויים</button><button class=\"wf-button\">הסר פריט</button></div><p class=\"wf-hint\">פריט שסומן \"אזל\" מוצג לסטודנטים \"לא זמין\" — הוא אינו נמחק מהתפריט.</p></div>",
+          "wireframe": "<div class=\"wf-screen\"><div class=\"wf-heading\">ניהול תפריט ומלאי: קפיטריית הנדסה</div><table class=\"wf-table\"><thead><tr><th>פריט</th><th>קטגוריה</th><th>מחיר</th><th>מלאי</th><th>זמינות</th></tr></thead><tbody><tr><td>סלט יווני</td><td>עיקריות</td><td>28 ₪</td><td>12</td><td><span class=\"wf-badge\">זמין</span></td></tr><tr><td>כריך טונה</td><td>עיקריות</td><td>22 ₪</td><td>0</td><td><span class=\"wf-badge\">אזל</span></td></tr></tbody></table><div class=\"wf-actions\"><button class=\"wf-button wf-primary\">הוסף פריט</button><button class=\"wf-button\">שמור שינויים</button><button class=\"wf-button\">הסר פריט</button></div><p class=\"wf-hint\">פריט שסומן \"אזל\" מוצג לסטודנטים \"לא זמין\". הוא אינו נמחק מהתפריט.</p></div>",
           "id": "uc-manage-menu"
         }
       ],
@@ -2107,7 +2105,7 @@ function ucOutcomeHtml(outcome) {
     return `<div class="ext-outcome ext-resume">↩ חזרה לשלב ${ucEsc(outcome.at)}</div>`;
   if (outcome.kind === 'terminate')
     return `<div class="ext-outcome ext-terminate">⛔ המקרה מסתיים ללא הצלחה${
-      outcome.text ? ' — ' + ucEsc(outcome.text) : ''}</div>`;
+      outcome.text ? ': ' + ucEsc(outcome.text) : ''}</div>`;
   return '';
 }
 
@@ -2132,7 +2130,7 @@ function ucStepBodyHtml(step, ctx) {
   if (step.kind === 'system')
     return `<em class="step-system">המערכת</em>: ${ucEsc(step.text)}`;
   if (step.kind === 'include')
-    return `<span class="step-include">«include» </span><a class="step-uc-ref" data-uc-ref="${ucEsc(step.uc)}">${ucEsc(ctx.ucName(step.uc))}</a>${step.text ? ' — ' + ucEsc(step.text) : ''}`;
+    return `<span class="step-include">«include» </span><a class="step-uc-ref" data-uc-ref="${ucEsc(step.uc)}">${ucEsc(ctx.ucName(step.uc))}</a>${step.text ? ': ' + ucEsc(step.text) : ''}`;
   if (step.kind === 'extension')  // legacy inline extension pseudo-step
     return ucEsc(step.text);
   return ucEsc(step.text);
@@ -2194,7 +2192,7 @@ function ucWhoHtml(id, doc, actorName, esc) {
       return esc(el ? el.name : r.from);
     });
   return `<div class="uc-primary uc-called">
-      <span class="uc-primary-label">אין שחקן — נקראת מתוך:</span>
+      <span class="uc-primary-label">אין שחקן. נקראת מתוך:</span>
       <b class="uc-callers">${callers.join(' · ')}</b>
     </div>`;
 }
@@ -2363,7 +2361,7 @@ function xmiBody(elements, rels) {
           });
         } else if (step.kind === 'actor')     out.push(pad + label + '. ' + actorName(step.actor) + ': ' + step.text);
         else if (step.kind === 'system')      out.push(pad + label + '. System: ' + step.text);
-        else if (step.kind === 'include')     out.push(pad + label + '. «include» ' + ucName(step.uc) + (step.text ? ' — ' + step.text : ''));
+        else if (step.kind === 'include')     out.push(pad + label + '. «include» ' + ucName(step.uc) + (step.text ? ': ' + step.text : ''));
         else if (step.kind === 'extension')   out.push(pad + label + 'a. ' + step.text);
 
         (extByAt.get(label) || []).forEach((e, j) => {
@@ -2376,7 +2374,7 @@ function xmiBody(elements, rels) {
           if (e.outcome && e.outcome.kind === 'resume')
             out.push(pad + '    ↩ חזרה לשלב ' + e.outcome.at);
           else if (e.outcome && e.outcome.kind === 'terminate')
-            out.push(pad + '    ⛔ המקרה מסתיים ללא הצלחה' + (e.outcome.text ? ' — ' + e.outcome.text : ''));
+            out.push(pad + '    ⛔ המקרה מסתיים ללא הצלחה' + (e.outcome.text ? ': ' + e.outcome.text : ''));
         });
       });
     };

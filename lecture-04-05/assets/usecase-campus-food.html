@@ -1032,7 +1032,6 @@ var useCaseDocs       = {
     "name": "אימות איסוף",
     "description": "עובד הדלפק מאמת באמצעות קוד האיסוף שההזמנה שולמה ושייכת לסטודנט שמולו, ומוסר אותה.",
     "preconditions": [
-      "ההזמנה מסומנת \"מוכנה לאיסוף\".",
       "עובד הדלפק מחובר לעמדת הדלפק."
     ],
     "postconditions": [
@@ -2203,7 +2202,6 @@ var diagramModel      = {
           "name": "אימות איסוף",
           "description": "עובד הדלפק מאמת באמצעות קוד האיסוף שההזמנה שולמה ושייכת לסטודנט שמולו, ומוסר אותה.",
           "preconditions": [
-            "ההזמנה מסומנת \"מוכנה לאיסוף\".",
             "עובד הדלפק מחובר לעמדת הדלפק."
           ],
           "postconditions": [
@@ -3335,11 +3333,18 @@ function ucWhoHtml(id, doc, actorName, esc) {
       </div>`
     : '';
 
-  const hasActor = rels.some(r => r.kind === 'actorAssoc' && r.ucId === id);
-  if (hasActor) {
+  /* 2026-11-07 asset patch, ported from usecase-campus-basic (David, 2026-08-26): list EVERY
+     initiator association, not just the primary. צפייה בתור הכנה has two initiators on the
+     diagram and the modal must match. Candidate for upstreaming into uc-diagram-common.js. */
+  const assocs = rels.filter(r => r.kind === 'actorAssoc' && r.ucId === id);
+  if (assocs.length) {
+    const ids = [];
+    assocs.forEach(r => { if (!ids.includes(r.actorId)) ids.push(r.actorId); });
+    if (ids.includes(doc.primaryActor)) { ids.splice(ids.indexOf(doc.primaryActor), 1); ids.unshift(doc.primaryActor); }
+    const links = ids.map(a => `<a class="uc-primary-link" data-actor-pulse="${esc(a)}">${esc(actorName(a))}</a>`).join(' · ');
     return `<div class="uc-primary">
-        <span class="uc-primary-label">שחקן:</span>
-        <a class="uc-primary-link" data-actor-pulse="${esc(doc.primaryActor)}">${esc(actorName(doc.primaryActor))}</a>
+        <span class="uc-primary-label">${ids.length > 1 ? 'שחקנים יוזמים:' : 'שחקן:'}</span>
+        ${links}
       </div>` + extendLine;
   }
   if (extendsOf.length) {
