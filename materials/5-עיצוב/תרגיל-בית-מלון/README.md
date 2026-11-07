@@ -1,4 +1,6 @@
-# תרגיל בית (רשות) — הזמנת חדר במלון 'גלי הים' · תרשים מצבים
+# תרגיל בית (רשות): הזמנת חדר במלון 'גלי הים' · תרשים מצבים
+
+> תרגול עצמי אחרי הרצאה 8 · **לא להגשה**. תרגילי הבית להגשה ניתנים במודל.
 
 <!-- Source of truth: lecture-08/practice/hotel.* — these files are COPIES.
      If the practice dossier changes, re-copy md+html+pdf+svg+html diagrams here. -->

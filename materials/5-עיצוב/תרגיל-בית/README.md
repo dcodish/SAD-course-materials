@@ -1,4 +1,6 @@
-# תרגיל בית (רשות) — מסעדת 'המלצר האוטומטי'
+# תרגיל בית (רשות): מסעדת 'המלצר האוטומטי'
+
+> תרגול עצמי אחרי הרצאות 6-7 · **לא להגשה**. תרגילי הבית להגשה ניתנים במודל.
 
 <!-- Source of truth: lecture-06-07/practice/restaurant.* — these files are COPIES.
      If the practice dossiers change, re-copy them here (and to תרגול-בכיתה). -->
