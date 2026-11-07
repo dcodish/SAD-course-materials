@@ -17,7 +17,7 @@
       <h1>תרשים מצבים — State Diagram</h1>
       <div class="lecture-no">הרצאה 8</div>
       <img class="cover-img" src="assets/title.png" alt="">
-      <div class="updated">עודכן: 16.10.2026</div>
+      <div class="updated">עודכן: 07.11.2026</div>
     </section>
     <section class="toc-slide" data-slug="toc">
       <h1>סדר היום</h1>
@@ -31,15 +31,6 @@
         </ol>
       </div>
     </section>
-    <!-- A3 — מה קורה בפרויקט בנקודה הזו: the SEQUEL to L6-7's analysis→design handoff slide
-         (same three columns, same four design lanes, same role names as the SDLC×roles rail on the
-         next slide). What changed: the data-model lane is DONE — it delivered the class diagram — and
-         the SAME seat (System Analyst) now produces a second artifact: how ONE object behaves over
-         time. The sibling behaviour diagrams (sequence, activity) are named as concepts only, with no
-         lecture numbers (year-agnostic, per the 2026-08-09 decision). REFRESH of the old recap +
-         interaction-types slides (folded together). The BA package is kept as a compact recap so the
-         "same input, different artifact" idea survives; acronyms trimmed to BA so the footer stays
-         one line. -->
     <section data-slug="design-lanes-behavior" class="has-acro-footer">
       <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
       <style>
@@ -176,10 +167,6 @@
       </aside>
     <div class="acro-footer"><span class="acro"><span class="en">SDLC</span> = <span class="en">Software Development Life Cycle</span> · מחזור פיתוח תוכנה</span> &nbsp;·&nbsp; <span class="acro"><span class="en">BA</span> = <span class="en">Business Analyst</span> · אנליסט/ית עסקי/ת</span></div>
     </section>
-    <!-- Where-are-we transition: crossing from ניתוח דרישות into עיצוב (what -> how). Uses the
-         shared interactive SDLC x roles rail (assets/sdlc_roles_rtl.html), flagged on the current
-         phase via ?here=design. Replaces the old simple phase-map (source: sdlc) so every HTML deck
-         uses the same asset — L1-L4-5 and L6-7. -->
     <section data-slug="sdlc-roles-design" class="has-acro-footer">
       <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
       <style>
@@ -197,16 +184,6 @@
       </div>
     <div class="acro-footer"><span class="acro"><span class="en">SDLC</span> = <span class="en">Software Development Life Cycle</span> · מחזור פיתוח תוכנה</span></div>
     </section>
-    <!-- A5 — status הוא רק ערך: the bridge from the class diagram to the state diagram. RIGHT: the
-         campus Order box (same box as L6-7 slide-class-box, trimmed) with `- status : OrderStatus`
-         highlighted, next to the «enumeration» OrderStatus box with L6-7's five literals
-         (Pending / InPreparation / Ready / Collected / Cancelled — English identifiers, as in L6-7;
-         this lecture later discovers the list is incomplete, so it is shown verbatim here).
-         LEFT: the three questions the class diagram cannot answer (legal transitions / triggering
-         event / order over the object's life), each with a campus question the class can argue about,
-         then the ⚠️ "nothing stops an illegal change" beat and the "why design needs it" list
-         (events to catch, methods to write, rules to enforce, re-check the process).
-         REFRESH of the old class-to-state-bridge (library book) slide. SVG carries the LTR guard. -->
     <section data-slug="status-is-a-value" class="has-acro-footer">
       <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
       <style>
@@ -281,13 +258,13 @@
             <div class="panel-title" style="text-align:center;">מה שכבר יש לנו מתרשים המחלקות</div>
             <svg viewBox="0 0 400 330" xmlns="http://www.w3.org/2000/svg" role="img"
                  aria-label="תיבת המחלקה Order עם התכונה status : OrderStatus מודגשת, ולצידה תיבת enumeration OrderStatus עם חמישה ערכים">
-              <!-- Order class box -->
+              
               <rect x="8" y="14" width="228" height="196" fill="#fff" stroke="#3b82f6" stroke-width="1.8" rx="3"/>
               <rect x="8" y="14" width="228" height="34" fill="#1e40af" rx="3"/>
               <text x="122" y="37" text-anchor="middle" font-size="17" font-weight="700" fill="#fff"
                     font-family="'Segoe UI',Arial,sans-serif">Order</text>
               <line x1="8" y1="48" x2="236" y2="48" stroke="#3b82f6" stroke-width="1.2"/>
-              <!-- highlighted attribute -->
+              
               <rect x="14" y="88" width="216" height="26" fill="#FFF6E6" stroke="#E86C00" stroke-width="1.8" rx="6"/>
               <g font-family="'Consolas','Courier New',monospace" font-size="13" fill="#1e293b" text-anchor="start">
                 <text x="20" y="73">- orderId : String</text>
@@ -298,7 +275,7 @@
               </g>
               <line x1="8" y1="152" x2="236" y2="152" stroke="#3b82f6" stroke-width="1.2"/>
 
-              <!-- enumeration box (house rendering: gray, dashed) -->
+              
               <rect x="262" y="14" width="130" height="44" fill="#475569"/>
               <text x="327" y="32" text-anchor="middle" font-size="11" fill="#e2e8f0" font-style="italic"
                     font-family="'Segoe UI',Arial,sans-serif">&laquo;enumeration&raquo;</text>
@@ -314,7 +291,7 @@
               <line x1="262" y1="58" x2="392" y2="58" stroke="#94a3b8" stroke-width="1.4" stroke-dasharray="5 3"/>
               <rect x="262" y="14" width="130" height="172" fill="none" stroke="#94a3b8" stroke-width="1.8" stroke-dasharray="5 3"/>
 
-              <!-- the point: values, but no order between them -->
+              
               <g direction="rtl" text-anchor="middle" font-family="'Noto Sans Hebrew',sans-serif">
                 <text direction="rtl" x="200" y="250" font-size="15" font-weight="700" fill="#C2410C">חמישה ערכים — ואף מילה על הסדר ביניהם</text>
                 <text direction="rtl" x="200" y="274" font-size="13" fill="#64748b">מ-Collected אפשר לחזור ל-Pending? הטיפוס לא אוסר</text>
@@ -346,14 +323,6 @@
       </aside>
     <div class="acro-footer"><span class="acro"><span class="en">AI</span> = <span class="en">Artificial Intelligence</span> · בינה מלאכותית</span></div>
     </section>
-    <!-- A6 — מהו תרשים מצבים. Definition hero (one object · its states · the events that move it ·
-         over its whole life, from creation until the record is gone). LEFT card: the basic notation as
-         an inline SVG — ● (one, unlabeled arrow) → a state box with the two compartments (name +
-         `entry / setStatus('PENDING')`) → ◎ (one, means the object no longer exists) with a template
-         transition label `אירוע [תנאי] / פעולה`. RIGHT card: one object per diagram · what it shows ·
-         when it is worth drawing (≥4-5 states with rules) · the 🤖 note: this is the artifact that
-         tells the AI which status changes it may implement. REFRESH of the old what-is-state-diagram
-         (definition-only) slide; the notation is the tool's (uml_state_diagram) notation exactly. -->
     <section data-slug="what-is-state-diagram" class="has-acro-footer">
       <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
       <style>
@@ -393,10 +362,10 @@
                   <path d="M0,0 L10,5 L0,10 z" fill="#334155"/>
                 </marker>
               </defs>
-              <!-- initial (RTL flow: right → left) -->
+              
               <circle cx="520" cy="100" r="8" fill="#1e293b"/>
               <line x1="512" y1="100" x2="404" y2="100" stroke="#334155" stroke-width="1.8" marker-end="url(#sd6-arr)"/>
-              <!-- state box -->
+              
               <rect x="170" y="56" width="232" height="88" rx="14" ry="14" fill="#fff" stroke="#3b82f6" stroke-width="1.8"/>
               <path d="M184,56 h204 a14,14 0 0 1 14,14 v22 h-232 v-22 a14,14 0 0 1 14,-14 z" fill="#eef4ff"/>
               <text x="286" y="82" direction="rtl" text-anchor="middle" font-size="16" font-weight="700" fill="#1e293b"
@@ -404,18 +373,18 @@
               <line x1="170" y1="92" x2="402" y2="92" stroke="#3b82f6" stroke-width="1.4"/>
               <text x="182" y="122" text-anchor="start" font-size="12.5" fill="#334155"
                     font-family="'Consolas','Courier New',monospace">entry / setStatus('PENDING')</text>
-              <!-- transition to final -->
+              
               <line x1="170" y1="100" x2="52" y2="100" stroke="#334155" stroke-width="1.8" marker-end="url(#sd6-arr)"/>
               <g font-family="'Noto Sans Hebrew',sans-serif" font-size="12.5" font-weight="700">
                 <text x="111" y="86" direction="rtl" text-anchor="middle">
                   <tspan fill="#334155">אירוע</tspan> <tspan fill="#0891b2">[תנאי]</tspan> <tspan fill="#15803d">/ פעולה</tspan>
                 </text>
               </g>
-              <!-- final -->
+              
               <circle cx="38" cy="100" r="12" fill="none" stroke="#1e293b" stroke-width="2"/>
               <circle cx="38" cy="100" r="7" fill="#1e293b"/>
 
-              <!-- leader lines + annotations -->
+              
               <line x1="520" y1="110" x2="520" y2="150" stroke="#94a3b8" stroke-width="1"/>
               <line x1="286" y1="146" x2="286" y2="176" stroke="#94a3b8" stroke-width="1"/>
               <line x1="38" y1="114" x2="38" y2="150" stroke="#94a3b8" stroke-width="1"/>
@@ -471,19 +440,6 @@
       </aside>
     <div class="acro-footer"><span class="acro"><span class="en">AI</span> = <span class="en">Artificial Intelligence</span> · בינה מלאכותית</span></div>
     </section>
-    <!-- A7 — לאילו אובייקטים מגיע תרשים? NEW. A five-card flip drill on the campus domain model
-         (L6-7 classes): the class decides first, then the card flips to the verdict.
-           Order ✓      — rich lifecycle with rules (BR-2, BR-4, the no-show rule BR-3)
-           Payment ✓    — pending / approved / failed / refunded, with rules about what may follow what
-           MenuItem ~   — available / sold-out: two values, no rules ⇒ a Boolean attribute, not a
-                          diagram (borderline — worth a class discussion)
-           OrderLine ✗  — no lifecycle of its own: it lives and dies with the order (L6-7 composition)
-           Student ✗    — in THIS system just a record (name, id, balance); a university system would
-                          have a lifecycle — the boundary decides
-         The test (lead bar): a meaningful lifecycle + rules about what may happen when.
-         Mixed order on the slide so ✓/✗ don't alternate and give the answer away.
-         Flip mechanics copied from lecture-06-07 slide-relationship-quiz (inline onclick + rotateY,
-         no <script>). English class identifiers in .en spans, as in L6-7. -->
     <section data-slug="which-objects" class="has-acro-footer">
       <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
       <style>
@@ -532,7 +488,7 @@
 
         <div class="grid5">
 
-          <!-- 1 Order -->
+          
           <div class="qc" onclick="this.classList.toggle('flip')"><div class="inner">
             <div class="face front">
               <div class="cls"><span class="en">Order</span></div>
@@ -547,7 +503,7 @@
             </div>
           </div></div>
 
-          <!-- 2 OrderLine -->
+          
           <div class="qc" onclick="this.classList.toggle('flip')"><div class="inner">
             <div class="face front">
               <div class="cls"><span class="en">OrderLine</span></div>
@@ -563,7 +519,7 @@
             </div>
           </div></div>
 
-          <!-- 3 Payment -->
+          
           <div class="qc" onclick="this.classList.toggle('flip')"><div class="inner">
             <div class="face front">
               <div class="cls"><span class="en">Payment</span></div>
@@ -578,7 +534,7 @@
             </div>
           </div></div>
 
-          <!-- 4 Student -->
+          
           <div class="qc" onclick="this.classList.toggle('flip')"><div class="inner">
             <div class="face front">
               <div class="cls"><span class="en">Student</span></div>
@@ -593,7 +549,7 @@
             </div>
           </div></div>
 
-          <!-- 5 MenuItem -->
+          
           <div class="qc" onclick="this.classList.toggle('flip')"><div class="inner">
             <div class="face front">
               <div class="cls"><span class="en">MenuItem</span></div>
@@ -615,8 +571,7 @@
 
       </div>
       <aside class="notes">
-        <b>איך מריצים:</b> כרטיס אחד בכל פעם — מצביעים, מתווכחים, ורק אז הופכים. המבחן שמוביל: יש מחזור חיים
-        משמעותי, ויש חוקים על מה מותר מתי.
+        <b>המבחן שמוביל כל כרטיס:</b> יש מחזור חיים משמעותי, ויש חוקים על מה מותר מתי.
         <b><span class="en">Order</span></b> — ברור, וזו הדוגמה של היום. <b><span class="en">Payment</span></b> — כן,
         ובתרשים <b>נפרד</b>: אובייקט אחד לתרשים. אם סטודנט מציע ״לשים את התשלום בתוך תרשים ההזמנה״ — זו ההזדמנות
         לחזור על הכלל.
@@ -631,19 +586,6 @@
       </aside>
     <div class="acro-footer"><span class="acro"><span class="en">AI</span> = <span class="en">Artificial Intelligence</span> · בינה מלאכותית</span></div>
     </section>
-    <!-- A8 — 🤖 AI draws the order lifecycle → ⚠️ what went wrong. NEW; mirrors L6-7's
-         slide-ai-domain-model for state diagrams. RIGHT: the AI's draft from the L4-5 use cases as an
-         inline SVG — exactly the "AI draft gone wrong" in PORTING_BRIEF: a top-to-bottom chain
-         ● → הזמנה → תשלום → הכנה → מוכן → נאסף → ◎, with בוטל → ◎ and לא נאסף → ◎ as two EXTRA finals,
-         arrows labelled "הכנה" / "כן" / "לא", one arrow unlabeled, "ביטול" drawn from every state, no
-         guards, no archive. LEFT: six numbered ⚠️ callouts, revealed one by one as fragments; each
-         fragment also lights its number on the diagram (same data-fragment-index). The six mistakes
-         are the lecture's ⚠️ checklist: flowchart shape · a business outcome drawn as ◎ (not the ◎ count — UML allows several) · activity/yes-no on arrows ·
-         unlabeled arrow · cancel from everywhere (BR-4) · no archive, no guards.
-         Section-א rule: no notation vocabulary the student doesn't have yet — "מצב", "אירוע", "תנאי"
-         are used in plain language; entry/exit/do, composite etc. are NOT mentioned here.
-         The draft is deliberately drawn flowchart-style (single-compartment boxes, no entry lines) —
-         that IS mistake 1. SVG carries the LTR guard; marker ids prefixed sd8-. -->
     <section data-slug="ai-state-draft" class="has-acro-footer">
       <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
       <style>
@@ -686,31 +628,31 @@
                 </marker>
               </defs>
               <g font-family="'Noto Sans Hebrew',sans-serif">
-                <!-- initial -->
+                
                 <circle cx="260" cy="16" r="8" fill="#1e293b"/>
                 <line x1="260" y1="24" x2="260" y2="46" stroke="#334155" stroke-width="1.8" marker-end="url(#sd8-arr)"/>
 
-                <!-- chain boxes (flowchart-style: one compartment, no entry line) -->
+                
                 <rect x="205" y="48" width="110" height="34" rx="12" fill="#fff" stroke="#3b82f6" stroke-width="1.8"/>
                 <text x="260" y="70" direction="rtl" text-anchor="middle" font-size="15" font-weight="700" fill="#1e293b">הזמנה</text>
-                <!-- unlabeled arrow (mistake 4) -->
+                
                 <line x1="260" y1="82" x2="260" y2="122" stroke="#334155" stroke-width="1.8" marker-end="url(#sd8-arr)"/>
 
                 <rect x="205" y="124" width="110" height="34" rx="12" fill="#fff" stroke="#3b82f6" stroke-width="1.8"/>
                 <text x="260" y="146" direction="rtl" text-anchor="middle" font-size="15" font-weight="700" fill="#1e293b">תשלום</text>
-                <!-- "כן" down -->
+                
                 <line x1="260" y1="158" x2="260" y2="198" stroke="#334155" stroke-width="1.8" marker-end="url(#sd8-arr)"/>
                 <text x="276" y="183" direction="rtl" text-anchor="start" font-size="12.5" fill="#334155">כן</text>
 
                 <rect x="205" y="200" width="110" height="34" rx="12" fill="#fff" stroke="#3b82f6" stroke-width="1.8"/>
                 <text x="260" y="222" direction="rtl" text-anchor="middle" font-size="15" font-weight="700" fill="#1e293b">הכנה</text>
-                <!-- "הכנה" activity label -->
+                
                 <line x1="260" y1="234" x2="260" y2="274" stroke="#334155" stroke-width="1.8" marker-end="url(#sd8-arr)"/>
                 <text x="282" y="259" direction="rtl" text-anchor="start" font-size="12.5" fill="#334155">הכנה</text>
 
                 <rect x="205" y="276" width="110" height="34" rx="12" fill="#fff" stroke="#3b82f6" stroke-width="1.8"/>
                 <text x="260" y="298" direction="rtl" text-anchor="middle" font-size="15" font-weight="700" fill="#1e293b">מוכן</text>
-                <!-- "איסוף" without guard -->
+                
                 <line x1="260" y1="310" x2="260" y2="350" stroke="#334155" stroke-width="1.8" marker-end="url(#sd8-arr)"/>
                 <text x="286" y="335" direction="rtl" text-anchor="start" font-size="12.5" fill="#334155">איסוף</text>
 
@@ -720,7 +662,7 @@
                 <circle cx="260" cy="440" r="12" fill="none" stroke="#1e293b" stroke-width="2"/>
                 <circle cx="260" cy="440" r="7" fill="#1e293b"/>
 
-                <!-- לא נאסף (left branch from מוכן) -->
+                
                 <line x1="205" y1="293" x2="132" y2="293" stroke="#334155" stroke-width="1.8" marker-end="url(#sd8-arr)"/>
                 <text x="168" y="285" direction="rtl" text-anchor="middle" font-size="12.5" fill="#334155">לא</text>
                 <rect x="30" y="276" width="100" height="34" rx="12" fill="#fff" stroke="#3b82f6" stroke-width="1.8"/>
@@ -729,28 +671,28 @@
                 <circle cx="80" cy="440" r="12" fill="none" stroke="#1e293b" stroke-width="2"/>
                 <circle cx="80" cy="440" r="7" fill="#1e293b"/>
 
-                <!-- בוטל (right side; "לא" from תשלום + ביטול from every state) -->
+                
                 <rect x="400" y="200" width="100" height="34" rx="12" fill="#fff" stroke="#3b82f6" stroke-width="1.8"/>
                 <text x="450" y="222" direction="rtl" text-anchor="middle" font-size="15" font-weight="700" fill="#1e293b">בוטל</text>
-                <!-- from תשלום: "לא" -->
+                
                 <path d="M315,141 C 360,141 420,160 440,198" fill="none" stroke="#334155" stroke-width="1.8" marker-end="url(#sd8-arr)"/>
                 <text x="378" y="132" direction="rtl" text-anchor="middle" font-size="12.5" fill="#334155">לא</text>
-                <!-- from הזמנה: ביטול -->
+                
                 <path d="M315,65 C 400,65 470,100 468,198" fill="none" stroke="#334155" stroke-width="1.8" marker-end="url(#sd8-arr)"/>
                 <text x="420" y="62" direction="rtl" text-anchor="middle" font-size="12.5" fill="#334155">ביטול</text>
-                <!-- from הכנה: ביטול -->
+                
                 <line x1="315" y1="217" x2="398" y2="217" stroke="#334155" stroke-width="1.8" marker-end="url(#sd8-arr)"/>
                 <text x="356" y="209" direction="rtl" text-anchor="middle" font-size="12.5" fill="#334155">ביטול</text>
-                <!-- from מוכן: ביטול -->
+                
                 <path d="M315,293 C 380,293 440,270 452,236" fill="none" stroke="#334155" stroke-width="1.8" marker-end="url(#sd8-arr)"/>
                 <text x="392" y="306" direction="rtl" text-anchor="middle" font-size="12.5" fill="#334155">ביטול</text>
-                <!-- בוטל → ◎ -->
+                
                 <line x1="450" y1="234" x2="450" y2="424" stroke="#334155" stroke-width="1.8" marker-end="url(#sd8-arr)"/>
                 <circle cx="450" cy="440" r="12" fill="none" stroke="#1e293b" stroke-width="2"/>
                 <circle cx="450" cy="440" r="7" fill="#1e293b"/>
               </g>
 
-              <!-- numbered markers — each appears with its callout -->
+              
               <g font-family="'Segoe UI',Arial,sans-serif" font-size="13" font-weight="800" fill="#fff" text-anchor="middle">
                 <g class="fragment" data-fragment-index="1">
                   <circle cx="186" cy="30" r="12" fill="#E86C00"/><text x="186" y="35">1</text>
@@ -819,14 +761,6 @@
       </aside>
     <div class="acro-footer"><span class="acro"><span class="en">UML</span> = <span class="en">Unified Modeling Language</span> · שפת מידול אחידה</span> &nbsp;·&nbsp; <span class="acro"><span class="en">AI</span> = <span class="en">Artificial Intelligence</span> · בינה מלאכותית</span></div>
     </section>
-    <!-- B1 — מצבים. REFRESH of the old `states` slide (library-book / generic examples) onto the campus
-         order. Teaches: a state is what the object IS for a stretch of time until an event; naming =
-         participle / adjective, never a verb or an activity; `status` holds it (the L6-7 attribute);
-         the campus order's 8 states; and the tool doctrine "a state is justified by behaviour, not
-         history" (same events + same actions ⇒ one state + an attribute).
-         SVG: one state box (מוכנה) with the two compartments annotated. Hebrew name uses
-         direction="rtl" + text-anchor="middle"; compartment line is LTR mono (the guard is the first
-         style line). -->
     <section data-slug="states" class="has-acro-footer">
       <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
       <style>
@@ -872,7 +806,7 @@
 
         <div class="top">
 
-          <!-- RIGHT (RTL-first): what a state is -->
+          
           <div class="def">
             <div class="panel-title">מהו מצב — ואיך קוראים לו</div>
             <ul class="list">
@@ -889,19 +823,19 @@
             </ul>
           </div>
 
-          <!-- LEFT: the state box + the campus states -->
+          
           <div class="ex">
             <div class="panel-title">כך נראה מצב בתרשים</div>
             <svg class="sd-svg" viewBox="0 0 470 205" xmlns="http://www.w3.org/2000/svg" role="img"
                  aria-label="תיבת מצב: מוכנה, עם תא פעילות ובו פעולה אחת: entry / setStatus('READY')">
-              <!-- state box -->
+              
               <rect x="16" y="14" width="310" height="150" rx="16" ry="16" fill="#fff" stroke="#3b82f6" stroke-width="2"/>
               <path d="M16,30 a16,16 0 0 1 16,-16 h278 a16,16 0 0 1 16,16 v34 h-310 z" fill="#eef4ff"/>
               <text x="171" y="48" direction="rtl" text-anchor="middle" font-size="21" font-weight="700" fill="#1e293b"
                     font-family="'Segoe UI',Arial,sans-serif">מוכנה</text>
               <line x1="16" y1="64" x2="326" y2="64" stroke="#3b82f6" stroke-width="1.6"/>
               <text x="30" y="112" text-anchor="start" font-size="15" fill="#334155" font-family="Consolas,monospace">entry / setStatus('READY')</text>
-              <!-- annotations -->
+              
               <line x1="326" y1="40" x2="356" y2="40" stroke="#94a3b8" stroke-width="1.2" stroke-dasharray="3 3"/>
               <text x="410" y="45" direction="rtl" text-anchor="middle" font-size="14.5" font-weight="700" fill="#004E8C"
                     font-family="'Segoe UI',Arial,sans-serif">שם המצב</text>
@@ -952,16 +886,6 @@
       </aside>
     <div class="acro-footer"><span class="acro"><span class="en">AI</span> = <span class="en">Artificial Intelligence</span> · בינה מלאכותית</span></div>
     </section>
-    <!-- B2 — חידון: מצב או לא מצב? REFRESH of the old `book-states-question` (library book) onto the
-         campus order. REFRAMED 2026-08-30 (David: "slide 10 quiz should only include state or not state
-         because transitions is not taught yet") — at this point students know only what a STATE is (B1);
-         events, guards and actions arrive on B3–B5. So every card has exactly two answers, מצב / לא מצב,
-         and the backs explain the "not" in plain language (a moment · something the system does · ongoing
-         doing) WITHOUT naming the formal categories — those get their names on the next slides.
-         Four states, four non-states, mixed order so no pattern gives the answer away. The key pair is
-         ״הכנה״ (not a state — it is what the kitchen does) vs ״בהכנה״ (a state). The old ״סימון מוכן״ card
-         was dropped for ״בהכנה״ to keep the pair. Flip mechanics copied from
-         lecture-06-07/slide-relationship-quiz (inline onclick + CSS rotateY, no <script>). -->
     <section data-slug="state-or-not-quiz" class="has-acro-footer">
       <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
       <style>
@@ -1007,7 +931,7 @@
 
         <div class="grid8">
 
-          <!-- 1 -->
+          
           <div class="qc" onclick="this.classList.toggle('flip')"><div class="inner">
             <div class="face front">
               <div class="word">ממתינה</div>
@@ -1020,7 +944,7 @@
             </div>
           </div></div>
 
-          <!-- 2 — the key card -->
+          
           <div class="qc" onclick="this.classList.toggle('flip')"><div class="inner">
             <div class="face front">
               <div class="word">הכנה</div>
@@ -1033,7 +957,7 @@
             </div>
           </div></div>
 
-          <!-- 3 -->
+          
           <div class="qc" onclick="this.classList.toggle('flip')"><div class="inner">
             <div class="face front">
               <div class="word">תשלום אושר</div>
@@ -1046,7 +970,7 @@
             </div>
           </div></div>
 
-          <!-- 4 -->
+          
           <div class="qc" onclick="this.classList.toggle('flip')"><div class="inner">
             <div class="face front">
               <div class="word">בהכנה</div>
@@ -1059,7 +983,7 @@
             </div>
           </div></div>
 
-          <!-- 5 -->
+          
           <div class="qc" onclick="this.classList.toggle('flip')"><div class="inner">
             <div class="face front">
               <div class="word">נשלחה התראה</div>
@@ -1072,7 +996,7 @@
             </div>
           </div></div>
 
-          <!-- 6 -->
+          
           <div class="qc" onclick="this.classList.toggle('flip')"><div class="inner">
             <div class="face front">
               <div class="word">מוכנה</div>
@@ -1085,7 +1009,7 @@
             </div>
           </div></div>
 
-          <!-- 7 -->
+          
           <div class="qc" onclick="this.classList.toggle('flip')"><div class="inner">
             <div class="face front">
               <div class="word">עברו 60 דקות</div>
@@ -1098,7 +1022,7 @@
             </div>
           </div></div>
 
-          <!-- 8 -->
+          
           <div class="qc" onclick="this.classList.toggle('flip')"><div class="inner">
             <div class="face front">
               <div class="word">בוטלה</div>
@@ -1117,13 +1041,12 @@
 
       </div>
       <aside class="notes">
-        <b>למה רק ״מצב / לא מצב״ (דוד, 2026-08-30):</b> בנקודה הזו הסטודנטים מכירים רק את המושג מצב. אירוע,
+        <b>למה רק ״מצב / לא מצב״:</b> בנקודה הזו הסטודנטים מכירים רק את המושג מצב. אירוע,
         תנאי ופעולה מגיעים בשלושת השקפים הבאים — ולכן החידון לא מבקש מהם לסווג לקטגוריות שעוד לא נלמדו, אלא
         רק לזהות מה <i>אינו</i> מצב. הסיבות בגב הכרטיס כתובות בשפה פשוטה (״רגע״, ״עשייה״, ״משהו שהמערכת
         עושה״) — ובשקפים הבאים אומרים: ״זוכרים את הרגעים מהחידון? קוראים להם אירועים. ואת ׳נשלחה התראה׳?
         קוראים לזה פעולה.״ כך החידון זורע את המושגים לפני שהם מקבלים שם.
-        <b>איך מריצים:</b> כרטיס אחד בכל פעם, הצבעה בכיתה, ורק אז הופכים. השאלה המנחה אחת: האם ההזמנה
-        <i>היא</i> זה לאורך זמן?
+        <b>השאלה המנחה</b> אחת: האם ההזמנה <i>היא</i> זה לאורך זמן?
         <b>הזוג המרכזי הוא ״הכנה״ / ״בהכנה״.</b> רוב הכיתה תגיד ״מצב״ על ״הכנה״, כי זה מה שהטיוטה של ה-AI
         ציירה (A8) וכי זה נשמע כמו שלב. ההבדל במילה הוא ההבדל במושג: שם-פעולה מתאר עשייה; בינוני מתאר מה
         שהאובייקט הוא. זה הכלל של שקף B1 (מצב = בינוני, לא פועל), והחידון נותן לו שיניים.
@@ -1136,13 +1059,6 @@
       </aside>
     <div class="acro-footer"><span class="acro"><span class="en">AI</span> = <span class="en">Artificial Intelligence</span> · בינה מלאכותית</span></div>
     </section>
-    <!-- B3 — מעברים ותווית המעבר. MERGE of the old `transitions` + the label half of `events-guards`.
-         Teaches: the arrow; the label grammar `event [guard] / action` as a colour-coded strip (event
-         #334155 · guard #0891b2 · action #15803d); every arrow carries an event except the initial one;
-         the SELF-TRANSITION (ממתינה loops on `עדכון שעת איסוף / updatePickupTime()`); "one arrow, one
-         event" — the event is the one that ENTERS the target (a compound ״תיקן והגיש מחדש״ is wrong).
-         SVG: ממתינה → בהכנה on `תחילת הכנה`, plus the self-loop. Labels stacked (Hebrew event line,
-         LTR action line) to avoid mixed-direction text in one SVG run. Marker id prefixed `tr-`. -->
     <section data-slug="transitions">
       <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
       <style>
@@ -1198,7 +1114,7 @@
 
         <div class="mid">
 
-          <!-- RIGHT (RTL-first): the rules -->
+          
           <div class="rules">
             <div class="panel-title">הכללים</div>
             <ul class="list">
@@ -1214,7 +1130,7 @@
             </ul>
           </div>
 
-          <!-- LEFT: the example -->
+          
           <div class="ex">
             <div class="panel-title">בהזמנה: מעבר רגיל ומעבר עצמי</div>
             <svg class="sd-svg" viewBox="0 0 540 230" xmlns="http://www.w3.org/2000/svg" role="img"
@@ -1225,27 +1141,27 @@
                 </marker>
               </defs>
 
-              <!-- self-loop above ממתינה -->
+              
               <path d="M 350,118 C 320,40 470,40 440,118" fill="none" stroke="#334155" stroke-width="1.8" marker-end="url(#tr-arr)"/>
               <rect x="315" y="12" width="160" height="34" rx="6" fill="#fff"/>
               <text x="395" y="26" direction="rtl" text-anchor="middle" font-size="12.5" font-weight="700" fill="#334155"
                     font-family="'Segoe UI',Arial,sans-serif">עדכון שעת איסוף</text>
               <text x="395" y="42" text-anchor="middle" font-size="11.5" fill="#15803d" font-family="Consolas,monospace">/ updatePickupTime()</text>
 
-              <!-- ממתינה (right, RTL-first) -->
+              
               <rect x="310" y="118" width="200" height="82" rx="14" ry="14" fill="#fff" stroke="#3b82f6" stroke-width="1.8"/>
               <text x="410" y="142" direction="rtl" text-anchor="middle" font-size="15" font-weight="700" fill="#1e293b"
                     font-family="'Segoe UI',Arial,sans-serif">ממתינה</text>
               <line x1="310" y1="151" x2="510" y2="151" stroke="#3b82f6" stroke-width="1.4"/>
               <text x="320" y="180" text-anchor="start" font-size="11" fill="#334155" font-family="Consolas,monospace">entry / queueForKitchen()</text>
 
-              <!-- transition ממתינה → בהכנה (leftwards, RTL reading) -->
+              
               <line x1="310" y1="159" x2="232" y2="159" stroke="#334155" stroke-width="1.8" marker-end="url(#tr-arr)"/>
               <rect x="236" y="130" width="70" height="20" rx="5" fill="#fff"/>
               <text x="271" y="145" direction="rtl" text-anchor="middle" font-size="12.5" font-weight="700" fill="#334155"
                     font-family="'Segoe UI',Arial,sans-serif">תחילת הכנה</text>
 
-              <!-- בהכנה (left) -->
+              
               <rect x="30" y="118" width="200" height="82" rx="14" ry="14" fill="#fff" stroke="#3b82f6" stroke-width="1.8"/>
               <text x="130" y="142" direction="rtl" text-anchor="middle" font-size="15" font-weight="700" fill="#1e293b"
                     font-family="'Segoe UI',Arial,sans-serif">בהכנה</text>
@@ -1253,7 +1169,7 @@
               <text x="40" y="172" text-anchor="start" font-size="11" fill="#334155" font-family="Consolas,monospace">entry / setStatus('IN_PREPARATION')</text>
               <text x="40" y="188" text-anchor="start" font-size="11" fill="#334155" font-family="Consolas,monospace">do / prepareItems()</text>
 
-              <!-- captions -->
+              
               <text x="130" y="222" direction="rtl" text-anchor="middle" font-size="11.5" fill="#555"
                     font-family="'Segoe UI',Arial,sans-serif">מעבר רגיל: אירוע בלבד, בלי תנאי ובלי פעולה</text>
               <text x="410" y="222" direction="rtl" text-anchor="middle" font-size="11.5" fill="#555"
@@ -1283,16 +1199,6 @@
         <b>מה עדיין לא כאן:</b> תנאי ואירוע-זמן — השקף הבא. כאן רק החץ והאירוע.
       </aside>
     </section>
-    <!-- B4 — אירועים ותנאים: אותו אירוע, יעד שונה. REFRESH of the old `events-guards` (library / PO
-         examples) onto the campus order. Teaches: the guard picks the target for the SAME event
-         (`אימות איסוף [BR-2: קוד תואם] / markCollected()` → נאספה); a FALSE guard is NOT an arrow —
-         nothing happens, no loop drawn; `ביטול ע״י הסטודנט [BR-4: לפני תחילת הכנה]`; time events
-         `after(60 דקות מזמן האיסוף)` → לא נאספה; guards REFERENCE the L3 catalog (BR-n) instead of
-         restating the rule. ⚠️ AI beat: the A8 draft had the same event twice with no guard.
-         SVG: מוכנה with two exits (guarded event → נאספה, time event → לא נאספה) and a greyed
-         "what if the code doesn't match" ghost that is deliberately NOT an arrow. Labels are stacked
-         one direction per line; `after(...)` is an English-led label so it stays LTR (no direction
-         attr). Marker ids prefixed `eg-`. -->
     <section data-slug="events-guards" class="has-acro-footer">
       <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
       <style>
@@ -1332,7 +1238,7 @@
 
         <div class="top">
 
-          <!-- RIGHT (RTL-first): the three rules -->
+          
           <div class="rules">
             <div class="panel-title">שלושה דברים לזכור</div>
             <div class="blk g">
@@ -1353,7 +1259,7 @@
             </div>
           </div>
 
-          <!-- LEFT: the diagram -->
+          
           <div class="ex">
             <div class="panel-title">בהזמנה: שתי יציאות ממוכנה — ומה שלא מציירים</div>
             <svg class="sd-svg" viewBox="0 0 620 300" xmlns="http://www.w3.org/2000/svg" role="img"
@@ -1364,21 +1270,21 @@
                 </marker>
               </defs>
 
-              <!-- מוכנה (right) -->
+              
               <rect x="395" y="80" width="215" height="82" rx="14" ry="14" fill="#fff" stroke="#3b82f6" stroke-width="1.8"/>
               <text x="512" y="104" direction="rtl" text-anchor="middle" font-size="15" font-weight="700" fill="#1e293b"
                     font-family="'Segoe UI',Arial,sans-serif">מוכנה</text>
               <line x1="395" y1="113" x2="610" y2="113" stroke="#3b82f6" stroke-width="1.4"/>
               <text x="405" y="142" text-anchor="start" font-size="11" fill="#334155" font-family="Consolas,monospace">entry / announceReady()</text>
 
-              <!-- נאספה (left) -->
+              
               <rect x="20" y="80" width="200" height="82" rx="14" ry="14" fill="#fff" stroke="#3b82f6" stroke-width="1.8"/>
               <text x="120" y="104" direction="rtl" text-anchor="middle" font-size="15" font-weight="700" fill="#1e293b"
                     font-family="'Segoe UI',Arial,sans-serif">נאספה</text>
               <line x1="20" y1="113" x2="220" y2="113" stroke="#3b82f6" stroke-width="1.4"/>
               <text x="30" y="142" text-anchor="start" font-size="11" fill="#334155" font-family="Consolas,monospace">entry / closeAsCollected()</text>
 
-              <!-- guarded transition מוכנה → נאספה -->
+              
               <line x1="395" y1="121" x2="222" y2="121" stroke="#334155" stroke-width="1.8" marker-end="url(#eg-arr)"/>
               <rect x="228" y="16" width="184" height="52" rx="6" fill="#fff"/>
               <text x="320" y="30" direction="rtl" text-anchor="middle" font-size="12.5" font-weight="700" fill="#334155"
@@ -1387,14 +1293,14 @@
                     font-family="'Segoe UI',Arial,sans-serif">[BR-2: קוד תואם]</text>
               <text x="320" y="62" text-anchor="middle" font-size="11.5" fill="#15803d" font-family="Consolas,monospace">/ markCollected()</text>
 
-              <!-- the NOT-an-arrow ghost: failed guard -->
+              
               <path d="M 480,80 C 470,40 540,40 530,80" fill="none" stroke="#cbd5e1" stroke-width="1.6" stroke-dasharray="4 4"/>
               <line x1="470" y1="36" x2="545" y2="80" stroke="#C62828" stroke-width="2.2"/>
               <line x1="545" y1="36" x2="470" y2="80" stroke="#C62828" stroke-width="2.2"/>
               <text x="520" y="24" direction="rtl" text-anchor="middle" font-size="11" font-weight="700" fill="#C62828"
                     font-family="'Segoe UI',Arial,sans-serif">[קוד לא תואם] — לא חץ. כלום לא קרה</text>
 
-              <!-- time event מוכנה → לא נאספה -->
+              
               <line x1="512" y1="162" x2="512" y2="212" stroke="#334155" stroke-width="1.8" marker-end="url(#eg-arr)"/>
               <rect x="300" y="176" width="200" height="20" rx="5" fill="#fff"/>
               <text x="500" y="191" text-anchor="end" font-size="12" font-weight="700" fill="#334155"
@@ -1405,7 +1311,7 @@
               <line x1="395" y1="247" x2="610" y2="247" stroke="#3b82f6" stroke-width="1.4"/>
               <text x="405" y="276" text-anchor="start" font-size="10.5" fill="#334155" font-family="Consolas,monospace">entry / closeAsNotCollected()</text>
 
-              <!-- side note on the left-bottom: what BR-2 is -->
+              
               <text x="120" y="210" direction="rtl" text-anchor="middle" font-size="11.5" font-weight="700" fill="#0891b2"
                     font-family="'Segoe UI',Arial,sans-serif">BR-2 מקטלוג החוקים:</text>
               <text x="120" y="226" direction="rtl" text-anchor="middle" font-size="11.5" fill="#555"
@@ -1446,13 +1352,6 @@
       </aside>
     <div class="acro-footer"><span class="acro"><span class="en">AI</span> = <span class="en">Artificial Intelligence</span> · בינה מלאכותית</span></div>
     </section>
-    <!-- B5 — פעולות במצב: entry / exit / do. REFRESH of the old `actions` (generic examples) onto the
-         campus order. Teaches: the three compartment lines; each kind at most once per state AND one
-         action per kind, so two things on entry = ONE wrapper method (Visual Paradigm gives entry a
-         single field); `entry / setStatus(...)` on EVERY state (the tracked
-         status); `do` only where something genuinely runs (בהכנה: `do / prepareItems()`); entry re-runs
-         on re-entry (self-loop too); these lines ARE the class's methods — the diagram hands the
-         developer a method list. SVG: מוכנה and בהכנה boxes with compartments. LTR guard first. -->
     <section data-slug="actions" class="has-acro-footer">
       <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
       <style>
@@ -1500,7 +1399,7 @@
 
         <div class="top">
 
-          <!-- RIGHT (RTL-first): the three kinds + rules -->
+          
           <div class="kinds">
             <div class="panel-title">שלוש שורות בתא הפעילות</div>
             <table class="k">
@@ -1523,12 +1422,12 @@
             </ul>
           </div>
 
-          <!-- LEFT: the two boxes + the method list -->
+          
           <div class="ex">
             <div class="panel-title">בהזמנה: בהכנה ומוכנה</div>
             <svg class="sd-svg" viewBox="0 0 520 206" xmlns="http://www.w3.org/2000/svg" role="img"
                  aria-label="שתי תיבות מצב: בהכנה עם entry / setStatus('IN_PREPARATION') ו-do / prepareItems(); מוכנה עם entry / announceReady() — שיטת עטיפה הקוראת ל-setStatus ול-notifyStudent">
-              <!-- בהכנה (right, RTL-first) -->
+              
               <rect x="268" y="12" width="244" height="150" rx="16" ry="16" fill="#fff" stroke="#3b82f6" stroke-width="2"/>
               <text x="390" y="44" direction="rtl" text-anchor="middle" font-size="20" font-weight="700" fill="#1e293b"
                     font-family="'Segoe UI',Arial,sans-serif">בהכנה</text>
@@ -1540,7 +1439,7 @@
               <text x="390" y="197" direction="rtl" text-anchor="middle" font-size="12" fill="#555"
                     font-family="'Segoe UI',Arial,sans-serif">המטבח מכין</text>
 
-              <!-- מוכנה (left) -->
+              
               <rect x="8" y="12" width="244" height="150" rx="16" ry="16" fill="#fff" stroke="#3b82f6" stroke-width="2"/>
               <text x="130" y="44" direction="rtl" text-anchor="middle" font-size="20" font-weight="700" fill="#1e293b"
                     font-family="'Segoe UI',Arial,sans-serif">מוכנה</text>
@@ -1589,15 +1488,6 @@
       </aside>
     <div class="acro-footer"><span class="acro"><span class="en">AI</span> = <span class="en">Artificial Intelligence</span> · בינה מלאכותית</span></div>
     </section>
-    <!-- B6 — התחלה וסוף — הכללים. REFRESH of the old `start-end-rules`. The old teaching ("final is
-         optional; several finals are fine") is RETIRED here on purpose — the uml_state_diagram tool
-         enforces one ◎ + an archive tail, and the graded critique must match it. Teaches: initial ● —
-         exactly one, its arrow is the ONLY unlabeled one; final ◎ — exactly ONE, reachable, and it
-         means "the record no longer exists in the system" — NOT "the order is done"; נאספה / בוטלה /
-         לא נאספה are STATES. Bottom: the classic mistake (three ◎) as `callout bad` vs the correct tail
-         (three outcome states → one ארכיון → one ◎) as `callout good`, with "next section shows the
-         tail". Mini SVGs are schematic name-only boxes (the compartments are taught on B5). Marker ids
-         prefixed `if-`. -->
     <section data-slug="initial-final" class="has-acro-footer">
       <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
       <style>
@@ -1633,7 +1523,7 @@
       <div class="body">
 
         <div class="top">
-          <!-- RIGHT: initial -->
+          
           <div>
             <div class="glyph">
               <svg viewBox="0 0 64 64" role="img" aria-label="מצב התחלתי: עיגול מלא"><circle cx="32" cy="32" r="11" fill="#1e293b"/></svg>
@@ -1644,7 +1534,7 @@
                 וזה <b>החץ היחיד בלי תווית</b>: האובייקט נוצר, אין אירוע שקדם לו. הוא לא מצב — ההזמנה אף פעם לא ״נמצאת״ בו.</div>
             </div>
           </div>
-          <!-- LEFT: final -->
+          
           <div>
             <div class="glyph">
               <svg viewBox="0 0 64 64" role="img" aria-label="מצב סופי: עיגול בתוך טבעת"><circle cx="32" cy="32" r="16" fill="none" stroke="#1e293b" stroke-width="2.5"/><circle cx="32" cy="32" r="9" fill="#1e293b"/></svg>
@@ -1659,7 +1549,7 @@
 
         <div class="cmp">
 
-          <!-- RIGHT: the classic mistake -->
+          
           <div class="callout bad">
             <span class="label">✗ הטעות הקלאסית — תוצאה עסקית מצוירת כ-◎</span>
             <svg viewBox="0 0 520 150" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="שלוש תוצאות, לכל אחת מצב סופי משלה — שגוי">
@@ -1668,21 +1558,21 @@
                   <path d="M0,0 L10,5 L0,10 z" fill="#334155"/>
                 </marker>
               </defs>
-              <!-- three outcome boxes -->
+              
               <rect x="370" y="18" width="130" height="40" rx="12" fill="#fff" stroke="#3b82f6" stroke-width="1.8"/>
               <text x="435" y="43" direction="rtl" text-anchor="middle" font-size="14" font-weight="700" fill="#1e293b" font-family="'Segoe UI',Arial,sans-serif">נאספה</text>
               <rect x="195" y="18" width="130" height="40" rx="12" fill="#fff" stroke="#3b82f6" stroke-width="1.8"/>
               <text x="260" y="43" direction="rtl" text-anchor="middle" font-size="14" font-weight="700" fill="#1e293b" font-family="'Segoe UI',Arial,sans-serif">בוטלה</text>
               <rect x="20" y="18" width="130" height="40" rx="12" fill="#fff" stroke="#3b82f6" stroke-width="1.8"/>
               <text x="85" y="43" direction="rtl" text-anchor="middle" font-size="14" font-weight="700" fill="#1e293b" font-family="'Segoe UI',Arial,sans-serif">לא נאספה</text>
-              <!-- three finals -->
+              
               <line x1="435" y1="58" x2="435" y2="98" stroke="#334155" stroke-width="1.8" marker-end="url(#if-arr-bad)"/>
               <circle cx="435" cy="116" r="12" fill="none" stroke="#1e293b" stroke-width="2"/><circle cx="435" cy="116" r="7" fill="#1e293b"/>
               <line x1="260" y1="58" x2="260" y2="98" stroke="#334155" stroke-width="1.8" marker-end="url(#if-arr-bad)"/>
               <circle cx="260" cy="116" r="12" fill="none" stroke="#1e293b" stroke-width="2"/><circle cx="260" cy="116" r="7" fill="#1e293b"/>
               <line x1="85" y1="58" x2="85" y2="98" stroke="#334155" stroke-width="1.8" marker-end="url(#if-arr-bad)"/>
               <circle cx="85" cy="116" r="12" fill="none" stroke="#1e293b" stroke-width="2"/><circle cx="85" cy="116" r="7" fill="#1e293b"/>
-              <!-- red crosses -->
+              
               <g stroke="#C62828" stroke-width="3" stroke-linecap="round">
                 <line x1="456" y1="102" x2="486" y2="132"/><line x1="486" y1="102" x2="456" y2="132"/>
                 <line x1="281" y1="102" x2="311" y2="132"/><line x1="311" y1="102" x2="281" y2="132"/>
@@ -1693,7 +1583,7 @@
               (״מה הזמנתי בחודש שעבר?״) עוד צריכים אותה. ובלי תווית על החצים — מה בכלל קרה?</div>
           </div>
 
-          <!-- LEFT: the correct tail -->
+          
           <div class="callout good">
             <span class="label">✓ נכון — התוצאות הן מצבים, ◎ אחד בסוף</span>
             <svg viewBox="0 0 520 150" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="שלוש תוצאות מתכנסות לארכיון, וממנו חץ אחד למצב סופי יחיד">
@@ -1702,14 +1592,14 @@
                   <path d="M0,0 L10,5 L0,10 z" fill="#334155"/>
                 </marker>
               </defs>
-              <!-- three outcome boxes -->
+              
               <rect x="370" y="18" width="130" height="40" rx="12" fill="#fff" stroke="#3b82f6" stroke-width="1.8"/>
               <text x="435" y="43" direction="rtl" text-anchor="middle" font-size="14" font-weight="700" fill="#1e293b" font-family="'Segoe UI',Arial,sans-serif">נאספה</text>
               <rect x="195" y="18" width="130" height="40" rx="12" fill="#fff" stroke="#3b82f6" stroke-width="1.8"/>
               <text x="260" y="43" direction="rtl" text-anchor="middle" font-size="14" font-weight="700" fill="#1e293b" font-family="'Segoe UI',Arial,sans-serif">בוטלה</text>
               <rect x="20" y="18" width="130" height="40" rx="12" fill="#fff" stroke="#3b82f6" stroke-width="1.8"/>
               <text x="85" y="43" direction="rtl" text-anchor="middle" font-size="14" font-weight="700" fill="#1e293b" font-family="'Segoe UI',Arial,sans-serif">לא נאספה</text>
-              <!-- converge into ארכיון -->
+              
               <path d="M 435,58 L 435,78 L 260,78" fill="none" stroke="#334155" stroke-width="1.8"/>
               <path d="M 85,58 L 85,78 L 260,78" fill="none" stroke="#334155" stroke-width="1.8"/>
               <line x1="260" y1="58" x2="260" y2="100" stroke="#334155" stroke-width="1.8" marker-end="url(#if-arr-good)"/>
@@ -1717,7 +1607,7 @@
               <text x="260" y="125" direction="rtl" text-anchor="middle" font-size="14" font-weight="700" fill="#1e293b" font-family="'Segoe UI',Arial,sans-serif">ארכיון</text>
               <rect x="300" y="82" width="90" height="16" rx="4" fill="#fff"/>
               <text x="345" y="94" direction="rtl" text-anchor="middle" font-size="11" font-weight="700" fill="#334155" font-family="'Segoe UI',Arial,sans-serif">סגירת יום</text>
-              <!-- one final -->
+              
               <line x1="200" y1="120" x2="92" y2="120" stroke="#334155" stroke-width="1.8" marker-end="url(#if-arr-good)"/>
               <circle cx="78" cy="120" r="12" fill="none" stroke="#1e293b" stroke-width="2"/><circle cx="78" cy="120" r="7" fill="#1e293b"/>
               <text x="146" y="112" text-anchor="middle" font-size="10.5" font-weight="700" fill="#334155" font-family="Consolas,monospace">after(7 שנים)</text>
@@ -1732,8 +1622,8 @@
 
       </div>
       <aside class="notes">
-        <b>שינוי דוקטרינה — לומר במפורש:</b> בגרסאות קודמות של הקורס לימדנו ״מצב סופי הוא רשות, ואפשר כמה״.
-        כבר לא — אבל לדייק (דוד, 2026-08-30): <b>ריבוי ◎ אינו טעות כשלעצמו</b> — UML מתיר כמה, וכולם שווי-משמעות. מה שהשתנה הוא
+        <b>שינוי דוקטרינה:</b> בגרסאות קודמות של הקורס לימדנו ״מצב סופי הוא רשות, ואפשר כמה״.
+        כבר לא, אבל בדיוק: <b>ריבוי ◎ אינו טעות כשלעצמו</b> — UML מתיר כמה, וכולם שווי-משמעות. מה שהשתנה הוא
         המשמעות: ◎ אומר דבר אחד, הרשומה נמחקה, ולכן תוצאה עסקית לעולם אינה ◎. אנחנו מציירים אחד כמוסכמה. הסיבה היא לא UML-פורמליזם — היא שהמשמעות ״ההזמנה
         הסתיימה״ מסתירה את השאלה החשובה של העיצוב: מה קורה לרשומה אחרי שהעסק סיים איתה? (דוחות, ביקורת, ״מה
         הזמנתי בחודש שעבר״). הכלי <code>uml_state_diagram</code> אוכף את זה, והביקורת שהסטודנטים מגישים חייבת
@@ -1749,14 +1639,6 @@
       </aside>
     <div class="acro-footer"><span class="acro"><span class="en">UML</span> = <span class="en">Unified Modeling Language</span> · שפת מידול אחידה</span> &nbsp;·&nbsp; <span class="acro"><span class="en">AI</span> = <span class="en">Artificial Intelligence</span> · בינה מלאכותית</span></div>
     </section>
-    <!-- B7 — זה לא תרשים זרימה. REFRESH of the old steps-summary(5) + po-step5 check. Side by side,
-         the SAME campus order drawn twice: a flowchart (top-down, ״יש תשלום?״ / ״נאסף?״ diamonds with
-         כן/לא, one arrow out of each box, ends everywhere — this is what the A8 AI draft looked like)
-         vs a state diagram (the cycle מוכנה→בהכנה on `תיקון [מנה חסרה]`, the self-loop, guards, arrows
-         in several directions, three exits). Under them the anti-flowchart checklist.
-         Placement: the flowchart sits on the RIGHT (read first in RTL) and the state diagram on the
-         LEFT — bad → good in reading order. Mini SVGs are schematic name-only boxes. Marker ids
-         prefixed `nf-`. -->
     <section data-slug="not-a-flowchart" class="has-acro-footer">
       <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
       <style>
@@ -1791,7 +1673,7 @@
 
         <div class="pair">
 
-          <!-- RIGHT (read first): the flowchart -->
+          
           <div class="fc">
             <div class="panel-title">תרשים זרימה <span class="tag warn">⚠️ כך נראתה הטיוטה של ה-<span class="en">AI</span></span></div>
             <svg viewBox="0 0 420 330" xmlns="http://www.w3.org/2000/svg" role="img"
@@ -1801,44 +1683,44 @@
                   <path d="M0,0 L10,5 L0,10 z" fill="#334155"/>
                 </marker>
               </defs>
-              <!-- start -->
+              
               <circle cx="210" cy="14" r="7" fill="#1e293b"/>
               <line x1="210" y1="21" x2="210" y2="34" stroke="#334155" stroke-width="1.6" marker-end="url(#nf-arr-fc)"/>
-              <!-- הזמנה -->
+              
               <rect x="160" y="36" width="100" height="30" rx="10" fill="#fff" stroke="#3b82f6" stroke-width="1.6"/>
               <text x="210" y="56" direction="rtl" text-anchor="middle" font-size="13" font-weight="700" fill="#1e293b" font-family="'Segoe UI',Arial,sans-serif">הזמנה</text>
               <line x1="210" y1="66" x2="210" y2="84" stroke="#334155" stroke-width="1.6" marker-end="url(#nf-arr-fc)"/>
-              <!-- diamond: יש תשלום? -->
+              
               <polygon points="210,86 262,114 210,142 158,114" fill="#fff" stroke="#E86C00" stroke-width="1.6"/>
               <text x="210" y="118" direction="rtl" text-anchor="middle" font-size="12" font-weight="700" fill="#1e293b" font-family="'Segoe UI',Arial,sans-serif">יש תשלום?</text>
-              <!-- לא → בוטל (left branch) -->
+              
               <line x1="158" y1="114" x2="112" y2="114" stroke="#334155" stroke-width="1.6" marker-end="url(#nf-arr-fc)"/>
               <text x="135" y="108" direction="rtl" text-anchor="middle" font-size="11.5" font-weight="700" fill="#C62828" font-family="'Segoe UI',Arial,sans-serif">לא</text>
               <rect x="20" y="99" width="90" height="30" rx="10" fill="#fff" stroke="#3b82f6" stroke-width="1.6"/>
               <text x="65" y="119" direction="rtl" text-anchor="middle" font-size="13" font-weight="700" fill="#1e293b" font-family="'Segoe UI',Arial,sans-serif">בוטל</text>
               <line x1="65" y1="129" x2="65" y2="150" stroke="#334155" stroke-width="1.6" marker-end="url(#nf-arr-fc)"/>
               <circle cx="65" cy="164" r="11" fill="none" stroke="#1e293b" stroke-width="2"/><circle cx="65" cy="164" r="6" fill="#1e293b"/>
-              <!-- כן → הכנה -->
+              
               <line x1="210" y1="142" x2="210" y2="160" stroke="#334155" stroke-width="1.6" marker-end="url(#nf-arr-fc)"/>
               <text x="228" y="156" direction="rtl" text-anchor="middle" font-size="11.5" font-weight="700" fill="#C62828" font-family="'Segoe UI',Arial,sans-serif">כן</text>
               <rect x="160" y="162" width="100" height="30" rx="10" fill="#fff" stroke="#3b82f6" stroke-width="1.6"/>
               <text x="210" y="182" direction="rtl" text-anchor="middle" font-size="13" font-weight="700" fill="#1e293b" font-family="'Segoe UI',Arial,sans-serif">הכנה</text>
               <line x1="210" y1="192" x2="210" y2="208" stroke="#334155" stroke-width="1.6" marker-end="url(#nf-arr-fc)"/>
-              <!-- מוכן -->
+              
               <rect x="160" y="210" width="100" height="30" rx="10" fill="#fff" stroke="#3b82f6" stroke-width="1.6"/>
               <text x="210" y="230" direction="rtl" text-anchor="middle" font-size="13" font-weight="700" fill="#1e293b" font-family="'Segoe UI',Arial,sans-serif">מוכן</text>
               <line x1="210" y1="240" x2="210" y2="256" stroke="#334155" stroke-width="1.6" marker-end="url(#nf-arr-fc)"/>
-              <!-- diamond: נאסף? -->
+              
               <polygon points="210,258 262,286 210,314 158,286" fill="#fff" stroke="#E86C00" stroke-width="1.6"/>
               <text x="210" y="290" direction="rtl" text-anchor="middle" font-size="12" font-weight="700" fill="#1e293b" font-family="'Segoe UI',Arial,sans-serif">נאסף?</text>
-              <!-- כן → נאסף (right branch) -->
+              
               <line x1="262" y1="286" x2="306" y2="286" stroke="#334155" stroke-width="1.6" marker-end="url(#nf-arr-fc)"/>
               <text x="284" y="280" direction="rtl" text-anchor="middle" font-size="11.5" font-weight="700" fill="#C62828" font-family="'Segoe UI',Arial,sans-serif">כן</text>
               <rect x="308" y="271" width="90" height="30" rx="10" fill="#fff" stroke="#3b82f6" stroke-width="1.6"/>
               <text x="353" y="291" direction="rtl" text-anchor="middle" font-size="13" font-weight="700" fill="#1e293b" font-family="'Segoe UI',Arial,sans-serif">נאסף</text>
               <line x1="353" y1="271" x2="353" y2="254" stroke="#334155" stroke-width="1.6" marker-end="url(#nf-arr-fc)"/>
               <circle cx="353" cy="240" r="11" fill="none" stroke="#1e293b" stroke-width="2"/><circle cx="353" cy="240" r="6" fill="#1e293b"/>
-              <!-- לא → לא נאסף (left branch) -->
+              
               <line x1="158" y1="286" x2="112" y2="286" stroke="#334155" stroke-width="1.6" marker-end="url(#nf-arr-fc)"/>
               <text x="135" y="280" direction="rtl" text-anchor="middle" font-size="11.5" font-weight="700" fill="#C62828" font-family="'Segoe UI',Arial,sans-serif">לא</text>
               <rect x="20" y="271" width="90" height="30" rx="10" fill="#fff" stroke="#3b82f6" stroke-width="1.6"/>
@@ -1849,7 +1731,7 @@
             <div class="cap"><b>כיוון אחד, חץ אחד מכל תיבה, כן/לא, שלושה סופים</b> — ואיפה התיקון? העדכון? הביטול מבהכנה?</div>
           </div>
 
-          <!-- LEFT: the state diagram -->
+          
           <div class="sd">
             <div class="panel-title">תרשים מצבים</div>
             <svg viewBox="0 0 560 330" xmlns="http://www.w3.org/2000/svg" role="img"
@@ -1859,32 +1741,32 @@
                   <path d="M0,0 L10,5 L0,10 z" fill="#334155"/>
                 </marker>
               </defs>
-              <!-- initial -->
+              
               <circle cx="546" cy="94" r="7" fill="#1e293b"/>
               <line x1="539" y1="94" x2="524" y2="94" stroke="#334155" stroke-width="1.6" marker-end="url(#nf-arr-sd)"/>
 
-              <!-- self-loop on ממתינה -->
+              
               <path d="M 420,72 C 400,18 500,18 480,72" fill="none" stroke="#334155" stroke-width="1.6" marker-end="url(#nf-arr-sd)"/>
               <text x="450" y="24" direction="rtl" text-anchor="middle" font-size="11.5" font-weight="700" fill="#334155" font-family="'Segoe UI',Arial,sans-serif">עדכון שעת איסוף</text>
 
-              <!-- ממתינה -->
+              
               <rect x="390" y="72" width="130" height="44" rx="12" fill="#fff" stroke="#3b82f6" stroke-width="1.8"/>
               <text x="455" y="99" direction="rtl" text-anchor="middle" font-size="14" font-weight="700" fill="#1e293b" font-family="'Segoe UI',Arial,sans-serif">ממתינה</text>
 
-              <!-- ממתינה → בוטלה (leftwards) -->
+              
               <line x1="390" y1="94" x2="172" y2="94" stroke="#334155" stroke-width="1.6" marker-end="url(#nf-arr-sd)"/>
               <text x="280" y="74" direction="rtl" text-anchor="middle" font-size="11.5" font-weight="700" fill="#334155" font-family="'Segoe UI',Arial,sans-serif">ביטול ע״י הסטודנט</text>
               <text x="280" y="88" direction="rtl" text-anchor="middle" font-size="11" font-weight="700" fill="#0891b2" font-family="'Segoe UI',Arial,sans-serif">[BR-4: לפני תחילת הכנה]</text>
               <rect x="40" y="72" width="130" height="44" rx="12" fill="#fff" stroke="#3b82f6" stroke-width="1.8"/>
               <text x="105" y="99" direction="rtl" text-anchor="middle" font-size="14" font-weight="700" fill="#1e293b" font-family="'Segoe UI',Arial,sans-serif">בוטלה</text>
 
-              <!-- ממתינה → בהכנה (down) -->
+              
               <line x1="490" y1="116" x2="490" y2="166" stroke="#334155" stroke-width="1.6" marker-end="url(#nf-arr-sd)"/>
               <text x="530" y="145" direction="rtl" text-anchor="middle" font-size="11.5" font-weight="700" fill="#334155" font-family="'Segoe UI',Arial,sans-serif">תחילת הכנה</text>
               <rect x="390" y="168" width="130" height="44" rx="12" fill="#fff" stroke="#3b82f6" stroke-width="1.8"/>
               <text x="455" y="195" direction="rtl" text-anchor="middle" font-size="14" font-weight="700" fill="#1e293b" font-family="'Segoe UI',Arial,sans-serif">בהכנה</text>
 
-              <!-- בהכנה → מוכנה (down) and the back-arc מוכנה → בהכנה (up) -->
+              
               <line x1="490" y1="212" x2="490" y2="262" stroke="#334155" stroke-width="1.6" marker-end="url(#nf-arr-sd)"/>
               <text x="530" y="241" direction="rtl" text-anchor="middle" font-size="11.5" font-weight="700" fill="#334155" font-family="'Segoe UI',Arial,sans-serif">סימון מוכן</text>
               <line x1="420" y1="264" x2="420" y2="214" stroke="#334155" stroke-width="1.6" marker-end="url(#nf-arr-sd)"/>
@@ -1893,14 +1775,14 @@
               <rect x="390" y="264" width="130" height="44" rx="12" fill="#fff" stroke="#3b82f6" stroke-width="1.8"/>
               <text x="455" y="291" direction="rtl" text-anchor="middle" font-size="14" font-weight="700" fill="#1e293b" font-family="'Segoe UI',Arial,sans-serif">מוכנה</text>
 
-              <!-- מוכנה → נאספה (leftwards, guarded) -->
+              
               <line x1="390" y1="286" x2="172" y2="286" stroke="#334155" stroke-width="1.6" marker-end="url(#nf-arr-sd)"/>
               <text x="318" y="266" direction="rtl" text-anchor="middle" font-size="11.5" font-weight="700" fill="#334155" font-family="'Segoe UI',Arial,sans-serif">אימות איסוף</text>
               <text x="318" y="280" direction="rtl" text-anchor="middle" font-size="11" font-weight="700" fill="#0891b2" font-family="'Segoe UI',Arial,sans-serif">[BR-2: קוד תואם]</text>
               <rect x="40" y="264" width="130" height="44" rx="12" fill="#fff" stroke="#3b82f6" stroke-width="1.8"/>
               <text x="105" y="291" direction="rtl" text-anchor="middle" font-size="14" font-weight="700" fill="#1e293b" font-family="'Segoe UI',Arial,sans-serif">נאספה</text>
 
-              <!-- מוכנה → לא נאספה (time event): left along the bottom, up, then into the box -->
+              
               <path d="M 390,300 L 250,300 L 250,204" fill="none" stroke="#334155" stroke-width="1.6"/>
               <line x1="250" y1="204" x2="172" y2="204" stroke="#334155" stroke-width="1.6" marker-end="url(#nf-arr-sd)"/>
               <text x="198" y="244" text-anchor="middle" font-size="11" font-weight="700" fill="#334155" font-family="Consolas,monospace">after(60 דק׳)</text>
@@ -1941,16 +1823,6 @@
       </aside>
     <div class="acro-footer"><span class="acro"><span class="en">BPMN</span> = <span class="en">Business Process Model and Notation</span> · מידול וסימון תהליכים עסקיים</span> &nbsp;·&nbsp; <span class="acro"><span class="en">AI</span> = <span class="en">Artificial Intelligence</span> · בינה מלאכותית</span></div>
     </section>
-    <!-- C1 — מצבי-על ומצבים פנימיים (REFRESH of the old "superstates" slide, 2026-08-30).
-         Teaches the composite state on the canonical campus order: פעילה {ממתינה, בהכנה, מוכנה}.
-         The whole argument is one comparison: WITHOUT the composite the staff cancel
-         (ביטול ע״י הצוות [פריט אזל]) is drawn THREE times (three arrows, three guards); WITH it, ONE
-         arrow leaves the dashed border and fires from every sub-state. Three rules under the pictures:
-         into the border ⇒ through the internal ●; from the border ⇒ from every sub-state; the purpose is
-         fewer duplicate arrows and guards. The BR-4 note is deliberate: the STUDENT cancel is NOT on the
-         border — it leaves ממתינה only — so the composite must not swallow a business rule (C5 picks
-         this up). Model, names and constants verbatim from PORTING_BRIEF.md (T2, T5, T7, T11).
-         SVG: two hand-drawn mini-diagrams + the LTR text guard; marker ids prefixed c1w-/c1c-. -->
     <section data-slug="composite-states" class="has-acro-footer">
       <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
       <style>
@@ -1990,7 +1862,7 @@
 
         <div class="cmp">
 
-          <!-- RIGHT (RTL-first): without the composite — three identical arrows -->
+          
           <div class="without">
             <div class="ph">✗ בלי מצב-על <small>אותו אירוע, אותו תנאי — שלוש פעמים</small></div>
             <svg viewBox="0 0 540 312" xmlns="http://www.w3.org/2000/svg" role="img"
@@ -2000,7 +1872,7 @@
                   <path d="M0,0 L10,5 L0,10 z" fill="#334155"/>
                 </marker>
               </defs>
-              <!-- sub-states column -->
+              
               <g font-family="'Segoe UI',Arial,sans-serif">
                 <rect x="115" y="0" width="170" height="52" rx="14" ry="14" fill="#fff" stroke="#3b82f6" stroke-width="1.8"/>
                 <text x="200" y="20" direction="rtl" text-anchor="middle" font-size="15" font-weight="700" fill="#1e293b">ממתינה</text>
@@ -2017,20 +1889,20 @@
                 <line x1="115" y1="287" x2="285" y2="287" stroke="#3b82f6" stroke-width="1.2"/>
                 <text x="121" y="303" font-size="9.5" fill="#334155" font-family="Consolas,monospace">entry / setStatus('READY')</text>
 
-                <!-- the normal flow between them -->
+                
                 <line x1="200" y1="52" x2="200" y2="130" stroke="#334155" stroke-width="1.8" marker-end="url(#c1w-arr)"/>
                 <text x="60" y="95" direction="rtl" text-anchor="middle" font-size="11.5" fill="#334155">תחילת הכנה</text>
                 <line x1="200" y1="182" x2="200" y2="260" stroke="#334155" stroke-width="1.8" marker-end="url(#c1w-arr)"/>
                 <text x="60" y="225" direction="rtl" text-anchor="middle" font-size="11.5" fill="#334155">סימון מוכן</text>
 
-                <!-- בוטלה -->
+                
                 <rect x="430" y="130" width="105" height="52" rx="14" ry="14" fill="#fff" stroke="#3b82f6" stroke-width="1.8"/>
                 <text x="482" y="150" direction="rtl" text-anchor="middle" font-size="15" font-weight="700" fill="#1e293b">בוטלה</text>
                 <line x1="430" y1="157" x2="535" y2="157" stroke="#3b82f6" stroke-width="1.2"/>
                 <text x="482" y="168" text-anchor="middle" font-size="8" fill="#334155" font-family="Consolas,monospace">entry / setStatus(</text>
                 <text x="482" y="178" text-anchor="middle" font-size="8" fill="#334155" font-family="Consolas,monospace">'CANCELLED')</text>
 
-                <!-- THREE identical cancel arrows -->
+                
                 <path d="M285,26 H400 V134 H430" fill="none" stroke="#c0392b" stroke-width="1.8" marker-end="url(#c1w-arr)"/>
                 <path d="M285,156 H430" fill="none" stroke="#c0392b" stroke-width="1.8" marker-end="url(#c1w-arr)"/>
                 <path d="M285,286 H400 V178 H430" fill="none" stroke="#c0392b" stroke-width="1.8" marker-end="url(#c1w-arr)"/>
@@ -2044,7 +1916,7 @@
             <div class="cap"><b>שלושה חצים, שלושה תנאים</b> — וכל שינוי במדיניות הביטול יתוקן בשלושה מקומות (או רק בשניים).</div>
           </div>
 
-          <!-- LEFT: with the composite — one arrow from the border -->
+          
           <div class="with">
             <div class="ph">✓ עם מצב-על <small>חץ אחד מהגבול — יוצא מכל מצב פנימי</small></div>
             <svg viewBox="0 0 540 380" xmlns="http://www.w3.org/2000/svg" role="img"
@@ -2055,12 +1927,12 @@
                 </marker>
               </defs>
               <g font-family="'Segoe UI',Arial,sans-serif">
-                <!-- incoming transition: enters the border, lands on the internal ● -->
+                
                 <line x1="165" y1="4" x2="165" y2="50" stroke="#334155" stroke-width="1.8" marker-end="url(#c1c-arr)"/>
                 <text x="215" y="22" direction="rtl" text-anchor="middle" font-size="11.5" font-weight="700" fill="#334155">תשלום אושר</text>
                 <text x="176" y="38" font-size="10.5" fill="#15803d" font-family="Consolas,monospace">/ recordPayment()</text>
 
-                <!-- the composite -->
+                
                 <rect x="15" y="50" width="300" height="322" rx="20" ry="20" fill="#f0f7ff" stroke="#2563eb" stroke-width="2" stroke-dasharray="8 4"/>
                 <text x="270" y="74" direction="rtl" text-anchor="middle" font-size="16" font-weight="700" fill="#1e293b">פעילה</text>
                 <text x="24" y="88" font-size="10" fill="#334155" font-family="Consolas,monospace">entry / setStatus('ACTIVE')</text>
@@ -2088,7 +1960,7 @@
                 <line x1="80" y1="322" x2="250" y2="322" stroke="#3b82f6" stroke-width="1.2"/>
                 <text x="86" y="337" font-size="9.5" fill="#334155" font-family="Consolas,monospace">entry / setStatus('READY')</text>
 
-                <!-- ONE arrow from the border -->
+                
                 <line x1="315" y1="237" x2="420" y2="237" stroke="#15803d" stroke-width="2.2" marker-end="url(#c1c-arr)"/>
                 <text x="367" y="214" direction="rtl" text-anchor="middle" font-size="11" font-weight="700" fill="#334155">ביטול ע״י הצוות</text>
                 <text x="367" y="228" direction="rtl" text-anchor="middle" font-size="11" font-weight="700" fill="#0891b2">[פריט אזל]</text>
@@ -2132,14 +2004,6 @@
       </aside>
     <div class="acro-footer"><span class="acro"><span class="en">AI</span> = <span class="en">Artificial Intelligence</span> · בינה מלאכותית</span></div>
     </section>
-    <!-- C2 — דוגמה נוספת: מכונת ייצור (KEEP of the old composite-machine slide, re-drawn 2026-08-30).
-         The IE-flavoured second composite example from PORTING_BRIEF.md: כבויה ⇄ מופעלת {ממתינה ⇄ מייצרת ⇄
-         מושהית}. Two teaching points the campus order can't make as sharply: (1) the sub-states form a
-         GRAPH (start / pause / resume / batch done — cycles both ways), not a sequence; (2) the two arrows
-         from the border (תקלה / stopAndLog() → בתקלה, כיבוי → כבויה) are WHAT JUSTIFIES the composite — they
-         replace 3+3 arrows. entry / setStatus on every state incl. the composite (constants OFF / ON /
-         WAITING / PRODUCING / PAUSED / FAULT). Layout: big SVG + a narrow rail of the three points.
-         SVG: hand-drawn + the LTR text guard; marker id prefixed c2-. -->
     <section data-slug="composite-machine" class="has-acro-footer">
       <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
       <style>
@@ -2167,7 +2031,7 @@
 
         <div class="main">
 
-          <!-- RIGHT (RTL-first): the diagram -->
+          
           <div class="fig">
             <svg viewBox="0 0 760 358" xmlns="http://www.w3.org/2000/svg" role="img"
                  aria-label="Machine state diagram: Off, composite On containing Waiting, Producing, Paused; Fault; arrows from the composite border">
@@ -2177,80 +2041,80 @@
                 </marker>
               </defs>
               <g font-family="'Segoe UI',Arial,sans-serif">
-                <!-- initial -->
+                
                 <circle cx="105" cy="14" r="7" fill="#1e293b"/>
                 <line x1="105" y1="21" x2="105" y2="50" stroke="#334155" stroke-width="1.8" marker-end="url(#c2-arr)"/>
 
-                <!-- כבויה -->
+                
                 <rect x="20" y="50" width="170" height="54" rx="14" ry="14" fill="#fff" stroke="#3b82f6" stroke-width="1.8"/>
                 <text x="105" y="70" direction="rtl" text-anchor="middle" font-size="15" font-weight="700" fill="#1e293b">כבויה</text>
                 <line x1="20" y1="77" x2="190" y2="77" stroke="#3b82f6" stroke-width="1.2"/>
                 <text x="27" y="94" font-size="9.5" fill="#334155" font-family="Consolas,monospace">entry / setStatus('OFF')</text>
 
-                <!-- composite מופעלת -->
+                
                 <rect x="290" y="14" width="450" height="334" rx="20" ry="20" fill="#f0f7ff" stroke="#2563eb" stroke-width="2" stroke-dasharray="8 4"/>
                 <text x="700" y="38" direction="rtl" text-anchor="middle" font-size="16" font-weight="700" fill="#1e293b">מופעלת</text>
                 <text x="300" y="38" font-size="10" fill="#334155" font-family="Consolas,monospace">entry / setStatus('ON')</text>
 
-                <!-- כבויה ⇄ border -->
+                
                 <line x1="190" y1="64" x2="290" y2="64" stroke="#334155" stroke-width="1.8" marker-end="url(#c2-arr)"/>
                 <text x="240" y="56" direction="rtl" text-anchor="middle" font-size="11.5" font-weight="700" fill="#334155">הפעלה</text>
                 <line x1="290" y1="90" x2="190" y2="90" stroke="#15803d" stroke-width="2.2" marker-end="url(#c2-arr)"/>
                 <text x="240" y="106" direction="rtl" text-anchor="middle" font-size="11.5" font-weight="700" fill="#334155">כיבוי</text>
 
-                <!-- internal initial → ממתינה -->
+                
                 <circle cx="395" cy="64" r="7" fill="#1e293b"/>
                 <line x1="395" y1="71" x2="395" y2="100" stroke="#334155" stroke-width="1.8" marker-end="url(#c2-arr)"/>
 
-                <!-- ממתינה -->
+                
                 <rect x="310" y="100" width="170" height="54" rx="14" ry="14" fill="#fff" stroke="#3b82f6" stroke-width="1.8"/>
                 <text x="395" y="120" direction="rtl" text-anchor="middle" font-size="15" font-weight="700" fill="#1e293b">ממתינה</text>
                 <line x1="310" y1="127" x2="480" y2="127" stroke="#3b82f6" stroke-width="1.2"/>
                 <text x="317" y="144" font-size="9.5" fill="#334155" font-family="Consolas,monospace">entry / setStatus('WAITING')</text>
 
-                <!-- מייצרת -->
+                
                 <rect x="550" y="100" width="170" height="54" rx="14" ry="14" fill="#fff" stroke="#3b82f6" stroke-width="1.8"/>
                 <text x="635" y="120" direction="rtl" text-anchor="middle" font-size="15" font-weight="700" fill="#1e293b">מייצרת</text>
                 <line x1="550" y1="127" x2="720" y2="127" stroke="#3b82f6" stroke-width="1.2"/>
                 <text x="557" y="144" font-size="9.5" fill="#334155" font-family="Consolas,monospace">entry / setStatus('PRODUCING')</text>
 
-                <!-- ממתינה ⇄ מייצרת -->
+                
                 <line x1="480" y1="117" x2="550" y2="117" stroke="#334155" stroke-width="1.8" marker-end="url(#c2-arr)"/>
                 <text x="515" y="108" direction="rtl" text-anchor="middle" font-size="11.5" font-weight="700" fill="#334155">התחל</text>
                 <line x1="550" y1="139" x2="480" y2="139" stroke="#334155" stroke-width="1.8" marker-end="url(#c2-arr)"/>
                 <text x="515" y="158" direction="rtl" text-anchor="middle" font-size="11" font-weight="700" fill="#334155">סיום אצווה</text>
 
-                <!-- מושהית -->
+                
                 <rect x="550" y="262" width="170" height="54" rx="14" ry="14" fill="#fff" stroke="#3b82f6" stroke-width="1.8"/>
                 <text x="635" y="282" direction="rtl" text-anchor="middle" font-size="15" font-weight="700" fill="#1e293b">מושהית</text>
                 <line x1="550" y1="289" x2="720" y2="289" stroke="#3b82f6" stroke-width="1.2"/>
                 <text x="557" y="306" font-size="9.5" fill="#334155" font-family="Consolas,monospace">entry / setStatus('PAUSED')</text>
 
-                <!-- מייצרת ⇄ מושהית -->
+                
                 <line x1="665" y1="154" x2="665" y2="262" stroke="#334155" stroke-width="1.8" marker-end="url(#c2-arr)"/>
                 <text x="700" y="212" direction="rtl" text-anchor="middle" font-size="11.5" font-weight="700" fill="#334155">השהה</text>
                 <line x1="605" y1="262" x2="605" y2="154" stroke="#334155" stroke-width="1.8" marker-end="url(#c2-arr)"/>
                 <text x="572" y="212" direction="rtl" text-anchor="middle" font-size="11.5" font-weight="700" fill="#334155">המשך</text>
 
-                <!-- בתקלה -->
+                
                 <rect x="20" y="262" width="170" height="54" rx="14" ry="14" fill="#fff" stroke="#3b82f6" stroke-width="1.8"/>
                 <text x="105" y="282" direction="rtl" text-anchor="middle" font-size="15" font-weight="700" fill="#1e293b">בתקלה</text>
                 <line x1="20" y1="289" x2="190" y2="289" stroke="#3b82f6" stroke-width="1.2"/>
                 <text x="27" y="306" font-size="9.5" fill="#334155" font-family="Consolas,monospace">entry / setStatus('FAULT')</text>
 
-                <!-- border → בתקלה -->
+                
                 <line x1="290" y1="289" x2="190" y2="289" stroke="#15803d" stroke-width="2.2" marker-end="url(#c2-arr)"/>
                 <text x="240" y="279" direction="rtl" text-anchor="middle" font-size="11.5" font-weight="700" fill="#334155">תקלה</text>
                 <text x="196" y="305" font-size="10" fill="#15803d" font-family="Consolas,monospace">/ stopAndLog()</text>
 
-                <!-- בתקלה → כבויה -->
+                
                 <line x1="105" y1="262" x2="105" y2="104" stroke="#334155" stroke-width="1.8" marker-end="url(#c2-arr)"/>
                 <text x="62" y="186" direction="rtl" text-anchor="middle" font-size="11.5" font-weight="700" fill="#334155">תוקנה</text>
               </g>
             </svg>
           </div>
 
-          <!-- LEFT: the three points -->
+          
           <div class="rail">
             <div class="pt">
               <div class="h">1 · המצבים הפנימיים הם גרף</div>
@@ -2288,17 +2152,6 @@
       </aside>
     <div class="acro-footer"><span class="acro"><span class="en">UML</span> = <span class="en">Unified Modeling Language</span> · שפת מידול אחידה</span></div>
     </section>
-    <!-- C3 — שני סופים: סוף הרלוונטיות וסוף הקיום (NEW 2026-08-30). Teaches LIFECYCLE-END.md §1–§2 + §5
-         verbatim: ◎ means "the object no longer exists in the system", never "the order is done".
-         Relevance ends in an OUTCOME STATE (נאספה / בוטלה / לא נאספה) that goes to ארכיון on סגירת יום /
-         archive(); existence ends at the single ◎ via a TIME EVENT with a CONCRETE retention period —
-         after(7 שנים) / purge(). Why archive: reports, audits, "what did I order last month". Retention is a
-         business decision with a basis (LIFECYCLE-END §5 table): financial 7y · contractual 7y ·
-         operational 1–2y · personal data shortest defensible. after(X ימים) is a placeholder — rejected.
-         The order charged money ⇒ financial ⇒ 7 years. ארכיון has no do. closureReason set in the outcome's
-         entry so the archive doesn't lose the why (C4 makes this explicit). Replaces the old deck's "final is
-         optional / several finals are fine" (David's decision #1 in REDESIGN_OUTLINE.md).
-         SVG: the tail, hand-drawn + the LTR text guard; marker id prefixed c3-. -->
     <section data-slug="two-ends" class="has-acro-footer">
       <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
       <style>
@@ -2340,7 +2193,7 @@
 
         <div class="top">
 
-          <!-- RIGHT (RTL-first): the two ends, side by side -->
+          
           <div class="tbl">
             <div class="panel-title">אותו אובייקט, שני סופים שונים</div>
             <table class="sad">
@@ -2358,7 +2211,7 @@
             </div>
           </div>
 
-          <!-- LEFT: the tail -->
+          
           <div class="fig">
             <div class="panel-title">הזנב של כל תרשים: תוצאה ← ארכיון ← ◎</div>
             <svg viewBox="0 0 540 314" xmlns="http://www.w3.org/2000/svg" role="img"
@@ -2369,7 +2222,7 @@
                 </marker>
               </defs>
               <g font-family="'Segoe UI',Arial,sans-serif">
-                <!-- outcome states -->
+                
                 <g font-family="Consolas,monospace" font-size="8.6" fill="#334155">
                   <rect x="10" y="6" width="165" height="80" rx="14" ry="14" fill="#fff" stroke="#3b82f6" stroke-width="1.8"/>
                   <text x="92" y="24" direction="rtl" text-anchor="middle" font-size="15" font-weight="700" fill="#1e293b" font-family="'Segoe UI',Arial,sans-serif">נאספה</text>
@@ -2393,7 +2246,7 @@
                   <text x="370" y="77" font-size="7.4" fill="#64748b">-- setClosureReason('NOT_COLLECTED')</text>
                 </g>
 
-                <!-- three arrows converge on ארכיון -->
+                
                 <line x1="92" y1="86" x2="205" y2="146" stroke="#334155" stroke-width="1.8" marker-end="url(#c3-arr)"/>
                 <line x1="269" y1="86" x2="269" y2="146" stroke="#334155" stroke-width="1.8" marker-end="url(#c3-arr)"/>
                 <line x1="446" y1="86" x2="335" y2="146" stroke="#334155" stroke-width="1.8" marker-end="url(#c3-arr)"/>
@@ -2401,14 +2254,14 @@
                 <text x="282" y="124" font-size="10.5" fill="#15803d" font-family="Consolas,monospace">/ archive()</text>
                 <text x="66" y="112" direction="rtl" text-anchor="middle" font-size="10" fill="#64748b">(אותה תווית על שלושת החצים)</text>
 
-                <!-- ארכיון -->
+                
                 <rect x="185" y="146" width="170" height="50" rx="14" ry="14" fill="#fff" stroke="#3b82f6" stroke-width="1.8"/>
                 <text x="270" y="165" direction="rtl" text-anchor="middle" font-size="15" font-weight="700" fill="#1e293b">ארכיון</text>
                 <line x1="185" y1="172" x2="355" y2="172" stroke="#3b82f6" stroke-width="1.2"/>
                 <text x="191" y="188" font-size="9.5" fill="#334155" font-family="Consolas,monospace">entry / setStatus('ARCHIVED')</text>
                 <text x="92" y="184" direction="rtl" text-anchor="middle" font-size="10" fill="#64748b">אין do — ״להישמר״ אינו התנהגות</text>
 
-                <!-- retention arc → ◎ -->
+                
                 <line x1="270" y1="196" x2="270" y2="274" stroke="#334155" stroke-width="1.8" marker-end="url(#c3-arr)"/>
                 <text x="282" y="232" font-size="11" font-weight="700" fill="#334155" font-family="Consolas,monospace">after(7 שנים)<tspan fill="#15803d"> / purge()</tspan></text>
                 <text x="180" y="232" direction="rtl" text-anchor="middle" font-size="10" fill="#64748b">אירוע זמן — לא ״סיימנו״</text>
@@ -2421,7 +2274,7 @@
 
         </div>
 
-        <!-- retention: a decision with a basis -->
+        
         <div class="ret">
           <div class="lead"><b>תקופת השמירה היא החלטה עם נימוק.</b> <code class="bad">after(X ימים)</code> הוא מציין-מקום, לא החלטה — ייפסל. בוחרים שורה ומנמקים במשפט:</div>
           <div class="r hit"><div class="t">כספי</div><span class="p">7 שנים</span> <span class="b">— הוראות ניהול ספרים (מס הכנסה)</span></div>
@@ -2437,7 +2290,7 @@
         <b>המשפט שמחליף את מה שלימדנו בעבר:</b> בדק הישן אמרנו ״מצב סופי אופציונלי, אפשר כמה״. לא עוד.
         ◎ פירושו אחד: הרשומה כבר לא קיימת במערכת. ״נאספה״ אינה סוף — היא מצב שההזמנה נמצאת בו, והרשומה
         עדיין עונה על שאלות. אנחנו מציירים ◎ אחד, נגיש — מוסכמה: UML מתיר כמה ◎ וכולם שווי-משמעות, ולכן ריבוי
-        סיומים אינו טעות כשלעצמו (דוד, 2026-08-30); הטעות היא תוצאה עסקית שמצוירת כ-◎.
+        סיומים אינו טעות כשלעצמו; הטעות היא תוצאה עסקית שמצוירת כ-◎.
         <b>שני הסופים, בשתי שאלות:</b> ״האם ההזמנה עדיין פעילה?״ (רלוונטיות — נגמרת באירוע עסקי) ו-״האם
         הרשומה עדיין קיימת?״ (קיום — נגמר באירוע זמן). הבלבול ביניהם הוא הטעות הנפוצה ביותר בתרשימי
         סטודנטים — תוצאה עסקית מצוירת כ-◎ — וה-<span class="en">AI</span> עושה אותה בכל טיוטה.
@@ -2445,7 +2298,7 @@
         ותקנות ניהול ספרים דורשות 7 שנים. אם ההזמנה הייתה ״הזמנת חדר לימוד״ בלי כסף — תפעולית, 1–2
         שנים. סטודנט שכותב <span class="en">after(X ימים)</span> לא קיבל החלטה, ובכלי זה נפסל. השתיקה
         של המפרט אינה רישיון להשאיר מציין-מקום — בוחרים שורה ומסבירים.
-        <b>שתי דקויות לומר בקול:</b> (1) ה-entry של ארכיון דורס את <span class="en">status</span>, ולכן
+        <b>שתי דקויות:</b> (1) ה-entry של ארכיון דורס את <span class="en">status</span>, ולכן
         הסיבה לסגירה נשמרת ב-<span class="en">closureReason</span> שנקבע כבר במצב התוצאה — השקף הבא.
         שימו לב שלכל תוצאה יש <b>פעולת כניסה אחת</b> — שיטת עטיפה — ושתי הפעולות יושבות בגוףה,
         המודפס באפור כהערה (<code>--</code>) מתחת לשם — הערה, לא שורת פעולה נוספת. ל-<code>entry</code> יש שדה אחד, ולכן לא משרשרים שתי קריאות ב-<code>;</code>. (2)
@@ -2455,16 +2308,6 @@
       </aside>
     <div class="acro-footer"><span class="acro"><span class="en">UML</span> = <span class="en">Unified Modeling Language</span> · שפת מידול אחידה</span> &nbsp;·&nbsp; <span class="acro"><span class="en">AI</span> = <span class="en">Artificial Intelligence</span> · בינה מלאכותית</span></div>
     </section>
-    <!-- C4 — ארכיון או מחיקה? מבחן העובדה העסקית (NEW 2026-08-30). Teaches LIFECYCLE-END.md §3 as a
-         decision: "did the object ever become something a report / audit / person could later ask about?"
-         Yes ⇒ outcome → ארכיון (the default). No ⇒ direct `event / delete()` to the SAME single ◎ (the
-         justified exception — narrow: never valid, abandoned before commitment, duplicate). Campus: an
-         order abandoned before payment (T3 `ביטול / delete()` from ממתינה לתשלום — nothing charged, never a
-         fact) vs a paid order cancelled (T6/T11 → בוטלה — the refund IS a fact ⇒ archive). The SVG shows
-         ONE ◎ with TWO incoming arcs. Rules: the bypass is labelled with a real event, never after(…); only
-         from a pre-commitment state; closureReason is set in the outcome's entry so the archive doesn't
-         lose the why. ⚠️ "a cancellation is not a deletion" (LIFECYCLE-END §3, verbatim intent).
-         SVG: hand-drawn + the LTR text guard; marker id prefixed c4-. -->
     <section data-slug="archive-or-delete" class="has-acro-footer">
       <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
       <style>
@@ -2505,7 +2348,7 @@
 
         <div class="main">
 
-          <!-- RIGHT (RTL-first): the two campus cases -->
+          
           <div class="cases">
             <div class="cs no">
               <div class="h">✗ לא הפכה לעובדה — מוחקים</div>
@@ -2521,7 +2364,7 @@
             </div>
           </div>
 
-          <!-- LEFT: one ◎, two incoming arcs -->
+          
           <div class="fig">
             <div class="panel-title">◎ אחד — שני חצים נכנסים</div>
             <svg viewBox="0 0 580 322" xmlns="http://www.w3.org/2000/svg" role="img"
@@ -2532,19 +2375,19 @@
                 </marker>
               </defs>
               <g font-family="'Segoe UI',Arial,sans-serif">
-                <!-- ממתינה לתשלום (pre-commitment) -->
+                
                 <rect x="20" y="10" width="200" height="54" rx="14" ry="14" fill="#fff" stroke="#3b82f6" stroke-width="1.8"/>
                 <text x="120" y="30" direction="rtl" text-anchor="middle" font-size="15" font-weight="700" fill="#1e293b">ממתינה לתשלום</text>
                 <line x1="20" y1="37" x2="220" y2="37" stroke="#3b82f6" stroke-width="1.2"/>
                 <text x="27" y="54" font-size="9.5" fill="#334155" font-family="Consolas,monospace">entry / setStatus('AWAITING_PAYMENT')</text>
                 <text x="120" y="80" direction="rtl" text-anchor="middle" font-size="10.5" fill="#c0392b" font-weight="700">לפני התחייבות — לא חויב כסף</text>
 
-                <!-- direct delete arc -->
+                
                 <path d="M120,64 V236 Q120,296 268,296" fill="none" stroke="#c0392b" stroke-width="2" marker-end="url(#c4-arr)"/>
                 <text x="165" y="150" direction="rtl" text-anchor="middle" font-size="12" font-weight="700" fill="#334155">ביטול</text>
                 <text x="130" y="168" font-size="11" font-weight="700" fill="#15803d" font-family="Consolas,monospace">/ delete()</text>
 
-                <!-- בוטלה (outcome) -->
+                
                 <rect x="370" y="10" width="200" height="80" rx="14" ry="14" fill="#fff" stroke="#3b82f6" stroke-width="1.8"/>
                 <text x="470" y="30" direction="rtl" text-anchor="middle" font-size="15" font-weight="700" fill="#1e293b">בוטלה</text>
                 <line x1="370" y1="37" x2="570" y2="37" stroke="#3b82f6" stroke-width="1.2"/>
@@ -2553,24 +2396,24 @@
                   <text x="377" y="72" font-size="7.6" fill="#64748b">-- setStatus('CANCELLED'); <tspan fill="#0e7490" font-weight="700">setClosureReason('CANCELLED')</tspan>; refund()</text>
                 </g>
 
-                <!-- בוטלה → ארכיון -->
+                
                 <line x1="470" y1="90" x2="470" y2="150" stroke="#334155" stroke-width="1.8" marker-end="url(#c4-arr)"/>
                 <text x="525" y="114" direction="rtl" text-anchor="middle" font-size="11.5" font-weight="700" fill="#334155">סגירת יום</text>
                 <text x="480" y="132" font-size="10.5" fill="#15803d" font-family="Consolas,monospace">/ archive()</text>
 
-                <!-- ארכיון -->
+                
                 <rect x="370" y="150" width="200" height="50" rx="14" ry="14" fill="#fff" stroke="#3b82f6" stroke-width="1.8"/>
                 <text x="470" y="169" direction="rtl" text-anchor="middle" font-size="15" font-weight="700" fill="#1e293b">ארכיון</text>
                 <line x1="370" y1="176" x2="570" y2="176" stroke="#3b82f6" stroke-width="1.2"/>
                 <text x="377" y="192" font-size="9.5" fill="#334155" font-family="Consolas,monospace">entry / setStatus('ARCHIVED')</text>
                 <text x="470" y="216" direction="rtl" text-anchor="middle" font-size="10.5" fill="#0e7490" font-weight="700">status נדרס — closureReason נשאר CANCELLED</text>
 
-                <!-- retention arc -->
+                
                 <path d="M470,200 V236 Q470,296 292,296" fill="none" stroke="#334155" stroke-width="1.8" marker-end="url(#c4-arr)"/>
                 <text x="480" y="252" font-size="11" font-weight="700" fill="#334155" font-family="Consolas,monospace">after(7 שנים)</text>
                 <text x="480" y="267" font-size="11" font-weight="700" fill="#15803d" font-family="Consolas,monospace">/ purge()</text>
 
-                <!-- the one final -->
+                
                 <circle cx="280" cy="296" r="12" fill="none" stroke="#1e293b" stroke-width="2"/>
                 <circle cx="280" cy="296" r="7" fill="#1e293b"/>
                 <text x="280" y="272" direction="rtl" text-anchor="middle" font-size="10.5" fill="#64748b">◎ אחד לכל התרשים</text>
@@ -2611,21 +2454,6 @@
       </aside>
     <div class="acro-footer"><span class="acro"><span class="en">AI</span> = <span class="en">Artificial Intelligence</span> · בינה מלאכותית</span></div>
     </section>
-    <!-- C5 — חוק עסקי = חץ שחסר (NEW 2026-08-30). Closes the L3 → L6-7 → L8 business-rules thread on the
-         state diagram. Three campus cards, each quoting its rule EXACTLY as written in the L3 catalog
-         (lecture-03/slides/slide-business-rules.html): BR-4 ⇒ the student cancel arrow is NOT drawn out of
-         בהכנה / מוכנה — the ABSENCE is the rule (T6 leaves ממתינה only); BR-2 ⇒ a guard that CITES the catalog
-         (`[BR-2: קוד תואם]`, T8) instead of restating it; BR-3 ⇒ a rule that was a HOLE since L3 (refund? charge?)
-         and got DECIDED while designing (David, 2026-08-30: החיוב נשאר — ללא זיכוי) — shown as an ABSENT action:
-         both outcomes now carry ONE entry action (a wrapper), so the rule lives one level down: the wrapper
-         bodies are printed under the boxes and closeAsNotCollected() has no refund() where closeAsCancelled()
-         does; a UML note beside the state says why.
-         Three kinds: BR-4 = missing arrow · BR-2 = guard · BR-3 = missing action. A rule you can't find in the
-         diagram was never decided — go get the decision, don't guess. Closing card: design does not create a second home for rules,
-         it DISTRIBUTES enforcement (class diagram / state diagram / database / code), every rule written once
-         in the catalog and referenced. 🤖: an unambiguous rules list is what the AI needs — its draft let
-         anyone cancel from anywhere. No dashed transitions anywhere; the only dashed line is the note anchor.
-         SVG: three hand-drawn mini-diagrams + the LTR text guard; marker ids prefixed c5a-/c5b-/c5c-. -->
     <section data-slug="rules-as-missing-arrows" class="has-acro-footer">
       <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
       <style>
@@ -2663,7 +2491,7 @@
 
         <div class="cards">
 
-          <!-- BR-4: the missing arrow -->
+          
           <div class="bc">
             <div class="h"><span class="id">BR-4</span> — החוק הוא החץ ש<u>לא</u> מצויר</div>
             <div class="quote">ביטול הזמנה מותר עד שהיא עוברת ל״בהכנה״ — לא אחריה.</div>
@@ -2688,11 +2516,11 @@
               <text x="300" y="70" direction="rtl" text-anchor="middle" font-size="10.5" fill="#334155" font-family="'Segoe UI',Arial,sans-serif">תחילת הכנה</text>
               <line x1="230" y1="126" x2="230" y2="170" stroke="#334155" stroke-width="1.8" marker-end="url(#c5a-arr)"/>
               <text x="300" y="152" direction="rtl" text-anchor="middle" font-size="10.5" fill="#334155" font-family="'Segoe UI',Arial,sans-serif">סימון מוכן</text>
-              <!-- the ONE student cancel arrow -->
+              
               <line x1="170" y1="25" x2="108" y2="25" stroke="#15803d" stroke-width="2.2" marker-end="url(#c5a-arr)"/>
               <text x="139" y="62" direction="rtl" text-anchor="middle" font-size="10" font-weight="700" fill="#334155" font-family="'Segoe UI',Arial,sans-serif">ביטול ע״י הסטודנט</text>
               <text x="139" y="75" direction="rtl" text-anchor="middle" font-size="10" font-weight="700" fill="#0891b2" font-family="'Segoe UI',Arial,sans-serif">[BR-4: לפני תחילת הכנה]</text>
-              <!-- the absence, made visible -->
+              
               <g font-family="'Segoe UI',Arial,sans-serif" font-size="11.5" font-weight="700" fill="#c0392b">
                 <text x="110" y="112" direction="rtl" text-anchor="middle">✗ אין חץ</text>
                 <text x="110" y="194" direction="rtl" text-anchor="middle">✗ אין חץ</text>
@@ -2701,7 +2529,7 @@
             <div class="so"><b>ההיעדר הוא החוק.</b> אין ״חץ אסור״ ב-<span class="en">UML</span> — מה שלא מצויר, לא קורה. הבודק צריך לחפש מה <u>חסר</u>.</div>
           </div>
 
-          <!-- BR-2: the guard cites the catalog -->
+          
           <div class="bc">
             <div class="h"><span class="id">BR-2</span> — החוק הוא תנאי שמפנה לקטלוג</div>
             <div class="quote">הזמנה נמסרת אך ורק למי שהזמין ושילם.</div>
@@ -2729,20 +2557,20 @@
             <div class="so"><b>מפנים, לא משכתבים.</b> <code>[BR-2: קוד תואם]</code> — החוק כתוב פעם אחת בקטלוג; כשהוא ישתנה, מוצאים לפי ההפניה את כל החצים שמושפעים.</div>
           </div>
 
-          <!-- BR-3: decided while designing — the missing action -->
+          
           <div class="bc br3">
             <div class="h"><span class="id">BR-3</span> — חוק שהוכרע תוך כדי עיצוב: פעולה שחסרה</div>
             <div class="quote">הזמנה ששולמה ולא נאספה עד סוף חלון האיסוף — <span class="was">מדיניות טרם הוחלטה</span> <span class="now">החיוב נשאר, ללא זיכוי.</span></div>
             <svg viewBox="0 0 340 214" xmlns="http://www.w3.org/2000/svg" role="img"
                  aria-label="Two outcome states side by side, each with a single entry action: closeAsCancelled() vs closeAsNotCollected(). The wrapper bodies are listed under the boxes: the first ends with refund(), the second does not — BR-3 decided: no refund; a UML note beside Not collected says BR-3: no refund">
-              <!-- the UML note (dog-eared), anchored to לא נאספה -->
+              
               <path d="M255,34 V50" fill="none" stroke="#64748b" stroke-width="1.3" stroke-dasharray="4 3"/>
               <path d="M214,4 H324 L332,12 V34 H214 Z" fill="#fff7ed" stroke="#E86C00" stroke-width="1.5"/>
               <path d="M324,4 V12 H332" fill="none" stroke="#E86C00" stroke-width="1"/>
               <text x="322" y="24" font-size="11" font-weight="700" fill="#E86C00" font-family="Consolas,monospace" text-anchor="end">BR-3:</text>
               <text x="285" y="24" direction="rtl" text-anchor="start" font-size="11.5" font-weight="700" fill="#1e293b" font-family="'Segoe UI',Arial,sans-serif">ללא זיכוי</text>
               <text x="105" y="24" direction="rtl" text-anchor="middle" font-size="10.5" fill="#64748b" font-family="'Segoe UI',Arial,sans-serif">פתק — מסביר, לא מעביר</text>
-              <!-- two outcome states -->
+              
               <g font-family="'Segoe UI',Arial,sans-serif" font-size="13.5" font-weight="700" fill="#1e293b">
                 <rect x="174" y="50" width="162" height="46" rx="12" ry="12" fill="#fff" stroke="#3b82f6" stroke-width="1.8"/>
                 <line x1="174" y1="72" x2="336" y2="72" stroke="#3b82f6" stroke-width="1"/>
@@ -2751,14 +2579,14 @@
                 <line x1="4" y1="72" x2="166" y2="72" stroke="#3b82f6" stroke-width="1"/>
                 <text x="85" y="66" direction="rtl" text-anchor="middle">בוטלה</text>
               </g>
-              <!-- לא נאספה: entry WITHOUT refund() -->
+              
               <text x="181" y="89" font-size="9" font-weight="400" fill="#334155" font-family="Consolas,monospace">entry / closeAsNotCollected()</text>
               <text x="181" y="114" font-size="8.5" font-weight="700" fill="#475569" font-family="Consolas,monospace">closeAsNotCollected():</text>
               <text x="181" y="126" font-size="7.5" font-weight="400" fill="#334155" font-family="Consolas,monospace">  setStatus('NOT_COLLECTED')</text>
               <text x="181" y="137" font-size="7.5" font-weight="400" fill="#334155" font-family="Consolas,monospace">  setClosureReason('NOT_COLLECTED')</text>
               <text x="181" y="150" font-size="9" font-weight="400" fill="#94a3b8" font-family="Consolas,monospace" text-decoration="line-through">  refund()</text>
               <text x="300" y="151" direction="rtl" text-anchor="middle" font-size="11" font-weight="700" fill="#E86C00" font-family="'Segoe UI',Arial,sans-serif">✗ אין</text>
-              <!-- בוטלה: entry WITH refund() -->
+              
               <text x="11" y="89" font-size="9" font-weight="400" fill="#334155" font-family="Consolas,monospace">entry / closeAsCancelled()</text>
               <text x="11" y="114" font-size="8.5" font-weight="700" fill="#475569" font-family="Consolas,monospace">closeAsCancelled():</text>
               <text x="11" y="126" font-size="7.5" font-weight="400" fill="#334155" font-family="Consolas,monospace">  setStatus('CANCELLED')</text>
@@ -2816,11 +2644,6 @@
       </aside>
     <div class="acro-footer"><span class="acro"><span class="en">UML</span> = <span class="en">Unified Modeling Language</span> · שפת מידול אחידה</span> &nbsp;·&nbsp; <span class="acro"><span class="en">AI</span> = <span class="en">Artificial Intelligence</span> · בינה מלאכותית</span></div>
     </section>
-    <!-- D1 — חמשת השלבים. KEEP of the old steps-summary, re-worded to the tool doctrine: object → states →
-         events + guards → actions → check (not a flowchart + TWO ends). Five numbered cards fill the canvas;
-         each carries a campus line so the next five slides (D2–D6) are visibly the same steps on the order.
-         The 🤖 line sets the division of labour: AI drafts steps 2–4 from the use cases; choosing the object
-         (step 1) and the check (step 5) stay with the analyst. -->
     <section data-slug="build-steps" class="has-acro-footer">
       <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
       <style>
@@ -2937,12 +2760,6 @@
       </aside>
     <div class="acro-footer"><span class="acro"><span class="en">AI</span> = <span class="en">Artificial Intelligence</span> · בינה מלאכותית</span></div>
     </section>
-    <!-- D2 — הזמנה בקמפוס, שלב 1: האובייקט. REFRESH of the old po-step1 / hotel-step1 walkthrough openers,
-         re-hosted on the campus order. Shows the L6-7 Order class with `status : OrderStatus` highlighted and the
-         L6-7 enum (5 literals). The whole point of the slide is the FIRST CRACK: five values are not the whole
-         story (no unpaid order, no no-show, no archive) — steps 2–5 grow the diagram on the same layout.
-         Right rail = discussion questions (the old deck's walkthrough device); caption = the question the class
-         diagram cannot answer. No state diagram yet on purpose: step 1 is choosing the object. -->
     <section data-slug="order-step1">
       <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
       <style>
@@ -3016,11 +2833,6 @@
         ״תחילת הכנה״. לא ״הכנה״ (זו פעילות, לא אירוע).
       </aside>
     </section>
-    <!-- D3 — שלב 2: המצבים. REFRESH of po-step2. The SAME SVG layout as steps 3–5 (coordinates shared via the
-         generator) so the diagram visibly grows: first the five L6-7 states + the composite פעילה, then the three
-         NEW states (orange 'חדש' tag) as fragments. Compartments are drawn empty on purpose — step 4 fills them.
-         Payoff: the enum grows (feedback to the class diagram) — rail card lists the new literals + closureReason.
-         No arrows yet: a state is what the order IS, the arrows (what happens) come next. -->
     <section data-slug="order-step2">
       <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
       <style>
@@ -3138,12 +2950,6 @@
         ומאפשרת מחיקה ישירה. ״נאספה בזמן״ מול ״נאספה באיחור״ — אותם אירועים ← תכונה, לא שני מצבים.
       </aside>
     </section>
-    <!-- D4 — שלב 3: אירועים ותנאים. REFRESH of po-step3. Same layout; the states are static now and the arrows
-         T0–T13 appear in five fragment groups: the happy path · the cycle + two self-loops · the three ways out
-         (time event, student cancel with BR-4 guard, team cancel from the composite border, the direct delete
-         arc) · the archive tail · the BR-3 note (UML note on לא נאספה: ללא זיכוי — decided 2026-08-30; the rule itself
-         is the ABSENT refund() in that state's entry, see step 4). Every non-initial arrow carries an event (tool doctrine).
-         Not drawn on purpose: a failed guard, student cancel out of בהכנה/מוכנה (BR-4), a ◎ per outcome. -->
     <section data-slug="order-step3" class="has-acro-footer">
       <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
       <style>
@@ -3303,17 +3109,6 @@
       </aside>
     <div class="acro-footer"><span class="acro"><span class="en">UML</span> = <span class="en">Unified Modeling Language</span> · שפת מידול אחידה</span></div>
     </section>
-    <!-- D5 — שלב 4: פעולות = שיטות. REFRESH of po-step4. Same layout; the arrows are static and the activity
-         compartments fill in as two fragments: first every state's single entry action (fragment 1), then the
-         rail opens the wrappers, plus do / prepareItems (fragment 2).
-         ONE action per entry: a state that has to do more than set its status gets ONE wrapper method
-         (queueForKitchen / announceReady / closeAs...), whose body starts with the setStatus it replaced.
-         Never two calls chained with ';' and never a second `entry /` line: Visual Paradigm gives entry one field.
-         Right rail = the METHOD LIST the diagram hands the developer: events become public methods, the entry
-         wrappers and the do action are the private ones. The notification is an entry (runs once), not a do.
-         BR-3 (decided 2026-08-30: no refund) is no longer readable off the boxes (the wrappers hide it), so it
-         lives in the rail: closeAsCancelled() refunds, closeAsNotCollected() does not. The UML note beside
-         לא נאספה explains why. -->
     <section data-slug="order-step4" class="has-acro-footer">
       <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
       <style>
@@ -3513,12 +3308,6 @@
       </aside>
     <div class="acro-footer"><span class="acro"><span class="en">AI</span> = <span class="en">Artificial Intelligence</span> · בינה מלאכותית</span></div>
     </section>
-    <!-- D6 — שלב 5: בדיקה. REFRESH of po-step5. The finished diagram (same layout, everything static) next to a
-         checklist card: seven ✓ rows revealed one by one — the last one is BR-3, decided 2026-08-30 (ללא זיכוי) and
-         visible as the ABSENT refund() inside closeAsNotCollected(), the wrapper that is לא נאספה's single
-         entry action (a UML note beside the state says why; the two bodies are compared on the BR-3 slide). A red dashed 'ghost' arrow
-         with ✗ appears on the diagram for the BR-4 missing cancel arrow — the rule is the arrow that is NOT there.
-         Bottom line closes the section: this is a state diagram, not a flowchart. -->
     <section data-slug="order-step5" class="has-acro-footer">
       <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
       <style>
@@ -3700,16 +3489,6 @@
       </aside>
     <div class="acro-footer"><span class="acro"><span class="en">AI</span> = <span class="en">Artificial Intelligence</span> · בינה מלאכותית</span></div>
     </section>
-    <!-- Section ד / D7 — MARQUEE: the live campus ORDER lifecycle. Port per
-         lecture-08/PORTING_BRIEF.md ("CANONICAL CAMPUS ORDER LIFECYCLE"). The live diagram
-         asset (assets/statediagram-campus-order.html) is drawn per the uml_state_diagram
-         skill; this slide embeds it full-height in ?embed=1 mode with a narrow "מה לראות"
-         side rail (pattern: lecture-06-07/slides/slide-campus-model.html). Everything the
-         rail points at is in the canonical model: composite פעילה + border cancel (T11) ·
-         the cycle מוכנה↔בהכנה (T9) · two self-loops (T1, T4) · one ◎ with two arcs
-         (T13 archive tail vs T3 bypass) · guards citing BR-2/BR-4 · the BR-3 note (decided: no refund — the
-         rule is the ABSENT refund() in לא נאספה) ·
-         setStatus on every state. Replaces the legacy state-library.png / state-phone.png. -->
     <section data-slug="campus-order-lifecycle">
       <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
       <style>
@@ -3738,7 +3517,7 @@
 
         <div class="model-row">
 
-          <!-- right rail (RTL-first): what to look for on the diagram -->
+          
           <div class="rail">
             <div class="panel-title">מה לראות בתרשים</div>
             <ul class="look">
@@ -3756,7 +3535,7 @@
             </div>
           </div>
 
-          <!-- left: the live state-diagram asset, full height, embed mode -->
+          
           <div class="embed">
             <iframe src="assets/statediagram-campus-order.html?embed=1" title="מחזור החיים של הזמנה בקמפוס — תרשים מצבים" loading="lazy"></iframe>
           </div>
@@ -3779,12 +3558,6 @@
         ביטול סטודנט מבהכנה/מוכנה, ◎ לכל תוצאה, after(X ימים).
       </aside>
     </section>
-    <!-- D8 — מהתרשים למימוש: טבלת מעברים. REFRESH of the old transition-table (library book) on the campus order.
-         Rows = the 8 states, columns = the events; a filled cell = the next state, "—" = the event is blocked in
-         that state. The orange cells are BR-4 (student cancel from בהכנה — and from מוכנה, same rule): a business
-         rule is an EMPTY cell. Left out of the columns to keep it readable: the two self-loops (תשלום נכשל,
-         עדכון שעת איסוף) and תיקון (מוכנה→בהכנה) — named in the side card. The table is the exact spec for
-         the code on the next slide (or for a DB check constraint). -->
     <section data-slug="transition-table">
       <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
       <style>
@@ -3914,11 +3687,6 @@
         שלושת המעברים האלה מחוץ לעמודות רק בגלל רוחב השקף; בטבלה אמיתית הם עמודות לכל דבר.
       </aside>
     </section>
-    <!-- D9 — 🤖 מהתרשים לקוד. REFRESH of the old code-csharp (a 40-line listing) — now a "what becomes what"
-         table + a ≤12-line C# snippet. Mirrors L6-7's model-to-code slide and its AI-developer framing (auto-memory
-         ai-developer-framing): the AI is the coder handed a spec — it enforces the diagram; the team still owns
-         the non-functional + integration. The snippet is the BR-4 rule in code (student cancel: only from Pending).
-         Language note: the mapping is UML → any language; C# only because the sample project is C#. -->
     <section data-slug="model-to-code" class="has-acro-footer">
       <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
       <style>
@@ -4016,18 +3784,6 @@
       </aside>
     <div class="acro-footer"><span class="acro"><span class="en">UML</span> = <span class="en">Unified Modeling Language</span> · שפת מידול אחידה</span> &nbsp;·&nbsp; <span class="acro"><span class="en">AI</span> = <span class="en">Artificial Intelligence</span> · בינה מלאכותית</span></div>
     </section>
-    <!-- E1 — חידון: מה לא בסדר בתרשים? NEW 2026-08-30 for the L8 HTML deck (no old-deck ancestor).
-         Six flip cards; each FRONT is a tiny inline-SVG fragment that contains exactly one of the six
-         "AI draft gone wrong" mistakes from A8, each BACK names the verdict, the rule, and the fix:
-           · unlabeled arrow between two states      ⇒ every arrow except the initial carries an event
-           · a flowchart diamond with כן/לא          ⇒ that is a flowchart — write event [guard]
-           · a ◎ per outcome                          ⇒ outcomes are STATES → ארכיון → ◎ (the ◎ count is not the error — UML allows several)
-           · two entry lines + after(X ימים)          ⇒ ONE entry action (a wrapper method), a concrete period
-           · "הכנה" written on an arrow               ⇒ an activity is not an event (תחילת הכנה / do)
-           · a ביטול arrow out of בהכנה               ⇒ BR-4 — the rule IS the missing arrow
-         Mixed order on purpose (same rule as the L6-7 quizzes) and the fronts show the fragment only —
-         no hint text that gives the answer away. Flip mechanics copied from L6-7 slide-relationship-quiz
-         (inline onclick + CSS rotateY, no <script>). Marker ids prefixed feq- (slide-unique). -->
     <section data-slug="find-the-errors-quiz" class="has-acro-footer">
       <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
       <style>
@@ -4073,7 +3829,7 @@
 
         <div class="grid6">
 
-          <!-- 1 — unlabeled arrow -->
+          
           <div class="qc" onclick="this.classList.toggle('flip')"><div class="inner">
             <div class="face front">
               <div class="num">1</div>
@@ -4100,7 +3856,7 @@
             </div>
           </div></div>
 
-          <!-- 2 — flowchart diamond -->
+          
           <div class="qc" onclick="this.classList.toggle('flip')"><div class="inner">
             <div class="face front">
               <div class="num">2</div>
@@ -4127,7 +3883,7 @@
             </div>
           </div></div>
 
-          <!-- 3 — a ◎ per outcome -->
+          
           <div class="qc" onclick="this.classList.toggle('flip')"><div class="inner">
             <div class="face front">
               <div class="num">3</div>
@@ -4155,7 +3911,7 @@
             </div>
           </div></div>
 
-          <!-- 4 — two entry lines + after(X ימים) -->
+          
           <div class="qc" onclick="this.classList.toggle('flip')"><div class="inner">
             <div class="face front">
               <div class="num">4</div>
@@ -4181,7 +3937,7 @@
             </div>
           </div></div>
 
-          <!-- 5 — activity on an arrow -->
+          
           <div class="qc" onclick="this.classList.toggle('flip')"><div class="inner">
             <div class="face front">
               <div class="num">5</div>
@@ -4208,7 +3964,7 @@
             </div>
           </div></div>
 
-          <!-- 6 — cancel out of בהכנה -->
+          
           <div class="qc" onclick="this.classList.toggle('flip')"><div class="inner">
             <div class="face front">
               <div class="num">6</div>
@@ -4241,15 +3997,15 @@
 
       </div>
       <aside class="notes">
-        <b>איך מריצים:</b> כרטיס אחד בכל פעם — קודם מצביעים בכיתה ״מה לא בסדר״, ורק אז הופכים. כל כרטיס
-        הוא קטע אחד מהטיוטה של ה-AI מתחילת ההרצאה (שקף A8), כך שהחידון סוגר מעגל: הרשימה שהצגנו
-        כאתגר ⇐ הכללים שלימדנו ⇐ עכשיו הם מזהים אותם לבד.
+        <b>החידון:</b> בכל כרטיס, קודם מחליטים ״מה לא בסדר״, ורק אז הופכים. כל כרטיס
+        הוא קטע אחד מהטיוטה של ה-AI מתחילת ההרצאה (שקף A8), כך שהחידון סוגר מעגל: הרשימה שהוצגה
+        כאתגר ⇐ הכללים שנלמדו ⇐ עכשיו מזהים אותם לבד.
         <b>הסדר מעורבב בכוונה</b> ואין רמז על החזית — הכרטיסים 1 ו-6 נראים ״בסדר גמור״ למי שלא שם לב,
         וזה בדיוק העניין: חץ בלי תווית וחץ שאסור לצייר הם הטעויות השקטות ביותר.
         <b>כרטיס 2 (המעוין)</b> הוא הלב: רוב הסטודנטים באים מתרשימי זרימה, ו״קוד תואם?״ עם כן/לא נראה
-        להם טבעי. לומר בקול: ההחלטה יושבת בתנאי על החץ, ותנאי שנכשל אינו חץ — לא קורה כלום, נשארים במוכנה.
+        להם טבעי. ההחלטה יושבת בתנאי על החץ, ותנאי שנכשל אינו חץ — לא קורה כלום, נשארים במוכנה.
         <b>כרטיס 3 (שלושה ◎)</b> — הסוף של הרלוונטיות מול הסוף של הקיום (C3). ההזמנה שבוטלה עדיין
-        מופיעה בדוח ההחזרים; לכן היא מצב, לכן ארכיון, ורק אחריו ◎. לדייק בכיתה: ריבוי ◎ אינו טעות ב-UML — הטעות היא שתוצאה
+        מופיעה בדוח ההחזרים; לכן היא מצב, לכן ארכיון, ורק אחריו ◎. ולדיוק: ריבוי ◎ אינו טעות ב-UML — הטעות היא שתוצאה
         מצוירת כסוף הקיום.
         <b>כרטיס 4</b> נושא שתי טעויות בכוונה — לתת לכיתה למצוא את השנייה אחרי שמצאו את הראשונה.
         ״7 שנים״ אינו מספר קסם: זו חובת שמירת רשומות כספיות; רשומה תפעולית בלבד הייתה מקבלת שנה–שנתיים.
@@ -4259,15 +4015,6 @@
       </aside>
     <div class="acro-footer"><span class="acro"><span class="en">UML</span> = <span class="en">Unified Modeling Language</span> · שפת מידול אחידה</span> &nbsp;·&nbsp; <span class="acro"><span class="en">AI</span> = <span class="en">Artificial Intelligence</span> · בינה מלאכותית</span></div>
     </section>
-    <!-- E2 — in-class practice. REFRESH of the old student-status-exercise: the spec is now the
-         L6-7 dorms system continued — the maintenance request (קריאת תחזוקה) whose status we drew
-         as an enum in L6-7's exercise gets its LIFECYCLE. Same graded skill as L6-7 / L4-5: feed
-         the spec to Claude, get a state diagram, then CRITIQUE it by this lecture's checklist.
-         The spec is seeded with the traps we taught: duplicate ⇒ direct delete vs closed ⇒ archive;
-         "בטיפול" vs "ממתינה לחלק" (different events ⇒ two states — the behaviour test); reopen within
-         7 days = a back-arc + a guard; "assign" is an event, "handling" is an activity.
-         Students can run the draw step with sad-mcp's uml_state_diagram tool (installed in L1).
-         Mirrors L6-7 slide-exercise.html. NEW 2026-08-30 for the L8 HTML deck. -->
     <section data-slug="exercise" class="has-acro-footer">
       <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
       <style>
@@ -4346,14 +4093,6 @@
       </aside>
     <div class="acro-footer"><span class="acro"><span class="en">AI</span> = <span class="en">Artificial Intelligence</span> · בינה מלאכותית</span></div>
     </section>
-    <!-- E3 — recap + close. NEW 2026-08-30 for the L8 HTML deck (replaces the old "recap" and absorbs
-         the uml-guidelines meme, which now lives in the speaker notes as the closing joke of the UML
-         block). The arc (status is a value → states/transitions/events/actions → composite + two ends →
-         build + check), six doctrine takeaways, and the payoff hero: what the state diagram GAVE BACK
-         to the class diagram (the enum grew, Order's method list) and to the rules catalog (BR-3 — open since
-         L3 — got decided because the diagram forced it: no refund, visible as the missing refund()).
-         The next-lecture teaser is YEAR-AGNOSTIC (no lecture
-         number — David's 2026-08-09 decision); keep its wording in sync with slide-closing.html. -->
     <section data-slug="summary" class="has-acro-footer">
       <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
       <style>
@@ -4449,14 +4188,6 @@
       </aside>
     <div class="acro-footer"><span class="acro"><span class="en">UML</span> = <span class="en">Unified Modeling Language</span> · שפת מידול אחידה</span> &nbsp;·&nbsp; <span class="acro"><span class="en">AI</span> = <span class="en">Artificial Intelligence</span> · בינה מלאכותית</span></div>
     </section>
-    <!-- E4 — the home assignment (the lecture's last taught slide; David: "the last slide is always
-         a home assignment"). REFRESH of the old hotel-step1..5 in-class walkthrough: the hotel booking
-         is now the homework, spec → AI → critique → corrected diagram. Mirrors L6-7 slide-homework.html.
-         The spec is seeded with this lecture's traps: outcome drawn as ◎ (no archive tail), a flowchart
-         shape (חדר פנוי? כן/לא), "ממתינה לתשלום" as a state or not (the behaviour test), three ways
-         into בוטלה with three different events, and a retention period that must be JUSTIFIED (a
-         booking charged money ⇒ financial ⇒ 7 years). The graded artifact is the CRITIQUE.
-         NEW 2026-08-30 for the L8 HTML deck. -->
     <section data-slug="homework" class="has-acro-footer">
       <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
       <style>
@@ -4534,14 +4265,6 @@
       </aside>
     <div class="acro-footer"><span class="acro"><span class="en">AI</span> = <span class="en">Artificial Intelligence</span> · בינה מלאכותית</span></div>
     </section>
-    <!-- Closing slide — תודה! + the next-lecture teaser over the old deck's assets/theend.png
-         (the green cartoon "THE END or the beginning…" — kept from the legacy L8 deck).
-         Full-bleed on purpose: no blue title bar and no left accent bar (same treatment as
-         the cover, section.title-slide, and L6-7's closing). The SDLC chip is suppressed from
-         slides.yaml (sdlc_phase: "") so the bottom-left band stays clear.
-         The image is teal/green, so the scrim is a dark teal (not the L6-7 navy) — it keeps the
-         cartoon's mood while pushing it back far enough for white Hebrew to stay legible.
-         Keep the next-lecture wording in sync with slide-summary.html (year-agnostic — no lecture number). -->
     <section data-slug="closing">
       <style>
         /* ---- full-bleed image + dark teal scrim so the Hebrew stays legible ---------- */

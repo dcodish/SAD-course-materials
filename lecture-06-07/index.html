@@ -30,14 +30,6 @@
         </ol>
       </div>
     </section>
-    <!-- A3 — what actually happens in a project at this point: the ANALYSIS → DESIGN handoff.
-         Replaces the old "previously on SAD" pipeline chain (David, 2026-08-10: the plain
-         "use cases ← class diagram" jump is wrong — show the handoff between the business-analysis
-         team and the technical team, and that a WHOLE team works here in parallel: DB, UI, NFRs).
-         RTL layout: right = the package the BA team hands over (which doubles as the L2/L3/L4-5
-         recap), middle = the handoff itself, left = the design team's parallel workstreams with
-         the data model flagged as the one seat we occupy today. Role names deliberately match the
-         SDLC×roles rail on the next slide (BA owns דרישות, System Analyst owns עיצוב). -->
     <section data-slug="analysis-to-design-handoff" class="has-acro-footer">
       <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
       <style>
@@ -143,7 +135,7 @@
       <aside class="notes">
         זו נקודת המעבר בפרויקט אמיתי: צוות הניתוח העסקי סיים, ומוסר חבילה — דרישות SMART, <b>קטלוג החוקים
         העסקיים</b>, תרחישי שימוש, תרשימי תהליך והדרישות הלא-פונקציונליות.
-        <b>על קטלוג החוקים כדאי לעצור רגע (נוסף 2026-08-15):</b> החוקים הגיעו מהרצאה 3, לכל אחד מזהה
+        <b>על קטלוג החוקים כדאי לעצור רגע:</b> החוקים הגיעו מהרצאה 3, לכל אחד מזהה
         (BR-n) ובעלים עסקי, והם <b>לא</b> נכתבים מחדש בתרשימים שלנו — מפנים אליהם. ובעיקר:
         <b>חוק שטרם הוחלט הוא חור בעיצוב, לא פורמליות.</b> אם מדיניות ההזמנה שלא נאספה (BR-3) עדיין פתוחה,
         אי אפשר לסגור את המודל — האם יש מצב ״זוכה״? האם לסטודנט יש דגל חסימה? האם קיימת בכלל מחלקת זיכוי?
@@ -157,10 +149,6 @@
       </aside>
     <div class="acro-footer"><span class="acro"><span class="en">SDLC</span> = <span class="en">Software Development Life Cycle</span> · מחזור פיתוח תוכנה</span> &nbsp;·&nbsp; <span class="acro"><span class="en">BPMN</span> = <span class="en">Business Process Model and Notation</span> · מידול וסימון תהליכים עסקיים</span> &nbsp;·&nbsp; <span class="acro"><span class="en">BA</span> = <span class="en">Business Analyst</span> · אנליסט/ית עסקי/ת</span> &nbsp;·&nbsp; <span class="acro"><span class="en">SMART</span> = <span class="en">Specific, Measurable, Achievable, Relevant, Traceable</span> · ספציפי, מדיד, בר-השגה, רלוונטי, עקיב</span></div>
     </section>
-    <!-- Where-are-we transition: crossing from ניתוח דרישות into עיצוב (what -> how). Uses the
-         shared interactive SDLC x roles rail (assets/sdlc_roles_rtl.html), flagged on the current
-         phase via ?here=design. Replaces the old simple phase-map (source: sdlc) so every HTML deck
-         uses the same asset — L1 (?here=init/asis), L2 (?here=asis), L3 + L4-5 (?here=req). -->
     <section data-slug="sdlc-roles-design" class="has-acro-footer">
       <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
       <h1>היכן אנחנו ב-<span class="en">SDLC</span></h1>
@@ -172,13 +160,6 @@
       </div>
     <div class="acro-footer"><span class="acro"><span class="en">SDLC</span> = <span class="en">Software Development Life Cycle</span> · מחזור פיתוח תוכנה</span></div>
     </section>
-    <!-- A5 — מחלקות ואובייקטים. The core idea before any diagram: class = תבנית (blueprint/type),
-         object = מופע (instance). SVG shows ONE class box (הזמנה, canonical attrs/ops) and TWO
-         concrete instances connected by DASHED gray connectors (not solid association lines — those
-         come in Section ג; the dashed style keeps the distinction honest). Canonical class names/
-         attrs are verbatim from PORTING_BRIEF so every slide agrees. Student names kept male form
-         per course convention (יוסי / דני). Class box notation follows the tool doctrine:
-         name (UpperCamelCase) / attributes (- name : Type) / operations (italic). -->
     <section data-slug="classes-objects" class="has-acro-footer">
       <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
       <style>
@@ -209,11 +190,11 @@
           <svg viewBox="0 0 500 240" xmlns="http://www.w3.org/2000/svg" role="img"
                aria-label="מחלקת Order כתבנית מימין, ושתי הזמנות קונקרטיות כמופעים משמאל, מחוברות בקווים מקווקווים">
 
-            <!-- dashed connectors (NOT association lines — instance-of, drawn first, boxes cover ends) -->
+            
             <line x1="315" y1="100" x2="200" y2="80"  stroke="#94a3b8" stroke-width="1.4" stroke-dasharray="4 4"/>
             <line x1="315" y1="150" x2="200" y2="182" stroke="#94a3b8" stroke-width="1.4" stroke-dasharray="4 4"/>
 
-            <!-- ===== THE CLASS (template), on the right ===== -->
+            
             <text x="397" y="22" text-anchor="middle" direction="rtl" font-size="14" font-weight="700"
                   fill="#1e40af" font-family="'Noto Sans Hebrew',sans-serif">מחלקה — תבנית</text>
             <rect x="315" y="30" width="165" height="182" fill="#fff" stroke="#3b82f6" stroke-width="1.8" rx="3"/>
@@ -222,8 +203,7 @@
                   fill="#fff" font-family="'Segoe UI',Arial,sans-serif">Order</text>
             <line x1="315" y1="60" x2="480" y2="60" stroke="#3b82f6" stroke-width="1"/>
             <line x1="315" y1="150" x2="480" y2="150" stroke="#3b82f6" stroke-width="1"/>
-            <!-- font-size 11 (was 12.5): at 12.5 the longest attribute line ran past the
-                 class box's right border. -->
+            
             <g font-family="'Consolas','Courier New',monospace" font-size="11" fill="#1e293b" direction="ltr" text-anchor="start">
               <text x="323" y="80">- orderId : String</text>
               <text x="323" y="100">- status : OrderStatus</text>
@@ -232,7 +212,7 @@
               <text x="323" y="190" font-style="italic">+ cancel()</text>
             </g>
 
-            <!-- ===== TWO OBJECTS (instances), on the left ===== -->
+            
             <text x="112" y="22" text-anchor="middle" direction="rtl" font-size="14" font-weight="700"
                   fill="#0F766E" font-family="'Noto Sans Hebrew',sans-serif">אובייקטים — מופעים</text>
 
@@ -273,17 +253,6 @@
       </aside>
     <div class="acro-footer"><span class="acro"><span class="en">AI</span> = <span class="en">Artificial Intelligence</span> · בינה מלאכותית</span></div>
     </section>
-    <!-- A6 — מהו תרשים מחלקות. Definition: the static structure / domain model — the classes the
-         system manages + the relationships between them. Contrast with the use-case diagram
-         (behavior / what) vs class diagram (structure / data). LEFT: a labelled 3-compartment box
-         preview (שם / תכונות / פעולות) on the canonical הזמנה class. RIGHT: "why it's good for" —
-         shared vocabulary · the skeleton the DB + code are DERIVED from · what AI reads to generate
-         the data layer (the 🤖 thread). Box notation obeys the tool doctrine.
-         2026-08-10 (David): the second bullet used to claim "כל תכונה הופכת לעמודה/שדה" — deleted, it
-         is not true (derived attributes aren't stored, multi-valued ones become their own table,
-         composites split across columns, and the DB adds FKs/surrogate keys/audit fields that are not
-         attributes at all). It now says derivation ≠ copy, which also sets up the full class-diagram ↔
-         database slide planned for section ד after נירמול. -->
     <section data-slug="what-is-class-diagram" class="has-acro-footer">
       <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
       <style>
@@ -309,7 +278,7 @@
             <div class="panel-title" style="text-align:center;">שלושה חלקים לכל מחלקה</div>
             <svg viewBox="0 0 360 230" xmlns="http://www.w3.org/2000/svg" role="img"
                  aria-label="תיבת המחלקה Order עם שלושה חלקים מסומנים: שם, תכונות, פעולות">
-              <!-- leader lines: label (left) → compartment (box left edge) -->
+              
               <line x1="156" y1="43"  x2="175" y2="43"  stroke="#94a3b8" stroke-width="1"/>
               <line x1="156" y1="100" x2="175" y2="100" stroke="#94a3b8" stroke-width="1"/>
               <line x1="156" y1="178" x2="175" y2="178" stroke="#94a3b8" stroke-width="1"/>
@@ -320,15 +289,14 @@
                 <text x="150" y="182" font-size="14">פעולות</text>
               </g>
 
-              <!-- the class box -->
+              
               <rect x="175" y="27" width="160" height="185" fill="#fff" stroke="#3b82f6" stroke-width="1.8" rx="3"/>
               <rect x="175" y="27" width="160" height="30"  fill="#1e40af" stroke="#3b82f6" stroke-width="1.8" rx="3"/>
               <text x="255" y="47" text-anchor="middle" direction="ltr" font-size="15" font-weight="700"
                     fill="#fff" font-family="'Segoe UI',Arial,sans-serif">Order</text>
               <line x1="175" y1="57"  x2="335" y2="57"  stroke="#3b82f6" stroke-width="1"/>
               <line x1="175" y1="145" x2="335" y2="145" stroke="#3b82f6" stroke-width="1"/>
-              <!-- font-size 11 (was 12.5): at 12.5 the longest line "- pickupTime : DateTime"
-                   ran past the class box's right border (box = x 175..335). -->
+              
               <g font-family="'Consolas','Courier New',monospace" font-size="11" fill="#1e293b" direction="ltr" text-anchor="start">
                 <text x="183" y="77">- orderId : String</text>
                 <text x="183" y="98">- status : OrderStatus</text>
@@ -367,18 +335,6 @@
       </aside>
     <div class="acro-footer"><span class="acro"><span class="en">AI</span> = <span class="en">Artificial Intelligence</span> · בינה מלאכותית</span></div>
     </section>
-    <!-- A7 — 🤖 מ-use cases למודל מחלקות. The design-phase AI beat, re-setting the ⚠️ challenge
-         habit for class diagrams. 🤖 callout: paste the L4-5 use cases/requirements → AI drafts a
-         candidate class list + first relationships in seconds. ⚠️ callout: it LOOKS complete, but AI
-         reliably (a) turns דוח מכירות/קבלה into a class (persistence test, taught in full on page 14);
-         (b) invents entities the boundary excluded (משלוח, OUT per running-example §0); (c) guesses
-         multiplicity; (d) subclasses what is really a status. Habit hero: the model is your verification
-         surface — what did it invent / miss / assume? Candidate names verbatim from PORTING_BRIEF.
-         2026-08-10 (David) — NO FORWARD VOCABULARY ON THIS SLIDE. Two authoring leaks removed:
-         the internal outline code "B7" (meaningless to a student) and the word "enum", which is not
-         introduced until page 11. Failure (d) is now phrased in plain language (תת-מחלקות מול סטטוס),
-         which needs no term the student doesn't have yet. General rule for section א: it sets the AI
-         habit BEFORE the notation is taught, so every beat must survive without notation vocabulary. -->
     <section data-slug="ai-domain-model" class="has-acro-footer">
       <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
       <style>
@@ -451,13 +407,6 @@
       </aside>
     <div class="acro-footer"><span class="acro"><span class="en">SDLC</span> = <span class="en">Software Development Life Cycle</span> · מחזור פיתוח תוכנה</span> &nbsp;·&nbsp; <span class="acro"><span class="en">AI</span> = <span class="en">Artificial Intelligence</span> · בינה מלאכותית</span></div>
     </section>
-    <!-- B1 — מחלקה: the rectangle + 3 compartments (name / attributes / operations).
-         Campus הזמנה (Order) box, per PORTING_BRIEF.md canonical model. A clean, simplified
-         box here (3 attrs + 2 ops) — the full attribute compartment expands on slide-attributes (B3).
-         SVG conventions copied from lecture-04-05/slides/slide-association.html:
-           class box = white rect, blue border #3b82f6, header band #1e40af white name,
-           divider lines per compartment; attribute/op text left-anchored (LTR Latin identifiers),
-           operations rendered italic; Hebrew labels use 'Noto Sans Hebrew' + direction. -->
     <section data-slug="class-box">
       <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
       <style>
@@ -495,14 +444,13 @@
           <div class="card">
             <svg class="class-svg" viewBox="0 0 470 306" xmlns="http://www.w3.org/2000/svg" role="img"
                  aria-label="תיבת המחלקה הזמנה עם שלושה תאים: שם, שלוש תכונות, וחמש פעולות הכוללות שולפת, קובעת ופעולה עם פרמטרים וערך מוחזר">
-              <!-- header band -->
+              
               <rect x="20" y="8" width="430" height="52" fill="#1e40af"/>
-              <!-- Class names are English identifiers (David, 2026-08-10) — the Hebrew name that used
-                   to sit here, with Order as an italic subtitle, is gone; the diagram is English-only. -->
+              
               <text x="235" y="43" text-anchor="middle" direction="ltr" font-size="22" font-weight="700"
                     fill="#ffffff" font-family="'Segoe UI',Arial,sans-serif">Order</text>
 
-              <!-- attributes compartment -->
+              
               <text x="34" y="88"  text-anchor="start" direction="ltr" font-size="15" fill="#1e293b"
                     font-family="'Consolas','Courier New',monospace">- orderId : String</text>
               <text x="34" y="115" text-anchor="start" direction="ltr" font-size="15" fill="#1e293b"
@@ -510,8 +458,7 @@
               <text x="34" y="142" text-anchor="start" direction="ltr" font-size="15" fill="#1e293b"
                     font-family="'Consolas','Courier New',monospace">- status : OrderStatus</text>
 
-              <!-- Operations compartment (italic). Deliberately covers all four signature shapes so
-                   there is something to discuss: no-in/no-out, no-in/out, in/no-out, in+out. -->
+              
               <text x="34" y="182" text-anchor="start" direction="ltr" font-size="14" fill="#1e293b" font-style="italic"
                     font-family="'Consolas','Courier New',monospace">+ total() : Money</text>
               <text x="34" y="207" text-anchor="start" direction="ltr" font-size="14" fill="#1e293b" font-style="italic"
@@ -523,10 +470,10 @@
               <text x="34" y="282" text-anchor="start" direction="ltr" font-size="14" fill="#1e293b" font-style="italic"
                     font-family="'Consolas','Courier New',monospace">+ setStatus(newStatus : OrderStatus)</text>
 
-              <!-- dividers between compartments -->
+              
               <line x1="20" y1="60"  x2="450" y2="60"  stroke="#3b82f6" stroke-width="1.4"/>
               <line x1="20" y1="158" x2="450" y2="158" stroke="#3b82f6" stroke-width="1.4"/>
-              <!-- outer border last, so it sits above the fills -->
+              
               <rect x="20" y="8" width="430" height="288" fill="none" stroke="#3b82f6" stroke-width="2"/>
             </svg>
           </div>
@@ -558,14 +505,6 @@
         OrderLine (שורת הזמנה) מופיע כאן כטיפוס מוחזר — טיזר קטן למחלקה המתווכת שנלמד בחלק ג׳.
       </aside>
     </section>
-    <!-- B2 — שם המחלקה. Naming rules only: UpperCamelCase, singular, no spaces/underscores, a noun
-         not a verb, and ALWAYS English.
-         2026-08-10 (David): packages used to share this slide; they now have their own slide at the
-         end of section ב (slide-packages.html), so the freed half became a proper ✗/✓/why table —
-         the rules are only memorable next to the mistake each one prevents. The last table row
-         teaches the English rule itself, which is the course-wide convention as of this date:
-         class/attribute/operation/package names are English identifiers even though the domain,
-         the interviews and the requirements are Hebrew. -->
     <section data-slug="class-name" class="has-acro-footer">
       <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
       <style>
@@ -644,11 +583,6 @@
       </aside>
     <div class="acro-footer"><span class="acro"><span class="en">AI</span> = <span class="en">Artificial Intelligence</span> · בינה מלאכותית</span></div>
     </section>
-    <!-- B4 — תכונות / Attributes.
-         Format + name : Type [= default] {constraint}; rules (camelCase name, dataType,
-         default, {} constraint, visibility). Right: the הזמנה attribute compartment expanded
-         (full canonical 5 attrs), the attributes tinted to draw the eye. Visibility kept
-         brief here — the full +/#/- table is B6 (slide-visibility). -->
     <section data-slug="attributes" class="has-acro-footer">
       <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
       <style>
@@ -675,16 +609,12 @@
           border-radius:6px; padding:2px 7px; align-self:flex-start; }
         section[data-slug="attributes"] .ex .ed { font-size:13.5px; color:var(--muted); line-height:1.35; }
       </style>
-      <!-- Title pattern: keep the em dash OUTSIDE the .en span. With the dash inside the LTR
-           isolate it rendered as "תכונות Attributes —" with the dash dangling at the far left.
-           This matches the sibling slides (Operations — פעולות, Visibility — נראות). -->
+      
       <h1><span class="en">Attributes</span> — תכונות</h1>
       <div class="subtitle">הנתונים שהמחלקה מחזיקה על כל אובייקט</div>
       <div class="body">
 
-        <!-- The old line wrote the default as "[= default]", using [] to mean "optional".
-             That collides with UML's real multiplicity brackets, now taught in the strip below,
-             so optionality is stated in words instead. -->
+        
         <div class="fmt">
           <span class="vis">-</span> <span class="nm">name</span> :
           <span class="ty">Type</span> <span class="df">= default</span> <span class="cn">{constraint}</span>
@@ -707,14 +637,13 @@
           <div class="card">
             <svg class="class-svg" viewBox="0 0 380 240" xmlns="http://www.w3.org/2000/svg" role="img"
                  aria-label="תא התכונות המורחב של המחלקה הזמנה">
-              <!-- header band -->
+              
               <rect x="20" y="8" width="340" height="46" fill="#1e40af"/>
-              <!-- One name only: the Hebrew header + italic English subtitle collapsed into a
-                   duplicate "Order / Order" when class names went English (2026-08-10). -->
+              
               <text x="190" y="38" text-anchor="middle" direction="ltr" font-size="20" font-weight="700"
                     fill="#ffffff" font-family="'Segoe UI',Arial,sans-serif">Order</text>
 
-              <!-- attributes compartment, tinted to draw the eye -->
+              
               <rect x="20" y="54" width="340" height="150" fill="#eff6ff"/>
               <text x="34" y="80"  text-anchor="start" direction="ltr" font-size="15" fill="#1e293b"
                     font-family="'Consolas','Courier New',monospace">- orderId : String</text>
@@ -726,11 +655,11 @@
                     font-family="'Consolas','Courier New',monospace">- pickupCode : String</text>
               <text x="34" y="188" text-anchor="start" direction="ltr" font-size="15" fill="#1e293b"
                     font-family="'Consolas','Courier New',monospace">- status : OrderStatus</text>
-              <!-- operations compartment (collapsed context, italic) -->
+              
               <text x="34" y="228" text-anchor="start" direction="ltr" font-size="14" fill="#94a3b8" font-style="italic"
                     font-family="'Consolas','Courier New',monospace">+ total() : Money  ...</text>
 
-              <!-- dividers + outer border last -->
+              
               <line x1="20" y1="54"  x2="360" y2="54"  stroke="#3b82f6" stroke-width="1.4"/>
               <line x1="20" y1="204" x2="360" y2="204" stroke="#3b82f6" stroke-width="1.4"/>
               <rect x="20" y="8" width="340" height="224" fill="none" stroke="#3b82f6" stroke-width="2"/>
@@ -748,14 +677,13 @@
 
         <b>התחביר המלא של תכונה ב-UML</b> (למקרה שנשאל — מה שעל השקופית הוא מה שנדרש בקורס, לא כל התקן):
         <code>[נראות] ['/'] שם [':' טיפוס] ['[' ריבוי ']'] ['=' ברירת-מחדל] ['{' מאפיינים '}']</code>.
-        ⚠️ <b>תכונה נגזרת (הקו הנטוי ‎/‎) — לא מלמדים ולא משתמשים</b> (החלטת דוד, 2026-08-11), בדיוק כמו ריבוי
+        ⚠️ <b>תכונה נגזרת (הקו הנטוי ‎/‎) — לא מלמדים ולא משתמשים</b>, בדיוק כמו ריבוי
         על תכונה. הסימון קיים בתקן, אבל אצלנו ערך מחושב מיוצג <b>כפעולה</b>. אין טעם להראות סימון ולומר
         ״קיים אבל לא נשתמש״ — זה רק מבלבל. אם ייתקלו בו בפלט של כלי: זה ערך מחושב, ואצלנו הוא פעולה.
 
-        ⚠️ <b>ריבוי על תכונה (‎[0..*]‎) — לא מלמדים ולא משתמשים</b> (החלטת דוד, 2026-08-10). הוא קיים בתקן,
+        ⚠️ <b>ריבוי על תכונה (‎[0..*]‎) — לא מלמדים ולא משתמשים</b>. הוא קיים בתקן,
         אבל אנחנו לא רוצים שהסטודנטים יכתבו אותו: תכונה רב-ערכית היא ״רשימה בתוך תכונה״, כלומר הפרה של
-        <b>1ONF</b>, והתשובה הנכונה תמיד היא <b>מחלקה נפרדת בקשר</b>. לכן הוא הוסר מהשקופית כדי לא לתת לו
-        לגיטימציה. <b>אם בכל זאת ייתקלו בו</b> — בפלט של כלי, במודל אמיתי או בטיוטה של AI — זו התשובה לתת:
+        <b>1ONF</b>, והתשובה הנכונה תמיד היא <b>מחלקה נפרדת בקשר</b>. לכן הוא לא מופיע בשקופית. <b>אם בכל זאת ייתקלו בו</b> — בפלט של כלי, במודל אמיתי או בטיוטה של AI — התשובה:
         ״זו רשימה בתוך תכונה; הפכו אותה למחלקה״. שימו לב שאין לזה שום קשר לריבוי על <b>קשר</b>, שהוא חובה
         בשני הקצוות ונלמד בחלק ג׳.
         שניים נוספים שלא על השקופית: תכונת <b>מחלקה</b> (static) מסומנת ב<b>קו תחתון</b> — נדיר במודל תחום;
@@ -763,15 +691,6 @@
       </aside>
     <div class="acro-footer"><span class="acro"><span class="en">UML</span> = <span class="en">Unified Modeling Language</span> · שפת מידול אחידה</span> &nbsp;·&nbsp; <span class="acro"><span class="en">AI</span> = <span class="en">Artificial Intelligence</span> · בינה מלאכותית</span></div>
     </section>
-    <!-- B3 — UML מול שפת תכנות. NEW 2026-08-10 (David: "I want to discuss the difference between UML
-         and a specific language — all conventions here are UML, but when switching to other languages
-         conventions may change and so can capabilities, such as different data types").
-         Placed immediately BEFORE the attributes slide, which is where types first get written down,
-         so students never assume `String` / `Money` are literal code.
-         Three beats: (1) the same attribute in four targets — the type name is NOT a language type;
-         (2) UML has constructs a language may not (multiple inheritance, ◆/◇); (3) the model is not
-         written for a language, so don't shrink it to a language's limits during analysis.
-         Same thesis as A6's "גזירה, לא העתקה" and the planned class-diagram↔database slide. -->
     <section data-slug="uml-vs-language" class="has-acro-footer">
       <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
       <style>
@@ -876,19 +795,6 @@
       </aside>
     <div class="acro-footer"><span class="acro"><span class="en">UML</span> = <span class="en">Unified Modeling Language</span> · שפת מידול אחידה</span></div>
     </section>
-    <!-- B5 — מזהים. NEW 2026-08-11 (David: build a slide on the identity/PK issue).
-         This is the answer to the single loudest question students import from the database course,
-         where every table has a primary key: does every class need an id?
-         Three beats:
-           1. the test — does anyone OUTSIDE the system refer to this thing on its own?
-           2. the split, straight from the campus model, so the examples are ones they already know
-              (Student/Order/MenuItem/Payment have one · OrderLine/Station/Cafeteria do not)
-           3. the persistence beat — object identity is free in memory (the reference); a ROW needs an
-              address for UPDATE/DELETE, so a class with no business id still gets a key in the table,
-              invented by the database and kept OUT of the class diagram.
-         Plus the FK rule, which is the other half of "what is not an attribute".
-         ⚠️ Makes one light forward reference to section ג (the association) — deliberately tagged as
-         such on the slide. If that bothers, the FK card is the part to move later. -->
     <section data-slug="identity" class="has-acro-footer">
       <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
       <style>
@@ -975,21 +881,6 @@
       </aside>
     <div class="acro-footer"><span class="acro"><span class="en">UML</span> = <span class="en">Unified Modeling Language</span> · שפת מידול אחידה</span></div>
     </section>
-    <!-- B6 — שתי דוגמאות: מהמחלקה לטבלה. NEW 2026-08-11 (David asked to SEE it compared:
-         "one class that does have an ID … the equivalent of a database ID, and one class that doesn't,
-         so students could compare between the two").
-         Same picture twice — the class box on top, the table it becomes underneath:
-           · Order      — has a business identifier → it simply BECOMES the primary key. Nothing invented.
-           · OrderLine  — has no identifier at all → the table still needs one, and it comes from the two
-                          RELATIONSHIPS the line already holds: (orderId, itemId) is a composite PK, each half
-                          also an FK. Nothing invented, nothing travels back into the diagram.
-         2026-08-30: was a DB-invented surrogate `lineId`; changed to the composite key so the slide matches
-         the example project students copy (SAD project/example_project — OrderItems PK = orderId + productId,
-         OrderItem.cs holds `order`/`product` references and derives the key from them). The surrogate is
-         still mentioned in the notes as the fallback when the same item may appear twice in one order.
-         The Orders table also shows `studentId FK`, which appears in the table and NOT in the class box —
-         the same fact as the FK rule on the previous slide, now visible rather than asserted.
-         TERMINOLOGY: model side = מחלקה / אובייקט, database side = טבלה / שורה. Never "רשומה". -->
     <section data-slug="identity-examples">
       <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
       <style>
@@ -1104,11 +995,6 @@
         <b>המסר לסיום:</b> אל תוסיפו לתרשים מזהה רק כי ״לכל טבלה יש מפתח״. המסד יסתדר; התרשים מתאר את התחום.
       </aside>
     </section>
-    <!-- B7 — דוגמאות ואילוצים. Two columns: attribute VALUE examples on the campus price
-         attribute (MenuItem), and constraints — always in {}, optionally hung on a Note.
-         2026-08-10 (David): «enumeration» used to be a third column here and now has its own
-         slide (slide-enumeration.html) — it is a type in its own right, not a footnote to
-         attribute syntax, and it needs room for the when-NOT-to-use rules. -->
     <section data-slug="attribute-examples">
       <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
       <style>
@@ -1133,7 +1019,7 @@
 
         <div class="cols ex3">
 
-          <!-- col 1: value examples (campus price attr) -->
+          
           <div class="card">
             <div class="panel-title">דוגמאות ערך</div>
             <div class="vex-row"><span class="vex-code">price : Money</span><span class="vex-note">טיפוס בלבד</span></div>
@@ -1142,7 +1028,7 @@
             <div class="vex-row"><span class="vex-code">price {&#8805; 0}</span><span class="vex-note">אילוץ</span></div>
           </div>
 
-          <!-- col 2: constraints in {} + Note -->
+          
           <div class="card">
             <div class="panel-title">אילוצים <span class="en">{ }</span></div>
             <p class="cn-text">
@@ -1172,14 +1058,6 @@
         ה-enumeration עבר לשקופית משלו (הבאה) — הוא טיפוס בפני עצמו, לא פרט תחבירי של תכונה.
       </aside>
     </section>
-    <!-- B8 — כשהמודל נפגש עם המציאות. NEW 2026-08-11, rebuilt from two slides David singled out from the
-         original deck as ones that "helped me explain stuff":
-           · the German licence plate (old slide 17) → choosing the right DATATYPE
-           · the blue washing machine (old slide 11) → why {"White","Black"} as a constraint is a bad idea
-         Both are the same underlying lesson — a type and a constraint are PROMISES, and reality breaks the
-         ones you make carelessly — so they share a slide instead of taking two.
-         The blue machine is the punchline of the constraint half: the original slide listed
-         machineColor = "White" {"White","Black"} and then showed a blue machine. Keep that beat. -->
     <section data-slug="type-and-constraint-reality" class="has-acro-footer">
       <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
       <style>
@@ -1253,16 +1131,6 @@
       </aside>
     <div class="acro-footer"><span class="acro"><span class="en">AI</span> = <span class="en">Artificial Intelligence</span> · בינה מלאכותית</span></div>
     </section>
-    <!-- B9 — «enumeration»: what it is, and why it beats a number or a string in code.
-         SIMPLIFIED 2026-08-11 (David: "we need to simplify slide 13"). The when-to-use / when-NOT and the
-         enum-vs-class decision moved to their own slide (slide-enum-or-class.html) — that half is the more
-         important one and was crowding this slide out.
-         The code demo is the one David asked for: three ways to write the same condition — a magic number
-         (unreadable), a raw string (readable but unchecked), an enum (both).
-         Notation honesty: «enumeration» + the literal list + NO line to the class is the standard; the gray
-         fill and dashed border are OUR house rendering and are labelled as such.
-         C#-SPECIFIC claims are marked: the name→number mapping is a C#/C++ family fact, not universal
-         (Java/Python enum members are objects). -->
     <section data-slug="enumeration" class="has-acro-footer">
       <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
       <style>
@@ -1296,7 +1164,7 @@
             <div class="panel-title" style="text-align:center;">הסימון</div>
             <svg class="enum-svg" viewBox="0 0 400 320" xmlns="http://www.w3.org/2000/svg" role="img"
                  aria-label="שתי תיבות enumeration: OrderStatus עם חמישה ערכים ומתחתיה מחלקת Order עם התכונה status, ולצידה DayOfWeek עם שבעת ימי השבוע — בלי קו בין enum למחלקה">
-              <!-- OrderStatus + the Order class that uses it -->
+              
               <rect x="14" y="6" width="128" height="44" fill="#475569"/>
               <text x="78" y="24" text-anchor="middle" font-size="11" fill="#e2e8f0" font-style="italic" font-family="'Segoe UI',Arial,sans-serif">&laquo;enumeration&raquo;</text>
               <text x="78" y="42" text-anchor="middle" font-size="14" font-weight="700" fill="#ffffff" font-family="'Segoe UI',Arial,sans-serif">OrderStatus</text>
@@ -1315,7 +1183,7 @@
               <text x="6" y="252" text-anchor="start" direction="ltr" font-size="11" fill="#1e293b"
                     font-family="'Consolas','Courier New',monospace">- status : OrderStatus</text>
 
-              <!-- DayOfWeek — the enum used in the code demo on the other side of the slide -->
+              
               <rect x="258" y="6" width="128" height="44" fill="#475569"/>
               <text x="322" y="24" text-anchor="middle" font-size="11" fill="#e2e8f0" font-style="italic" font-family="'Segoe UI',Arial,sans-serif">&laquo;enumeration&raquo;</text>
               <text x="322" y="42" text-anchor="middle" font-size="14" font-weight="700" fill="#ffffff" font-family="'Segoe UI',Arial,sans-serif">DayOfWeek</text>
@@ -1400,15 +1268,6 @@
       </aside>
     <div class="acro-footer"><span class="acro"><span class="en">UML</span> = <span class="en">Unified Modeling Language</span> · שפת מידול אחידה</span></div>
     </section>
-    <!-- B10 — enum או מחלקה. NEW 2026-08-11 (David: the management question is the important half, and
-         it deserves its own slide; he also asked directly "can we have an admin page to manage enums?").
-         The answer, stated plainly on the slide: NO. An enum is compiled into the build, so changing it
-         means a code change and a new release. An admin screen implies a table, and a table implies a class.
-         Two decisive tests, in this order:
-           1. does the CODE branch on the value (if/switch)? → the code must know the values → enum
-           2. who OWNS the list — a developer (release) or a business user (admin screen)? → class
-         The dropdown case David raised (gender) lands in the class column on purpose: if all you need is a
-         list to display and someone may extend it, that is a lookup table, not an enum. -->
     <section data-slug="enum-or-class">
       <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
       <style>
@@ -1527,27 +1386,6 @@
         ונראה את זה בחלק ג׳ עם שני סוגי התשלום.
       </aside>
     </section>
-    <!-- B11 — מגדר: המקרה שמלמד הכול. NEW 2026-08-11, from slides David flagged as ones that worked
-         (old 13/14 — the Ynet headlines — and old 15 — Facebook's custom gender field).
-         ⚠️ It also CORRECTS his own earlier teaching, at his request: he used to present gender as
-         "why an enum and not a boolean". The enum step is only half the journey — by the two tests on
-         the enum-or-class slide (does the code branch on it? who owns the list?) the answer LEANS class.
-         ⚠️ REFRAMED 2026-08-17 (David: "slide 18 says gender is a class but slide 19 says it depends, so we
-         need to be less decisive on 18 and explain the depends part — pros and cons of doing an enum for
-         gender"). He is right, and it was a real contradiction: B12's gender card has always carried the
-         ⚖️ תלוי במערכת verdict while this slide closed on ״לא enum ולא Boolean״, so a student who took the
-         bottom line literally met the opposite answer one slide later. The whole "depends" story was
-         already written — but it sat in the SPEAKER NOTES, where only the lecturer saw it.
-         What changed: only Boolean stays a verdict (✗ פסול תמיד — wrong in every system). enum and מחלקה
-         now share ONE neutral blue treatment, each labelled with WHEN it is right, and a בעד/נגד box gives
-         enum the honest four-and-four it never got. The bottom line is now the applicable test —
-         ״כמה עולה ערך חדש? אם התשובה היא גרסה — זו מחלקה״ — which YIELDS B12's ⚖️ instead of fighting it.
-         The evidence panel is retitled: the headlines prove THE LIST MOVES (the input to the decision);
-         they do not by themselves pick the answer.
-         Structure: three options → enum's pros/cons on the left, the evidence on the right.
-         The evidence is deliberately real-world and dated: Germany 2013, Israeli rulings, Facebook's
-         open list. This is the slide that proves "the list is neither closed nor stable" instead of
-         asserting it. Treated as a modelling case study, not as a topic in itself. -->
     <section data-slug="gender-case">
       <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
       <style>
@@ -1656,8 +1494,8 @@
 
       </div>
       <aside class="notes">
-        🎯 <b>איך לנסח את ההכרעה — ובעיקר איך לא (2026-08-17).</b> אל תאמרו ״מגדר הוא מחלקה״. זו הפורמולציה
-        שהשקף החזיק עד היום, והיא <b>סותרת את החידון בשקף הבא</b>, שבו הכרטיס של מגדר הוא ⚖️ ״תלוי במערכת״.
+        🎯 <b>איך לנסח את ההכרעה, ובעיקר איך לא.</b> ״מגדר הוא מחלקה״ אינו ניסוח נכון: הוא
+        <b>סותר את החידון בשקף הבא</b>, שבו הכרטיס של מגדר הוא ⚖️ ״תלוי במערכת״.
         הניסוח שעובד: <b>Boolean נשבר תמיד — זו ההכרעה היחידה כאן.</b> בין enum למחלקה זו שאלה על
         <b>המערכת</b>, לא על המילה ״מגדר״. והמבחן שאפשר להפעיל בשנייה: <b>כמה עולה ערך חדש?</b> אם התשובה
         היא ״גרסה — קוד, בדיקות, פריסה״, ואם הערך החדש מגיע מרגולציה או מטופס שמישהו אחר מנסח — זו
@@ -1665,16 +1503,15 @@
         <b>למה בכל זאת יש לשקף כיוון:</b> במערכות שחיות מול טפסים ורגולציה (רפואה, רישום, משאבי אנוש) — ואלה
         רוב המערכות שהסטודנטים יפגשו — הרשימה מנוהלת מבחוץ, ולכן <b>ברירת המחדל נוטה למחלקה</b>. זו נטייה,
         לא כלל, וזה בדיוק ההבדל שהשקף מנסה ללמד.
-        ⚠️ <b>שינוי מול מה שלימדנו בעבר (דוד, 2026-08-11):</b> בעבר השתמשנו בדוגמה הזו כדי להסביר ״למה enum
-        ולא Boolean״. זה נכון רק כחצי הדרך — שתי השאלות משקופית <b>enum או מחלקה</b> (האם הקוד מתפצל לפי
-        הערך, ומי בעל הרשימה) הן שמכריעות, ובמערכת שמנוהלת מול רגולציה שתיהן מצביעות על מחלקה.
-        💬 <b>איך להריץ את הבעד/נגד בכיתה:</b> אל תקראו את שמונת הסעיפים. בקשו מהכיתה <b>סעיף אחד בעד</b>
-        ו<b>סעיף אחד נגד</b>, ואז הצביעו על השורה שמכריעה בפועל: ״<b>אין השבתה</b>״. ערך שיצא משימוש לא ניתן
-        להסתיר ב-enum בלי לגעת בקוד — וגם אי אפשר להשאיר אותו על מי שכבר נרשם ולהעלים אותו מהטופס. זה בדיוק
+        ⚠️ <b>לא רק ״enum ולא Boolean״:</b> ״למה enum ולא Boolean״ הוא רק חצי הדרך. שתי השאלות משקופית
+        <b>enum או מחלקה</b> (האם הקוד מתפצל לפי הערך, ומי בעל הרשימה) הן שמכריעות, ובמערכת שמנוהלת מול
+        רגולציה שתיהן מצביעות על מחלקה.
+        💬 <b>הבעד/נגד:</b> השורה שמכריעה בפועל היא ״<b>אין השבתה</b>״. ערך שיצא משימוש לא ניתן להסתיר
+        ב-enum בלי לגעת בקוד, וגם אי אפשר להשאיר אותו על מי שכבר נרשם ולהעלים אותו מהטופס. זה בדיוק
         מה שמסך ניהול נותן בחינם, וזו הסיבה המעשית ביותר לבחור מחלקה.
-        ⚠️ ושווה לומר בפה מלא: <b>enum כאן אינו טעות</b>. הוא פשוט יותר, מוגן יותר ומהיר יותר — ואם המערכת רק
+        ⚠️ וחשוב: <b>enum כאן אינו טעות</b>. הוא פשוט יותר, מוגן יותר ומהיר יותר — ואם המערכת רק
         מציגה ומסכמת, הוא הבחירה הנכונה. מי שיבחר enum ויסביר <b>למה</b> — קיבל את מלוא הניקוד.
-        <b>איך להריץ את שלוש האפשרויות בכיתה:</b> ובכל אחת לשאול ״מה שובר את זה?״.
+        <b>שלוש האפשרויות, ובכל אחת השאלה ״מה שובר את זה?״:</b>
         (1) <code>Boolean</code> — נשבר ברגע שיש אפשרות שלישית, וגם לא ברור מה המשמעות של false.
         (2) <code>enum</code> — נראה פתרון, עד שמבינים שהוספת ערך דורשת קוד, בנייה, בדיקות ופריסה. גרמניה
         הוסיפה ערך שלישי לטפסים רשמיים ב-2013; בישראל שונו טפסי רישום ופסיקות בתי משפט שינו את מה שנרשם
@@ -1684,30 +1521,15 @@
         על מבנה הנתונים שלהם?״ — התשובה: זו טבלה, לא enum, ובוודאי לא Boolean.
         <b>המסר הכללי, וזה מה שצריך להישאר:</b> ההחלטה אינה על המילה ״מגדר״ אלא על <b>מי מנהל את הרשימה ובאיזה
         קצב היא משתנה</b> — בדיוק אותו מבחן שהרצנו על קטגוריות פריטים ועל סיבות ביטול.
-        <b>הערה לכיתה:</b> להישאר על המישור המקצועי — זו שאלת מידול נתונים, והדוגמה נבחרה כי היא ממחישה היטב
+        <b>המישור כאן מקצועי:</b> זו שאלת מידול נתונים, והדוגמה נבחרה כי היא ממחישה היטב
         רשימה שמשתנה לאורך זמן מגורמים חיצוניים.
-        🔗 <b>וההמשך הישיר, אז אל תסגרו את הנושא כאן (דוד, 2026-08-14):</b> מגדר חוזר <b>בשקף הבא</b> ככרטיס
-        ⚖️ ״תלוי במערכת״ בחידון — עם בדיוק שתי האפשרויות שעל השקף הזה. אפשר לומר את זה מראש: ״נחזור לזה עוד
-        רגע, ואז אתם תכריעו״.
+        🔗 <b>וההמשך הישיר:</b> מגדר חוזר <b>בשקף הבא</b> ככרטיס ⚖️ ״תלוי במערכת״ בחידון, עם בדיוק שתי
+        האפשרויות שעל השקף הזה. שם אתם תכריעו.
         ניואנס משני לסטודנט חד: במערכת רפואית ייתכנו <b>שתי תכונות</b> — gender מנוהל (מחלקה) לצד sexAtBirth
         קליני סגור שהקוד באמת מתפצל לפיו (enum). אותה מילה, שתי תכונות, שתי תשובות — וזו גם התשובה הטובה
         ביותר לסטודנט שמתעקש ״אז מה נכון?״.
       </aside>
     </section>
-    <!-- B12 — חידון: enum או מחלקה? NEW 2026-08-14 (David: "I would like a slide with a quiz (cards) of
-         questions — should this be enum or class — and when we turn the card, we see the answer and the
-         class model"). Closes the enum trilogy: the test (B10) → the worked case (B11 gender) → this drill.
-         Eight value-lists, deliberately mixed so no pattern gives the answer away:
-           enum      — סטטוס הזמנה (code branches on every value) · יום בשבוע (fixed by nature, built-in)
-           class     — קטגוריות תפריט (manager edits, display data) · סיבות ביטול (business adds) ·
-                       מגדר (regulation owns the list; the callback to B11 — WITH the nuance David asked
-                       about 2026-08-14: clinical sexAtBirth is a DIFFERENT attribute and may be an enum)
-           neither   — סוג תשלום (values carry different data ⇒ generalization — the trap card, links to C6)
-           ⚖️ depends — תפקיד משתמש (permissions in code vs admin-managed) ·
-                       דרגת חומרה (label only vs values carrying SLA data)
-         Fronts show the list in HEBREW (business language); backs show the verdict + the model snippet in
-         ENGLISH identifiers — reinforcing מדברים בעברית, רושמים באנגלית.
-         Same no-<script> flip licence as class-or-not-quiz: inline onclick toggles a class, CSS rotateY. -->
     <section data-slug="enum-class-quiz">
       <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
       <style>
@@ -1835,13 +1657,13 @@
       </div>
       <aside class="notes">
         הדריל שסוגר את שלישיית ה-enum: המבחן (שקף 17) ← המקרה של מגדר (18) ← תרגול. שמונה רשימות, אחת-אחת;
-        לבקש נימוק לפני ההפיכה, לא רק הצבעה. בכל כרטיס: החזית בעברית (שפת העסק), הגב באנגלית (שפת המודל) —
+        נסו לנמק לפני ההפיכה, לא רק לנחש. בכל כרטיס: החזית בעברית (שפת העסק), הגב באנגלית (שפת המודל) —
         מדברים בעברית, רושמים באנגלית.
         <b>סוג תשלום הוא כרטיס המלכודת</b> — אחרי שני שקפים של ״enum או מחלקה״ הכיתה תתפצל בין השניים, והתשובה
-        היא לא זה ולא זה: לערכים יש תכונות <b>סותרות</b> (universityId מול last4/gatewayRef) ו<b>קשר שונה</b> (רק אשראי פונה לשער התשלום) — ולכן הורשה. ⚠️ ״נתונים שונים״ לבדו אינו נימוק (ראו שקף ההורשה, 2026-08-15). זה
+        היא לא זה ולא זה: לערכים יש תכונות <b>סותרות</b> (universityId מול last4/gatewayRef) ו<b>קשר שונה</b> (רק אשראי פונה לשער התשלום) — ולכן הורשה. ⚠️ ״נתונים שונים״ לבדו אינו נימוק (ראו שקף ההורשה). זה
         בדיוק המבחן השלישי בכותרת, וזה הקישור קדימה לחלק ג׳.
-        <b>והשאלה שדוד עצמו שאל (2026-08-14) — ״למה הורשה? הרי רוצים מימוש גנרי שתומך בסוגי תשלום עתידיים
-        בלי לשנות קוד״.</b> התשובה בשלוש מדרגות, ושווה להריץ אותה בכיתה אם השאלה עולה:
+        <b>והשאלה המתבקשת: ״למה הורשה? הרי רוצים מימוש גנרי שתומך בסוגי תשלום עתידיים
+        בלי לשנות קוד״.</b> התשובה בשלוש מדרגות:
         (1) <u>סוג חדש עם נתונים/התנהגות חדשים = קוד חדש בכל ארכיטקטורה</u> — מישהו חייב לכתוב את האינטגרציה
         של Bit או PayPal. אין מודל שחוסך את זה; זה אותו טיעון בדיוק כמו ההגנה על enum בשקף 17 (״ממילא צריך
         לכתוב את ההתנהגות החדשה״).
@@ -1852,7 +1674,7 @@
         וכל הפרטים הספציפיים חיים אצל שער התשלום. אז אין הורשה: מחלקת PaymentMethod (טבלת ערכים) והמבחן
         השלישי פשוט נכשל. כלומר: המודל הולך אחרי מה <b>שאנחנו</b> שומרים. בקמפוס אנחנו כן שומרים universityId
         מול last4 — ולכן שתי תת-מחלקות. ״גנרי״ שמשטיח אותן = עמודות ריקות או blob — מודל שכבר לא אומר אמת.
-        <b>מגדר — תלוי במערכת (הכרעת דוד, 2026-08-14, אחרי שהכרטיס אמר ״מחלקה״ נחרצות):</b> מערכת שרק מציגה
+        <b>מגדר: תלוי במערכת.</b> מערכת שרק מציגה
         או אוספת לסטטיסטיקה — enum סביר, והחלפתו פעם בעשור היא גרסה נסבלת; מערכת שחיה מול טפסים ורגולציה —
         רפואה, מערכות רישום — מנהלת את הרשימה ⇒ מחלקה. השקף הקודם מספר את הסיפור של הסוג השני (טפסי רישום
         שנשברו שוב ושוב); הכרטיס מכליל. ניואנס משני לסטודנט חד: במערכת רפואית ייתכנו <b>שתי</b> תכונות —
@@ -1863,11 +1685,6 @@
         שאלה טובה על כל כרטיס, כמו בחידון הקודם: ״מה צריך להשתנות בדרישות כדי שהתשובה תתהפך?״
       </aside>
     </section>
-    <!-- B13 — Operations: the third compartment. Format + method(param:Type):Return, rendered
-         ITALIC (tool doctrine, NOTATION.md — operations compartment is italic). SVG shows the
-         canonical הזמנה (Order) box with the operations compartment highlighted. The box keeps
-         the canonical ops (total/cancel) so it agrees with the marquee model (C8); markReady is
-         offered only as an extra format example (side-effecting op, no return). -->
     <section data-slug="operations">
       <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
       <style>
@@ -1912,16 +1729,16 @@
             <svg class="op-svg" viewBox="0 0 250 200" xmlns="http://www.w3.org/2000/svg" role="img"
                  aria-label="תיבת המחלקה הזמנה: שם, תכונות, וחלק הפעולות מודגש בכתב נטוי">
               <rect x="14" y="6" width="222" height="188" fill="#fff" stroke="#3b82f6" stroke-width="2"/>
-              <!-- header band -->
+              
               <rect x="14" y="6" width="222" height="32" fill="#1e40af"/>
               <text x="125" y="27" text-anchor="middle" direction="rtl" font-size="15" font-weight="700"
                     fill="#fff" font-family="'Segoe UI',Arial,sans-serif">Order</text>
-              <!-- attributes compartment -->
+              
               <line x1="14" y1="112" x2="236" y2="112" stroke="#cbd5e1" stroke-width="1"/>
               <text x="24" y="58"  text-anchor="start" font-size="12" fill="#334155" font-family="Consolas,monospace">- orderId : String</text>
               <text x="24" y="78"  text-anchor="start" font-size="12" fill="#334155" font-family="Consolas,monospace">- status : OrderStatus</text>
               <text x="24" y="98"  text-anchor="start" font-size="12" fill="#334155" font-family="Consolas,monospace">- pickupTime : DateTime</text>
-              <!-- operations compartment (highlighted) -->
+              
               <rect x="15" y="113" width="220" height="80" fill="#FFF6E6"/>
               <text x="24" y="140" text-anchor="start" font-size="12.5" font-style="italic" fill="#9a3412" font-family="Consolas,monospace">+ total() : Money</text>
               <text x="24" y="166" text-anchor="start" font-size="12.5" font-style="italic" fill="#9a3412" font-family="Consolas,monospace">+ cancel()</text>
@@ -1960,18 +1777,6 @@
         המשפט ולהשאיר את ההדגמה לשם.
       </aside>
     </section>
-    <!-- B14 — התרשים הוא תצוגה, לא המודל. NEW 2026-08-11 (David's vision).
-         The point he already teaches on the Operations slide, made structural: an operation drawn without
-         parameters or a return type STILL HAS THEM — the diagram just isn't showing them. Same for an
-         attribute drawn without its type.
-         Three campus classes, each hiding something DIFFERENT on purpose:
-           · Order    — attributes typed, operations stripped of params/returns
-           · MenuItem — operations complete, attributes stripped of types
-           · Payment  — name only, compartments collapsed entirely
-         Clicking any of them opens its FULL SPECIFICATION — every type, default, constraint, parameter and
-         return value — the way a modelling tool (Visual Paradigm et al.) keeps the model in a repository and
-         lets the diagram be one view of it.
-         No <script> in a fragment: inline onclick only, same overlay pattern as slide-relationship-or-not. -->
     <section data-slug="diagram-is-a-view">
       <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
       <style>
@@ -2067,7 +1872,7 @@
 
       </div>
 
-      <!-- ══ full specification — Order ══ -->
+      
       <div class="sp" id="spOrder" hidden onclick="this.hidden=true">
         <div class="sp-box" onclick="event.stopPropagation()">
           <button class="sp-x" onclick="this.closest('.sp').hidden=true">✕</button>
@@ -2088,7 +1893,7 @@
         </div>
       </div>
 
-      <!-- ══ full specification — MenuItem ══ -->
+      
       <div class="sp" id="spItem" hidden onclick="this.hidden=true">
         <div class="sp-box" onclick="event.stopPropagation()">
           <button class="sp-x" onclick="this.closest('.sp').hidden=true">✕</button>
@@ -2108,7 +1913,7 @@
         </div>
       </div>
 
-      <!-- ══ full specification — Payment ══ -->
+      
       <div class="sp" id="spPay" hidden onclick="this.hidden=true">
         <div class="sp-box" onclick="event.stopPropagation()">
           <button class="sp-x" onclick="this.closest('.sp').hidden=true">✕</button>
@@ -2126,20 +1931,6 @@
         </div>
       </div>
     </section>
-    <!-- B15 — מאוחסן או מחושב. NEW 2026-08-10 (David: "this decision is worth a slide in its own").
-         2026-08-11: the DERIVED-ATTRIBUTE column was removed with the rest of the `/` notation (David:
-         "it will just confuse students if I say it exists but we don't use and teach it"). The decision
-         is now binary and cleaner: a value is either STORED, or COMPUTED — and a computed value is an
-         OPERATION. The two callouts (the second-source-of-truth trap and the store-anyway exceptions)
-         were always the valuable half and are untouched.
-         Sits right after Operations, because it is the first moment both halves of the box exist and the
-         student can be asked "so which one do I use?".
-         Two questions, in order: (1) must it be stored at all? (2) if computed — attribute or operation?
-         The ⚠️ beat is the stored-copy-of-a-derivable-value, which is the most common inconsistency bug
-         and a very common AI-draft mistake. The exception card is what makes it honest: unitPrice on
-         OrderLine looks derivable from MenuItem.price and must still be stored, because a menu price
-         changes and last month's order has to stay true. That example was also a genuine flaw in the
-         running model until 2026-08-10 — see the dossier. -->
     <section data-slug="stored-derived-operation" class="has-acro-footer">
       <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
       <style>
@@ -2244,11 +2035,6 @@
       </aside>
     <div class="acro-footer"><span class="acro"><span class="en">UML</span> = <span class="en">Unified Modeling Language</span> · שפת מידול אחידה</span> &nbsp;·&nbsp; <span class="acro"><span class="en">AI</span> = <span class="en">Artificial Intelligence</span> · בינה מלאכותית</span></div>
     </section>
-    <!-- B16 — Visibility: the + / # / - markers. A table.sad (סימון | נראות | משמעות | דוגמה מהקמפוס)
-         with one campus line each. pickupCode(-) and total(+) are canonical members; validate() on
-         תשלום is an illustrative protected op living on the Payment inheritance hierarchy (the only
-         campus place where # / יורשים is meaningful). Bottom-line: analysis marks basic visibility;
-         the full picture sharpens in code. -->
     <section data-slug="visibility" class="has-acro-footer">
       <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
       <style>
@@ -2316,13 +2102,6 @@
       </aside>
     <div class="acro-footer"><span class="acro"><span class="en">AI</span> = <span class="en">Artificial Intelligence</span> · בינה מלאכותית</span></div>
     </section>
-    <!-- B17 — What is NOT a class. The persistence test as the headline:
-         "האם המערכת שומרת ומנהלת מידע על זה?" — the single sharpest filter of the
-         lecture. ✅ real classes (stored & managed) vs ❌ NOT classes: computed output
-         (דוח מכירות / קבלה / אישור הזמנה — derived on demand, no independent record) and an
-         untracked participant (הספק — procurement is OUT of scope, §0). Cross-check against the
-         use cases. ⚠️ this is the #1 AI class-diagram mistake — it turns every report/receipt
-         into a class. -->
     <section data-slug="not-a-class" class="has-acro-footer">
       <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
       <style>
@@ -2390,17 +2169,6 @@
       </aside>
     <div class="acro-footer"><span class="acro"><span class="en">CRUD</span> = <span class="en">Create, Read, Update, Delete</span> · יצירה, קריאה, עדכון, מחיקה</span> &nbsp;·&nbsp; <span class="acro"><span class="en">AI</span> = <span class="en">Artificial Intelligence</span> · בינה מלאכותית</span></div>
     </section>
-    <!-- B18 — חידון: מחלקה או לא? NEW 2026-08-11 (David: build it as a quiz — 8 options, discuss one at a
-         time in class, click to turn the card over and reveal the verdict).
-         Eight candidates, deliberately mixed so the answer is never guessable from a pattern:
-           ✗ no      — דוח מכירות (computed output) · ״ביצוע הזמנה״ (a use case, not a thing) · שער תשלום
-                       (drawn, but as «external system» — NOT a domain class, per the dependency slide)
-           ✓ yes     — קפיטריה (the counter-example: one instance is still a class — David, 2026-08-11) ·
-                       תלונה (stored, tracked, has a status)
-           ⚖️ depends — עגלת קניות · כתובת · קבלה   ← the discussion gold: the noun never decides, the
-                       system's behaviour does.
-         CARD FLIP with no <script>: inline onclick toggles a class, CSS does a 3D rotateY. Same
-         inline-handler licence as the other interactive slides in this deck. -->
     <section data-slug="class-or-not-quiz">
       <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
       <style>
@@ -2523,10 +2291,6 @@
         כמחלקת תחום — בדיוק כפי שנלמד בשקופית התלות. ״לא מחלקה״ ו״לא מחלקת תחום״ אינם אותו דבר.
       </aside>
     </section>
-    <!-- B19 — Compact notation. When the focus is relationships, collapse the box: three
-         views of the SAME canonical הזמנה (Order) class at decreasing detail — full (3
-         compartments) / name+attributes / name only. The class still holds all its members;
-         this is only a display choice to keep the relationship diagram readable. Short slide. -->
     <section data-slug="compact-notation">
       <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
       <style>
@@ -2550,7 +2314,7 @@
 
         <div class="cols-3">
 
-          <!-- Full box: 3 compartments -->
+          
           <div class="card">
             <svg class="cn-svg" viewBox="0 0 200 180" xmlns="http://www.w3.org/2000/svg" role="img"
                  aria-label="תיבה מלאה של המחלקה הזמנה: שם, תכונות ופעולות">
@@ -2567,7 +2331,7 @@
             <p class="cap">מלא — שם, תכונות ופעולות</p>
           </div>
 
-          <!-- Name + attributes only -->
+          
           <div class="card">
             <svg class="cn-svg" viewBox="0 0 200 130" xmlns="http://www.w3.org/2000/svg" role="img"
                  aria-label="תיבה מקוצרת של הזמנה: שם ותכונות בלבד">
@@ -2581,7 +2345,7 @@
             <p class="cap">שם + תכונות</p>
           </div>
 
-          <!-- Name only -->
+          
           <div class="card">
             <svg class="cn-svg" viewBox="0 0 200 70" xmlns="http://www.w3.org/2000/svg" role="img"
                  aria-label="תיבה מכווצת של הזמנה: שם בלבד">
@@ -2602,15 +2366,6 @@
         כדי לשמור על קריאוּת תרשים הקשרים, לא כדי לוותר עליהם.
       </aside>
     </section>
-    <!-- B20 — חבילות (packages). NEW 2026-08-10 (David's call: packages get their own slide instead of
-         sharing the naming slide). Placed at the END of section ב on purpose: it comes after
-         compact-notation (B8), so the package can be drawn with name-only boxes that the students have
-         just been taught, and it can group the WHOLE campus model rather than a two-class toy.
-         Anchor that makes it land in seconds: they imported a turtle package their lecturer wrote in
-         the programming course — same idea, same mechanics.
-         HONESTY BEAT (kept on the slide, not just in the notes): this course never uses packages
-         again — no exercise, no project deliverable requires them. They are here so the term is
-         familiar when they meet it in a real model or in generated code. -->
     <section data-slug="packages" class="has-acro-footer">
       <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
       <style>
@@ -2648,7 +2403,7 @@
             <svg class="pkg-svg" viewBox="0 0 620 290" xmlns="http://www.w3.org/2000/svg" role="img"
                  aria-label="שלוש חבילות: Ordering ובה Order ו-OrderLine, Catalog ובה MenuItem, Station ו-Cafeteria, ו-Billing ובה Payment ושתי תת-המחלקות שלו">
 
-              <!-- ── package: Ordering ── -->
+              
               <rect x="12" y="26" width="120" height="24" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.6"/>
               <text x="72" y="43" text-anchor="middle" direction="ltr" font-size="14" font-weight="700"
                     fill="#1e40af" font-family="'Segoe UI',Arial,sans-serif">Ordering</text>
@@ -2660,7 +2415,7 @@
               <text x="105" y="136" text-anchor="middle" direction="ltr" font-size="14" font-weight="700"
                     fill="#fff" font-family="'Segoe UI',Arial,sans-serif">OrderLine</text>
 
-              <!-- ── package: Catalog ── -->
+              
               <rect x="218" y="26" width="120" height="24" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.6"/>
               <text x="278" y="43" text-anchor="middle" direction="ltr" font-size="14" font-weight="700"
                     fill="#1e40af" font-family="'Segoe UI',Arial,sans-serif">Catalog</text>
@@ -2675,7 +2430,7 @@
               <text x="311" y="180" text-anchor="middle" direction="ltr" font-size="14" font-weight="700"
                     fill="#fff" font-family="'Segoe UI',Arial,sans-serif">Cafeteria</text>
 
-              <!-- ── package: Billing ── -->
+              
               <rect x="424" y="26" width="120" height="24" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.6"/>
               <text x="484" y="43" text-anchor="middle" direction="ltr" font-size="14" font-weight="700"
                     fill="#1e40af" font-family="'Segoe UI',Arial,sans-serif">Billing</text>
@@ -2690,7 +2445,7 @@
               <text x="517" y="180" text-anchor="middle" direction="ltr" font-size="11.5" font-weight="700"
                     fill="#1e40af" font-family="'Segoe UI',Arial,sans-serif">CreditCardPayment</text>
 
-              <!-- dashed cross-package references: Ordering -> Catalog -> ... -> Billing -->
+              
               <line x1="198" y1="131" x2="218" y2="131" stroke="#94a3b8" stroke-width="1.4" stroke-dasharray="5 4"/>
               <line x1="404" y1="131" x2="424" y2="131" stroke="#94a3b8" stroke-width="1.4" stroke-dasharray="5 4"/>
               <text x="311" y="240" text-anchor="middle" direction="rtl" font-size="14" fill="#475569"
@@ -2719,21 +2474,6 @@
       </aside>
     <div class="acro-footer"><span class="acro"><span class="en">AI</span> = <span class="en">Artificial Intelligence</span> · בינה מלאכותית</span></div>
     </section>
-    <!-- B21 — תרגיל זיהוי מחלקות (המעונות). REDESIGNED 2026-08-14 per David: "the purpose of the slide is
-         missed. I want the story to fit the full slide. When I click on a questionable item, we get a popup
-         explaining what it is and why. We should have a diagram build as we go along so students see not
-         only the classes but also the entire picture."
-         Mechanics: every questionable term in the story is a clickable chip. Clicking it
-           (1) opens a popup with the verdict (מחלקה / תכונה / רשימת ערכים / מלכודת / לא מחלקה) and the why,
-           (2) marks the chip with its verdict colour, and
-           (3) turns the matching piece of the diagram SOLID — the whole diagram sits as a faint GHOST
-               skeleton from the start, so the "entire picture" is visible and fills in as the class works.
-         The דיקאנט chip deliberately adds NOTHING to the diagram — that absence is the teaching point.
-         Diagram is SVG with ENGLISH-ONLY labels (Hebrew inside SVG bidi-breaks — lesson from abstract-class
-         and the enum literals). All Hebrew explanation lives in the HTML popups.
-         No <script>: inline onclick toggling classes, same licence as the other interactive slides.
-         Story is the shortened version of the original dorms scenario (David 2026-08-14: "it can be ok since
-         it was too long anyway") + one added sentence (student assignment) so Student earns its box. -->
     <section data-slug="class-detection-exercise">
       <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
       <style>
@@ -2848,15 +2588,12 @@
             </div>
           </div>
 
-          <!-- the diagram: full ghost skeleton, pieces turn solid as terms are classified -->
+          
           <div class="dwrap">
             <svg class="dsvg" viewBox="0 0 470 560" xmlns="http://www.w3.org/2000/svg" role="img"
                  aria-label="תרשים המחלקות של המעונות, נבנה בהדרגה: University, DormComplex, Building, Apartment, Room, Student, MaintenanceUnit, Amenity, ApartmentType">
 
-              <!-- University (האוניברסיטה) — ADDED 2026-08-17. The owner of the whole hierarchy, and the
-                   first word of the story. Plain association, NOT ◆: the rest of the chain is physical
-                   containment, while university→complex is organisational ownership, and C10's rule is
-                   "not clearly a composition ⇒ plain line". Flip it to a diamond if the instructor prefers. -->
+              
               <g class="dg d-university">
                 <rect x="250" y="8" width="200" height="34" fill="#1e40af" stroke="#3b82f6" stroke-width="1.5"/>
                 <text x="350" y="30" text-anchor="middle" direction="ltr" font-size="13.5" font-weight="700" fill="#fff" font-family="'Segoe UI',Arial,sans-serif">University</text>
@@ -2865,7 +2602,7 @@
                 <text x="358" y="68" direction="ltr" font-size="10.5" fill="#64748b" font-family="Consolas,monospace">1..*</text>
               </g>
 
-              <!-- MaintenanceUnit (אב בית) + assoc to complex -->
+              
               <g class="dg d-maint">
                 <rect x="15" y="78" width="150" height="34" fill="#1e40af" stroke="#3b82f6" stroke-width="1.5"/>
                 <text x="90" y="100" text-anchor="middle" direction="ltr" font-size="13.5" font-weight="700" fill="#fff" font-family="'Segoe UI',Arial,sans-serif">MaintenanceUnit</text>
@@ -2874,7 +2611,7 @@
                 <text x="243" y="90" text-anchor="end" direction="ltr" font-size="10.5" fill="#64748b" font-family="Consolas,monospace">1..*</text>
               </g>
 
-              <!-- DormComplex -->
+              
               <g class="dg d-complex">
                 <rect x="250" y="70" width="200" height="76" fill="#fff" stroke="#3b82f6" stroke-width="1.6"/>
                 <rect x="250" y="70" width="200" height="26" fill="#1e40af"/>
@@ -2885,7 +2622,7 @@
                 <text x="258" y="132" text-anchor="start" direction="ltr" font-size="11.5" fill="#1e293b" font-family="Consolas,monospace">- location : String</text>
               </g>
 
-              <!-- Building + composition from complex -->
+              
               <g class="dg d-building">
                 <polygon points="350,146 344,156 350,166 356,156" fill="#1e40af" stroke="#1e40af"/>
                 <line x1="350" y1="166" x2="350" y2="186" stroke="#334155" stroke-width="1.5"/>
@@ -2895,7 +2632,7 @@
                 <text x="350" y="208" text-anchor="middle" direction="ltr" font-size="13.5" font-weight="700" fill="#fff" font-family="'Segoe UI',Arial,sans-serif">Building</text>
               </g>
 
-              <!-- Apartment + composition from building -->
+              
               <g class="dg d-apartment">
                 <polygon points="350,220 344,230 350,240 356,230" fill="#1e40af" stroke="#1e40af"/>
                 <line x1="350" y1="240" x2="350" y2="258" stroke="#334155" stroke-width="1.5"/>
@@ -2921,7 +2658,7 @@
                 <text x="258" y="334" text-anchor="start" direction="ltr" font-size="11.5" fill="#1e293b" font-family="Consolas,monospace">- intendedYears : StudyYear</text>
               </g>
 
-              <!-- Amenity (תנאים) + many-to-many assoc to apartment -->
+              
               <g class="dg d-amenity">
                 <rect x="15" y="382" width="170" height="34" fill="#1e40af" stroke="#3b82f6" stroke-width="1.5"/>
                 <text x="100" y="404" text-anchor="middle" direction="ltr" font-size="13.5" font-weight="700" fill="#fff" font-family="'Segoe UI',Arial,sans-serif">Amenity</text>
@@ -2930,7 +2667,7 @@
                 <text x="106" y="376" direction="ltr" font-size="10.5" fill="#64748b" font-family="Consolas,monospace">0..*</text>
               </g>
 
-              <!-- Room + composition from apartment -->
+              
               <g class="dg d-room">
                 <polygon points="350,350 344,360 350,370 356,360" fill="#1e40af" stroke="#1e40af"/>
                 <line x1="350" y1="370" x2="350" y2="394" stroke="#334155" stroke-width="1.5"/>
@@ -2954,7 +2691,7 @@
                 <text x="23" y="508" text-anchor="start" direction="ltr" font-size="11" fill="#334155" font-family="Consolas,monospace">ComputerRoom</text>
               </g>
 
-              <!-- Student + assoc to room -->
+              
               <g class="dg d-student">
                 <line x1="350" y1="470" x2="350" y2="514" stroke="#334155" stroke-width="1.5"/>
                 <text x="358" y="482" direction="ltr" font-size="10.5" fill="#64748b" font-family="Consolas,monospace">1</text>
@@ -2971,7 +2708,7 @@
 
       </div>
 
-      <!-- ── per-term popups: verdict + why. Click anywhere to close. ── -->
+      
       <div class="pop" id="dp-university" hidden onclick="this.hidden=true">
         <div class="pop-box"><button class="pop-x">✕</button>
           <div class="pop-h">האוניברסיטה</div><span class="pop-v c">מחלקה — University, גם עם מופע יחיד</span>
@@ -3082,10 +2819,10 @@
         </div>
       </div>
       <aside class="notes">
-        סדר הרצה מומלץ: לקרוא את התרחיש פסקה-פסקה; על כל מונח מודגש — הכיתה מכריעה בקול (מחלקה / תכונה /
+        איך עובדים עם השקף: קוראים את התרחיש פסקה-פסקה; על כל מונח מודגש מכריעים (מחלקה / תכונה /
         רשימת ערכים), ורק אז לוחצים: הפופאפ נותן את ההכרעה והנימוק, והחלק המתאים בתרשים משמאל נדלק. התרשים
-        המלא יושב כצל חיוור מההתחלה — ״התמונה השלמה״ — ומתמלא תוך כדי; בסוף כל הקופסאות דולקות.
-        🆕 <b>האוניברסיטה (דוד, 2026-08-17) — פותחים בה, וזה הכי קל לפספס.</b> היא <b>המילה הראשונה</b> בתרחיש,
+        המלא יושב כצל חיוור מההתחלה (״התמונה השלמה״) ומתמלא תוך כדי; בסוף כל הקופסאות דולקות.
+        <b>האוניברסיטה: פותחים בה, וזה הכי קל לפספס.</b> היא <b>המילה הראשונה</b> בתרחיש,
         ולכן היא נקראת כמו <b>רקע</b> ולא כמו משתתפת — סטודנטים ימדלו את המקבצים וידלגו על מי שמחזיק אותם.
         שווה לשאול לפני הלחיצה: ״קראנו משפט שלם. מה כבר הופיע בו ואף אחד לא אמר?״ ההכרעה עצמה קלה — המערכת
         שומרת עליה שם, כתובת ואיש קשר, והיא הבעלים של כל ההיררכיה ⇒ <b>מחלקה</b>, וזו אותה שורה כמו אב בית
@@ -3099,33 +2836,21 @@
         הכלה פיזית ואילו כאן מדובר בבעלות ארגונית — ולפי הכלל שלנו, מה שאינו בבירור הרכבה מקבל קו רגיל.
         <b>שלוש נקודות עצירה נוספות:</b> (1) <b>אב בית</b> — מופע יחיד הוא עדיין מחלקה (הקפיטריה מהחידון);
         (2) <b>״תנאים״</b> — המלכודת הכפולה: רשימה-בתוך-תכונה וגם רשימה שמנוהלת ע״י אחזקה ⇒ מחלקה Amenity.
-        ⚠️ בכיתה לומר ״רשימה בתוך תכונה״ ולא 1ONF — נירמול נלמד רק בחלק ד (דוד, 2026-08-14); בשקף הנירמול
-        אפשר לחזור לדוגמה הזו ולתת לה את השם;
+        ⚠️ כאן אומרים ״רשימה בתוך תכונה״ ולא 1ONF, כי נירמול נלמד רק בחלק ד; בשקף הנירמול
+        נחזור לדוגמה הזו וניתן לה את השם;
         (3) <b>״כמות הסטודנטים בחדר״</b> — נתון על החדר ולא קרדינליות, כי הדיקאנט משנה אותו (FullTimeStudent 12..18).
-        <b>״חדרים שאינם למגורים״ הוא הד לשקף המגדר</b> (דוד, 2026-08-14: ״איך נדע איזה חדר? נצטרך רשימה״):
+        <b>״חדרים שאינם למגורים״ הוא הד לשקף המגדר</b> (״איך נדע איזה חדר? נצטרך רשימה״):
         לא Boolean — בסיפור כבר שלושה סוגים — אלא kind : RoomKind, ואז המבחן הרגיל: רשימה קבועה ⇒ enum,
         מנוהלת ע״י הנהלת המעונות ⇒ מחלקה. בתרשים מצויר ה-enum.
         <b>הקליק על הדיקאנט הוא הפואנטה של הסוף:</b> שום דבר לא נדלק בתרשים — מי שקובע כלל עסקי אבל לא מנוהל
         במערכת פשוט לא מופיע במודל. ״מספר הדירות בבניין״ — נגזר, סופרים ולא שומרים (itemCount של ההזמנה).
         התרשים באנגלית בלבד, ההסברים בעברית — הכלל הקבוע: מדברים בעברית, רושמים באנגלית.
-        <b>כלל הפופאפים (דוד, 2026-08-14): רק אוצר מילים של חלק ב.</b> בלי ״הרכבה״/◆, בלי קרדינליות
-        (1..*), בלי 1ONF — כל אלה נלמדים אחר-כך. התרשים עצמו <b>כן</b> מציג את המעוינים והריבויים —
-        זה טיזר מכוון לחלק ג; אם נשאלים: ״את הסימנים שעל הקווים נלמד מיד״. הפופאפ של ״כמות הסטודנטים״
-        יקבל את שמו המלא (FullTimeStudent 12..18) רק בשקף ביקורת הקרדינליות.
+        <b>הפופאפים משתמשים רק באוצר מילים של חלק ב.</b> בלי ״הרכבה״/◆, בלי קרדינליות
+        (1..*), בלי 1ONF, כי כל אלה נלמדים אחר-כך. התרשים עצמו <b>כן</b> מציג את המעוינים והריבויים:
+        את הסימנים שעל הקווים נלמד מיד, בחלק ג. ״כמות הסטודנטים״ תקבל את שמה המלא (FullTimeStudent 12..18)
+        בשקף ביקורת הקרדינליות.
       </aside>
     </section>
-    <!-- C (Section ג, part 1) — מפת הקשרים: the whole relationship set as a legend grid.
-         REBUILT 2026-08-30 (David, pre-session): (1) the four DEGREES of association are now visibly
-         INSIDE the association card — a thumbnail ladder — and clicking the card zooms into the full
-         ladder with a glyph per degree (students used to read the bottom strip as a 5th/6th kind);
-         (2) aggregation + composition merged into ONE whole–part card (◇/◆) that zooms the same way,
-         so the map shows FOUR kinds of relationship and two of them open; (3) interface/API stays out
-         on purpose — see the 2026-08-17 note below and in the speaker notes.
-         Overlay pattern = slide-relationship-or-not (inline onclick, no <script>, .rq/.rq-box).
-         Glyphs + doctrine per ../SAD MCP/skills/uml-class-diagram/NOTATION.md:
-         association = solid line no arrow; aggregation = hollow ◇ at whole (identify only, draw a
-         plain line); composition = filled ◆ at whole; generalization = hollow ▷ at parent;
-         dependency = dashed + open arrow, NOT drawn on the domain model (external systems only). -->
     <section data-slug="relationships-map" class="has-acro-footer">
       <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
       <style>
@@ -3211,7 +2936,7 @@
 
         <div class="rel-grid">
 
-          <!-- 1. Association — with the four degrees INSIDE the card (thumbnail) -->
+          
           <div class="card zoom" onclick="document.getElementById('rm-assoc').hidden=false">
             <svg class="glyph" viewBox="0 0 110 40" role="img" aria-label="קו מלא בלי חץ — אסוציאציה">
               <line x1="8" y1="20" x2="102" y2="20" stroke="#334155" stroke-width="2"/>
@@ -3233,7 +2958,7 @@
             </div>
           </div>
 
-          <!-- 2. Whole–part — aggregation + composition in ONE card (merged 2026-08-30) -->
+          
           <div class="card zoom" onclick="document.getElementById('rm-part').hidden=false">
             <svg class="glyph two" viewBox="0 0 160 40" role="img" aria-label="שני קווים: מעוין חלול ומעוין מלא בקצה השלם">
               <line x1="30" y1="12" x2="150" y2="12" stroke="#334155" stroke-width="2"/>
@@ -3254,7 +2979,7 @@
             </div>
           </div>
 
-          <!-- 3. Generalization -->
+          
           <div class="card">
             <svg class="glyph" viewBox="0 0 110 40" role="img" aria-label="קו עם משולש חלול בקצה ההורה — הכללה">
               <line x1="26" y1="20" x2="102" y2="20" stroke="#334155" stroke-width="2"/>
@@ -3282,12 +3007,9 @@
             </div>
           </div>
 
-          <!-- REMOVED 2026-08-17: the interface card (ball-and-socket). Interface slides were parked
-               2026-08-15 (concept only, we do NOT draw «interface» or realization); nothing downstream
-               teaches that notation. Re-checked 2026-08-30 (David asked "are we missing interfaces?") —
-               still out, same reason. Answer if asked: what we DRAW is a dependency to «external system». -->
+          
 
-          <!-- 4. Dependency -->
+          
           <div class="card">
             <svg class="glyph" viewBox="0 0 110 40" role="img" aria-label="קו מקווקו עם חץ פתוח — תלות">
               <line x1="20" y1="20" x2="102" y2="20" stroke="#334155" stroke-width="2" stroke-dasharray="6,4"/>
@@ -3317,7 +3039,7 @@
 
       </div>
 
-      <!-- ── overlay 1: the four degrees of association ─────────────────────── -->
+      
       <div class="rq" id="rm-assoc" hidden onclick="this.hidden=true">
         <div class="rq-box" onclick="event.stopPropagation()">
           <button class="rq-x" onclick="this.closest('.rq').hidden=true">✕</button>
@@ -3405,7 +3127,7 @@
         </div>
       </div>
 
-      <!-- ── overlay 2: whole–part — ◇ vs ◆ ─────────────────────────────────── -->
+      
       <div class="rq" id="rm-part" hidden onclick="this.hidden=true">
         <div class="rq-box" onclick="event.stopPropagation()">
           <button class="rq-x" onclick="this.closest('.rq').hidden=true">✕</button>
@@ -3458,29 +3180,28 @@
 
       <aside class="notes">
         מפת הקשרים לסעיף. ארבעה סוגים על השקופית: אסוציאציה (קו מלא בלי חץ), שלם–חלק (מעוין על השלם — חלול
-        ◇ לצבירה, מלא ◆ להרכבה; כרטיס אחד משותף מאז 2026-08-30), הכללה (משולש חלול אל ההורה), תלות (מקווקו
+        ◇ לצבירה, מלא ◆ להרכבה; כרטיס אחד משותף), הכללה (משולש חלול אל ההורה), תלות (מקווקו
         + חץ פתוח — למערכות חיצוניות שאנחנו קוראים להן; המערכת החיצונית מצוירת כתיבה עם הסטריאוטיפ
         «external system», כלומר אינה אחת ממחלקות התחום שלנו).
         <b>שני כרטיסים נפתחים בלחיצה.</b> הכרטיס הראשון — ארבע הדרגות של אסוציאציה, עם ציור לכל דרגה
-        (רגיל / מחלקת קשר / מחלקה מתווכת / n-ary); הכרטיס השני — ◇ מול ◆ עם המבחנים והמדיניות. פותחים את הראשון
-        בשקופית הזו, ואת השני אפשר לפתוח כאן בקצרה או להשאיר לשקופיות ההרכבה והצבירה (C10–C11).
+        (רגיל / מחלקת קשר / מחלקה מתווכת / n-ary); הכרטיס השני — ◇ מול ◆ עם המבחנים והמדיניות. את השני מפרטות
+        גם שקופיות ההרכבה והצבירה (C10–C11).
 
-        ⚠️ <b>הבהרה שחייבים לומר (David, 2026-08-11; זו הסיבה שהסולם עבר לתוך הכרטיס ב-2026-08-30):</b>
+        ⚠️ <b>הבהרה חשובה:</b>
         ארבע הדרגות אינן סוגי קשר נוספים — <b>כולן Association</b>, כלומר ארבע דרגות של הכרטיס הראשון בלבד.
-        שלם–חלק, הכללה ותלות אינם חלק מהסולם הזה. הדרך הנוחה להגיד את זה: ״למעלה — <b>איזה סוג קשר</b>;
-        בתוך הכרטיס — <b>כמה מסובך הקשר הרגיל שלנו</b>״. הסולם ישב פעם כרצועה מתחת לכל הכרטיסים וסטודנטים קראו
-        אותו כסוג חמישי-שישי; עכשיו הוא פיזית בתוך הכרטיס.
+        שלם–חלק, הכללה ותלות אינם חלק מהסולם הזה. במילים אחרות: ״למעלה — <b>איזה סוג קשר</b>;
+        בתוך הכרטיס — <b>כמה מסובך הקשר הרגיל שלנו</b>״. לכן הסולם נמצא
+        בתוך הכרטיס הראשון ולא כרצועה מתחת לכל הכרטיסים: הוא אינו סוג קשר חמישי או שישי.
         ודיוק נוסף: <b>מחלקה מתווכת</b> אינה סימון על הקשר אלא <b>מחליפה</b> אותו — מוחקים את קשר הרבים-לרבים ובמקומו
         שתי אסוציאציות ומחלקה באמצע. מחלקת קשר, לעומת זאת, נשארת תלויה על הקשר הקיים. קשר n-ary — תמיד לפרק
         למחלקה מתווכת; ולהזהיר שהמעוין שלו יושב במרכז ואינו ה-◇/◆ שיושבים בקצה קו.
 
-        ℹ️ <b>אם סטודנט שואל על ממשק / API (2026-08-17, אושר שוב 2026-08-30).</b> עד 2026-08-17 היה כאן כרטיס
-        ממשק, עם סמל ה״כפתור והשקע״. הוא <b>הוסר</b>: שקפי הממשק הוצאו מהקורס (2026-08-15, ״מושג בלבד״), ולכן המפה
-        הבטיחה סימון שאיש אינו מלמד. התשובה בעל-פה, אם עולה: מה ש<b>מציירים</b> הוא <b>תלות</b> — קו מקווקו אל
+        ℹ️ <b>ומה עם ממשק / API?</b> במפה אין כרטיס ממשק, כי בקורס ממשק הוא מושג בלבד ולא סימון. מה
+        ש<b>מציירים</b> הוא <b>תלות</b>: קו מקווקו אל
         <span class="en">«external system»</span>; ה״ממשק״ הוא ה-<span class="en">API</span> שדרכו קוראים,
         כלומר קופסה שחורה עם חוזה מוגדר. קו התלות אומר <b>ש</b>אנחנו תלויים; שם ה-API אומר <b>במה בדיוק</b>.
         זה לא סוג קשר נוסף ואינו נדרש בתרשים.
-        ℹ️ <b>למרצה — מה עוד לא נמצא כאן ולמה.</b> בתקן יש גם <b>מימוש (Realization)</b> — קו מקווקו עם
+        ℹ️ <b>מה עוד לא נמצא כאן, ולמה.</b> בתקן יש גם <b>מימוש (Realization)</b> — קו מקווקו עם
         משולש חלול, ממחלקה אל <span class="en">«interface»</span>. הוא <b>לא נלמד בקורס</b> (כך גם ב-NOTATION.md
         של הכלי: ״Realization — ❌ not in lectures״), וה״ממשק״ שאנחנו מלמדים בשקופית התלות הוא <b>מושג</b> —
         ה-API של מערכת חיצונית כקופסה שחורה — ולא מחלקה מסוג interface שמציירים. לכן הוא לא מופיע במפה, ולכן
@@ -3492,13 +3213,6 @@
       </aside>
     <div class="acro-footer"><span class="acro"><span class="en">CRUD</span> = <span class="en">Create, Read, Update, Delete</span> · יצירה, קריאה, עדכון, מחיקה</span> &nbsp;·&nbsp; <span class="acro"><span class="en">AI</span> = <span class="en">Artificial Intelligence</span> · בינה מלאכותית</span></div>
     </section>
-    <!-- C (Section ג) — Association + Multiplicity. The core line, on campus data.
-         SVG: סטודנט 1 ——— 0..* הזמנה — SOLID line, NO arrowhead, multiplicity at BOTH ends.
-         Doctrine (../SAD MCP/skills/uml-class-diagram/NOTATION.md): association = solid line
-         no arrow (directed association never used on a domain model); multiplicity at both
-         ends ALWAYS (1 / 0..1 / 1..* / 0..*). Two tiny extras: a recursive/self association
-         (קטגוריה) and the {or} constraint. ⚠️: AI leaves an end blank or guesses 1.
-         Class-box SVG convention: white rect, #3b82f6 border, #1e40af header w/ white name. -->
     <section data-slug="association-multiplicity" class="has-acro-footer">
       <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
       <style>
@@ -3535,13 +3249,13 @@
             <div class="panel-title" style="color:var(--blue);">דוגמה מהקמפוס</div>
             <svg class="assoc-svg" viewBox="0 0 560 120" xmlns="http://www.w3.org/2000/svg" role="img"
                  aria-label="סטודנט אחד מקושר בקו מלא לאפס או יותר הזמנות">
-              <!-- association line: SOLID, no markers -->
+              
               <line x1="380" y1="60" x2="195" y2="60" stroke="#334155" stroke-width="1.8"/>
-              <!-- multiplicity at BOTH ends -->
+              
               <text x="366" y="52" text-anchor="middle" font-size="14" fill="#64748b" font-family="Arial,sans-serif">1</text>
               <text x="210" y="52" text-anchor="middle" font-size="14" fill="#64748b" font-family="Arial,sans-serif">0..*</text>
 
-              <!-- סטודנט (right) -->
+              
               <g transform="translate(380,28)">
                 <rect width="165" height="64" fill="#fff" stroke="#3b82f6" stroke-width="1.6"/>
                 <rect width="165" height="24" fill="#1e40af"/>
@@ -3550,7 +3264,7 @@
                 <text x="8" y="57" font-size="11.5" fill="#1e293b" font-family="Arial,sans-serif">- name : String</text>
               </g>
 
-              <!-- הזמנה (left) -->
+              
               <g transform="translate(20,28)">
                 <rect width="175" height="64" fill="#fff" stroke="#3b82f6" stroke-width="1.6"/>
                 <rect width="175" height="24" fill="#1e40af"/>
@@ -3591,14 +3305,13 @@
         <div class="cols mini-cols">
           <div class="card">
             <div class="panel-title">קשר רקורסיבי (מחלקה לעצמה)</div>
-            <!-- Enlarged 2026-08-11: at 190x90 the loop plus the new role labels were unreadable.
-                 Role names sit OUTSIDE the loop's span so they never touch the curve. -->
+            
             <svg class="self-svg" viewBox="0 0 240 118" xmlns="http://www.w3.org/2000/svg" role="img"
                  aria-label="Category מקושרת לעצמה — תפקיד הורה בקצה אחד, תת-קטגוריות בקצה השני">
               <path d="M145,70 C185,20 55,20 95,70" fill="none" stroke="#334155" stroke-width="1.8"/>
               <text x="154" y="63" font-size="12" fill="#64748b" font-family="Arial,sans-serif">0..*</text>
               <text x="82"  y="63" font-size="12" fill="#64748b" font-family="Arial,sans-serif">1</text>
-              <!-- role names — optional in general, near-essential on a recursive association -->
+              
               <text x="186" y="45" text-anchor="middle" direction="rtl" font-size="12" fill="#E86C00" font-weight="700"
                     font-family="'Noto Sans Hebrew',sans-serif">תת-קטגוריות</text>
               <text x="52"  y="45" text-anchor="middle" direction="rtl" font-size="12" fill="#E86C00" font-weight="700"
@@ -3623,12 +3336,12 @@
 
       </div>
       <aside class="notes">
-        <b>שלושה דברים שנוספו לכרטיס הכללים (David, 2026-08-30):</b>
+        <b>שלושה כללים מכרטיס הכללים:</b>
         (1) <b>אין קרדינליות מספרית</b> — לא <code>0..3</code>, לא <code>2</code>, לא <code>1..20</code>. ארבע הצורות הן כל אוצר
         המילים; מספר ספציפי הוא כלל עסקי שישתנה, ומקומו ב-<code>{אילוץ}</code> — שקף 32 מרחיב (ושם גם החריג היחיד: מספר הגדרתי).
         (2) <b>לא M ו-N</b> — זה סימון של ERD/מסדי נתונים, וסטודנטים גוררים אותו מקורס מסדי נתונים. ב-UML כותבים
         <code>0..*</code> / <code>1..*</code>; ״M:N״ נאמר בעל-פה כשמדברים על קשר רבים-לרבים, אבל לא נכתב על הקו.
-        (3) <b>מוסכמת הקורס לקצה ריק:</b> קצה בלי קרדינליות נקרא כ-<code>*</code>. להדגיש שזו מוסכמה <b>שלנו</b> — ב-UML
+        (3) <b>מוסכמת הקורס לקצה ריק:</b> קצה בלי קרדינליות נקרא כ-<code>*</code>. שימו לב שזו מוסכמה <b>שלנו</b> — ב-UML
         קצה ריק פירושו ״לא צוין״, לא ״רבים״. המשמעות המעשית: השמטה אף פעם לא מבטאת 1; מי שמתכוון ל-1 חייב לכתוב.
         זה לא סותר את ״קרדינליות בשני הקצוות — תמיד״: הכלל לכתיבה נשאר, המוסכמה היא לקריאה של מה שכבר צויר (ובבדיקה).
         הקו הבסיסי: אסוציאציה = קו מלא בלי חץ, קרדינליות בשני הקצוות תמיד. סטודנט 1 — 0..* הזמנה.
@@ -3644,30 +3357,13 @@
         1, תת-קטגוריות 0..*) ואילוץ {or} (הזמנה משולמת בכרטיס אוניברסיטה או באשראי, לא בשניהם).
         ה-AI נוטה להשאיר קצה בלי קרדינליות או לנחש 1 — זו נקודת אימות.
       
-        <b>שמות תפקיד (role names) — אופציונלי, וכדאי להראות (David, 2026-08-11).</b> אפשר לכתוב על כל קצה של קשר
+        <b>שמות תפקיד (role names): אופציונלי.</b> אפשר לכתוב על כל קצה של קשר
         את <b>התפקיד</b> שהמחלקה ממלאת בו. ברוב הקשרים זה מיותר — ״סטודנט מבצע הזמנות״ ברור מאליו. אבל בקשר
         <b>רקורסיבי</b> זה כמעט הכרחי: שני הקצוות הם אותה מחלקה, ובלי ״הורה״ ו״תת-קטגוריות״ אי אפשר לדעת מי מי.
-        הכלל שאפשר לתת: אם קוראים את הקשר בקול ולא ברור מי עושה מה — הוסיפו שמות תפקיד.
+        הכלל: אם קוראים את הקשר בקול ולא ברור מי עושה מה — הוסיפו שמות תפקיד.
       </aside>
     <div class="acro-footer"><span class="acro"><span class="en">UML</span> = <span class="en">Unified Modeling Language</span> · שפת מידול אחידה</span> &nbsp;·&nbsp; <span class="acro"><span class="en">AI</span> = <span class="en">Artificial Intelligence</span> · בינה מלאכותית</span></div>
     </section>
-    <!-- C3 — הקרדינליות הקלאסית — ולמה רובה שגויה. REBUILT as 3-state cards 2026-08-14 per David:
-         "I want cards again. Each card has the example (in a class diagram view). One click — we see the
-         problems. Second click gives a good model."
-         David's three teaching comments, which are now the content:
-           · Husband/Wife — "not realistically true and is culture dependent. bad design"
-           · EggBox — "each egg would need to be distinguished, which is not the case"
-           · CreditHour — "a credit hour is a problem just like an egg. it's not an object"
-         ⇒ The slide now carries TWO messages, not one: (1) cardinality is a business decision, and
-         (2) sometimes the NUMBER is wrong because the CLASS is wrong — if you cannot tell two instances
-         apart and store nothing about them, it is a QUANTITY (attribute), not a class. Cards 3+4 share
-         that punchline, which is the persistence test from section ב coming back inside section ג.
-         3-state cycle with no <script>: inline onclick advances data-s 0→1→2→0 and rewrites className.
-           s0 = the classic example as a mini class diagram · s1 = what's wrong · s2 = a good model.
-         ⚠️ VOCABULARY: מחלקה מתווכת / הרכבה are taught AFTER this slide (C4, C5) — the Marriage fix is
-         drawn plainly and called ״מחלקה נפרדת״; the notes flag it as the setup for C4. Multiplicity itself
-         IS taught (C2, previous slide), so 0..* / 2..* are fair game.
-         SVG carries English identifiers only (standing bidi rule); all Hebrew lives in HTML. -->
     <section data-slug="cardinality-critique" class="has-acro-footer">
       <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
       <style>
@@ -3728,7 +3424,7 @@
 
         <div class="cards">
 
-          <!-- ── 1. Husband / Wife ── -->
+          
           <div class="qc s0" data-s="0" onclick="this.dataset.s=(+this.dataset.s+1)%3;this.className='qc s'+this.dataset.s">
             <div class="qt">בעל ואישה</div>
             <div class="dia">
@@ -3766,7 +3462,7 @@
             <div class="hint"><span class="h0x">👆 מה הבעיה?</span><span class="h1x">👆 מודל טוב</span><span class="h2x">👆 חזרה</span></div>
           </div>
 
-          <!-- ── 2. Teacher / Student ── -->
+          
           <div class="qc s0" data-s="0" onclick="this.dataset.s=(+this.dataset.s+1)%3;this.className='qc s'+this.dataset.s">
             <div class="qt">מורה ותלמיד</div>
             <div class="dia">
@@ -3800,7 +3496,7 @@
             <div class="hint"><span class="h0x">👆 מה הבעיה?</span><span class="h1x">👆 מודל טוב</span><span class="h2x">👆 חזרה</span></div>
           </div>
 
-          <!-- ── 3. EggBox / Egg — the "not an object" card ── -->
+          
           <div class="qc s0" data-s="0" onclick="this.dataset.s=(+this.dataset.s+1)%3;this.className='qc s'+this.dataset.s">
             <div class="qt">קופסת ביצים</div>
             <div class="dia">
@@ -3833,7 +3529,7 @@
             <div class="hint"><span class="h0x">👆 מה הבעיה?</span><span class="h1x">👆 מודל טוב</span><span class="h2x">👆 חזרה</span></div>
           </div>
 
-          <!-- ── 4. FullTimeStudent / CreditHour — same disease ── -->
+          
           <div class="qc s0" data-s="0" onclick="this.dataset.s=(+this.dataset.s+1)%3;this.className='qc s'+this.dataset.s">
             <div class="qt">נקודות זכות</div>
             <div class="dia">
@@ -3884,35 +3580,35 @@
 
       </div>
       <aside class="notes">
-        השקופית קיימת במצגת המקורית כדוגמאות ״נכונות״ מספר לימוד, ודוד השתמש בה הפוך — <b>כדי להראות שרובן שגויות</b>.
-        הפעלה: להראות כרטיס, לתת לכיתה לנסח מה מפריע, ורק אז ללחוץ. לחיצה ראשונה = הבעיות, שנייה = מודל טוב,
+        אלה דוגמאות שמופיעות בספרי לימוד כ״נכונות״, ו<b>רובן שגויות</b>.
+        בכל כרטיס: נסו לנסח מה מפריע לפני הלחיצה. לחיצה ראשונה = הבעיות, שנייה = מודל טוב,
         שלישית = חזרה לדוגמה המקורית (שימושי כשרוצים לחזור ולהשוות).
         <b>שני מסרים, לא אחד.</b> (1) קרדינליות היא החלטה עסקית ולא עובדת טבע. (2) <b>לפעמים המספר שגוי כי
         המחלקה שגויה</b> — וזה החידוש בשני הכרטיסים האחרונים.
-        <b>בעל/אישה (הערת דוד):</b> זה לא רק ״חסרה היסטוריה״ — זה פשוט <b>לא נכון במציאות ותלוי תרבות וחוק</b>:
+        <b>בעל/אישה:</b> זה לא רק ״חסרה היסטוריה״ — זה פשוט <b>לא נכון במציאות ותלוי תרבות וחוק</b>:
         יש מדינות שבהן הקשר אינו אחד-לאחד, ויש נישואים חד-מיניים ששוברים את עצם השמות. מודל שקובע מדיניות חברתית
         במבנה שלו הוא <b>עיצוב גרוע</b> — כי כל שינוי חוק שובר את התוכנה. Person + Marriage עם תאריכים פותר
         את שניהם: היסטוריה, וגם גמישות תרבותית שהיא נתון ולא מבנה. (זה גם בדיוק הדפוס שנקבל לו שם בשקף הבא.)
         <b>מורה/תלמיד:</b> ההרגל שצריך לקבע — לקרוא כל קשר <b>פעמיים</b>, אחד מכל כיוון.
-        <b>ולמה המודל המתוקן הוא 0..* ולא 1..*</b> (שאלת דוד, 2026-08-14 — והיא חושפת מלכודת יפה): גם
+        <b>ולמה המודל המתוקן הוא 0..* ולא 1..*</b> (שאלה שחושפת מלכודת יפה): גם
         <code>1..*</code> היה נופל בדיוק בחטא שהשקופית מבקרת. <b>גבול תחתון של 1 הוא הבטחה שהאובייקט לא יכול
         להתקיים בלי הקשר — כולל ברגע היווצרותו.</b> תלמיד שזה עתה נרשם עדיין אין לו מורה; אם נכתוב
         <code>1..*</code> המערכת לא תוכל בכלל ליצור אותו לפני שיבוץ. זה גם מה שקורה כששואלים את שאלה 1 מלמטה
         (״תמיד?״) על התיקון שלנו עצמו. <b>המסר: רוב הקשרים בניתוח הם באמת 0..* בשני הקצוות; גבול תחתון 1 צריך
         הצדקה של מחזור חיים, לא של ״ככה זה בדרך כלל״.</b>
-        <b>למה במודל המתוקן כתוב 1..* ולא 2..*</b> (תוקן 2026-08-15): ״לפחות שניים״ הוא <b>חוק</b>, לא מבנה —
+        <b>למה במודל המתוקן כתוב 1..* ולא 2..*:</b> ״לפחות שניים״ הוא <b>חוק</b>, לא מבנה —
         ומספרים ספציפיים אינם נאכפים בכלום ומקבעים מדיניות שמשתנה. לכן בתרשים רק <code>1..*</code>
         (נישואים לא קיימים בלי משתתפים), וה״כמה בדיוק״ הוא אילוץ + נתון. זה בדיוק הנושא של השקף הבא.
         <b>ועל הסימון עצמו:</b> <code>*</code> ו-<code>0..*</code> זהים לחלוטין ב-UML. בקורס כותבים תמיד את
         הצורה המפורשת <code>0..*</code> (ארבע הצורות משקף 32) — כי הגבול <b>התחתון</b> הוא בדיוק המקום שבו
         מסתתרות ההנחות, וכוכבית לבדה מסתירה אותו; סטודנטים גם נוטים לקרוא <code>*</code> כ״הרבה״, כלומר לפחות
         אחד. אבל צריך לדעת <b>לקרוא</b> <code>*</code> — כלים וטיוטות AI פולטים אותו.
-        <b>ביצים (הערת דוד):</b> השגיאה העמוקה אינה 12,24 אלא ש<b>ביצה כלל אינה אובייקט</b> — כדי שתהיה מחלקה
+        <b>ביצים:</b> השגיאה העמוקה אינה 12,24 אלא ש<b>ביצה כלל אינה אובייקט</b> — כדי שתהיה מחלקה
         צריך שנרצה להבחין בין מופע למופע ולשמור עליו משהו, ואיש אינו עוקב אחרי ביצה מספר 7. זה מבחן הקיימוּת
         מחלק ב׳ חוזר בתוך חלק ג׳. הכלל למבחן: <b>אם אי אפשר להבחין בין המופעים ולא שומרים עליהם דבר — זו כמות
-        (תכונה), לא מחלקה.</b> ובנוסף, כן, <code>12,24</code> אינו טווח (<code>0..24</code>) — שווה לתקן בקול,
-        זה נבדק. אותו דבר ב-<code>House 1 —— 0,1 Chimney</code>: הסימון הוא <code>0..1</code>, ויש בתים עם שתי ארובות.
-        <b>נקודות זכות (הערת דוד):</b> ״נקודת זכות היא בעיה בדיוק כמו ביצה — היא לא אובייקט״. שלוש בעיות
+        (תכונה), לא מחלקה.</b> ובנוסף, כן, <code>12,24</code> אינו טווח (<code>0..24</code>), וזה
+        נבדק. אותו דבר ב-<code>House 1 —— 0,1 Chimney</code>: הסימון הוא <code>0..1</code>, ויש בתים עם שתי ארובות.
+        <b>נקודות זכות:</b> ״נקודת זכות היא בעיה בדיוק כמו ביצה — היא לא אובייקט״. שלוש בעיות
         בכרטיס אחד: אובייקט מדומה, חוק עסקי שהוטמע במבנה, ומחלקה ששמה <b>סטטוס</b>. אם הסטטוס משתנה, הסטודנט
         צריך ״להחליף מחלקה״ — סימן מובהק שהמידול שגוי; סטטוס הוא תכונה.
         <b>אזהרת אוצר מילים:</b> מחלקה מתווכת והרכבה עדיין לא נלמדו — לכן Marriage מוצג כ״מחלקה נפרדת״ בלבד.
@@ -3922,24 +3618,6 @@
       </aside>
     <div class="acro-footer"><span class="acro"><span class="en">UML</span> = <span class="en">Unified Modeling Language</span> · שפת מידול אחידה</span> &nbsp;·&nbsp; <span class="acro"><span class="en">AI</span> = <span class="en">Artificial Intelligence</span> · בינה מלאכותית</span></div>
     </section>
-    <!-- C4 — איזו קרדינליות כותבים, ומה כבר שייך למימוש. REBUILT 2026-08-15.
-         v1 (2026-08-14) answered David's runtime-parameter question but he called it "too loaded":
-         "focus the message into what cardinality to use and what not to use (remember we are in DESIGN
-         phase - not implementation) and I would like to show how the design class diagram would be
-         translated into implementation class diagram so students understand the difference in stage.
-         In our case, students design and we tell claude to develop based on the design."
-         So the slide now does exactly two things:
-           (1) ✓/✗ — the four forms are the whole vocabulary; specific numbers are NOT cardinality.
-           (2) the SAME relationship drawn twice — תרשים עיצוב (what students hand over) vs
-               תרשים מימוש (what the AI derives) — so the stage boundary is visible, not asserted.
-         The NOT NULL/ORM table and the concurrency trap moved OUT to the speaker notes (they were the
-         "loaded" half); the notes keep the full answer for the instructor.
-         BONUS — this closes an open item from 2026-08-11: the sample project's classes are an
-         IMPLEMENTATION view (Order { -Worker worker }), which looks like it contradicts the lecture.
-         Naming the two views here is the "cheap fix" the dossier asked for.
-         ⚠️ VOCABULARY: mediating class (C7) / composition (C8) not yet taught — plain lines, no diamonds.
-         ״אובייקט כתכונה״ is described in plain words, NOT as 2ONF (section ד).
-         SVG: English identifiers only + the LTR text guard. -->
     <section data-slug="cardinality-vs-rules" class="has-acro-footer">
       <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
       <style>
@@ -4000,7 +3678,7 @@
       <div class="subtitle">אנחנו ב<b>שלב העיצוב</b>. התרשים שלכם הוא המפרט — והמימוש נגזר ממנו</div>
       <div class="body">
 
-        <!-- (1) the vocabulary: what to write, what never to write -->
+        
         <div class="vocab">
           <div class="vb ok">
             <div class="vh">✓ ארבע צורות — וזה הכול</div>
@@ -4018,16 +3696,15 @@
           </div>
         </div>
 
-        <!-- (2) the SAME relationship, two stages -->
+        
         <div class="stages">
 
-          <!-- RIGHT (RTL-first): the design diagram — what students hand over -->
+          
           <div class="st design">
             <div class="sh">תרשים העיצוב — <span class="en">Design</span><small>התרשים היחיד שאתם מציירים ומוסרים</small></div>
             <svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg" role="img"
                  aria-label="Design: Cafeteria 1 to 0..* Order, Order 1 to 0..* OrderLine, with a constraint note referencing cafeteria.maxOrderLines">
-              <!-- Cafeteria IS in the diagram (David, 2026-08-30: the code referenced a class the diagram never
-                   showed). The limit is its attribute — that is where a business number lives. -->
+              
               <rect x="4" y="14" width="108" height="54" fill="#fff" stroke="#3b82f6" stroke-width="1.6"/>
               <rect x="4" y="14" width="108" height="26" fill="#1e40af"/>
               <text x="58" y="32" text-anchor="middle" font-size="13" font-weight="700" fill="#fff" font-family="'Segoe UI',Arial,sans-serif">Cafeteria</text>
@@ -4047,7 +3724,7 @@
               <rect x="316" y="24" width="80" height="34" fill="#1e40af" stroke="#3b82f6" stroke-width="1.6"/>
               <text x="356" y="46" text-anchor="middle" font-size="12.5" font-weight="700" fill="#fff" font-family="'Segoe UI',Arial,sans-serif">OrderLine</text>
 
-              <!-- the constraint hangs on a NOTE attached by a dashed line to the Order–OrderLine ASSOCIATION -->
+              
               <line x1="286" y1="41" x2="286" y2="98" stroke="#d1a441" stroke-width="1.4" stroke-dasharray="5 3"/>
               <path d="M60 98 L340 98 L368 126 L368 172 L60 172 Z" fill="#fffbeb" stroke="#d1a441" stroke-width="1.6"/>
               <path d="M340 98 L340 126 L368 126" fill="none" stroke="#d1a441" stroke-width="1.6"/>
@@ -4059,9 +3736,7 @@
               והחוק עצמו כבר קיים ב<b>קטלוג</b> מהרצאה 3 — לכן מפנים אליו (<span class="en" dir="ltr">BR-7</span>) במקום לשכתב אותו.</div>
           </div>
 
-          <!-- LEFT: the CODE the AI derives from the design diagram. Until 2026-08-30 this was a second
-               class diagram ("implementation diagram") — David: showing students two class diagrams and
-               telling them to draw only one is confusing. Now: one diagram (theirs) → the code (the AI's). -->
+          
           <div class="st impl">
             <div class="sh">הקוד — <span class="en">Code</span><small>מה שה-<span class="en">AI</span> גוזר מהתרשים שלכם. אתם לא כותבים אותו ולא מציירים אותו</small></div>
             <pre class="code"><span class="kw">class</span> <span class="ty">Order</span> {
@@ -4089,11 +3764,10 @@
 
       </div>
       <aside class="notes">
-        <b>למה אין כאן תרשים מימוש (David, 2026-08-30):</b> עד היום השקופית הראתה <i>שני</i> תרשימי מחלקות ואמרה
-        ״ציירו רק את הימני״ — וזה בלבל: סטודנטים ראו שני תרשימים ולא ידעו איזה נדרש. עכשיו יש תרשים אחד (שלהם)
-        ומולו <b>הקוד</b> שה-AI גוזר ממנו. המסר: אתם מציירים תרשים אחד; מה שמימין הופך לשדות, רשימה ופעולה —
-        ואת זה אף אחד לא מבקש מכם לצייר. אם סטודנט ראה בכלי או בפרויקט הדוגמה מחלקות עם <code>List&lt;…&gt;</code>
-        ושדות של מחלקות אחרות — זה הקוד/המימוש שצויר כתרשים, לא מה שמוסרים בקורס.
+        <b>למה אין כאן תרשים מימוש:</b> בשקופית יש תרשים אחד (שלכם) ומולו <b>הקוד</b> שה-AI גוזר ממנו.
+        המסר: אתם מציירים תרשים אחד; מה שמימין הופך לשדות, רשימה ופעולה, ואת זה אף אחד לא מבקש מכם לצייר.
+        אם ראיתם בכלי או בפרויקט הדוגמה מחלקות עם <code>List&lt;…&gt;</code> ושדות של מחלקות אחרות, זה
+        הקוד/המימוש שצויר כתרשים, לא מה שמוסרים בקורס.
         <b>הפוקוס של השקף:</b> איזו קרדינליות כותבים, ואיפה עובר הגבול בין עיצוב למימוש. אנחנו בשלב העיצוב —
         ולכן התרשים אומר <b>מה</b> נכון, לא <b>איך</b> מממשים.
         <b>(1) ארבע צורות, וזה הכול.</b> הן אינן רשימה לשינון אלא התשובות לשתי שאלות: האם זה יכול להיות אפס
@@ -4107,7 +3781,7 @@
         <b>ואיפה החוק כן חי:</b> ערך (תכונה על מי שמחזיק בחוק — <code>Cafeteria.maxOrderLines</code>, בדיוק כמו
         מע״מ וגודל הזמנה מקסימלי מחידון ״מחלקה או לא״) ← אילוץ בתרשים שאומר שיש גבול ומאיפה הוא ← פעולה בקוד
         שאוכפת. שלוש שכבות, ורק האחרונה באמת אוכפת.
-        <b>״אז איפה בדיוק כותבים את זה בתרשים?״ (שאלת דוד, 2026-08-15) — שתי אפשרויות, שתיהן חוקיות:</b>
+        <b>״אז איפה בדיוק כותבים את זה בתרשים?״ שתי אפשרויות, שתיהן חוקיות:</b>
         (א) <b>אילוץ קצר ישירות ליד קצה הקשר</b>, בסוגריים מסולסלים; (ב) <b>פתק (Note)</b> — אותו סמל
         פינה-מקופלת שנלמד בשקף 14 — <b>מחובר בקו מקווקו לקו הקשר</b>, ובתוכו האילוץ. מחברים אל <b>הקשר</b> כי
         החוק הוא על הקשר; אילוץ על תכונה בודדת נכתב עליה או על המחלקה. כלל אצבע: יותר משתיים-שלוש מילים —
@@ -4142,21 +3816,6 @@
       </aside>
     <div class="acro-footer"><span class="acro"><span class="en">AI</span> = <span class="en">Artificial Intelligence</span> · בינה מלאכותית</span></div>
     </section>
-    <!-- C5 — מחלקת קשר: מה זה, איך מציירים, ומתי מותר. NEW 2026-08-15 (David: "I want to separate
-         the association class from the מחלקה מתווכת. I want to show when and how to use the association
-         [class]. when only one object exists on a relation. what else?").
-         The old single slide C5 (association-mediating-class) taught the two concepts side by side, with
-         the mediating class as the hero and the association class as a footnote. It is now THREE slides:
-           C5 (this)  — מחלקת קשר: notation + the three when-tests
-           C6         — מחלקת קשר היא מחלקה לכל דבר (פעולות + קשרים) — David's two follow-ups
-           C7         — מחלקה מתווכת: when the pair repeats / the thing has its own life + the comparison
-         THE DECISIVE TEST, and the reason the split is worth three slides: **הצמד מזהה את המופע**.
-         That is UML's own semantics — a link is identified by the objects it connects, so there cannot be
-         two instances of the association class between the same pair. Everything else (no lifecycle of its
-         own, no business id) follows from it. David's classroom example lives on C6.
-         ⚠️ VOCABULARY: מחלקה מתווכת is taught on the NEXT slide — don't name it here; the caption says only
-         that a case exists where this does not hold.
-         SVG: English identifiers only + the LTR text guard (else 0..* renders as *..0). -->
     <section data-slug="association-class" class="has-acro-footer">
       <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
       <style>
@@ -4209,7 +3868,7 @@
 
         <div class="top">
 
-          <!-- RIGHT (RTL-first): the notation -->
+          
           <div class="card dia-card">
             <div class="panel-title" style="color:var(--dark-blue);">איפה שמים את הציון?</div>
             <div class="tries">
@@ -4218,21 +3877,21 @@
             </div>
             <svg viewBox="0 0 560 205" xmlns="http://www.w3.org/2000/svg" role="img"
                  aria-label="Student 0..* to 0..* Course, with an Enrollment association class hanging from the midpoint by a dashed line">
-              <!-- the association itself: solid, no arrowhead -->
+              
               <line x1="405" y1="40" x2="155" y2="40" stroke="#334155" stroke-width="1.8"/>
               <text x="393" y="32" text-anchor="end" font-size="13" font-weight="700" fill="#334155" font-family="Consolas,monospace">0..*</text>
               <text x="167" y="32" font-size="13" font-weight="700" fill="#334155" font-family="Consolas,monospace">0..*</text>
-              <!-- dashed perpendicular from the MIDPOINT -->
+              
               <line x1="280" y1="40" x2="280" y2="96" stroke="#334155" stroke-width="1.6" stroke-dasharray="5,4"/>
 
-              <!-- Student (right) -->
+              
               <rect x="405" y="22" width="140" height="36" fill="#1e40af" stroke="#3b82f6" stroke-width="1.6"/>
               <text x="475" y="45" text-anchor="middle" font-size="14" font-weight="700" fill="#fff" font-family="'Segoe UI',Arial,sans-serif">Student</text>
-              <!-- Course (left) -->
+              
               <rect x="15" y="22" width="140" height="36" fill="#1e40af" stroke="#3b82f6" stroke-width="1.6"/>
               <text x="85" y="45" text-anchor="middle" font-size="14" font-weight="700" fill="#fff" font-family="'Segoe UI',Arial,sans-serif">Course</text>
 
-              <!-- Enrollment — the association class -->
+              
               <rect x="185" y="96" width="190" height="86" fill="#fff" stroke="#3b82f6" stroke-width="1.8"/>
               <rect x="185" y="96" width="190" height="28" fill="#1e40af"/>
               <text x="280" y="116" text-anchor="middle" font-size="14" font-weight="700" fill="#fff" font-family="'Segoe UI',Arial,sans-serif">Enrollment</text>
@@ -4243,7 +3902,7 @@
               המחלקה שנתלית כך נקראת <b>מחלקת קשר</b>.</div>
           </div>
 
-          <!-- LEFT: how it is drawn -->
+          
           <div class="card how">
             <div class="panel-title" style="color:var(--blue);">איך מציירים</div>
             <ol class="rules">
@@ -4257,7 +3916,7 @@
 
         </div>
 
-        <!-- the three tests -->
+        
         <div class="tests">
           <div class="t">
             <div class="q">① למי שייך הנתון?</div>
@@ -4298,23 +3957,6 @@
       </aside>
     <div class="acro-footer"><span class="acro"><span class="en">UML</span> = <span class="en">Unified Modeling Language</span> · שפת מידול אחידה</span> &nbsp;·&nbsp; <span class="acro"><span class="en">AI</span> = <span class="en">Artificial Intelligence</span> · בינה מלאכותית</span></div>
     </section>
-    <!-- C6 — מחלקת קשר היא מחלקה לכל דבר. NEW 2026-08-15, and it exists because of two things David
-         said in the same breath (2026-08-15):
-           (1) "question - why do you say there are no methods on such a class?"  ← and he is right:
-               there is NO such rule. In the UML metamodel AssociationClass is BOTH a Class and an
-               Association, so it has attributes, operations, generalization — everything. The "attributes
-               only" impression came from our own old slide, whose comparison row read
-               ״לקשר יש תכונות בלבד״. That row is now gone (see C7) and the myth is answered head-on here.
-           (2) "I want to show that an association class can be connected to other classes too."
-         Both are demonstrated by ONE worked example — David's own classroom example, verbatim:
-           "if a student just want to know whats his grade in a course, its association class. if he want
-            to have a list of all his final grades (like he took the exam several times), its not."
-         Careful reading of that example: the second half does NOT kill the association class — it kills
-         the ATTRIBUTE. Each sitting is a fact with its own date and score, so it becomes its own class
-         hanging off Enrollment, and the final grade turns into an OPERATION (the מאוחסן-או-מחושב rule
-         from B15 applied here). That single move demonstrates (1) and (2) at once.
-         The case where the association class itself breaks — the same pair TWICE — is C7's opening.
-         SVG: English identifiers only + the LTR text guard. -->
     <section data-slug="association-class-more" class="has-acro-footer">
       <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
       <style>
@@ -4353,7 +3995,7 @@
 
         <div class="cases">
 
-          <!-- RIGHT (RTL-first): one grade -->
+          
           <div class="cs">
             <div class="ask">״כמה קיבלתי בקורס?״<small>ציון אחד, סופי, לכל הרשמה</small></div>
             <svg viewBox="0 0 420 250" xmlns="http://www.w3.org/2000/svg" role="img"
@@ -4375,7 +4017,7 @@
             <div class="verdict"><b>✓ מחלקת קשר</b> — והציון הוא פשוט <i>תכונה</i> עליה. צמד אחד, מופע אחד, ערך אחד.</div>
           </div>
 
-          <!-- LEFT: several sittings -->
+          
           <div class="cs b">
             <div class="ask">״ומה קיבלתי בכל מועד?״<small>נבחנתי במועד א׳, ושוב במועד ב׳</small></div>
             <svg viewBox="0 0 420 250" xmlns="http://www.w3.org/2000/svg" role="img"
@@ -4389,7 +4031,7 @@
               <rect x="10" y="7" width="125" height="30" fill="#1e40af" stroke="#3b82f6" stroke-width="1.5"/>
               <text x="72" y="27" text-anchor="middle" font-size="13" font-weight="700" fill="#fff" font-family="'Segoe UI',Arial,sans-serif">Course</text>
 
-              <!-- the association class, now with an OPERATION -->
+              
               <rect x="115" y="52" width="190" height="78" fill="#fff" stroke="#3b82f6" stroke-width="1.7"/>
               <rect x="115" y="52" width="190" height="26" fill="#1e40af"/>
               <text x="210" y="71" text-anchor="middle" font-size="13" font-weight="700" fill="#fff" font-family="'Segoe UI',Arial,sans-serif">Enrollment</text>
@@ -4397,7 +4039,7 @@
               <line x1="115" y1="105" x2="305" y2="105" stroke="#3b82f6" stroke-width="1"/>
               <text x="124" y="122" font-size="12" font-style="italic" fill="#2563eb" font-family="Consolas,monospace">+ finalGrade() : Grade</text>
 
-              <!-- a plain association from the association class to another class -->
+              
               <line x1="210" y1="130" x2="210" y2="180" stroke="#334155" stroke-width="1.6"/>
               <text x="218" y="146" font-size="12" font-weight="700" fill="#334155" font-family="Consolas,monospace">1</text>
               <text x="218" y="176" font-size="12" font-weight="700" fill="#334155" font-family="Consolas,monospace">0..*</text>
@@ -4412,7 +4054,7 @@
 
         </div>
 
-        <!-- the two questions this slide exists to answer -->
+        
         <div class="answers">
           <div class="an">
             <div class="h">✓ מותרות לה פעולות</div>
@@ -4430,11 +4072,11 @@
 
       </div>
       <aside class="notes">
-        <b>איך מריצים את השקף:</b> שואלים את הכיתה את השאלה הימנית, מקבלים ״תכונה על ההרשמה״, ואז מוסיפים
-        את המשפט השני: ״ואם נבחנתי גם במועד ב׳ — איפה שני הציונים?״. הטעות הצפויה היא
-        <code>grades : List&lt;Grade&gt;</code>, וזו הזדמנות להגיד את זה בפשטות: <b>רשימה אינה תכונה</b>.
-        לכל ציון יש תאריך, מועד ואולי מרצה — כלומר הוא <b>עובדה בפני עצמה</b>, ומקומן של עובדות הוא במחלקה.
-        (זה גם 1ONF, שנראה בפירוש בפרק נירמול — לא חובה לקרוא לזה בשם כאן.)
+        <b>השאלה המובילה (הימנית בשקף):</b> איפה נשמר הציון? התשובה הראשונה, ״תכונה על ההרשמה״, נכונה.
+        ואז: ״ואם נבחנתי גם במועד ב׳, איפה שני הציונים?״. הטעות הצפויה היא
+        <code>grades : List&lt;Grade&gt;</code>, אבל <b>רשימה אינה תכונה</b>.
+        לכל ציון יש תאריך, מועד ואולי מרצה, כלומר הוא <b>עובדה בפני עצמה</b>, ומקומן של עובדות הוא במחלקה.
+        (זה גם 1ONF, שנראה בפירוש בפרק נירמול.)
         <b>ועכשיו התשובה לשאלה ״אז אין למחלקת קשר פעולות?״ — יש.</b> אין כלל כזה בתקן: מחלקת קשר היא
         <b>גם Class וגם Association</b>, כלומר מחלקה מלאה בכל מובן. שלושה מקורות לרושם המוטעה, וכדאי
         לומר אותם: (א) במודל תחום כמעט לא מציירים פעולות על אף מחלקה; (ב) רוב ההתנהגות באמת שייכת לצדדים;
@@ -4453,23 +4095,6 @@
       </aside>
     <div class="acro-footer"><span class="acro"><span class="en">UML</span> = <span class="en">Unified Modeling Language</span> · שפת מידול אחידה</span></div>
     </section>
-    <!-- C7 — מתי מחלקת קשר מספיקה ומתי כבר לא. REBUILT 2026-08-15 (David, second pass): "on slide 35 I
-         want to continue the example of grade and course student. So we show in what case would we do an
-         association and in what case we would not. And we could still keep the campus example as a second
-         slide... One thing I want to remove from slide 35 is ternary relation. This should be in a
-         separate slide."
-         So this slide is now ONE example decided twice — the same Student/Course/grade thread from C5+C6:
-           ✓ נרשמים פעם אחת   ⇒ the pair identifies ⇒ מחלקת קשר (Enrollment hangs on the line)
-           ✗ מותר לחזור על הקורס ⇒ the pair repeats  ⇒ מחלקה מתווכת (the SAME Enrollment now stands on its
-             own, carries the semester, and the many-to-many is deleted)
-         Deliberately the SAME class name in both panels: nothing new was invented — the concept's STATUS in
-         the model changed, because a BUSINESS RULE changed, not because of modelling taste.
-         Campus/OrderLine moved to C8 (second example + the comparison table); n-ary moved to C9 (its own
-         slide, with the diamond notation) — both per David.
-         ⚠️ VOCABULARY: composition ◆ is C10 — plain lines here. No id attribute is drawn on the mediating
-         Enrollment: per the identity doctrine (B5) an id enters the diagram only if the business reads it
-         out loud; the invented key is a database matter (notes).
-         SVG: English identifiers only + the LTR text guard. -->
     <section data-slug="mediating-class">
       <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
       <style>
@@ -4507,7 +4132,7 @@
 
         <div class="cases">
 
-          <!-- RIGHT (RTL-first): the pair identifies -->
+          
           <div class="cs keep">
             <div class="rule">נרשמים לקורס <b>פעם אחת</b><small>לכל צמד (סטודנט, קורס) — הרשמה אחת, וזהו</small></div>
             <svg viewBox="0 0 480 205" xmlns="http://www.w3.org/2000/svg" role="img"
@@ -4531,7 +4156,7 @@
               אין לה חיים בלעדיו.</div>
           </div>
 
-          <!-- LEFT: the pair repeats -->
+          
           <div class="cs move">
             <div class="rule">והחוק משתנה: <b>מותר לחזור על הקורס</b><small>אותו סטודנט, אותו קורס — בסמסטר אחר, ובציון אחר</small></div>
             <svg viewBox="0 0 480 205" xmlns="http://www.w3.org/2000/svg" role="img"
@@ -4570,9 +4195,9 @@
       <aside class="notes">
         <b>הפוקוס:</b> אותה דוגמה בדיוק משני השקפים הקודמים — ועכשיו מכריעים אותה פעמיים. זה השקף שאומר
         שההחלטה אינה טכנית אלא <b>עסקית</b>: לא שינינו את המודל כי ״כך יותר יפה״, אלא כי <b>החוק השתנה</b>.
-        <b>איך מריצים:</b> מציגים את הפאנל הימני (מה שכבר מוכר), ואז שואלים משפט אחד: ״ומה קורה אם מותר
-        לחזור על הקורס?״. תנו לכיתה לגלות שאי אפשר לתלות שתי הרשמות על אותו קו — <b>מופע של מחלקת קשר הוא
-        הקישור עצמו, והקישור מזוהה על ידי הקצוות</b>, ולכן לצמד אחד יש לכל היותר מופע אחד.
+        <b>השאלה המובילה:</b> הפאנל הימני כבר מוכר. ״ומה קורה אם מותר לחזור על הקורס?״ אי אפשר לתלות
+        שתי הרשמות על אותו קו: <b>מופע של מחלקת קשר הוא הקישור עצמו, והקישור מזוהה על ידי הקצוות</b>,
+        ולכן לצמד אחד יש לכל היותר מופע אחד.
         <b>שימו לב שהשם לא השתנה:</b> <code>Enrollment</code> בשני הצדדים. זו הנקודה — לא הומצאה מחלקה חדשה,
         <b>המעמד</b> שלה במודל השתנה: מ״נתלית על הקשר״ ל״עומדת בפני עצמה ומחליפה אותו״.
         <b>ולמה אין מזהה מצויר על הגרסה המתווכת</b> (שאלה צפויה): לפי כלל המזהים — מזהה נכנס לתרשים רק אם
@@ -4588,19 +4213,6 @@
         וזה בדיוק הנושא של שקף ה-<span class="en">n-ary</span> בהמשך.
       </aside>
     </section>
-    <!-- C8 — דוגמה נוספת: שורת הזמנה בקמפוס. NEW 2026-08-15 (David: "we could still keep the campus example
-         as a second slide. It would be another example."). C7 decides the Student/Course case twice; this
-         slide runs the SAME decision on the running example, and then closes the pair with the comparison
-         table (moved here from the old C7, since it summarises both examples).
-         Why the campus case is the mediating one: the pair (Order, MenuItem) REPEATS — שניצל עם בצל ושניצל
-         בלי, in one order — which is exactly the question already asked on B6 identity-examples
-         ("why not (orderId, itemId) as the key?"). The counter-factual is on the slide on purpose: had the
-         business said "one line per item, with a quantity", OrderItem would be an ASSOCIATION class — and
-         that is precisely what the course's sample project does (PRIMARY KEY (orderId, productId),
-         dossier 2026-08-11). Same shape in code, different identity decision — students who spot the gap
-         between the deck and the sample project get their answer here instead of thinking one is wrong.
-         ⚠️ VOCABULARY: composition ◆ is the next slide — plain lines here, no diamonds. n-ary is C9.
-         SVG: English identifiers only + the LTR text guard. -->
     <section data-slug="mediating-class-campus">
       <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
       <style>
@@ -4646,7 +4258,7 @@
 
         <div class="top">
 
-          <!-- RIGHT (RTL-first): why this one is mediating -->
+          
           <div class="why">
             <div class="panel-title" style="color:var(--dark-blue);">אותה הכרעה, על המודל שלנו</div>
             <ul class="pts">
@@ -4661,12 +4273,12 @@
               אותה צורה בקוד — <b>החלטת זהות אחרת</b>.</div>
           </div>
 
-          <!-- LEFT: the campus model -->
+          
           <div class="sol">
             <div class="panel-title" style="color:var(--green);">מה שמצויר במודל הקמפוס</div>
             <svg viewBox="0 0 500 222" xmlns="http://www.w3.org/2000/svg" role="img"
                  aria-label="The many-to-many between Order and MenuItem is replaced by an OrderLine class linked to each side">
-              <!-- BEFORE: the many-to-many that cannot carry the data -->
+              
               <line x1="340" y1="30" x2="160" y2="30" stroke="#94a3b8" stroke-width="1.6"/>
               <text x="332" y="23" text-anchor="end" font-size="12" font-weight="700" fill="#94a3b8" font-family="Consolas,monospace">0..*</text>
               <text x="168" y="23" font-size="12" font-weight="700" fill="#94a3b8" font-family="Consolas,monospace">0..*</text>
@@ -4678,11 +4290,11 @@
               <rect x="30" y="15" width="130" height="30" fill="#94a3b8" stroke="#94a3b8" stroke-width="1.5"/>
               <text x="95" y="35" text-anchor="middle" font-size="13" font-weight="700" fill="#fff" font-family="'Segoe UI',Arial,sans-serif">MenuItem</text>
 
-              <!-- the move -->
+              
               <line x1="250" y1="70" x2="250" y2="86" stroke="#2E7D32" stroke-width="2"/>
               <path d="M244 84 L250 92 L256 84 Z" fill="#2E7D32"/>
 
-              <!-- AFTER: two plain associations + a real class in the middle -->
+              
               <line x1="410" y1="135" x2="325" y2="135" stroke="#334155" stroke-width="1.8"/>
               <text x="404" y="128" text-anchor="end" font-size="12" font-weight="700" fill="#334155" font-family="Consolas,monospace">1</text>
               <text x="331" y="128" font-size="12" font-weight="700" fill="#334155" font-family="Consolas,monospace">0..*</text>
@@ -4755,21 +4367,6 @@
         <code>Order</code>◆<code>OrderLine</code> היא למעשה הרכבה.
       </aside>
     </section>
-    <!-- C9 — קשר בין שלושה (n-ary). NEW 2026-08-15, split out of the mediating-class slide at David's
-         request: "One thing I want to remove from slide 35 is ternary relation. This should be in a
-         separate slide. We should show the UML notation of a diamond, and then we should explain that it's
-         not useful, and we should use something else, but don't mix these types of relations."
-         So the slide does exactly three things:
-           (1) SHOWS the notation honestly — the n-ary diamond, three ends, multiplicity on each;
-           (2) says why it is not useful — unreadable multiplicity (each end is "per COMBINATION of the
-               others"), nowhere to put the data, and nothing downstream (tool/code/DB) represents it;
-           (3) shows what we draw instead — the same fact as a mediating class with three plain binaries.
-         Example is deliberately OUTSIDE the two running threads (Student/Course and campus) so the
-         concepts don't blend: supplier–product–warehouse ⇒ Delivery, operations-flavoured for IE&M.
-         ⚠️ The ⚠️ line about the aggregation/composition diamond is not decoration: ◆/◇ sit at the END of
-         a line next to the whole, the n-ary diamond sits at the CENTRE and replaces the line. Composition
-         is the very next slide, so the guard is placed here on purpose.
-         SVG: English identifiers only + the LTR text guard (0..* would render as *..0 without it). -->
     <section data-slug="nary-relation" class="has-acro-footer">
       <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
       <style>
@@ -4811,7 +4408,7 @@
 
         <div class="two">
 
-          <!-- RIGHT (RTL-first): the UML notation -->
+          
           <div class="uml">
             <div class="panel-title" style="color:var(--muted);">כך <span class="en">UML</span> מסמנת קשר <span class="en">n-ary</span><small>מעוין במרכז, קו לכל צד, וקרדינליות בכל קצה — אבל לא במשמעות שאתם מכירים</small></div>
             <svg viewBox="0 0 460 245" xmlns="http://www.w3.org/2000/svg" role="img"
@@ -4836,7 +4433,7 @@
               <span class="w">⚠️ ואל תבלבלו:</span> המעוין הזה יושב ב<b>מרכז</b> ומחליף את הקו. המעוין של הרכבה (השקף הבא) יושב על <b>קצה</b> הקו.</div>
           </div>
 
-          <!-- LEFT: what we draw instead -->
+          
           <div class="fix">
             <div class="panel-title" style="color:var(--green);">מה שנצייר במקום<small>מחלקה מתווכת + קשר רגיל לכל אחד משלושת הצדדים</small></div>
             <svg viewBox="0 0 460 245" xmlns="http://www.w3.org/2000/svg" role="img"
@@ -4899,13 +4496,13 @@
         <b>איך מזהים קשר n-ary מלכתחילה:</b> כשה<b>עובדה</b> קורסת אם מורידים ממנה צד — ״ספק סיפק מוצר
         למחסן״: בלי המחסן לא ידוע לאן, בלי הספק לא ידוע ממי. אם הורדת צד והמשפט עדיין נכון, זה לא באמת
         קשר של שלושה אלא שני קשרים נפרדים — וזו טעות נפוצה יותר מהקשר האמיתי.
-        <b>״ולמה המספרים בשני התרשימים לא זהים?״ (שאלת דוד, 2026-08-15) — כי הם עונים על שאלות שונות, וזה
+        <b>״ולמה המספרים בשני התרשימים לא זהים?״ כי הם עונים על שאלות שונות, וזה
         בדיוק לב העניין.</b> בקשר n-ary הריבוי בקצה אומר כמה מופעים של <b>אותו צד</b> יכולים להשתתף עבור כל
         <b>צירוף קבוע</b> של כל השאר — ולכן <code>0..*</code> בכל שלושת הקצוות (לזוג ספק+מחסן יכולים להתאים
         מוצרים רבים, וכן הלאה). אחרי הפירוק כל קו הוא <b>בינארי</b>, והשאלה הופכת לפשוטה: כל <code>Delivery</code>
         מתייחסת ל<b>מוצר אחד</b>, ל<b>ספק אחד</b> ול<b>מחסן אחד</b> ⇐ <code>1</code> בצד ההוא, ו-<code>0..*</code>
-        בצד האספקה. אותה מציאות, שתי קריאות — ואם צריך שקף שלם כדי להסביר את המספר, זו כבר תשובה. שווה
-        להראות את זה בכיתה בדיוק כך, כי זו ההצדקה החזקה ביותר לוותר על המעוין.
+        בצד האספקה. אותה מציאות, שתי קריאות — ואם צריך שקף שלם כדי להסביר את המספר, זו כבר תשובה. וזו
+        ההצדקה החזקה ביותר לוותר על המעוין.
         <b>ומה עם מחלקת קשר על n-ary?</b> אפשר בתקן, אבל אז יש לנו מעוין <b>ועוד</b> קופסה מקווקוות אליו —
         כלומר כל החסרונות של המעוין, ועוד סימון. אם ממילא צריך מחלקה, שתעמוד בפני עצמה.
         <b>הפירוק הוא לא רק ויזואלי:</b> אחרי הפירוק כל קו הוא קשר בינארי עם שני קצוות קריאים, ולכל שאלה
@@ -4918,19 +4515,6 @@
       </aside>
     <div class="acro-footer"><span class="acro"><span class="en">UML</span> = <span class="en">Unified Modeling Language</span> · שפת מידול אחידה</span> &nbsp;·&nbsp; <span class="acro"><span class="en">AI</span> = <span class="en">Artificial Intelligence</span> · בינה מלאכותית</span></div>
     </section>
-    <!-- C10 — הרכבה ◆. SPLIT out of the old slide-aggregation-composition 2026-08-15 (David: "for slide 38
-         I want this divided into 2 slides, one for each type and examples on when to use it and when not to.
-         specifically, is it optional from a design point of view and what happens in implementation").
-         ORDER NOTE: composition comes FIRST and aggregation second — deliberately. ◆ is the one that carries
-         consequences, so it earns the attention; ◇ then lands as "the weaker cousin that changes nothing",
-         and the topic ends on the practical rule (in doubt → a plain line) instead of on a shrug.
-         The design/implementation split is the same device as C4 (cardinality-vs-rules), which David asked
-         for there and liked: students hand over the design, the AI derives the implementation.
-         ANSWER to "is it optional?" — for ◆, NO: it states single ownership + existential dependency, and
-         both are derivable (NOT NULL + cascade delete, no standalone CRUD, no second reference). The ✗ list
-         is what makes it teachable: sharing kills composition faster than lifecycle does.
-         Implementation row kept WORD-FOR-WORD compatible with D2 model-vs-database (מחיקה מדורגת · NOT NULL).
-         SVG: English identifiers only + the LTR text guard. -->
     <section data-slug="composition" class="has-acro-footer">
       <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
       <style>
@@ -4986,7 +4570,7 @@
 
         <div class="top">
 
-          <!-- RIGHT (RTL-first): what it says -->
+          
           <div class="what">
             <div class="panel-title" style="color:var(--dark-blue);">מה הסימון אומר</div>
             <svg viewBox="0 0 320 250" xmlns="http://www.w3.org/2000/svg" role="img"
@@ -5010,7 +4594,7 @@
             </div>
           </div>
 
-          <!-- LEFT: when / when not -->
+          
           <div class="ex">
             <div class="panel-title" style="color:var(--dark-blue);">מתי כן, ומתי בכלל לא</div>
             <ul class="list">
@@ -5042,10 +4626,10 @@
 
       </div>
       <aside class="notes">
-        <b>קפיטריה ◆ עמדה — הוחלט מחדש 2026-08-30 (David):</b> עד היום זו הייתה הדוגמה של <i>צבירה</i>, בטענה ש״העמדה
-        עוברת לקפיטריה אחרת״. הטענה הזו מדברת על <b>הדלפק הפיזי</b>, והמערכת לא מנהלת ציוד. מה שהמערכת מנהלת הוא
-        ״העמדה החמה של קפיטריה X״ — מושג וירטואלי, שמזוהה רק דרך הקפיטריה (שקף המזהים), ונסגר איתה. שני המבחנים
-        עוברים: בעלים אחד, ונמחקת עם השלם. אם פותחים את הציוד בקפיטריה אחרת — נוצרת שם <b>עמדה חדשה</b>.
+        <b>קפיטריה ◆ עמדה:</b> קל לטעון שזו <i>צבירה</i>, כי ״העמדה עוברת לקפיטריה אחרת״. הטענה הזו מדברת
+        על <b>הדלפק הפיזי</b>, והמערכת לא מנהלת ציוד. מה שהמערכת מנהלת הוא ״העמדה החמה של קפיטריה X״: מושג
+        וירטואלי, שמזוהה רק דרך הקפיטריה (שקף המזהים), ונסגר איתה. שני המבחנים עוברים: בעלים אחד, ונמחקת
+        עם השלם. אם פותחים את הציוד בקפיטריה אחרת, נוצרת שם <b>עמדה חדשה</b>.
         <b>הפוקוס:</b> הרכבה היא הסימון היחיד בשלם–חלק שבאמת <b>משנה משהו</b>. לכן היא מקבלת שקף לעצמה,
         ולכן היא נלמדת <b>לפני</b> הצבירה: מי שמבין ◆ מבין מיד למה ◇ כמעט לא נחוץ.
         <b>שני המבחנים, ולמה השני חשוב יותר:</b> תלות קיומית היא המבחן שמלמדים בכל מקום — ״מחק את השלם, החלק
@@ -5055,7 +4639,7 @@
         <b>ומכאן ההבחנה שסטודנטים מפספסים:</b> ההרכבה בקמפוס אינה ״הזמנה מכילה פריטים״ אלא
         <code>Order ◆ OrderLine</code> — ה<b>שורה</b> היא החלק, לא הפריט. זו בדיוק הסיבה שהמחלקה המתווכת
         נלמדה קודם: בלעדיה אין מה לחבר בהרכבה.
-        <b>״אז זה אופציונלי?״ (שאלת דוד, 2026-08-15) — לא, ובזה ◆ שונה מ-◇.</b> ◆ מתורגם לשלושה דברים
+        <b>״אז זה אופציונלי?״ לא, ובזה ◆ שונה מ-◇.</b> ◆ מתורגם לשלושה דברים
         שהמפתח (או ה-<span class="en">AI</span>) גוזר ממנו: מפתח זר שאסור שיהיה ריק, מחיקה מדורגת, וחוסר
         קיום עצמאי (אין <span class="en">repository</span> ואין מסך ניהול לשורת הזמנה). זה גם מסביר את
         האזהרה בשורה התחתונה: ◆ שגוי אינו טעות ציור, הוא <b>מחיקת נתונים</b>.
@@ -5067,22 +4651,6 @@
       </aside>
     <div class="acro-footer"><span class="acro"><span class="en">UML</span> = <span class="en">Unified Modeling Language</span> · שפת מידול אחידה</span> &nbsp;·&nbsp; <span class="acro"><span class="en">CRUD</span> = <span class="en">Create, Read, Update, Delete</span> · יצירה, קריאה, עדכון, מחיקה</span> &nbsp;·&nbsp; <span class="acro"><span class="en">AI</span> = <span class="en">Artificial Intelligence</span> · בינה מלאכותית</span></div>
     </section>
-    <!-- C11 — צבירה ◇. SPLIT out of the old slide-aggregation-composition 2026-08-15, second half (David:
-         "one for each type and examples on when to use it and when not to. specifically, is it optional
-         from a design point of view and what happens in implementation").
-         The honest answer, and the reason this slide has a different shape from C10: for ◇ the answer to
-         "is it optional?" is YES. UML 2.5.1 itself says the precise semantics of SHARED aggregation
-         "varies by application area and modeler" — i.e. the standard declines to define it. No language
-         has a keyword, no database structure differs, and nothing is derived from it. So the slide states
-         that plainly instead of pretending ◇ is a decision, and lands on the course rule: in doubt, a plain
-         line. Read it, don't argue about it.
-         Same design/implementation device as C10 and C4 — but here BOTH cells say "nothing happens", which
-         is exactly the contrast that makes ◆ meaningful in retrospect.
-         ⚠️ 2026-08-30 (David): Cafeteria–Station is NO LONGER the aggregation instance — a station is a virtual
-         concept inside its cafeteria and dies with it, so it moved to C10 as composition (and the marquee now
-         draws it ◆). The teaching instance here is Gym ◇ Member (the textbook shared aggregation, also the ◇
-         card of the C12 quiz); Cafeteria–Station appears in the ✗ list as the trap it turned out to be.
-         SVG: English identifiers only + the LTR text guard. -->
     <section data-slug="aggregation" class="has-acro-footer">
       <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
       <style>
@@ -5138,7 +4706,7 @@
 
         <div class="top">
 
-          <!-- RIGHT (RTL-first): what it says -->
+          
           <div class="what">
             <div class="panel-title" style="color:var(--dark-blue);">מה הסימון אומר</div>
             <svg viewBox="0 0 320 250" xmlns="http://www.w3.org/2000/svg" role="img"
@@ -5159,7 +4727,7 @@
               למועדון (ויכול להיות בכמה) · <span class="en" dir="ltr">0..*</span> ⇐ מועדון יכול להיפתח בלי אף מתאמן.</div>
           </div>
 
-          <!-- LEFT: when / when not -->
+          
           <div class="ex">
             <div class="panel-title" style="color:var(--dark-blue);">איפה תפגשו אותו — ואיפה זו סתם טעות</div>
             <ul class="list">
@@ -5206,7 +4774,7 @@
         <b>הטעות הנפוצה ביותר בתרשימי סטודנטים:</b> יהלומים בכל מקום, כי ״יש לו״. שווה לומר: כל אסוציאציה
         היא ״יש לו״ במובן כלשהו — סטודנט ״יש לו״ הרשמות, הזמנה ״יש לה״ תשלום. אם היהלום לא אומר משהו על
         <b>מחזור החיים</b>, הוא לא אומר כלום.
-        <b>״אז למה הסימון בכלל קיים?״ (שאלת דוד, 2026-08-15) — התשובה היא היסטוריה, לא תכנון.</b>
+        <b>״אז למה הסימון בכלל קיים?״ התשובה היא היסטוריה, לא תכנון.</b>
         (א) <b>הוא נולד לפני UML</b>, בשיטות של בוץ׳ ורמבו (<span class="en">Booch</span>, <span class="en">OMT</span>)
         בתחילת שנות ה-90. כשאיחדו אותן ל-UML ב-1997, הצבירה כבר הייתה בכל ספר לימוד ובאלפי תרשימים — להוציא
         אותה לא היה מעשי.
@@ -5227,30 +4795,16 @@
         בדיוק כמו תכונה נגזרת והמעוין של קשר בין שלושה.
         <b>ומה עושים עם תרשים של AI שמלא ב-◇:</b> לא פוסלים. בודקים רק את ה-◆: כל מעוין <b>מלא</b> חייב לעבור
         את שני המבחנים, כי לו יש תוצאות. את ה-◇ אפשר להשאיר או למחוק — הקוד ייצא זהה.
-        <b>למה הדוגמה כאן היא מועדון–מתאמן ולא קפיטריה–עמדה (2026-08-30):</b> קפיטריה–עמדה שימשה כאן כדוגמת
-        הצבירה עד היום, בטענה ש״העמדה עוברת לקפיטריה אחרת״. דוד פסל: העמדה היא <b>מושג וירטואלי</b> — ״העמדה
-        החמה של קפיטריה X״ — ולא ציוד; כשהקפיטריה נסגרת, העמדה בצורתה הזו לא קיימת. לכן היא הרכבה ◆ (השקף
-        הקודם, וכך גם במרקיזה), וכאן היא ברשימת ה-✗ כמלכודת. הדוגמה הנקייה של צבירה משותפת היא מועדון–מתאמן:
-        המתאמן קיים לפני, אחרי, ובכמה מועדונים במקביל — וזו בדיוק ההגדרה של ״שיתוף״.
+        <b>למה הדוגמה כאן היא מועדון–מתאמן ולא קפיטריה–עמדה:</b> קל לטעון שקפיטריה–עמדה היא צבירה, כי
+        ״העמדה עוברת לקפיטריה אחרת״. אבל העמדה היא <b>מושג וירטואלי</b> (״העמדה החמה של קפיטריה X״) ולא
+        ציוד; כשהקפיטריה נסגרת, העמדה בצורתה הזו לא קיימת. לכן היא הרכבה ◆ (השקף הקודם, וכך גם במרקיזה),
+        וכאן היא ברשימת ה-✗ כמלכודת. הדוגמה הנקייה של צבירה משותפת היא מועדון–מתאמן: המתאמן קיים לפני,
+        אחרי, ובכמה מועדונים במקביל, וזו בדיוק ההגדרה של ״שיתוף״.
         <b>קישור קדימה:</b> במודל הקמפוס המלא (שקף המרקיזה) אין ◇ בכלל — יש שתי הרכבות (<code>Order ◆ OrderLine</code>,
         <code>Cafeteria ◆ Station</code>), וזה עקבי עם המדיניות: ◇ מזהים, לא מייצרים.
       </aside>
     <div class="acro-footer"><span class="acro"><span class="en">UML</span> = <span class="en">Unified Modeling Language</span> · שפת מידול אחידה</span> &nbsp;·&nbsp; <span class="acro"><span class="en">AI</span> = <span class="en">Artificial Intelligence</span> · בינה מלאכותית</span></div>
     </section>
-    <!-- C12 — חידון: איזה קשר? NEW 2026-08-15 (David: "add a slide 40 - card quiz style. card shows a
-         relation between 2 common items (in text) and we need to decide what relation they have —
-         association, aggregation, or composite — we will acknowledge in this case that while it's
-         composite in nature, we model it as association").
-         So the quiz deliberately has THREE fronts and only TWO legal answers on paper — which is the whole
-         point, and the direct drill for the policy set the same day (◇ = recognition only, never produced):
-           ◆ הרכבה        — both tests pass (dies with the whole AND single owner)
-           ◇ באופיו ⇐ קו רגיל — it really is a part-of, and we STILL draw a plain line. David's case.
-           קו רגיל         — not whole-part at all (usually a sharing or catalogue trap)
-         Card 2 (מכונית↔גלגל) is the one David described: everyone says composition, and it fails BOTH tests
-         — a wheel is swapped, stored, and moved to another car. Cards 5 (מועדון↔מתאמן) is the classic
-         textbook aggregation; 6 (תפריט↔פריט) and 8 (בית חולים↔רופא) are sharing traps that sound part-of.
-         Mixed order on purpose so no pattern gives the answer away — same rule as the enum and class quizzes.
-         Flip mechanics copied from slide-enum-class-quiz (inline onclick + CSS rotateY, no <script>). -->
     <section data-slug="relationship-quiz">
       <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
       <style>
@@ -5304,7 +4858,7 @@
 
         <div class="grid8">
 
-          <!-- 1 -->
+          
           <div class="qc" onclick="this.classList.toggle('flip')"><div class="inner">
             <div class="face front">
               <div class="pair">ספר <span class="lnk">↔</span> עמוד</div>
@@ -5318,7 +4872,7 @@
             </div>
           </div></div>
 
-          <!-- 2 — David's case -->
+          
           <div class="qc" onclick="this.classList.toggle('flip')"><div class="inner">
             <div class="face front">
               <div class="pair">מכונית <span class="lnk">↔</span> גלגל</div>
@@ -5332,7 +4886,7 @@
             </div>
           </div></div>
 
-          <!-- 3 -->
+          
           <div class="qc" onclick="this.classList.toggle('flip')"><div class="inner">
             <div class="face front">
               <div class="pair">סטודנט <span class="lnk">↔</span> קורס</div>
@@ -5346,7 +4900,7 @@
             </div>
           </div></div>
 
-          <!-- 4 -->
+          
           <div class="qc" onclick="this.classList.toggle('flip')"><div class="inner">
             <div class="face front">
               <div class="pair">בניין <span class="lnk">↔</span> דירה</div>
@@ -5360,7 +4914,7 @@
             </div>
           </div></div>
 
-          <!-- 5 -->
+          
           <div class="qc" onclick="this.classList.toggle('flip')"><div class="inner">
             <div class="face front">
               <div class="pair">מטוס <span class="lnk">↔</span> מנוע</div>
@@ -5374,7 +4928,7 @@
             </div>
           </div></div>
 
-          <!-- 6 -->
+          
           <div class="qc" onclick="this.classList.toggle('flip')"><div class="inner">
             <div class="face front">
               <div class="pair">תפריט <span class="lnk">↔</span> פריט תפריט</div>
@@ -5388,7 +4942,7 @@
             </div>
           </div></div>
 
-          <!-- 7 -->
+          
           <div class="qc" onclick="this.classList.toggle('flip')"><div class="inner">
             <div class="face front">
               <div class="pair">חוזה <span class="lnk">↔</span> סעיף</div>
@@ -5402,7 +4956,7 @@
             </div>
           </div></div>
 
-          <!-- 8 -->
+          
           <div class="qc" onclick="this.classList.toggle('flip')"><div class="inner">
             <div class="face front">
               <div class="pair">בית חולים <span class="lnk">↔</span> רופא</div>
@@ -5422,23 +4976,23 @@
 
       </div>
       <aside class="notes">
-        <b>איך מריצים:</b> כרטיס אחד בכל פעם, מצביעים בכיתה, ורק אז הופכים. השאלה שמובילה כל כרטיס היא זוג
-        השאלות מהשקפים הקודמים: <b>מה קורה לחלק כשמוחקים את השלם</b>, ו<b>האם מישהו נוסף מחזיק בו</b>.
+        <b>השאלה שמובילה כל כרטיס</b> היא זוג השאלות מהשקפים הקודמים: <b>מה קורה לחלק כשמוחקים את
+        השלם</b>, ו<b>האם מישהו נוסף מחזיק בו</b>.
         <b>המבנה של החידון הוא המסר:</b> יש שלוש אפשרויות על השולחן — אסוציאציה, צבירה, הרכבה — אבל <b>רק
         שתיים מגיעות לתרשים</b>. כרטיס שהוא ״צבירה באופיו״ מקבל תשובה כפולה: <i>כן, זה באמת שלם–חלק —
         ובכל זאת מציירים קו רגיל</i>. זו בדיוק מדיניות הקורס: ◇ מזהים, לא מייצרים.
         <b>כרטיס 2 (מכונית↔גלגל) הוא הכרטיס המרכזי</b> — כמעט כולם יגידו הרכבה. הוא נופל ב<b>שני</b>
         המבחנים: הגלגל מתחלף, נשמר במחסן, ועובר לרכב אחר. אם רק כרטיס אחד נדון לעומק בכיתה — שיהיה זה.
-        <b>ולמה ״מכונית בלי גלגלים היא לא מכונית״ אינו נימוק (שאלת דוד, 2026-08-15):</b> הרכבה שואלת אם
+        <b>ולמה ״מכונית בלי גלגלים היא לא מכונית״ אינו נימוק:</b> הרכבה שואלת אם
         ה<b>חלק</b> יכול להתקיים בלי השלם — לא אם השלם ״שלם״ בלעדיו. התחושה ש״חייבים להיות גלגלים״ היא
         <b>גבול תחתון בריבוי</b>, ציר אחר לגמרי; ולפי הכלל שלנו גם היא לא תהיה 4 או <code>1..*</code> אלא
         <code>0..*</code>, כי מכונית קיימת על פס הייצור עוד לפני שהורכבו גלגלים. שווה לומר את שתי השאלות
         זו לצד זו — זה מפריד סופית בין ◆ לבין קרדינליות.
-        <b>ולמה מועדון כושר↔מתאמן <i>אינו</i> על השקף (הערת דוד, 2026-08-15, והיא נכונה):</b> זו הדוגמה
+        <b>ולמה מועדון כושר↔מתאמן <i>אינו</i> על השקף:</b> זו הדוגמה
         הקלאסית לצבירה בספרי הלימוד, אבל <b>שניהם חיים זה בלי זה</b> ואין כאן הכלה אמיתית — יש <b>חברוּת</b>,
-        שהיא קשר רגיל (ואם שומרים עליה תאריך הצטרפות וסוג מנוי — מחלקת קשר). אם סטודנט מעלה אותה, זו התשובה.
-        לכן הכרטיס הוחלף ב<b>מטוס↔מנוע</b>: שם ה״חלק״ אינו שנוי במחלוקת — מנוע הוא רכיב של המטוס — ובכל
-        זאת הוא מוחכר, משופץ בנפרד ומורכב על מטוס אחר. זה בדיוק המקרה שדוד ביקש: שלם–חלק באמת, וקו רגיל בתרשים.
+        שהיא קשר רגיל (ואם שומרים עליה תאריך הצטרפות וסוג מנוי — מחלקת קשר). אם היא עולה, זו התשובה.
+        לכן בשקף מופיע במקומה <b>מטוס↔מנוע</b>: שם ה״חלק״ אינו שנוי במחלוקת — מנוע הוא רכיב של המטוס — ובכל
+        זאת הוא מוחכר, משופץ בנפרד ומורכב על מטוס אחר. זה בדיוק המקרה המבוקש: שלם–חלק באמת, וקו רגיל בתרשים.
         <b>כרטיסים 6 ו-8 הם מלכודות ה״יש לו״:</b> תפריט ״מכיל״ פריטים, ולבית חולים ״יש״ רופאים — ובשניהם
         ה<b>שיתוף</b> הוא שמכריע. שווה לחזור ולומר: כל אסוציאציה היא ״יש לו״ במובן כלשהו.
         <b>כרטיס 3 מזכיר משהו אחר לגמרי:</b> הוא לא שלם–חלק בכלל, וגם לא כל קשר חייב יהלום. אם שואלים
@@ -5449,27 +5003,6 @@
         <b>הערת מיקום:</b> החידון סוגר את שלישיית שלם–חלק (הרכבה ⇠ צבירה ⇠ חידון) לפני שעוברים להורשה.
       </aside>
     </section>
-    <!-- C13 — הורשה: מתי היא באמת מוצדקת. REWRITTEN 2026-08-15 around David's teaching doctrine:
-         "if we have 3 cases (for instance) different properties it's not a reason for inheritance since
-          properties can be empty and that is not an issue for classes (unlike databases). Same for different
-          methods that exist and will be called either by instance a or b. So the real reason for inheritance
-          is if the nature of class is truly different or if relations are different. Specifically, for user
-          roles, students tend to run into inheritance for each employee type where an enum would be enough."
-         This REPLACES the old rule on this slide ("inherit when subtypes have genuinely different
-         attributes/operations"), which is the rule the tool still ships — see the divergence log.
-         ⚠️ I SHARPENED TWO OF DAVID'S POINTS RATHER THAN COPYING THEM (he asked to be challenged):
-           · "different attributes is not a reason" holds for an OPTIONAL attribute, but not for MUTUALLY
-             EXCLUSIVE attribute sets. Collapsing Payment into one class with three nullable fields asserts
-             something false — that a payment could carry both last4 and universityId, or neither. The empty
-             attribute is cheap; the LOST INVARIANT is not. Without this nuance the course's own flagship
-             generalization stops being defensible on its own terms.
-           · "different methods is not a reason" is true AT THE ANALYSIS LEVEL (we barely draw operations)
-             but false in code, where polymorphism is the classic justification — and L13 generates that code.
-             Stated with its scope instead of as a general truth, because students meet the opposite claim in
-             the OO programming course.
-         The campus example is now justified by the RELATION (CreditCardPayment ⇢ «external system»
-         PaymentGateway; the university card has no such link) — which is why the dependency is drawn here.
-         SVG: English identifiers only + the LTR text guard. -->
     <section data-slug="generalization">
       <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
       <style>
@@ -5516,7 +5049,7 @@
 
         <div class="gen-row">
 
-          <!-- RIGHT (RTL-first): the two lists -->
+          
           <div class="rail">
             <div class="bx no">
               <div class="h">✗ נשמע כמו סיבה — ואינו</div>
@@ -5536,34 +5069,34 @@
             </div>
           </div>
 
-          <!-- LEFT: the campus example, justified by the RELATION -->
+          
           <div class="ex">
             <div class="panel-title">ולמה במודל שלנו זו כן הורשה</div>
             <svg viewBox="0 0 640 330" xmlns="http://www.w3.org/2000/svg" role="img"
                  aria-label="Payment with two subtypes; only CreditCardPayment has a dependency to the external PaymentGateway">
-              <!-- parent -->
+              
               <rect x="215" y="6" width="210" height="66" fill="#fff" stroke="#3b82f6" stroke-width="1.7"/>
               <rect x="215" y="6" width="210" height="30" fill="#1e40af"/>
               <text x="320" y="27" text-anchor="middle" font-size="15" font-weight="700" fill="#fff" font-family="'Segoe UI',Arial,sans-serif">Payment</text>
               <text x="224" y="56" font-size="12" fill="#1e293b" font-family="Consolas,monospace">- amount : Money</text>
-              <!-- generalization: hollow triangle at the parent -->
+              
               <polygon points="320,72 306,94 334,94" fill="#fff" stroke="#334155" stroke-width="1.7"/>
               <line x1="320" y1="94" x2="320" y2="116" stroke="#334155" stroke-width="1.7"/>
               <line x1="120" y1="116" x2="500" y2="116" stroke="#334155" stroke-width="1.7"/>
               <line x1="120" y1="116" x2="120" y2="150" stroke="#334155" stroke-width="1.7"/>
               <line x1="500" y1="116" x2="500" y2="150" stroke="#334155" stroke-width="1.7"/>
-              <!-- child 1 -->
+              
               <rect x="10" y="150" width="220" height="62" fill="#fff" stroke="#3b82f6" stroke-width="1.7"/>
               <rect x="10" y="150" width="220" height="30" fill="#1e40af"/>
               <text x="120" y="171" text-anchor="middle" font-size="12.5" font-weight="700" fill="#fff" font-family="'Segoe UI',Arial,sans-serif">UniversityCardPayment</text>
               <text x="19" y="199" font-size="12" fill="#1e293b" font-family="Consolas,monospace">- universityId : String</text>
-              <!-- child 2 -->
+              
               <rect x="390" y="150" width="220" height="80" fill="#fff" stroke="#3b82f6" stroke-width="1.7"/>
               <rect x="390" y="150" width="220" height="30" fill="#1e40af"/>
               <text x="500" y="171" text-anchor="middle" font-size="12.5" font-weight="700" fill="#fff" font-family="'Segoe UI',Arial,sans-serif">CreditCardPayment</text>
               <text x="399" y="197" font-size="12" fill="#1e293b" font-family="Consolas,monospace">- last4 : String</text>
               <text x="399" y="217" font-size="12" fill="#1e293b" font-family="Consolas,monospace">- gatewayRef : String</text>
-              <!-- THE justification: a relation only one subtype has -->
+              
               <line x1="500" y1="230" x2="500" y2="266" stroke="#334155" stroke-width="1.7" stroke-dasharray="6 3"/>
               <line x1="500" y1="274" x2="492" y2="261" stroke="#334155" stroke-width="1.7"/>
               <line x1="500" y1="274" x2="508" y2="261" stroke="#334155" stroke-width="1.7"/>
@@ -5617,22 +5150,6 @@
         לא מאפשרות. לא שווה יותר ממשפט.
       </aside>
     </section>
-    <!-- C14 — חידון: הורשה, enum, הרכבה או קשר רגיל. NEW 2026-08-15 (David: "I want a slide 42 with a card
-         quiz about inheritance or enum or aggregation or regular. 4/8 should be inheritance to teach the
-         concept").
-         ⚠️ ONE SUBSTITUTION, and it follows from David's own policy: the fourth option is **◆ הרכבה**, not
-         aggregation. ◇ is never a drawn answer any more (2026-08-15 policy), so putting it on a quiz as a
-         correct answer would contradict the deck; the ◆/◇/plain drill already happened on C12.
-         DESIGN NOTE — this slide is also the answer to David's other question ("is one slide enough before
-         the quiz? they know what inheritance is but tend to use it too often"): the problem is REFLEX, not
-         knowledge, so a second explanatory slide would repeat what they already know. Instead every back
-         face shows **the model to draw instead** — so the reflex gets somewhere to go. That is what makes
-         this slide carry the teaching weight rather than only test it.
-         The 4 inheritance cards are all justified by the NEW doctrine (C13): different RELATIONS and/or
-         mutually exclusive attributes — never "it has one more field". Each back names which criterion.
-         The 2 enum cards are the two flavours of the trap: a ROLE (David's employee case) and a TIER that
-         CHANGES (the change-kind test, which is the one students can apply without arguing).
-         Flip mechanics reuse the no-<script> pattern from the other quizzes. -->
     <section data-slug="inheritance-quiz">
       <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
       <style>
@@ -5683,7 +5200,7 @@
 
         <div class="grid8">
 
-          <!-- 1 · inheritance -->
+          
           <div class="qc" onclick="this.classList.toggle('flip')"><div class="inner">
             <div class="face front">
               <div class="sit">משלוח</div>
@@ -5697,7 +5214,7 @@
             </div>
           </div></div>
 
-          <!-- 2 · enum (David's case) -->
+          
           <div class="qc" onclick="this.classList.toggle('flip')"><div class="inner">
             <div class="face front">
               <div class="sit">סוגי עובדים</div>
@@ -5711,7 +5228,7 @@
             </div>
           </div></div>
 
-          <!-- 3 · inheritance -->
+          
           <div class="qc" onclick="this.classList.toggle('flip')"><div class="inner">
             <div class="face front">
               <div class="sit">חשבון בנק</div>
@@ -5725,7 +5242,7 @@
             </div>
           </div></div>
 
-          <!-- 4 · composition -->
+          
           <div class="qc" onclick="this.classList.toggle('flip')"><div class="inner">
             <div class="face front">
               <div class="sit">קורס ומפגשים</div>
@@ -5739,7 +5256,7 @@
             </div>
           </div></div>
 
-          <!-- 5 · inheritance -->
+          
           <div class="qc" onclick="this.classList.toggle('flip')"><div class="inner">
             <div class="face front">
               <div class="sit">מוצר בקטלוג</div>
@@ -5753,7 +5270,7 @@
             </div>
           </div></div>
 
-          <!-- 6 · enum (the change-kind test) -->
+          
           <div class="qc" onclick="this.classList.toggle('flip')"><div class="inner">
             <div class="face front">
               <div class="sit">דרגת לקוח</div>
@@ -5767,7 +5284,7 @@
             </div>
           </div></div>
 
-          <!-- 7 · inheritance (the campus canon) -->
+          
           <div class="qc" onclick="this.classList.toggle('flip')"><div class="inner">
             <div class="face front">
               <div class="sit">תשלום בקמפוס</div>
@@ -5781,7 +5298,7 @@
             </div>
           </div></div>
 
-          <!-- 8 · plain association -->
+          
           <div class="qc" onclick="this.classList.toggle('flip')"><div class="inner">
             <div class="face front">
               <div class="sit">ספק ומוצר</div>
@@ -5801,7 +5318,7 @@
 
       </div>
       <aside class="notes">
-        <b>איך מריצים:</b> כרטיס בכל פעם, מצביעים, ואז הופכים. הצבעה ביד היא חלק מהעניין — הרפלקס ״זו הורשה״
+        <b>החידון:</b> כרטיס בכל פעם; מחליטים לפני שהופכים. הרפלקס ״זו הורשה״
         צריך להיתפס <b>לפני</b> שהוא הופך להרגל בתרשים.
         <b>מה השקף הזה עושה מעבר לבדיקה:</b> כל צד אחורי מציג לא רק תשובה אלא <b>את המודל שמציירים במקום</b>
         (<code>Employee { role : EmployeeRole }</code>, <code>Course ◆—— Session</code>). זה בכוונה: סטודנטים
@@ -5824,35 +5341,6 @@
         היינו מחברים אותו להורה ומשאירים אותו ריק אצל חצי מהמופעים.
       </aside>
     </section>
-    <!-- Section ג / C — class discussion: "which relationship — if any?" (twin of L4-5
-         slide-relationship-or-not.html). 6 campus cards; click a card → a popup with TWO
-         candidate models (א / ב). NEITHER is marked correct on screen — the key lives in
-         this comment + the <aside class="notes">. No <script>: inline onclick only, so it
-         survives however the fragment is inlined (matching the L4-5 exemplar + L1 fishbone).
-         Doctrine authority: ../../SAD MCP/skills/uml-class-diagram/NOTATION.md.
-
-         ANSWER KEY — since 2026-08-15 it is also ON THE CARD: a second click inside the popup marks the
-         correct option green, dims the other, and opens a 'תשובה ושיקולים' block (David's request).
-         The list below stays as the authoring source of truth for those blocks:
-           1 הזמנה ↔ שורת הזמנה → א COMPOSITION (יהלום מלא בצד ההזמנה). שורת הזמנה לא קיימת
-                                  בלי ההזמנה שלה — מוחקים הזמנה, נמחקות השורות. (ב = צירוף/aggregation,
-                                  יהלום חלול — מתאים למקרה 2, לא כאן.)
-           2 קפיטריה ↔ עמדה     → א COMPOSITION (יהלום מלא בצד הקפיטריה). FLIPPED 2026-08-30 (David):
-                                  a station is a VIRTUAL concept inside its cafeteria and does not exist in
-                                  that form once the cafeteria closes; the "equipment moves" argument was
-                                  about furniture the system does not track. Same answer as case 1 — the
-                                  case now drills the trap (physical counter vs modelled concept).
-           3 תשלום-אונ׳/אשראי   → א GENERALIZATION. לכל תת-סוג תכונות משלו (universityId מול
-                                  last4/gatewayRef) ⇒ הורשה מוצדקת. (ב enum שגוי — יש הבדל תכונות.)
-                                  המראָה של מקרה 5.
-           4 הזמנה ↔ פריט תפריט → ב מחלקה מתווכת (שורת הזמנה). קשר רבים-לרבים + צורך לשמור כמות לכל פריט
-             (עם כמות)            ⇒ אין איפה לתלות את הכמות בקשר רגיל; המחלקה המתווכת נושאת אותה.
-           5 סטטוס הזמנה         → ב ENUM «OrderStatus», לא הורשה. ל״הזמנה ממתינה״ ול״הזמנה מוכנה״
-             (המלכודת)            אותן תכונות בדיוק — רק התווית שונה ⇒ enum. הטעות הקלאסית. מראָה של 3.
-           6 דוח מכירות          → ב לא מחלקה בכלל. מבחן ההימצאוּת: המערכת לא שומרת רשומת ״דוח״ —
-                                  היא מחשבת אותו מההזמנות בזמן אמת. פלט מחושב, לא מחלקה שנשמרת.
-         איזון החדר: 1 הרכבה · 2 צירוף · 3 הורשה · 4 מחלקה מתווכת · 5 enum (לא הורשה!) · 6 לא מחלקה.
-         שלושה מהשישה אינם ״קשר רגיל״ (5 enum, 6 לא-מחלקה, 4 דורש מחלקה מתווכת) — וזה הלקח. -->
     <section data-slug="relationship-or-not">
       <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
       <style>
@@ -5933,7 +5421,7 @@
 
       </div>
 
-      <!-- ══ 1 · הזמנה ↔ שורת הזמנה — composition vs aggregation ══ -->
+      
       <div class="rq" id="cr1" hidden onclick="this.hidden=true">
         <div class="rq-box" data-a="0" onclick="event.stopPropagation(); this.dataset.a='1'">
           <button class="rq-x" onclick="this.closest('.rq').hidden=true">✕</button>
@@ -5982,7 +5470,7 @@
         </div>
       </div>
 
-      <!-- ══ 2 · קפיטריה ↔ עמדה — aggregation vs composition ══ -->
+      
       <div class="rq" id="cr2" hidden onclick="this.hidden=true">
         <div class="rq-box" data-a="0" onclick="event.stopPropagation(); this.dataset.a='1'">
           <button class="rq-x" onclick="this.closest('.rq').hidden=true">✕</button>
@@ -6032,7 +5520,7 @@
         </div>
       </div>
 
-      <!-- ══ 3 · תשלום — generalization vs enum ══ -->
+      
       <div class="rq" id="cr3" hidden onclick="this.hidden=true">
         <div class="rq-box" data-a="0" onclick="event.stopPropagation(); this.dataset.a='1'">
           <button class="rq-x" onclick="this.closest('.rq').hidden=true">✕</button>
@@ -6084,7 +5572,7 @@
         </div>
       </div>
 
-      <!-- ══ 4 · הזמנה ↔ פריט תפריט (כמות) — plain many-to-many vs mediating class ══ -->
+      
       <div class="rq" id="cr4" hidden onclick="this.hidden=true">
         <div class="rq-box" data-a="0" onclick="event.stopPropagation(); this.dataset.a='1'">
           <button class="rq-x" onclick="this.closest('.rq').hidden=true">✕</button>
@@ -6122,7 +5610,7 @@
                 <text x="213" y="38" text-anchor="middle" font-size="9.5" fill="#64748b" font-family="Consolas,monospace">1</text>
                 <text x="109" y="38" text-anchor="middle" font-size="9.5" fill="#64748b" font-family="Consolas,monospace">1</text>
 
-                <!-- appears only on the reveal click: the SAME pair, twice — what `notes` is for -->
+                
                 <g class="reveal-only">
                   <line x1="161" y1="94" x2="161" y2="106" stroke="#7c3aed" stroke-width="1.2" stroke-dasharray="4 3"/>
                   <path d="M40 106 L268 106 L280 118 L280 152 L40 152 Z" fill="#FAF5FF" stroke="#7c3aed" stroke-width="1.3"/>
@@ -6148,7 +5636,7 @@
         </div>
       </div>
 
-      <!-- ══ 5 · סטטוס הזמנה — THE TRAP: inheritance vs enum ══ -->
+      
       <div class="rq" id="cr5" hidden onclick="this.hidden=true">
         <div class="rq-box" data-a="0" onclick="event.stopPropagation(); this.dataset.a='1'">
           <button class="rq-x" onclick="this.closest('.rq').hidden=true">✕</button>
@@ -6187,8 +5675,7 @@
                 <text x="221" y="31" text-anchor="middle" font-size="10" fill="#64748b" font-family="Consolas,monospace">«enumeration»</text>
                 <text x="221" y="46" text-anchor="middle" font-size="11" font-weight="700" fill="#334155" font-family="Consolas,monospace">OrderStatus</text>
                 <line x1="160" y1="54" x2="282" y2="54" stroke="#cbd5e1" stroke-width="1"/>
-                <!-- font-size 8.5 (was 9.5): the English literals are longer than the Hebrew ones
-                     and overran the 122px-wide enum box. -->
+                
                 <text x="221" y="70" text-anchor="middle" direction="ltr" font-size="8.5" fill="#475569" font-family="'Segoe UI',Arial,sans-serif">Pending · InPreparation</text>
                 <text x="221" y="86" text-anchor="middle" direction="ltr" font-size="8.5" fill="#475569" font-family="'Segoe UI',Arial,sans-serif">Ready · Collected</text>
                 <text x="221" y="102" text-anchor="middle" direction="ltr" font-size="9.5" fill="#475569" font-family="'Segoe UI',Arial,sans-serif">Cancelled</text>
@@ -6209,7 +5696,7 @@
         </div>
       </div>
 
-      <!-- ══ 6 · דוח מכירות — class vs not-a-class (persistence test) ══ -->
+      
       <div class="rq" id="cr6" hidden onclick="this.hidden=true">
         <div class="rq-box" data-a="0" onclick="event.stopPropagation(); this.dataset.a='1'">
           <button class="rq-x" onclick="this.closest('.rq').hidden=true">✕</button>
@@ -6259,7 +5746,7 @@
       <aside class="notes">
         לוחצים על מקרה ← נפתחות שתי דרכים למדל. לא מסמנים תשובה — מתווכחים. מפתח:
         1 א׳ הרכבה (יהלום מלא — שורת הזמנה לא קיימת בלי ההזמנה) ·
-        2 א׳ הרכבה (יהלום מלא — העמדה היא מושג בתוך הקפיטריה ונסגרת איתה; אותה תשובה כמו 1. הוחלט מחדש 2026-08-30, דוד: ״עמדה היא מושג וירטואלי שלא יתקיים בצורתו כשהקפיטריה נסגרת״. המלכודת שהכרטיס מלמד: לחשוב על הדלפק הפיזי במקום על המושג שהמערכת מנהלת) ·
+        2 א׳ הרכבה (יהלום מלא — העמדה היא מושג בתוך הקפיטריה ונסגרת איתה; אותה תשובה כמו 1. עמדה היא מושג וירטואלי, שלא קיים בצורתו כשהקפיטריה נסגרת. המלכודת שהכרטיס מלמד: לחשוב על הדלפק הפיזי במקום על המושג שהמערכת מנהלת) ·
         3 א׳ הורשה — <b>לא</b> בגלל ״שדות שונים״ אלא כי התכונות סותרות (universityId מול last4) ורק לאשראי יש קשר לשער התשלום ·
         4 ב׳ מחלקה מתווכת שורת הזמנה (קשר רבים-לרבים + צורך לשמור כמות — אין איפה לתלות אותה בקשר רגיל) ·
         5 ב׳ enum «OrderStatus» — לא הורשה! אותן תכונות בדיוק, רק תווית שונה — הטעות הקלאסית, המראָה של 3 ·
@@ -6267,23 +5754,6 @@
         שלושה מהשישה אינם ״קשר רגיל״ (4 מתווכת, 5 enum, 6 לא-מחלקה) — וזה בדיוק הלקח.
       </aside>
     </section>
-    <!-- C16 — תלות (Dependency): למי אנחנו קוראים. SPLIT out of the old slide-dependency-interface
-         2026-08-15 (David: "for Dependency ו-Interface I need better examples... maybe create a separate
-         slide for each type, and maybe a third slide with quiz cards").
-         ⚠️ THIS SLIDE ALSO CORRECTS A MIX-UP IN DAVID'S OWN FRAMING, and he asked to be told:
-         he proposed "interface = external systems, dependency = an import/include of a package inside the
-         organization". The course already rules the opposite way, and it is the standard reading:
-         **dependency is the notation for calling an external system** (his own instructor ruling,
-         2026-08-09, in the tool contract: Payment ⇢ «external system» PaymentGateway). A package «import»
-         IS a dependency, but that is a package-diagram usage and a narrow slice; at class level a
-         dependency means "uses without holding a reference" — parameter, local variable, static call.
-         An INTERFACE is a contract about substitutability, not about being outside — that is C17.
-         Example set widened per David: payment gateway · university SSO · Google Maps · an AI service.
-         The ✗ column is the load-bearing half: a technical library is a dependency in CODE and does not
-         belong in a domain class diagram at all — that is exactly the case David was thinking of.
-         Client of the dependency is CreditCardPayment (not Payment) to match the marquee after the
-         2026-08-15 fix: only a credit-card payment goes through the gateway.
-         SVG: English identifiers only + the LTR text guard. -->
     <section data-slug="dependency" class="has-acro-footer">
       <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
       <style>
@@ -6329,7 +5799,7 @@
 
         <div class="row">
 
-          <!-- RIGHT (RTL-first): the notation -->
+          
           <div class="dia">
             <div class="panel-title" style="color:#4C1D95;">הסימון, ומה יש בקצה השני</div>
             <svg viewBox="0 0 560 150" xmlns="http://www.w3.org/2000/svg" role="img"
@@ -6358,7 +5828,7 @@
               כל עוד החוזה נשמר, מחליפים את מי שמאחוריו בלי לגעת במחלקות שלנו. לא מציירים אותו — הוא שם על הקו, לא תיבה.</div>
           </div>
 
-          <!-- LEFT: when yes / when not -->
+          
           <div class="when">
             <div class="panel-title" style="color:var(--dark-blue);">מתי מציירים תלות — ומתי בכלל לא</div>
             <ul class="lst">
@@ -6383,27 +5853,27 @@
 
       </div>
       <aside class="notes">
-        <b>הכלל המעודכן (David, 2026-08-30):</b> תלות היא הסימון היחיד לכל קריאת API — ספק חיצוני <b>וגם</b> מערכת אחרת
+        <b>הכלל:</b> תלות היא הסימון היחיד לכל קריאת API — ספק חיצוני <b>וגם</b> מערכת אחרת
         של הארגון (HR, ERP, מערכת הסטודנטים, SSO). ״חיצוני״ פירושו מחוץ לגבול <b>המערכת שלנו</b>, לא מחוץ לארגון: המבחן הוא
         ״מי מחזיק את הנתונים״ — אם הם אצל המערכת האחרת ואנחנו רק קוראים, זו «external system» ותלות. לא לבלבל עם <b>חבילת
         קוד</b> פנימית שמקומפלת לתוכנו — היא הקוד שלנו, והמחלקות שבה הן מחלקות רגילות (הפריט ⚖️ ברשימה).
         ממשק/Interface נשאר <b>מושג</b> על הקו — החוזה שדרכו קוראים ומה שמאפשר להחליף את מי שמאחוריו — ולא תיבה או משולש
-        מימוש (שקפי הממשק נשארים ב-_parked; הוחלט שוב 2026-08-30).
+        מימוש.
         <b>הפוקוס:</b> תלות היא הקשר החלש ביותר, והשימוש שלה בקורס צר ומוגדר — <b>מערכת חיצונית שאנחנו קוראים
         לה</b>. אם מציירים תלות בין שתי מחלקות תחום, כמעט תמיד התכוונו לאסוציאציה.
         <b>ההגדרה הכללית, אם עולה שאלה:</b> ״הלקוח זקוק לספק״ — ובמחלקות זה בדרך כלל <b>שימוש בלי החזקה</b>:
         מעבירים מחלקה כפרמטר, יוצרים אותה זמנית, קוראים לשירות. ברגע ששומרים הפניה — זו כבר אסוציאציה.
-        ⚠️ <b>ולמה זו לא ״תלות בין חבילות״ (שאלת דוד, 2026-08-15):</b> <code>import</code> של חבילה הוא
+        ⚠️ <b>ולמה זו לא ״תלות בין חבילות״:</b> <code>import</code> של חבילה הוא
         <b>אכן</b> תלות — אבל זו תלות ב<b>תרשים חבילות</b> (<code>«import»</code>/<code>«access»</code>),
         ובקורס הזה אנחנו לא מציירים תרשימי חבילות. וחשוב מזה: ספרייה טכנית שאנחנו מייבאים לא נכנסת לתרשים
         <b>מחלקות התחום</b> בכלל — היא לא מייצגת שום דבר שהעסק יודע עליו. זה הכרטיס שמפיל אנשים בחידון.
-        <b>שלוש הדוגמאות החדשות</b> (דוד, 2026-08-15) עובדות טוב כי הן מוכרות: <code>Google Maps</code> —
+        <b>שלוש הדוגמאות</b> עובדות טוב כי הן מוכרות: <code>Google Maps</code> —
         אנחנו לא שומרים מפות; שירות <span class="en">AI</span> — אנחנו לא שומרים מודל; שער תשלום — אנחנו לא
         שומרים כרטיסי אשראי. בכל שלושתן <b>אין לנו רשומות</b>, וזה בדיוק המבחן.
-        <b>למה הלקוח כאן הוא <code>CreditCardPayment</code> ולא <code>Payment</code>:</b> תוקן ב-2026-08-15 —
+        <b>למה הלקוח כאן הוא <code>CreditCardPayment</code> ולא <code>Payment</code>:</b>
         רק תשלום באשראי פונה לשער; תשלום בכרטיס אוניברסיטה מחייב חשבון פנימי. זה גם מה שמצדיק את ההורשה
-        (״קשרים שונים״), ולכן שווה להצביע על החיבור בין שני השקפים.
-        <b>״ומה עם חבילה פנימית שפותחה בארגון ואנחנו מייבאים לקוד?״ (שאלת דוד, 2026-08-15) — התשובה תלויה
+        (״קשרים שונים״), וזה החיבור בין שני השקפים.
+        <b>״ומה עם חבילה פנימית שפותחה בארגון ואנחנו מייבאים לקוד?״ התשובה תלויה
         ב<u>מה יש בתוכה</u>, והמבחן הוא בדיוק זה של השקף: האם אנחנו שומרים רשומות, והאם העסק יודע על זה.</b>
         <b>(א) חבילה עם מחלקות תחום שאנחנו משתמשים ושומרים</b> — למשל ״חבילת עובדים״ עם <code>Employee</code>
         ו-<code>Department</code>, ואצלנו נשמרות המשמרות שלהם: <b>מציירים אותן כמחלקות רגילות</b> עם אסוציאציות
@@ -6423,24 +5893,6 @@
       </aside>
     <div class="acro-footer"><span class="acro"><span class="en">AI</span> = <span class="en">Artificial Intelligence</span> · בינה מלאכותית</span></div>
     </section>
-    <!-- C18 — חידון: מה מציירים? REBUILT 2026-08-15 (David, second pass): "it's not clear from the quiz what
-         the options are. It depends on what an interface is — so we need to make that clear. And again, I
-         want a third click to show the exact model that is used: the class diagram with the dependency or
-         the interface."
-         TWO FIXES:
-         (1) THE OPTIONS ARE NOW ON EVERY CARD FRONT as chips (⇢ / —— / ✗), the way the other two quizzes do
-             it — previously they lived only in the subtitle, so a student deciding had nothing to choose
-             between. And the lead bar now answers the interface question head-on, because it is the reason
-             the option set looked incomplete: **an interface is not one of the options** — it is not a thing
-             you draw in this course. It is the NAME OF THE CAPABILITY behind the dependency line, and it
-             shows up in the third state of the cards where the vendor is replaceable.
-         (2) THREE STATES instead of two: front → verdict + why → **the model actually drawn**. The third
-             state is the payoff: it turns the verbal answer into the picture the student has to produce,
-             and for the three swappable services it also shows the contract name on the line — which is the
-             only place an interface becomes visible in our notation.
-         State machine: data-s 0→1→2→0 on the card; the flip transform holds for both 1 and 2 so the back
-         face just swaps its content. No <script>, same inline-onclick licence as the other quizzes.
-         SVG: English identifiers only + the LTR text guard. -->
     <section data-slug="dependency-quiz" class="has-acro-footer">
       <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
       <style>
@@ -6495,7 +5947,7 @@
 
         <div class="grid8">
 
-          <!-- 1 -->
+          
           <div class="qc" data-s="0" onclick="this.dataset.s=(+this.dataset.s+1)%3"><div class="inner">
             <div class="face front"><div class="ico">💳</div><div class="sit">שער תשלום</div>
               <div class="sub">חיוב כרטיס אשראי</div>
@@ -6520,7 +5972,7 @@
             </div>
           </div></div>
 
-          <!-- 2 -->
+          
           <div class="qc" data-s="0" onclick="this.dataset.s=(+this.dataset.s+1)%3"><div class="inner">
             <div class="face front"><div class="ico">🗺️</div><div class="sit"><span class="en">Google Maps</span></div>
               <div class="sub">הצגת מיקום העמדה</div>
@@ -6545,7 +5997,7 @@
             </div>
           </div></div>
 
-          <!-- 3 -->
+          
           <div class="qc" data-s="0" onclick="this.dataset.s=(+this.dataset.s+1)%3"><div class="inner">
             <div class="face front"><div class="ico">🤖</div><div class="sit">שירות <span class="en">AI</span></div>
               <div class="sub">מסכם ביקורות על פריטים</div>
@@ -6570,7 +6022,7 @@
             </div>
           </div></div>
 
-          <!-- 4 -->
+          
           <div class="qc" data-s="0" onclick="this.dataset.s=(+this.dataset.s+1)%3"><div class="inner">
             <div class="face front"><div class="ico">🎓</div><div class="sit">זיהוי האוניברסיטה</div>
               <div class="sub">כניסה וחיוב כרטיס סטודנט</div>
@@ -6595,7 +6047,7 @@
             </div>
           </div></div>
 
-          <!-- 5 -->
+          
           <div class="qc" data-s="0" onclick="this.dataset.s=(+this.dataset.s+1)%3"><div class="inner">
             <div class="face front"><div class="ico">📄</div><div class="sit">ספריית <span class="en">PDF</span></div>
               <div class="sub">מייצרת את קובץ הקבלה</div>
@@ -6614,7 +6066,7 @@
             </div>
           </div></div>
 
-          <!-- 6 -->
+          
           <div class="qc" data-s="0" onclick="this.dataset.s=(+this.dataset.s+1)%3"><div class="inner">
             <div class="face front"><div class="ico">🧾</div><div class="sit">תשלום</div>
               <div class="sub">הרשומה שנשמרת על כל חיוב</div>
@@ -6635,7 +6087,7 @@
             </div>
           </div></div>
 
-          <!-- 7 -->
+          
           <div class="qc" data-s="0" onclick="this.dataset.s=(+this.dataset.s+1)%3"><div class="inner">
             <div class="face front"><div class="ico">🧑‍🎓</div><div class="sit">הסטודנט שמזמין</div>
               <div class="sub">מלכודת</div>
@@ -6656,7 +6108,7 @@
             </div>
           </div></div>
 
-          <!-- 8 -->
+          
           <div class="qc" data-s="0" onclick="this.dataset.s=(+this.dataset.s+1)%3"><div class="inner">
             <div class="face front"><div class="ico">🗄️</div><div class="sit">מסד הנתונים שלנו</div>
               <div class="sub">מלכודת</div>
@@ -6683,13 +6135,13 @@
       <aside class="notes">
         <b>שלושה מצבים לכל כרטיס:</b> תרחיש ← תשובה ונימוק ← <b>התרשים עצמו</b>. הלחיצה השלישית היא העיקר:
         היא הופכת תשובה מילולית לתמונה שהסטודנט צריך לייצר במבחן ובתרגיל.
-        <b>ולמה שלוש אפשרויות ולא ארבע (שאלת דוד, 2026-08-15):</b> <b>ממשק אינו אפשרות</b> — לא מציירים אותו
+        <b>ולמה שלוש אפשרויות ולא ארבע:</b> <b>ממשק אינו אפשרות</b> — לא מציירים אותו
         בקורס. מה שכן רואים הוא <b>שם היכולת על קו התלות</b> (<code>PaymentAPI</code>, <code>MapService</code>,
         <code>TextSummarizer</code>) — ולכן הוא מופיע רק בשלב השלישי, ורק בכרטיסים שבהם הספק מתחלף. אם
         סטודנט שואל ״ואיפה הממשק?״ — זו התשובה, והיא מופיעה גם בפס העליון של השקף.
         <b>שימו לב שכרטיס 4 (זיהוי אוניברסיטה) בכוונה בלי שם יכולת:</b> ספק שלא מתחלף לא מצדיק חוזה בעל שם.
         זה מונע את המסקנה השגויה ש״לכל מערכת חיצונית מגדירים ממשק״.
-        <b>כרטיס 5 (ספריית PDF) הוא הלב</b>, והוא בדיוק המקרה שדוד תיאר כ״import של חבילה״: בקוד תלות אמיתית,
+        <b>כרטיס 5 (ספריית PDF) הוא הלב</b>, והוא בדיוק המקרה של ״import של חבילה״: בקוד תלות אמיתית,
         בתרשים התחום — כלום. השלב השלישי שם מראה <b>קופסה ריקה</b> בכוונה: התשובה ״לא מציירים״ היא גם תשובה
         שצריך לדעת לצייר, כלומר לא לצייר.
         <b>כרטיסים 7 ו-8:</b> מלכודות מוכרות — שחקן מול מחלקה, ותשתית מול תחום.
@@ -6698,18 +6150,6 @@
       </aside>
     <div class="acro-footer"><span class="acro"><span class="en">AI</span> = <span class="en">Artificial Intelligence</span> · בינה מלאכותית</span></div>
     </section>
-    <!-- D1 — 1ONF: אין רשימה בתוך תכונה. SPLIT of the old single normalization slide 2026-08-17
-         (David: "for slide 47 — ONF — I want a separate slide for each rule with an example of a bad class
-         and how it's fixed with ONF").
-         Shape shared by all three ONF slides: ✗ the offending class box · ✓ the fixed model · a strip of
-         what concretely BREAKS without the rule · one bottom line.
-         ⚠️ NAMING, kept from the 2026-08-10 regression fix: these are 1ONF/2ONF/3ONF — the OBJECT rules,
-         not the relational 1NF/2NF/3NF the students meet in the database course in parallel. Do not drop
-         the O. And this is David's own ONF formulation from his source deck, NOT Ambler's — do not
-         "correct" it toward Ambler without asking him.
-         The fix here lands on OrderLine, which section ג already built as a mediating class — so the rule
-         arrives as a callback rather than as new material.
-         SVG: English identifiers only + the LTR text guard. -->
     <section data-slug="onf-1" class="has-acro-footer">
       <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
       <style>
@@ -6805,7 +6245,7 @@
 
         </div>
 
-        <!-- second example (David, 2026-08-30: at least two examples per ONF) — operations flavour -->
+        
         <div class="ex2">
           <div class="e2 bad">
             <div class="eh">✗ דוגמה 2 <small>— עובד וכישוריו</small></div>
@@ -6850,13 +6290,13 @@
 
       </div>
       <aside class="notes">
-        <b>דוגמה 2 (2026-08-30):</b> עובד–כישורים. אותו כלל, מסביבת תפעול: ״ריתוך; מלגזה; CNC״ במחרוזת אחת פירושו שאי אפשר לשאול מי מוסמך למלגזה בלי לפרק טקסט. התיקון הוא קשר רבים-לרבים, ואם לצמד יש נתונים (רמה, תוקף הסמכה) — מחלקה מתווכת. שווה להראות שהמחלקה המתווכת של חלק ג׳ חוזרת גם כאן.
+        <b>דוגמה 2:</b> עובד–כישורים. אותו כלל, מסביבת תפעול: ״ריתוך; מלגזה; CNC״ במחרוזת אחת פירושו שאי אפשר לשאול מי מוסמך למלגזה בלי לפרק טקסט. התיקון הוא קשר רבים-לרבים, ואם לצמד יש נתונים (רמה, תוקף הסמכה) — מחלקה מתווכת. המחלקה המתווכת של חלק ג׳ חוזרת גם כאן.
         <b>אלה 1ONF/2ONF/3ONF — נירמול של מודל מחלקות, לא של טבלאות.</b> לסטודנטים יש קורס בסיסי נתונים
         במקביל, ושם 2NF ו-3NF פירושם דברים אחרים לגמרי (תלות חלקית במפתח, תלות טרנזיטיבית). הרעיון זהה —
         <b>כל עובדה במקום אחד</b> — אבל הכללים מנוסחים על מחלקות ותכונות. אל תשמיטו את ה-O.
         <b>הכלל בשורה אחת:</b> תכונה מחזיקה ערך אחד. אם מתחשק לכתוב שם רשימה — יש שם מחלקה שלא נולדה.
         <b>אם מישהו כותב <code>- phones : String [0..*]</code>:</b> בקורס הזה <b>לא מלמדים ריבוי על תכונה ולא
-        משתמשים בו</b> (החלטת דוד, 2026-08-10) — הוא הוסר משקף התכונות בכוונה. הוא חוקי ב-UML, והתשובה אצלנו
+        משתמשים בו</b> (גם שקף התכונות לא מציג אותו). הוא חוקי ב-UML, והתשובה אצלנו
         תמיד אחת: <b>זו רשימה בתוך תכונה, כלומר הפרת 1ONF</b>.
         <b>איך מפרקים, ושווה לתת את שתי האפשרויות:</b> אם לערך החוזר <b>אין</b> תכונות משלו — מחלקה קטנה
         בקשר; אם <b>יש</b> לו תכונות (סוג הטלפון, מתי אומת; כאן: כמות והערות) — ממילא מגיעה לו מחלקה מלאה.
@@ -6868,13 +6308,6 @@
       </aside>
     <div class="acro-footer"><span class="acro"><span class="en">UML</span> = <span class="en">Unified Modeling Language</span> · שפת מידול אחידה</span></div>
     </section>
-    <!-- D2 — 2ONF: אין אובייקט כתכונה. SPLIT of the old normalization slide 2026-08-17 (David: a slide per
-         rule, with a bad class and its fix). Same shape as D1 and D3.
-         ⚠️ This is the rule most likely to be argued with, because in CODE the field is exactly what you
-         write (`Order { -Worker worker }` in the sample project). That is not a contradiction — it is the
-         design-vs-implementation boundary from C4, and the notes say so explicitly.
-         Naming: OBJECT normal form, not the relational 2NF. David's own formulation, not Ambler's.
-         SVG: English identifiers only + the LTR text guard. -->
     <section data-slug="onf-2">
       <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
       <style>
@@ -6967,7 +6400,7 @@
 
         </div>
 
-        <!-- second example (David, 2026-08-30: at least two examples per ONF) — operations flavour -->
+        
         <div class="ex2">
           <div class="e2 bad">
             <div class="eh">✗ דוגמה 2 <small>— משלוח והספק שלו</small></div>
@@ -7016,10 +6449,10 @@
 
       </div>
       <aside class="notes">
-        <b>דוגמה 2 (2026-08-30):</b> משלוח–ספק. אותו מבחן כמו הזמנה–סטודנט: ברגע שיש עוד עובדה אחת על הספק (טלפון, תנאי תשלום, דירוג איכות) — הוא מחלקה. ולהזכיר שוב: <code>supplierId</code> כתכונה על Shipment הוא מפתח זר, לא תכונה (B5).
+        <b>דוגמה 2:</b> משלוח–ספק. אותו מבחן כמו הזמנה–סטודנט: ברגע שיש עוד עובדה אחת על הספק (טלפון, תנאי תשלום, דירוג איכות) — הוא מחלקה. ושוב: <code>supplierId</code> כתכונה על Shipment הוא מפתח זר, לא תכונה (B5).
         <b>הכלל בשורה אחת:</b> תכונה מחזיקה טיפוס פשוט (מספר, טקסט, תאריך, ערך מרשימה). מחלקה אחרת —
         מגיעים אליה ב<b>קשר</b>, לא מטמיעים אותה פנימה.
-        <b>שימו לב איזו גרסה של השגיאה מציגים כאן (תיקון של דוד, 2026-08-17), כי היא הנפוצה:</b> לא
+        <b>שימו לב איזו גרסה של השגיאה מציגים כאן, כי היא הנפוצה:</b> לא
         ״הכניסו אובייקט קיים לתוך תכונה״ אלא <b>המחלקה מעולם לא נוצרה</b> — הסטודנט מיוצג בתור <b>שם</b>.
         זה נראה תמים, ולכן הוא עובר: מחרוזת היא טיפוס לגיטימי, והמודל ״עובד״. השאלה שחושפת אותו:
         <b>״ומה עוד אתם יודעים על הסטודנט?״</b> — ברגע שיש תשובה אחת נוספת (מייל, מספר סטודנט), אין לה איפה
@@ -7039,13 +6472,6 @@
         מסד הנתונים״.
       </aside>
     </section>
-    <!-- D3 - 3ONF: פרק תכונה מורכבת. SPLIT of the old normalization slide 2026-08-17 (David: a slide per
-         rule, with a bad class and its fix). Same shape as D1 and D2, and it closes the trio.
-         The extra beat this one needs, because it is the question students actually ask: HOW FAR do you
-         split? Answer on the slide - split to the level the business asks questions at; and if the composite
-         is reused or carries behaviour, it stops being attributes and becomes a class (Address).
-         Naming: OBJECT normal form, not the relational 3NF. David's own formulation, not Ambler's.
-         SVG: English identifiers only + the LTR text guard. -->
     <section data-slug="onf-3">
       <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
       <style>
@@ -7138,7 +6564,7 @@
 
         </div>
 
-        <!-- second example (David, 2026-08-30: at least two examples per ONF) — operations flavour -->
+        
         <div class="ex2">
           <div class="e2 bad">
             <div class="eh">✗ דוגמה 2 <small>— משמרת</small></div>
@@ -7184,10 +6610,10 @@
 
       </div>
       <aside class="notes">
-        <b>דוגמה 2 (2026-08-30):</b> משמרת. ״ראשון 08:00-16:00״ במחרוזת אחת — שלוש עובדות. הפירוק נותן לכל אחת טיפוס: יום = ה-enum DayOfWeek משקף 16 (קישור לאחור!), שעות = Time שאפשר לחשב איתו, ואילוץ {end > start} שעל מחרוזת אי אפשר להביע. גם כאן: מפרקים עד הרמה שהעסק שואל בה — ״כמה שעות״, ״מי במשמרת ביום ראשון״.
+        <b>דוגמה 2:</b> משמרת. ״ראשון 08:00-16:00״ במחרוזת אחת — שלוש עובדות. הפירוק נותן לכל אחת טיפוס: יום = ה-enum DayOfWeek משקף 16 (קישור לאחור!), שעות = Time שאפשר לחשב איתו, ואילוץ {end > start} שעל מחרוזת אי אפשר להביע. גם כאן: מפרקים עד הרמה שהעסק שואל בה — ״כמה שעות״, ״מי במשמרת ביום ראשון״.
         <b>הכלל בשורה אחת:</b> ערך אחד שמכיל כמה עובדות — מפרקים. המבחן הוא לא ״כמה חלקים יש״ אלא
         <b>האם העסק שואל על חלק בנפרד</b>.
-        ⚠️ <b>ולפני הפירוק — שאלה שקודמת לו, וזו הערה של דוד על גרסה קודמת של השקף (2026-08-17):</b>
+        ⚠️ <b>ולפני הפירוק, שאלה שקודמת לו:</b>
         <b>על מי התכונה מדברת?</b> ״מיקום איסוף״ מתאר את ה<b>עמדה</b>, לא את ההזמנה. אם מפרקים אותו לתוך
         <code>Order</code> מקבלים תכונות על המחלקה <b>הלא נכונה</b> — שגיאה גרועה יותר מהמחרוזת המקורית, כי
         עכשיו אותו מידע יישמר מחדש בכל הזמנה. הסדר הנכון: קודם <b>מי הבעלים של העובדה</b>, ורק אחר כך
@@ -7204,13 +6630,6 @@
         קשר · 3ONF — ערך מורכב הוא רכיבים. וכולם אותו עיקרון: <b>כל עובדה במקום אחד, ובמקום שאפשר לשאול עליו</b>.
       </aside>
     </section>
-    <!-- D4a — מודל הקמפוס, שלב 1: מחלקות. REPLACES slide-campus-model (David, 2026-08-30): the marquee now BUILDS
-         step by step like L8's order-step slides. Same generated SVG layout on steps 1–5 (coordinates scaled from
-         assets/classdiagram-campus-food.html CLASSES/RELS, so every step matches the live asset exactly); step 6 embeds
-         the live asset. Step 1: the seven domain classes appear as EMPTY boxes (names only) in four fragment groups, each
-         group = the L4-5 use case whose nouns passed the persistence test; a red dashed 'ghost' pair shows two nouns that
-         FAILED (דוח מכירות, קבלה). Compartments are drawn empty on purpose — step 2 fills them. Generated by
-         scratchpad gen_model_steps.py (2026-08-30). -->
     <section data-slug="model-step1" class="has-acro-footer">
       <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
       <style>
@@ -7321,11 +6740,6 @@
       </aside>
     <div class="acro-footer"><span class="acro"><span class="en">AI</span> = <span class="en">Artificial Intelligence</span> · בינה מלאכותית</span></div>
     </section>
-    <!-- D4b — שלב 2: תכונות, מזהים ופעולות. Same SVG layout as steps 1/3/4/5 (generated). The seven boxes are static;
-         three fragments fill them: (1) every attribute compartment incl. the {>0}/{>=0} constraints, (2) orange bands on the
-         four BUSINESS IDs (studentId, orderId, itemId, paymentId) — the classes nobody outside refers to get none, (3) green
-         bands on the three operations — stored vs derived (total(), lineTotal()) — with unitPrice as the deliberate
-         'stored although derivable' case (menu price changes, a past order must not). Follows the asset verbatim. -->
     <section data-slug="model-step2">
       <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
       <style>
@@ -7541,12 +6955,6 @@
         להשתנות. שאלת כיתה: למה status היא תכונה ולא פעולה? כי המערכת <b>קובעת</b> אותה, לא מחשבת אותה מנתונים אחרים.
       </aside>
     </section>
-    <!-- D4c — שלב 3: קשרים וקרדינליות. Same layout; boxes static (filled). EVERY association/composition relation of
-         the asset appears as a PLAIN line (no diamond yet) with multiplicity at BOTH ends — nothing left dangling (David,
-         2026-08-30: students will not understand why some classes have no association): Student 1—0..* Order · the red
-         ghost Order 0..*—0..* MenuItem (where does quantity go?) · Order 1—0..* OrderLine + OrderLine 0..*—1 MenuItem, the
-         mediating class named · MenuItem 0..*—1 Station · Cafeteria 1—0..* Station · Order 1—0..1 Payment. Solid line, no
-         arrowhead (tool doctrine). Whether a line is a composition is decided in step 4. -->
     <section data-slug="model-step3" class="has-acro-footer">
       <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
       <style>
@@ -7701,14 +7109,6 @@
       </aside>
     <div class="acro-footer"><span class="acro"><span class="en">AI</span> = <span class="en">Artificial Intelligence</span> · בינה מלאכותית</span></div>
     </section>
-    <!-- D4d — שלב 4: הרכבה — עוברים על כל קו ומחליטים. Same diagram as step 3 (all six plain lines static); the
-         DECISION pass (David, 2026-08-30: step 3 draws everything, step 4 decides). One fragment per line, walking the
-         diagram: a verdict badge — ◆ on Order—OrderLine and Cafeteria—Station (the filled diamond is ADDED at the whole end
-         inside the fragment, same size as the marker step 5 uses) and a gray 'קו רגיל' badge + one-line reason on the other
-         four (Student—Order: an order is not part of a student · OrderLine—MenuItem: catalogue item, shared · MenuItem—Station:
-         shared · Order—Payment: a payment record is not a part). Rail = the two tests; ◆ only when both pass; ◇ never
-         generated — in doubt, a plain line. Cafeteria ◆ Station is composition since 2026-08-30 (a station is a concept inside
-         its cafeteria). -->
     <section data-slug="model-step4">
       <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
       <style>
@@ -7864,18 +7264,13 @@
         <b>סטודנט—הזמנה:</b> סטודנט הוא לא ״שלם״ שההזמנה חלק ממנו; ההזמנה היא רשומה בפני עצמה (ובדוחות היא נשארת גם אם הסטודנט
         סיים ללמוד). קו רגיל. <b>הזמנה—שורת הזמנה:</b> שורה בלי הזמנה — אין; בעלים אחד — כן. ◆. <b>שורה—פריט תפריט:</b> הפריט הוא
         קטלוג, משותף לאלפי שורות, קיים גם בלי אף הזמנה. קו רגיל. <b>פריט—עמדה:</b> העמדה משרתת פריטים רבים ולא ״מורכבת״ מהם. קו
-        רגיל. <b>קפיטריה—עמדה:</b> שונה 2026-08-30 (דוד) — ״העמדה החמה של קפיטריית הנדסה״ היא מושג בתוך הקפיטריה, לא ציוד
+        רגיל. <b>קפיטריה—עמדה:</b> ״העמדה החמה של קפיטריית הנדסה״ היא מושג בתוך הקפיטריה, לא ציוד
         שמגלגלים; נסגרה הקפיטריה, העמדה נעלמת, והציוד שנפתח במקום אחר הוא עמדה חדשה. ◆. <b>הזמנה—תשלום:</b> רשומת תשלום היא
         ישות כספית משלה (מזהה עסקי, אסמכתא לסולק) — לא חלק מההזמנה. קו רגיל.
         <b>◇ צבירה</b> — אין בתרשים ולא יהיה: בקורס לומדים לזהות אותה במודלים של אחרים, לא מייצרים. בספק — קו רגיל; היהלום המלא
         רק כשאתם בטוחים בשני המבחנים. שאלת כיתה לסיום: למה היהלום תמיד בצד ה-1?
       </aside>
     </section>
-    <!-- D4e — שלב 5: הורשה, enum ותלות. Same layout; the seven classes + six relations are static. Fragments add the
-         rest of the asset: (1) Payment ▷ {UniversityCardPayment, CreditCardPayment} — inheritance justified by DIFFERENT
-         RELATIONS (only credit card talks to the gateway), (2) the UNCONNECTED «enumeration» OrderStatus box above Order,
-         (3) the two «external system» boxes with dashed dependencies — CreditCardPayment ⇢ PaymentGateway (moved off the
-         parent 2026-08-15) and Student ⇢ UniversityIdentity. After this fragment the SVG equals the live asset (step 6). -->
     <section data-slug="model-step5">
       <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
       <style>
@@ -8057,17 +7452,10 @@
         היחיד הוא הטיפוס של התכונה. (ב-L8 הרשימה תגדל — תרשים המצבים מזין חזרה את מודל המחלקות.)
         <b>תלות (פרגמנט 3):</b> שתי מערכות חיצוניות — שער התשלום ושירות הזיהוי של האוניברסיטה. תיבה אפורה מקווקוות,
         ״no records on our side״, בלי קרדינליות: אנחנו לא שומרים אותן, רק קוראים להן. החץ מ<b>CreditCardPayment</b> ולא
-        מ-Payment — אחרת המודל היה טוען שכל תשלום עובר בשער, ומוחק את הצידוק להורשה. הכלל (C16, דוד 2026-08-30): תלות
+        מ-Payment — אחרת המודל היה טוען שכל תשלום עובר בשער, ומוחק את הצידוק להורשה. הכלל (C16): תלות
         היא הסימון לכל קריאת API — ספק חיצוני וגם מערכות אחרות של הארגון. אחרי הפרגמנט הזה התרשים זהה לנכס החי — שלב 6.
       </aside>
     </section>
-    <!-- D4f — שלב 6: בדיקה — ומודל חי. REPLACES slide-campus-model (David, 2026-08-30): the model now builds step by
-         step like L8's order-step slides, and this is the closing beat — the LIVE asset (assets/classdiagram-campus-food.html
-         ?embed=1, full height, exactly like the old page-49 marquee) next to a ✓ checklist rail revealed row by row:
-         persistence test · ids · multiplicity both ends · mediating class · ◆ only where the part dies with the whole ·
-         inheritance by relations · enum unconnected · dependency only to external systems · 1ONF/2ONF/3ONF (the three rules
-         that precede this sequence — the model is opened as a CLEAN model). "מה לראות" content of the old slide folded in.
-         The asset is interactive during the lecture (click a class for its description, hover a line). -->
     <section data-slug="model-step6" class="has-acro-footer">
       <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
       <style>
@@ -8092,7 +7480,7 @@
       <div class="body">
         <div class="model-row">
 
-          <!-- right rail (RTL-first): the checklist, one ✓ per click -->
+          
           <div class="rail">
             <div class="panel-title">שלב 6: הבדיקה</div>
             <div class="row fragment"><b>מבחן הקיימוּת</b> — 7 מחלקות תחום; דוח מכירות וקבלה נשארו בחוץ</div>
@@ -8106,7 +7494,7 @@
             <div class="row onf fragment"><b><span class="en">1ONF · 2ONF · 3ONF</span></b> — אין רשימה בתכונה, אין אובייקט בתכונה, אין ערך מורכב</div>
           </div>
 
-          <!-- left: the live class-diagram asset, full height, embed mode -->
+          
           <div class="embed">
             <iframe src="assets/classdiagram-campus-food.html?embed=1" title="מודל המחלקות של הזמנת אוכל בקמפוס" loading="lazy"></iframe>
           </div>
@@ -8126,14 +7514,6 @@
       </aside>
     <div class="acro-footer"><span class="acro"><span class="en">AI</span> = <span class="en">Artificial Intelligence</span> · בינה מלאכותית</span></div>
     </section>
-    <!-- D2 — תרשים מחלקות מול מסד הנתונים. The slide David asked for early on and deferred:
-         "I will want this slide but it needs to come later in the process."
-         Placed straight after נירמול (1ONF/2ONF/3ONF), which is itself database-course material, so the
-         comparison lands where it is already loudest.
-         Everything it needs is now taught: identity + FK (slides 12-13), unitPrice as a point-in-time
-         value, 1ONF vs multi-valued attributes, enum vs lookup table.
-         Structure: the mapping table (what crosses over) + what does NOT cross, in both directions.
-         Thesis, third time in the deck: גזירה, לא העתקה. -->
     <section data-slug="model-vs-database" class="has-acro-footer">
       <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
       <style>
@@ -8220,10 +7600,6 @@
       </aside>
     <div class="acro-footer"><span class="acro"><span class="en">UML</span> = <span class="en">Unified Modeling Language</span> · שפת מידול אחידה</span></div>
     </section>
-    <!-- D3 — the class diagram is ONE design artifact; design owns much more. Callback to L4-5
-         non-functional requirements, and a forward preview of the sibling design diagrams:
-         תרשים מצבים (L8) = the order's lifecycle, תרשים רצף (L9) = the interactions.
-         REFRESH of old slide 51. NEW 2026-07-23 for the L6-7 HTML deck. -->
     <section data-slug="design-phase-more">
       <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
       <style>
@@ -8269,9 +7645,7 @@
               <div class="nm">תרשים מצבים <span class="en">(State)</span></div>
               <div class="ds">מחזור החיים של ההזמנה: <b>ממתין ← בהכנה ← מוכן ← נאסף</b></div>
             </div>
-            <!-- NO lecture number here on purpose (David, 2026-08-09): Sequence IS lecture 9 in the
-                 course's general structure, but it wasn't taught this year (12-week semester instead
-                 of 13). Keep it as a complementary UML diagram so the slide stays year-agnostic. -->
+            
             <div class="sib">
               <span class="tag">תרשים משלים</span>
               <div class="nm">תרשים רצף <span class="en">(Sequence)</span></div>
@@ -8291,12 +7665,6 @@
         מחזור החיים של ההזמנה (ערכי OrderStatus כמצבים); תרשים רצף (Sequence) משלים אותו ומראה את האינטראקציה בין האובייקטים בזמן.
       </aside>
     </section>
-    <!-- D4 — from the class model to running code (the L13 bridge). Mirror of L4-5's
-         analysis-to-code slide. Pipeline: מודל המחלקות + תרחישים → CLAUDE.md → פיתוח → L13.
-         FRAMING (auto-memory ai-developer-framing): AI is the coder handed a spec — it writes
-         the CRUD/data layer; the TEAM still owns the non-functional requirements and integration.
-         Never "AI builds the system". Thesis: the model is the CEILING on the AI's output.
-         NEW 2026-07-23 for the L6-7 HTML deck. -->
     <section data-slug="model-to-code" class="has-acro-footer">
       <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
       <style>
@@ -8371,12 +7739,6 @@
       </aside>
     <div class="acro-footer"><span class="acro"><span class="en">CRUD</span> = <span class="en">Create, Read, Update, Delete</span> · יצירה, קריאה, עדכון, מחיקה</span> &nbsp;·&nbsp; <span class="acro"><span class="en">AI</span> = <span class="en">Artificial Intelligence</span> · בינה מלאכותית</span></div>
     </section>
-    <!-- E1 — in-class practice. Feed a fresh operations spec (מעונות / dormitories — one of the
-         classic identification scenarios, per REDESIGN_OUTLINE) to Claude, get a class model, then
-         CRITIQUE it by this lecture's doctrine. The graded skill is the critique, not the draw —
-         same thread as L4-5's exercises-ai-critique. The dorm spec is seeded with the traps we
-         taught: many-to-many-with-data (mediating class), enum-not-inheritance, composition, a report that
-         fails the persistence test. NEW 2026-07-23 for the L6-7 HTML deck. -->
     <section data-slug="exercise" class="has-acro-footer">
       <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
       <style>
@@ -8421,7 +7783,7 @@
 
       </div>
       <aside class="notes">
-        <b>המסמך המלא (2026-08-30):</b> הפסקה שעל השקף היא רק התקציר. באתר הקורס, תחת
+        <b>המסמך המלא:</b> הפסקה שעל השקף היא רק התקציר. באתר הקורס, תחת
         <code>materials/5-עיצוב/תרגול-בכיתה</code>, יש מסמך אפיון מלא של המעונות — תיאור הארגון, ראיונות, מילון
         נתונים, כללים עסקיים ושאלות פתוחות — בדיוק במתכונת של הספרייה מהרצאה 4-5. זה מה שמזינים ל-sad-mcp,
         וזה הסיפור <b>המשותף</b> לכל הכיתה: הפרויקטים הקבוצתיים שונים זה מזה, ולכן אין תרשים אחד להתווכח עליו —
@@ -8435,21 +7797,6 @@
       </aside>
     <div class="acro-footer"><span class="acro"><span class="en">AI</span> = <span class="en">Artificial Intelligence</span> · בינה מלאכותית</span></div>
     </section>
-    <!-- E2 — אותו תרגיל, שני כלים. NEW 2026-08-17 (David: first "add this image as slide 54 — the result of
-         sad-mcp for this problem", then, mid-build: "we also have this solution which Claude created WITHOUT
-         the sad-mcp. So this is where I would like to show students the importance of using the right tool
-         and challenging results, since the mcp result is quite good (I think)").
-         That second message changed the slide: a single reference output would have read as "here is the
-         answer", which destroys E1 (the graded skill is the CRITIQUE). A SIDE-BY-SIDE does the opposite —
-         it shows that the tool removes most of the errors and that the remaining judgement is still theirs.
-         Two assets, both text in git:
-           · assets/classdiagram-dorms.html?embed=1 — the sad-mcp output, rebuilt in the generator's own
-             CLASSES/RELS format (David's original was a screenshot pasted into chat, which is not a file).
-           · assets/dorms-unaided.svg — Claude's unaided attempt, exactly as produced.
-         The visible diff strip holds only the four headline differences; the full audit is in the notes, and
-         it is deliberately framed as "what to check", because a couple of the calls are arguable.
-         ⚠️ Do NOT present the sad-mcp panel as correct-by-definition. Its own decisions (MaintenanceRequest
-         hanging off the contract, 1..* between Building and Room) are worth challenging too — notes say so. -->
     <section data-slug="exercise-solution" data-z="0" class="has-acro-footer">
       <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
       <style>
@@ -8595,9 +7942,6 @@
       </aside>
     <div class="acro-footer"><span class="acro"><span class="en">UML</span> = <span class="en">Unified Modeling Language</span> · שפת מידול אחידה</span></div>
     </section>
-    <!-- E2 — recap + close. The arc (class → members → relationships → good design), the five
-         doctrine takeaways, and the bridge to L8: the OrderStatus enum values become STATES in a
-         state diagram (the campus order's lifecycle). NEW 2026-07-23 for the L6-7 HTML deck. -->
     <section data-slug="summary">
       <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
       <style>
@@ -8651,13 +7995,6 @@
         ערכי OrderStatus שראינו (ממתין/בהכנה/מוכן/נאסף) הופכים למצבים במחזור החיים של ההזמנה, והמעברים ביניהם.
       </aside>
     </section>
-    <!-- E3 — the home assignment (the lecture's last taught slide; David: "the last slide is always
-         a home assignment"). Mirror of L4-5's homework slide. Students take the spec we did NOT run
-         in class (מלצר אוטומטי / automatic waiter — the second classic identification scenario) and
-         repeat the workflow: feed the spec to Claude, get a class model + assumptions, then CRITIQUE
-         it by the lecture's doctrine and submit a corrected model with reasoning. The graded artifact
-         is the CRITIQUE. The waiter spec is deliberately parallel to campus food so the doctrine
-         transfers. NEW 2026-07-23 for the L6-7 HTML deck. -->
     <section data-slug="homework" class="has-acro-footer">
       <div class="sdlc-chip" title="שלב 5 מתוך 8 ב-SDLC"><span class="sdlc-chip-dot"></span>עיצוב</div>
       <style>
@@ -8708,7 +8045,7 @@
 
       </div>
       <aside class="notes">
-        <b>רשות, ולמה בכל זאת (David, 2026-08-30):</b> התרגיל לא מוגש לציון. הוא קיים כי הפרויקט של כל קבוצה שונה
+        <b>רשות, ולמה בכל זאת:</b> התרגיל לא מוגש לציון. הוא קיים כי הפרויקט של כל קבוצה שונה
         ולכן אין לכיתה תרשים משותף להתווכח עליו — זה הסיפור המשותף, כמו החניון בהרצאה 4-5. המסמך המלא
         (ארגון, ראיונות, מילון נתונים, כללים, שאלות פתוחות) נמצא באתר הקורס תחת
         <code>materials/5-עיצוב/תרגיל-בית</code> עם README של הנחיות. מי שמביא ביקורת לשיעור הבא — פותחים איתה.
@@ -8721,13 +8058,6 @@
       </aside>
     <div class="acro-footer"><span class="acro"><span class="en">AI</span> = <span class="en">Artificial Intelligence</span> · בינה מלאכותית</span></div>
     </section>
-    <!-- Closing slide — תודה! + the next-lecture teaser over a licensed Adobe Stock photo
-         (Adobe Stock #272102292 "Technology blueprints" — the structure/blueprint motif of a
-         class diagram; licensed 2026-08-09 → assets/closing.jpg).
-         Full-bleed on purpose: no blue title bar and no left accent bar (same treatment as
-         the cover, section.title-slide). The SDLC chip is suppressed from slides.yaml
-         (sdlc_phase: "") so the bottom-left band stays clear.
-         Keep the wording in sync with slide-summary.html (L6-7 → תרשים מצבים in L8). -->
     <section data-slug="closing">
       <style>
         /* ---- full-bleed photo + dark scrim so the Hebrew stays legible ------------- */
