@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+<html lang="he">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>שבילי זהב, Class Diagram (פתרון שאלה 7)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,700;1,400&family=Rubik:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; padding: 24px; background: #eef2f7; font-family: 'Rubik', sans-serif; color: #1e293b; }
+  .page { max-width: 1560px; margin: 0 auto; }
+  header.top {
+    background: #1e40af; color: #fff; border-radius: 10px 10px 0 0;
+    padding: 18px 26px; direction: rtl; text-align: right;
+  }
+  header.top h1 { margin: 0 0 4px 0; font-size: 20px; font-weight: 700; }
+  header.top p { margin: 0; font-size: 13px; color: #dbeafe; line-height: 1.7; }
+  .diagram-wrap {
+    background: #fff; border: 1px solid #cbd5e1; border-top: none;
+    border-radius: 0 0 10px 10px; padding: 10px; overflow-x: auto; direction: ltr;
+  }
+  svg { display: block; }
+  .has-notes .diagram-wrap { border-radius: 0; }
+  .notes { background: #fef9c3; border: 1px solid #eab308; border-top: none; border-radius: 0 0 10px 10px; padding: 16px 22px; direction: rtl; text-align: right; }
+  .notes h2 { margin: 0 0 10px 0; font-size: 14px; font-weight: 700; color: #78350f; }
+  .notes .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 24px; }
+  .notes p { margin: 0; font-size: 12px; line-height: 1.5; color: #78350f; }
+  .notes code { font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; }
+  @media (max-width: 760px) { .notes .grid { grid-template-columns: 1fr; } }
+  .vp-export-btn {
+    position: fixed; bottom: 20px; right: 20px; z-index: 1000;
+    background: #1e40af; color: #fff; border: none; border-radius: 6px;
+    padding: 8px 16px; font-size: 13px; cursor: pointer;
+    font-family: 'IBM Plex Mono', monospace;
+  }
+  .vp-export-btn:hover { background: #1e3a8a; }
+</style>
+</head>
+<body>
+<div class="page">
+  <header class="top">
+    <h1>פתרון שאלה 7, תרשים מחלקות, מערכת לניהול טיולים והרשמה לחברי מועדוני גמלאים</h1>
+    <p>מודל פתרון להוראה, ניתוח ועיצוב מערכות מידע (364-1-1411), 2026 סמסטר קיץ מועד ב'. <b>נקודות ההכרעה בתרשים:</b> (א) <b>קטלוג מול מופע:</b> <code>Trip</code> הוא המסלול בקטלוג (שם, תיאור, אזור, מחיר למשתתף, מינימום משתתפים), ו-<code>TripDeparture</code> היא כל יציאה שלו (מספר יציאה, תאריך, מדריך וחובש), בקשר <code>1</code> מול <code>*</code> (7.2). (ב) <b>סוגי המסלולים אינם ירושה:</b> <code>Trip</code> נושא את סוג המסלול (<code>tripType</code>, enumerator) ואת המאפיינים של כל הסוגים: שם מלון ולילות, רמת קושי ואורך הליכה. הסוגים נבדלים רק במאפיינים: אין לאף סוג קשר משלו, והמאפיינים אינם סותרים זה את זה. מאפיין שנשאר ריק במסלול מסוג אחר אינו בעיה במחלקה (7.3). (ג) <b>המלווה</b> הוא מחלקה <code>Companion</code> (שם, טלפון) בקומפוזיציה עם <code>TripRegistration</code>, <code>0..1</code> בצד המלווה: הוא חלק מההרשמה ונמחק איתה (7.4). (ד) <b>אין תיק רפואי:</b> נשמרת רק הצהרת הניידות שבכל הרשמה (<code>specialNeeds</code>, רשימת צרכים מתוך <code>SpecialNeed</code>: חבר יכול להצהיר על כמה צרכים יחד); ההכרעה ההפוכה, מנומקת, מזכה במלואה (7.5). (ה) שעת האיסוף שייכת לצמד יציאה × תחנה, ולכן היא על מחלקת הקשר <code>PickupStop</code>; האוטובוסים קשורים ליציאה ברבים-לרבים פשוט, בלי נתוני קישור. (ו) אין מפתחות בתרשים: קו הקשר הוא ההפניה. המספרים העסקיים שהסיפור נוקב בהם (מספר חבר, מספר יציאה, מספר רישוי) הם מאפיינים רגילים. (ז) אין מחלקות לתשלום, למלון כהזמנה או לצי האוטובוסים: מחוץ להיקף.</p>
+  </header>
+  <div class="diagram-wrap">
+    <svg id="diagram-svg" xmlns="http://www.w3.org/2000/svg"></svg>
+  </div>
+</div>
+
+<button class="vp-export-btn" onclick="exportXMI()">Download .xmi (Visual Paradigm)</button>
+
+<script>
+/* ── 1. DATA (routed offline by render_class.mjs) ────────────────────────── */
+
+const CLASSES = [
+  {
+    "id": "Coordinator",
+    "name": "Coordinator",
+    "isEnum": false,
+    "attrs": [
+      "+ name : String",
+      "+ phone : String"
+    ],
+    "ops": [],
+    "x": 40,
+    "y": 40
+  },
+  {
+    "id": "Club",
+    "name": "Club",
+    "isEnum": false,
+    "attrs": [
+      "+ name : String"
+    ],
+    "ops": [],
+    "x": 60,
+    "y": 170
+  },
+  {
+    "id": "Member",
+    "name": "Member",
+    "isEnum": false,
+    "attrs": [
+      "+ memberNumber : String",
+      "+ name : String",
+      "+ phone : String",
+      "+ hasWebAccount : Boolean"
+    ],
+    "ops": [],
+    "x": 40,
+    "y": 330
+  },
+  {
+    "id": "Trip",
+    "name": "Trip",
+    "isEnum": false,
+    "attrs": [
+      "+ name : String",
+      "+ description : String",
+      "+ region : String",
+      "+ pricePerParticipant : Number",
+      "+ minParticipants : Integer",
+      "+ tripType : TripType",
+      "+ hotelName : String",
+      "+ nights : Integer",
+      "+ difficultyLevel : DifficultyLevel",
+      "+ walkingDistanceKm : Number"
+    ],
+    "ops": [],
+    "x": 650,
+    "y": 40
+  },
+  {
+    "id": "TripDeparture",
+    "name": "TripDeparture",
+    "isEnum": false,
+    "attrs": [
+      "+ departureNumber : String",
+      "+ date : Date",
+      "+ status : DepartureStatus"
+    ],
+    "ops": [
+      "+ closeRegistration()",
+      "+ cancel()",
+      "+ approvedCount()",
+      "+ passengersByStop()"
+    ],
+    "x": 660,
+    "y": 380
+  },
+  {
+    "id": "StaffMember",
+    "name": "StaffMember",
+    "isEnum": false,
+    "attrs": [
+      "+ name : String",
+      "+ phone : String",
+      "+ role : StaffRole"
+    ],
+    "ops": [],
+    "x": 1010,
+    "y": 380
+  },
+  {
+    "id": "Bus",
+    "name": "Bus",
+    "isEnum": false,
+    "attrs": [
+      "+ licenseNumber : String",
+      "+ seatCount : Integer",
+      "+ hasWheelchairLift : Boolean"
+    ],
+    "ops": [],
+    "x": 1010,
+    "y": 540
+  },
+  {
+    "id": "PickupStation",
+    "name": "PickupStation",
+    "isEnum": false,
+    "attrs": [
+      "+ name : String",
+      "+ address : String"
+    ],
+    "ops": [],
+    "x": 690,
+    "y": 730
+  },
+  {
+    "id": "PickupStop",
+    "name": "PickupStop",
+    "isEnum": false,
+    "attrs": [
+      "+ pickupTime : Time"
+    ],
+    "ops": [],
+    "x": 820,
+    "y": 640
+  },
+  {
+    "id": "TripRegistration",
+    "name": "TripRegistration",
+    "isEnum": false,
+    "attrs": [
+      "+ registrationDate : Date",
+      "+ specialNeeds : SpecialNeed [0..*]",
+      "+ waitlistPosition : Integer",
+      "+ offerExpiresAt : DateTime",
+      "+ status : RegistrationStatus",
+      "+ closureReason : ClosureReason"
+    ],
+    "ops": [
+      "+ joinWaitlist()",
+      "+ offerSeat()",
+      "+ confirmSeat()",
+      "+ approveAndAssignBus()",
+      "+ cancel()",
+      "+ closeAsRejected()",
+      "+ closeAsCancelled()",
+      "+ closeAsCancelledByAssociation()"
+    ],
+    "x": 300,
+    "y": 330
+  },
+  {
+    "id": "Companion",
+    "name": "Companion",
+    "isEnum": false,
+    "attrs": [
+      "+ name : String",
+      "+ phone : String"
+    ],
+    "ops": [],
+    "x": 330,
+    "y": 630
+  },
+  {
+    "id": "RegistrationStatus",
+    "name": "RegistrationStatus",
+    "stereotype": "«enumeration»",
+    "isEnum": true,
+    "attrs": [
+      "Draft",
+      "PendingMedicCheck",
+      "Waitlisted",
+      "SeatOffered",
+      "Approved",
+      "Rejected",
+      "Cancelled",
+      "CancelledByAssociation",
+      "Archived"
+    ],
+    "ops": [],
+    "x": 1300,
+    "y": 40
+  },
+  {
+    "id": "ClosureReason",
+    "name": "ClosureReason",
+    "stereotype": "«enumeration»",
+    "isEnum": true,
+    "attrs": [
+      "Rejected",
+      "Cancelled",
+      "CancelledByAssociation",
+      "Completed",
+      "NotPlaced"
+    ],
+    "ops": [],
+    "x": 1300,
+    "y": 230
+  },
+  {
+    "id": "DepartureStatus",
+    "name": "DepartureStatus",
+    "stereotype": "«enumeration»",
+    "isEnum": true,
+    "attrs": [
+      "OpenForRegistration",
+      "RegistrationClosed",
+      "Departed",
+      "Cancelled"
+    ],
+    "ops": [],
+    "x": 1300,
+    "y": 380
+  },
+  {
+    "id": "SpecialNeed",
+    "name": "SpecialNeed",
+    "stereotype": "«enumeration»",
+    "isEnum": true,
+    "attrs": [
+      "Walker",
+      "Wheelchair",
+      "Oxygen"
+    ],
+    "ops": [],
+    "x": 1300,
+    "y": 510
+  },
+  {
+    "id": "TripType",
+    "name": "TripType",
+    "stereotype": "«enumeration»",
+    "isEnum": true,
+    "attrs": [
+      "DayTrip",
+      "MultiDay",
+      "NatureWalk"
+    ],
+    "ops": [],
+    "x": 930,
+    "y": 40
+  },
+  {
+    "id": "DifficultyLevel",
+    "name": "DifficultyLevel",
+    "stereotype": "«enumeration»",
+    "isEnum": true,
+    "attrs": [
+      "Easy",
+      "Medium",
+      "Challenging"
+    ],
+    "ops": [],
+    "x": 1300,
+    "y": 630
+  },
+  {
+    "id": "StaffRole",
+    "name": "StaffRole",
+    "stereotype": "«enumeration»",
+    "isEnum": true,
+    "attrs": [
+      "Guide",
+      "Medic"
+    ],
+    "ops": [],
+    "x": 1300,
+    "y": 750
+  }
+];
+
+const RELS = [
+  {
+    "id": "r_coord_club",
+    "type": "assoc",
+    "from": "Coordinator",
+    "to": "Club",
+    "fromMult": "1..*",
+    "toMult": "1",
+    "label": "coordinates",
+    "points": [
+      [
+        110,
+        108
+      ],
+      [
+        110,
+        170
+      ]
+    ]
+  },
+  {
+    "id": "r_member_club",
+    "type": "assoc",
+    "from": "Member",
+    "to": "Club",
+    "fromMult": "*",
+    "toMult": "1",
+    "label": "belongs to",
+    "points": [
+      [
+        120,
+        330
+      ],
+      [
+        120,
+        224
+      ]
+    ]
+  },
+  {
+    "id": "r_member_reg",
+    "type": "assoc",
+    "from": "Member",
+    "to": "TripRegistration",
+    "fromMult": "1",
+    "toMult": "*",
+    "label": "registers",
+    "points": [
+      [
+        219,
+        378
+      ],
+      [
+        300,
+        378
+      ]
+    ]
+  },
+  {
+    "id": "r_reg_dep",
+    "type": "assoc",
+    "from": "TripRegistration",
+    "to": "TripDeparture",
+    "fromMult": "*",
+    "toMult": "1",
+    "label": "for",
+    "side": "h",
+    "busY2": 450,
+    "points": [
+      [
+        544,
+        450
+      ],
+      [
+        660,
+        450
+      ]
+    ]
+  },
+  {
+    "id": "r_reg_comp",
+    "type": "comp",
+    "from": "TripRegistration",
+    "to": "Companion",
+    "fromMult": "1",
+    "toMult": "0..1",
+    "label": "accompanied by",
+    "points": [
+      [
+        390,
+        567
+      ],
+      [
+        390,
+        630
+      ]
+    ]
+  },
+  {
+    "id": "r_reg_station",
+    "type": "assoc",
+    "from": "TripRegistration",
+    "to": "PickupStation",
+    "fromMult": "*",
+    "toMult": "1",
+    "label": "picked up at",
+    "points": [
+      [
+        480,
+        567
+      ],
+      [
+        480,
+        760
+      ],
+      [
+        690,
+        760
+      ]
+    ]
+  },
+  {
+    "id": "r_reg_bus",
+    "type": "assoc",
+    "from": "TripRegistration",
+    "to": "Bus",
+    "fromMult": "*",
+    "toMult": "0..1",
+    "label": "assigned to",
+    "points": [
+      [
+        531,
+        540
+      ],
+      [
+        630,
+        540
+      ],
+      [
+        630,
+        610
+      ],
+      [
+        1010,
+        610
+      ]
+    ]
+  },
+  {
+    "id": "r_trip_dep",
+    "type": "assoc",
+    "from": "Trip",
+    "to": "TripDeparture",
+    "fromMult": "1",
+    "toMult": "*",
+    "label": "runs as",
+    "points": [
+      [
+        752.5,
+        220
+      ],
+      [
+        752.5,
+        380
+      ]
+    ]
+  },
+  {
+    "id": "r_dep_guide",
+    "type": "assoc",
+    "from": "TripDeparture",
+    "to": "StaffMember",
+    "fromMult": "*",
+    "toMult": "1",
+    "toRole": "guide",
+    "label": "guided by",
+    "side": "h",
+    "busY2": 400,
+    "points": [
+      [
+        845,
+        400
+      ],
+      [
+        1010,
+        400
+      ]
+    ]
+  },
+  {
+    "id": "r_dep_medic",
+    "type": "assoc",
+    "from": "TripDeparture",
+    "to": "StaffMember",
+    "fromMult": "*",
+    "toMult": "1",
+    "toRole": "medic",
+    "label": "attended by",
+    "side": "h",
+    "busY2": 440,
+    "points": [
+      [
+        845,
+        440
+      ],
+      [
+        1010,
+        440
+      ]
+    ]
+  },
+  {
+    "id": "r_dep_bus",
+    "type": "assoc",
+    "from": "TripDeparture",
+    "to": "Bus",
+    "fromMult": "*",
+    "toMult": "*",
+    "label": "uses",
+    "points": [
+      [
+        845,
+        500
+      ],
+      [
+        1100,
+        500
+      ],
+      [
+        1100,
+        540
+      ]
+    ]
+  },
+  {
+    "id": "r_dep_station",
+    "type": "assoc",
+    "from": "TripDeparture",
+    "to": "PickupStation",
+    "fromMult": "*",
+    "toMult": "1..*",
+    "label": "stops at",
+    "side": "v",
+    "busX": 750,
+    "points": [
+      [
+        750,
+        519
+      ],
+      [
+        750,
+        730
+      ]
+    ]
+  }
+];
+
+const ASSOC_CLASSES = [
+  {
+    "classId": "PickupStop",
+    "assocId": "r_dep_station"
+  }
+];
+
+/* ── 2. ENGINE (SAD MCP uml-class-diagram §9d) ───────────────────────────── */
+
+const HDR_H = 28, PAD = 6, LINE_H = 14, DIV_H = 1;
+const FM = 'font-family="IBM Plex Mono, monospace"';
+
+function escXml(s) {
+  return String(s)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+function boxH(cls) {
+  const hdrH = cls.stereotype ? 38 : HDR_H;
+  return hdrH + PAD + cls.attrs.length * LINE_H +
+    (cls.ops.length > 0 ? DIV_H + cls.ops.length * LINE_H : 0) + PAD;
+}
+
+function boxW(cls) {
+  const longest = [...cls.attrs, ...cls.ops, cls.name]
+    .reduce((m, s) => Math.max(m, s.length), 0);
+  return Math.max(120, Math.ceil(longest * 6.5) + 16);
+}
+
+function svgBox(cls) {
+  const w = boxW(cls), h = boxH(cls), { x, y } = cls;
+  const hdrH = cls.stereotype ? 38 : HDR_H;
+  const border   = cls.isEnum ? '#94a3b8' : '#3b82f6';
+  const hdrFill  = cls.isEnum ? '#475569' : '#1e40af';
+  const bodyFill = cls.isEnum ? '#f8fafc' : 'white';
+  const dash     = cls.isEnum ? 'stroke-dasharray="5 3"' : '';
+
+  let s = `<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="${bodyFill}" stroke="${border}" stroke-width="2" ${dash} rx="2"/>`;
+  s += `<rect x="${x}" y="${y}" width="${w}" height="${hdrH}" fill="${hdrFill}" rx="2"/>`;
+
+  if (cls.stereotype) {
+    s += `<text x="${x + w/2}" y="${y + 13}" text-anchor="middle" fill="white" font-size="9" ${FM}>${escXml(cls.stereotype)}</text>`;
+  }
+  const nameStyle = cls.isAbstract ? 'font-style:italic' : '';
+  const nameY = cls.stereotype ? y + hdrH - 8 : y + hdrH / 2 + 4;
+  s += `<text x="${x + w/2}" y="${nameY}" text-anchor="middle" fill="white" font-size="11" font-weight="700" ${FM} style="${nameStyle}">${escXml(cls.name)}</text>`;
+
+  const divY = y + hdrH;
+  s += `<line x1="${x}" y1="${divY}" x2="${x + w}" y2="${divY}" stroke="${border}" stroke-width="1"/>`;
+
+  let curY = divY + PAD + 10;
+  for (const a of cls.attrs) {
+    s += `<text x="${x + 6}" y="${curY}" text-anchor="start" fill="#1e293b" font-size="10.5" ${FM}>${escXml(a)}</text>`;
+    curY += LINE_H;
+  }
+  if (cls.ops.length > 0) {
+    const opDivY = divY + PAD + cls.attrs.length * LINE_H;
+    s += `<line x1="${x}" y1="${opDivY}" x2="${x + w}" y2="${opDivY}" stroke="${border}" stroke-width="1"/>`;
+    curY = opDivY + PAD + 10;
+    for (const o of cls.ops) {
+      s += `<text x="${x + 6}" y="${curY}" text-anchor="start" fill="#2563eb" font-size="10.5" font-style="italic" ${FM}>${escXml(o)}</text>`;
+      curY += LINE_H;
+    }
+  }
+  return s;
+}
+
+function svgRel(rel) {
+  const pts = rel.points.map(([px, py]) => `${px},${py}`).join(' ');
+  let mS = '', mE = '', dash = '';
+  if (rel.type === 'comp') mS = 'marker-start="url(#compFill)"';
+  if (rel.type === 'agg')  mS = 'marker-start="url(#aggHollow)"';
+  if (rel.type === 'gen')  mE = 'marker-end="url(#genHollow)"';
+  if (rel.type === 'dep')  { mE = 'marker-end="url(#arrOpen)"'; dash = 'stroke-dasharray="6 3"'; }
+
+  let s = `<polyline points="${pts}" fill="none" stroke="#334155" stroke-width="1.8" ${dash} ${mS} ${mE}/>`;
+  const multLabel = (end, adj, txt) => {
+    const dx = adj[0] - end[0], dy = adj[1] - end[1];
+    const L = Math.hypot(dx, dy) || 1, ux = dx / L, uy = dy / L;
+    const x = end[0] + ux * 18 - uy * 10, y = end[1] + uy * 18 + ux * 10 + 3;
+    return `<text x="${x}" y="${y}" text-anchor="middle" fill="#64748b" font-size="9.5" ${FM} style="direction:ltr;unicode-bidi:isolate">${escXml(txt)}</text>`;
+  };
+  if (rel.fromMult) s += multLabel(rel.points[0], rel.points[1], rel.fromMult);
+  if (rel.toMult) {
+    const n = rel.points.length;
+    s += multLabel(rel.points[n - 1], rel.points[n - 2], rel.toMult);
+  }
+  if (rel.label) {
+    const mid = rel.points[Math.floor(rel.points.length / 2)];
+    s += `<text x="${mid[0]}" y="${mid[1] - 6}" text-anchor="middle" fill="#64748b" font-size="9.5" ${FM}>${escXml(rel.label)}</text>`;
+  }
+  return s;
+}
+
+function render() {
+  let maxX = 600, maxY = 400;
+  for (const cls of CLASSES) {
+    maxX = Math.max(maxX, cls.x + boxW(cls) + 60);
+    maxY = Math.max(maxY, cls.y + boxH(cls) + 80);
+  }
+
+  const defs = `<defs>
+    <pattern id="dotgrid" width="24" height="24" patternUnits="userSpaceOnUse">
+      <circle cx="12" cy="12" r="0.8" fill="#cbd5e1"/>
+    </pattern>
+    <marker id="genHollow" markerWidth="12" markerHeight="10" refX="10" refY="5" orient="auto">
+      <polygon points="0,0 10,5 0,10" fill="white" stroke="#334155" stroke-width="1.5"/>
+    </marker>
+    <marker id="arrOpen" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <polyline points="0,0 9,4 0,8" fill="none" stroke="#334155" stroke-width="1.5"/>
+    </marker>
+    <marker id="compFill" markerWidth="14" markerHeight="10" refX="1" refY="5" orient="auto">
+      <polygon points="0,5 7,0 14,5 7,10" fill="#1e40af" stroke="#1e40af"/>
+    </marker>
+    <marker id="aggHollow" markerWidth="14" markerHeight="10" refX="1" refY="5" orient="auto">
+      <polygon points="0,5 7,0 14,5 7,10" fill="white" stroke="#334155"/>
+    </marker>
+  </defs>`;
+
+  const bg    = `<rect width="${maxX}" height="${maxY}" fill="url(#dotgrid)"/>`;
+  const rels  = RELS.map(svgRel).join('');
+  const boxes = CLASSES.map(svgBox).join('');
+  const legend = `<text x="16" y="${maxY - 40}" fill="#64748b" font-size="9" ${FM}>── Association  ◇── Aggregation  ◆── Composition  ──▷ Generalization  |  קרדינליות בשני קצות הקשר  |  --- association-class tether</text>`;
+
+  const svg = document.getElementById('diagram-svg');
+  svg.setAttribute('width',   maxX);
+  svg.setAttribute('height',  maxY);
+  svg.setAttribute('viewBox', `0 0 ${maxX} ${maxY}`);
+  svg.innerHTML = defs + bg + rels + boxes + legend;
+}
+
+/* association-class tethers: dashed line from the association midpoint to the
+   nearest edge of the association class, so the box can sit on any side of the
+   line without the tether cutting through it */
+function addTethers() {
+  const svg = document.getElementById('diagram-svg');
+  const out = ASSOC_CLASSES.map(({ classId, assocId }) => {
+    const base = RELS.find(r => r.id === assocId);
+    const cls  = CLASSES.find(c => c.id === classId);
+    if (!base || !cls) return '';
+    // midpoint ALONG the polyline — the chord midpoint of an L-shaped route
+    // floats in empty space, leaving the tether disconnected from the line
+    const p = base.points;
+    let total = 0;
+    const seg = [];
+    for (let i = 0; i < p.length - 1; i++) {
+      const L = Math.hypot(p[i + 1][0] - p[i][0], p[i + 1][1] - p[i][1]);
+      seg.push(L); total += L;
+    }
+    let half = total / 2, mx = p[0][0], my = p[0][1];
+    for (let i = 0; i < seg.length; i++) {
+      if (half <= seg[i]) {
+        const t = seg[i] ? half / seg[i] : 0;
+        mx = p[i][0] + (p[i + 1][0] - p[i][0]) * t;
+        my = p[i][1] + (p[i + 1][1] - p[i][1]) * t;
+        break;
+      }
+      half -= seg[i];
+    }
+
+    const w = boxW(cls), h = boxH(cls);
+    const cx = cls.x + w / 2, cy = cls.y + h / 2;
+    // clip the midpoint→centre segment at the box boundary
+    const dx = mx - cx, dy = my - cy;
+    let tx = cx, ty = cy;
+    if (dx !== 0 || dy !== 0) {
+      const sx = dx === 0 ? Infinity : (w / 2) / Math.abs(dx);
+      const sy = dy === 0 ? Infinity : (h / 2) / Math.abs(dy);
+      const s = Math.min(sx, sy);
+      tx = cx + dx * s;
+      ty = cy + dy * s;
+    }
+    return `<line x1="${mx}" y1="${my}" x2="${tx.toFixed(1)}" y2="${ty.toFixed(1)}" stroke="#334155" stroke-width="1.3" stroke-dasharray="4 3" fill="none"/>`;
+  }).join('');
+  if (out) svg.insertAdjacentHTML('beforeend', out);
+}
+
+/* ── 3. diagramModel (model-shape.md, kind:'class') ──────────────────────── */
+
+function buildModel() {
+  const parseMember = (s) => {
+    const m = s.match(/^([+\-#])?\s*([^:()]+?)\s*(\([^)]*\))?\s*(?::\s*(.+))?\s*$/);
+    return {
+      visibility: m && m[1] ? m[1] : '+',
+      name: m ? m[2].trim() : s,
+      type: m && m[4] ? m[4].trim() : null,
+      isOp: !!(m && m[3])
+    };
+  };
+  const elements = CLASSES.map(c => {
+    if (c.isEnum) {
+      return { kind: 'class', id: c.id, name: c.name, isAbstract: false,
+        stereotype: 'enumeration',
+        attributes: c.attrs.map(v => ({ visibility: '', name: v, type: null, defaultValue: null, constraint: null })),
+        operations: [], x: c.x, y: c.y, w: boxW(c), h: boxH(c) };
+    }
+    return { kind: 'class', id: c.id, name: c.name, isAbstract: !!c.isAbstract,
+      stereotype: c.stereotype ? c.stereotype.replace(/[«»]/g, '').trim() : null,
+      attributes: c.attrs.map(a => { const p = parseMember(a);
+        return { visibility: p.visibility, name: p.name, type: p.type, defaultValue: null, constraint: null }; }),
+      operations: c.ops.map(o => { const p = parseMember(o);
+        return { visibility: p.visibility, name: p.name, params: [], returnType: p.type }; }),
+      x: c.x, y: c.y, w: boxW(c), h: boxH(c) };
+  });
+
+  const relationships = [];
+  RELS.forEach((r, i) => {
+    if (r.type === 'gen') {
+      relationships.push({ kind: 'generalization', id: r.id || ('gen_' + i), from: r.from, to: r.to });
+      return;
+    }
+    relationships.push({ kind: 'association', id: r.id || ('assoc_' + i),
+      from: r.from, to: r.to, multFrom: r.fromMult, multTo: r.toMult,
+      roleFrom: r.fromRole || null, roleTo: r.toRole || null, directed: false,
+      aggregation: r.type === 'agg', composition: r.type === 'comp' });
+  });
+  ASSOC_CLASSES.forEach(ac => {
+    relationships.push({ kind: 'associationClass', id: 'ac_' + ac.classId, classId: ac.classId, assocId: ac.assocId });
+  });
+
+  return {
+    kind: 'class',
+    title: "Golden Trails, Class Diagram",
+    parts: [ { id: 'part-1', label: "Golden Trails", splitRationale: '', elements, relationships } ]
+  };
+}
+
+const diagramModel = buildModel();
+
+/* ── 4. VP export ────────────────────────────────────────────────────────── */
+
+function xmlEscape(s) {
+  return String(s ?? '')
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;').replace(/'/g, '&apos;');
+}
+
+function downloadFile(filename, mimeType, content) {
+  const blob = new Blob([content], { type: mimeType });
+  const url  = URL.createObjectURL(blob);
+  const a    = Object.assign(document.createElement('a'), { href: url, download: filename });
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(() => { URL.revokeObjectURL(url); a.remove(); }, 1000);
+}
+
+function xmiBody(elements, rels) {
+  // Visual Paradigm needs each association's ends spelled out, and a generalization nested
+  // in its subclass; it deletes anything else on import (tested with VP 18.0, 2026-11-07).
+  // A split diagram repeats classes across tabs (an overview with names only, detail tabs
+  // with attributes): keep each class once, in its fullest copy, and each line once.
+  const byId = new Map();
+  for (const el of elements) {
+    const prev = byId.get(el.id);
+    if (!prev || (el.attributes || []).length > (prev.attributes || []).length) byId.set(el.id, el);
+  }
+  elements = [...byId.values()];
+  const seen = new Set();
+  rels = rels.filter(r => { const k = r.from + '|' + r.to; if (seen.has(k)) return false; seen.add(k); return true; });
+  const srcRels =(typeof PARTS !== 'undefined' && Array.isArray(PARTS)) ? PARTS.flatMap(p => p.rels || [])
+                : (typeof RELS !== 'undefined' && Array.isArray(RELS)) ? RELS : [];
+  const srcType = r => { const s = srcRels.find(x => x.from === r.from && x.to === r.to); return s ? s.type : null; };
+  const isGen = r => r.kind === 'generalization' || srcType(r) === 'gen';
+  const isDep = r => r.kind === 'dependency' || srcType(r) === 'dep';
+  const ids = new Set(elements.map(e => e.id));
+  const lower = m => { const v = String(m || '1').split('..')[0]; return v === '*' ? '0' : v; };
+  const upper = m => { const v = String(m || '1').split('..').pop(); return v === '*' ? '*' : v; };
+  const vis = v => v === '-' ? 'private' : v === '#' ? 'protected' : 'public';
+  const lines = [];
+  for (const el of elements) {
+    const isEnum = el.stereotype === 'enumeration';
+    lines.push(`    <packagedElement xmi:type="${isEnum ? 'uml:Enumeration' : 'uml:Class'}" xmi:id="${el.id}" name="${xmlEscape(el.name)}"${el.isAbstract ? ' isAbstract="true"' : ''}>`);
+    if (isEnum) {
+      el.attributes.forEach((a, i) => lines.push(`      <ownedLiteral xmi:id="${el.id}_lit${i}" name="${xmlEscape(a.name)}"/>`));
+    } else {
+      for (const r of rels)
+        if (isGen(r) && r.from === el.id && ids.has(r.to))
+          lines.push(`      <generalization xmi:type="uml:Generalization" xmi:id="${el.id}_gen_${r.to}" general="${r.to}"/>`);
+      el.attributes.forEach((a, i) => lines.push(`      <ownedAttribute xmi:id="${el.id}_att${i}" name="${xmlEscape(a.name)}" visibility="${vis(a.visibility)}"/>`));
+      (el.operations || []).forEach((op, i) => lines.push(`      <ownedOperation xmi:id="${el.id}_op${i}" name="${xmlEscape(op.name)}" visibility="${vis(op.visibility)}"/>`));
+    }
+    lines.push(`    </packagedElement>`);
+  }
+  rels.forEach((r, i) => {
+    if (isGen(r) || !ids.has(r.from) || !ids.has(r.to)) return;
+    const id = `rel${i}`;
+    if (isDep(r)) {
+      lines.push(`    <packagedElement xmi:type="uml:Dependency" xmi:id="${id}" client="${r.from}" supplier="${r.to}"/>`);
+      return;
+    }
+    if (r.kind !== 'association') return;
+    const agg = r.composition ? ' aggregation="composite"' : r.aggregation ? ' aggregation="shared"' : '';
+    const end = (n, type, mult, extra) => [
+      `      <ownedEnd xmi:type="uml:Property" xmi:id="${id}_e${n}" association="${id}" type="${type}"${extra}>`,
+      `        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="${id}_e${n}_l" value="${lower(mult)}"/>`,
+      `        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="${id}_e${n}_u" value="${upper(mult)}"/>`,
+      `      </ownedEnd>`];
+    lines.push(`    <packagedElement xmi:type="uml:Association" xmi:id="${id}" memberEnd="${id}_e1 ${id}_e2">`,
+      ...end(1, r.from, r.multFrom, agg), ...end(2, r.to, r.multTo, ''),
+      `    </packagedElement>`);
+  });
+  return lines.join('\n');
+}
+
+function exportXMI() {
+  const m = diagramModel;
+  const title = xmlEscape(m.title || 'diagram');
+  const allElements = m.parts.flatMap(p => p.elements);
+  const allRelationships = m.parts.flatMap(p => p.relationships);
+  const body = xmiBody(allElements, allRelationships);
+
+  const xmi = `<?xml version="1.0" encoding="UTF-8"?>
+<xmi:XMI xmi:version="2.1"
+  xmlns:xmi="http://www.omg.org/XMI"
+  xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML">
+  <uml:Model xmi:id="model_1" name="${title}">
+${body}
+  </uml:Model>
+</xmi:XMI>`;
+
+  downloadFile(title.replace(/\s+/g, '_') + '.xmi', 'application/xml', xmi);
+}
+
+document.addEventListener('DOMContentLoaded', () => { render(); addTethers(); });
+</script>
+</body>
+</html>

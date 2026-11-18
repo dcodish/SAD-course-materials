@@ -1,0 +1,1092 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>פתרון שאלה 1, טיפול בדיווח על אירוע חריג בטיול: BPMN 1.0</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Hebrew:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; padding: 0; background: #eef2f6;
+      font-family: 'Noto Sans Hebrew', -apple-system, BlinkMacSystemFont, sans-serif;
+      direction: rtl; }
+    .header-bar { padding: 14px 20px; background: linear-gradient(135deg, #37474f, #546e7a);
+      color: #fff; display: flex; align-items: baseline; gap: 16px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
+    .header-bar h1 { margin: 0; font-size: 18px; font-weight: 600; }
+    .header-bar .en { font-size: 13px; opacity: 0.8; font-weight: 400; }
+    .header-bar .badge { margin-inline-start: auto; background: rgba(255,255,255,0.15);
+      padding: 3px 10px; border-radius: 10px; font-size: 11px; letter-spacing: 0.5px; }
+    .stats-bar { padding: 8px 20px; background: #ffffff; font-size: 12px; color: #546e7a;
+      border-bottom: 1px solid #cfd8dc; }
+    .stats-bar span { margin-inline-end: 16px; }
+    .svg-wrapper { overflow: auto; background: #f8fafc; padding: 20px; min-height: calc(100vh - 120px); }
+    svg { display: block; background: #f8fafc; }
+    .bpmn-element { cursor: pointer; }
+    /* Flow hover: a wide invisible hit-area makes thin lines easy to grab; the
+       line then brightens + thickens (and is lifted to the front by JS) so it
+       can be tracked unbroken through crossings. Dash patterns are preserved. */
+    .bpmn-flow { cursor: pointer; }
+    .bpmn-flow-hit { stroke: transparent; fill: none; stroke-width: 16; pointer-events: stroke; }
+    .bpmn-flow-line { transition: stroke 0.05s, stroke-width 0.05s; }
+    .bpmn-flow.bpmn-hl .bpmn-flow-line { stroke: #e6007e !important; stroke-width: 3.4 !important; }
+    .bpmn-tooltip { display: none; position: fixed; background: #1a1a2e; color: #fff;
+      padding: 9px 13px; border-radius: 6px; font-size: 12px; max-width: 280px;
+      z-index: 500; direction: rtl; pointer-events: none; line-height: 1.5;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+    .bpmn-tooltip strong { color: #ffd54f; }
+    .vp-export-btn { position: fixed; bottom: 20px; left: 20px; z-index: 1000;
+      background: #1e40af; color: #fff; border: none; border-radius: 6px;
+      padding: 9px 16px; font-size: 13px; cursor: pointer;
+      font-family: 'Noto Sans Hebrew', sans-serif; box-shadow: 0 2px 6px rgba(0,0,0,0.15); }
+    .vp-export-btn:hover { background: #1e3a8a; }
+    .assumptions-btn { position: fixed; top: 12px; left: 12px; z-index: 1000;
+      background: #37474f; color: #fff; border: none; border-radius: 6px;
+      padding: 7px 13px; font-size: 12px; cursor: pointer;
+      font-family: 'Noto Sans Hebrew', sans-serif; }
+    .assumptions-panel { position: fixed; top: 54px; left: 12px; z-index: 1000;
+      background: #ffffff; border: 1px solid #b0bec5; border-radius: 8px; padding: 14px;
+      max-width: 340px; max-height: 70vh; overflow-y: auto; direction: rtl;
+      font-family: 'Noto Sans Hebrew', sans-serif; font-size: 13px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.18); display: none; }
+    .assumptions-panel h4 { margin: 0 0 10px; color: #37474f; }
+    .assumptions-panel ul { margin: 4px 0 10px; padding-inline-start: 18px; }
+
+    .pp-open-btn { position: fixed; bottom: 64px; left: 20px; z-index: 1000;
+      background: #37474f; color: #fff; border: none; border-radius: 6px;
+      padding: 9px 16px; font-size: 13px; cursor: pointer;
+      font-family: 'Noto Sans Hebrew', sans-serif; box-shadow: 0 2px 6px rgba(0,0,0,0.15); }
+    .pp-open-btn:hover { background: #263238; }
+    .pp-overlay { display: none; position: fixed; inset: 0; z-index: 2000; overflow: auto;
+      background: #cfd8dc; direction: rtl; font-family: 'Noto Sans Hebrew', sans-serif; }
+    .pp-overlay.pp-show { display: block; }
+    .pp-toolbar { position: sticky; top: 0; z-index: 1; display: flex; flex-wrap: wrap;
+      align-items: center; gap: 10px; padding: 10px 20px; background: #37474f; color: #fff; }
+    .pp-toolbar button { background: #fff; color: #263238; border: none; border-radius: 5px;
+      padding: 6px 12px; font-size: 13px; cursor: pointer; font-family: inherit; }
+    .pp-toolbar .pp-hint { font-size: 12px; opacity: 0.85; margin-inline-start: auto; }
+    .pp-pages { display: flex; flex-direction: column; align-items: center; gap: 18px; padding: 20px; }
+    .pp-page { width: min(1100px, 100%); }
+    .pp-page img { display: block; width: 100%; background: #fff;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.2); }
+    .pp-page a { display: inline-block; margin-top: 6px; font-size: 12px; color: #1e40af; }
+    .pp-status { padding: 40px; text-align: center; color: #37474f; }
+    @page { size: A4 landscape; margin: 10mm; }
+    @media print {
+      body.pp-printing > *:not(.pp-overlay) { display: none !important; }
+      body.pp-printing .pp-overlay { position: static; display: block; overflow: visible; background: #fff; }
+      body.pp-printing .pp-toolbar { display: none; }
+      body.pp-printing .pp-pages { display: block; padding: 0; }
+      body.pp-printing .pp-page { width: 100%; break-after: page; }
+      body.pp-printing .pp-page:last-child { break-after: auto; }
+      body.pp-printing .pp-page img { box-shadow: none; }
+      body.pp-printing .pp-page a { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="header-bar">
+    <h1>פתרון שאלה 1, טיפול בדיווח על אירוע חריג בטיול</h1>
+    <span class="en">Handling an incident report from a trip</span>
+    <span class="badge">BPMN 1.0</span>
+  </div>
+  <div class="stats-bar">
+    <span>3 מאגרים</span>
+    <span>3 נתיבים</span>
+    <span>11 משימות</span>
+    <span>6 שערים</span>
+    <span>4 אירועים</span>
+    <span>2 פריטי נתונים</span>
+    <span>28 זרימות</span>
+  </div>
+  <div class="svg-wrapper">
+    <svg width="3510.6" height="940"
+         viewBox="0 0 3510.6 940"
+         xmlns="http://www.w3.org/2000/svg">
+      
+    <defs>
+      <pattern id="dot-grid" x="0" y="0" width="24" height="24" patternUnits="userSpaceOnUse">
+        <circle cx="1" cy="1" r="0.8" fill="#cbd5e1"/>
+      </pattern>
+      <!-- markerUnits=userSpaceOnUse: arrowheads keep ONE size regardless of each
+           flow's stroke-width (default strokeWidth units made seq arrows ~45%
+           bigger than data-association arrows) -->
+      <marker id="arrow-seq" viewBox="0 0 10 10" refX="10" refY="5"
+              markerWidth="12" markerHeight="12" markerUnits="userSpaceOnUse" orient="auto-start-reverse">
+        <path d="M 0 0 L 10 5 L 0 10 Z" fill="#455a64"/>
+      </marker>
+      <marker id="msg-start" viewBox="-10 -10 20 20" refX="0" refY="0"
+              markerWidth="12" markerHeight="12" markerUnits="userSpaceOnUse" orient="auto">
+        <circle cx="0" cy="0" r="4" fill="#ffffff" stroke="#37474f" stroke-width="1.2"/>
+      </marker>
+      <marker id="msg-end" viewBox="0 0 10 10" refX="9" refY="5"
+              markerWidth="12" markerHeight="12" markerUnits="userSpaceOnUse" orient="auto-start-reverse">
+        <path d="M 0 0 L 10 5 L 0 10 Z" fill="#37474f"/>
+      </marker>
+      <marker id="arrow-data" viewBox="0 0 10 10" refX="9" refY="5"
+              markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto-start-reverse">
+        <path d="M 0 0 L 10 5 L 0 10 Z" fill="#7986cb"/>
+      </marker>
+    </defs>
+      <rect x="0" y="0" width="3510.6" height="940" fill="#f8fafc"/>
+    <rect x="0" y="0" width="3510.6" height="940" fill="url(#dot-grid)"/>
+      
+    <!-- pool: guide -->
+    <g class="bpmn-pool" data-pool="guide">
+      <rect x="20" y="72" width="3450.6" height="96"
+            fill="#faf7f2" stroke="#8d6e63" stroke-width="1.5"/>
+      <rect x="20" y="72" width="30" height="96"
+            fill="#6d4c41" stroke="#8d6e63" stroke-width="1.5"/>
+      <text x="29" y="120" text-anchor="middle"
+            dominant-baseline="middle"
+            transform="rotate(-90, 29, 120)"
+            fill="#ffffff" font-size="11" font-weight="600"
+            direction="rtl">מדריך הטיול</text>
+      <text x="41" y="120" text-anchor="middle"
+            dominant-baseline="middle"
+            transform="rotate(-90, 41, 120)"
+            fill="#ffffff" font-size="11" font-weight="600"
+            direction="rtl">(עצמאי)</text>
+      <line x1="50" y1="72" x2="50" y2="168"
+            stroke="#8d6e63" stroke-width="1"/>
+    </g>
+
+    <!-- pool: assoc -->
+    <g class="bpmn-pool" data-pool="assoc">
+      <rect x="20" y="184" width="3450.6" height="608"
+            fill="#ffffff" stroke="#455a64" stroke-width="1.5"/>
+      <rect x="20" y="184" width="30" height="608"
+            fill="#37474f" stroke="#455a64" stroke-width="1.5"/>
+      <text x="35" y="488" text-anchor="middle"
+            dominant-baseline="middle"
+            transform="rotate(-90, 35, 488)"
+            fill="#ffffff" font-size="12" font-weight="600"
+            direction="rtl">עמותת הטיולים</text>
+      <line x1="50" y1="184" x2="50" y2="792"
+            stroke="#455a64" stroke-width="1"/>
+    </g>
+
+    <!-- pool: insurer -->
+    <g class="bpmn-pool" data-pool="insurer">
+      <rect x="20" y="808" width="3450.6" height="96"
+            fill="#faf7f2" stroke="#8d6e63" stroke-width="1.5"/>
+      <rect x="20" y="808" width="30" height="96"
+            fill="#6d4c41" stroke="#8d6e63" stroke-width="1.5"/>
+      <text x="35" y="856" text-anchor="middle"
+            dominant-baseline="middle"
+            transform="rotate(-90, 35, 856)"
+            fill="#ffffff" font-size="12" font-weight="600"
+            direction="rtl">חברת הביטוח</text>
+      <line x1="50" y1="808" x2="50" y2="904"
+            stroke="#8d6e63" stroke-width="1"/>
+    </g>
+      
+    <g class="bpmn-lane" data-lane="sys">
+      <rect x="74" y="184" width="3396.6" height="168"
+            fill="#fafafa" fill-opacity="0.6" stroke="none"/>
+      <rect x="50" y="184" width="24" height="168"
+            fill="#546e7a" stroke="#455a64" stroke-width="1"/>
+      <text x="62" y="268" text-anchor="middle"
+            dominant-baseline="middle"
+            transform="rotate(-90, 62, 268)"
+            fill="#ffffff" font-size="11" font-weight="500"
+            direction="rtl">מערכת העמותה</text>
+      
+    </g>
+
+    <g class="bpmn-lane" data-lane="officer">
+      <rect x="74" y="352" width="3396.6" height="272"
+            fill="#fafafa" fill-opacity="0.6" stroke="none"/>
+      <rect x="50" y="352" width="24" height="272"
+            fill="#546e7a" stroke="#455a64" stroke-width="1"/>
+      <text x="62" y="488" text-anchor="middle"
+            dominant-baseline="middle"
+            transform="rotate(-90, 62, 488)"
+            fill="#ffffff" font-size="11" font-weight="500"
+            direction="rtl">ממונה הבטיחות</text>
+      <line x1="50" y1="352" x2="3470.6" y2="352"
+              stroke="#90a4ae" stroke-width="1" stroke-dasharray="4 3"/>
+    </g>
+
+    <g class="bpmn-lane" data-lane="chair">
+      <rect x="74" y="624" width="3396.6" height="168"
+            fill="#fafafa" fill-opacity="0.6" stroke="none"/>
+      <rect x="50" y="624" width="24" height="168"
+            fill="#546e7a" stroke="#455a64" stroke-width="1"/>
+      <text x="62" y="708" text-anchor="middle"
+            dominant-baseline="middle"
+            transform="rotate(-90, 62, 708)"
+            fill="#ffffff" font-size="11" font-weight="500"
+            direction="rtl">יו&quot;ר העמותה</text>
+      <line x1="50" y1="624" x2="3470.6" y2="624"
+              stroke="#90a4ae" stroke-width="1" stroke-dasharray="4 3"/>
+    </g>
+      
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf1">
+      <path class="bpmn-flow-hit" d="M 144.0 258.0 L 144.0 410.0 L 356.0 410.0 L 356.0 436.0" fill="none"/>
+      <path class="bpmn-flow-line" d="M 144.0 258.0 L 144.0 410.0 L 356.0 410.0 L 356.0 436.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf2">
+      <path class="bpmn-flow-hit" d="M 380.0 460.0 L 498.0 460.0" fill="none"/>
+      <path class="bpmn-flow-line" d="M 380.0 460.0 L 498.0 460.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf3">
+      <path class="bpmn-flow-hit" d="M 638.0 460.0 L 756.0 460.0" fill="none"/>
+      <path class="bpmn-flow-line" d="M 638.0 460.0 L 756.0 460.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf4">
+      <path class="bpmn-flow-hit" d="M 797.0 467.0 L 900.6 467.0 L 900.6 460.0 L 926.6 460.0" fill="none"/>
+      <path class="bpmn-flow-line" d="M 797.0 467.0 L 900.6 467.0 L 900.6 460.0 L 926.6 460.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    <g class="bpmn-flow-label">
+      <rect x="828.22" y="470.25" width="82.6" height="14"
+            rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"/>
+      <text x="869.52" y="477.25" text-anchor="middle" dominant-baseline="middle"
+            font-size="11" fill="#263238" direction="rtl">חסרים פרטים</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf5">
+      <path class="bpmn-flow-hit" d="M 1066.6 460.0 L 1190.6 460.0" fill="none"/>
+      <path class="bpmn-flow-line" d="M 1066.6 460.0 L 1190.6 460.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf6">
+      <path class="bpmn-flow-hit" d="M 1226.6 460.0 L 1242.6 460.0 L 1242.6 428.0 L 1082.6 428.0 L 1082.6 510.0 L 356.0 510.0 L 356.0 484.0" fill="none"/>
+      <path class="bpmn-flow-line" d="M 1226.6 460.0 L 1242.6 460.0 L 1242.6 428.0 L 1082.6 428.0 L 1082.6 510.0 L 356.0 510.0 L 356.0 484.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf7">
+      <path class="bpmn-flow-hit" d="M 797.0 453.0 L 910.6 453.0 L 910.6 298.0 L 989.6 298.0 L 989.6 272.0" fill="none"/>
+      <path class="bpmn-flow-line" d="M 797.0 453.0 L 910.6 453.0 L 910.6 298.0 L 989.6 298.0 L 989.6 272.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    <g class="bpmn-flow-label">
+      <rect x="811.95" y="364.5" width="76" height="14"
+            rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"/>
+      <text x="849.95" y="371.5" text-anchor="middle" dominant-baseline="middle"
+            font-size="11" fill="#263238" direction="rtl">הדיווח מלא</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf8">
+      <path class="bpmn-flow-hit" d="M 1066.6 240.0 L 1184.6 240.0" fill="none"/>
+      <path class="bpmn-flow-line" d="M 1066.6 240.0 L 1184.6 240.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf9">
+      <path class="bpmn-flow-hit" d="M 1232.6 240.0 L 1350.6 240.0" fill="none"/>
+      <path class="bpmn-flow-line" d="M 1232.6 240.0 L 1350.6 240.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    <g class="bpmn-flow-label">
+      <rect x="1253.6" y="216.75" width="76" height="14"
+            rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"/>
+      <text x="1291.6" y="223.75" text-anchor="middle" dominant-baseline="middle"
+            font-size="11" fill="#263238" direction="rtl">נפגע משתתף</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf10">
+      <path class="bpmn-flow-hit" d="M 1413.6 272.0 L 1413.6 364.0 L 1420.6 364.0 L 1420.6 390.0" fill="none"/>
+      <path class="bpmn-flow-line" d="M 1413.6 272.0 L 1413.6 364.0 L 1420.6 364.0 L 1420.6 390.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf11">
+      <path class="bpmn-flow-hit" d="M 1438.6 408.0 L 1536.6 408.0 L 1536.6 460.0 L 1562.6 460.0" fill="none"/>
+      <path class="bpmn-flow-line" d="M 1438.6 408.0 L 1536.6 408.0 L 1536.6 460.0 L 1562.6 460.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf12">
+      <path class="bpmn-flow-hit" d="M 1702.6 460.0 L 1794.6 460.0 L 1794.6 453.0 L 1827.6 453.0" fill="none"/>
+      <path class="bpmn-flow-line" d="M 1702.6 460.0 L 1794.6 460.0 L 1794.6 453.0 L 1827.6 453.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf13">
+      <path class="bpmn-flow-hit" d="M 1208.6 264.0 L 1208.6 420.0 L 1386.6 420.0 L 1386.6 454.0 L 1420.6 454.0 L 1420.6 480.0" fill="none"/>
+      <path class="bpmn-flow-line" d="M 1208.6 264.0 L 1208.6 420.0 L 1386.6 420.0 L 1386.6 454.0 L 1420.6 454.0 L 1420.6 480.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    <g class="bpmn-flow-label">
+      <rect x="1123.9499999999998" y="299.8" width="76" height="14"
+            rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"/>
+      <text x="1161.9499999999998" y="306.8" text-anchor="middle" dominant-baseline="middle"
+            font-size="11" fill="#263238" direction="rtl">התגלה מפגע</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf14">
+      <path class="bpmn-flow-hit" d="M 1490.6 512.0 L 1794.6 512.0 L 1794.6 467.0 L 1827.6 467.0" fill="none"/>
+      <path class="bpmn-flow-line" d="M 1490.6 512.0 L 1794.6 512.0 L 1794.6 467.0 L 1827.6 467.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf15">
+      <path class="bpmn-flow-hit" d="M 1868.6 460.0 L 1986.6 460.0" fill="none"/>
+      <path class="bpmn-flow-line" d="M 1868.6 460.0 L 1986.6 460.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf16">
+      <path class="bpmn-flow-hit" d="M 2056.6 428.0 L 2056.6 298.0 L 2063.6 298.0 L 2063.6 272.0" fill="none"/>
+      <path class="bpmn-flow-line" d="M 2056.6 428.0 L 2056.6 298.0 L 2063.6 298.0 L 2063.6 272.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf17">
+      <path class="bpmn-flow-hit" d="M 2126.6 240.0 L 2244.6 240.0" fill="none"/>
+      <path class="bpmn-flow-line" d="M 2126.6 240.0 L 2244.6 240.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf18">
+      <path class="bpmn-flow-hit" d="M 2268.6 264.0 L 2268.6 622.0 L 2473.6 622.0 L 2473.6 648.0" fill="none"/>
+      <path class="bpmn-flow-line" d="M 2268.6 264.0 L 2268.6 622.0 L 2473.6 622.0 L 2473.6 648.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    <g class="bpmn-flow-label">
+      <rect x="2235.6" y="360.4" width="24" height="14"
+            rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"/>
+      <text x="2247.6" y="367.4" text-anchor="middle" dominant-baseline="middle"
+            font-size="11" fill="#263238" direction="rtl">כן</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf19">
+      <path class="bpmn-flow-hit" d="M 2292.6 240.0 L 2668.6 240.0" fill="none"/>
+      <path class="bpmn-flow-line" d="M 2292.6 240.0 L 2668.6 240.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    <g class="bpmn-flow-label">
+      <rect x="2393.4" y="216.75" width="24" height="14"
+            rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"/>
+      <text x="2405.4" y="223.75" text-anchor="middle" dominant-baseline="middle"
+            font-size="11" fill="#263238" direction="rtl">לא</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf20">
+      <path class="bpmn-flow-hit" d="M 2487.6 648.0 L 2487.6 290.0 L 2692.6 290.0 L 2692.6 264.0" fill="none"/>
+      <path class="bpmn-flow-line" d="M 2487.6 648.0 L 2487.6 290.0 L 2692.6 290.0 L 2692.6 264.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf21">
+      <path class="bpmn-flow-hit" d="M 2716.6 240.0 L 2834.6 240.0" fill="none"/>
+      <path class="bpmn-flow-line" d="M 2716.6 240.0 L 2834.6 240.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf22">
+      <path class="bpmn-flow-hit" d="M 2974.6 240.0 L 3046.6 240.0" fill="none"/>
+      <path class="bpmn-flow-line" d="M 2974.6 240.0 L 3046.6 240.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    </g>
+
+    <g class="bpmn-flow bpmn-sequence" data-flow="sf23">
+      <path class="bpmn-flow-hit" d="M 3186.6 240.0 L 3310.6 240.0" fill="none"/>
+      <path class="bpmn-flow-line" d="M 3186.6 240.0 L 3310.6 240.0" fill="none" stroke="#455a64" stroke-width="1.6"
+            marker-end="url(#arrow-seq)"/>
+      
+      
+    </g>
+      
+    <g class="bpmn-flow bpmn-message" data-flow="mf1">
+      <path class="bpmn-flow-hit" d="M 144.0 168.0 L 144.0 222.0" fill="none"/>
+      <path class="bpmn-flow-line" d="M 144.0 168.0 L 144.0 222.0" fill="none" stroke="#37474f" stroke-width="1.3"
+            stroke-dasharray="10 5"
+            marker-start="url(#msg-start)" marker-end="url(#msg-end)"/>
+      
+    <g class="bpmn-flow-label">
+      <rect x="18.16000000000001" y="184" width="115.6" height="14"
+            rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"/>
+      <text x="75.96000000000001" y="191" text-anchor="middle" dominant-baseline="middle"
+            font-size="11" fill="#263238" direction="rtl">טופס דיווח מקוון</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-message" data-flow="mf2">
+      <path class="bpmn-flow-hit" d="M 996.6 428.0 L 996.6 286.0 L 1082.6 286.0 L 1082.6 194.0 L 996.6 194.0 L 996.6 168.0" fill="none"/>
+      <path class="bpmn-flow-line" d="M 996.6 428.0 L 996.6 286.0 L 1082.6 286.0 L 1082.6 194.0 L 996.6 194.0 L 996.6 168.0" fill="none" stroke="#37474f" stroke-width="1.3"
+            stroke-dasharray="10 5"
+            marker-start="url(#msg-start)" marker-end="url(#msg-end)"/>
+      
+    <g class="bpmn-flow-label">
+      <rect x="1007.9000000000001" y="346" width="142" height="14"
+            rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"/>
+      <text x="1078.9" y="353" text-anchor="middle" dominant-baseline="middle"
+            font-size="11" fill="#263238" direction="rtl">דיווח מוחזר עם הערות</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-message" data-flow="mf3">
+      <path class="bpmn-flow-hit" d="M 1208.6 168.0 L 1208.6 176.0 L 1248.6 176.0 L 1248.6 442.0 L 1208.6 442.0" fill="none"/>
+      <path class="bpmn-flow-line" d="M 1208.6 168.0 L 1208.6 176.0 L 1248.6 176.0 L 1248.6 442.0 L 1208.6 442.0" fill="none" stroke="#37474f" stroke-width="1.3"
+            stroke-dasharray="10 5"
+            marker-start="url(#msg-start)" marker-end="url(#msg-end)"/>
+      
+    <g class="bpmn-flow-label">
+      <rect x="1187.3" y="140.75" width="82.6" height="14"
+            rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"/>
+      <text x="1228.6" y="147.75" text-anchor="middle" dominant-baseline="middle"
+            font-size="11" fill="#263238" direction="rtl">דיווח מושלם</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-message" data-flow="mf4">
+      <path class="bpmn-flow-hit" d="M 1427.6 272.0 L 1427.6 374.0 L 1506.6 374.0 L 1506.6 782.0 L 1420.6 782.0 L 1420.6 808.0" fill="none"/>
+      <path class="bpmn-flow-line" d="M 1427.6 272.0 L 1427.6 374.0 L 1506.6 374.0 L 1506.6 782.0 L 1420.6 782.0 L 1420.6 808.0" fill="none" stroke="#37474f" stroke-width="1.3"
+            stroke-dasharray="10 5"
+            marker-start="url(#msg-start)" marker-end="url(#msg-end)"/>
+      
+    <g class="bpmn-flow-label">
+      <rect x="1437.5749999999998" y="312" width="109" height="14"
+            rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"/>
+      <text x="1492.0749999999998" y="319" text-anchor="middle" dominant-baseline="middle"
+            font-size="11" fill="#263238" direction="rtl">הודעה על האירוע</text>
+    </g>
+    </g>
+
+    <g class="bpmn-flow bpmn-message" data-flow="mf5">
+      <path class="bpmn-flow-hit" d="M 3116.6 208.0 L 3116.6 168.0" fill="none"/>
+      <path class="bpmn-flow-line" d="M 3116.6 208.0 L 3116.6 168.0" fill="none" stroke="#37474f" stroke-width="1.3"
+            stroke-dasharray="10 5"
+            marker-start="url(#msg-start)" marker-end="url(#msg-end)"/>
+      
+    <g class="bpmn-flow-label">
+      <rect x="3018.22" y="177" width="89.19999999999999" height="14"
+            rx="3" ry="3" fill="#ffffff" fill-opacity="0.92" stroke="none"/>
+      <text x="3062.8199999999997" y="184" text-anchor="middle" dominant-baseline="middle"
+            font-size="11" fill="#263238" direction="rtl">סיכום הטיפול</text>
+    </g>
+    </g>
+      
+    <g class="bpmn-flow bpmn-data-assoc" data-flow="da1" data-dir="read">
+      <path class="bpmn-flow-hit" d="M 568.0 574.0 L 568.0 492.0" fill="none"/>
+      <path class="bpmn-flow-line" d="M 568.0 574.0 L 568.0 492.0" fill="none" stroke="#7986cb" stroke-width="1.1"
+            stroke-dasharray="4 3" marker-end="url(#arrow-data)"/>
+    </g>
+
+    <g class="bpmn-flow bpmn-data-assoc" data-flow="da2" data-dir="write">
+      <path class="bpmn-flow-hit" d="M 1003.6 272.0 L 1003.6 298.0 L 1941.9 298.0 L 1941.9 276.0 L 1971.9 276.0 L 1971.9 302.0" fill="none"/>
+      <path class="bpmn-flow-line" d="M 1003.6 272.0 L 1003.6 298.0 L 1941.9 298.0 L 1941.9 276.0 L 1971.9 276.0 L 1971.9 302.0" fill="none" stroke="#7986cb" stroke-width="1.1"
+            stroke-dasharray="4 3" marker-end="url(#arrow-data)"/>
+    </g>
+
+    <g class="bpmn-flow bpmn-data-assoc" data-flow="da3" data-dir="read">
+      <path class="bpmn-flow-hit" d="M 1985.9 302.0 L 1985.9 286.0 L 1985.9 290.0 L 2049.6 290.0 L 2049.6 272.0" fill="none"/>
+      <path class="bpmn-flow-line" d="M 1985.9 302.0 L 1985.9 286.0 L 1985.9 290.0 L 2049.6 290.0 L 2049.6 272.0" fill="none" stroke="#7986cb" stroke-width="1.1"
+            stroke-dasharray="4 3" marker-end="url(#arrow-data)"/>
+    </g>
+
+    <g class="bpmn-flow bpmn-data-assoc" data-flow="da4" data-dir="write">
+      <path class="bpmn-flow-hit" d="M 2904.6 272.0 L 2904.6 310.0 L 2029.9 310.0 L 2029.9 284.0 L 1999.9 284.0 L 1999.9 302.0" fill="none"/>
+      <path class="bpmn-flow-line" d="M 2904.6 272.0 L 2904.6 310.0 L 2029.9 310.0 L 2029.9 284.0 L 1999.9 284.0 L 1999.9 302.0" fill="none" stroke="#7986cb" stroke-width="1.1"
+            stroke-dasharray="4 3" marker-end="url(#arrow-data)"/>
+    </g>
+      
+    <g class="bpmn-element bpmn-event" id="s_start" data-kind="event" data-event="start">
+      <circle cx="144" cy="240" r="18" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2"/>
+      <text text-anchor="middle" font-size="11" fill="#37474f" direction="rtl"
+             font-weight="500"><tspan x="144" y="272">התקבל טופס דיווח</tspan><tspan x="144" y="284">מקוון על אירוע…</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-task" id="s_save" data-kind="task">
+      <rect x="926.6" y="208" width="140" height="64"
+            rx="8" ry="8" fill="#ffffff" stroke="#546e7a" stroke-width="1.5"/>
+      <text text-anchor="middle" dominant-baseline="middle"
+            font-size="11.5" font-weight="500"
+            fill="#1a1a2e" direction="rtl"><tspan x="996.6" y="233">שמירת הדיווח</tspan><tspan x="996.6" y="247">במאגר האירועים</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-gateway" id="g_or_split" data-kind="gateway" data-gw="OR">
+      <text text-anchor="middle" font-size="11" fill="#37474f" direction="rtl"
+             font-weight="500"><tspan x="1208.6" y="206">מה אירע?</tspan></text>
+      <rect x="1191.6" y="223" width="34" height="34"
+            fill="#e3f2fd" stroke="#1565c0" stroke-width="2"
+            transform="rotate(45, 1208.6, 240)"/>
+      
+      <circle cx="1208.6" cy="240" r="9" fill="none"
+              stroke="#0d47a1" stroke-width="3"/>
+    </g>
+
+    <g class="bpmn-element bpmn-task" id="s_insurer" data-kind="task">
+      <rect x="1350.6" y="208" width="140" height="64"
+            rx="8" ry="8" fill="#ffffff" stroke="#546e7a" stroke-width="1.5"/>
+      <text text-anchor="middle" dominant-baseline="middle"
+            font-size="11.5" font-weight="500"
+            fill="#1a1a2e" direction="rtl"><tspan x="1420.6" y="226">שליחת הודעה על</tspan><tspan x="1420.6" y="240">האירוע לחברת</tspan><tspan x="1420.6" y="254">הביטוח</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-task" id="s_history" data-kind="task">
+      <rect x="1986.6" y="208" width="140" height="64"
+            rx="8" ry="8" fill="#ffffff" stroke="#546e7a" stroke-width="1.5"/>
+      <text text-anchor="middle" dominant-baseline="middle"
+            font-size="11.5" font-weight="500"
+            fill="#1a1a2e" direction="rtl"><tspan x="2056.6" y="226">שליפת האירועים</tspan><tspan x="2056.6" y="240">הקודמים באותו</tspan><tspan x="2056.6" y="254">אתר והצגתם…</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-gateway" id="g_prev" data-kind="gateway" data-gw="XOR">
+      <text text-anchor="middle" font-size="11" fill="#37474f" direction="rtl"
+             font-weight="500"><tspan x="2268.6" y="193">האם נמצא אירוע קודם</tspan><tspan x="2268.6" y="206">באותו אתר?</tspan></text>
+      <rect x="2251.6" y="223" width="34" height="34"
+            fill="#fff8e1" stroke="#f9a825" stroke-width="2"
+            transform="rotate(45, 2268.6, 240)"/>
+      
+      <line x1="2260.6" y1="232" x2="2276.6" y2="248"
+            stroke="#e65100" stroke-width="3" stroke-linecap="round"/>
+      <line x1="2276.6" y1="232" x2="2260.6" y2="248"
+            stroke="#e65100" stroke-width="3" stroke-linecap="round"/>
+    </g>
+
+    <g class="bpmn-element bpmn-gateway" id="g_prev_merge" data-kind="gateway" data-gw="XOR">
+      
+      <rect x="2675.6" y="223" width="34" height="34"
+            fill="#fff8e1" stroke="#f9a825" stroke-width="2"
+            transform="rotate(45, 2692.6, 240)"/>
+      
+      <line x1="2684.6" y1="232" x2="2700.6" y2="248"
+            stroke="#e65100" stroke-width="3" stroke-linecap="round"/>
+      <line x1="2700.6" y1="232" x2="2684.6" y2="248"
+            stroke="#e65100" stroke-width="3" stroke-linecap="round"/>
+    </g>
+
+    <g class="bpmn-element bpmn-task" id="s_close" data-kind="task">
+      <rect x="2834.6" y="208" width="140" height="64"
+            rx="8" ry="8" fill="#ffffff" stroke="#546e7a" stroke-width="1.5"/>
+      <text text-anchor="middle" dominant-baseline="middle"
+            font-size="11.5" font-weight="500"
+            fill="#1a1a2e" direction="rtl"><tspan x="2904.6" y="233">סימון הדיווח</tspan><tspan x="2904.6" y="247">כסגור במאגר</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-task" id="s_summary" data-kind="task">
+      <rect x="3046.6" y="208" width="140" height="64"
+            rx="8" ry="8" fill="#ffffff" stroke="#546e7a" stroke-width="1.5"/>
+      <text text-anchor="middle" dominant-baseline="middle"
+            font-size="11.5" font-weight="500"
+            fill="#1a1a2e" direction="rtl"><tspan x="3116.6" y="233">שליחת סיכום</tspan><tspan x="3116.6" y="247">הטיפול למדריך</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-event" id="s_end" data-kind="event" data-event="end">
+      <circle cx="3328.6" cy="240" r="18" fill="#ffebee" stroke="#c62828" stroke-width="3.5"/>
+      <text text-anchor="middle" font-size="11" fill="#37474f" direction="rtl"
+             font-weight="500"><tspan x="3328.6" y="272">הדיווח נסגר</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-gateway" id="o_loop_merge" data-kind="gateway" data-gw="XOR">
+      
+      <rect x="339" y="443" width="34" height="34"
+            fill="#fff8e1" stroke="#f9a825" stroke-width="2"
+            transform="rotate(45, 356, 460)"/>
+      
+      <line x1="348" y1="452" x2="364" y2="468"
+            stroke="#e65100" stroke-width="3" stroke-linecap="round"/>
+      <line x1="364" y1="452" x2="348" y2="468"
+            stroke="#e65100" stroke-width="3" stroke-linecap="round"/>
+    </g>
+
+    <g class="bpmn-element bpmn-task" id="o_check" data-kind="task">
+      <rect x="498" y="428" width="140" height="64"
+            rx="8" ry="8" fill="#ffffff" stroke="#546e7a" stroke-width="1.5"/>
+      <text text-anchor="middle" dominant-baseline="middle"
+            font-size="11.5" font-weight="500"
+            fill="#1a1a2e" direction="rtl"><tspan x="568" y="453">בדיקת שלמות</tspan><tspan x="568" y="467">הדיווח</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-gateway" id="g_complete" data-kind="gateway" data-gw="XOR">
+      <text text-anchor="middle" font-size="11" fill="#37474f" direction="rtl"
+             font-weight="500"><tspan x="780" y="426">האם הדיווח מלא?</tspan></text>
+      <rect x="763" y="443" width="34" height="34"
+            fill="#fff8e1" stroke="#f9a825" stroke-width="2"
+            transform="rotate(45, 780, 460)"/>
+      
+      <line x1="772" y1="452" x2="788" y2="468"
+            stroke="#e65100" stroke-width="3" stroke-linecap="round"/>
+      <line x1="788" y1="452" x2="772" y2="468"
+            stroke="#e65100" stroke-width="3" stroke-linecap="round"/>
+    </g>
+
+    <g class="bpmn-element bpmn-task" id="o_return" data-kind="task">
+      <rect x="926.6" y="428" width="140" height="64"
+            rx="8" ry="8" fill="#ffffff" stroke="#546e7a" stroke-width="1.5"/>
+      <text text-anchor="middle" dominant-baseline="middle"
+            font-size="11.5" font-weight="500"
+            fill="#1a1a2e" direction="rtl"><tspan x="996.6" y="453">החזרת הדיווח</tspan><tspan x="996.6" y="467">למדריך עם הערות</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-event" id="o_wait_fixed" data-kind="event" data-event="intermediate">
+      
+      <circle cx="1208.6" cy="460" r="18" fill="#ffffff" stroke="#1565c0" stroke-width="2"/>
+      <circle cx="1208.6" cy="460" r="13.5" fill="none" stroke="#1565c0" stroke-width="1.2"/>
+      <text text-anchor="middle" font-size="11" fill="#37474f" direction="rtl"
+             font-weight="500"><tspan x="1208.6" y="492">התקבל דיווח מושלם</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-event" id="o_week" data-kind="event" data-event="intermediate">
+      
+      <circle cx="1420.6" cy="408" r="18" fill="#ffffff" stroke="#1565c0" stroke-width="2"/>
+      <circle cx="1420.6" cy="408" r="13.5" fill="none" stroke="#1565c0" stroke-width="1.2"/>
+      <text text-anchor="middle" font-size="11" fill="#37474f" direction="rtl"
+             font-weight="500"><tspan x="1420.6" y="440">חלף שבוע</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-task" id="o_visit" data-kind="task">
+      <rect x="1350.6" y="480" width="140" height="64"
+            rx="8" ry="8" fill="#ffffff" stroke="#546e7a" stroke-width="1.5"/>
+      <text text-anchor="middle" dominant-baseline="middle"
+            font-size="11.5" font-weight="500"
+            fill="#1a1a2e" direction="rtl"><tspan x="1420.6" y="505">סיור בדיקה באתר</tspan><tspan x="1420.6" y="519">ותיעוד הממצאים</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-task" id="o_call" data-kind="task">
+      <rect x="1562.6" y="428" width="140" height="64"
+            rx="8" ry="8" fill="#ffffff" stroke="#546e7a" stroke-width="1.5"/>
+      <text text-anchor="middle" dominant-baseline="middle"
+            font-size="11.5" font-weight="500"
+            fill="#1a1a2e" direction="rtl"><tspan x="1632.6" y="446">שיחה עם המשתתף</tspan><tspan x="1632.6" y="460">שנפגע לבירור</tspan><tspan x="1632.6" y="474">שלומו</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-gateway" id="g_or_join" data-kind="gateway" data-gw="OR">
+      
+      <rect x="1827.6" y="443" width="34" height="34"
+            fill="#e3f2fd" stroke="#1565c0" stroke-width="2"
+            transform="rotate(45, 1844.6, 460)"/>
+      
+      <circle cx="1844.6" cy="460" r="9" fill="none"
+              stroke="#0d47a1" stroke-width="3"/>
+    </g>
+
+    <g class="bpmn-element bpmn-task" id="o_corrective" data-kind="task">
+      <rect x="1986.6" y="428" width="140" height="64"
+            rx="8" ry="8" fill="#ffffff" stroke="#546e7a" stroke-width="1.5"/>
+      <text text-anchor="middle" dominant-baseline="middle"
+            font-size="11.5" font-weight="500"
+            fill="#1a1a2e" direction="rtl"><tspan x="2056.6" y="453">קביעת פעולה</tspan><tspan x="2056.6" y="467">מתקנת</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-task" id="c_approve" data-kind="task">
+      <rect x="2410.6" y="648" width="140" height="64"
+            rx="8" ry="8" fill="#ffffff" stroke="#546e7a" stroke-width="1.5"/>
+      <text text-anchor="middle" dominant-baseline="middle"
+            font-size="11.5" font-weight="500"
+            fill="#1a1a2e" direction="rtl"><tspan x="2480.6" y="673">בחינת הפעולה</tspan><tspan x="2480.6" y="687">המתקנת ואישורה</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-data-object" id="do_form" data-kind="dataObject">
+      <path d="M 550 574 L 578 574 L 586 582 L 586 618 L 550 618 Z" fill="#ffffff" stroke="#1565c0" stroke-width="1.3"/>
+      <path d="M 578 574 L 578 582 L 586 582" fill="none" stroke="#1565c0" stroke-width="1.3"/>
+      <text text-anchor="middle" font-size="11" fill="#263238"
+            direction="rtl"><tspan x="568" y="630">טופס דיווח על</tspan><tspan x="568" y="642">אירוע</tspan></text>
+    </g>
+
+    <g class="bpmn-element bpmn-data-store" id="ds_incidents" data-kind="dataStore">
+      <path d="M 1957.9333333333332 308 L 1957.9333333333332 340
+               A 28 6 0 0 0 2013.9333333333332 340
+               L 2013.9333333333332 308
+               A 28 6 0 0 0 1957.9333333333332 308 Z"
+            fill="#ffffff" stroke="#2e7d32" stroke-width="1.4"/>
+      <path d="M 1957.9333333333332 308
+               A 28 6 0 0 0 2013.9333333333332 308"
+            fill="none" stroke="#2e7d32" stroke-width="1.4"/>
+      <text x="1985.9333333333332" y="360" text-anchor="middle"
+            font-size="11" fill="#263238"
+            direction="rtl">מאגר האירועים</text>
+    </g>
+    </svg>
+  </div>
+  <div id="bpmn-tooltip" class="bpmn-tooltip"></div>
+  
+    <button class="assumptions-btn" onclick="toggleAssumptions()">ℹ️ הנחות ושאלות</button>
+    <div id="assumptions-panel" class="assumptions-panel">
+      <h4>הנחות ושאלות פתוחות</h4>
+      <strong>הנחות:</strong><ul><li>מדריך הטיול הוא מדריך עצמאי שאינו עובד העמותה, ולכן הוא מצויר כאן כ-Pool נפרד (ריק), והדיווח, ההחזרה להשלמה, הדיווח המושלם והסיכום עוברים ב-Message Flow. חלופה המזכה במלואה (1.2): המדריך כ-Lane בתוך ה-Pool של העמותה, משום שבתהליך הזה הוא פועל מטעמה ובטופס שלה; אז הדיווח עובר ב-Sequence Flow, וההשלמה היא פעילות ב-Lane שלו.</li><li>חברת הביטוח היא משתתף חיצוני ועצמאי, ולכן היא Pool ריק המקבל הודעה אחת. לפי התיאור היא אינה עונה, ולכן אין המתנה לתשובתה.</li><li>באירוע אחד ייתכנו פגיעה, מפגע, או שניהם יחד, ולכן הפיצול שאחרי השמירה הוא שער OR עם תנאי על כל יציאה. האיחוד שלפני קביעת הפעולה המתקנת הוא שער OR הממתין לענפים שהופעלו בלבד: הוא אינו נתקע כשהופעל ענף אחד, ואינו מפעיל את הפעולה המתקנת פעמיים כשהופעלו שניים.</li><li>השבוע שבין ההודעה לחברת הביטוח לבין השיחה עם המשתתף הוא פרק זמן שבו איש אינו פועל, ולכן הוא אירוע ביניים של המתנה לזמן (&quot;חלף שבוע&quot;) בתוך ענף הפגיעה בלבד, ולא פעילות.</li><li>השיחה עם המשתתף שנפגע היא פעילות אחת של הממונה. Pool ריק למשתתף עם Message Flow תקין באותה מידה.</li><li>הדוח הרבעוני לוועד המנהל אינו מופיע בתרשים: הוא מופעל בסוף כל רבעון ולא בקבלת דיווח, ומסכם דיווחים רבים, בעוד שכל ריצה של התרשים מטפלת בדיווח אחד, מן הקבלה ועד הסגירה. זהו תהליך נפרד, שהקשר היחיד שלו לתהליך הזה הוא מאגר האירועים (1.4).</li><li>שערי המיזוג (XOR) לפני בדיקת השלמות ולפני סימון הדיווח כסגור מצוירים כאן במפורש, לשם הבהירות. סטודנט שהכניס את המסלולים ישירות לפעילות הבאה לא טעה.</li></ul>
+      <strong>שאלות פתוחות:</strong><ul><li>התיאור אינו קובע גבול למספר סבבי ההשלמה מול המדריך, ואינו קובע מה קורה אם המדריך אינו משלים את הדיווח. בפועל כדאי לברר זאת מול העמותה; אין זה נדרש בתשובה.</li></ul>
+    </div>
+  <button class="vp-export-btn" onclick="exportBPMN()">Download .bpmn (Visual Paradigm)</button>
+
+  <button class="pp-open-btn" onclick="ppOpen()">עמודים להדפסה (A4)</button>
+  <div id="pp-overlay" class="pp-overlay">
+    <div class="pp-toolbar">
+      <button onclick="ppDownloadDocx()">הורדה כקובץ Word</button>
+      <button onclick="ppPrint()">הדפסה</button>
+      <button onclick="ppClose()">סגירה</button>
+      <span class="pp-hint">ל-Word: לחיצה ימנית על עמוד ← העתקת תמונה, ואז הדבקה</span>
+    </div>
+    <div id="pp-pages" class="pp-pages"></div>
+  </div>
+  <script>
+  (function() {
+    const TOOLTIPS = {"s_start":"<strong>אירוע התחלה</strong><div>התקבל טופס דיווח מקוון על אירוע חריג</div>","o_loop_merge":"<strong>XOR (בלעדי): איחוד</strong>","o_check":"<strong>בדיקת שלמות הדיווח</strong><div>מאגר: עמותת הטיולים · נתיב: ממונה הבטיחות</div><div>קורא: טופס דיווח על אירוע</div>","g_complete":"<strong>XOR (בלעדי): פיצול</strong><div>האם הדיווח מלא?</div><div>שאלה: האם מופיעים בדיווח מועד האירוע, מקומו, תיאורו ושמות המעורבים?</div><div>ענפים:</div><ul style=\"margin:4px 0 0;padding-right:18px\"><li>חסרים פרטים ← החזרת הדיווח למדריך עם הערות</li><li>הדיווח מלא ← שמירת הדיווח במאגר האירועים</li></ul>","o_return":"<strong>החזרת הדיווח למדריך עם הערות</strong><div>מאגר: עמותת הטיולים · נתיב: ממונה הבטיחות</div>","o_wait_fixed":"<strong>אירוע ביניים</strong><div>התקבל דיווח מושלם</div>","s_save":"<strong>שמירת הדיווח במאגר האירועים</strong><div>מאגר: עמותת הטיולים · נתיב: מערכת העמותה</div><div>כותב: מאגר האירועים</div>","g_or_split":"<strong>OR (משתף): פיצול</strong><div>מה אירע?</div><div>שאלה: אילו טיפולים נדרשים: פגיעה במשתתף, מפגע באתר, או שניהם?</div><div>ענפים:</div><ul style=\"margin:4px 0 0;padding-right:18px\"><li>נפגע משתתף ← שליחת הודעה על האירוע לחברת הביטוח</li><li>התגלה מפגע ← סיור בדיקה באתר ותיעוד הממצאים</li></ul>","s_insurer":"<strong>שליחת הודעה על האירוע לחברת הביטוח</strong><div>מאגר: עמותת הטיולים · נתיב: מערכת העמותה</div>","o_week":"<strong>אירוע ביניים</strong><div>חלף שבוע</div>","o_call":"<strong>שיחה עם המשתתף שנפגע לבירור שלומו</strong><div>מאגר: עמותת הטיולים · נתיב: ממונה הבטיחות</div>","o_visit":"<strong>סיור בדיקה באתר ותיעוד הממצאים</strong><div>מאגר: עמותת הטיולים · נתיב: ממונה הבטיחות</div>","g_or_join":"<strong>OR (משתף): איחוד</strong>","o_corrective":"<strong>קביעת פעולה מתקנת</strong><div>מאגר: עמותת הטיולים · נתיב: ממונה הבטיחות</div>","s_history":"<strong>שליפת האירועים הקודמים באותו אתר והצגתם לממונה</strong><div>מאגר: עמותת הטיולים · נתיב: מערכת העמותה</div><div>קורא: מאגר האירועים</div>","g_prev":"<strong>XOR (בלעדי): פיצול</strong><div>האם נמצא אירוע קודם באותו אתר?</div><div>שאלה: האם דווח בעבר אירוע באותו אתר?</div><div>ענפים:</div><ul style=\"margin:4px 0 0;padding-right:18px\"><li>כן ← בחינת הפעולה המתקנת ואישורה</li><li>לא ← g_prev_merge</li></ul>","c_approve":"<strong>בחינת הפעולה המתקנת ואישורה</strong><div>מאגר: עמותת הטיולים · נתיב: יו&quot;ר העמותה</div>","g_prev_merge":"<strong>XOR (בלעדי): איחוד</strong>","s_close":"<strong>סימון הדיווח כסגור במאגר</strong><div>מאגר: עמותת הטיולים · נתיב: מערכת העמותה</div><div>כותב: מאגר האירועים</div>","s_summary":"<strong>שליחת סיכום הטיפול למדריך</strong><div>מאגר: עמותת הטיולים · נתיב: מערכת העמותה</div>","s_end":"<strong>אירוע סיום</strong><div>הדיווח נסגר</div>","do_form":"<strong>אובייקט נתונים: טופס דיווח על אירוע</strong><div>נקרא ע״י: בדיקת שלמות הדיווח</div>","ds_incidents":"<strong>מאגר נתונים: מאגר האירועים</strong><div>נקרא ע״י: שליפת האירועים הקודמים באותו אתר והצגתם לממונה</div><div>נכתב ע״י: שמירת הדיווח במאגר האירועים, סימון הדיווח כסגור במאגר</div>"};
+    const tip = document.getElementById('bpmn-tooltip');
+    document.querySelectorAll('.bpmn-element').forEach(function(g) {
+      g.addEventListener('mouseenter', function() {
+        const id = g.getAttribute('id');
+        const content = TOOLTIPS[id];
+        if (!content) return;
+        tip.innerHTML = content;
+        tip.style.display = 'block';
+      });
+      g.addEventListener('mousemove', function(e) {
+        tip.style.top = (e.clientY + 14) + 'px';
+        tip.style.left = (e.clientX + 14) + 'px';
+      });
+      g.addEventListener('mouseleave', function() { tip.style.display = 'none'; });
+    });
+
+    // Flow highlight: brighten and draw an unbroken copy on top of crossings.
+    // The hovered element itself is NEVER moved in the DOM: moving the node
+    // under the pointer can swallow the browser's mouseleave and leave the
+    // highlight stuck. A pointer-transparent clone gives the same z-lift safely.
+    document.querySelectorAll('.bpmn-flow').forEach(function(g) {
+      let ghost = null;
+      g.addEventListener('mouseenter', function() {
+        g.classList.add('bpmn-hl');
+        ghost = g.cloneNode(true);
+        ghost.removeAttribute('id');
+        ghost.style.pointerEvents = 'none';
+        g.ownerSVGElement.appendChild(ghost);  // unbroken copy on top
+      });
+      g.addEventListener('mouseleave', function() {
+        g.classList.remove('bpmn-hl');
+        if (ghost) { ghost.remove(); ghost = null; }
+      });
+    });
+  })();
+
+  
+  function toggleAssumptions() {
+    const p = document.getElementById('assumptions-panel');
+    p.style.display = p.style.display === 'block' ? 'none' : 'block';
+  }
+
+  // Precomputed BPMN 2.0 XML: server generated from the layout
+  const BPMN_XML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<bpmn:definitions xmlns:bpmn=\"http://www.omg.org/spec/BPMN/20100524/MODEL\"\n  xmlns:bpmndi=\"http://www.omg.org/spec/BPMN/20100524/DI\"\n  xmlns:dc=\"http://www.omg.org/spec/DD/20100524/DC\"\n  xmlns:di=\"http://www.omg.org/spec/DD/20100524/DI\"\n  xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n  id=\"Definitions_1\" targetNamespace=\"http://bpmn.io/schema/bpmn\">\n  <bpmn:process id=\"process_1\" name=\"מדריך הטיול (עצמאי)\" isExecutable=\"false\">\n\n      <bpmn:dataObjectReference id=\"do_form\" name=\"טופס דיווח על אירוע\"/>\n      <bpmn:dataStoreReference id=\"ds_incidents\" name=\"מאגר האירועים\"/>\n  </bpmn:process>\n  <bpmn:process id=\"process_2\" name=\"עמותת הטיולים\" isExecutable=\"false\">\n      <bpmn:laneSet id=\"process_2_laneset\">\n        <bpmn:lane id=\"sys\" name=\"מערכת העמותה\">\n          <bpmn:flowNodeRef>s_start</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>s_save</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>g_or_split</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>s_insurer</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>s_history</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>g_prev</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>g_prev_merge</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>s_close</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>s_summary</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>s_end</bpmn:flowNodeRef>\n        </bpmn:lane>\n        <bpmn:lane id=\"officer\" name=\"ממונה הבטיחות\">\n          <bpmn:flowNodeRef>o_loop_merge</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>o_check</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>g_complete</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>o_return</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>o_wait_fixed</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>o_week</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>o_call</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>o_visit</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>g_or_join</bpmn:flowNodeRef>\n          <bpmn:flowNodeRef>o_corrective</bpmn:flowNodeRef>\n        </bpmn:lane>\n        <bpmn:lane id=\"chair\" name=\"יו&quot;ר העמותה\">\n          <bpmn:flowNodeRef>c_approve</bpmn:flowNodeRef>\n        </bpmn:lane>\n      </bpmn:laneSet>\n      <bpmn:startEvent id=\"s_start\" name=\"התקבל טופס דיווח מקוון על אירוע חריג\"/>\n      <bpmn:exclusiveGateway id=\"o_loop_merge\" name=\"\"/>\n      <bpmn:task id=\"o_check\" name=\"בדיקת שלמות הדיווח\"/>\n      <bpmn:exclusiveGateway id=\"g_complete\" name=\"האם הדיווח מלא?\"/>\n      <bpmn:task id=\"o_return\" name=\"החזרת הדיווח למדריך עם הערות\"/>\n      <bpmn:intermediateCatchEvent id=\"o_wait_fixed\" name=\"התקבל דיווח מושלם\"/>\n      <bpmn:task id=\"s_save\" name=\"שמירת הדיווח במאגר האירועים\"/>\n      <bpmn:inclusiveGateway id=\"g_or_split\" name=\"מה אירע?\"/>\n      <bpmn:task id=\"s_insurer\" name=\"שליחת הודעה על האירוע לחברת הביטוח\"/>\n      <bpmn:intermediateCatchEvent id=\"o_week\" name=\"חלף שבוע\"/>\n      <bpmn:task id=\"o_call\" name=\"שיחה עם המשתתף שנפגע לבירור שלומו\"/>\n      <bpmn:task id=\"o_visit\" name=\"סיור בדיקה באתר ותיעוד הממצאים\"/>\n      <bpmn:inclusiveGateway id=\"g_or_join\" name=\"\"/>\n      <bpmn:task id=\"o_corrective\" name=\"קביעת פעולה מתקנת\"/>\n      <bpmn:task id=\"s_history\" name=\"שליפת האירועים הקודמים באותו אתר והצגתם לממונה\"/>\n      <bpmn:exclusiveGateway id=\"g_prev\" name=\"האם נמצא אירוע קודם באותו אתר?\"/>\n      <bpmn:task id=\"c_approve\" name=\"בחינת הפעולה המתקנת ואישורה\"/>\n      <bpmn:exclusiveGateway id=\"g_prev_merge\" name=\"\"/>\n      <bpmn:task id=\"s_close\" name=\"סימון הדיווח כסגור במאגר\"/>\n      <bpmn:task id=\"s_summary\" name=\"שליחת סיכום הטיפול למדריך\"/>\n      <bpmn:endEvent id=\"s_end\" name=\"הדיווח נסגר\"/>\n      <bpmn:dataObjectReference id=\"do_form\" name=\"טופס דיווח על אירוע\"/>\n      <bpmn:dataStoreReference id=\"ds_incidents\" name=\"מאגר האירועים\"/>\n      <bpmn:sequenceFlow id=\"sf1\" sourceRef=\"s_start\" targetRef=\"o_loop_merge\"/>\n      <bpmn:sequenceFlow id=\"sf2\" sourceRef=\"o_loop_merge\" targetRef=\"o_check\"/>\n      <bpmn:sequenceFlow id=\"sf3\" sourceRef=\"o_check\" targetRef=\"g_complete\"/>\n      <bpmn:sequenceFlow id=\"sf4\" sourceRef=\"g_complete\" targetRef=\"o_return\" name=\"חסרים פרטים\"/>\n      <bpmn:sequenceFlow id=\"sf5\" sourceRef=\"o_return\" targetRef=\"o_wait_fixed\"/>\n      <bpmn:sequenceFlow id=\"sf6\" sourceRef=\"o_wait_fixed\" targetRef=\"o_loop_merge\"/>\n      <bpmn:sequenceFlow id=\"sf7\" sourceRef=\"g_complete\" targetRef=\"s_save\" name=\"הדיווח מלא\"/>\n      <bpmn:sequenceFlow id=\"sf8\" sourceRef=\"s_save\" targetRef=\"g_or_split\"/>\n      <bpmn:sequenceFlow id=\"sf9\" sourceRef=\"g_or_split\" targetRef=\"s_insurer\" name=\"נפגע משתתף\"/>\n      <bpmn:sequenceFlow id=\"sf10\" sourceRef=\"s_insurer\" targetRef=\"o_week\"/>\n      <bpmn:sequenceFlow id=\"sf11\" sourceRef=\"o_week\" targetRef=\"o_call\"/>\n      <bpmn:sequenceFlow id=\"sf12\" sourceRef=\"o_call\" targetRef=\"g_or_join\"/>\n      <bpmn:sequenceFlow id=\"sf13\" sourceRef=\"g_or_split\" targetRef=\"o_visit\" name=\"התגלה מפגע\"/>\n      <bpmn:sequenceFlow id=\"sf14\" sourceRef=\"o_visit\" targetRef=\"g_or_join\"/>\n      <bpmn:sequenceFlow id=\"sf15\" sourceRef=\"g_or_join\" targetRef=\"o_corrective\"/>\n      <bpmn:sequenceFlow id=\"sf16\" sourceRef=\"o_corrective\" targetRef=\"s_history\"/>\n      <bpmn:sequenceFlow id=\"sf17\" sourceRef=\"s_history\" targetRef=\"g_prev\"/>\n      <bpmn:sequenceFlow id=\"sf18\" sourceRef=\"g_prev\" targetRef=\"c_approve\" name=\"כן\"/>\n      <bpmn:sequenceFlow id=\"sf19\" sourceRef=\"g_prev\" targetRef=\"g_prev_merge\" name=\"לא\"/>\n      <bpmn:sequenceFlow id=\"sf20\" sourceRef=\"c_approve\" targetRef=\"g_prev_merge\"/>\n      <bpmn:sequenceFlow id=\"sf21\" sourceRef=\"g_prev_merge\" targetRef=\"s_close\"/>\n      <bpmn:sequenceFlow id=\"sf22\" sourceRef=\"s_close\" targetRef=\"s_summary\"/>\n      <bpmn:sequenceFlow id=\"sf23\" sourceRef=\"s_summary\" targetRef=\"s_end\"/>\n  </bpmn:process>\n  <bpmn:process id=\"process_3\" name=\"חברת הביטוח\" isExecutable=\"false\">\n\n      <bpmn:dataObjectReference id=\"do_form\" name=\"טופס דיווח על אירוע\"/>\n      <bpmn:dataStoreReference id=\"ds_incidents\" name=\"מאגר האירועים\"/>\n  </bpmn:process>\n  <bpmn:collaboration id=\"collab_1\">\n    <bpmn:participant id=\"guide\" name=\"מדריך הטיול (עצמאי)\" processRef=\"process_1\"/>\n    <bpmn:participant id=\"assoc\" name=\"עמותת הטיולים\" processRef=\"process_2\"/>\n    <bpmn:participant id=\"insurer\" name=\"חברת הביטוח\" processRef=\"process_3\"/>\n    <bpmn:messageFlow id=\"mf1\" sourceRef=\"guide\" targetRef=\"s_start\" name=\"טופס דיווח מקוון\"/>\n    <bpmn:messageFlow id=\"mf2\" sourceRef=\"o_return\" targetRef=\"guide\" name=\"דיווח מוחזר עם הערות\"/>\n    <bpmn:messageFlow id=\"mf3\" sourceRef=\"guide\" targetRef=\"o_wait_fixed\" name=\"דיווח מושלם\"/>\n    <bpmn:messageFlow id=\"mf4\" sourceRef=\"s_insurer\" targetRef=\"insurer\" name=\"הודעה על האירוע\"/>\n    <bpmn:messageFlow id=\"mf5\" sourceRef=\"s_summary\" targetRef=\"guide\" name=\"סיכום הטיפול\"/>\n  </bpmn:collaboration>\n  <bpmndi:BPMNDiagram id=\"BPMNDiagram_1\">\n    <bpmndi:BPMNPlane id=\"BPMNPlane_1\" bpmnElement=\"collab_1\">\n      <bpmndi:BPMNShape id=\"guide_di\" bpmnElement=\"guide\" isHorizontal=\"true\">\n        <dc:Bounds x=\"20\" y=\"72\" width=\"3451\" height=\"96\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"assoc_di\" bpmnElement=\"assoc\" isHorizontal=\"true\">\n        <dc:Bounds x=\"20\" y=\"184\" width=\"3451\" height=\"608\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"sys_di\" bpmnElement=\"sys\" isHorizontal=\"true\">\n        <dc:Bounds x=\"50\" y=\"184\" width=\"3421\" height=\"168\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"officer_di\" bpmnElement=\"officer\" isHorizontal=\"true\">\n        <dc:Bounds x=\"50\" y=\"352\" width=\"3421\" height=\"272\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"chair_di\" bpmnElement=\"chair\" isHorizontal=\"true\">\n        <dc:Bounds x=\"50\" y=\"624\" width=\"3421\" height=\"168\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"insurer_di\" bpmnElement=\"insurer\" isHorizontal=\"true\">\n        <dc:Bounds x=\"20\" y=\"808\" width=\"3451\" height=\"96\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"s_start_di\" bpmnElement=\"s_start\">\n        <dc:Bounds x=\"126\" y=\"222\" width=\"36\" height=\"36\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"s_save_di\" bpmnElement=\"s_save\">\n        <dc:Bounds x=\"927\" y=\"208\" width=\"140\" height=\"64\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"g_or_split_di\" bpmnElement=\"g_or_split\">\n        <dc:Bounds x=\"1185\" y=\"216\" width=\"48\" height=\"48\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"s_insurer_di\" bpmnElement=\"s_insurer\">\n        <dc:Bounds x=\"1351\" y=\"208\" width=\"140\" height=\"64\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"s_history_di\" bpmnElement=\"s_history\">\n        <dc:Bounds x=\"1987\" y=\"208\" width=\"140\" height=\"64\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"g_prev_di\" bpmnElement=\"g_prev\">\n        <dc:Bounds x=\"2245\" y=\"216\" width=\"48\" height=\"48\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"g_prev_merge_di\" bpmnElement=\"g_prev_merge\">\n        <dc:Bounds x=\"2669\" y=\"216\" width=\"48\" height=\"48\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"s_close_di\" bpmnElement=\"s_close\">\n        <dc:Bounds x=\"2835\" y=\"208\" width=\"140\" height=\"64\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"s_summary_di\" bpmnElement=\"s_summary\">\n        <dc:Bounds x=\"3047\" y=\"208\" width=\"140\" height=\"64\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"s_end_di\" bpmnElement=\"s_end\">\n        <dc:Bounds x=\"3311\" y=\"222\" width=\"36\" height=\"36\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"o_loop_merge_di\" bpmnElement=\"o_loop_merge\">\n        <dc:Bounds x=\"332\" y=\"436\" width=\"48\" height=\"48\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"o_check_di\" bpmnElement=\"o_check\">\n        <dc:Bounds x=\"498\" y=\"428\" width=\"140\" height=\"64\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"g_complete_di\" bpmnElement=\"g_complete\">\n        <dc:Bounds x=\"756\" y=\"436\" width=\"48\" height=\"48\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"o_return_di\" bpmnElement=\"o_return\">\n        <dc:Bounds x=\"927\" y=\"428\" width=\"140\" height=\"64\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"o_wait_fixed_di\" bpmnElement=\"o_wait_fixed\">\n        <dc:Bounds x=\"1191\" y=\"442\" width=\"36\" height=\"36\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"o_week_di\" bpmnElement=\"o_week\">\n        <dc:Bounds x=\"1403\" y=\"390\" width=\"36\" height=\"36\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"o_visit_di\" bpmnElement=\"o_visit\">\n        <dc:Bounds x=\"1351\" y=\"480\" width=\"140\" height=\"64\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"o_call_di\" bpmnElement=\"o_call\">\n        <dc:Bounds x=\"1563\" y=\"428\" width=\"140\" height=\"64\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"g_or_join_di\" bpmnElement=\"g_or_join\">\n        <dc:Bounds x=\"1821\" y=\"436\" width=\"48\" height=\"48\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"o_corrective_di\" bpmnElement=\"o_corrective\">\n        <dc:Bounds x=\"1987\" y=\"428\" width=\"140\" height=\"64\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"c_approve_di\" bpmnElement=\"c_approve\">\n        <dc:Bounds x=\"2411\" y=\"648\" width=\"140\" height=\"64\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"do_form_di\" bpmnElement=\"do_form\">\n        <dc:Bounds x=\"550\" y=\"574\" width=\"36\" height=\"44\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNShape id=\"ds_incidents_di\" bpmnElement=\"ds_incidents\">\n        <dc:Bounds x=\"1958\" y=\"302\" width=\"56\" height=\"44\"/>\n      </bpmndi:BPMNShape>\n      <bpmndi:BPMNEdge id=\"sf1_di\" bpmnElement=\"sf1\">\n        <di:waypoint x=\"144\" y=\"258\"/>\n        <di:waypoint x=\"144\" y=\"410\"/>\n        <di:waypoint x=\"356\" y=\"410\"/>\n        <di:waypoint x=\"356\" y=\"436\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf2_di\" bpmnElement=\"sf2\">\n        <di:waypoint x=\"380\" y=\"460\"/>\n        <di:waypoint x=\"498\" y=\"460\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf3_di\" bpmnElement=\"sf3\">\n        <di:waypoint x=\"638\" y=\"460\"/>\n        <di:waypoint x=\"756\" y=\"460\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf4_di\" bpmnElement=\"sf4\">\n        <di:waypoint x=\"797\" y=\"467\"/>\n        <di:waypoint x=\"901\" y=\"467\"/>\n        <di:waypoint x=\"901\" y=\"460\"/>\n        <di:waypoint x=\"927\" y=\"460\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf5_di\" bpmnElement=\"sf5\">\n        <di:waypoint x=\"1067\" y=\"460\"/>\n        <di:waypoint x=\"1191\" y=\"460\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf6_di\" bpmnElement=\"sf6\">\n        <di:waypoint x=\"1227\" y=\"460\"/>\n        <di:waypoint x=\"1243\" y=\"460\"/>\n        <di:waypoint x=\"1243\" y=\"428\"/>\n        <di:waypoint x=\"1083\" y=\"428\"/>\n        <di:waypoint x=\"1083\" y=\"510\"/>\n        <di:waypoint x=\"356\" y=\"510\"/>\n        <di:waypoint x=\"356\" y=\"484\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf7_di\" bpmnElement=\"sf7\">\n        <di:waypoint x=\"797\" y=\"453\"/>\n        <di:waypoint x=\"911\" y=\"453\"/>\n        <di:waypoint x=\"911\" y=\"298\"/>\n        <di:waypoint x=\"990\" y=\"298\"/>\n        <di:waypoint x=\"990\" y=\"272\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf8_di\" bpmnElement=\"sf8\">\n        <di:waypoint x=\"1067\" y=\"240\"/>\n        <di:waypoint x=\"1185\" y=\"240\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf9_di\" bpmnElement=\"sf9\">\n        <di:waypoint x=\"1233\" y=\"240\"/>\n        <di:waypoint x=\"1351\" y=\"240\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf10_di\" bpmnElement=\"sf10\">\n        <di:waypoint x=\"1414\" y=\"272\"/>\n        <di:waypoint x=\"1414\" y=\"364\"/>\n        <di:waypoint x=\"1421\" y=\"364\"/>\n        <di:waypoint x=\"1421\" y=\"390\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf11_di\" bpmnElement=\"sf11\">\n        <di:waypoint x=\"1439\" y=\"408\"/>\n        <di:waypoint x=\"1537\" y=\"408\"/>\n        <di:waypoint x=\"1537\" y=\"460\"/>\n        <di:waypoint x=\"1563\" y=\"460\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf12_di\" bpmnElement=\"sf12\">\n        <di:waypoint x=\"1703\" y=\"460\"/>\n        <di:waypoint x=\"1795\" y=\"460\"/>\n        <di:waypoint x=\"1795\" y=\"453\"/>\n        <di:waypoint x=\"1828\" y=\"453\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf13_di\" bpmnElement=\"sf13\">\n        <di:waypoint x=\"1209\" y=\"264\"/>\n        <di:waypoint x=\"1209\" y=\"420\"/>\n        <di:waypoint x=\"1387\" y=\"420\"/>\n        <di:waypoint x=\"1387\" y=\"454\"/>\n        <di:waypoint x=\"1421\" y=\"454\"/>\n        <di:waypoint x=\"1421\" y=\"480\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf14_di\" bpmnElement=\"sf14\">\n        <di:waypoint x=\"1491\" y=\"512\"/>\n        <di:waypoint x=\"1795\" y=\"512\"/>\n        <di:waypoint x=\"1795\" y=\"467\"/>\n        <di:waypoint x=\"1828\" y=\"467\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf15_di\" bpmnElement=\"sf15\">\n        <di:waypoint x=\"1869\" y=\"460\"/>\n        <di:waypoint x=\"1987\" y=\"460\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf16_di\" bpmnElement=\"sf16\">\n        <di:waypoint x=\"2057\" y=\"428\"/>\n        <di:waypoint x=\"2057\" y=\"298\"/>\n        <di:waypoint x=\"2064\" y=\"298\"/>\n        <di:waypoint x=\"2064\" y=\"272\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf17_di\" bpmnElement=\"sf17\">\n        <di:waypoint x=\"2127\" y=\"240\"/>\n        <di:waypoint x=\"2245\" y=\"240\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf18_di\" bpmnElement=\"sf18\">\n        <di:waypoint x=\"2269\" y=\"264\"/>\n        <di:waypoint x=\"2269\" y=\"622\"/>\n        <di:waypoint x=\"2474\" y=\"622\"/>\n        <di:waypoint x=\"2474\" y=\"648\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf19_di\" bpmnElement=\"sf19\">\n        <di:waypoint x=\"2293\" y=\"240\"/>\n        <di:waypoint x=\"2669\" y=\"240\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf20_di\" bpmnElement=\"sf20\">\n        <di:waypoint x=\"2488\" y=\"648\"/>\n        <di:waypoint x=\"2488\" y=\"290\"/>\n        <di:waypoint x=\"2693\" y=\"290\"/>\n        <di:waypoint x=\"2693\" y=\"264\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf21_di\" bpmnElement=\"sf21\">\n        <di:waypoint x=\"2717\" y=\"240\"/>\n        <di:waypoint x=\"2835\" y=\"240\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf22_di\" bpmnElement=\"sf22\">\n        <di:waypoint x=\"2975\" y=\"240\"/>\n        <di:waypoint x=\"3047\" y=\"240\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"sf23_di\" bpmnElement=\"sf23\">\n        <di:waypoint x=\"3187\" y=\"240\"/>\n        <di:waypoint x=\"3311\" y=\"240\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"mf1_di\" bpmnElement=\"mf1\">\n        <di:waypoint x=\"144\" y=\"168\"/>\n        <di:waypoint x=\"144\" y=\"222\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"mf2_di\" bpmnElement=\"mf2\">\n        <di:waypoint x=\"997\" y=\"428\"/>\n        <di:waypoint x=\"997\" y=\"286\"/>\n        <di:waypoint x=\"1083\" y=\"286\"/>\n        <di:waypoint x=\"1083\" y=\"194\"/>\n        <di:waypoint x=\"997\" y=\"194\"/>\n        <di:waypoint x=\"997\" y=\"168\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"mf3_di\" bpmnElement=\"mf3\">\n        <di:waypoint x=\"1209\" y=\"168\"/>\n        <di:waypoint x=\"1209\" y=\"176\"/>\n        <di:waypoint x=\"1249\" y=\"176\"/>\n        <di:waypoint x=\"1249\" y=\"442\"/>\n        <di:waypoint x=\"1209\" y=\"442\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"mf4_di\" bpmnElement=\"mf4\">\n        <di:waypoint x=\"1428\" y=\"272\"/>\n        <di:waypoint x=\"1428\" y=\"374\"/>\n        <di:waypoint x=\"1507\" y=\"374\"/>\n        <di:waypoint x=\"1507\" y=\"782\"/>\n        <di:waypoint x=\"1421\" y=\"782\"/>\n        <di:waypoint x=\"1421\" y=\"808\"/>\n      </bpmndi:BPMNEdge>\n      <bpmndi:BPMNEdge id=\"mf5_di\" bpmnElement=\"mf5\">\n        <di:waypoint x=\"3117\" y=\"208\"/>\n        <di:waypoint x=\"3117\" y=\"168\"/>\n      </bpmndi:BPMNEdge>\n    </bpmndi:BPMNPlane>\n  </bpmndi:BPMNDiagram>\n</bpmn:definitions>";
+  const BPMN_FILENAME = "Handling_an_incident_report_from_a_trip.bpmn";
+  function exportBPMN() {
+    const blob = new Blob([BPMN_XML], { type: 'application/xml' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = BPMN_FILENAME;
+    document.body.appendChild(a); a.click();
+    setTimeout(function() { URL.revokeObjectURL(url); a.remove(); }, 1000);
+  }
+
+  (function() {
+    var ASPECT = 1.55, PAGE_PX = 3300, PAD = 10, FOOTER = 24, GAP = 6;
+    var FONT_CSS = 'https://fonts.googleapis.com/css2?family=Noto+Sans+Hebrew:wght@400;500;700&display=swap';
+    var pages = null, fontFaceCss = null;
+
+    function box(el) { var b = el.getBBox(); return { x0: b.x, x1: b.x + b.width, y0: b.y, y1: b.y + b.height }; }
+    function rectBox(r) {
+      var x = +r.getAttribute('x'), y = +r.getAttribute('y');
+      return { x0: x, x1: x + +r.getAttribute('width'), y0: y, y1: y + +r.getAttribute('height') };
+    }
+
+    function measure(svg) {
+      var pools = [].map.call(svg.querySelectorAll('.bpmn-pool'), function(g) {
+        var rs = g.querySelectorAll('rect');
+        return { body: rectBox(rs[0]), header: rectBox(rs[1]) };
+      });
+      var laneHeaders = [].map.call(svg.querySelectorAll('.bpmn-lane'), function(g) {
+        return rectBox(g.querySelectorAll('rect')[1]);
+      });
+      var obstacles = [].map.call(svg.querySelectorAll('.bpmn-element, .bpmn-flow-label'), box);
+      var all = pools.map(function(p) { return p.body; }).concat(obstacles);
+      var x0 = Math.min.apply(null, all.map(function(b) { return b.x0; })) - PAD;
+      var x1 = Math.max.apply(null, all.map(function(b) { return b.x1; })) + PAD;
+      var y0 = Math.min.apply(null, all.map(function(b) { return b.y0; })) - PAD;
+      var y1 = Math.max.apply(null, all.map(function(b) { return b.y1; })) + PAD;
+      var stripEnd = Math.max.apply(null, pools.map(function(p) { return p.header.x1; })
+        .concat(laneHeaders.map(function(b) { return b.x1; })));
+      if (!pools.length) stripEnd = x0;
+      var blocked = obstacles
+        .filter(function(b) { return b.x1 > stripEnd; })
+        .map(function(b) { return [b.x0 - GAP, b.x1 + GAP]; })
+        .sort(function(a, b) { return a[0] - b[0]; });
+      return { x0: x0, x1: x1, y0: y0, y1: y1, stripEnd: stripEnd, blocked: blocked };
+    }
+
+    function isFree(blocked, x) {
+      for (var i = 0; i < blocked.length; i++) if (x > blocked[i][0] && x < blocked[i][1]) return false;
+      return true;
+    }
+
+    // Free x nearest to target inside [lo, hi]; the clamped target if none is free.
+    function bestCut(blocked, target, lo, hi) {
+      var cands = [target];
+      blocked.forEach(function(iv) { cands.push(iv[0], iv[1]); });
+      var best = null;
+      cands.forEach(function(x) {
+        if (x <= lo || x > hi || !isFree(blocked, x)) return;
+        if (best === null || Math.abs(x - target) < Math.abs(best - target)) best = x;
+      });
+      return best !== null ? best : Math.min(hi, Math.max(lo + 1, target));
+    }
+
+    function planCuts(m, sliceW) {
+      var start = m.stripEnd, end = m.x1, n = 0, pos = start;
+      while (pos < end) { pos = end - pos <= sliceW ? end : bestCut(m.blocked, pos + sliceW, pos + sliceW / 2, pos + sliceW); n++; }
+      var cuts = [start];
+      for (var i = 1; i < n; i++) {
+        var prev = cuts[i - 1], left = n - i;
+        var lo = Math.max(prev, end - left * sliceW), hi = prev + sliceW;
+        cuts.push(bestCut(m.blocked, prev + (end - prev) / (left + 1), lo, hi));
+      }
+      cuts.push(end);
+      return cuts;
+    }
+
+    function esc(s) { return String(s).replace(/[&<>"]/g, function(c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+
+    function diagramMarkup(svg) {
+      var clone = svg.cloneNode(true);
+      [].slice.call(clone.children).forEach(function(c) {
+        if (c.tagName === 'rect' && +c.getAttribute('x') === 0 && +c.getAttribute('y') === 0) c.remove();
+      });
+      return clone.innerHTML;
+    }
+
+    function pageSvg(inner, m, cuts, i, pageW, pageH, title) {
+      var stripW = m.stripEnd - m.x0, h = m.y1 - m.y0, sliceW = cuts[i + 1] - cuts[i];
+      var n = cuts.length - 1, px = PAGE_PX, py = Math.round(PAGE_PX * pageH / pageW);
+      var dash = 'stroke="#90a4ae" stroke-width="1.2" stroke-dasharray="6 4"';
+      var marks = (i > 0 ? '<line x1="' + stripW + '" y1="0" x2="' + stripW + '" y2="' + h + '" ' + dash + '/>' : '')
+        + (i < n - 1 ? '<line x1="' + (stripW + sliceW) + '" y1="0" x2="' + (stripW + sliceW) + '" y2="' + h + '" ' + dash + '/>' : '');
+      return '<svg xmlns="http://www.w3.org/2000/svg" width="' + px + '" height="' + py + '" viewBox="0 0 ' + pageW + ' ' + pageH + '">'
+        + '<style>' + (fontFaceCss || '') + " text { font-family: 'Noto Sans Hebrew', Arial, sans-serif; }</style>"
+        + '<rect x="0" y="0" width="' + pageW + '" height="' + pageH + '" fill="#ffffff"/>'
+        + '<svg x="0" y="0" width="' + stripW + '" height="' + h + '" viewBox="' + m.x0 + ' ' + m.y0 + ' ' + stripW + ' ' + h + '">' + inner + '</svg>'
+        + '<svg x="' + stripW + '" y="0" width="' + sliceW + '" height="' + h + '" viewBox="' + cuts[i] + ' ' + m.y0 + ' ' + sliceW + ' ' + h + '">' + inner + '</svg>'
+        + marks
+        + '<text x="' + (pageW - 4) + '" y="' + (pageH - 8) + '" font-size="11" fill="#546e7a" direction="rtl" text-anchor="start">' + esc(title) + '</text>'
+        + '<text x="4" y="' + (pageH - 8) + '" font-size="11" fill="#546e7a" direction="rtl" text-anchor="end">עמוד ' + (i + 1) + ' מתוך ' + n + '</text>'
+        + '</svg>';
+    }
+
+    function toDataUrl(blob) {
+      return new Promise(function(res) { var r = new FileReader(); r.onload = function() { res(r.result); }; r.readAsDataURL(blob); });
+    }
+
+    // An SVG drawn as an image cannot load web fonts, so inline them; without
+    // network access the page falls back to Arial, which also has Hebrew.
+    function loadFonts() {
+      if (fontFaceCss !== null) return Promise.resolve();
+      return fetch(FONT_CSS).then(function(r) { return r.text(); }).then(function(css) {
+        var urls = css.match(/url\([^)]+\)/g) || [];
+        return Promise.all(urls.map(function(u) {
+          var href = u.slice(4, -1).replace(/['"]/g, '');
+          return fetch(href).then(function(r) { return r.blob(); }).then(toDataUrl)
+            .then(function(d) { css = css.split(href).join(d); });
+        })).then(function() { fontFaceCss = css; });
+      }).catch(function() { fontFaceCss = ''; });
+    }
+
+    function rasterize(svgText) {
+      return new Promise(function(res, rej) {
+        var img = new Image();
+        img.onload = function() {
+          var c = document.createElement('canvas');
+          c.width = img.naturalWidth; c.height = img.naturalHeight;
+          c.getContext('2d').drawImage(img, 0, 0);
+          res(c.toDataURL('image/png'));
+        };
+        img.onerror = rej;
+        img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svgText);
+      });
+    }
+
+    function build() {
+      var svg = document.querySelector('.svg-wrapper svg');
+      var title = (document.querySelector('.header-bar h1') || {}).textContent || '';
+      var m = measure(svg);
+      var pageH = (m.y1 - m.y0) + FOOTER, pageW = Math.round(pageH * ASPECT);
+      var cuts = planCuts(m, pageW - (m.stripEnd - m.x0));
+      var widest = 0;
+      for (var k = 0; k < cuts.length - 1; k++) widest = Math.max(widest, cuts[k + 1] - cuts[k]);
+      pageW = Math.ceil(m.stripEnd - m.x0 + widest);
+      var inner = diagramMarkup(svg);
+      return loadFonts().then(function() {
+        var jobs = [];
+        for (var i = 0; i < cuts.length - 1; i++) jobs.push(rasterize(pageSvg(inner, m, cuts, i, pageW, pageH, title)));
+        return Promise.all(jobs);
+      });
+    }
+
+    function fileBase() {
+      return (typeof BPMN_FILENAME === 'string' ? BPMN_FILENAME : 'bpmn').replace(/\.bpmn$/, '');
+    }
+
+    // One .docx with a landscape A4 page per image, at Word's default margins.
+
+    var CRC_TABLE = (function() {
+      var t = [];
+      for (var n = 0; n < 256; n++) {
+        var c = n;
+        for (var k = 0; k < 8; k++) c = c & 1 ? 0xEDB88320 ^ (c >>> 1) : c >>> 1;
+        t[n] = c >>> 0;
+      }
+      return t;
+    })();
+    function crc32(bytes) {
+      var c = 0xFFFFFFFF;
+      for (var i = 0; i < bytes.length; i++) c = CRC_TABLE[(c ^ bytes[i]) & 0xFF] ^ (c >>> 8);
+      return (c ^ 0xFFFFFFFF) >>> 0;
+    }
+
+    // Uncompressed ("stored") zip: PNGs are already compressed.
+    function zip(files) {
+      var enc = new TextEncoder(), parts = [], central = [], offset = 0;
+      function u16(v) { return [v & 0xFF, (v >>> 8) & 0xFF]; }
+      function u32(v) { return [v & 0xFF, (v >>> 8) & 0xFF, (v >>> 16) & 0xFF, (v >>> 24) & 0xFF]; }
+      files.forEach(function(f) {
+        var name = enc.encode(f.name), data = f.data, crc = crc32(data);
+        var common = [].concat(u16(0), u16(0), u16(0), u16(0x21), u32(crc), u32(data.length), u32(data.length), u16(name.length), u16(0));
+        var local = new Uint8Array([].concat(u32(0x04034b50), u16(20), common));
+        parts.push(local, name, data);
+        central.push(new Uint8Array([].concat(u32(0x02014b50), u16(20), u16(20), common, u16(0), u16(0), u16(0), u32(0), u32(offset))), name);
+        offset += local.length + name.length + data.length;
+      });
+      var size = central.reduce(function(n, p) { return n + p.length; }, 0);
+      var end = new Uint8Array([].concat(u32(0x06054b50), u16(0), u16(0), u16(files.length), u16(files.length), u32(size), u32(offset), u16(0)));
+      return new Blob(parts.concat(central, [end]), { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
+    }
+
+    function pngBytes(dataUrl) {
+      var bin = atob(dataUrl.slice(dataUrl.indexOf(',') + 1)), out = new Uint8Array(bin.length);
+      for (var i = 0; i < bin.length; i++) out[i] = bin.charCodeAt(i);
+      return out;
+    }
+
+    function pngSize(bytes) {
+      function at(o) { return ((bytes[o] << 24) | (bytes[o + 1] << 16) | (bytes[o + 2] << 8) | bytes[o + 3]) >>> 0; }
+      return { w: at(16), h: at(20) };
+    }
+
+    function buildDocx(urls) {
+      var EMU_CM = 360000, MAX_W = 24.7 * EMU_CM, MAX_H = 15.4 * EMU_CM;
+      var enc = new TextEncoder(), files = [], rels = [], body = [];
+      urls.forEach(function(u, i) {
+        var n = i + 1, data = pngBytes(u), px = pngSize(data);
+        var cx = MAX_W, cy = Math.round(MAX_W * px.h / px.w);
+        if (cy > MAX_H) { cy = MAX_H; cx = Math.round(MAX_H * px.w / px.h); }
+        files.push({ name: 'word/media/page' + n + '.png', data: data });
+        rels.push('<Relationship Id="rIdP' + n + '" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/image" Target="media/page' + n + '.png"/>');
+        body.push('<w:p><w:pPr><w:jc w:val="center"/></w:pPr>'
+          + (i > 0 ? '<w:r><w:br w:type="page"/></w:r>' : '')
+          + '<w:r><w:drawing><wp:inline distT="0" distB="0" distL="0" distR="0">'
+          + '<wp:extent cx="' + cx + '" cy="' + cy + '"/><wp:docPr id="' + n + '" name="page' + n + '"/>'
+          + '<a:graphic xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main"><a:graphicData uri="http://schemas.openxmlformats.org/drawingml/2006/picture">'
+          + '<pic:pic xmlns:pic="http://schemas.openxmlformats.org/drawingml/2006/picture">'
+          + '<pic:nvPicPr><pic:cNvPr id="' + n + '" name="page' + n + '.png"/><pic:cNvPicPr/></pic:nvPicPr>'
+          + '<pic:blipFill><a:blip r:embed="rIdP' + n + '"/><a:stretch><a:fillRect/></a:stretch></pic:blipFill>'
+          + '<pic:spPr><a:xfrm><a:off x="0" y="0"/><a:ext cx="' + cx + '" cy="' + cy + '"/></a:xfrm><a:prstGeom prst="rect"><a:avLst/></a:prstGeom></pic:spPr>'
+          + '</pic:pic></a:graphicData></a:graphic></wp:inline></w:drawing></w:r></w:p>');
+      });
+      var xml = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>';
+      files.unshift(
+        { name: '[Content_Types].xml', data: enc.encode(xml
+          + '<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">'
+          + '<Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>'
+          + '<Default Extension="xml" ContentType="application/xml"/>'
+          + '<Default Extension="png" ContentType="image/png"/>'
+          + '<Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/>'
+          + '</Types>') },
+        { name: '_rels/.rels', data: enc.encode(xml
+          + '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">'
+          + '<Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/>'
+          + '</Relationships>') },
+        { name: 'word/_rels/document.xml.rels', data: enc.encode(xml
+          + '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">' + rels.join('') + '</Relationships>') },
+        { name: 'word/document.xml', data: enc.encode(xml
+          + '<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"'
+          + ' xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"'
+          + ' xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing"><w:body>'
+          + body.join('')
+          + '<w:sectPr><w:pgSz w:w="16838" w:h="11906" w:orient="landscape"/>'
+          + '<w:pgMar w:top="1440" w:right="1440" w:bottom="1440" w:left="1440" w:header="708" w:footer="708" w:gutter="0"/></w:sectPr>'
+          + '</w:body></w:document>') });
+      return zip(files);
+    }
+
+    window.ppOpen = function() {
+      var overlay = document.getElementById('pp-overlay'), host = document.getElementById('pp-pages');
+      overlay.classList.add('pp-show');
+      if (pages) return;
+      host.innerHTML = '<div class="pp-status">מכין עמודים…</div>';
+      build().then(function(urls) {
+        pages = urls;
+        host.innerHTML = urls.map(function(u, i) {
+          return '<div class="pp-page"><img src="' + u + '" alt="עמוד ' + (i + 1) + '">'
+            + '<a href="' + u + '" download="' + esc(fileBase()) + '_page-' + (i + 1) + '.png">הורדת עמוד ' + (i + 1) + ' (PNG)</a></div>';
+        }).join('');
+      }).catch(function(e) {
+        host.innerHTML = '<div class="pp-status">הכנת העמודים נכשלה: ' + esc(e && e.message || e) + '</div>';
+      });
+    };
+    window.ppClose = function() { document.getElementById('pp-overlay').classList.remove('pp-show'); };
+    window.ppPrint = function() {
+      if (!pages) return;
+      document.body.classList.add('pp-printing');
+      window.print();
+      document.body.classList.remove('pp-printing');
+    };
+    window.ppDownloadDocx = function() {
+      if (!pages) return;
+      var a = document.createElement('a');
+      a.href = URL.createObjectURL(buildDocx(pages)); a.download = fileBase() + '_A4.docx';
+      document.body.appendChild(a); a.click();
+      setTimeout(function() { URL.revokeObjectURL(a.href); a.remove(); }, 1000);
+    };
+  })();
+  </script>
+</body>
+</html>

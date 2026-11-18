@@ -1,0 +1,3000 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>שבילי זהב, Use Case Diagram (פתרון שאלה 6)</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Hebrew:wght@400;600&family=IBM+Plex+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+/* inlined uc-diagram-common.css */
+/* uc-diagram-common.css: SAD MCP shared styles for use case diagrams */
+
+/* ── Base layout ─────────────────────────────────────────────────────────── */
+body { margin: 0; padding: 20px 0; background: #f8fafc;
+  font-family: 'Noto Sans Hebrew', sans-serif; color: #1e293b; }
+h1.page-title { text-align: center; font-size: 18px; color: #1e40af;
+  margin: 0 0 10px; font-weight: 700; }
+.diagram-part { display: flex; justify-content: center; }
+
+/* ── Tab bar ─────────────────────────────────────────────────────────────── */
+.tab-bar { display: flex; justify-content: center; gap: 8px; margin: 12px 0 4px; }
+.tab { padding: 7px 20px; border: 1px solid #cbd5e1; background: #f8fafc;
+  color: #475569; font-size: 13px; font-weight: 600; cursor: pointer;
+  border-radius: 6px; font-family: 'Noto Sans Hebrew', sans-serif; }
+.tab.active { background: #1e40af; color: #fff; border-color: #1e40af; }
+.split-rationale { text-align: center; font-size: 11px; color: #64748b;
+  margin: 0 0 8px; font-style: italic; }
+
+/* ── Buttons ─────────────────────────────────────────────────────────────── */
+.fix-btn { padding: 8px 20px; border: 1px solid #3b82f6; background: #eff6ff;
+  color: #1e40af; font-size: 12px; font-weight: 600; cursor: pointer;
+  border-radius: 6px; font-family: 'Noto Sans Hebrew', sans-serif; }
+.fix-btn:hover { background: #dbeafe; }
+.vp-export-btn { position: fixed; bottom: 20px; right: 20px; z-index: 1000;
+  background: #1e40af; color: #fff; border: none; border-radius: 6px;
+  padding: 8px 16px; font-size: 13px; cursor: pointer;
+  font-family: 'IBM Plex Mono', monospace; }
+.vp-export-btn:hover { background: #1e3a8a; }
+
+/* ── Assumptions panel ───────────────────────────────────────────────────── */
+.assumptions-panel { display: flex; gap: 24px; max-width: 1000px;
+  margin: 20px auto; padding: 16px 20px; background: #fff;
+  border: 1px solid #cbd5e1; border-radius: 8px; direction: rtl; }
+.assumptions-col { flex: 1; min-width: 0; }
+.assumptions-col h3 { margin: 0 0 6px; font-size: 13px; font-weight: 600; color: #1e40af; }
+.assumptions-col ul { margin: 0; padding-right: 18px; }
+.assumptions-col li { color: #334155; font-size: 12px; line-height: 1.6; }
+
+/* ── User stories summary panel ──────────────────────────────────────────── */
+.user-stories-panel { max-width: 1000px; margin: 12px auto 20px; padding: 16px 20px;
+  background: #fff; border: 1px solid #cbd5e1; border-radius: 8px; direction: rtl; }
+.user-stories-panel h3 { margin: 0 0 8px; font-size: 13px; font-weight: 600; color: #1e40af; }
+.user-stories-panel ul { margin: 0; padding-right: 18px; }
+.user-stories-panel li { color: #334155; font-size: 12px; line-height: 1.7; }
+
+/* ── UC modal ────────────────────────────────────────────────────────────── */
+body.uc-modal-open { overflow: hidden; }
+.uc-modal[hidden] { display: none !important; }
+.uc-modal { position: fixed; inset: 0; z-index: 2000; display: flex;
+  align-items: flex-start; justify-content: center; padding: 40px 20px;
+  overflow-y: auto; direction: rtl; font-family: 'Noto Sans Hebrew', sans-serif; }
+.uc-modal-backdrop { position: absolute; inset: 0; background: rgba(15,23,42,0.55); }
+.uc-modal-body { position: relative; z-index: 1; width: 100%; max-width: 960px;
+  background: #fff; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,.25);
+  padding: 28px 32px 32px; color: #1e293b; }
+.uc-modal-close { position: absolute; top: 10px; left: 14px; background: none;
+  border: none; font-size: 24px; color: #64748b; cursor: pointer; }
+.uc-modal-body header { border-bottom: 1px solid #e2e8f0; padding-bottom: 12px;
+  margin-bottom: 18px; }
+.uc-modal-body .uc-id { display: inline-block; font-family: 'IBM Plex Mono',monospace;
+  font-size: 11px; color: #64748b; background: #f1f5f9; padding: 2px 8px;
+  border-radius: 4px; margin-bottom: 6px; }
+.uc-modal-body .uc-name { margin: 0 0 4px; font-size: 20px; color: #1e40af; font-weight: 700; }
+.uc-modal-body .uc-primary { font-size: 13px; color: #334155; }
+.uc-modal-body .uc-primary-label { color: #64748b; margin-left: 6px; }
+.uc-modal-body .uc-primary-link { color: #1e40af; cursor: pointer; font-weight: 600;
+  text-decoration: underline dotted; }
+.uc-description { margin-bottom: 20px; font-size: 14px; line-height: 1.7; color: #334155; }
+.uc-scenarios h3 { font-size: 14px; color: #1e40af; margin: 18px 0 6px;
+  border-right: 3px solid #3b82f6; padding-right: 10px; }
+
+/* ── Scenario rail (NOTATION §11c) ────────────────────────────────────────
+   A UC with more than one scenario (a CRUD "ניהול X" and its four operations)
+   shows a numbered rail with one flow at a time: the VP Flow-of-Events
+   presentation, matching the course's flow-of-events viewer. */
+.uc-sc-rail-title { font-size: 12px; color: #64748b; font-weight: 700; margin: 18px 0 8px; }
+.uc-sc-split { display: grid; grid-template-columns: 200px minmax(0, 1fr); gap: 14px;
+  align-items: start; }
+.uc-sc-rail { display: flex; flex-direction: column; gap: 6px; }
+.uc-sc-tab { appearance: none; text-align: start; border: 1px solid #cbd5e1;
+  background: #f8fafc; border-radius: 6px; padding: 7px 10px; cursor: pointer;
+  font-family: inherit; font-size: 13px; color: #334155; }
+.uc-sc-tab:hover { background: #eef2f7; }
+.uc-sc-tab[aria-selected="true"] { background: #e0f2fe; border-color: #0284c7;
+  color: #0c4a6e; font-weight: 600; }
+.uc-sc-tab .uc-sc-num { display: block; font-size: 10px; color: #64748b;
+  font-family: 'IBM Plex Mono', monospace; }
+.uc-sc-pane > h3 { margin-top: 0; }
+.uc-scenarios ol { margin: 0 0 14px; padding-right: 22px; }
+.uc-scenarios ol li { color: #1e293b; font-size: 13px; line-height: 1.9; }
+.step-actor { color: #1e40af; font-weight: 600; cursor: pointer; text-decoration: underline dotted; }
+.step-system { color: #475569; font-style: italic; }
+.step-include { color: #7c3aed; font-family: 'IBM Plex Mono', monospace; font-size: 11px; }
+.step-uc-ref { color: #7c3aed; cursor: pointer; text-decoration: underline; }
+
+/* ── Flow of events (§4.4a / NOTATION §11b) ──────────────────────────────
+   Step labels are printed by the JS, not by list-style, so the number a reader
+   sees always matches what an extension's "חזרה לשלב 2.1" points at. */
+.uc-scenarios ul.flow { list-style: none; margin: 0 0 14px; padding: 0; }
+.uc-scenarios ul.flow ul.flow { margin: 4px 0 6px; padding-right: 14px;
+  border-right: 2px solid #e2e8f0; }
+.flow-step { color: #1e293b; font-size: 13px; line-height: 1.9; }
+.step-label { display: inline-block; min-width: 34px; color: #64748b;
+  font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600; }
+
+/* loop / alt: control structures read as keywords, not as prose */
+.flow-loop > .ctrl-kw, .flow-alt > .ctrl-kw { font-weight: 700; font-size: 11px;
+  padding: 1px 7px; border-radius: 10px; letter-spacing: .02em; }
+.flow-loop > .ctrl-kw { color: #0369a1; background: #e0f2fe; }
+.flow-alt  > .ctrl-kw { color: #92400e; background: #fef3c7; }
+.ctrl-cond { color: #334155; font-style: italic; }
+.flow-loop > ul.flow { border-right-color: #7dd3fc; }
+.flow-alt  > ul.flow, .flow-branches { border-right-color: #fcd34d; }
+.flow-branches { list-style: none; margin: 4px 0 6px; padding-right: 14px;
+  border-right: 2px solid #fcd34d; }
+.flow-branch { font-size: 13px; line-height: 1.9; }
+.branch-label { color: #92400e; font-weight: 600; font-size: 12px;
+  background: #fffbeb; border: 1px solid #fde68a; border-radius: 4px; padding: 0 6px; }
+.flow-branch > ul.flow { border-right-color: #fde68a; }
+
+/* «extend» hook marker (§3.3): a step declaring an extension point */
+.ext-point-badge { font-size: 11.5px; color: #7c3aed; background: #f5f3ff;
+  border: 1px solid #ddd6fe; border-radius: 4px; padding: 1px 8px;
+  margin: 2px 0 2px 0; display: inline-block; line-height: 1.7; }
+.ext-point-cond { color: #6d28d9; font-size: 11px; }
+
+/* extensions: the not-happy path */
+.ext-holder { list-style: none; }
+.ext-list { list-style: none; margin: 2px 0 8px; padding-right: 34px; }
+.ext-inline, .ext-sub { list-style: none; color: #64748b; font-size: 12px;
+  padding-right: 24px; line-height: 1.7; }
+.ext-sub { padding-right: 0; border-right: 2px solid #fecaca; padding-right: 10px;
+  margin-bottom: 4px; }
+.ext-label { color: #b91c1c; min-width: 42px; }
+.ext-steps { list-style: none; margin: 2px 0; padding-right: 12px; }
+.ext-steps li { font-size: 12px; color: #64748b; line-height: 1.7; }
+.ext-steps .step-label { min-width: 48px; color: #94a3b8; }
+.ext-outcome { font-size: 11.5px; font-weight: 600; margin: 2px 0 2px 0;
+  padding-right: 12px; }
+.ext-resume { color: #0f766e; }
+.ext-terminate { color: #b91c1c; }
+.uc-prepostuser { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 18px;
+  margin: 18px 0 20px; }
+.uc-prepostuser > div { background: #f8fafc; border: 1px solid #e2e8f0;
+  border-radius: 8px; padding: 12px 14px; }
+.uc-prepostuser h4 { margin: 0 0 6px; font-size: 12px; color: #1e40af; font-weight: 600; }
+.uc-prepostuser ul { margin: 0; padding-right: 18px; font-size: 12px;
+  color: #334155; line-height: 1.7; }
+.uc-wireframe { border-top: 1px dashed #cbd5e1; padding-top: 16px; margin-top: 6px; }
+.uc-wireframe:empty, .uc-wireframe[hidden] { display: none; }
+
+/* ── Actor pulse ─────────────────────────────────────────────────────────── */
+.actor-pulse { animation: actor-pulse 0.6s ease-in-out 3; }
+@keyframes actor-pulse {
+  0%, 100% { filter: none; }
+  50%      { filter: drop-shadow(0 0 8px #3b82f6); }
+}
+
+/* ── Wireframe scoped theme (wf-*) ───────────────────────────────────────── */
+.wf-screen { background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px;
+  padding: 18px 20px; font-family: 'Noto Sans Hebrew', sans-serif;
+  color: #1e293b; direction: rtl; max-width: 760px; margin: 0 auto; }
+.wf-heading { margin: 0 0 14px; font-size: 15px; color: #1e40af; font-weight: 700;
+  border-bottom: 1px solid #e2e8f0; padding-bottom: 6px; }
+.wf-section { margin: 14px 0; }
+.wf-row { display: flex; gap: 10px; align-items: center; margin: 6px 0; }
+.wf-label { font-size: 12px; color: #475569; min-width: 120px; }
+.wf-input, .wf-textarea, .wf-select { flex: 1; background: #fff;
+  border: 1px solid #cbd5e1; border-radius: 4px; padding: 6px 8px;
+  font-size: 12px; color: #334155; }
+.wf-textarea { min-height: 60px; }
+.wf-table { width: 100%; border-collapse: collapse; margin: 10px 0; font-size: 12px; }
+.wf-table th, .wf-table td { border: 1px solid #cbd5e1; padding: 6px 8px; text-align: right; }
+.wf-table th { background: #e2e8f0; color: #1e40af; font-weight: 600; }
+.wf-actions { display: flex; gap: 8px; margin-top: 12px; justify-content: flex-start; }
+.wf-button { background: #fff; border: 1px solid #64748b; border-radius: 4px;
+  padding: 6px 14px; font-size: 12px; color: #334155; cursor: default; }
+.wf-primary { background: #1e40af; color: #fff; border-color: #1e40af; }
+.wf-image-box { border: 1px dashed #94a3b8; background: #f1f5f9; color: #64748b;
+  text-align: center; padding: 24px; border-radius: 4px; font-size: 12px; margin: 10px 0; }
+.wf-hint { font-size: 11px; color: #64748b; font-style: italic; margin: 6px 0; }
+.wf-badge { display: inline-block; background: #e0f2fe; color: #0369a1;
+  padding: 2px 8px; border-radius: 999px; font-size: 10px; font-weight: 600; }
+
+/* REQUIRED for tab switching: this sheet sets display:flex on .diagram-part,
+   which overrides the browser default [hidden]{display:none}. */
+[hidden] { display: none !important; }
+
+  </style>
+</head>
+<body>
+  <div class="solution-head">
+    <h1>פתרון שאלה 6, תרשים Use Case, מערכת לניהול טיולים והרשמה לחברי מועדוני גמלאים</h1>
+    <p>מודל פתרון להוראה, ניתוח ועיצוב מערכות מידע (364-1-1411), 2026 סמסטר קיץ מועד ב'. לחיצה על Use Case פותחת את התיעוד המלא; לחיצה על שחקן מציגה תיאור. <b>ארבעה אזורי אחריות של אותה מערכת:</b> הרשמה וביטולים, תפעול יציאות, ניהול נתוני-אב, ותהליכים אוטומטיים. <b>נקודות המפתח:</b> "הרשמה ליציאה" היא Use Case <b>אחד</b> ששני שחקנים קשורים אליו, החבר ורכז המועדון, כי המטרה והתוצאה זהות (6.2); חברת "קווי הנגב" <b>אינה שחקן</b>, כי הסדרן רק מודיע למנהלת והיא שרושמת את האוטובוסים (6.3); לכל רשימה שהמנהלת מתחזקת יש Use Case ניהול ייעודי (6.4); ו-«include» ל"הקצאת מקום ביציאה" משלושת ה-Use Cases שבהם הרשמה עשויה להתאשר: הרשמה, בדיקת חובש ואישור מקום שהוצע. הודעות ה-SMS אינן Use Case: הן צעד בתוך כל Use Case שמחליט לשלוח אותן, כמו שליחת דואר.</p>
+  </div>
+
+  <div class="tab-bar">
+    <button class="tab active" onclick="showDiagram(0)">הרשמה וביטולים</button>
+    <button class="tab" onclick="showDiagram(1)">תפעול יציאות</button>
+    <button class="tab" onclick="showDiagram(2)">ניהול נתוני-אב</button>
+    <button class="tab" onclick="showDiagram(3)">תהליכים אוטומטיים</button>
+  </div>
+  <div class="split-rationale">פוצל לארבעה אזורי אחריות: 18 Use Cases &gt; סף 8. ניהול נתוני-האב מקבל תרשים משלו, והטריגרים של שחקן הזמן מקבלים תרשים משלהם.</div>
+  <div style="text-align:center;margin:8px 0;">
+    <button onclick="fixLayout(currentLayout())" class="fix-btn">Fix Layout</button>
+  </div>
+
+  <div class="diagram-part" id="diagram-0">
+    <svg id="diagram-svg-0" viewBox="0 0 1700 860" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <pattern id="dots0" width="24" height="24" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="0.8" fill="#cbd5e1"/></pattern>
+        <marker id="arrow-include0" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polyline points="0 0, 9 3.5, 0 7" fill="none" stroke="#7c3aed" stroke-width="1.2"/></marker>
+        <marker id="arrow-extend0" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polyline points="0 0, 9 3.5, 0 7" fill="none" stroke="#b45309" stroke-width="1.2"/></marker>
+      </defs>
+      <rect x="0" y="0" width="1700" height="860" fill="#f8fafc"/>
+      <rect x="0" y="0" width="1700" height="860" fill="url(#dots0)"/>
+
+      <rect class="system-boundary" x="380" y="70" width="980" height="740" rx="12" fill="#ffffff" stroke="#3b82f6" stroke-width="2.5"/>
+      <rect x="380" y="70" width="980" height="44" rx="12" fill="#1e40af"/>
+      <rect x="380" y="96" width="980" height="18" fill="#1e40af"/>
+      <text x="870" y="99" text-anchor="middle" fill="#ffffff" font-size="14" font-weight="700" font-family="'Noto Sans Hebrew',sans-serif">מערכת הטיולים, הרשמה וביטולים</text>
+
+      <g id="assocLayer0">
+        <line class="assoc-line" data-conn-from="member" data-conn-to="uc-register" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+        <line class="conn-hitbox" data-conn-id="a-member-register" data-hitbox-from="member" data-hitbox-to="uc-register" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('a-member-register','assoc',event)"/>
+        <line class="assoc-line" data-conn-from="member" data-conn-to="uc-cancel-reg" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+        <line class="assoc-line" data-conn-from="member" data-conn-to="uc-confirm-offer" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+        <line class="assoc-line" data-conn-from="coordinator" data-conn-to="uc-register" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+        <line class="conn-hitbox" data-conn-id="a-coord-register" data-hitbox-from="coordinator" data-hitbox-to="uc-register" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('a-coord-register','assoc',event)"/>
+        <line class="assoc-line" data-conn-from="coordinator" data-conn-to="uc-cancel-reg" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+        <line class="assoc-line" data-conn-from="coordinator" data-conn-to="uc-confirm-offer" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+        <line class="assoc-line" data-conn-from="medic" data-conn-to="uc-medic-check" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+        <line class="assoc-line" data-conn-from="manager" data-conn-to="uc-cancel-dep" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+      </g>
+
+      <g id="includeLayer0">
+        <line class="include-line" data-conn-from="uc-register" data-conn-to="uc-allocate" x1="0" y1="0" x2="0" y2="0" stroke="#7c3aed" stroke-width="1.6" stroke-dasharray="6 4" marker-end="url(#arrow-include0)"/>
+        <text data-label-for="uc-register uc-allocate" x="0" y="0" text-anchor="middle" font-size="9.5" fill="#7c3aed" font-family="'IBM Plex Mono',monospace">«include»</text>
+        <line class="include-line" data-conn-from="uc-confirm-offer" data-conn-to="uc-allocate" x1="0" y1="0" x2="0" y2="0" stroke="#7c3aed" stroke-width="1.6" stroke-dasharray="6 4" marker-end="url(#arrow-include0)"/>
+        <text data-label-for="uc-confirm-offer uc-allocate" x="0" y="0" text-anchor="middle" font-size="9.5" fill="#7c3aed" font-family="'IBM Plex Mono',monospace">«include»</text>
+        <line class="include-line" data-conn-from="uc-medic-check" data-conn-to="uc-allocate" x1="0" y1="0" x2="0" y2="0" stroke="#7c3aed" stroke-width="1.6" stroke-dasharray="6 4" marker-end="url(#arrow-include0)"/>
+        <text data-label-for="uc-medic-check uc-allocate" x="0" y="0" text-anchor="middle" font-size="9.5" fill="#7c3aed" font-family="'IBM Plex Mono',monospace">«include»</text>
+        <line class="include-line" data-conn-from="uc-seat-offer" data-conn-to="uc-cancel-reg" x1="0" y1="0" x2="0" y2="0" stroke="#b45309" stroke-width="1.6" stroke-dasharray="6 4" marker-end="url(#arrow-extend0)"/>
+        <text data-label-for="uc-seat-offer uc-cancel-reg" x="0" y="0" text-anchor="middle" font-size="9.5" fill="#b45309" font-family="'IBM Plex Mono',monospace">«extend»</text>
+      </g>
+
+      <g id="ucLayer0">
+        <g class="uc-group" id="uc-group-uc-cancel-reg" data-uc-id="uc-cancel-reg" onclick="showDesc('uc-cancel-reg','uc',event)" style="cursor:pointer"><ellipse cx="560" cy="180" rx="80" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/><text x="560" y="184" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">ביטול הרשמה</text></g>
+        <g class="uc-group" id="uc-group-uc-register" data-uc-id="uc-register" onclick="showDesc('uc-register','uc',event)" style="cursor:pointer"><ellipse cx="560" cy="350" rx="85" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/><text x="560" y="354" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">הרשמה ליציאה</text></g>
+        <g class="uc-group" id="uc-group-uc-confirm-offer" data-uc-id="uc-confirm-offer" onclick="showDesc('uc-confirm-offer','uc',event)" style="cursor:pointer"><ellipse cx="560" cy="520" rx="90" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/><text x="560" y="524" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">אישור מקום שהוצע</text></g>
+        <g class="uc-group" id="uc-group-uc-seat-offer" data-uc-id="uc-seat-offer" onclick="showDesc('uc-seat-offer','uc',event)" style="cursor:pointer"><ellipse cx="870" cy="180" rx="95" ry="28" fill="#ece3fb" stroke="#7c3aed" stroke-width="2"/><text x="870" y="184" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">הצעת מקום לבא בתור</text></g>
+        <g class="uc-group" id="uc-group-uc-allocate" data-uc-id="uc-allocate" onclick="showDesc('uc-allocate','uc',event)" style="cursor:pointer"><ellipse cx="870" cy="350" rx="95" ry="28" fill="#ece3fb" stroke="#7c3aed" stroke-width="2"/><text x="870" y="354" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">הקצאת מקום ביציאה</text></g>
+        <g class="uc-group" id="uc-group-uc-medic-check" data-uc-id="uc-medic-check" onclick="showDesc('uc-medic-check','uc',event)" style="cursor:pointer"><ellipse cx="1170" cy="260" rx="100" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/><text x="1170" y="264" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">בדיקת הצהרת ניידות</text></g>
+        <g class="uc-group" id="uc-group-uc-cancel-dep" data-uc-id="uc-cancel-dep" onclick="showDesc('uc-cancel-dep','uc',event)" style="cursor:pointer"><ellipse cx="1170" cy="520" rx="75" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/><text x="1170" y="524" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">ביטול יציאה</text></g>
+      </g>
+
+      <g id="actorLayer0">
+        <g id="actor-group-member" data-actor-id="member" onclick="showDesc('member','actor',event)" style="cursor:pointer" transform="translate(290,260)">
+          <circle cx="0" cy="-60" r="14" fill="#e0f0ff" stroke="#334155" stroke-width="2"/><line x1="0" y1="-46" x2="0" y2="-10" stroke="#334155" stroke-width="2"/><line x1="-18" y1="-36" x2="18" y2="-36" stroke="#334155" stroke-width="2"/><line x1="0" y1="-10" x2="-14" y2="14" stroke="#334155" stroke-width="2"/><line x1="0" y1="-10" x2="14" y2="14" stroke="#334155" stroke-width="2"/>
+          <text x="0" y="30" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b" font-family="'Noto Sans Hebrew',sans-serif">חבר</text>
+          <text x="0" y="44" text-anchor="middle" font-size="9.5" fill="#64748b" font-family="'Noto Sans Hebrew',sans-serif">(בעל חשבון באתר)</text>
+        </g>
+        <g id="actor-group-coordinator" data-actor-id="coordinator" onclick="showDesc('coordinator','actor',event)" style="cursor:pointer" transform="translate(290,560)">
+          <circle cx="0" cy="-60" r="14" fill="#e0f0ff" stroke="#334155" stroke-width="2"/><line x1="0" y1="-46" x2="0" y2="-10" stroke="#334155" stroke-width="2"/><line x1="-18" y1="-36" x2="18" y2="-36" stroke="#334155" stroke-width="2"/><line x1="0" y1="-10" x2="-14" y2="14" stroke="#334155" stroke-width="2"/><line x1="0" y1="-10" x2="14" y2="14" stroke="#334155" stroke-width="2"/>
+          <text x="0" y="30" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b" font-family="'Noto Sans Hebrew',sans-serif">רכז מועדון</text>
+        </g>
+        <g id="actor-group-medic" data-actor-id="medic" onclick="showDesc('medic','actor',event)" style="cursor:pointer" transform="translate(1460,260)">
+          <circle cx="0" cy="-60" r="14" fill="#e0f0ff" stroke="#334155" stroke-width="2"/><line x1="0" y1="-46" x2="0" y2="-10" stroke="#334155" stroke-width="2"/><line x1="-18" y1="-36" x2="18" y2="-36" stroke="#334155" stroke-width="2"/><line x1="0" y1="-10" x2="-14" y2="14" stroke="#334155" stroke-width="2"/><line x1="0" y1="-10" x2="14" y2="14" stroke="#334155" stroke-width="2"/>
+          <text x="0" y="30" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b" font-family="'Noto Sans Hebrew',sans-serif">חובש</text>
+        </g>
+        <g id="actor-group-manager" data-actor-id="manager" onclick="showDesc('manager','actor',event)" style="cursor:pointer" transform="translate(1460,620)">
+          <circle cx="0" cy="-60" r="14" fill="#e0f0ff" stroke="#334155" stroke-width="2"/><line x1="0" y1="-46" x2="0" y2="-10" stroke="#334155" stroke-width="2"/><line x1="-18" y1="-36" x2="18" y2="-36" stroke="#334155" stroke-width="2"/><line x1="0" y1="-10" x2="-14" y2="14" stroke="#334155" stroke-width="2"/><line x1="0" y1="-10" x2="14" y2="14" stroke="#334155" stroke-width="2"/>
+          <text x="0" y="30" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b" font-family="'Noto Sans Hebrew',sans-serif">מנהלת הטיולים</text>
+        </g>
+      </g>
+    </svg>
+  </div>
+
+  <div class="diagram-part" id="diagram-1" hidden>
+    <svg id="diagram-svg-1" viewBox="0 0 1300 580" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <pattern id="dots1" width="24" height="24" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="0.8" fill="#cbd5e1"/></pattern>
+      </defs>
+      <rect x="0" y="0" width="1300" height="580" fill="#f8fafc"/>
+      <rect x="0" y="0" width="1300" height="580" fill="url(#dots1)"/>
+
+      <rect class="system-boundary" x="380" y="70" width="580" height="460" rx="12" fill="#ffffff" stroke="#3b82f6" stroke-width="2.5"/>
+      <rect x="380" y="70" width="580" height="44" rx="12" fill="#1e40af"/>
+      <rect x="380" y="96" width="580" height="18" fill="#1e40af"/>
+      <text x="670" y="99" text-anchor="middle" fill="#ffffff" font-size="14" font-weight="700" font-family="'Noto Sans Hebrew',sans-serif">מערכת הטיולים, תפעול יציאות</text>
+
+      <g id="assocLayer1">
+        <line class="assoc-line" data-conn-from="manager" data-conn-to="uc-schedule" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+        <line class="assoc-line" data-conn-from="manager" data-conn-to="uc-buses" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+        <line class="conn-hitbox" data-conn-id="a-manager-buses" data-hitbox-from="manager" data-hitbox-to="uc-buses" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('a-manager-buses','assoc',event)"/>
+        <line class="assoc-line" data-conn-from="guide" data-conn-to="uc-passenger-list" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+      </g>
+
+      <g id="ucLayer1">
+        <g class="uc-group" id="uc-group-uc-schedule" data-uc-id="uc-schedule" onclick="showDesc('uc-schedule','uc',event)" style="cursor:pointer"><ellipse cx="560" cy="180" rx="75" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/><text x="560" y="184" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">תזמון יציאה</text></g>
+        <g class="uc-group" id="uc-group-uc-buses" data-uc-id="uc-buses" onclick="showDesc('uc-buses','uc',event)" style="cursor:pointer"><ellipse cx="560" cy="310" rx="100" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/><text x="560" y="314" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">רישום אוטובוסים ליציאה</text></g>
+        <g class="uc-group" id="uc-group-uc-passenger-list" data-uc-id="uc-passenger-list" onclick="showDesc('uc-passenger-list','uc',event)" style="cursor:pointer"><ellipse cx="780" cy="440" rx="125" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/><text x="780" y="444" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">צפייה ברשימת הנוסעים לפי תחנות</text></g>
+      </g>
+
+      <g id="actorLayer1">
+        <g id="actor-group-manager" data-actor-id="manager" onclick="showDesc('manager','actor',event)" style="cursor:pointer" transform="translate(290,270)">
+          <circle cx="0" cy="-60" r="14" fill="#e0f0ff" stroke="#334155" stroke-width="2"/><line x1="0" y1="-46" x2="0" y2="-10" stroke="#334155" stroke-width="2"/><line x1="-18" y1="-36" x2="18" y2="-36" stroke="#334155" stroke-width="2"/><line x1="0" y1="-10" x2="-14" y2="14" stroke="#334155" stroke-width="2"/><line x1="0" y1="-10" x2="14" y2="14" stroke="#334155" stroke-width="2"/>
+          <text x="0" y="30" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b" font-family="'Noto Sans Hebrew',sans-serif">מנהלת הטיולים</text>
+        </g>
+        <g id="actor-group-guide" data-actor-id="guide" onclick="showDesc('guide','actor',event)" style="cursor:pointer" transform="translate(1060,430)">
+          <circle cx="0" cy="-60" r="14" fill="#e0f0ff" stroke="#334155" stroke-width="2"/><line x1="0" y1="-46" x2="0" y2="-10" stroke="#334155" stroke-width="2"/><line x1="-18" y1="-36" x2="18" y2="-36" stroke="#334155" stroke-width="2"/><line x1="0" y1="-10" x2="-14" y2="14" stroke="#334155" stroke-width="2"/><line x1="0" y1="-10" x2="14" y2="14" stroke="#334155" stroke-width="2"/>
+          <text x="0" y="30" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b" font-family="'Noto Sans Hebrew',sans-serif">מדריך</text>
+        </g>
+      </g>
+    </svg>
+  </div>
+
+  <div class="diagram-part" id="diagram-2" hidden>
+    <svg id="diagram-svg-2" viewBox="0 0 1250 640" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <pattern id="dots2" width="24" height="24" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="0.8" fill="#cbd5e1"/></pattern>
+      </defs>
+      <rect x="0" y="0" width="1250" height="640" fill="#f8fafc"/>
+      <rect x="0" y="0" width="1250" height="640" fill="url(#dots2)"/>
+
+      <rect class="system-boundary" x="380" y="70" width="540" height="520" rx="12" fill="#ffffff" stroke="#3b82f6" stroke-width="2.5"/>
+      <rect x="380" y="70" width="540" height="44" rx="12" fill="#1e40af"/>
+      <rect x="380" y="96" width="540" height="18" fill="#1e40af"/>
+      <text x="650" y="99" text-anchor="middle" fill="#ffffff" font-size="14" font-weight="700" font-family="'Noto Sans Hebrew',sans-serif">מערכת הטיולים, ניהול נתוני-אב</text>
+
+      <g id="assocLayer2">
+        <line class="assoc-line" data-conn-from="manager" data-conn-to="uc-manage-trips" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+        <line class="assoc-line" data-conn-from="manager" data-conn-to="uc-manage-stations" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+        <line class="assoc-line" data-conn-from="manager" data-conn-to="uc-manage-staff" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+        <line class="assoc-line" data-conn-from="coordinator" data-conn-to="uc-manage-members" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+      </g>
+
+      <g id="ucLayer2">
+        <g class="uc-group" id="uc-group-uc-manage-trips" data-uc-id="uc-manage-trips" onclick="showDesc('uc-manage-trips','uc',event)" style="cursor:pointer"><ellipse cx="620" cy="180" rx="80" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/><text x="620" y="184" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">ניהול מסלולים</text></g>
+        <g class="uc-group" id="uc-group-uc-manage-stations" data-uc-id="uc-manage-stations" onclick="showDesc('uc-manage-stations','uc',event)" style="cursor:pointer"><ellipse cx="620" cy="300" rx="90" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/><text x="620" y="304" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">ניהול תחנות איסוף</text></g>
+        <g class="uc-group" id="uc-group-uc-manage-staff" data-uc-id="uc-manage-staff" onclick="showDesc('uc-manage-staff','uc',event)" style="cursor:pointer"><ellipse cx="620" cy="420" rx="85" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/><text x="620" y="424" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">ניהול אנשי צוות</text></g>
+        <g class="uc-group" id="uc-group-uc-manage-members" data-uc-id="uc-manage-members" onclick="showDesc('uc-manage-members','uc',event)" style="cursor:pointer"><ellipse cx="740" cy="525" rx="95" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/><text x="740" y="529" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">ניהול חברי המועדון</text></g>
+      </g>
+
+      <g id="actorLayer2">
+        <g id="actor-group-manager" data-actor-id="manager" onclick="showDesc('manager','actor',event)" style="cursor:pointer" transform="translate(290,300)">
+          <circle cx="0" cy="-60" r="14" fill="#e0f0ff" stroke="#334155" stroke-width="2"/><line x1="0" y1="-46" x2="0" y2="-10" stroke="#334155" stroke-width="2"/><line x1="-18" y1="-36" x2="18" y2="-36" stroke="#334155" stroke-width="2"/><line x1="0" y1="-10" x2="-14" y2="14" stroke="#334155" stroke-width="2"/><line x1="0" y1="-10" x2="14" y2="14" stroke="#334155" stroke-width="2"/>
+          <text x="0" y="30" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b" font-family="'Noto Sans Hebrew',sans-serif">מנהלת הטיולים</text>
+        </g>
+        <g id="actor-group-coordinator" data-actor-id="coordinator" onclick="showDesc('coordinator','actor',event)" style="cursor:pointer" transform="translate(1020,520)">
+          <circle cx="0" cy="-60" r="14" fill="#e0f0ff" stroke="#334155" stroke-width="2"/><line x1="0" y1="-46" x2="0" y2="-10" stroke="#334155" stroke-width="2"/><line x1="-18" y1="-36" x2="18" y2="-36" stroke="#334155" stroke-width="2"/><line x1="0" y1="-10" x2="-14" y2="14" stroke="#334155" stroke-width="2"/><line x1="0" y1="-10" x2="14" y2="14" stroke="#334155" stroke-width="2"/>
+          <text x="0" y="30" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b" font-family="'Noto Sans Hebrew',sans-serif">רכז מועדון</text>
+        </g>
+      </g>
+    </svg>
+  </div>
+
+  <div class="diagram-part" id="diagram-3" hidden>
+    <svg id="diagram-svg-3" viewBox="0 0 1300 700" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <pattern id="dots3" width="24" height="24" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="0.8" fill="#cbd5e1"/></pattern>
+      </defs>
+      <rect x="0" y="0" width="1300" height="700" fill="#f8fafc"/>
+      <rect x="0" y="0" width="1300" height="700" fill="url(#dots3)"/>
+
+      <rect class="system-boundary" x="380" y="70" width="580" height="580" rx="12" fill="#ffffff" stroke="#3b82f6" stroke-width="2.5"/>
+      <rect x="380" y="70" width="580" height="44" rx="12" fill="#1e40af"/>
+      <rect x="380" y="96" width="580" height="18" fill="#1e40af"/>
+      <text x="670" y="99" text-anchor="middle" fill="#ffffff" font-size="14" font-weight="700" font-family="'Noto Sans Hebrew',sans-serif">מערכת הטיולים, תהליכים אוטומטיים</text>
+
+      <g id="assocLayer3">
+        <line class="assoc-line" data-conn-from="timeActor" data-conn-to="uc-close-reg" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+        <line class="conn-hitbox" data-conn-id="a-time-close" data-hitbox-from="timeActor" data-hitbox-to="uc-close-reg" x1="0" y1="0" x2="0" y2="0" stroke="transparent" stroke-width="14" style="cursor:pointer" onclick="showDesc('a-time-close','assoc',event)"/>
+        <line class="assoc-line" data-conn-from="timeActor" data-conn-to="uc-offer-expired" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+        <line class="assoc-line" data-conn-from="timeActor" data-conn-to="uc-trip-day-close" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+        <line class="assoc-line" data-conn-from="timeActor" data-conn-to="uc-purge" x1="0" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="1.8"/>
+      </g>
+
+      <g id="ucLayer3">
+        <g class="uc-group" id="uc-group-uc-close-reg" data-uc-id="uc-close-reg" onclick="showDesc('uc-close-reg','uc',event)" style="cursor:pointer"><ellipse cx="620" cy="180" rx="100" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/><text x="620" y="184" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">סגירת ההרשמה ליציאה</text></g>
+        <g class="uc-group" id="uc-group-uc-offer-expired" data-uc-id="uc-offer-expired" onclick="showDesc('uc-offer-expired','uc',event)" style="cursor:pointer"><ellipse cx="620" cy="300" rx="115" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/><text x="620" y="304" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">טיפול בהצעת מקום שפקעה</text></g>
+        <g class="uc-group" id="uc-group-uc-trip-day-close" data-uc-id="uc-trip-day-close" onclick="showDesc('uc-trip-day-close','uc',event)" style="cursor:pointer"><ellipse cx="620" cy="420" rx="125" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/><text x="620" y="424" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">העברת הרשמות היציאה לארכיון</text></g>
+        <g class="uc-group" id="uc-group-uc-purge" data-uc-id="uc-purge" onclick="showDesc('uc-purge','uc',event)" style="cursor:pointer"><ellipse cx="620" cy="540" rx="100" ry="28" fill="#d4e9f7" stroke="#2980b9" stroke-width="1.8"/><text x="620" y="544" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1a2e" font-family="'Noto Sans Hebrew',sans-serif">מחיקת רשומות הרשמה</text></g>
+      </g>
+
+      <g id="actorLayer3">
+        <g id="actor-group-timeActor" data-actor-id="timeActor" onclick="showDesc('timeActor','actor',event)" style="cursor:pointer" transform="translate(1080,370)">
+          <circle cx="0" cy="-60" r="14" fill="#fef3c7" stroke="#334155" stroke-width="2"/><line x1="0" y1="-46" x2="0" y2="-10" stroke="#334155" stroke-width="2"/><line x1="-18" y1="-36" x2="18" y2="-36" stroke="#334155" stroke-width="2"/><line x1="0" y1="-10" x2="-14" y2="14" stroke="#334155" stroke-width="2"/><line x1="0" y1="-10" x2="14" y2="14" stroke="#334155" stroke-width="2"/>
+          <text x="0" y="30" text-anchor="middle" font-size="9" font-style="italic" fill="#64748b" font-family="'IBM Plex Mono',monospace">«system»</text>
+          <text x="0" y="44" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b" font-family="'Noto Sans Hebrew',sans-serif">שחקן זמן</text>
+          <text x="0" y="58" text-anchor="middle" font-size="9.5" fill="#64748b" font-family="'Noto Sans Hebrew',sans-serif">(טריגר תזמון)</text>
+        </g>
+      </g>
+    </svg>
+  </div>
+
+  <div id="assumptions-panel" class="assumptions-panel" hidden>
+    <div class="assumptions-col" id="assumptions-col"><h3>הנחות</h3><ul id="assumptions-list"></ul></div>
+    <div class="assumptions-col" id="open-questions-col"><h3>שאלות פתוחות</h3><ul id="open-questions-list"></ul></div>
+  </div>
+
+  <div id="user-stories-panel" class="user-stories-panel" hidden>
+    <h3>סיפורי משתמש</h3>
+    <ul id="user-stories-list"></ul>
+  </div>
+
+  <div id="uc-modal" class="uc-modal" hidden role="dialog" aria-modal="true">
+    <div class="uc-modal-backdrop" onclick="closeUcModal()"></div>
+    <div class="uc-modal-body"></div>
+  </div>
+
+  <button class="vp-export-btn" onclick="exportXMI()">Download .xmi (Visual Paradigm)</button>
+
+  <script>
+  var actorDescriptions = {
+  "member": {
+    "name": "חבר",
+    "desc": "חבר מועדון גמלאים שיש לו חשבון באתר. נרשם ליציאה בעצמו, מבטל את הרשמתו ומאשר מקום שהוצע לו. לחבר שאין לו חשבון אין גישה ישירה למערכת: רכז המועדון פועל בשמו."
+  },
+  "coordinator": {
+    "name": "רכז מועדון",
+    "desc": "רושם, מבטל ומאשר מקום שהוצע עבור חברי המועדון שלו בלבד, לפי בקשתם בטלפון, ומתחזק את רשימת חברי המועדון."
+  },
+  "medic": {
+    "name": "חובש",
+    "desc": "החובש של היציאה. בודק כל הרשמה שבה הוצהר צורך (הליכון, כיסא גלגלים, חמצן), ומאשר או דוחה אותה."
+  },
+  "guide": {
+    "name": "מדריך",
+    "desc": "המדריך של היציאה. ביום הטיול רואה את רשימת הנוסעים לפי תחנות."
+  },
+  "manager": {
+    "name": "מנהלת הטיולים",
+    "desc": "רונית. מתזמנת יציאות, רושמת את האוטובוסים שהוקצו לכל יציאה לפי הודעת סדרן \"קווי הנגב\", מבטלת יציאה בשל מיעוט נרשמים או אזהרת מזג אוויר, ומתחזקת את קטלוג המסלולים, את תחנות האיסוף ואת אנשי הצוות."
+  },
+  "timeActor": {
+    "name": "שחקן זמן «system»",
+    "desc": "שעון המערכת. אינו משתמש אנושי. מפעיל את סגירת ההרשמה, את הטיפול בהצעת מקום שפקעה, את סגירת היציאה בתום יום הטיול ואת מחיקת הרשומות בתום תקופת השמירה."
+  }
+};
+
+  var assocDescriptions = {
+  "a-member-register": {
+    "name": "חבר - הרשמה ליציאה",
+    "desc": "חבר בעל חשבון נרשם בעצמו. זה אותו Use Case שהרכז מפעיל: המטרה והתוצאה זהות, והשוני הוא רק מי מבצע (6.2)."
+  },
+  "a-coord-register": {
+    "name": "רכז מועדון - הרשמה ליציאה",
+    "desc": "הרכז רושם חבר מהמועדון שלו לפי בקשתו בטלפון. ההגבלה לחברי המועדון שלו היא תנאי מוקדם בתיאור ה-Use Case, לא התנהגות אחרת (6.2)."
+  },
+  "a-manager-buses": {
+    "name": "מנהלת הטיולים - רישום אוטובוסים ליציאה",
+    "desc": "סדרן \"קווי הנגב\" מודיע למנהלת אילו אוטובוסים הוקצו, והיא שרושמת אותם. החברה אינה פועלת מול המערכת ולכן אינה שחקן (6.3)."
+  },
+  "a-time-close": {
+    "name": "שחקן זמן - סגירת ההרשמה ליציאה",
+    "desc": "טריגר אחד, תגובה אוטומטית אחת: ההרשמה נסגרת, ואם מספר המאושרים נמוך מהמינימום של המסלול נשלחת התרעה למנהלת. ההתרעה היא שלב בתוך ה-Use Case ולא Use Case נפרד."
+  }
+};
+
+  var useCaseDocs = {
+  "uc-register": {
+    "id": "uc-register",
+    "name": "הרשמה ליציאה",
+    "primaryActor": "member",
+    "secondaryActors": [
+      "coordinator"
+    ],
+    "description": "רישום חבר ליציאה: בחירת תחנת איסוף מבין התחנות שנבחרו ליציאה, מילוי הצהרת ניידות וצירוף מלווה אחד לכל היותר. מבצע: החבר עצמו, או רכז המועדון בשמו.",
+    "preconditions": [
+      "ההרשמה ליציאה פתוחה (יותר מעשרה ימים לפני היציאה).",
+      "החבר אינו רשום כבר לאותה יציאה.",
+      "כשהמבצע הוא רכז: החבר שייך למועדון של הרכז."
+    ],
+    "postconditions": [
+      "נוצרה הרשמה: ממתינה לבדיקת חובש (אם הוצהר צורך), מאושרת ומשובצת לאוטובוס (אם יש מקום), או ברשימת המתנה (אם אין)."
+    ],
+    "scenarios": [
+      {
+        "id": "sc-happy",
+        "name": "מסלול מרכזי",
+        "flow": [
+          {
+            "kind": "actor",
+            "actor": "member",
+            "text": "בוחר יציאה ותחנת איסוף"
+          },
+          {
+            "kind": "actor",
+            "actor": "member",
+            "text": "ממלא הצהרת ניידות ומצרף מלווה אם יש"
+          },
+          {
+            "kind": "system",
+            "text": "בודק שהחבר אינו רשום כבר ליציאה"
+          },
+          {
+            "kind": "include",
+            "uc": "uc-allocate",
+            "text": "הקצאת מקום ביציאה"
+          },
+          {
+            "kind": "system",
+            "text": "שולח לחבר הודעת SMS על תוצאת ההרשמה"
+          }
+        ],
+        "extensions": [
+          {
+            "at": 3,
+            "text": "החבר כבר רשום ליציאה: המערכת מציגה את ההרשמה הקיימת ואינה יוצרת חדשה."
+          },
+          {
+            "at": 4,
+            "text": "הוצהר צורך: ההרשמה ממתינה לבדיקת החובש, וההקצאה תתבצע עם אישורו."
+          }
+        ]
+      }
+    ],
+    "userStories": [
+      {
+        "role": "חבר",
+        "want": "להירשם לטיול בעצמי ולבחור את תחנת האיסוף שלי",
+        "so": "לא אצטרך להתקשר ולא אירשם פעמיים בטעות"
+      }
+    ]
+  },
+  "uc-cancel-reg": {
+    "id": "uc-cancel-reg",
+    "name": "ביטול הרשמה",
+    "primaryActor": "member",
+    "secondaryActors": [
+      "coordinator"
+    ],
+    "description": "ביטול הרשמה בידי החבר או בידי רכז המועדון שלו, עד שבעה ימים לפני היציאה. על כל ביטול נשלחת לחבר הודעת SMS. אם בוטלה הרשמה מאושרת ויש ממתינים, המקום מוצע לראשון ברשימה (extend).",
+    "preconditions": [
+      "נותרו שבעה ימים לפחות עד היציאה.",
+      "כשהמבצע הוא רכז: החבר שייך למועדון שלו."
+    ],
+    "postconditions": [
+      "ההרשמה במצב \"בוטלה\"."
+    ],
+    "scenarios": [
+      {
+        "id": "sc-happy",
+        "name": "מסלול מרכזי",
+        "flow": [
+          {
+            "kind": "actor",
+            "actor": "member",
+            "text": "בוחר הרשמה ומבקש לבטל"
+          },
+          {
+            "kind": "system",
+            "text": "בודק שנותרו שבעה ימים לפחות עד היציאה ומבטל"
+          },
+          {
+            "kind": "system",
+            "text": "שולח לחבר הודעת SMS על הביטול"
+          }
+        ],
+        "extensions": [
+          {
+            "at": 2,
+            "text": "נקודת הרחבה \"פינוי מקום\": אם ההרשמה שבוטלה הייתה מאושרת ויש ממתינים, מופעל Use Case הצעת מקום לבא בתור."
+          },
+          {
+            "at": 2,
+            "text": "נותרו פחות משבעה ימים: הביטול נדחה והחבר מופנה למנהלת."
+          }
+        ]
+      }
+    ],
+    "userStories": []
+  },
+  "uc-confirm-offer": {
+    "id": "uc-confirm-offer",
+    "name": "אישור מקום שהוצע",
+    "primaryActor": "member",
+    "secondaryActors": [
+      "coordinator"
+    ],
+    "description": "חבר שהוצע לו מקום מאשר אותו תוך 48 שעות; ההרשמה מאושרת והוא משובץ לאוטובוס. רכז המועדון רשאי לאשר בשם חבר שאין לו חשבון.",
+    "preconditions": [
+      "להרשמה הוצע מקום, ולא חלפו 48 שעות מההצעה."
+    ],
+    "postconditions": [
+      "ההרשמה מאושרת ומשובצת לאוטובוס."
+    ],
+    "scenarios": [
+      {
+        "id": "sc-happy",
+        "name": "מסלול מרכזי",
+        "flow": [
+          {
+            "kind": "actor",
+            "actor": "member",
+            "text": "מאשר את המקום שהוצע"
+          },
+          {
+            "kind": "include",
+            "uc": "uc-allocate",
+            "text": "הקצאת מקום ביציאה"
+          },
+          {
+            "kind": "system",
+            "text": "שולח לחבר הודעת SMS על האישור"
+          }
+        ],
+        "extensions": []
+      }
+    ],
+    "userStories": []
+  },
+  "uc-seat-offer": {
+    "id": "uc-seat-offer",
+    "name": "הצעת מקום לבא בתור",
+    "primaryActor": "",
+    "secondaryActors": [],
+    "description": "כשמתפנה מקום, הוא מוצע לראשון ברשימת ההמתנה, שיש לו 48 שעות לאשר. מתרחש רק בחלק מהביטולים (כשבוטלה הרשמה מאושרת ויש ממתינים), ולכן «extend» ולא «include». Use Case מרחיב אינו מפעיל «include» משלו, ולכן הודעת ה-SMS היא צעד בתוכו. מופעל גם מתוך \"טיפול בהצעת מקום שפקעה\".",
+    "preconditions": [
+      "התפנה מקום ביציאה, ויש הרשמות ברשימת ההמתנה."
+    ],
+    "postconditions": [
+      "להרשמה הראשונה ברשימה הוצע מקום; נקבע מועד פקיעה בעוד 48 שעות."
+    ],
+    "scenarios": [
+      {
+        "id": "sc-happy",
+        "name": "מסלול מרכזי",
+        "flow": [
+          {
+            "kind": "system",
+            "text": "מאתר את ההרשמה הראשונה ברשימת ההמתנה"
+          },
+          {
+            "kind": "system",
+            "text": "מסמן שהוצע לה מקום וקובע מועד פקיעה בעוד 48 שעות"
+          },
+          {
+            "kind": "system",
+            "text": "שולח לחבר הודעת SMS עם הצעת המקום ומועד הפקיעה"
+          }
+        ],
+        "extensions": []
+      }
+    ],
+    "userStories": []
+  },
+  "uc-medic-check": {
+    "id": "uc-medic-check",
+    "name": "בדיקת הצהרת ניידות",
+    "primaryActor": "medic",
+    "secondaryActors": [],
+    "description": "החובש של היציאה בודק הרשמה שבה הוצהר צורך (הליכון, כיסא גלגלים או חמצן), ומאשר או דוחה אותה. הרשמה שאושרה עוברת להקצאת מקום (include); על כל אישור או דחייה נשלחת לחבר הודעת SMS.",
+    "preconditions": [
+      "ההרשמה ממתינה לבדיקת חובש; המבצע הוא החובש של היציאה."
+    ],
+    "postconditions": [
+      "ההרשמה נדחתה, או אושרה ומשובצת, או נכנסה לרשימת ההמתנה אם אין מקום."
+    ],
+    "scenarios": [
+      {
+        "id": "sc-happy",
+        "name": "מסלול מרכזי",
+        "flow": [
+          {
+            "kind": "system",
+            "text": "מציג לחובש את ההרשמות הממתינות לבדיקתו ואת הצהרות הניידות"
+          },
+          {
+            "kind": "actor",
+            "actor": "medic",
+            "text": "מאשר את ההרשמה"
+          },
+          {
+            "kind": "include",
+            "uc": "uc-allocate",
+            "text": "הקצאת מקום ביציאה"
+          },
+          {
+            "kind": "system",
+            "text": "שולח לחבר הודעת SMS על תוצאת הבדיקה"
+          }
+        ],
+        "extensions": [
+          {
+            "at": 2,
+            "text": "החובש דוחה את ההרשמה: ההרשמה נדחית, והמערכת שולחת לחבר הודעת SMS על הדחייה."
+          }
+        ]
+      }
+    ],
+    "userStories": []
+  },
+  "uc-cancel-dep": {
+    "id": "uc-cancel-dep",
+    "name": "ביטול יציאה",
+    "primaryActor": "manager",
+    "secondaryActors": [],
+    "description": "המנהלת מבטלת יציאה בשל מיעוט נרשמים או אזהרת מזג אוויר. כל ההרשמות הפעילות ליציאה, מאושרות וממתינות כאחת, מתבטלות, ולכל חבר נשלחת הודעת SMS.",
+    "preconditions": [
+      "היציאה טרם יצאה."
+    ],
+    "postconditions": [
+      "היציאה בוטלה; כל ההרשמות הפעילות אליה במצב \"בוטלה בידי העמותה\"."
+    ],
+    "scenarios": [
+      {
+        "id": "sc-happy",
+        "name": "מסלול מרכזי",
+        "flow": [
+          {
+            "kind": "actor",
+            "actor": "manager",
+            "text": "בוחרת יציאה, מציינת את סיבת הביטול ומאשרת"
+          },
+          {
+            "kind": "system",
+            "text": "מבטל את היציאה ואת כל ההרשמות הפעילות אליה"
+          },
+          {
+            "kind": "system",
+            "text": "שולח הודעת SMS על הביטול לכל חבר שהיה רשום"
+          }
+        ],
+        "extensions": []
+      }
+    ],
+    "userStories": []
+  },
+  "uc-allocate": {
+    "id": "uc-allocate",
+    "name": "הקצאת מקום ביציאה",
+    "primaryActor": "",
+    "secondaryActors": [],
+    "description": "התנהגות משותפת לשלושה Use Cases שבהם הרשמה עשויה להתאשר: הרשמה ליציאה, בדיקת הצהרת ניידות ואישור מקום שהוצע. המערכת מחפשת מקום פנוי באחד מאוטובוסי היציאה, ולנעזר בכיסא גלגלים רק באוטובוס עם מעלון; אם נמצא, ההרשמה מאושרת והחבר משובץ, ואחרת ההרשמה נכנסת לסוף רשימת ההמתנה.",
+    "preconditions": [
+      "ההרשמה כשירה להקצאה: לא הוצהר בה צורך, או שהחובש אישר אותה, או שהחבר אישר מקום שהוצע לו."
+    ],
+    "postconditions": [
+      "ההרשמה מאושרת ומשובצת לאוטובוס, או ממתינה בסוף רשימת ההמתנה."
+    ],
+    "scenarios": [
+      {
+        "id": "sc-happy",
+        "name": "מסלול מרכזי",
+        "flow": [
+          {
+            "kind": "system",
+            "text": "מחפש מקום פנוי באוטובוסי היציאה, ולנעזר בכיסא גלגלים רק באוטובוס עם מעלון"
+          },
+          {
+            "kind": "system",
+            "text": "מאשר את ההרשמה ומשבץ את החבר לאוטובוס שנמצא"
+          }
+        ],
+        "extensions": [
+          {
+            "at": 1,
+            "text": "אין מקום מתאים: ההרשמה נכנסת לסוף רשימת ההמתנה."
+          }
+        ]
+      }
+    ],
+    "userStories": []
+  },
+  "uc-schedule": {
+    "id": "uc-schedule",
+    "name": "תזמון יציאה",
+    "primaryActor": "manager",
+    "secondaryActors": [],
+    "description": "יצירת יציאה של מסלול מהקטלוג: מספר יציאה, תאריך, מדריך וחובש, ובחירת תחנות איסוף מתוך התחנות הקבועות עם שעת איסוף לכל אחת ביציאה זו.",
+    "preconditions": [
+      "המסלול, התחנות ואנשי הצוות קיימים במערכת."
+    ],
+    "postconditions": [
+      "נוצרה יציאה הפתוחה להרשמה."
+    ],
+    "scenarios": [
+      {
+        "id": "sc-happy",
+        "name": "מסלול מרכזי",
+        "flow": [
+          {
+            "kind": "actor",
+            "actor": "manager",
+            "text": "בוחרת מסלול, תאריך, מדריך וחובש"
+          },
+          {
+            "kind": "actor",
+            "actor": "manager",
+            "text": "בוחרת תחנות איסוף וקובעת לכל אחת שעת איסוף"
+          },
+          {
+            "kind": "system",
+            "text": "יוצר את היציאה ופותח אותה להרשמה"
+          }
+        ],
+        "extensions": []
+      }
+    ],
+    "userStories": []
+  },
+  "uc-buses": {
+    "id": "uc-buses",
+    "name": "רישום אוטובוסים ליציאה",
+    "primaryActor": "manager",
+    "secondaryActors": [],
+    "description": "לאחר שסדרן \"קווי הנגב\" הודיע אילו אוטובוסים הוקצו, המנהלת רושמת אותם ליציאה: מספר רישוי, מספר מקומות והאם יש מעלון. אוטובוס שכבר רשום מיציאה קודמת נבחר מהרשימה.",
+    "preconditions": [
+      "היציאה קיימת."
+    ],
+    "postconditions": [
+      "האוטובוסים קשורים ליציאה, ומספר המקומות ביציאה עודכן."
+    ],
+    "scenarios": [
+      {
+        "id": "sc-happy",
+        "name": "מסלול מרכזי",
+        "flow": [
+          {
+            "kind": "actor",
+            "actor": "manager",
+            "text": "בוחרת יציאה ומזינה את האוטובוסים שהוקצו לה"
+          },
+          {
+            "kind": "system",
+            "text": "מקשר את האוטובוסים ליציאה ומעדכן את מספר המקומות"
+          }
+        ],
+        "extensions": []
+      }
+    ],
+    "userStories": []
+  },
+  "uc-passenger-list": {
+    "id": "uc-passenger-list",
+    "name": "צפייה ברשימת הנוסעים לפי תחנות",
+    "primaryActor": "guide",
+    "secondaryActors": [],
+    "description": "ביום הטיול המדריך רואה את ההרשמות המאושרות ליציאה, מקובצות לפי תחנת איסוף ושעת האיסוף, ולפי אוטובוס.",
+    "preconditions": [
+      "המבצע הוא המדריך של היציאה."
+    ],
+    "postconditions": [
+      "לא משתנה דבר במערכת."
+    ],
+    "scenarios": [
+      {
+        "id": "sc-happy",
+        "name": "מסלול מרכזי",
+        "flow": [
+          {
+            "kind": "actor",
+            "actor": "guide",
+            "text": "בוחר את היציאה של היום"
+          },
+          {
+            "kind": "system",
+            "text": "מציג את הנוסעים המאושרים לפי תחנה, שעת איסוף ואוטובוס, כולל מלווים"
+          }
+        ],
+        "extensions": []
+      }
+    ],
+    "userStories": []
+  },
+  "uc-manage-trips": {
+    "id": "uc-manage-trips",
+    "name": "ניהול מסלולים",
+    "primaryActor": "manager",
+    "secondaryActors": [],
+    "description": "הוספה, עדכון והסרה של מסלולים בקטלוג: שם, תיאור, אזור, מחיר למשתתף ומספר משתתפים מינימלי, ולפי סוג המסלול גם שם המלון ומספר הלילות, או רמת הקושי ואורך ההליכה.",
+    "preconditions": [],
+    "postconditions": [
+      "קטלוג המסלולים מעודכן."
+    ],
+    "scenarios": [],
+    "userStories": []
+  },
+  "uc-manage-stations": {
+    "id": "uc-manage-stations",
+    "name": "ניהול תחנות איסוף",
+    "primaryActor": "manager",
+    "secondaryActors": [],
+    "description": "הוספה, עדכון והסרה של תחנות האיסוף הקבועות (שם וכתובת).",
+    "preconditions": [],
+    "postconditions": [
+      "רשימת התחנות מעודכנת."
+    ],
+    "scenarios": [],
+    "userStories": []
+  },
+  "uc-manage-staff": {
+    "id": "uc-manage-staff",
+    "name": "ניהול אנשי צוות",
+    "primaryActor": "manager",
+    "secondaryActors": [],
+    "description": "הוספה, עדכון והסרה של מדריכים וחובשים (שם וטלפון).",
+    "preconditions": [],
+    "postconditions": [
+      "רשימת אנשי הצוות מעודכנת."
+    ],
+    "scenarios": [],
+    "userStories": []
+  },
+  "uc-manage-members": {
+    "id": "uc-manage-members",
+    "name": "ניהול חברי המועדון",
+    "primaryActor": "coordinator",
+    "secondaryActors": [],
+    "description": "הוספה ועדכון של חברי המועדון של הרכז: מספר חבר, שם וטלפון. הסיפור אינו קובע מי מתחזק את רשימת החברים; כאן הוקצתה לרכז, שמכיר את חברי המועדון.",
+    "preconditions": [
+      "המבצע הוא רכז המועדון."
+    ],
+    "postconditions": [
+      "רשימת חברי המועדון מעודכנת."
+    ],
+    "scenarios": [],
+    "userStories": []
+  },
+  "uc-close-reg": {
+    "id": "uc-close-reg",
+    "name": "סגירת ההרשמה ליציאה",
+    "primaryActor": "timeActor",
+    "secondaryActors": [],
+    "description": "עשרה ימים לפני היציאה ההרשמה נסגרת. אם מספר ההרשמות המאושרות נמוך מהמינימום של המסלול, המערכת מתריעה למנהלת הטיולים. טריגר אחד, Use Case אחד.",
+    "preconditions": [
+      "הגיע המועד: עשרה ימים לפני היציאה."
+    ],
+    "postconditions": [
+      "היציאה סגורה להרשמות חדשות; נשלחה התרעה למנהלת אם יש מיעוט נרשמים."
+    ],
+    "scenarios": [
+      {
+        "id": "sc-happy",
+        "name": "מסלול מרכזי",
+        "flow": [
+          {
+            "kind": "system",
+            "text": "סוגר את היציאה להרשמות חדשות"
+          },
+          {
+            "kind": "system",
+            "text": "סופר את ההרשמות המאושרות ומשווה למינימום של המסלול"
+          },
+          {
+            "kind": "system",
+            "text": "אם המספר נמוך מהמינימום, שולח התרעה למנהלת הטיולים"
+          }
+        ],
+        "extensions": []
+      }
+    ],
+    "userStories": []
+  },
+  "uc-offer-expired": {
+    "id": "uc-offer-expired",
+    "name": "טיפול בהצעת מקום שפקעה",
+    "primaryActor": "timeActor",
+    "secondaryActors": [],
+    "description": "בתום 48 שעות מהצעת מקום שלא אושרה, ההרשמה חוזרת לסוף רשימת ההמתנה, והמקום מוצע לבא אחריו (התנהגות \"הצעת מקום לבא בתור\").",
+    "preconditions": [
+      "חלפו 48 שעות מהצעת המקום, והחבר לא אישר."
+    ],
+    "postconditions": [
+      "ההרשמה בסוף רשימת ההמתנה; המקום הוצע לבא בתור."
+    ],
+    "scenarios": [],
+    "userStories": []
+  },
+  "uc-trip-day-close": {
+    "id": "uc-trip-day-close",
+    "name": "העברת הרשמות היציאה לארכיון",
+    "primaryActor": "timeActor",
+    "secondaryActors": [],
+    "description": "בתום יום הטיול כל ההרשמות של היציאה עוברות לארכיון, וסיבת הסגירה נשמרת (התקיימה, לא שובצה, בוטלה, בוטלה בידי העמותה, נדחתה).",
+    "preconditions": [
+      "הסתיים יום הטיול."
+    ],
+    "postconditions": [
+      "ההרשמות בארכיון, לקריאה בלבד."
+    ],
+    "scenarios": [],
+    "userStories": []
+  },
+  "uc-purge": {
+    "id": "uc-purge",
+    "name": "מחיקת רשומות הרשמה",
+    "primaryActor": "timeActor",
+    "secondaryActors": [],
+    "description": "בתום שנתיים מיום הטיול נמחקות רשומות ההרשמה של היציאה, ועמן פרטי המלווים.",
+    "preconditions": [
+      "חלפו שנתיים מיום הטיול."
+    ],
+    "postconditions": [
+      "רשומות ההרשמה נמחקו מהמערכת."
+    ],
+    "scenarios": [],
+    "userStories": []
+  }
+};
+
+  var diagramLayouts = [
+  {
+    "svgId": "diagram-svg-0",
+    "boundary": {
+      "x": 380,
+      "y": 70,
+      "width": 980,
+      "height": 740
+    },
+    "actors": [
+      {
+        "id": "member",
+        "label": "חבר",
+        "side": "left",
+        "x": 290,
+        "y": 260,
+        "ucIds": [
+          "uc-register",
+          "uc-cancel-reg",
+          "uc-confirm-offer"
+        ]
+      },
+      {
+        "id": "coordinator",
+        "label": "רכז מועדון",
+        "side": "left",
+        "x": 290,
+        "y": 560,
+        "ucIds": [
+          "uc-register",
+          "uc-cancel-reg",
+          "uc-confirm-offer"
+        ]
+      },
+      {
+        "id": "medic",
+        "label": "חובש",
+        "side": "right",
+        "x": 1460,
+        "y": 260,
+        "ucIds": [
+          "uc-medic-check"
+        ]
+      },
+      {
+        "id": "manager",
+        "label": "מנהלת הטיולים",
+        "side": "right",
+        "x": 1460,
+        "y": 620,
+        "ucIds": [
+          "uc-cancel-dep"
+        ]
+      }
+    ],
+    "useCases": [
+      {
+        "id": "uc-cancel-reg",
+        "cx": 560,
+        "cy": 180,
+        "rx": 80,
+        "ry": 28
+      },
+      {
+        "id": "uc-register",
+        "cx": 560,
+        "cy": 350,
+        "rx": 85,
+        "ry": 28
+      },
+      {
+        "id": "uc-confirm-offer",
+        "cx": 560,
+        "cy": 520,
+        "rx": 90,
+        "ry": 28
+      },
+      {
+        "id": "uc-seat-offer",
+        "cx": 870,
+        "cy": 180,
+        "rx": 95,
+        "ry": 28
+      },
+      {
+        "id": "uc-allocate",
+        "cx": 870,
+        "cy": 350,
+        "rx": 95,
+        "ry": 28
+      },
+      {
+        "id": "uc-medic-check",
+        "cx": 1170,
+        "cy": 260,
+        "rx": 100,
+        "ry": 28
+      },
+      {
+        "id": "uc-cancel-dep",
+        "cx": 1170,
+        "cy": 520,
+        "rx": 75,
+        "ry": 28
+      }
+    ],
+    "connections": []
+  },
+  {
+    "svgId": "diagram-svg-1",
+    "boundary": {
+      "x": 380,
+      "y": 70,
+      "width": 580,
+      "height": 460
+    },
+    "actors": [
+      {
+        "id": "manager",
+        "label": "מנהלת הטיולים",
+        "side": "left",
+        "x": 290,
+        "y": 270,
+        "ucIds": [
+          "uc-schedule",
+          "uc-buses"
+        ]
+      },
+      {
+        "id": "guide",
+        "label": "מדריך",
+        "side": "right",
+        "x": 1060,
+        "y": 430,
+        "ucIds": [
+          "uc-passenger-list"
+        ]
+      }
+    ],
+    "useCases": [
+      {
+        "id": "uc-schedule",
+        "cx": 560,
+        "cy": 180,
+        "rx": 75,
+        "ry": 28
+      },
+      {
+        "id": "uc-buses",
+        "cx": 560,
+        "cy": 310,
+        "rx": 100,
+        "ry": 28
+      },
+      {
+        "id": "uc-passenger-list",
+        "cx": 780,
+        "cy": 440,
+        "rx": 125,
+        "ry": 28
+      }
+    ],
+    "connections": []
+  },
+  {
+    "svgId": "diagram-svg-2",
+    "boundary": {
+      "x": 380,
+      "y": 70,
+      "width": 540,
+      "height": 520
+    },
+    "actors": [
+      {
+        "id": "manager",
+        "label": "מנהלת הטיולים",
+        "side": "left",
+        "x": 290,
+        "y": 300,
+        "ucIds": [
+          "uc-manage-trips",
+          "uc-manage-stations",
+          "uc-manage-staff"
+        ]
+      },
+      {
+        "id": "coordinator",
+        "label": "רכז מועדון",
+        "side": "right",
+        "x": 1020,
+        "y": 520,
+        "ucIds": [
+          "uc-manage-members"
+        ]
+      }
+    ],
+    "useCases": [
+      {
+        "id": "uc-manage-trips",
+        "cx": 620,
+        "cy": 180,
+        "rx": 80,
+        "ry": 28
+      },
+      {
+        "id": "uc-manage-stations",
+        "cx": 620,
+        "cy": 300,
+        "rx": 90,
+        "ry": 28
+      },
+      {
+        "id": "uc-manage-staff",
+        "cx": 620,
+        "cy": 420,
+        "rx": 85,
+        "ry": 28
+      },
+      {
+        "id": "uc-manage-members",
+        "cx": 740,
+        "cy": 525,
+        "rx": 95,
+        "ry": 28
+      }
+    ],
+    "connections": []
+  },
+  {
+    "svgId": "diagram-svg-3",
+    "boundary": {
+      "x": 380,
+      "y": 70,
+      "width": 580,
+      "height": 580
+    },
+    "actors": [
+      {
+        "id": "timeActor",
+        "label": "שחקן זמן",
+        "side": "right",
+        "x": 1080,
+        "y": 370,
+        "ucIds": [
+          "uc-close-reg",
+          "uc-offer-expired",
+          "uc-trip-day-close",
+          "uc-purge"
+        ]
+      }
+    ],
+    "useCases": [
+      {
+        "id": "uc-close-reg",
+        "cx": 620,
+        "cy": 180,
+        "rx": 100,
+        "ry": 28
+      },
+      {
+        "id": "uc-offer-expired",
+        "cx": 620,
+        "cy": 300,
+        "rx": 115,
+        "ry": 28
+      },
+      {
+        "id": "uc-trip-day-close",
+        "cx": 620,
+        "cy": 420,
+        "rx": 125,
+        "ry": 28
+      },
+      {
+        "id": "uc-purge",
+        "cx": 620,
+        "cy": 540,
+        "rx": 100,
+        "ry": 28
+      }
+    ],
+    "connections": [
+      {
+        "from": "timeActor",
+        "to": "uc-close-reg",
+        "type": "association",
+        "timing": "עשרה ימים לפני היציאה"
+      },
+      {
+        "from": "timeActor",
+        "to": "uc-offer-expired",
+        "type": "association",
+        "timing": "בתום 48 שעות מהצעת המקום"
+      },
+      {
+        "from": "timeActor",
+        "to": "uc-trip-day-close",
+        "type": "association",
+        "timing": "בתום יום הטיול"
+      },
+      {
+        "from": "timeActor",
+        "to": "uc-purge",
+        "type": "association",
+        "timing": "בתום שנתיים מיום הטיול"
+      }
+    ]
+  }
+];
+
+  var diagramModel = {
+  "kind": "use-case",
+  "title": "שבילי זהב, Use Case",
+  "parts": [
+    {
+      "id": "part-a",
+      "label": "הרשמה וביטולים",
+      "splitRationale": "פוצל לפי אזורי אחריות: 18 Use Cases > 8.",
+      "elements": [
+        {
+          "kind": "actor",
+          "id": "member",
+          "name": "חבר",
+          "actorType": "human",
+          "side": "left"
+        },
+        {
+          "kind": "actor",
+          "id": "coordinator",
+          "name": "רכז מועדון",
+          "actorType": "human",
+          "side": "left"
+        },
+        {
+          "kind": "actor",
+          "id": "medic",
+          "name": "חובש",
+          "actorType": "human",
+          "side": "right"
+        },
+        {
+          "kind": "actor",
+          "id": "manager",
+          "name": "מנהלת הטיולים",
+          "actorType": "human",
+          "side": "right"
+        },
+        {
+          "kind": "useCase",
+          "id": "uc-cancel-reg",
+          "name": "ביטול הרשמה",
+          "description": "ביטול הרשמה בידי החבר או בידי רכז המועדון שלו, עד שבעה ימים לפני היציאה. על כל ביטול נשלחת לחבר הודעת SMS. אם בוטלה הרשמה מאושרת ויש ממתינים, המקום מוצע לראשון ברשימה (extend).",
+          "primaryActor": "member",
+          "secondaryActors": [
+            "coordinator"
+          ],
+          "preconditions": [
+            "נותרו שבעה ימים לפחות עד היציאה.",
+            "כשהמבצע הוא רכז: החבר שייך למועדון שלו."
+          ],
+          "postconditions": [
+            "ההרשמה במצב \"בוטלה\"."
+          ],
+          "scenarios": [
+            {
+              "id": "sc-happy",
+              "name": "מסלול מרכזי",
+              "flow": [
+                {
+                  "kind": "actor",
+                  "actor": "member",
+                  "text": "בוחר הרשמה ומבקש לבטל"
+                },
+                {
+                  "kind": "system",
+                  "text": "בודק שנותרו שבעה ימים לפחות עד היציאה ומבטל"
+                },
+                {
+                  "kind": "system",
+                  "text": "שולח לחבר הודעת SMS על הביטול"
+                }
+              ],
+              "extensions": [
+                {
+                  "at": 2,
+                  "text": "נקודת הרחבה \"פינוי מקום\": אם ההרשמה שבוטלה הייתה מאושרת ויש ממתינים, מופעל Use Case הצעת מקום לבא בתור."
+                },
+                {
+                  "at": 2,
+                  "text": "נותרו פחות משבעה ימים: הביטול נדחה והחבר מופנה למנהלת."
+                }
+              ]
+            }
+          ],
+          "userStories": [],
+          "wireframe": ""
+        },
+        {
+          "kind": "useCase",
+          "id": "uc-register",
+          "name": "הרשמה ליציאה",
+          "description": "רישום חבר ליציאה: בחירת תחנת איסוף מבין התחנות שנבחרו ליציאה, מילוי הצהרת ניידות וצירוף מלווה אחד לכל היותר. מבצע: החבר עצמו, או רכז המועדון בשמו.",
+          "primaryActor": "member",
+          "secondaryActors": [
+            "coordinator"
+          ],
+          "preconditions": [
+            "ההרשמה ליציאה פתוחה (יותר מעשרה ימים לפני היציאה).",
+            "החבר אינו רשום כבר לאותה יציאה.",
+            "כשהמבצע הוא רכז: החבר שייך למועדון של הרכז."
+          ],
+          "postconditions": [
+            "נוצרה הרשמה: ממתינה לבדיקת חובש (אם הוצהר צורך), מאושרת ומשובצת לאוטובוס (אם יש מקום), או ברשימת המתנה (אם אין)."
+          ],
+          "scenarios": [
+            {
+              "id": "sc-happy",
+              "name": "מסלול מרכזי",
+              "flow": [
+                {
+                  "kind": "actor",
+                  "actor": "member",
+                  "text": "בוחר יציאה ותחנת איסוף"
+                },
+                {
+                  "kind": "actor",
+                  "actor": "member",
+                  "text": "ממלא הצהרת ניידות ומצרף מלווה אם יש"
+                },
+                {
+                  "kind": "system",
+                  "text": "בודק שהחבר אינו רשום כבר ליציאה"
+                },
+                {
+                  "kind": "include",
+                  "uc": "uc-allocate",
+                  "text": "הקצאת מקום ביציאה"
+                },
+                {
+                  "kind": "system",
+                  "text": "שולח לחבר הודעת SMS על תוצאת ההרשמה"
+                }
+              ],
+              "extensions": [
+                {
+                  "at": 3,
+                  "text": "החבר כבר רשום ליציאה: המערכת מציגה את ההרשמה הקיימת ואינה יוצרת חדשה."
+                },
+                {
+                  "at": 4,
+                  "text": "הוצהר צורך: ההרשמה ממתינה לבדיקת החובש, וההקצאה תתבצע עם אישורו."
+                }
+              ]
+            }
+          ],
+          "userStories": [
+            {
+              "role": "חבר",
+              "want": "להירשם לטיול בעצמי ולבחור את תחנת האיסוף שלי",
+              "so": "לא אצטרך להתקשר ולא אירשם פעמיים בטעות"
+            }
+          ],
+          "wireframe": ""
+        },
+        {
+          "kind": "useCase",
+          "id": "uc-confirm-offer",
+          "name": "אישור מקום שהוצע",
+          "description": "חבר שהוצע לו מקום מאשר אותו תוך 48 שעות; ההרשמה מאושרת והוא משובץ לאוטובוס. רכז המועדון רשאי לאשר בשם חבר שאין לו חשבון.",
+          "primaryActor": "member",
+          "secondaryActors": [
+            "coordinator"
+          ],
+          "preconditions": [
+            "להרשמה הוצע מקום, ולא חלפו 48 שעות מההצעה."
+          ],
+          "postconditions": [
+            "ההרשמה מאושרת ומשובצת לאוטובוס."
+          ],
+          "scenarios": [
+            {
+              "id": "sc-happy",
+              "name": "מסלול מרכזי",
+              "flow": [
+                {
+                  "kind": "actor",
+                  "actor": "member",
+                  "text": "מאשר את המקום שהוצע"
+                },
+                {
+                  "kind": "include",
+                  "uc": "uc-allocate",
+                  "text": "הקצאת מקום ביציאה"
+                },
+                {
+                  "kind": "system",
+                  "text": "שולח לחבר הודעת SMS על האישור"
+                }
+              ],
+              "extensions": []
+            }
+          ],
+          "userStories": [],
+          "wireframe": ""
+        },
+        {
+          "kind": "useCase",
+          "id": "uc-seat-offer",
+          "name": "הצעת מקום לבא בתור",
+          "description": "כשמתפנה מקום, הוא מוצע לראשון ברשימת ההמתנה, שיש לו 48 שעות לאשר. מתרחש רק בחלק מהביטולים (כשבוטלה הרשמה מאושרת ויש ממתינים), ולכן «extend» ולא «include». Use Case מרחיב אינו מפעיל «include» משלו, ולכן הודעת ה-SMS היא צעד בתוכו. מופעל גם מתוך \"טיפול בהצעת מקום שפקעה\".",
+          "primaryActor": "",
+          "secondaryActors": [],
+          "preconditions": [
+            "התפנה מקום ביציאה, ויש הרשמות ברשימת ההמתנה."
+          ],
+          "postconditions": [
+            "להרשמה הראשונה ברשימה הוצע מקום; נקבע מועד פקיעה בעוד 48 שעות."
+          ],
+          "scenarios": [
+            {
+              "id": "sc-happy",
+              "name": "מסלול מרכזי",
+              "flow": [
+                {
+                  "kind": "system",
+                  "text": "מאתר את ההרשמה הראשונה ברשימת ההמתנה"
+                },
+                {
+                  "kind": "system",
+                  "text": "מסמן שהוצע לה מקום וקובע מועד פקיעה בעוד 48 שעות"
+                },
+                {
+                  "kind": "system",
+                  "text": "שולח לחבר הודעת SMS עם הצעת המקום ומועד הפקיעה"
+                }
+              ],
+              "extensions": []
+            }
+          ],
+          "userStories": [],
+          "wireframe": ""
+        },
+        {
+          "kind": "useCase",
+          "id": "uc-allocate",
+          "name": "הקצאת מקום ביציאה",
+          "description": "התנהגות משותפת לשלושה Use Cases שבהם הרשמה עשויה להתאשר: הרשמה ליציאה, בדיקת הצהרת ניידות ואישור מקום שהוצע. המערכת מחפשת מקום פנוי באחד מאוטובוסי היציאה, ולנעזר בכיסא גלגלים רק באוטובוס עם מעלון; אם נמצא, ההרשמה מאושרת והחבר משובץ, ואחרת ההרשמה נכנסת לסוף רשימת ההמתנה.",
+          "primaryActor": "",
+          "secondaryActors": [],
+          "preconditions": [
+            "ההרשמה כשירה להקצאה: לא הוצהר בה צורך, או שהחובש אישר אותה, או שהחבר אישר מקום שהוצע לו."
+          ],
+          "postconditions": [
+            "ההרשמה מאושרת ומשובצת לאוטובוס, או ממתינה בסוף רשימת ההמתנה."
+          ],
+          "scenarios": [
+            {
+              "id": "sc-happy",
+              "name": "מסלול מרכזי",
+              "flow": [
+                {
+                  "kind": "system",
+                  "text": "מחפש מקום פנוי באוטובוסי היציאה, ולנעזר בכיסא גלגלים רק באוטובוס עם מעלון"
+                },
+                {
+                  "kind": "system",
+                  "text": "מאשר את ההרשמה ומשבץ את החבר לאוטובוס שנמצא"
+                }
+              ],
+              "extensions": [
+                {
+                  "at": 1,
+                  "text": "אין מקום מתאים: ההרשמה נכנסת לסוף רשימת ההמתנה."
+                }
+              ]
+            }
+          ],
+          "userStories": [],
+          "wireframe": ""
+        },
+        {
+          "kind": "useCase",
+          "id": "uc-medic-check",
+          "name": "בדיקת הצהרת ניידות",
+          "description": "החובש של היציאה בודק הרשמה שבה הוצהר צורך (הליכון, כיסא גלגלים או חמצן), ומאשר או דוחה אותה. הרשמה שאושרה עוברת להקצאת מקום (include); על כל אישור או דחייה נשלחת לחבר הודעת SMS.",
+          "primaryActor": "medic",
+          "secondaryActors": [],
+          "preconditions": [
+            "ההרשמה ממתינה לבדיקת חובש; המבצע הוא החובש של היציאה."
+          ],
+          "postconditions": [
+            "ההרשמה נדחתה, או אושרה ומשובצת, או נכנסה לרשימת ההמתנה אם אין מקום."
+          ],
+          "scenarios": [
+            {
+              "id": "sc-happy",
+              "name": "מסלול מרכזי",
+              "flow": [
+                {
+                  "kind": "system",
+                  "text": "מציג לחובש את ההרשמות הממתינות לבדיקתו ואת הצהרות הניידות"
+                },
+                {
+                  "kind": "actor",
+                  "actor": "medic",
+                  "text": "מאשר את ההרשמה"
+                },
+                {
+                  "kind": "include",
+                  "uc": "uc-allocate",
+                  "text": "הקצאת מקום ביציאה"
+                },
+                {
+                  "kind": "system",
+                  "text": "שולח לחבר הודעת SMS על תוצאת הבדיקה"
+                }
+              ],
+              "extensions": [
+                {
+                  "at": 2,
+                  "text": "החובש דוחה את ההרשמה: ההרשמה נדחית, והמערכת שולחת לחבר הודעת SMS על הדחייה."
+                }
+              ]
+            }
+          ],
+          "userStories": [],
+          "wireframe": ""
+        },
+        {
+          "kind": "useCase",
+          "id": "uc-cancel-dep",
+          "name": "ביטול יציאה",
+          "description": "המנהלת מבטלת יציאה בשל מיעוט נרשמים או אזהרת מזג אוויר. כל ההרשמות הפעילות ליציאה, מאושרות וממתינות כאחת, מתבטלות, ולכל חבר נשלחת הודעת SMS.",
+          "primaryActor": "manager",
+          "secondaryActors": [],
+          "preconditions": [
+            "היציאה טרם יצאה."
+          ],
+          "postconditions": [
+            "היציאה בוטלה; כל ההרשמות הפעילות אליה במצב \"בוטלה בידי העמותה\"."
+          ],
+          "scenarios": [
+            {
+              "id": "sc-happy",
+              "name": "מסלול מרכזי",
+              "flow": [
+                {
+                  "kind": "actor",
+                  "actor": "manager",
+                  "text": "בוחרת יציאה, מציינת את סיבת הביטול ומאשרת"
+                },
+                {
+                  "kind": "system",
+                  "text": "מבטל את היציאה ואת כל ההרשמות הפעילות אליה"
+                },
+                {
+                  "kind": "system",
+                  "text": "שולח הודעת SMS על הביטול לכל חבר שהיה רשום"
+                }
+              ],
+              "extensions": []
+            }
+          ],
+          "userStories": [],
+          "wireframe": ""
+        }
+      ],
+      "relationships": [
+        {
+          "kind": "actorAssoc",
+          "id": "as-member-uc-register",
+          "actorId": "member",
+          "ucId": "uc-register",
+          "role": "initiator"
+        },
+        {
+          "kind": "actorAssoc",
+          "id": "as-member-uc-cancel-reg",
+          "actorId": "member",
+          "ucId": "uc-cancel-reg",
+          "role": "initiator"
+        },
+        {
+          "kind": "actorAssoc",
+          "id": "as-member-uc-confirm-offer",
+          "actorId": "member",
+          "ucId": "uc-confirm-offer",
+          "role": "initiator"
+        },
+        {
+          "kind": "actorAssoc",
+          "id": "as-coordinator-uc-register",
+          "actorId": "coordinator",
+          "ucId": "uc-register",
+          "role": "initiator"
+        },
+        {
+          "kind": "actorAssoc",
+          "id": "as-coordinator-uc-cancel-reg",
+          "actorId": "coordinator",
+          "ucId": "uc-cancel-reg",
+          "role": "initiator"
+        },
+        {
+          "kind": "actorAssoc",
+          "id": "as-coordinator-uc-confirm-offer",
+          "actorId": "coordinator",
+          "ucId": "uc-confirm-offer",
+          "role": "initiator"
+        },
+        {
+          "kind": "actorAssoc",
+          "id": "as-medic-uc-medic-check",
+          "actorId": "medic",
+          "ucId": "uc-medic-check",
+          "role": "initiator"
+        },
+        {
+          "kind": "actorAssoc",
+          "id": "as-manager-uc-cancel-dep",
+          "actorId": "manager",
+          "ucId": "uc-cancel-dep",
+          "role": "initiator"
+        },
+        {
+          "kind": "include",
+          "id": "inc-part-a-0",
+          "from": "uc-register",
+          "to": "uc-allocate"
+        },
+        {
+          "kind": "include",
+          "id": "inc-part-a-1",
+          "from": "uc-confirm-offer",
+          "to": "uc-allocate"
+        },
+        {
+          "kind": "include",
+          "id": "inc-part-a-2",
+          "from": "uc-medic-check",
+          "to": "uc-allocate"
+        },
+        {
+          "kind": "extend",
+          "id": "ext-part-a-0",
+          "from": "uc-seat-offer",
+          "to": "uc-cancel-reg",
+          "condition": "בוטלה הרשמה מאושרת ויש ממתינים",
+          "extensionPoint": "פינוי מקום"
+        }
+      ]
+    },
+    {
+      "id": "part-b",
+      "label": "תפעול יציאות",
+      "splitRationale": "תזמון היציאות, רישום האוטובוסים ורשימת הנוסעים ביום הטיול.",
+      "elements": [
+        {
+          "kind": "actor",
+          "id": "manager",
+          "name": "מנהלת הטיולים",
+          "actorType": "human",
+          "side": "left"
+        },
+        {
+          "kind": "actor",
+          "id": "guide",
+          "name": "מדריך",
+          "actorType": "human",
+          "side": "right"
+        },
+        {
+          "kind": "useCase",
+          "id": "uc-schedule",
+          "name": "תזמון יציאה",
+          "description": "יצירת יציאה של מסלול מהקטלוג: מספר יציאה, תאריך, מדריך וחובש, ובחירת תחנות איסוף מתוך התחנות הקבועות עם שעת איסוף לכל אחת ביציאה זו.",
+          "primaryActor": "manager",
+          "secondaryActors": [],
+          "preconditions": [
+            "המסלול, התחנות ואנשי הצוות קיימים במערכת."
+          ],
+          "postconditions": [
+            "נוצרה יציאה הפתוחה להרשמה."
+          ],
+          "scenarios": [
+            {
+              "id": "sc-happy",
+              "name": "מסלול מרכזי",
+              "flow": [
+                {
+                  "kind": "actor",
+                  "actor": "manager",
+                  "text": "בוחרת מסלול, תאריך, מדריך וחובש"
+                },
+                {
+                  "kind": "actor",
+                  "actor": "manager",
+                  "text": "בוחרת תחנות איסוף וקובעת לכל אחת שעת איסוף"
+                },
+                {
+                  "kind": "system",
+                  "text": "יוצר את היציאה ופותח אותה להרשמה"
+                }
+              ],
+              "extensions": []
+            }
+          ],
+          "userStories": [],
+          "wireframe": ""
+        },
+        {
+          "kind": "useCase",
+          "id": "uc-buses",
+          "name": "רישום אוטובוסים ליציאה",
+          "description": "לאחר שסדרן \"קווי הנגב\" הודיע אילו אוטובוסים הוקצו, המנהלת רושמת אותם ליציאה: מספר רישוי, מספר מקומות והאם יש מעלון. אוטובוס שכבר רשום מיציאה קודמת נבחר מהרשימה.",
+          "primaryActor": "manager",
+          "secondaryActors": [],
+          "preconditions": [
+            "היציאה קיימת."
+          ],
+          "postconditions": [
+            "האוטובוסים קשורים ליציאה, ומספר המקומות ביציאה עודכן."
+          ],
+          "scenarios": [
+            {
+              "id": "sc-happy",
+              "name": "מסלול מרכזי",
+              "flow": [
+                {
+                  "kind": "actor",
+                  "actor": "manager",
+                  "text": "בוחרת יציאה ומזינה את האוטובוסים שהוקצו לה"
+                },
+                {
+                  "kind": "system",
+                  "text": "מקשר את האוטובוסים ליציאה ומעדכן את מספר המקומות"
+                }
+              ],
+              "extensions": []
+            }
+          ],
+          "userStories": [],
+          "wireframe": ""
+        },
+        {
+          "kind": "useCase",
+          "id": "uc-passenger-list",
+          "name": "צפייה ברשימת הנוסעים לפי תחנות",
+          "description": "ביום הטיול המדריך רואה את ההרשמות המאושרות ליציאה, מקובצות לפי תחנת איסוף ושעת האיסוף, ולפי אוטובוס.",
+          "primaryActor": "guide",
+          "secondaryActors": [],
+          "preconditions": [
+            "המבצע הוא המדריך של היציאה."
+          ],
+          "postconditions": [
+            "לא משתנה דבר במערכת."
+          ],
+          "scenarios": [
+            {
+              "id": "sc-happy",
+              "name": "מסלול מרכזי",
+              "flow": [
+                {
+                  "kind": "actor",
+                  "actor": "guide",
+                  "text": "בוחר את היציאה של היום"
+                },
+                {
+                  "kind": "system",
+                  "text": "מציג את הנוסעים המאושרים לפי תחנה, שעת איסוף ואוטובוס, כולל מלווים"
+                }
+              ],
+              "extensions": []
+            }
+          ],
+          "userStories": [],
+          "wireframe": ""
+        }
+      ],
+      "relationships": [
+        {
+          "kind": "actorAssoc",
+          "id": "as-manager-uc-schedule",
+          "actorId": "manager",
+          "ucId": "uc-schedule",
+          "role": "initiator"
+        },
+        {
+          "kind": "actorAssoc",
+          "id": "as-manager-uc-buses",
+          "actorId": "manager",
+          "ucId": "uc-buses",
+          "role": "initiator"
+        },
+        {
+          "kind": "actorAssoc",
+          "id": "as-guide-uc-passenger-list",
+          "actorId": "guide",
+          "ucId": "uc-passenger-list",
+          "role": "initiator"
+        }
+      ]
+    },
+    {
+      "id": "part-c",
+      "label": "ניהול נתוני-אב",
+      "splitRationale": "ניהול נתוני-האב מקבל תרשים משלו ואינו מעורב בשחקן הזמן.",
+      "elements": [
+        {
+          "kind": "actor",
+          "id": "manager",
+          "name": "מנהלת הטיולים",
+          "actorType": "human",
+          "side": "left"
+        },
+        {
+          "kind": "actor",
+          "id": "coordinator",
+          "name": "רכז מועדון",
+          "actorType": "human",
+          "side": "right"
+        },
+        {
+          "kind": "useCase",
+          "id": "uc-manage-trips",
+          "name": "ניהול מסלולים",
+          "description": "הוספה, עדכון והסרה של מסלולים בקטלוג: שם, תיאור, אזור, מחיר למשתתף ומספר משתתפים מינימלי, ולפי סוג המסלול גם שם המלון ומספר הלילות, או רמת הקושי ואורך ההליכה.",
+          "primaryActor": "manager",
+          "secondaryActors": [],
+          "preconditions": [],
+          "postconditions": [
+            "קטלוג המסלולים מעודכן."
+          ],
+          "scenarios": [],
+          "userStories": [],
+          "wireframe": ""
+        },
+        {
+          "kind": "useCase",
+          "id": "uc-manage-stations",
+          "name": "ניהול תחנות איסוף",
+          "description": "הוספה, עדכון והסרה של תחנות האיסוף הקבועות (שם וכתובת).",
+          "primaryActor": "manager",
+          "secondaryActors": [],
+          "preconditions": [],
+          "postconditions": [
+            "רשימת התחנות מעודכנת."
+          ],
+          "scenarios": [],
+          "userStories": [],
+          "wireframe": ""
+        },
+        {
+          "kind": "useCase",
+          "id": "uc-manage-staff",
+          "name": "ניהול אנשי צוות",
+          "description": "הוספה, עדכון והסרה של מדריכים וחובשים (שם וטלפון).",
+          "primaryActor": "manager",
+          "secondaryActors": [],
+          "preconditions": [],
+          "postconditions": [
+            "רשימת אנשי הצוות מעודכנת."
+          ],
+          "scenarios": [],
+          "userStories": [],
+          "wireframe": ""
+        },
+        {
+          "kind": "useCase",
+          "id": "uc-manage-members",
+          "name": "ניהול חברי המועדון",
+          "description": "הוספה ועדכון של חברי המועדון של הרכז: מספר חבר, שם וטלפון. הסיפור אינו קובע מי מתחזק את רשימת החברים; כאן הוקצתה לרכז, שמכיר את חברי המועדון.",
+          "primaryActor": "coordinator",
+          "secondaryActors": [],
+          "preconditions": [
+            "המבצע הוא רכז המועדון."
+          ],
+          "postconditions": [
+            "רשימת חברי המועדון מעודכנת."
+          ],
+          "scenarios": [],
+          "userStories": [],
+          "wireframe": ""
+        }
+      ],
+      "relationships": [
+        {
+          "kind": "actorAssoc",
+          "id": "as-manager-uc-manage-trips",
+          "actorId": "manager",
+          "ucId": "uc-manage-trips",
+          "role": "initiator"
+        },
+        {
+          "kind": "actorAssoc",
+          "id": "as-manager-uc-manage-stations",
+          "actorId": "manager",
+          "ucId": "uc-manage-stations",
+          "role": "initiator"
+        },
+        {
+          "kind": "actorAssoc",
+          "id": "as-manager-uc-manage-staff",
+          "actorId": "manager",
+          "ucId": "uc-manage-staff",
+          "role": "initiator"
+        },
+        {
+          "kind": "actorAssoc",
+          "id": "as-coordinator-uc-manage-members",
+          "actorId": "coordinator",
+          "ucId": "uc-manage-members",
+          "role": "initiator"
+        }
+      ]
+    },
+    {
+      "id": "part-d",
+      "label": "תהליכים אוטומטיים",
+      "splitRationale": "הטריגרים שאין להם יוזם אנושי מרוכזים בתרשים נפרד.",
+      "elements": [
+        {
+          "kind": "actor",
+          "id": "timeActor",
+          "name": "שחקן זמן",
+          "actorType": "system",
+          "side": "right"
+        },
+        {
+          "kind": "useCase",
+          "id": "uc-close-reg",
+          "name": "סגירת ההרשמה ליציאה",
+          "description": "עשרה ימים לפני היציאה ההרשמה נסגרת. אם מספר ההרשמות המאושרות נמוך מהמינימום של המסלול, המערכת מתריעה למנהלת הטיולים. טריגר אחד, Use Case אחד.",
+          "primaryActor": "timeActor",
+          "secondaryActors": [],
+          "preconditions": [
+            "הגיע המועד: עשרה ימים לפני היציאה."
+          ],
+          "postconditions": [
+            "היציאה סגורה להרשמות חדשות; נשלחה התרעה למנהלת אם יש מיעוט נרשמים."
+          ],
+          "scenarios": [
+            {
+              "id": "sc-happy",
+              "name": "מסלול מרכזי",
+              "flow": [
+                {
+                  "kind": "system",
+                  "text": "סוגר את היציאה להרשמות חדשות"
+                },
+                {
+                  "kind": "system",
+                  "text": "סופר את ההרשמות המאושרות ומשווה למינימום של המסלול"
+                },
+                {
+                  "kind": "system",
+                  "text": "אם המספר נמוך מהמינימום, שולח התרעה למנהלת הטיולים"
+                }
+              ],
+              "extensions": []
+            }
+          ],
+          "userStories": [],
+          "wireframe": ""
+        },
+        {
+          "kind": "useCase",
+          "id": "uc-offer-expired",
+          "name": "טיפול בהצעת מקום שפקעה",
+          "description": "בתום 48 שעות מהצעת מקום שלא אושרה, ההרשמה חוזרת לסוף רשימת ההמתנה, והמקום מוצע לבא אחריו (התנהגות \"הצעת מקום לבא בתור\").",
+          "primaryActor": "timeActor",
+          "secondaryActors": [],
+          "preconditions": [
+            "חלפו 48 שעות מהצעת המקום, והחבר לא אישר."
+          ],
+          "postconditions": [
+            "ההרשמה בסוף רשימת ההמתנה; המקום הוצע לבא בתור."
+          ],
+          "scenarios": [],
+          "userStories": [],
+          "wireframe": ""
+        },
+        {
+          "kind": "useCase",
+          "id": "uc-trip-day-close",
+          "name": "העברת הרשמות היציאה לארכיון",
+          "description": "בתום יום הטיול כל ההרשמות של היציאה עוברות לארכיון, וסיבת הסגירה נשמרת (התקיימה, לא שובצה, בוטלה, בוטלה בידי העמותה, נדחתה).",
+          "primaryActor": "timeActor",
+          "secondaryActors": [],
+          "preconditions": [
+            "הסתיים יום הטיול."
+          ],
+          "postconditions": [
+            "ההרשמות בארכיון, לקריאה בלבד."
+          ],
+          "scenarios": [],
+          "userStories": [],
+          "wireframe": ""
+        },
+        {
+          "kind": "useCase",
+          "id": "uc-purge",
+          "name": "מחיקת רשומות הרשמה",
+          "description": "בתום שנתיים מיום הטיול נמחקות רשומות ההרשמה של היציאה, ועמן פרטי המלווים.",
+          "primaryActor": "timeActor",
+          "secondaryActors": [],
+          "preconditions": [
+            "חלפו שנתיים מיום הטיול."
+          ],
+          "postconditions": [
+            "רשומות ההרשמה נמחקו מהמערכת."
+          ],
+          "scenarios": [],
+          "userStories": [],
+          "wireframe": ""
+        }
+      ],
+      "relationships": [
+        {
+          "kind": "actorAssoc",
+          "id": "as-timeActor-uc-close-reg",
+          "actorId": "timeActor",
+          "ucId": "uc-close-reg",
+          "role": "initiator"
+        },
+        {
+          "kind": "actorAssoc",
+          "id": "as-timeActor-uc-offer-expired",
+          "actorId": "timeActor",
+          "ucId": "uc-offer-expired",
+          "role": "initiator"
+        },
+        {
+          "kind": "actorAssoc",
+          "id": "as-timeActor-uc-trip-day-close",
+          "actorId": "timeActor",
+          "ucId": "uc-trip-day-close",
+          "role": "initiator"
+        },
+        {
+          "kind": "actorAssoc",
+          "id": "as-timeActor-uc-purge",
+          "actorId": "timeActor",
+          "ucId": "uc-purge",
+          "role": "initiator"
+        }
+      ]
+    }
+  ],
+  "assumptions": [
+    "ההזדהות במערכת היא תנאי מוקדם לכל מקרה שימוש ואינה מקרה שימוש בפני עצמה.",
+    "לחבר שאין לו חשבון באתר אין גישה ישירה למערכת: רכז המועדון פועל בשמו (רושם, מבטל ומאשר מקום שהוצע). מי שצייר שחקן נפרד לחבר ללא חשבון ונימק זאת נתן תשובה תקינה לא פחות.",
+    "\"הרשמה ליציאה\" היא Use Case אחד ששני שחקנים קשורים אליו: המטרה והתוצאה זהות, והשוני הוא רק מי מבצע. ההגבלה שרכז רושם ומבטל רק עבור חברי המועדון שלו היא תנאי מוקדם בתיאור ה-Use Case.",
+    "חברת \"קווי הנגב\" וסדרן החברה אינם שחקנים: הסדרן מודיע למנהלת, והיא שרושמת את האוטובוסים ב\"רישום אוטובוסים ליציאה\". לחברה אין מגע עם המערכת, וצי האוטובוסים שלה מחוץ להיקף.",
+    "המלווה (למשל בן זוג) אינו שחקן: אין לו גישה למערכת, ופרטיו נרשמים כחלק מההרשמה.",
+    "\"הקצאת מקום ביציאה\" (חיפוש מקום פנוי, מעלון לכיסא גלגלים, אישור ושיבוץ או רשימת המתנה) היא אותה התנהגות בכל שלושת ה-Use Cases שבהם הרשמה עשויה להתאשר, ולכן היא יעד «include» משלושה בסיסים ואין לה שחקן.",
+    "שליחת הודעות ה-SMS אינה Use Case, כשם ששליחת דואר אינה Use Case: היא צעד בתוך כל Use Case שמחליט לשלוח אותה (אישור, דחייה, הצעת מקום, ביטול).",
+    "\"הצעת מקום לבא בתור\" מתרחשת רק בחלק מהביטולים, ולכן היא «extend» של \"ביטול הרשמה\". היא מופעלת גם מתוך \"טיפול בהצעת מקום שפקעה\", כמתואר בתיעוד של אותו Use Case.",
+    "לכל רשימה שהמנהלת מתחזקת יש Use Case ניהול ייעודי; ההוספה, העדכון וההסרה הם שלבים בתוכו ולא Use Cases נפרדים.",
+    "אין Use Case לסימון מי עלה לאוטובוס: בהתאם לבקשת רכזי המועדונים, המדריך סופר ראשים (ראו 8.4; גם ההכרעה ההפוכה מזכה). אין Use Cases לתשלומים, להזמנת מלונות או לניהול צי האוטובוסים: הם מחוץ להיקף.",
+    "אין Use Case לצפייה בתיק רפואי: התיק הרפואי המלא אינו נשמר במערכת (ראו 7.5)."
+  ],
+  "openQuestions": [
+    "מי מתחזק את רשימת המועדונים ואת שיוך הרכזים למועדונים? הסיפור אינו אומר; כאן הנחנו שהרשימה נטענת בהקמת המערכת.",
+    "מה קורה להרשמה שעדיין ממתינה לבדיקת החובש כשההרשמה נסגרת? הסיפור אינו קובע; יש לברר מול רונית."
+  ]
+};
+  </script>
+  <script>
+/* inlined uc-diagram-common.js */
+/* uc-diagram-common.js: SAD MCP shared runtime for use case diagrams
+   Depends on globals defined in the inline <script> of each diagram:
+   diagramLayouts, actorDescriptions, assocDescriptions, useCaseDocs, diagramModel
+
+   This file is deployed by hand to themathbible.com (see CLAUDE.md → Static Assets).
+   Keep UC_RUNTIME_VERSION in sync with package.json on every deploy: it prints to the
+   browser console so you can confirm which runtime is actually live vs. the repo.
+*/
+const UC_RUNTIME_VERSION = '2.9.6';
+if (typeof console !== 'undefined') console.info('[sad-mcp] uc-diagram runtime v' + UC_RUNTIME_VERSION);
+
+// Course terminology: תרחיש is reserved for the use case itself; a path inside it is a scenario.
+const SCENARIO_LABEL = 'סנריו';
+const SCENARIOS_LABEL = 'סנריואים';
+
+// ── fixLayout constants ───────────────────────────────────────────────────
+const HEADER_H  = 44;
+const UC_PAD    = 30;
+const UC_GAP    = 14;
+const ACTOR_PAD = 80;
+
+// ── fixLayout ─────────────────────────────────────────────────────────────
+function fixLayout(layout) {
+  const svg = document.getElementById(layout.svgId);
+  if (!svg) return;
+  const b = layout.boundary;
+
+  // Step 1: Group UCs by the side of their owning actor.
+  const ucSide = {};
+  layout.actors.forEach(a =>
+    a.ucIds.forEach(uid => {
+      ucSide[uid] = ucSide[uid] && ucSide[uid] !== a.side ? 'center' : a.side;
+    })
+  );
+  const cols = { left: [], right: [], center: [] };
+  layout.useCases.forEach(uc => cols[ucSide[uc.id] || 'center'].push(uc));
+
+  // Step 2: Sort each column by actor order (top-to-bottom on that side).
+  function sortCol(ucs, side) {
+    const ordered = layout.actors.filter(a => a.side === side).sort((a, bb) => a.y - bb.y);
+    ucs.sort((a, bb) => {
+      const ai = ordered.findIndex(act => act.ucIds.includes(a.id));
+      const bi = ordered.findIndex(act => act.ucIds.includes(bb.id));
+      return (ai < 0 ? 999 : ai) - (bi < 0 ? 999 : bi);
+    });
+  }
+  sortCol(cols.left,  'left');
+  sortCol(cols.right, 'right');
+
+  // Step 3: Adaptive column X positions. Widen boundary if needed.
+  const COL_GAP = 30;
+  const maxRx = ucs => (ucs.length ? Math.max(...ucs.map(u => u.rx)) : 0);
+  const lRx = maxRx(cols.left), cRx = maxRx(cols.center), rRx = maxRx(cols.right);
+  const gaps = (cRx ? 2 * COL_GAP : (lRx && rRx ? 2 * COL_GAP : 0));
+  const needed = 2 * UC_PAD + 2 * lRx + 2 * cRx + 2 * rRx + gaps;
+  if (b.width < needed) b.width = needed;
+
+  const leftX   = b.x + UC_PAD + lRx;
+  const rightX  = b.x + b.width - UC_PAD - rRx;
+  const centerX = (leftX + rightX) / 2;
+
+  function place(ucs, colX, colName) {
+    ucs.forEach((uc, i) => {
+      uc.cy = b.y + HEADER_H + UC_PAD + uc.ry + i * (uc.ry * 2 + UC_GAP);
+      uc.cx = colX;
+      uc.col = colName;
+    });
+  }
+  place(cols.left,   leftX,   'left');
+  place(cols.right,  rightX,  'right');
+  place(cols.center, centerX, 'center');
+
+  // Step 4: Clamp and resolve overlaps. Idempotent fixed-point loop.
+  const minX = b.x + UC_PAD;
+  const maxX = b.x + b.width - UC_PAD;
+  const minY = b.y + HEADER_H + UC_PAD;
+  let changed = true, iter = 0;
+  while (changed && iter++ < 40) {
+    changed = false;
+    for (const uc of layout.useCases) {
+      const nx = Math.max(minX + uc.rx, Math.min(maxX - uc.rx, uc.cx));
+      if (nx !== uc.cx) { uc.cx = nx; changed = true; }
+      const ny = Math.max(minY + uc.ry, uc.cy);
+      if (ny !== uc.cy) { uc.cy = ny; changed = true; }
+    }
+    for (const col of Object.values(cols)) {
+      col.sort((a, bb) => a.cy - bb.cy);
+      for (let i = 1; i < col.length; i++) {
+        const prev = col[i - 1], cur = col[i];
+        const nd = prev.cy + prev.ry + UC_GAP + cur.ry;
+        if (cur.cy < nd) { cur.cy = nd; changed = true; }
+      }
+    }
+  }
+
+  // Step 5: Expand boundary height to fit all UCs.
+  const maxBottom = Math.max(...layout.useCases.map(uc => uc.cy + uc.ry));
+  b.height = Math.max(b.height, maxBottom - b.y + UC_PAD);
+
+  // Step 6: Re-center actors on their UC group; push bottom actors below boundary.
+  layout.actors.forEach(actor => {
+    const myUCs = layout.useCases.filter(u => actor.ucIds.includes(u.id));
+    if (actor.side === 'left' || actor.side === 'right') {
+      if (myUCs.length) actor.y = myUCs.reduce((s, u) => s + u.cy, 0) / myUCs.length;
+      actor.x = actor.side === 'left' ? b.x - ACTOR_PAD : b.x + b.width + ACTOR_PAD;
+    } else if (actor.side === 'bottom') {
+      actor.y = b.y + b.height + ACTOR_PAD;
+    }
+  });
+
+  // Step 6b: Enforce a minimum vertical gap between actors on the same side.
+  // Step 6 centers each actor on its UCs' mean cy, which can place two single-UC
+  // actors barely one row apart (~UC_GAP) so their stick figures + labels overlap.
+  // Push later actors down to keep centers at least ACTOR_MIN_GAP apart (CR #6).
+  const ACTOR_MIN_GAP = 150;
+  ['left', 'right'].forEach(side => {
+    const col = layout.actors.filter(a => a.side === side).sort((a, bb) => a.y - bb.y);
+    for (let i = 1; i < col.length; i++) {
+      const need = col[i - 1].y + ACTOR_MIN_GAP;
+      if (col[i].y < need) col[i].y = need;
+    }
+  });
+
+  // Step 7: Write UC positions to the SVG (absolute attributes).
+  layout.useCases.forEach(uc => {
+    const g = svg.querySelector('[id="uc-group-' + uc.id + '"]');
+    if (!g) return;
+    const el = g.querySelector('ellipse');
+    if (!el) return;
+    const dx = uc.cx - parseFloat(el.getAttribute('cx'));
+    const dy = uc.cy - parseFloat(el.getAttribute('cy'));
+    el.setAttribute('cx', uc.cx);
+    el.setAttribute('cy', uc.cy);
+    g.querySelectorAll('text').forEach(t => {
+      t.setAttribute('x', parseFloat(t.getAttribute('x') || 0) + dx);
+      t.setAttribute('y', parseFloat(t.getAttribute('y') || 0) + dy);
+    });
+    g.removeAttribute('transform');
+  });
+  layout.actors.forEach(actor => {
+    // Scope to THIS svg: a shared actor id (e.g. 'head') repeats across tabs, so
+    // document.getElementById returns the first tab's figure and moves the wrong
+    // one: leaving this tab's figure detached from its (correctly placed) line.
+    const g = svg.querySelector('[id="actor-group-' + actor.id + '"]');
+    if (g) g.setAttribute('transform', `translate(${actor.x},${actor.y})`);
+  });
+
+  // Step 8: Recalculate every connection line endpoint.
+  svg.querySelectorAll('[data-conn-from][data-conn-to]').forEach(line => {
+    const fId = line.getAttribute('data-conn-from');
+    const tId = line.getAttribute('data-conn-to');
+    const fUC = layout.useCases.find(u => u.id === fId);
+    const fAc = layout.actors.find(a => a.id === fId);
+    const tUC = layout.useCases.find(u => u.id === tId);
+    const tAc = layout.actors.find(a => a.id === tId);
+    const from = fAc ? { x: fAc.x, y: fAc.y } : fUC ? { x: fUC.cx, y: fUC.cy } : null;
+    const to   = tAc ? { x: tAc.x, y: tAc.y } : tUC ? { x: tUC.cx, y: tUC.cy } : null;
+    if (!from || !to) return;
+    let x1 = from.x, y1 = from.y, x2 = to.x, y2 = to.y;
+    if (fUC) { const a = Math.atan2(to.y - fUC.cy, to.x - fUC.cx);     x1 = fUC.cx + fUC.rx * Math.cos(a); y1 = fUC.cy + fUC.ry * Math.sin(a); }
+    if (tUC) { const a = Math.atan2(from.y - tUC.cy, from.x - tUC.cx); x2 = tUC.cx + tUC.rx * Math.cos(a); y2 = tUC.cy + tUC.ry * Math.sin(a); }
+    line.setAttribute('x1', x1); line.setAttribute('y1', y1);
+    line.setAttribute('x2', x2); line.setAttribute('y2', y2);
+
+    const hitbox = svg.querySelector(
+      `.conn-hitbox[data-hitbox-from="${fId}"][data-hitbox-to="${tId}"]`);
+    if (hitbox) {
+      hitbox.setAttribute('x1', x1); hitbox.setAttribute('y1', y1);
+      hitbox.setAttribute('x2', x2); hitbox.setAttribute('y2', y2);
+    }
+
+    // Reposition «include»/«extend» text label associated with this line.
+    const lbl = svg.querySelector(`[data-label-for="${fId} ${tId}"]`);
+    if (lbl) {
+      lbl.setAttribute('x', (x1 + x2) / 2);
+      lbl.setAttribute('y', (y1 + y2) / 2 - 8);
+    }
+  });
+
+  // Step 9: Resize boundary rect and SVG viewBox (both width and height).
+  const br = svg.querySelector('.system-boundary, rect[rx="12"]');
+  if (br) { br.setAttribute('width', b.width); br.setAttribute('height', b.height); }
+  const vb = svg.getAttribute('viewBox');
+  if (vb) {
+    const p = vb.split(/\s+/);
+    p[3] = Math.max(parseFloat(p[3]), b.y + b.height + 120);
+    const ACTOR_LABEL_MARGIN = 120;
+    const maxActorX = layout.actors.length
+      ? Math.max(...layout.actors.map(a => a.x))
+      : b.x + b.width;
+    p[2] = Math.max(parseFloat(p[2]), maxActorX + ACTOR_LABEL_MARGIN);
+    svg.setAttribute('viewBox', p.join(' '));
+  }
+
+  // Step 10: Timing labels + «extend» condition/point notes.
+  renderTimingLabels(layout);
+  renderExtendNotes(layout);
+}
+
+// ── renderTimingLabels ────────────────────────────────────────────────────
+function renderTimingLabels(layout) {
+  const svg = document.getElementById(layout.svgId);
+  if (!svg) return;
+  svg.querySelectorAll('.timing-label').forEach(el => el.remove());
+  const NS = 'http://www.w3.org/2000/svg';
+  (layout.connections || []).forEach(conn => {
+    if (!conn.timing) return;
+    const line = svg.querySelector(
+      `[data-conn-from="${conn.from}"][data-conn-to="${conn.to}"]`);
+    if (!line) return;
+    const x1 = +line.getAttribute('x1'), y1 = +line.getAttribute('y1');
+    const x2 = +line.getAttribute('x2'), y2 = +line.getAttribute('y2');
+    const mx = (x1 + x2) / 2, my = (y1 + y2) / 2;
+    const w = 10 + conn.timing.length * 7, h = 16;
+    const g = document.createElementNS(NS, 'g');
+    g.setAttribute('class', 'timing-label');
+    const rect = document.createElementNS(NS, 'rect');
+    rect.setAttribute('x', mx - w / 2); rect.setAttribute('y', my - h / 2);
+    rect.setAttribute('width', w);      rect.setAttribute('height', h);
+    rect.setAttribute('fill', 'white'); rect.setAttribute('stroke', '#334155');
+    rect.setAttribute('stroke-width', '0.8'); rect.setAttribute('rx', '3');
+    const text = document.createElementNS(NS, 'text');
+    text.setAttribute('x', mx); text.setAttribute('y', my + 4);
+    text.setAttribute('font-size', '10'); text.setAttribute('text-anchor', 'middle');
+    text.setAttribute('fill', '#334155');
+    text.setAttribute('font-family', "'Noto Sans Hebrew', sans-serif");
+    text.setAttribute('direction', 'rtl');
+    text.textContent = conn.timing;
+    g.appendChild(rect); g.appendChild(text);
+    svg.appendChild(g);
+  });
+}
+
+// ── renderExtendNotes ─────────────────────────────────────────────────────
+// UML puts the {condition} and the extension point on every Extend: a bare
+// «extend» label cannot answer "when does this fire?". Data comes from
+// diagramModel.relationships (kind: 'extend'); rendered like timing labels:
+// re-created on every fixLayout pass at the arrow midpoint, below the line
+// (the static «extend» label sits above it).
+function renderExtendNotes(layout) {
+  const svg = document.getElementById(layout.svgId);
+  if (!svg || typeof diagramModel === 'undefined') return;
+  svg.querySelectorAll('.extend-note').forEach(el => el.remove());
+  const NS = 'http://www.w3.org/2000/svg';
+  const rels = (diagramModel.parts || []).flatMap(p => p.relationships || []);
+  rels.filter(r => r.kind === 'extend' && (r.condition || r.extensionPoint)).forEach(r => {
+    const line = svg.querySelector(`[data-conn-from="${r.from}"][data-conn-to="${r.to}"]`);
+    if (!line) return;  // this tab does not draw the arrow
+    const x1 = +line.getAttribute('x1'), y1 = +line.getAttribute('y1');
+    const x2 = +line.getAttribute('x2'), y2 = +line.getAttribute('y2');
+    const mx = (x1 + x2) / 2, my = (y1 + y2) / 2;
+    const rows = [];
+    if (r.condition)      rows.push('{' + r.condition + '}');
+    if (r.extensionPoint) rows.push('📍 ' + r.extensionPoint);
+    const LINE_H = 13;
+    const w = 14 + Math.max(...rows.map(t => t.length)) * 6;
+    const h = rows.length * LINE_H + 7;
+    const g = document.createElementNS(NS, 'g');
+    g.setAttribute('class', 'extend-note');
+    const rect = document.createElementNS(NS, 'rect');
+    rect.setAttribute('x', mx - w / 2); rect.setAttribute('y', my + 5);
+    rect.setAttribute('width', w);      rect.setAttribute('height', h);
+    rect.setAttribute('fill', 'white'); rect.setAttribute('stroke', '#7c3aed');
+    rect.setAttribute('stroke-width', '0.8'); rect.setAttribute('rx', '3');
+    g.appendChild(rect);
+    rows.forEach((t, i) => {
+      const text = document.createElementNS(NS, 'text');
+      text.setAttribute('x', mx); text.setAttribute('y', my + 5 + LINE_H * (i + 1));
+      text.setAttribute('font-size', '9.5'); text.setAttribute('text-anchor', 'middle');
+      text.setAttribute('fill', '#7c3aed');
+      text.setAttribute('font-family', "'Noto Sans Hebrew', sans-serif");
+      text.setAttribute('direction', 'rtl');
+      text.textContent = t;
+      g.appendChild(text);
+    });
+    svg.appendChild(g);
+  });
+}
+
+// ── Tabs ──────────────────────────────────────────────────────────────────
+let activeTab = 0;
+function currentLayout() { return diagramLayouts[activeTab]; }
+function showDiagram(index) {
+  activeTab = index;
+  document.querySelectorAll('.diagram-part').forEach((p, i) => p.hidden = i !== index);
+  document.querySelectorAll('.tab').forEach((t, i) => t.classList.toggle('active', i === index));
+  fixLayout(diagramLayouts[index]);
+}
+
+// ── Small popup (actors & associations) ───────────────────────────────────
+function showDesc(id, type, event) {
+  if (type === 'uc') { openUcModal(id); event.stopPropagation(); return; }
+  showPopup(id, type, event);
+}
+
+function showPopup(id, type, event) {
+  hideDesc();
+  const data = type === 'actor' ? actorDescriptions[id]
+             : type === 'assoc' ? assocDescriptions[id]
+             : null;
+  if (!data) return;
+  const panel = document.createElement('div');
+  panel.id = 'desc-panel';
+  panel.innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+      <strong style="font-size:12px;color:#1e40af;direction:rtl;">${data.name}</strong>
+      <span onclick="hideDesc()" style="cursor:pointer;color:#94a3b8;font-size:18px;line-height:1;margin-right:6px;">×</span>
+    </div>
+    <div style="font-size:11px;color:#334155;line-height:1.6;direction:rtl;">${data.desc}</div>`;
+  Object.assign(panel.style, {
+    position:'fixed', background:'#fff', border:'1.5px solid #2980b9',
+    borderRadius:'8px', padding:'12px 16px', maxWidth:'300px',
+    boxShadow:'0 4px 14px rgba(0,0,0,.15)', zIndex:'1000',
+    left: event.clientX + 'px', top: event.clientY + 'px'
+  });
+  document.body.appendChild(panel);
+  const r = panel.getBoundingClientRect();
+  if (r.right  > window.innerWidth)  panel.style.left = (window.innerWidth  - r.width  - 10) + 'px';
+  if (r.bottom > window.innerHeight) panel.style.top  = (event.clientY - r.height - 10) + 'px';
+  event.stopPropagation();
+}
+
+function hideDesc() { document.getElementById('desc-panel')?.remove(); }
+
+document.addEventListener('click', e => {
+  if (!e.target.closest('[data-uc-id]') &&
+      !e.target.closest('[data-actor-id]') &&
+      !e.target.closest('[data-conn-id]')) hideDesc();
+});
+
+// ── UC modal ──────────────────────────────────────────────────────────────
+function wireframeSafe(html) {
+  const forbidden = [/<script\b/i, /\son\w+\s*=/i, /<iframe\b/i,
+    /src\s*=\s*["']https?:/i, /href\s*=\s*["']https?:/i, /@import\b/i, /<style\b/i];
+  return !forbidden.some(rx => rx.test(html));
+}
+
+// Flow of events (§4.4a / NOTATION §11b). The flow is a tree: actor/system/
+// include are leaves, `loop` and `alt` nest one level deeper. Step labels are
+// computed here rather than left to <ol> numbering, because extensions and
+// `resume` outcomes reference them by name: CSS counters would let the rendered
+// number drift away from "חזרה לשלב 2.1" and nobody would notice.
+function ucEsc(s) {
+  return String(s == null ? '' : s)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function ucOutcomeHtml(outcome) {
+  if (!outcome) return '';
+  if (outcome.kind === 'resume')
+    return `<div class="ext-outcome ext-resume">↩ חזרה לשלב ${ucEsc(outcome.at)}</div>`;
+  if (outcome.kind === 'terminate')
+    return `<div class="ext-outcome ext-terminate">⛔ המקרה מסתיים ללא הצלחה${
+      outcome.text ? ': ' + ucEsc(outcome.text) : ''}</div>`;
+  return '';
+}
+
+function ucExtensionHtml(ext, label, letter) {
+  // Legacy extensions (text-only, pre-2.6) carry the whole sentence in `text`
+  // and already read as prose: don't prefix them with "אם".
+  const structured = Array.isArray(ext.steps) || !!ext.outcome;
+  const head = structured
+    ? `אם ${ucEsc(ext.text)}:`
+    : ucEsc(ext.text);
+  const subSteps = (ext.steps || []).length
+    ? `<ul class="ext-steps">${(ext.steps || []).map((s, k) =>
+        `<li><span class="step-label">${label}${letter}${k + 1}</span>${ucEsc(s)}</li>`).join('')}</ul>`
+    : '';
+  return `<li class="ext-sub"><span class="step-label ext-label">${label}${letter}</span>${head}` +
+         `${subSteps}${ucOutcomeHtml(ext.outcome)}</li>`;
+}
+
+function ucStepBodyHtml(step, ctx) {
+  if (step.kind === 'actor')
+    return `<strong class="step-actor" data-actor-id="${ucEsc(step.actor)}">${ucEsc(ctx.actorName(step.actor))}</strong>: ${ucEsc(step.text)}`;
+  if (step.kind === 'system')
+    return `<em class="step-system">המערכת</em>: ${ucEsc(step.text)}`;
+  if (step.kind === 'include')
+    return `<span class="step-include">«include» </span><a class="step-uc-ref" data-uc-ref="${ucEsc(step.uc)}">${ucEsc(ctx.ucName(step.uc))}</a>${step.text ? ': ' + ucEsc(step.text) : ''}`;
+  if (step.kind === 'extension')  // legacy inline extension pseudo-step
+    return ucEsc(step.text);
+  return ucEsc(step.text);
+}
+
+// «extend» hook marker (§3.3). A step carrying `extensionPoint` is the named
+// location where an extension may fire: mark it in the base's modal, naming the
+// extension(s) that hook here and their {condition}, so the reader can answer
+// "at what point does it fire?" from the base's own flow.
+function ucPointBadgeHtml(step, ctx) {
+  const pt = step && step.extensionPoint;
+  if (!pt) return '';
+  const rels = (diagramModel.parts || []).flatMap(p => p.relationships || []);
+  const hooks = rels
+    .filter(r => r.kind === 'extend' && r.to === ctx.ucId && r.extensionPoint === pt)
+    .map(r =>
+      `<a class="step-uc-ref" data-uc-ref="${ucEsc(r.from)}">${ucEsc(ctx.ucName(r.from))}</a>` +
+      (r.condition ? ` <span class="ext-point-cond">{${ucEsc(r.condition)}}</span>` : ''));
+  return `<div class="ext-point-badge">📍 נקודת הרחבה ״${ucEsc(pt)}״` +
+         (hooks.length ? `: «extend» ${hooks.join(' · ')}` : '') + `</div>`;
+}
+
+function ucFlowHtml(flow, prefix, extByAt, ctx) {
+  let html = '<ul class="flow">';
+  (flow || []).forEach((step, i) => {
+    const label = `${prefix}${i + 1}`;
+    const badge = ucPointBadgeHtml(step, ctx);
+
+    if (step.kind === 'loop') {
+      html += `<li class="flow-step flow-loop"><span class="step-label">${label}</span>` +
+              `<span class="ctrl-kw">חזור</span> <span class="ctrl-cond">${ucEsc(step.condition)}</span>:` +
+              badge + ucFlowHtml(step.steps, `${label}.`, extByAt, ctx) + '</li>';
+    } else if (step.kind === 'alt') {
+      let branches = '<ul class="flow-branches">';
+      (step.branches || []).forEach((b, bi) => {
+        const bLabel = `${label}.${bi + 1}`;
+        branches += `<li class="flow-branch"><span class="step-label">${bLabel}</span>` +
+                    `<span class="branch-label">${ucEsc(b.label)}</span>` +
+                    ucFlowHtml(b.steps, `${bLabel}.`, extByAt, ctx) + '</li>';
+      });
+      branches += '</ul>';
+      html += `<li class="flow-step flow-alt"><span class="step-label">${label}</span>` +
+              `<span class="ctrl-kw">לפי</span> <span class="ctrl-cond">${ucEsc(step.condition)}</span>:` +
+              badge + branches + '</li>';
+    } else if (step.kind === 'extension') {
+      html += `<li class="ext-inline">${step.at ? ucEsc(step.at) + 'a. ' : ''}${ucEsc(step.text)}</li>`;
+    } else {
+      html += `<li class="flow-step"><span class="step-label">${label}</span>${ucStepBodyHtml(step, ctx)}${badge}</li>`;
+    }
+
+    const exts = extByAt.get(label) || [];
+    if (exts.length)
+      html += '<li class="ext-holder"><ul class="ext-list">' +
+              exts.map((e, j) => ucExtensionHtml(e, label, String.fromCharCode(97 + j))).join('') +
+              '</ul></li>';
+  });
+  return html + '</ul>';
+}
+
+// Modal header "who" line. Course doctrine: שחקן = מי שיוזם: an actor is whoever
+// initiates. Two UC kinds legitimately have ZERO actor associations, each with its
+// own wording because their invocation mechanism differs:
+//   «include» target (CR #4) : nobody initiates it, it is CALLED by its bases.
+//   «extend» extension (§3.3): nothing calls it EITHER: it fires on its own when
+//     the base reaches the named extension point and the condition holds. Naming
+//     the base + point here is what answers "at what point does it run?".
+// An extension WITH an actor shows the actor line AND its base/point line.
+function ucWhoHtml(id, doc, actorName, esc) {
+  const rels = (diagramModel.parts || []).flatMap(p => p.relationships || []);
+  const els  = (diagramModel.parts || []).flatMap(p => p.elements || []);
+  const nameOf = eid => { const el = els.find(e => e.id === eid); return esc(el ? el.name : eid); };
+  const extendsOf = rels.filter(r => r.kind === 'extend' && r.from === id)
+    .map(r => nameOf(r.to) + (r.extensionPoint ? ', בנקודת ״' + esc(r.extensionPoint) + '״' : ''));
+  const extendLine = extendsOf.length
+    ? `<div class="uc-primary uc-called">
+        <span class="uc-primary-label">הרחבה של:</span>
+        <b class="uc-callers">${extendsOf.join(' · ')}</b>
+      </div>`
+    : '';
+
+  const hasActor = rels.some(r => r.kind === 'actorAssoc' && r.ucId === id);
+  if (hasActor) {
+    return `<div class="uc-primary">
+        <span class="uc-primary-label">שחקן:</span>
+        <a class="uc-primary-link" data-actor-pulse="${esc(doc.primaryActor)}">${esc(actorName(doc.primaryActor))}</a>
+      </div>` + extendLine;
+  }
+  if (extendsOf.length) {
+    return `<div class="uc-primary uc-called">
+        <span class="uc-primary-label">אין שחקן: הרחבה של:</span>
+        <b class="uc-callers">${extendsOf.join(' · ')}</b>
+      </div>`;
+  }
+  const callers = rels.filter(r => r.kind === 'include' && r.to === id).map(r => nameOf(r.from));
+  return `<div class="uc-primary uc-called">
+      <span class="uc-primary-label">אין שחקן: נקראת מתוך:</span>
+      <b class="uc-callers">${callers.join(' · ')}</b>
+    </div>`;
+}
+
+function openUcModal(id) {
+  const doc = useCaseDocs[id];
+  if (!doc) return;
+  const actorName = aid => (actorDescriptions[aid]?.name) || aid;
+  const ucName    = uid => (useCaseDocs[uid]?.name) || uid;
+  const ctx = { actorName, ucName, ucId: id };
+  const esc = ucEsc;
+
+  const sces = doc.scenarios || [];
+  const scFlowHtml = sce => {
+    // `at` is a dot-numbered label; legacy models used a plain step number.
+    const extByAt = new Map();
+    (sce.extensions || []).forEach(e => {
+      const at = String(e.at == null ? '' : e.at);
+      if (!extByAt.has(at)) extByAt.set(at, []);
+      extByAt.get(at).push(e);
+    });
+    return ucFlowHtml(sce.flow, '', extByAt, ctx);
+  };
+  // NOTATION §11c: a multi-scenario UC (a CRUD "ניהול X" carries one scenario per
+  // operation) must READ as separate scenarios: numbered rail, one flow shown at a
+  // time, same presentation as VP's Flow-of-Events tab. Stacked bare headings made
+  // four scenarios look like sub-sections of a single flow.
+  let scenariosHtml = '';
+  if (sces.length > 1) {
+    const tabs = sces.map((sce, i) =>
+      `<button type="button" class="uc-sc-tab" data-sc-ix="${i}" aria-selected="${i === 0}">` +
+      `<span class="uc-sc-num">${SCENARIO_LABEL} ${i + 1}</span>${esc(sce.name || sce.id)}</button>`).join('');
+    const panes = sces.map((sce, i) =>
+      `<div class="uc-sc-pane" data-sc-ix="${i}"${i ? ' style="display:none"' : ''}>` +
+      `<h3>${esc(sce.name || sce.id)}</h3>${scFlowHtml(sce)}</div>`).join('');
+    scenariosHtml =
+      `<div class="uc-sc-rail-title">${SCENARIOS_LABEL} (${sces.length})</div>` +
+      `<div class="uc-sc-split"><div class="uc-sc-rail">${tabs}</div><div class="uc-sc-panes">${panes}</div></div>`;
+  } else {
+    sces.forEach(sce => {
+      scenariosHtml += `<h3>${esc(sce.name || sce.id)}</h3>` + scFlowHtml(sce);
+    });
+  }
+
+  const listItems = items => (items || []).map(s => `<li>${esc(s)}</li>`).join('');
+  const usItems   = (doc.userStories || []).map(us =>
+    `<li>${esc('בתור ' + us.role + ', אני רוצה ' + us.want + ', כדי ש' + us.so)}</li>`).join('');
+
+  const wfHtml = (doc.wireframe && wireframeSafe(doc.wireframe))
+    ? `<section class="uc-wireframe">${doc.wireframe}</section>` : '';
+  if (doc.wireframe && !wireframeSafe(doc.wireframe))
+    console.warn(`Wireframe for ${id} failed safety check.`);
+
+  // Single innerHTML write: avoids silent failures in sandboxed iframe environments.
+  const body = document.querySelector('#uc-modal .uc-modal-body');
+  body.innerHTML = `
+    <button class="uc-modal-close" onclick="closeUcModal()" aria-label="Close">×</button>
+    <header>
+      <span class="uc-id">${esc(doc.id)}</span>
+      <h2 class="uc-name">${esc(doc.name)}</h2>
+      ${ucWhoHtml(id, doc, actorName, esc)}
+    </header>
+    <section class="uc-description">${esc(doc.description || '')}</section>
+    <section class="uc-scenarios">${scenariosHtml}</section>
+    <section class="uc-prepostuser">
+      <div class="uc-pre"><h4>תנאים מוקדמים</h4><ul>${listItems(doc.preconditions)}</ul></div>
+      <div class="uc-post"><h4>תנאים סופיים</h4><ul>${listItems(doc.postconditions)}</ul></div>
+      <div class="uc-stories"><h4>סיפורי משתמש</h4><ul>${usItems}</ul></div>
+    </section>
+    ${wfHtml}`;
+
+  // An actorless «include» target renders no .uc-primary-link: guard before wiring.
+  const primaryLink = body.querySelector('.uc-primary-link');
+  if (primaryLink) primaryLink.onclick = () => { closeUcModal(); pulseActor(doc.primaryActor); };
+  body.querySelectorAll('.step-actor').forEach(el => {
+    el.onclick = () => { closeUcModal(); pulseActor(el.dataset.actorId); };
+  });
+  body.querySelectorAll('.step-uc-ref').forEach(el => {
+    el.onclick = () => openUcModal(el.dataset.ucRef);
+  });
+  body.querySelectorAll('.uc-sc-tab').forEach(tab => {
+    tab.onclick = () => {
+      body.querySelectorAll('.uc-sc-tab').forEach(t =>
+        t.setAttribute('aria-selected', String(t === tab)));
+      body.querySelectorAll('.uc-sc-pane').forEach(p => {
+        p.style.display = p.dataset.scIx === tab.dataset.scIx ? '' : 'none';
+      });
+    };
+  });
+
+  const modal = document.getElementById('uc-modal');
+  modal.hidden = false;
+  document.body.classList.add('uc-modal-open');
+}
+
+function closeUcModal() {
+  const modal = document.getElementById('uc-modal');
+  if (modal) modal.hidden = true;
+  document.body.classList.remove('uc-modal-open');
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeUcModal(); });
+
+function pulseActor(actorId) {
+  const g = document.getElementById('actor-group-' + actorId);
+  if (!g) return;
+  g.classList.add('actor-pulse');
+  setTimeout(() => g.classList.remove('actor-pulse'), 2000);
+}
+
+// ── Assumptions panel ─────────────────────────────────────────────────────
+function renderAssumptions() {
+  const a = (diagramModel && diagramModel.assumptions)   || [];
+  const q = (diagramModel && diagramModel.openQuestions) || [];
+  const panel = document.getElementById('assumptions-panel');
+  if (!panel) return;
+  if (!a.length && !q.length) { panel.hidden = true; return; }
+  panel.hidden = false;
+  const fillList = (listEl, items) => {
+    listEl.innerHTML = '';
+    items.forEach(s => { const li = document.createElement('li'); li.textContent = s; listEl.appendChild(li); });
+  };
+  fillList(document.getElementById('assumptions-list'),    a);
+  fillList(document.getElementById('open-questions-list'), q);
+  document.getElementById('assumptions-col').hidden    = !a.length;
+  document.getElementById('open-questions-col').hidden = !q.length;
+}
+
+// ── XMI export ────────────────────────────────────────────────────────────
+function xmlEscape(s) {
+  return String(s == null ? '' : s)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;').replace(/'/g,'&apos;');
+}
+
+function downloadFile(filename, mimeType, content) {
+  const blob = new Blob([content], { type: mimeType });
+  const url  = URL.createObjectURL(blob);
+  const a = Object.assign(document.createElement('a'), { href: url, download: filename });
+  document.body.appendChild(a); a.click();
+  setTimeout(() => { URL.revokeObjectURL(url); a.remove(); }, 1000);
+}
+
+function xmiBody(elements, rels) {
+  const lines = [];
+  function flowText(uc) {
+    const actorName = id => (elements.find(e => e.kind === 'actor'   && e.id === id) || {}).name || id;
+    const ucName    = id => (elements.find(e => e.kind === 'useCase' && e.id === id) || {}).name || id;
+    const out = [];
+
+    // VP stores Flow of Events as an OpaqueBehavior text body, so the loop/alt
+    // structure round-trips as indented prose rather than as UML activity nodes.
+    const emit = (flow, prefix, indent, extByAt) => {
+      (flow || []).forEach((step, i) => {
+        const label = prefix + (i + 1);
+        const pad = '  '.repeat(indent);
+        // §3.3: a step that declares an extension point is the named hook; the
+        // exported flow must show it or the correspondence lives only on-screen.
+        const pt = step.extensionPoint ? ': 📍 נקודת הרחבה: ' + step.extensionPoint : '';
+        if (step.kind === 'loop') {
+          out.push(pad + label + '. חזור ' + (step.condition || '') + ':' + pt);
+          emit(step.steps, label + '.', indent + 1, extByAt);
+        } else if (step.kind === 'alt') {
+          out.push(pad + label + '. לפי ' + (step.condition || '') + ':' + pt);
+          (step.branches || []).forEach((b, bi) => {
+            const bLabel = label + '.' + (bi + 1);
+            out.push('  '.repeat(indent + 1) + bLabel + ' [' + (b.label || '') + ']');
+            emit(b.steps, bLabel + '.', indent + 2, extByAt);
+          });
+        } else if (step.kind === 'actor')     out.push(pad + label + '. ' + actorName(step.actor) + ': ' + step.text + pt);
+        else if (step.kind === 'system')      out.push(pad + label + '. System: ' + step.text + pt);
+        else if (step.kind === 'include')     out.push(pad + label + '. «include» ' + ucName(step.uc) + (step.text ? ': ' + step.text : '') + pt);
+        else if (step.kind === 'extension')   out.push(pad + label + 'a. ' + step.text);
+
+        (extByAt.get(label) || []).forEach((e, j) => {
+          const letter = String.fromCharCode(97 + j);
+          const structured = Array.isArray(e.steps) || !!e.outcome;
+          out.push(pad + '  ' + label + letter + '. ' + (structured ? 'אם ' + e.text + ':' : e.text));
+          (e.steps || []).forEach((s, k) => {
+            out.push(pad + '    ' + label + letter + (k + 1) + '. ' + s);
+          });
+          if (e.outcome && e.outcome.kind === 'resume')
+            out.push(pad + '    ↩ חזרה לשלב ' + e.outcome.at);
+          else if (e.outcome && e.outcome.kind === 'terminate')
+            out.push(pad + '    ⛔ המקרה מסתיים ללא הצלחה' + (e.outcome.text ? ': ' + e.outcome.text : ''));
+        });
+      });
+    };
+
+    (uc.scenarios || []).forEach(sc => {
+      out.push((sc.name || sc.id) + ':');
+      const extByAt = new Map();
+      (sc.extensions || []).forEach(e => {
+        const at = String(e.at == null ? '' : e.at);
+        if (!extByAt.has(at)) extByAt.set(at, []);
+        extByAt.get(at).push(e);
+      });
+      emit(sc.flow, '', 1, extByAt);
+    });
+    return out.join('\n');
+  }
+
+  for (const el of elements) {
+    if (el.kind === 'useCase') {
+      const hasDocs = (el.preconditions  && el.preconditions.length)
+                   || (el.postconditions && el.postconditions.length)
+                   || (el.scenarios      && el.scenarios.length);
+      if (!hasDocs) {
+        lines.push('    <packagedElement xmi:type="uml:UseCase" xmi:id="' + el.id + '" name="' + xmlEscape(el.name) + '"/>');
+      } else {
+        lines.push('    <packagedElement xmi:type="uml:UseCase" xmi:id="' + el.id + '" name="' + xmlEscape(el.name) + '">');
+        (el.preconditions || []).forEach((p, i) => {
+          lines.push('      <precondition xmi:type="uml:Constraint" xmi:id="' + el.id + '-pre-' + (i+1) + '" name="pre-' + (i+1) + '">');
+          lines.push('        <specification xmi:type="uml:OpaqueExpression" xmi:id="' + el.id + '-pre-' + (i+1) + '-s"><body>' + xmlEscape(p) + '</body></specification>');
+          lines.push('      </precondition>');
+        });
+        (el.postconditions || []).forEach((p, i) => {
+          lines.push('      <postcondition xmi:type="uml:Constraint" xmi:id="' + el.id + '-post-' + (i+1) + '" name="post-' + (i+1) + '">');
+          lines.push('        <specification xmi:type="uml:OpaqueExpression" xmi:id="' + el.id + '-post-' + (i+1) + '-s"><body>' + xmlEscape(p) + '</body></specification>');
+          lines.push('      </postcondition>');
+        });
+        if (el.scenarios && el.scenarios.length) {
+          lines.push('      <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="' + el.id + '-flow" name="Flow of Events">');
+          lines.push('        <body>' + xmlEscape(flowText(el)) + '</body>');
+          lines.push('      </ownedBehavior>');
+        }
+        lines.push('    </packagedElement>');
+      }
+    }
+    if (el.kind === 'actor')
+      lines.push('    <packagedElement xmi:type="uml:Actor" xmi:id="' + el.id + '" name="' + xmlEscape(el.name) + '"/>');
+  }
+  for (const r of rels) {
+    if (r.kind === 'actorAssoc') {
+      lines.push('    <packagedElement xmi:type="uml:Association" xmi:id="' + r.id + '">');
+      lines.push('      <ownedEnd xmi:type="uml:Property" xmi:id="' + r.id + '-e1" association="' + r.id + '" type="' + r.actorId + '"/>');
+      lines.push('      <ownedEnd xmi:type="uml:Property" xmi:id="' + r.id + '-e2" association="' + r.id + '" type="' + r.ucId   + '"/>');
+      lines.push('    </packagedElement>');
+    }
+    if (r.kind === 'include')
+      lines.push('    <packagedElement xmi:type="uml:Include" xmi:id="' + r.id + '" includingCase="' + r.from + '" addition="' + r.to + '"/>');
+    if (r.kind === 'extend')
+      lines.push('    <packagedElement xmi:type="uml:Extend"  xmi:id="' + r.id + '" extendedCase="'  + r.to   + '" extension="' + r.from + '"/>');
+    if (r.kind === 'generalization')
+      lines.push('    <packagedElement xmi:type="uml:Generalization" xmi:id="' + r.id + '" specific="' + r.from + '" general="' + r.to + '"/>');
+  }
+  return lines.join('\n');
+}
+
+function exportXMI() {
+  const m     = diagramModel;
+  const title = xmlEscape(m.title || 'diagram');
+  const body  = xmiBody(m.parts.flatMap(p => p.elements), m.parts.flatMap(p => p.relationships));
+  const xmi   =
+    '<?xml version="1.0" encoding="UTF-8"?>\n' +
+    '<xmi:XMI xmi:version="2.1"\n' +
+    '  xmlns:xmi="http://www.omg.org/XMI"\n' +
+    '  xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML">\n' +
+    '  <uml:Model xmi:id="model_1" name="' + title + '">\n' +
+    body + '\n' +
+    '  </uml:Model>\n' +
+    '</xmi:XMI>';
+  downloadFile(title.replace(/\s+/g, '_') + '.xmi', 'application/xml', xmi);
+}
+
+// ── User stories summary panel ────────────────────────────────────────────
+function renderUserStoriesSummary() {
+  const panel = document.getElementById('user-stories-panel');
+  if (!panel) return;
+  const seen = new Set();
+  const stories = [];
+  Object.values(useCaseDocs).forEach(doc => {
+    (doc.userStories || []).forEach(us => {
+      const key = us.role + '|' + us.want + '|' + us.so;
+      if (!seen.has(key)) { seen.add(key); stories.push(us); }
+    });
+  });
+  if (!stories.length) { panel.hidden = true; return; }
+  panel.hidden = false;
+  const list = document.getElementById('user-stories-list');
+  if (!list) return;
+  list.innerHTML = '';
+  stories.forEach(us => {
+    const li = document.createElement('li');
+    li.textContent = 'בתור ' + us.role + ', אני רוצה ' + us.want + ', כדי ש' + us.so;
+    list.appendChild(li);
+  });
+}
+
+// ── Hover highlight ────────────────────────────────────────────────────────
+// Point at any association / «include» / «extend» line to trace it through
+// crossings: it brightens to magenta, thickens, and lifts to the front,
+// restoring on mouse-out. Reuses the existing wide .conn-hitbox targets (kept in
+// sync by fixLayout), so no extra geometry and it works on every tab.
+// The lifted line ignores the pointer: otherwise it sits above its own hitbox, the
+// hitbox reports mouse-out, and the highlight sticks or flickers. Entering a line
+// clears the previous highlight first.
+let ucClearHover = null;
+function wireUcHover() {
+  const reset = () => { if (ucClearHover) { ucClearHover(); ucClearHover = null; } };
+  document.querySelectorAll('.conn-hitbox').forEach(hit => {
+    if (hit.dataset.hoverWired) return;
+    hit.dataset.hoverWired = '1';
+    hit.style.cursor = 'pointer';
+    const svg = hit.ownerSVGElement;
+    const fId = hit.getAttribute('data-hitbox-from');
+    const tId = hit.getAttribute('data-hitbox-to');
+    const line = svg && svg.querySelector(
+      `[data-conn-from="${fId}"][data-conn-to="${tId}"]`);
+    if (!line) return;
+    hit.addEventListener('mouseenter', () => {
+      reset();
+      const s0 = line.getAttribute('stroke') || '#334155';
+      const w0 = line.getAttribute('stroke-width') || '1.5';
+      const slot = document.createComment('e'); line.parentNode.insertBefore(slot, line);
+      line.style.pointerEvents = 'none';
+      line.parentNode.appendChild(line); // lift to front
+      line.setAttribute('stroke', '#e6007e');
+      line.setAttribute('stroke-width', String(Math.max(3.2, parseFloat(w0) + 1.6)));
+      ucClearHover = () => {
+        line.setAttribute('stroke', s0);
+        line.setAttribute('stroke-width', w0);
+        line.style.pointerEvents = '';
+        if (slot.parentNode) { slot.parentNode.insertBefore(line, slot); slot.remove(); }
+      };
+    });
+    hit.addEventListener('mouseleave', reset);
+  });
+}
+
+// ── Init ──────────────────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  diagramLayouts.forEach(l => fixLayout(l));
+  renderAssumptions();
+  renderUserStoriesSummary();
+});
+// Wired independently so a hiccup in the layout/summary init above never skips
+// it (hover doesn't depend on layout: it only attaches listeners).
+document.addEventListener('DOMContentLoaded', wireUcHover);
+
+</script>
+</body>
+</html>
