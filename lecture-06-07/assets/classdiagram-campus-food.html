@@ -91,166 +91,164 @@
 
   <script>
   /* ============================================================
-     1. DATA — CLASSES and RELS (§9b, §9c)
-     Layout: main chain across the top row (y=230, connector y=270),
-     payment sub-tree centre-bottom, the two «external system» boxes at the
-     left and right EDGES so they read as outside our system boundary.
+     1. DATA: CLASSES and RELS (§9b, §9c)
+     The book's final campus model (book/figures/ch05/fig-5-30-campus-full.json), on one canvas:
+     the ordering chain across the middle row, the payment sub-tree below Order, the cafeteria
+     side (Cafeteria, Station, Employee and their enumerations) on the right, and the two
+     «external system» boxes at the edges. Validated with sad-mcp 2.13.17 (no errors, no warnings).
      ============================================================ */
   const CLASSES = [
-    {
-      id: 'Student', name: 'Student', stereotype: null, isEnum: false, isAbstract: false, isExternal: false,
-      attrs: ['- studentId : String', '- name : String', '- email : String'],
+    { id: "UniversityIdentity", name: "UniversityIdentity", stereotype: "«external system»", isEnum: false, isAbstract: false, isExternal: true,
+      attrs: [],
       ops: [],
-      x: 60, y: 230,
-      desc: 'מי שמזמין. המערכת שומרת רשומה לכל סטודנט — מספר סטודנט (מספר עסקי שהאוניברסיטה משתמשת בו), שם ודוא״ל. לסטודנט אחד יכולות להיות <b>0..*</b> הזמנות; לכל הזמנה יש בדיוק סטודנט אחד.'
-    },
-    {
-      id: 'Order', name: 'Order', stereotype: null, isEnum: false, isAbstract: false, isExternal: false,
-      attrs: [
-        '- orderId : String',
-        '- createdAt : DateTime',
-        '- pickupTime : DateTime',
-        '- pickupCode : String',
-        '- status : OrderStatus'
-      ],
-      ops: ['+ total() : Money', '+ cancel()'],
-      x: 290, y: 230,
-      desc: 'ההזמנה עצמה. שימו לב ש-<span class="en">total()</span> היא <b>פעולה</b> ולא תכונה — הסכום מחושב מהשורות ולכן לא נשמר. התכונה <span class="en">status</span> היא מטיפוס <span class="en">OrderStatus</span> — זו כל החוליה אל קופסת ה-<span class="en">enumeration</span>.'
-    },
-    {
-      id: 'OrderLine', name: 'OrderLine', stereotype: null, isEnum: false, isAbstract: false, isExternal: false,
-      attrs: ['- quantity : int {>0}', '- unitPrice : Money {>=0}', '- notes : String'],
-      ops: ['+ lineTotal() : Money'],
-      x: 540, y: 230,
-      desc: '<b>מחלקה מתווכת</b> (מחלקה מתווכת): היא מחליפה את הקשר רבים-לרבים שבין הזמנה לפריט תפריט, ונושאת את הנתונים שנולדו מהקשר — <span class="en">quantity</span>, ההערות, ו-<span class="en">unitPrice</span>. שימו לב ל-<span class="en">unitPrice</span>: הוא <b>משוכפל לכאורה</b> מ-<span class="en">MenuItem.price</span>, ובכל זאת חייב להישמר — מחיר בתפריט משתנה, והזמנה מלפני חודש חייבת להישאר נכונה. לכן <span class="en">lineTotal()</span> מחושב מ-<span class="en">quantity × unitPrice</span> ולא מהמחיר הנוכחי. קשר ה<b>רבים-לרבים</b> המקורי נמחק ובמקומו שני קשרים נפרדים.'
-    },
-    {
-      id: 'MenuItem', name: 'MenuItem', stereotype: null, isEnum: false, isAbstract: false, isExternal: false,
-      attrs: [
-        '- itemId : String',
-        '- name : String',
-        '- price : Money {>=0}',
-        '- isVegetarian : Boolean',
-        '- available : Boolean'
-      ],
+      x: 40, y: 140,
+      desc: "מערכת הזיהוי של האוניברסיטה. הסטודנט נכנס דרכה; אנחנו קוראים לה ולא שומרים שום נתון שלה, ולכן קופסת «external system» וקו תלות, בלי ריבוי." },
+    { id: "Student", name: "Student", stereotype: null, isEnum: false, isAbstract: false, isExternal: false,
+      attrs: ["+ studentNumber : String", "+ fullName : String"],
       ops: [],
-      x: 777, y: 230,
-      desc: 'מה שאפשר להזמין: שם, מחיר עם אילוץ <span class="en">{&gt;=0}</span>, האם צמחוני והאם זמין כרגע. הפריט קיים בתפריט גם בלי אף הזמנה — ולכן הקשר אל שורת הזמנה הוא קשר רגיל ולא הרכבה.'
-    },
-    {
-      id: 'Station', name: 'Station', stereotype: null, isEnum: false, isAbstract: false, isExternal: false,
-      attrs: ['- name : String', '- type : StationType'],
+      x: 60, y: 300,
+      desc: "מי שמזמין. <span class=\"en\">studentNumber</span> הוא מזהה עסקי (מודפס על הכרטיס), ולצדו השם המלא. לסטודנט <b>0..*</b> הזמנות, הזמנה מועדפת אחת לכל היותר, ותוויות תזונה שבחר." },
+    { id: "FavoriteOrder", name: "FavoriteOrder", stereotype: null, isEnum: false, isAbstract: false, isExternal: false,
+      attrs: ["+ name : String"],
       ops: [],
-      x: 1033, y: 230,
-      desc: 'עמדת ההגשה שממנה אוספים את הפריט (פיצה, סלטים, שתייה). כל פריט תפריט משויך לעמדה אחת; לעמדה יש <b>0..*</b> פריטים.'
-    },
-    {
-      id: 'Cafeteria', name: 'Cafeteria', stereotype: null, isEnum: false, isAbstract: false, isExternal: false,
-      attrs: ['- name : String', '- location : String'],
+      x: 250, y: 140,
+      desc: "הזמנה מועדפת שהסטודנט שמר כדי להזמין שוב בלחיצה. שייכת לסטודנט אחד ונמחקת איתו (◆), ומצביעה על הזמנה קיימת אחת." },
+    { id: "Order", name: "Order", stereotype: null, isEnum: false, isAbstract: false, isExternal: false,
+      attrs: ["+ orderNumber : String", "+ createdAt : DateTime", "+ pickupTime : DateTime", "+ pickupCode : String", "+ status : OrderStatus"],
+      ops: ["+ total() : Money", "+ cancel()"],
+      x: 320, y: 300,
+      desc: "הלב של המודל. <span class=\"en\">orderNumber</span> ו-<span class=\"en\">pickupCode</span> הם מזהים שהסטודנט מקריא בדלפק. <span class=\"en\">total()</span> היא פעולה: הסכום מחושב מהשורות ולא נשמר. כל הזמנה שייכת לקפיטריה אחת." },
+    { id: "OrderStatus", name: "OrderStatus", stereotype: "«enumeration»", isEnum: true, isAbstract: false, isExternal: false,
+      attrs: ["Pending", "InPreparation", "Ready", "Collected", "Cancelled"],
       ops: [],
-      x: 1036, y: 90,
-      desc: '<b>הרכבה (◆ יהלום מלא)</b>: הקפיטריה מורכבת מעמדות — ״העמדה החמה״ היא <b>מושג</b> בתוך הקפיטריה, לא ציוד. נסגרת הקפיטריה — העמדה בצורתה הזו לא קיימת יותר; אם פותחים את הציוד במקום אחר, שם נוצרת עמדה חדשה. שני המבחנים של ההרכבה עוברים: בעלים אחד (1), ונמחקת עם השלם. <b>שימו לב:</b> אין ◇ בתרשים הזה בכוונה — בקורס לא מייצרים צבירה.'
-    },
-    {
-      id: 'Payment', name: 'Payment', stereotype: null, isEnum: false, isAbstract: false, isExternal: false,
-      attrs: ['- paymentId : String', '- amount : Money', '- paidAt : DateTime'],
+      x: 560, y: 150,
+      desc: "רשימה סגורה של מצבי ההזמנה. קופסה לא מחוברת: הקישור היחיד הוא הטיפוס של <span class=\"en\">status</span> בהזמנה." },
+    { id: "OrderLine", name: "OrderLine", stereotype: null, isEnum: false, isAbstract: false, isExternal: false,
+      attrs: ["+ quantity : Integer {>0}", "+ unitPrice : Money {>=0}", "+ notes : String"],
+      ops: ["+ lineTotal() : Money"],
+      x: 580, y: 300,
+      desc: "שורת הזמנה: מחלקה מתווכת בין הזמנה לפריט. אותו פריט יכול להופיע פעמיים באותה הזמנה עם הערות שונות, ולכן הצמד לא מזהה שורה. <span class=\"en\">unitPrice</span> נשמר בכוונה: המחיר ברגע ההזמנה." },
+    { id: "MenuItem", name: "MenuItem", stereotype: null, isEnum: false, isAbstract: false, isExternal: false,
+      attrs: ["+ itemCode : String", "+ name : String", "+ price : Money {>=0}", "+ available : Boolean", "+ description : String"],
       ops: [],
-      x: 560, y: 470,
-      desc: 'רשומת התשלום של ההזמנה. הקרדינליות <b>0..1</b> מספרת סיפור: יש הזמנות שבוטלו לפני שנוצר תשלום. תשלום פונה למערכת חיצונית — ראו את קו התלות אל שער התשלום.'
-    },
-    {
-      id: 'UniversityCardPayment', name: 'UniversityCardPayment', stereotype: null, isEnum: false, isAbstract: false, isExternal: false,
-      attrs: ['- universityId : String'],
+      x: 850, y: 300,
+      desc: "פריט בתפריט. <span class=\"en\">itemCode</span> הוא מזהה עסקי בקטלוג. מוכן בעמדה אחת, ויכולות להיות לו כמה תוויות תזונה." },
+    { id: "Station", name: "Station", stereotype: null, isEnum: false, isAbstract: false, isExternal: false,
+      attrs: ["+ name : String", "+ type : StationType"],
       ops: [],
-      x: 470, y: 620,
-      desc: '<b>הכללה (▷ משולש ריק)</b>: כל תכונות תשלום קיימות גם כאן, ובנוסף מספר הכרטיס האוניברסיטאי. ההורשה מוצדקת <b>לא</b> משום ש״לכל אחד יש שדה אחר״ — תכונה ריקה אינה בעיה — אלא משום ש<b>הקשרים שונים</b>: רק תשלום באשראי פונה לשער התשלום החיצוני. ובנוסף התכונות <b>סותרות</b>: מזהה אוניברסיטאי ו-last4 לעולם לא יחיו יחד.'
-    },
-    {
-      id: 'CreditCardPayment', name: 'CreditCardPayment', stereotype: null, isEnum: false, isAbstract: false, isExternal: false,
-      attrs: ['- last4 : String', '- gatewayRef : String'],
+      x: 1100, y: 300,
+      desc: "עמדת הכנה (חמה או קרה) בתוך קפיטריה. נסגרה הקפיטריה, העמדה נעלמת, ולכן הרכבה ◆." },
+    { id: "Cafeteria", name: "Cafeteria", stereotype: null, isEnum: false, isAbstract: false, isExternal: false,
+      attrs: ["+ name : String", "+ building : String", "+ floor : Integer", "+ opensAt : Time", "+ closesAt : Time {closesAt > opensAt}", "+ status : CafeteriaStatus", "+ maxOrderLines : Integer {>0}"],
       ops: [],
-      x: 700, y: 620,
-      desc: 'תת-סוג של תשלום, עם 4 הספרות האחרונות ואסמכתא מהסולק (<span class="en">gatewayRef</span>) — נתונים שלא קיימים בתשלום בכרטיס אוניברסיטה, וזו הסיבה להורשה.'
-    },
-    {
-      id: 'OrderStatus', name: 'OrderStatus', stereotype: '«enumeration»', isEnum: true, isAbstract: false, isExternal: false,
-      attrs: ['Pending', 'InPreparation', 'Ready', 'Collected', 'Cancelled'],
+      x: 1050, y: 100,
+      desc: "קפיטריה בקמפוס: מיקום, שעות פעילות ומצב. <span class=\"en\">maxOrderLines</span> הוא הערך של BR-12 (מספר השורות המרבי בהזמנה): נתון שמנהל משנה, לא ריבוי." },
+    { id: "CafeteriaStatus", name: "CafeteriaStatus", stereotype: "«enumeration»", isEnum: true, isAbstract: false, isExternal: false,
+      attrs: ["Active", "TemporarilyClosed"],
       ops: [],
-      x: 300, y: 80,
-      desc: 'רשימה סגורה של מצבי ההזמנה — ערכים טקסטואליים, מעטים, ולא משתנים לעתים קרובות. הקופסה <b>אינה מחוברת בקו</b> לאף מחלקה: ההפניה היחידה היא טיפוס התכונה <span class="en">status : OrderStatus</span>.'
-    },
-    {
-      id: 'PaymentGateway', name: 'PaymentGateway', stereotype: '«external system»', isEnum: false, isAbstract: false, isExternal: true,
-      attrs: ['no records on our side'], ops: [], minW: 170,
-      x: 900, y: 480,
-      desc: '<b>מערכת חיצונית</b> — הסולק שמחייב את כרטיס האשראי. אנחנו <b>לא</b> שומרים אותה: אין לה תכונות ואין לה פעולות, ואין קרדינליות על הקו. הקשר הוא <b>תלות</b> (קו מקווקו + חץ פתוח) — ושימו לב שהוא יוצא מ<b>תשלום באשראי</b> ולא מ״תשלום״: תשלום בכרטיס אוניברסיטה מחייב חשבון פנימי ואינו עובר בשער. זה בדיוק ההבדל ב<b>קשרים</b> שמצדיק את ההורשה.'
-    },
-    {
-      id: 'UniversityIdentity', name: 'UniversityIdentity', stereotype: '«external system»', isEnum: false, isAbstract: false, isExternal: true,
-      attrs: ['no records on our side'], ops: [], minW: 170,
-      x: 60, y: 400,
-      desc: '<b>מערכת חיצונית</b> — שירות ה-<span class="en">SSO</span> של האוניברסיטה שמאמת מי הסטודנט. אין לנו רשומות שלה, רק <b>תלות</b> עליה. אם מישהו הפך אותה למחלקה עם תכונות — זו טעות קלאסית במבחן.'
-    }
+      x: 880, y: 110,
+      desc: "מצב הקפיטריה: פעילה או סגורה זמנית." },
+    { id: "StationType", name: "StationType", stereotype: "«enumeration»", isEnum: true, isAbstract: false, isExternal: false,
+      attrs: ["Hot", "Cold"],
+      ops: [],
+      x: 1100, y: 420,
+      desc: "סוג העמדה: חמה או קרה. רשימה סגורה, בלי קו אל העמדה." },
+    { id: "Employee", name: "Employee", stereotype: null, isEnum: false, isAbstract: false, isExternal: false,
+      attrs: ["+ fullName : String", "+ username : String", "+ email : String", "+ phone : String", "+ role : EmployeeRole", "+ status : ActivityStatus"],
+      ops: [],
+      x: 1100, y: 560,
+      desc: "עובד קפיטריה (דלפק, מטבח, מנהל). שם משתמש לכניסה ולא מזהה מומצא. שייך לקפיטריה אחת." },
+    { id: "EmployeeRole", name: "EmployeeRole", stereotype: "«enumeration»", isEnum: true, isAbstract: false, isExternal: false,
+      attrs: ["Desk", "Kitchen", "Manager"],
+      ops: [],
+      x: 1100, y: 730,
+      desc: "תפקיד העובד: דלפק, מטבח או מנהל." },
+    { id: "ActivityStatus", name: "ActivityStatus", stereotype: "«enumeration»", isEnum: true, isAbstract: false, isExternal: false,
+      attrs: ["Active", "Inactive"],
+      ops: [],
+      x: 1240, y: 730,
+      desc: "מצב העובד במערכת: פעיל או לא פעיל." },
+    { id: "Payment", name: "Payment", stereotype: null, isEnum: false, isAbstract: false, isExternal: false,
+      attrs: ["+ receiptNumber : String", "+ amount : Money", "+ paidAt : DateTime", "+ status : PaymentStatus"],
+      ops: [],
+      x: 320, y: 520,
+      desc: "תשלום על הזמנה: מספר קבלה, סכום, זמן ומצב (הושלם או נכשל). להזמנה <b>0..1</b> תשלום: הזמנה שבוטלה לפני התשלום קיימת בלעדיו." },
+    { id: "PaymentStatus", name: "PaymentStatus", stereotype: "«enumeration»", isEnum: true, isAbstract: false, isExternal: false,
+      attrs: ["Completed", "Failed"],
+      ops: [],
+      x: 540, y: 520,
+      desc: "מצב התשלום: הושלם או נכשל." },
+    { id: "UniversityCardPayment", name: "UniversityCardPayment", stereotype: null, isEnum: false, isAbstract: false, isExternal: false,
+      attrs: ["+ studentCardNumber : String"],
+      ops: [],
+      x: 180, y: 690,
+      desc: "תשלום בכרטיס הסטודנט, שמחויב בתוך האוניברסיטה. יש לו מספר כרטיס, ואין לו קשר לשער התשלום." },
+    { id: "CreditCardPayment", name: "CreditCardPayment", stereotype: null, isEnum: false, isAbstract: false, isExternal: false,
+      attrs: ["+ gatewayRef : String"],
+      ops: [],
+      x: 430, y: 690,
+      desc: "תשלום באשראי. רק הוא עובר דרך שער התשלום, ולכן ההורשה. שומרים רק את האסמכתא מהשער; פרטי הכרטיס לא נשמרים אצלנו (NFR-3)." },
+    { id: "PaymentGateway", name: "PaymentGateway", stereotype: "«external system»", isEnum: false, isAbstract: false, isExternal: true,
+      attrs: [],
+      ops: [],
+      x: 650, y: 692,
+      desc: "שער התשלום של חברת הסליקה. קוראים לו, לא שומרים אותו." },
+    { id: "DietaryLabel", name: "DietaryLabel", stereotype: null, isEnum: false, isAbstract: false, isExternal: false,
+      attrs: ["+ name : String"],
+      ops: [],
+      x: 850, y: 560,
+      desc: "תווית תזונה (צמחוני, טבעוני, ללא גלוטן). מחלקה ולא enum, כי זו בחירה מרובה: לפריט כמה תוויות ולסטודנט כמה העדפות (1ONF). שני הקשרים שלה הם רבים-לרבים." }
   ];
 
   const RELS = [
-    // סטודנט (1) —— (0..*) הזמנה
-    { type: 'assoc', from: 'Student', to: 'Order',
-      fromMult: '1', toMult: '0..*', fromRole: null, toRole: null, label: null,
-      points: [[206, 270], [290, 270]] },
-
-    // הזמנה (1) ◆—— (0..*) שורת הזמנה  (composition — FILLED diamond at הזמנה)
-    { type: 'comp', from: 'Order', to: 'OrderLine',
-      fromMult: '1', toMult: '0..*', fromRole: null, toRole: null, label: null,
-      points: [[456, 270], [540, 270]] },
-
-    // שורת הזמנה (*) —— (1) פריט תפריט
-    { type: 'assoc', from: 'OrderLine', to: 'MenuItem',
-      fromMult: '0..*', toMult: '1', fromRole: null, toRole: null, label: null,
-      // FIXED 2026-08-15: started at x=693, which is INSIDE the OrderLine box (540..719) — so the
-      // multiplicity label, placed 22px along the line, was painted over by the box (boxes render
-      // after edges) and only the trailing "*" of "0..*" was visible. Now starts at the real edge.
-      points: [[719, 270], [777, 270]] },
-
-    // פריט תפריט (*) —— (1) עמדה
-    { type: 'assoc', from: 'MenuItem', to: 'Station',
-      fromMult: '0..*', toMult: '1', fromRole: null, toRole: null, label: null,
-      points: [[949, 270], [1033, 270]] },
-
-    // קפיטריה (1) ◆—— (0..*) עמדה  (composition — FILLED diamond at קפיטריה; flipped from ◇ 2026-08-30, David:
-    // a station is a virtual concept inside its cafeteria and does not exist in that form once it closes)
-    { type: 'comp', from: 'Cafeteria', to: 'Station',
-      fromMult: '1', toMult: '0..*', fromRole: null, toRole: null, label: null,
-      points: [[1106, 158], [1106, 230]] },
-
-    // הזמנה (1) —— (0..1) תשלום
-    { type: 'assoc', from: 'Order', to: 'Payment',
-      fromMult: '1', toMult: '0..1', fromRole: null, toRole: null, label: null,
-      points: [[373, 369], [373, 430], [633, 430], [633, 470]] },
-
-    // תשלום בכרטיס אוניברסיטה ——▷ תשלום  (generalization — hollow triangle AT תשלום)
-    { type: 'gen', from: 'UniversityCardPayment', to: 'Payment',
+    { id: "a1", type: "dep", from: "Student", to: "UniversityIdentity",
       fromMult: null, toMult: null, fromRole: null, toRole: null, label: null,
-      points: [[553, 620], [553, 588], [633, 588], [633, 552]] },
-
-    // תשלום באשראי ——▷ תשלום  (generalization — hollow triangle AT תשלום)
-    { type: 'gen', from: 'CreditCardPayment', to: 'Payment',
+      points: [[100, 300], [100, 190]] },
+    { id: "a2", type: "comp", from: "Student", to: "FavoriteOrder",
+      fromMult: "1", toMult: "0..1", fromRole: null, toRole: null, label: null,
+      points: [[200, 300], [200, 250], [310, 250], [310, 194]] },
+    { id: "a3", type: "assoc", from: "FavoriteOrder", to: "Order",
+      fromMult: "0..1", toMult: "1", fromRole: null, toRole: null, label: null,
+      points: [[370, 167], [420, 167], [420, 300]] },
+    { id: "a4", type: "assoc", from: "Student", to: "DietaryLabel",
+      fromMult: "0..*", toMult: "0..*", fromRole: null, toRole: null, label: null,
+      points: [[146, 368], [146, 800], [910, 800], [910, 614]] },
+    { id: "a5", type: "assoc", from: "Student", to: "Order",
+      fromMult: "1", toMult: "0..*", fromRole: null, toRole: null, label: null,
+      points: [[232, 340], [320, 340]] },
+    { id: "a6", type: "assoc", from: "Order", to: "Cafeteria",
+      fromMult: "0..*", toMult: "1", fromRole: null, toRole: null, label: null,
+      points: [[460, 300], [460, 60], [1180, 60], [1180, 100]] },
+    { id: "a7", type: "comp", from: "Order", to: "OrderLine",
+      fromMult: "1", toMult: "0..*", fromRole: null, toRole: null, label: null,
+      points: [[486, 340], [580, 340]] },
+    { id: "a8", type: "assoc", from: "OrderLine", to: "MenuItem",
+      fromMult: "0..*", toMult: "1", fromRole: null, toRole: null, label: null,
+      points: [[759, 340], [850, 340]] },
+    { id: "a9", type: "assoc", from: "Order", to: "Payment",
+      fromMult: "1", toMult: "0..1", fromRole: null, toRole: null, label: null,
+      points: [[403, 439], [403, 520]] },
+    { id: "a10", type: "gen", from: "UniversityCardPayment", to: "Payment",
       fromMult: null, toMult: null, fromRole: null, toRole: null, label: null,
-      points: [[776, 620], [776, 588], [633, 588], [633, 552]] },
-
-    // תשלום באשראי ⇢ «external system» שער תשלום  (dependency — dashed + open arrow, NO multiplicity)
-    // MOVED off the parent 2026-08-15: only a CREDIT CARD payment goes through the gateway; a
-    // university-card payment debits an internal account. Drawing it from Payment claimed every
-    // payment uses the gateway — and it also erased the very thing that justifies the inheritance
-    // (different RELATIONS, see the generalization slide).
-    { type: 'dep', from: 'CreditCardPayment', to: 'PaymentGateway',
+      points: [[279, 690], [279, 660], [406, 660], [406, 616]] },
+    { id: "a11", type: "gen", from: "CreditCardPayment", to: "Payment",
       fromMult: null, toMult: null, fromRole: null, toRole: null, label: null,
-      points: [[853, 655], [876, 655], [876, 505], [900, 505]] },
-
-    // סטודנט ⇢ «external system» זיהוי אוניברסיטה  (dependency)
-    { type: 'dep', from: 'Student', to: 'UniversityIdentity',
+      points: [[506, 690], [506, 660], [406, 660], [406, 616]] },
+    { id: "a12", type: "dep", from: "CreditCardPayment", to: "PaymentGateway",
       fromMult: null, toMult: null, fromRole: null, toRole: null, label: null,
-      points: [[133, 312], [133, 400]] }
+      points: [[583, 717], [650, 717]] },
+    { id: "b2", type: "assoc", from: "Employee", to: "Cafeteria",
+      fromMult: "0..*", toMult: "1", fromRole: null, toRole: null, label: null,
+      points: [[1279, 620], [1340, 620], [1340, 170], [1313, 170]] },
+    { id: "b3", type: "comp", from: "Cafeteria", to: "Station",
+      fromMult: "1", toMult: "0..*", fromRole: null, toRole: null, label: null,
+      points: [[1173, 238], [1173, 300]] },
+    { id: "b4", type: "assoc", from: "MenuItem", to: "Station",
+      fromMult: "0..*", toMult: "1", fromRole: null, toRole: null, label: null,
+      points: [[1009, 340], [1100, 340]] },
+    { id: "b5", type: "assoc", from: "MenuItem", to: "DietaryLabel",
+      fromMult: "0..*", toMult: "0..*", fromRole: null, toRole: null, label: null,
+      points: [[910, 410], [910, 560]] }
   ];
 
   /* ============================================================
@@ -596,130 +594,874 @@ ${body}
      4. diagramModel — from model-shape.md for kind: 'class'
      ============================================================ */
   const diagramModel = {
-    kind: 'class',
-    title: 'תרשים מחלקות — מערכת הזמנת מזון בקמפוס',
-    parts: [
+    "kind": "class",
+    "title": "Campus Food Ordering: the domain model",
+    "parts": [
       {
-        id: 'part-1',
-        label: 'Domain Model',
-        splitRationale: '',
-        elements: [
-          { kind: 'class', id: 'Student', name: 'Student', isAbstract: false, stereotype: null,
-            attributes: [
-              { visibility: '-', name: 'studentId', type: 'String', defaultValue: null, constraint: null },
-              { visibility: '-', name: 'name', type: 'String', defaultValue: null, constraint: null },
-              { visibility: '-', name: 'email', type: 'String', defaultValue: null, constraint: null }
+        "id": "part-1",
+        "label": "Domain Model",
+        "splitRationale": "",
+        "elements": [
+          {
+            "kind": "class",
+            "id": "UniversityIdentity",
+            "name": "UniversityIdentity",
+            "isAbstract": false,
+            "stereotype": "external system",
+            "attributes": [],
+            "operations": [],
+            "x": 40,
+            "y": 140,
+            "w": 133,
+            "h": 50
+          },
+          {
+            "kind": "class",
+            "id": "Student",
+            "name": "Student",
+            "isAbstract": false,
+            "stereotype": null,
+            "attributes": [
+              {
+                "visibility": "+",
+                "name": "studentNumber",
+                "type": "String",
+                "defaultValue": null,
+                "constraint": null
+              },
+              {
+                "visibility": "+",
+                "name": "fullName",
+                "type": "String",
+                "defaultValue": null,
+                "constraint": null
+              }
             ],
-            operations: [],
-            x: 60, y: 230, w: 146, h: 82 },
-          { kind: 'class', id: 'Order', name: 'Order', isAbstract: false, stereotype: null,
-            attributes: [
-              { visibility: '-', name: 'orderId', type: 'String', defaultValue: null, constraint: null },
-              { visibility: '-', name: 'createdAt', type: 'DateTime', defaultValue: null, constraint: null },
-              { visibility: '-', name: 'pickupTime', type: 'DateTime', defaultValue: null, constraint: null },
-              { visibility: '-', name: 'pickupCode', type: 'String', defaultValue: null, constraint: null },
-              { visibility: '-', name: 'status', type: 'OrderStatus', defaultValue: null, constraint: null }
+            "operations": [],
+            "x": 60,
+            "y": 300,
+            "w": 172,
+            "h": 68
+          },
+          {
+            "kind": "class",
+            "id": "FavoriteOrder",
+            "name": "FavoriteOrder",
+            "isAbstract": false,
+            "stereotype": null,
+            "attributes": [
+              {
+                "visibility": "+",
+                "name": "name",
+                "type": "String",
+                "defaultValue": null,
+                "constraint": null
+              }
             ],
-            operations: [
-              { visibility: '+', name: 'total', params: [], returnType: 'Money' },
-              { visibility: '+', name: 'cancel', params: [], returnType: null }
+            "operations": [],
+            "x": 250,
+            "y": 140,
+            "w": 120,
+            "h": 54
+          },
+          {
+            "kind": "class",
+            "id": "Order",
+            "name": "Order",
+            "isAbstract": false,
+            "stereotype": null,
+            "attributes": [
+              {
+                "visibility": "+",
+                "name": "orderNumber",
+                "type": "String",
+                "defaultValue": null,
+                "constraint": null
+              },
+              {
+                "visibility": "+",
+                "name": "createdAt",
+                "type": "DateTime",
+                "defaultValue": null,
+                "constraint": null
+              },
+              {
+                "visibility": "+",
+                "name": "pickupTime",
+                "type": "DateTime",
+                "defaultValue": null,
+                "constraint": null
+              },
+              {
+                "visibility": "+",
+                "name": "pickupCode",
+                "type": "String",
+                "defaultValue": null,
+                "constraint": null
+              },
+              {
+                "visibility": "+",
+                "name": "status",
+                "type": "OrderStatus",
+                "defaultValue": null,
+                "constraint": null
+              }
             ],
-            x: 290, y: 230, w: 166, h: 139 },
-          { kind: 'class', id: 'OrderLine', name: 'OrderLine', isAbstract: false, stereotype: null,
-            attributes: [
-              { visibility: '-', name: 'quantity', type: 'int', defaultValue: null, constraint: '>0' },
-              { visibility: '-', name: 'unitPrice', type: 'Money', defaultValue: null, constraint: '>=0' },
-              { visibility: '-', name: 'notes', type: 'String', defaultValue: null, constraint: null }
+            "operations": [
+              {
+                "visibility": "+",
+                "name": "total",
+                "params": [],
+                "returnType": "Money"
+              },
+              {
+                "visibility": "+",
+                "name": "cancel",
+                "params": [],
+                "returnType": null
+              }
             ],
-            operations: [
-              { visibility: '+', name: 'lineTotal', params: [], returnType: 'Money' }
+            "x": 320,
+            "y": 300,
+            "w": 166,
+            "h": 139
+          },
+          {
+            "kind": "class",
+            "id": "OrderStatus",
+            "name": "OrderStatus",
+            "isAbstract": false,
+            "stereotype": "enumeration",
+            "attributes": [
+              {
+                "visibility": "+",
+                "name": "Pending",
+                "type": null,
+                "defaultValue": null,
+                "constraint": null
+              },
+              {
+                "visibility": "+",
+                "name": "InPreparation",
+                "type": null,
+                "defaultValue": null,
+                "constraint": null
+              },
+              {
+                "visibility": "+",
+                "name": "Ready",
+                "type": null,
+                "defaultValue": null,
+                "constraint": null
+              },
+              {
+                "visibility": "+",
+                "name": "Collected",
+                "type": null,
+                "defaultValue": null,
+                "constraint": null
+              },
+              {
+                "visibility": "+",
+                "name": "Cancelled",
+                "type": null,
+                "defaultValue": null,
+                "constraint": null
+              }
             ],
-            x: 540, y: 230, w: 153, h: 83 },
-          { kind: 'class', id: 'MenuItem', name: 'MenuItem', isAbstract: false, stereotype: null,
-            attributes: [
-              { visibility: '-', name: 'itemId', type: 'String', defaultValue: null, constraint: null },
-              { visibility: '-', name: 'name', type: 'String', defaultValue: null, constraint: null },
-              { visibility: '-', name: 'price', type: 'Money', defaultValue: null, constraint: '>=0' },
-              { visibility: '-', name: 'isVegetarian', type: 'Boolean', defaultValue: null, constraint: null },
-              { visibility: '-', name: 'available', type: 'Boolean', defaultValue: null, constraint: null }
+            "operations": [],
+            "x": 560,
+            "y": 150,
+            "w": 120,
+            "h": 120
+          },
+          {
+            "kind": "class",
+            "id": "OrderLine",
+            "name": "OrderLine",
+            "isAbstract": false,
+            "stereotype": null,
+            "attributes": [
+              {
+                "visibility": "+",
+                "name": "quantity",
+                "type": "Integer",
+                "defaultValue": null,
+                "constraint": ">0"
+              },
+              {
+                "visibility": "+",
+                "name": "unitPrice",
+                "type": "Money",
+                "defaultValue": null,
+                "constraint": ">=0"
+              },
+              {
+                "visibility": "+",
+                "name": "notes",
+                "type": "String",
+                "defaultValue": null,
+                "constraint": null
+              }
             ],
-            operations: [],
-            x: 777, y: 230, w: 172, h: 110 },
-          { kind: 'class', id: 'Station', name: 'Station', isAbstract: false, stereotype: null,
-            attributes: [
-              { visibility: '-', name: 'name', type: 'String', defaultValue: null, constraint: null },
-              { visibility: '-', name: 'type', type: 'StationType', defaultValue: null, constraint: null }
+            "operations": [
+              {
+                "visibility": "+",
+                "name": "lineTotal",
+                "params": [],
+                "returnType": "Money"
+              }
             ],
-            operations: [],
-            x: 1033, y: 230, w: 146, h: 68 },
-          { kind: 'class', id: 'Cafeteria', name: 'Cafeteria', isAbstract: false, stereotype: null,
-            attributes: [
-              { visibility: '-', name: 'name', type: 'String', defaultValue: null, constraint: null },
-              { visibility: '-', name: 'location', type: 'String', defaultValue: null, constraint: null }
+            "x": 580,
+            "y": 300,
+            "w": 179,
+            "h": 97
+          },
+          {
+            "kind": "class",
+            "id": "MenuItem",
+            "name": "MenuItem",
+            "isAbstract": false,
+            "stereotype": null,
+            "attributes": [
+              {
+                "visibility": "+",
+                "name": "itemCode",
+                "type": "String",
+                "defaultValue": null,
+                "constraint": null
+              },
+              {
+                "visibility": "+",
+                "name": "name",
+                "type": "String",
+                "defaultValue": null,
+                "constraint": null
+              },
+              {
+                "visibility": "+",
+                "name": "price",
+                "type": "Money",
+                "defaultValue": null,
+                "constraint": ">=0"
+              },
+              {
+                "visibility": "+",
+                "name": "available",
+                "type": "Boolean",
+                "defaultValue": null,
+                "constraint": null
+              },
+              {
+                "visibility": "+",
+                "name": "description",
+                "type": "String",
+                "defaultValue": null,
+                "constraint": null
+              }
             ],
-            operations: [],
-            x: 1036, y: 90, w: 140, h: 68 },
-          { kind: 'class', id: 'Payment', name: 'Payment', isAbstract: false, stereotype: null,
-            attributes: [
-              { visibility: '-', name: 'paymentId', type: 'String', defaultValue: null, constraint: null },
-              { visibility: '-', name: 'amount', type: 'Money', defaultValue: null, constraint: null },
-              { visibility: '-', name: 'paidAt', type: 'DateTime', defaultValue: null, constraint: null }
+            "operations": [],
+            "x": 850,
+            "y": 300,
+            "w": 159,
+            "h": 110
+          },
+          {
+            "kind": "class",
+            "id": "Station",
+            "name": "Station",
+            "isAbstract": false,
+            "stereotype": null,
+            "attributes": [
+              {
+                "visibility": "+",
+                "name": "name",
+                "type": "String",
+                "defaultValue": null,
+                "constraint": null
+              },
+              {
+                "visibility": "+",
+                "name": "type",
+                "type": "StationType",
+                "defaultValue": null,
+                "constraint": null
+              }
             ],
-            operations: [],
-            x: 560, y: 470, w: 146, h: 82 },
-          { kind: 'class', id: 'UniversityCardPayment', name: 'UniversityCardPayment', isAbstract: false, stereotype: null,
-            attributes: [
-              { visibility: '-', name: 'universityId', type: 'String', defaultValue: null, constraint: null }
+            "operations": [],
+            "x": 1100,
+            "y": 300,
+            "w": 146,
+            "h": 68
+          },
+          {
+            "kind": "class",
+            "id": "Cafeteria",
+            "name": "Cafeteria",
+            "isAbstract": false,
+            "stereotype": null,
+            "attributes": [
+              {
+                "visibility": "+",
+                "name": "name",
+                "type": "String",
+                "defaultValue": null,
+                "constraint": null
+              },
+              {
+                "visibility": "+",
+                "name": "building",
+                "type": "String",
+                "defaultValue": null,
+                "constraint": null
+              },
+              {
+                "visibility": "+",
+                "name": "floor",
+                "type": "Integer",
+                "defaultValue": null,
+                "constraint": null
+              },
+              {
+                "visibility": "+",
+                "name": "opensAt",
+                "type": "Time",
+                "defaultValue": null,
+                "constraint": null
+              },
+              {
+                "visibility": "+",
+                "name": "closesAt",
+                "type": "Time",
+                "defaultValue": null,
+                "constraint": "closesAt > opensAt"
+              },
+              {
+                "visibility": "+",
+                "name": "status",
+                "type": "CafeteriaStatus",
+                "defaultValue": null,
+                "constraint": null
+              },
+              {
+                "visibility": "+",
+                "name": "maxOrderLines",
+                "type": "Integer",
+                "defaultValue": null,
+                "constraint": ">0"
+              }
             ],
-            operations: [],
-            x: 470, y: 620, w: 166, h: 54 },
-          { kind: 'class', id: 'CreditCardPayment', name: 'CreditCardPayment', isAbstract: false, stereotype: null,
-            attributes: [
-              { visibility: '-', name: 'last4', type: 'String', defaultValue: null, constraint: null },
-              { visibility: '-', name: 'gatewayRef', type: 'String', defaultValue: null, constraint: null }
+            "operations": [],
+            "x": 1050,
+            "y": 100,
+            "w": 263,
+            "h": 138
+          },
+          {
+            "kind": "class",
+            "id": "CafeteriaStatus",
+            "name": "CafeteriaStatus",
+            "isAbstract": false,
+            "stereotype": "enumeration",
+            "attributes": [
+              {
+                "visibility": "+",
+                "name": "Active",
+                "type": null,
+                "defaultValue": null,
+                "constraint": null
+              },
+              {
+                "visibility": "+",
+                "name": "TemporarilyClosed",
+                "type": null,
+                "defaultValue": null,
+                "constraint": null
+              }
             ],
-            operations: [],
-            x: 700, y: 620, w: 153, h: 68 },
-          { kind: 'class', id: 'OrderStatus', name: 'OrderStatus', isAbstract: false, stereotype: 'enumeration',
-            attributes: [
-              { visibility: '', name: 'Pending', type: null, defaultValue: null, constraint: null },
-              { visibility: '', name: 'InPreparation', type: null, defaultValue: null, constraint: null },
-              { visibility: '', name: 'Ready', type: null, defaultValue: null, constraint: null },
-              { visibility: '', name: 'Collected', type: null, defaultValue: null, constraint: null },
-              { visibility: '', name: 'Cancelled', type: null, defaultValue: null, constraint: null }
+            "operations": [],
+            "x": 880,
+            "y": 110,
+            "w": 127,
+            "h": 78
+          },
+          {
+            "kind": "class",
+            "id": "StationType",
+            "name": "StationType",
+            "isAbstract": false,
+            "stereotype": "enumeration",
+            "attributes": [
+              {
+                "visibility": "+",
+                "name": "Hot",
+                "type": null,
+                "defaultValue": null,
+                "constraint": null
+              },
+              {
+                "visibility": "+",
+                "name": "Cold",
+                "type": null,
+                "defaultValue": null,
+                "constraint": null
+              }
             ],
-            operations: [],
-            x: 300, y: 80, w: 120, h: 120 },
-          { kind: 'class', id: 'PaymentGateway', name: 'PaymentGateway', isAbstract: false, stereotype: 'external system',
-            attributes: [], operations: [],
-            x: 900, y: 480, w: 170, h: 64 },
-          { kind: 'class', id: 'UniversityIdentity', name: 'UniversityIdentity', isAbstract: false, stereotype: 'external system',
-            attributes: [], operations: [],
-            x: 60, y: 400, w: 170, h: 64 }
+            "operations": [],
+            "x": 1100,
+            "y": 420,
+            "w": 120,
+            "h": 78
+          },
+          {
+            "kind": "class",
+            "id": "Employee",
+            "name": "Employee",
+            "isAbstract": false,
+            "stereotype": null,
+            "attributes": [
+              {
+                "visibility": "+",
+                "name": "fullName",
+                "type": "String",
+                "defaultValue": null,
+                "constraint": null
+              },
+              {
+                "visibility": "+",
+                "name": "username",
+                "type": "String",
+                "defaultValue": null,
+                "constraint": null
+              },
+              {
+                "visibility": "+",
+                "name": "email",
+                "type": "String",
+                "defaultValue": null,
+                "constraint": null
+              },
+              {
+                "visibility": "+",
+                "name": "phone",
+                "type": "String",
+                "defaultValue": null,
+                "constraint": null
+              },
+              {
+                "visibility": "+",
+                "name": "role",
+                "type": "EmployeeRole",
+                "defaultValue": null,
+                "constraint": null
+              },
+              {
+                "visibility": "+",
+                "name": "status",
+                "type": "ActivityStatus",
+                "defaultValue": null,
+                "constraint": null
+              }
+            ],
+            "operations": [],
+            "x": 1100,
+            "y": 560,
+            "w": 179,
+            "h": 124
+          },
+          {
+            "kind": "class",
+            "id": "EmployeeRole",
+            "name": "EmployeeRole",
+            "isAbstract": false,
+            "stereotype": "enumeration",
+            "attributes": [
+              {
+                "visibility": "+",
+                "name": "Desk",
+                "type": null,
+                "defaultValue": null,
+                "constraint": null
+              },
+              {
+                "visibility": "+",
+                "name": "Kitchen",
+                "type": null,
+                "defaultValue": null,
+                "constraint": null
+              },
+              {
+                "visibility": "+",
+                "name": "Manager",
+                "type": null,
+                "defaultValue": null,
+                "constraint": null
+              }
+            ],
+            "operations": [],
+            "x": 1100,
+            "y": 730,
+            "w": 120,
+            "h": 92
+          },
+          {
+            "kind": "class",
+            "id": "ActivityStatus",
+            "name": "ActivityStatus",
+            "isAbstract": false,
+            "stereotype": "enumeration",
+            "attributes": [
+              {
+                "visibility": "+",
+                "name": "Active",
+                "type": null,
+                "defaultValue": null,
+                "constraint": null
+              },
+              {
+                "visibility": "+",
+                "name": "Inactive",
+                "type": null,
+                "defaultValue": null,
+                "constraint": null
+              }
+            ],
+            "operations": [],
+            "x": 1240,
+            "y": 730,
+            "w": 120,
+            "h": 78
+          },
+          {
+            "kind": "class",
+            "id": "Payment",
+            "name": "Payment",
+            "isAbstract": false,
+            "stereotype": null,
+            "attributes": [
+              {
+                "visibility": "+",
+                "name": "receiptNumber",
+                "type": "String",
+                "defaultValue": null,
+                "constraint": null
+              },
+              {
+                "visibility": "+",
+                "name": "amount",
+                "type": "Money",
+                "defaultValue": null,
+                "constraint": null
+              },
+              {
+                "visibility": "+",
+                "name": "paidAt",
+                "type": "DateTime",
+                "defaultValue": null,
+                "constraint": null
+              },
+              {
+                "visibility": "+",
+                "name": "status",
+                "type": "PaymentStatus",
+                "defaultValue": null,
+                "constraint": null
+              }
+            ],
+            "operations": [],
+            "x": 320,
+            "y": 520,
+            "w": 172,
+            "h": 96
+          },
+          {
+            "kind": "class",
+            "id": "PaymentStatus",
+            "name": "PaymentStatus",
+            "isAbstract": false,
+            "stereotype": "enumeration",
+            "attributes": [
+              {
+                "visibility": "+",
+                "name": "Completed",
+                "type": null,
+                "defaultValue": null,
+                "constraint": null
+              },
+              {
+                "visibility": "+",
+                "name": "Failed",
+                "type": null,
+                "defaultValue": null,
+                "constraint": null
+              }
+            ],
+            "operations": [],
+            "x": 540,
+            "y": 520,
+            "w": 120,
+            "h": 78
+          },
+          {
+            "kind": "class",
+            "id": "UniversityCardPayment",
+            "name": "UniversityCardPayment",
+            "isAbstract": false,
+            "stereotype": null,
+            "attributes": [
+              {
+                "visibility": "+",
+                "name": "studentCardNumber",
+                "type": "String",
+                "defaultValue": null,
+                "constraint": null
+              }
+            ],
+            "operations": [],
+            "x": 180,
+            "y": 690,
+            "w": 198,
+            "h": 54
+          },
+          {
+            "kind": "class",
+            "id": "CreditCardPayment",
+            "name": "CreditCardPayment",
+            "isAbstract": false,
+            "stereotype": null,
+            "attributes": [
+              {
+                "visibility": "+",
+                "name": "gatewayRef",
+                "type": "String",
+                "defaultValue": null,
+                "constraint": null
+              }
+            ],
+            "operations": [],
+            "x": 430,
+            "y": 690,
+            "w": 153,
+            "h": 54
+          },
+          {
+            "kind": "class",
+            "id": "PaymentGateway",
+            "name": "PaymentGateway",
+            "isAbstract": false,
+            "stereotype": "external system",
+            "attributes": [],
+            "operations": [],
+            "x": 650,
+            "y": 692,
+            "w": 120,
+            "h": 50
+          },
+          {
+            "kind": "class",
+            "id": "DietaryLabel",
+            "name": "DietaryLabel",
+            "isAbstract": false,
+            "stereotype": null,
+            "attributes": [
+              {
+                "visibility": "+",
+                "name": "name",
+                "type": "String",
+                "defaultValue": null,
+                "constraint": null
+              }
+            ],
+            "operations": [],
+            "x": 850,
+            "y": 560,
+            "w": 120,
+            "h": 54
+          }
         ],
-        relationships: [
-          { kind: 'association', id: 'assoc_student_order', from: 'Student', to: 'Order',
-            multFrom: '1', multTo: '0..*', roleFrom: null, roleTo: null,
-            directed: false, aggregation: false, composition: false },
-          { kind: 'association', id: 'comp_order_orderline', from: 'Order', to: 'OrderLine',
-            multFrom: '1', multTo: '0..*', roleFrom: null, roleTo: null,
-            directed: false, aggregation: false, composition: true },
-          { kind: 'association', id: 'assoc_orderline_menuitem', from: 'OrderLine', to: 'MenuItem',
-            multFrom: '0..*', multTo: '1', roleFrom: null, roleTo: null,
-            directed: false, aggregation: false, composition: false },
-          { kind: 'association', id: 'assoc_menuitem_station', from: 'MenuItem', to: 'Station',
-            multFrom: '0..*', multTo: '1', roleFrom: null, roleTo: null,
-            directed: false, aggregation: false, composition: false },
-          { kind: 'association', id: 'comp_cafeteria_station', from: 'Cafeteria', to: 'Station',
-            multFrom: '1', multTo: '0..*', roleFrom: null, roleTo: null,
-            directed: false, aggregation: false, composition: true },
-          { kind: 'association', id: 'assoc_order_payment', from: 'Order', to: 'Payment',
-            multFrom: '1', multTo: '0..1', roleFrom: null, roleTo: null,
-            directed: false, aggregation: false, composition: false },
-          { kind: 'generalization', id: 'gen_unicard_payment', from: 'UniversityCardPayment', to: 'Payment' },
-          { kind: 'generalization', id: 'gen_credit_payment', from: 'CreditCardPayment', to: 'Payment' },
-          { kind: 'dependency', id: 'dep_payment_gateway', from: 'CreditCardPayment', to: 'PaymentGateway', stereotype: null },
-          { kind: 'dependency', id: 'dep_student_identity', from: 'Student', to: 'UniversityIdentity', stereotype: null }
+        "relationships": [
+          {
+            "kind": "dependency",
+            "id": "a1",
+            "from": "Student",
+            "to": "UniversityIdentity",
+            "stereotype": null
+          },
+          {
+            "kind": "association",
+            "id": "a2",
+            "from": "Student",
+            "to": "FavoriteOrder",
+            "multFrom": "1",
+            "multTo": "0..1",
+            "roleFrom": null,
+            "roleTo": null,
+            "directed": false,
+            "aggregation": false,
+            "composition": true
+          },
+          {
+            "kind": "association",
+            "id": "a3",
+            "from": "FavoriteOrder",
+            "to": "Order",
+            "multFrom": "0..1",
+            "multTo": "1",
+            "roleFrom": null,
+            "roleTo": null,
+            "directed": false,
+            "aggregation": false,
+            "composition": false
+          },
+          {
+            "kind": "association",
+            "id": "a4",
+            "from": "Student",
+            "to": "DietaryLabel",
+            "multFrom": "0..*",
+            "multTo": "0..*",
+            "roleFrom": null,
+            "roleTo": null,
+            "directed": false,
+            "aggregation": false,
+            "composition": false
+          },
+          {
+            "kind": "association",
+            "id": "a5",
+            "from": "Student",
+            "to": "Order",
+            "multFrom": "1",
+            "multTo": "0..*",
+            "roleFrom": null,
+            "roleTo": null,
+            "directed": false,
+            "aggregation": false,
+            "composition": false
+          },
+          {
+            "kind": "association",
+            "id": "a6",
+            "from": "Order",
+            "to": "Cafeteria",
+            "multFrom": "0..*",
+            "multTo": "1",
+            "roleFrom": null,
+            "roleTo": null,
+            "directed": false,
+            "aggregation": false,
+            "composition": false
+          },
+          {
+            "kind": "association",
+            "id": "a7",
+            "from": "Order",
+            "to": "OrderLine",
+            "multFrom": "1",
+            "multTo": "0..*",
+            "roleFrom": null,
+            "roleTo": null,
+            "directed": false,
+            "aggregation": false,
+            "composition": true
+          },
+          {
+            "kind": "association",
+            "id": "a8",
+            "from": "OrderLine",
+            "to": "MenuItem",
+            "multFrom": "0..*",
+            "multTo": "1",
+            "roleFrom": null,
+            "roleTo": null,
+            "directed": false,
+            "aggregation": false,
+            "composition": false
+          },
+          {
+            "kind": "association",
+            "id": "a9",
+            "from": "Order",
+            "to": "Payment",
+            "multFrom": "1",
+            "multTo": "0..1",
+            "roleFrom": null,
+            "roleTo": null,
+            "directed": false,
+            "aggregation": false,
+            "composition": false
+          },
+          {
+            "kind": "generalization",
+            "id": "a10",
+            "from": "UniversityCardPayment",
+            "to": "Payment"
+          },
+          {
+            "kind": "generalization",
+            "id": "a11",
+            "from": "CreditCardPayment",
+            "to": "Payment"
+          },
+          {
+            "kind": "dependency",
+            "id": "a12",
+            "from": "CreditCardPayment",
+            "to": "PaymentGateway",
+            "stereotype": null
+          },
+          {
+            "kind": "association",
+            "id": "b2",
+            "from": "Employee",
+            "to": "Cafeteria",
+            "multFrom": "0..*",
+            "multTo": "1",
+            "roleFrom": null,
+            "roleTo": null,
+            "directed": false,
+            "aggregation": false,
+            "composition": false
+          },
+          {
+            "kind": "association",
+            "id": "b3",
+            "from": "Cafeteria",
+            "to": "Station",
+            "multFrom": "1",
+            "multTo": "0..*",
+            "roleFrom": null,
+            "roleTo": null,
+            "directed": false,
+            "aggregation": false,
+            "composition": true
+          },
+          {
+            "kind": "association",
+            "id": "b4",
+            "from": "MenuItem",
+            "to": "Station",
+            "multFrom": "0..*",
+            "multTo": "1",
+            "roleFrom": null,
+            "roleTo": null,
+            "directed": false,
+            "aggregation": false,
+            "composition": false
+          },
+          {
+            "kind": "association",
+            "id": "b5",
+            "from": "MenuItem",
+            "to": "DietaryLabel",
+            "multFrom": "0..*",
+            "multTo": "0..*",
+            "roleFrom": null,
+            "roleTo": null,
+            "directed": false,
+            "aggregation": false,
+            "composition": false
+          }
         ]
       }
     ]
